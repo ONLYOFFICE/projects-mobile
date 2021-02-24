@@ -1,0 +1,1 @@
+enum LoginState { Portal, Password }
