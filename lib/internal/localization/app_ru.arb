@@ -1,0 +1,7 @@
+
+{
+    "emailAddress": "Регистрационный email",
+    "password": "Пароль",
+    "portalName":  "Адрес портала",
+    "continueButton": "Продолжить"
+}

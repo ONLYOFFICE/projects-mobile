@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:only_office_mobile/data/enums/loginstate.dart';
 import 'package:only_office_mobile/data/enums/viewstate.dart';
+import 'package:only_office_mobile/data/models/capabilities.dart';
 import 'package:only_office_mobile/data/models/user.dart';
 import 'package:only_office_mobile/data/services/authentication_service.dart';
+import 'package:only_office_mobile/data/services/portal_service.dart';
 import 'package:only_office_mobile/domain/viewmodels/base_viewmodel.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 
@@ -11,7 +13,9 @@ class LoginViewModel extends BaseViewModel {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
 
-  String errorMessage;
+  final PortalService _portalService = locator<PortalService>();
+
+  Capabilities capabilities;
 
   Future<bool> login(String email, String pass, String portalName) async {
     setState(ViewState.Busy);
@@ -35,11 +39,18 @@ class LoginViewModel extends BaseViewModel {
     // refactor login process
   }
 
-  validatePortal(String portalName) {
+  Future<bool> prepareAuthorization(String portalName) async {
     //TODO
     // validate portal and get portal capabilities}
+    setState(ViewState.Busy);
+    var _capabilities = await _portalService.portalCapabilities(portalName);
 
-    setLoginState(LoginState.Password);
+    if (_capabilities.response != null) {
+      capabilities = _capabilities.response;
+      setLoginState(LoginState.Login);
+    }
+    setState(ViewState.Idle);
+    return true;
   }
 
   String emailValidator(value) {
@@ -57,16 +68,6 @@ class LoginViewModel extends BaseViewModel {
   String passValidator(value) {
     if (!value.isEmpty) return null;
     return 'Введите пароль';
-  }
-
-  String portalValidator(value) {
-    if (value.isEmpty) return 'Введите корректный адрес портала';
-
-    final Pattern _emailPattern =
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+\.onlyoffice+\.[a-zA-Z]";
-
-    if (RegExp(_emailPattern).hasMatch(value)) return null;
-    return 'Введите корректный адрес портала';
   }
 
   LoginState _loginState = LoginState.Portal;

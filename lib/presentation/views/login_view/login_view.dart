@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/views/base_view.dart';
-import 'package:only_office_mobile/presentation/views/login_view/widgets/login_form.dart';
+import 'package:only_office_mobile/presentation/views/login_view/widgets/authorization.dart';
 
 class LoginView extends StatelessWidget {
   @override
@@ -18,7 +18,7 @@ class LoginView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  LoginForm(viewmodel: viewmodel),
+                  Authorization(viewmodel: viewmodel),
                 ],
               ),
             ),

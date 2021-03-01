@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:only_office_mobile/data/models/authDTO.dart';
+import 'package:only_office_mobile/data/models/apiDTO.dart';
 import 'package:only_office_mobile/data/models/auth_token.dart';
 import 'package:only_office_mobile/data/models/user.dart';
 import 'package:only_office_mobile/internal/locator.dart';
@@ -10,19 +10,19 @@ import 'package:only_office_mobile/data/models/error.dart';
 class AuthApi {
   var coreApi = locator<CoreApi>();
 
-  Future<AuthDTO> loginByUsername(
+  Future<ApiDTO<AuthToken>> loginByUsername(
       String email, String pass, String portalName) async {
-    var url = coreApi.getAuthUrl(portalName);
+    var url = coreApi.authUrl(portalName);
     var body =
         jsonEncode(<String, String>{'userName': email, 'password': pass});
 
-    var result = new AuthDTO();
+    var result = new ApiDTO<AuthToken>();
     try {
-      var response = await coreApi.post(url, body);
+      var response = await coreApi.postRequest(url, body);
       final responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
-        result.authToken = AuthToken.fromJson(responseJson);
+        result.response = AuthToken.fromJson(responseJson);
       } else {
         result.error = PortalError.fromJson(responseJson);
       }

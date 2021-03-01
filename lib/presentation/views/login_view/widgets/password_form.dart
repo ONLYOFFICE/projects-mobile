@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:only_office_mobile/data/enums/viewstate.dart';
 import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
+import 'package:only_office_mobile/presentation/views/login_view/widgets/login_sources_panel.dart';
 
 class PasswordForm extends StatefulWidget {
   final LoginViewModel viewmodel;
@@ -26,6 +29,8 @@ class _PasswordFormState extends State<PasswordForm> {
 
   @override
   Widget build(BuildContext context) {
+    final localization = AppLocalizations.of(context);
+
     final emailField = TextFormField(
       controller: emailController,
       validator: widget.viewmodel.emailValidator,
@@ -34,7 +39,7 @@ class _PasswordFormState extends State<PasswordForm> {
       style: mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Регистрационный email",
+        hintText: localization.emailAddress,
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
@@ -47,7 +52,7 @@ class _PasswordFormState extends State<PasswordForm> {
       style: mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Пароль",
+        hintText: localization.password, //"Пароль",
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
@@ -93,13 +98,13 @@ class _PasswordFormState extends State<PasswordForm> {
             SizedBox(
               height: 10.0,
             ),
-            // loginButon,
             widget.viewmodel.state == ViewState.Busy
                 ? CircularProgressIndicator()
                 : loginButon,
             SizedBox(
               height: 15.0,
             ),
+            LoginSources(capabilities: widget.viewmodel.capabilities.providers),
           ],
         ),
       ),

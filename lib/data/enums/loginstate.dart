@@ -1,1 +1,1 @@
-enum LoginState { Portal, Password }
+enum LoginState { Portal, Login }
