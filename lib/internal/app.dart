@@ -31,28 +31,13 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:only_office_mobile/data/models/user.dart';
 import 'package:only_office_mobile/data/services/authentication_service.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 import 'package:provider/provider.dart';
-import 'package:only_office_mobile/presentation/views/home_view/home_view.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:only_office_mobile/internal/router.dart' as UI;
-
-// class App extends StatelessWidget {
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Flutter Demo',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//         visualDensity: VisualDensity.adaptivePlatformDensity,
-//       ),
-//       home: HomeView(title: 'Flutter Demo Home Page'),
-//     );
-//   }
-// }
 
 class App extends StatelessWidget {
   @override
@@ -62,7 +47,17 @@ class App extends StatelessWidget {
       create: (BuildContext context) =>
           locator<AuthenticationService>().userController.stream,
       child: MaterialApp(
-        title: 'Flutter Demo',
+        localizationsDelegates: [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: [
+          const Locale('en', ''), // English, no country code
+          const Locale('ru', ''),
+        ],
+        title: 'ONLYOFFICE',
         theme: ThemeData(),
         initialRoute: 'login',
         onGenerateRoute: UI.Router.generateRoute,

@@ -42,16 +42,28 @@ class CoreApi {
     };
   }
 
-  String getAuthUrl(String portalName) =>
+  String authUrl(String portalName) =>
       'https://$portalName/api/2.0/authentication.json';
 
-  Future<http.Response> post(String url, String body) async {
-    var post = client.post(
+  String capabilitiesUrl(String portalName) =>
+      'https://$portalName/api/2.0/capabilities';
+
+  Future<http.Response> getRequest(String url) async {
+    var request = client.get(
+      url,
+      headers: headers(),
+    );
+    final http.Response response = await request;
+    return response;
+  }
+
+  Future<http.Response> postRequest(String url, String body) async {
+    var request = client.post(
       url,
       headers: headers(),
       body: body,
     );
-    final http.Response response = await post;
+    final http.Response response = await request;
     return response;
   }
 }

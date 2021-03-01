@@ -1,4 +1,4 @@
-enum LoginState { Portal, Password }
+enum LoginState { Portal, Login }
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *

@@ -1,0 +1,20 @@
+{
+  "emailAddress": "Email Address",
+  "@emailAddress": {
+    "description": "Email Address"
+  },
+
+  "password": "Password",
+  "@password": {
+    "description": "Password"
+  },
+
+  "portalName": "Portal Address",
+  "@portalName": {
+    "description": "Portal Address"
+  },
+  "continueButton": "Continue",
+  "@continueButton": {
+    "description": "Continue button title"
+  }
+}

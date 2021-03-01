@@ -30,33 +30,22 @@
  *
  */
 
-import 'package:flutter/material.dart';
+class Capabilities {
+  Capabilities({
+    this.ldapEnabled,
+    this.providers,
+    this.ssoLabel,
+    this.ssoUrl,
+  });
+  bool ldapEnabled;
+  List<String> providers;
+  String ssoLabel;
+  String ssoUrl;
 
-import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/base_view.dart';
-import 'package:only_office_mobile/presentation/views/login_view/widgets/authorization.dart';
-
-class LoginView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BaseView<LoginViewModel>(builder: (context, viewmodel, child) {
-      return Scaffold(
-        body: Center(
-          child: Container(
-            color: backgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Authorization(viewmodel: viewmodel),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    });
+  Capabilities.fromJson(Map<String, dynamic> json) {
+    ldapEnabled = json['response']['ldapEnabled'];
+    providers = List<String>.from(json['response']['providers']);
+    ssoLabel = json['response']['ssoLabel'];
+    ldapEnabled = json['response']['ldapEnabled'];
   }
 }

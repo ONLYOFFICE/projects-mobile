@@ -30,33 +30,26 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'dart:async';
 
-import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/base_view.dart';
-import 'package:only_office_mobile/presentation/views/login_view/widgets/authorization.dart';
+import 'package:only_office_mobile/data/api/portal_api.dart';
+import 'package:only_office_mobile/data/models/apiDTO.dart';
+import 'package:only_office_mobile/data/models/capabilities.dart';
+import 'package:only_office_mobile/internal/locator.dart';
 
-class LoginView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BaseView<LoginViewModel>(builder: (context, viewmodel, child) {
-      return Scaffold(
-        body: Center(
-          child: Container(
-            color: backgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Authorization(viewmodel: viewmodel),
-                ],
-              ),
-            ),
-          ),
-        ),
-      );
-    });
+class PortalService {
+  PortalApi _api = locator<PortalApi>();
+
+  Future<ApiDTO<Capabilities>> portalCapabilities(String portalName) async {
+    ApiDTO<Capabilities> response = await _api.getCapabilities(portalName);
+
+    // var capabilities = response.response != null;
+
+    // if (tokenReceived) {
+    //   userController.add(response.response);
+    // } else {
+    //   userController.addError(response.error);
+    // }
+    return response;
   }
 }

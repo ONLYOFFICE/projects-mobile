@@ -32,31 +32,37 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/base_view.dart';
-import 'package:only_office_mobile/presentation/views/login_view/widgets/authorization.dart';
+class LoginItem extends StatelessWidget {
+  final String serviceName;
+  final Function onTap;
+  const LoginItem({this.serviceName, this.onTap});
 
-class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BaseView<LoginViewModel>(builder: (context, viewmodel, child) {
-      return Scaffold(
-        body: Center(
-          child: Container(
-            color: backgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Authorization(viewmodel: viewmodel),
-                ],
-              ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+        padding: EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(5.0),
+            boxShadow: [
+              BoxShadow(
+                  blurRadius: 3.0,
+                  offset: Offset(0.0, 2.0),
+                  color: Color.fromARGB(80, 0, 0, 0))
+            ]),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              serviceName,
+              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16.0),
             ),
-          ),
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }

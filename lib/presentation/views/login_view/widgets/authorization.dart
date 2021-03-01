@@ -32,31 +32,46 @@
 
 import 'package:flutter/material.dart';
 
+import 'package:only_office_mobile/data/enums/loginstate.dart';
 import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/base_view.dart';
-import 'package:only_office_mobile/presentation/views/login_view/widgets/authorization.dart';
+import 'package:only_office_mobile/presentation/views/login_view/widgets/password_form.dart';
+import 'package:only_office_mobile/presentation/views/login_view/widgets/portal_form.dart';
 
-class LoginView extends StatelessWidget {
+class Authorization extends StatefulWidget {
+  final LoginViewModel viewmodel;
+  Authorization({this.viewmodel});
+
+  @override
+  _AuthorizationState createState() => _AuthorizationState();
+}
+
+class _AuthorizationState extends State<Authorization> {
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passController = new TextEditingController();
+  TextEditingController portalController = new TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BaseView<LoginViewModel>(builder: (context, viewmodel, child) {
-      return Scaffold(
-        body: Center(
-          child: Container(
-            color: backgroundColor,
-            child: Padding(
-              padding: const EdgeInsets.all(36.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Authorization(viewmodel: viewmodel),
-                ],
-              ),
-            ),
-          ),
+    return new Container(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            //TODO Separate to different stateful vidgets: portalscreen and loginscreen
+            widget.viewmodel.loginState == LoginState.Portal
+                ? PortalForm(viewmodel: widget.viewmodel)
+                : PasswordForm(viewmodel: widget.viewmodel)
+          ],
         ),
-      );
-    });
+      ),
+    );
   }
 }
