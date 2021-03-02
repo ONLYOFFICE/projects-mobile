@@ -56,10 +56,10 @@ class AuthApi {
       if (response.statusCode == 201) {
         result.response = AuthToken.fromJson(responseJson);
       } else {
-        result.error = PortalError.fromJson(responseJson);
+        result.error = Error.fromJson(responseJson);
       }
     } catch (e) {
-      result.error = new PortalError(message: 'Чтото пошло не так');
+      result.error = new Error(message: 'Ошибка');
     }
 
     return result;

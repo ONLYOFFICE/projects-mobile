@@ -32,16 +32,14 @@
 
 import 'dart:async';
 
-import 'package:only_office_mobile/data/enums/loginstate.dart';
+import 'package:get/get.dart';
 import 'package:only_office_mobile/data/enums/viewstate.dart';
 import 'package:only_office_mobile/data/models/capabilities.dart';
-import 'package:only_office_mobile/data/models/user.dart';
 import 'package:only_office_mobile/data/services/authentication_service.dart';
 import 'package:only_office_mobile/data/services/portal_service.dart';
-import 'package:only_office_mobile/domain/viewmodels/base_viewmodel.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 
-class LoginViewModel extends BaseViewModel {
+class LoginController extends GetxController {
   final AuthenticationService _authenticationService =
       locator<AuthenticationService>();
 
@@ -49,38 +47,31 @@ class LoginViewModel extends BaseViewModel {
 
   Capabilities capabilities;
 
-  Future<bool> login(String email, String pass, String portalName) async {
+  String _portalName;
+
+  Future<bool> loginByPassword(String email, String password) async {
     setState(ViewState.Busy);
 
-    StreamController<User>().stream.handleError(onError);
+    var result =
+        await _authenticationService.login(email, password, _portalName);
 
-    var success = await _authenticationService.login(email, pass, portalName);
-
-    // Handle potential error here too.
+    // TODO Handle potential error here too.
 
     setState(ViewState.Idle);
-    return success;
+    return result.response != null;
   }
 
-  onError() {
-    setState(ViewState.Idle);
-  }
-
-  loginByPassword(String username, String password) {
-    //todo
-    // refactor login process
-  }
-
-  Future<bool> prepareAuthorization(String portalName) async {
-    //TODO
-    // validate portal and get portal capabilities}
+  getPortalCapabilities(String portalName) async {
     setState(ViewState.Busy);
+    _portalName = portalName;
+
     var _capabilities = await _portalService.portalCapabilities(portalName);
 
-    if (_capabilities.response != null) {
-      capabilities = _capabilities.response;
-      setLoginState(LoginState.Login);
+    if (_capabilities != null) {
+      capabilities = _capabilities;
+      Get.toNamed('LoginView');
     }
+
     setState(ViewState.Idle);
     return true;
   }
@@ -102,12 +93,9 @@ class LoginViewModel extends BaseViewModel {
     return 'Введите пароль';
   }
 
-  LoginState _loginState = LoginState.Portal;
+  var state = ViewState.Idle.obs;
 
-  LoginState get loginState => _loginState;
-
-  void setLoginState(LoginState viewState) {
-    _loginState = viewState;
-    notifyListeners();
+  void setState(ViewState viewState) {
+    state.value = viewState;
   }
 }

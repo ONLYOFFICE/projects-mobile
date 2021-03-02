@@ -30,16 +30,14 @@
  *
  */
 
-import 'package:only_office_mobile/domain/viewmodels/base_viewmodel.dart';
+import 'package:get/get.dart';
 
-class HomeViewModel extends BaseViewModel {
-  // Api _api = locator<Api>();
+import 'package:only_office_mobile/presentation/views/authentication/login_view.dart';
+import 'package:only_office_mobile/presentation/views/authentication/portal_view.dart';
+import 'package:only_office_mobile/presentation/views/home_view/home_view.dart';
 
-  // List<Projects> projects;
-
-  Future getProjects(int userId) async {
-    // setState(ViewState.Busy);
-    // projects = await _api.getProjectsForUser(userId);
-    // setState(ViewState.Idle);
-  }
-}
+List<GetPage> getxPages() => [
+      GetPage(name: '/', page: () => HomeView()),
+      GetPage(name: 'PortalView', page: () => PortalView()),
+      GetPage(name: 'LoginView', page: () => LoginView()),
+    ];

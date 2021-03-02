@@ -31,26 +31,46 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:only_office_mobile/presentation/views/home_view/home_view.dart';
-import 'package:only_office_mobile/presentation/views/login_view/login_view.dart';
+import 'package:get/get.dart';
+import 'package:only_office_mobile/data/enums/viewstate.dart';
 
-const String initialRoute = "login";
+import 'package:only_office_mobile/domain/controllers/login_controller.dart';
+import 'package:only_office_mobile/presentation/shared/app_colors.dart';
+import 'package:only_office_mobile/presentation/views/authentication/widgets/login_sources_panel.dart';
+import 'package:only_office_mobile/presentation/views/authentication/widgets/password_form.dart';
 
-class Router {
-  static Route<dynamic> generateRoute(RouteSettings settings) {
-    switch (settings.name) {
-      case '/':
-        return MaterialPageRoute(builder: (_) => HomeView());
-      case 'login':
-        return MaterialPageRoute(builder: (_) => LoginView());
-      default:
-        return MaterialPageRoute(
-            builder: (_) => Scaffold(
-                  body: Center(
-                    child: Text('No route defined for ${settings.name}'),
-                  ),
-                ));
-    }
+import 'package:only_office_mobile/domain/dialogs.dart';
+
+class LoginView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    LoginController controller = Get.put(LoginController());
+
+    Obx(() => controller.state.value == ViewState.Busy
+        ? () => {ProgressDialog.show}
+        : {});
+
+    return Scaffold(
+      body: Center(
+        child: Container(
+          color: backgroundColor,
+          child: Padding(
+            padding: const EdgeInsets.all(36.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                PasswordForm(),
+                (controller.capabilities != null)
+                    ? LoginSources(
+                        capabilities: controller.capabilities.providers)
+                    : SizedBox(
+                        height: 15.0,
+                      ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
