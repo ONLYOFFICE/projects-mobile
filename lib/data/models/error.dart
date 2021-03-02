@@ -1,8 +1,8 @@
-class PortalError {
+class Error {
   String message;
-  PortalError({this.message});
+  Error({this.message});
 
-  PortalError.fromJson(Map<String, dynamic> json) {
+  Error.fromJson(Map<String, dynamic> json) {
     message = json['error']['message'];
   }
 }

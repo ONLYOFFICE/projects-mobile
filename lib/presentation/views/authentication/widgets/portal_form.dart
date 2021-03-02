@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 
-import 'package:only_office_mobile/data/enums/viewstate.dart';
-import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
+import 'package:only_office_mobile/domain/controllers/login_controller.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
 
 class PortalForm extends StatefulWidget {
-  final LoginViewModel viewmodel;
-  PortalForm({this.viewmodel});
+  PortalForm();
 
   @override
   _PortalFormState createState() => _PortalFormState();
@@ -28,6 +27,7 @@ class _PortalFormState extends State<PortalForm> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
+    LoginController controller = Get.put(LoginController());
 
     final portalField = TextFormField(
       controller: portalController,
@@ -42,9 +42,7 @@ class _PortalFormState extends State<PortalForm> {
     );
 
     var onContinuePressed = () async {
-      var success =
-          await widget.viewmodel.prepareAuthorization(portalController.text);
-      // if (success) {}
+      await controller.getPortalCapabilities(portalController.text);
     };
     final continueButton = Material(
       elevation: 5.0,
@@ -61,25 +59,17 @@ class _PortalFormState extends State<PortalForm> {
       ),
     );
 
-    final String assetName = 'resources/logo_new.svg';
-    final Widget svg =
-        SvgPicture.asset(assetName, semanticsLabel: 'resources/logo_new.svg');
-
     return new Container(
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            svg,
-            SizedBox(height: 10.0),
             portalField,
             SizedBox(
               height: 10.0,
             ),
-            widget.viewmodel.state == ViewState.Busy
-                ? CircularProgressIndicator()
-                : continueButton,
+            continueButton,
             SizedBox(
               height: 15.0,
             ),

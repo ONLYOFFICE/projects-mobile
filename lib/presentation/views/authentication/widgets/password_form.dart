@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/get.dart';
 
 import 'package:only_office_mobile/data/enums/viewstate.dart';
-import 'package:only_office_mobile/domain/viewmodels/login_viewmodel.dart';
+import 'package:only_office_mobile/domain/controllers/login_controller.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
-import 'package:only_office_mobile/presentation/views/login_view/widgets/login_sources_panel.dart';
 
 class PasswordForm extends StatefulWidget {
-  final LoginViewModel viewmodel;
-  PasswordForm({this.viewmodel});
-
+  PasswordForm();
   @override
   _PasswordFormState createState() => _PasswordFormState();
 }
@@ -30,10 +27,11 @@ class _PasswordFormState extends State<PasswordForm> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
+    LoginController controller = Get.find();
 
     final emailField = TextFormField(
       controller: emailController,
-      validator: widget.viewmodel.emailValidator,
+      validator: controller.emailValidator,
       autofillHints: [AutofillHints.email],
       obscureText: false,
       style: mainStyle,
@@ -45,7 +43,7 @@ class _PasswordFormState extends State<PasswordForm> {
       ),
     );
     final passwordField = TextFormField(
-      validator: widget.viewmodel.passValidator,
+      validator: controller.passValidator,
       controller: passController,
       autofillHints: [AutofillHints.password],
       obscureText: true,
@@ -59,10 +57,10 @@ class _PasswordFormState extends State<PasswordForm> {
     );
 
     var onLoginPressed = () async {
-      var loginSuccess = await widget.viewmodel
-          .loginByPassword(emailController.text, passController.text);
+      var loginSuccess = await controller.loginByPassword(
+          emailController.text, passController.text);
       if (loginSuccess) {
-        Navigator.pushNamed(context, '/');
+        Get.toNamed('/');
       }
     };
     final loginButon = Material(
@@ -80,17 +78,12 @@ class _PasswordFormState extends State<PasswordForm> {
       ),
     );
 
-    final String assetName = 'resources/logo_new.svg';
-    final Widget svg =
-        SvgPicture.asset(assetName, semanticsLabel: 'resources/logo_new.svg');
-
     return new Container(
       child: Form(
         key: _formKey,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            svg,
             SizedBox(height: 10.0),
             emailField,
             SizedBox(height: 10.0),
@@ -98,13 +91,12 @@ class _PasswordFormState extends State<PasswordForm> {
             SizedBox(
               height: 10.0,
             ),
-            widget.viewmodel.state == ViewState.Busy
+            Obx(() => controller.state.value == ViewState.Busy
                 ? CircularProgressIndicator()
-                : loginButon,
+                : loginButon),
             SizedBox(
               height: 15.0,
             ),
-            LoginSources(capabilities: widget.viewmodel.capabilities.providers),
           ],
         ),
       ),

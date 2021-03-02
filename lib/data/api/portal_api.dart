@@ -20,10 +20,10 @@ class PortalApi {
       if (response.statusCode == 200) {
         result.response = Capabilities.fromJson(responseJson);
       } else {
-        result.error = PortalError.fromJson(responseJson);
+        result.error = Error.fromJson(responseJson);
       }
     } catch (e) {
-      result.error = new PortalError(message: 'Чтото пошло не так');
+      result.error = new Error(message: 'Ошибка');
     }
 
     return result;

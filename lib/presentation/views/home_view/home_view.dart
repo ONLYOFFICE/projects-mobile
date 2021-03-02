@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:only_office_mobile/data/enums/viewstate.dart';
-import 'package:only_office_mobile/data/models/user.dart';
-import 'package:only_office_mobile/domain/viewmodels/home_viewmodel.dart';
+import 'package:only_office_mobile/domain/controllers/home_controller.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
 import 'package:only_office_mobile/presentation/shared/ui_helpers.dart';
-import 'package:only_office_mobile/presentation/views/base_view.dart';
-import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BaseView<HomeViewModel>(
-      onModelReady: (model) => model.getProjects(Provider.of<User>(context).id),
-      builder: (context, model, child) => Scaffold(
-        backgroundColor: backgroundColor,
-        body: model.state == ViewState.Busy
+    HomeController controller = Get.put(HomeController());
+
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      body: Obx(
+        () => controller.state == ViewState.Busy
             ? Center(child: CircularProgressIndicator())
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +23,7 @@ class HomeView extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Text(
-                      'Welcome ${Provider.of<User>(context).name}',
+                      'Welcome ',
                       style: headerStyle,
                     ),
                   ),
@@ -39,5 +38,6 @@ class HomeView extends StatelessWidget {
               ),
       ),
     );
+    // );
   }
 }

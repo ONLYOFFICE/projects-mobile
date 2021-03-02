@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:only_office_mobile/presentation/views/login_view/widgets/login_service_button.dart';
+import 'package:only_office_mobile/presentation/views/authentication/widgets/login_service_button.dart';
 
 class LoginSources extends StatelessWidget {
   final List<String> capabilities;
@@ -9,7 +9,7 @@ class LoginSources extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Container(
-      height: 50,
+      height: 90,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
