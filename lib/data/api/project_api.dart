@@ -30,36 +30,36 @@
  *
  */
 
-// import 'package:flutter/material.dart';
-// import 'package:only_office_mobile/domain/viewmodels/base_viewmodel.dart';
-// import 'package:only_office_mobile/internal/locator.dart';
-// import 'package:provider/provider.dart';
+import 'dart:convert';
 
-// class BaseView<T extends BaseViewModel> extends StatefulWidget {
-//   final Widget Function(BuildContext context, T model, Widget child) builder;
-//   final Function(T) onModelReady;
+import 'package:only_office_mobile/data/models/apiDTO.dart';
+import 'package:only_office_mobile/data/models/project.dart';
+import 'package:only_office_mobile/internal/locator.dart';
+import 'package:only_office_mobile/data/api/core_api.dart';
+import 'package:only_office_mobile/data/models/error.dart';
 
-//   BaseView({this.builder, this.onModelReady});
+class ProjectApi {
+  var coreApi = locator<CoreApi>();
 
-//   @override
-//   _BaseViewState<T> createState() => _BaseViewState<T>();
-// }
+  Future<ApiDTO<List<Project>>> getProjects() async {
+    var url = coreApi.projectsUrl();
 
-// class _BaseViewState<T extends BaseViewModel> extends State<BaseView<T>> {
-//   T model = locator<T>();
+    var result = new ApiDTO<List<Project>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
 
-//   @override
-//   void initState() {
-//     if (widget.onModelReady != null) {
-//       widget.onModelReady(model);
-//     }
-//     super.initState();
-//   }
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => Project.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson);
+      }
+    } catch (e) {
+      result.error = new CustomError(message: 'Ошибка');
+    }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return ChangeNotifierProvider<T>(
-//         create: (context) => model,
-//         child: Consumer<T>(builder: widget.builder));
-//   }
-// }
+    return result;
+  }
+}

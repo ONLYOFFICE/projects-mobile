@@ -30,23 +30,27 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:only_office_mobile/data/enums/viewstate.dart';
+import 'package:flutter/material.dart';
 
-class HomeController extends GetxController {
-  // Api _api = locator<Api>();
+import 'package:only_office_mobile/presentation/shared/app_colors.dart';
+import 'package:only_office_mobile/presentation/views/authentication/widgets/tfacode_form.dart';
 
-  // List<Projects> projects;
-
-  Future getProjects(int userId) async {
-    // setState(ViewState.Busy);
-    // projects = await _api.getProjectsForUser(userId);
-    // setState(ViewState.Idle);
-  }
-  ViewState _state = ViewState.Idle;
-
-  ViewState get state => _state;
-  void setState(ViewState viewState) {
-    _state = viewState;
+class CodeView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Container(
+          color: backgroundColor,
+          child: Padding(
+            padding: const EdgeInsets.all(36.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[SizedBox(height: 10.0), CodeForm()],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -46,10 +46,6 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     LoginController controller = Get.put(LoginController());
 
-    Obx(() => controller.state.value == ViewState.Busy
-        ? () => {ProgressDialog.show}
-        : {});
-
     return Scaffold(
       body: Center(
         child: Container(

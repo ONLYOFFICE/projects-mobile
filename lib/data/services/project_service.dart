@@ -30,37 +30,27 @@
  *
  */
 
-import 'dart:convert';
+import 'dart:async';
 
+import 'package:only_office_mobile/data/api/project_api.dart';
 import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/capabilities.dart';
-import 'package:only_office_mobile/data/services/secure_storage.dart';
+import 'package:only_office_mobile/data/models/project.dart';
+import 'package:only_office_mobile/domain/dialogs.dart';
 import 'package:only_office_mobile/internal/locator.dart';
-import 'package:only_office_mobile/data/api/core_api.dart';
-import 'package:only_office_mobile/data/models/error.dart';
 
-class PortalApi {
-  var coreApi = locator<CoreApi>();
-  var secureStorage = locator<Storage>();
+class ProjectService {
+  ProjectApi _api = locator<ProjectApi>();
 
-  Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = coreApi.capabilitiesUrl(portalName);
+  Future<List<Project>> getProjects() async {
+    ApiDTO<List<Project>> projects = await _api.getProjects();
 
-    var result = new ApiDTO<Capabilities>();
-    try {
-      var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+    var success = projects.response != null;
 
-      if (response.statusCode == 200) {
-        result.response = Capabilities.fromJson(responseJson);
-        secureStorage.putString('portalName', portalName);
-      } else {
-        result.error = CustomError.fromJson(responseJson);
-      }
-    } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+    if (success) {
+      return projects.response;
+    } else {
+      ErrorDialog.show(projects.error);
+      return null;
     }
-
-    return result;
   }
 }

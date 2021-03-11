@@ -30,37 +30,52 @@
  *
  */
 
-import 'dart:convert';
-
-import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/capabilities.dart';
-import 'package:only_office_mobile/data/services/secure_storage.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:only_office_mobile/data/enums/viewstate.dart';
+import 'package:only_office_mobile/data/models/project.dart';
+import 'package:only_office_mobile/data/services/project_service.dart';
 import 'package:only_office_mobile/internal/locator.dart';
-import 'package:only_office_mobile/data/api/core_api.dart';
-import 'package:only_office_mobile/data/models/error.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class PortalApi {
-  var coreApi = locator<CoreApi>();
-  var secureStorage = locator<Storage>();
+class ProjectsController extends GetxController {
+  var _api = locator<ProjectService>();
 
-  Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = coreApi.capabilitiesUrl(portalName);
+  @override
+  @mustCallSuper
+  void onInit() {
+    super.onInit();
+    setState(ViewState.Busy);
+    getProjects().then((value) => setState(ViewState.Idle));
+  }
 
-    var result = new ApiDTO<Capabilities>();
-    try {
-      var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+  List<Project> projects;
 
-      if (response.statusCode == 200) {
-        result.response = Capabilities.fromJson(responseJson);
-        secureStorage.putString('portalName', portalName);
-      } else {
-        result.error = CustomError.fromJson(responseJson);
-      }
-    } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
-    }
+  RefreshController refreshController =
+      RefreshController(initialRefresh: false);
 
-    return result;
+  void onRefresh() async {
+    await getProjects();
+    refreshController.refreshCompleted();
+  }
+
+  void onLoading() async {
+    // monitor network fetch
+
+    refreshController.loadComplete();
+  }
+
+  //
+
+  Future getProjects() async {
+    setState(ViewState.Busy);
+    projects = await _api.getProjects();
+    setState(ViewState.Idle);
+  }
+
+  var state = ViewState.Idle.obs;
+
+  void setState(ViewState viewState) {
+    state.value = viewState;
   }
 }

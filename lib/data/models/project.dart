@@ -30,37 +30,55 @@
  *
  */
 
-import 'dart:convert';
+class Project {
+  Project({
+    this.id,
+    this.description,
+    this.title,
+    this.status,
+    this.canEdit,
+    this.isPrivate,
+    this.responsible,
+  });
+  int id;
+  String description;
+  String title;
+  int status;
+  bool canEdit;
+  bool isPrivate;
 
-import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/capabilities.dart';
-import 'package:only_office_mobile/data/services/secure_storage.dart';
-import 'package:only_office_mobile/internal/locator.dart';
-import 'package:only_office_mobile/data/api/core_api.dart';
-import 'package:only_office_mobile/data/models/error.dart';
+  Responsible responsible;
 
-class PortalApi {
-  var coreApi = locator<CoreApi>();
-  var secureStorage = locator<Storage>();
+  Project.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    description = json['description'];
+    title = json['title'];
+    status = json['status'];
+    canEdit = json['canEdit'];
+    isPrivate = json['isPrivate'];
+    responsible = Responsible.fromJson(json['responsible']);
+  }
+}
 
-  Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = coreApi.capabilitiesUrl(portalName);
+class Responsible {
+  Responsible({
+    this.id,
+    this.displayName,
+    this.title,
+    this.avatarSmall,
+    this.profileUrl,
+  });
+  String id;
+  String displayName;
+  String title;
+  String avatarSmall;
+  String profileUrl;
 
-    var result = new ApiDTO<Capabilities>();
-    try {
-      var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        result.response = Capabilities.fromJson(responseJson);
-        secureStorage.putString('portalName', portalName);
-      } else {
-        result.error = CustomError.fromJson(responseJson);
-      }
-    } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
-    }
-
-    return result;
+  Responsible.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    displayName = json['displayName'];
+    title = json['title'];
+    avatarSmall = json['avatarSmall'];
+    profileUrl = json['profileUrl'];
   }
 }

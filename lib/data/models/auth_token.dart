@@ -34,13 +34,16 @@ class AuthToken {
   AuthToken({
     this.token,
     this.expires,
+    this.tfa,
   });
   String token;
   String expires;
+  bool tfa;
 
   AuthToken.fromJson(Map<String, dynamic> json) {
     token = json['response']['token'];
     expires = json['response']['expires'];
+    tfa = json['response']['tfa'];
   }
 
   Map<String, dynamic> toJson() {
