@@ -6,5 +6,5 @@ class ApiDTO<T> {
     this.error,
   });
   T response;
-  Error error;
+  CustomError error;
 }

@@ -10,9 +10,8 @@ import 'package:only_office_mobile/data/models/error.dart';
 class AuthApi {
   var coreApi = locator<CoreApi>();
 
-  Future<ApiDTO<AuthToken>> loginByUsername(
-      String email, String pass, String portalName) async {
-    var url = coreApi.authUrl(portalName);
+  Future<ApiDTO<AuthToken>> loginByUsername(String email, String pass) async {
+    var url = coreApi.authUrl();
     var body =
         jsonEncode(<String, String>{'userName': email, 'password': pass});
 
@@ -24,16 +23,42 @@ class AuthApi {
       if (response.statusCode == 201) {
         result.response = AuthToken.fromJson(responseJson);
       } else {
-        result.error = Error.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson);
       }
     } catch (e) {
-      result.error = new Error(message: 'Ошибка');
+      result.error = new CustomError(message: 'Ошибка');
     }
 
     return result;
   }
 
-  Future<User> getUserProfile(int userId) async {
-    return new User(id: 1123, name: "test", username: "testing");
+  Future<ApiDTO<AuthToken>> confirmTFACode(
+    String email,
+    String pass,
+    String code,
+  ) async {
+    var url = coreApi.tfaUrl(code);
+    var body = jsonEncode(<String, String>{
+      'userName': email,
+      'password': pass,
+      'accessToken': '',
+      'provider': ''
+    });
+
+    var result = new ApiDTO<AuthToken>();
+    try {
+      var response = await coreApi.postRequest(url, body);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 201) {
+        result.response = AuthToken.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson);
+      }
+    } catch (e) {
+      result.error = new CustomError(message: 'Ошибка');
+    }
+
+    return result;
   }
 }

@@ -1,8 +1,8 @@
-class Error {
+class CustomError {
   String message;
-  Error({this.message});
+  CustomError({this.message});
 
-  Error.fromJson(Map<String, dynamic> json) {
+  CustomError.fromJson(Map<String, dynamic> json) {
     message = json['error']['message'];
   }
 }

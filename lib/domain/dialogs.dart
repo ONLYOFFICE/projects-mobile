@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:only_office_mobile/data/models/error.dart';
 
 class ErrorDialog {
-  static show(Error error) {
+  static show(CustomError error) {
     Get.defaultDialog(
         title: '${error.message}',
         textConfirm: 'ok',
@@ -17,7 +17,7 @@ class ErrorDialog {
 }
 
 class ProgressDialog {
-  static show(Error error) {
+  static show(CustomError error) {
     Get.dialog(Center(child: CircularProgressIndicator()));
   }
 

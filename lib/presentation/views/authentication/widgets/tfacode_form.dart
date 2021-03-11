@@ -7,15 +7,13 @@ import 'package:only_office_mobile/domain/controllers/login_controller.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
 
-class PasswordForm extends StatefulWidget {
-  PasswordForm();
+class CodeForm extends StatefulWidget {
   @override
-  _PasswordFormState createState() => _PasswordFormState();
+  _CodeFormState createState() => _CodeFormState();
 }
 
-class _PasswordFormState extends State<PasswordForm> {
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passController = new TextEditingController();
+class _CodeFormState extends State<CodeForm> {
+  TextEditingController codeController = new TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -29,36 +27,22 @@ class _PasswordFormState extends State<PasswordForm> {
     final localization = AppLocalizations.of(context);
     LoginController controller = Get.find();
 
-    final emailField = TextFormField(
-      controller: emailController,
-      validator: controller.emailValidator,
-      autofillHints: [AutofillHints.email],
-      obscureText: false,
-      style: mainStyle,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: localization.emailAddress,
-        // border:
-        //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-      ),
-    );
-    final passwordField = TextFormField(
+    final codeField = TextFormField(
       validator: controller.passValidator,
-      controller: passController,
+      controller: codeController,
       autofillHints: [AutofillHints.password],
       obscureText: true,
       style: mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: localization.password, //"Пароль",
+        hintText: "Код",
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
     );
 
     var onLoginPressed = () async {
-      await controller.loginByPassword(
-          emailController.text, passController.text);
+      await controller.sendCode(codeController.text);
     };
     final loginButon = Material(
       elevation: 5.0,
@@ -68,7 +52,7 @@ class _PasswordFormState extends State<PasswordForm> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
-        child: Text("Login",
+        child: Text("Send",
             textAlign: TextAlign.center,
             style: mainStyle.copyWith(
                 color: backgroundColor, fontWeight: FontWeight.bold)),
@@ -82,9 +66,7 @@ class _PasswordFormState extends State<PasswordForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: 10.0),
-            emailField,
-            SizedBox(height: 10.0),
-            passwordField,
+            codeField,
             SizedBox(
               height: 10.0,
             ),
