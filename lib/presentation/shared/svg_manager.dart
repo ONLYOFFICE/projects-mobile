@@ -30,35 +30,11 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:only_office_mobile/data/services/project_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class ProjectsController extends GetxController {
-  var _api = locator<ProjectService>();
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  var projects = [].obs;
-
-  RefreshController refreshController = RefreshController(initialRefresh: true);
-
-  void onRefresh() async {
-    await getProjects();
-    refreshController.refreshCompleted();
-  }
-
-  void onLoading() async {
-    await getProjects();
-    refreshController.loadComplete();
-  }
-
-  Future getProjects() async {
-    var items = await _api.getProjects();
-    projects.assignAll(items);
+class SVG {
+  static Widget create(String path) {
+    return SvgPicture.asset(path, semanticsLabel: path);
   }
 }

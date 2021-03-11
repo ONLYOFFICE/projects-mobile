@@ -30,35 +30,39 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:only_office_mobile/data/services/project_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:flutter/material.dart';
 
-class ProjectsController extends GetxController {
-  var _api = locator<ProjectService>();
+import 'package:only_office_mobile/data/models/project.dart';
+import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
+
+class ProjectItem extends StatelessWidget {
+  final Project project;
+  const ProjectItem({this.project});
 
   @override
-  void onInit() {
-    super.onInit();
-  }
-
-  var projects = [].obs;
-
-  RefreshController refreshController = RefreshController(initialRefresh: true);
-
-  void onRefresh() async {
-    await getProjects();
-    refreshController.refreshCompleted();
-  }
-
-  void onLoading() async {
-    await getProjects();
-    refreshController.loadComplete();
-  }
-
-  Future getProjects() async {
-    var items = await _api.getProjects();
-    projects.assignAll(items);
+  Widget build(BuildContext context) {
+    return Card(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: SVG.create('resources/icons/project_icon.svg'),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(height: 16),
+              Text(project.title),
+              const SizedBox(height: 8),
+              Text(project.responsible.displayName),
+            ],
+          ),
+          const SizedBox(height: 16),
+        ],
+      ),
+      // Center(child: Text(project.title))
+    );
   }
 }
