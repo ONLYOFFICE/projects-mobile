@@ -31,27 +31,34 @@
  */
 
 class User {
-  int id;
-  String name;
-  String username;
-  User({this.id, this.name, this.username});
+  String id;
+  String displayName;
+  String title;
+  String avatarSmall;
+  String profileUrl;
 
-  User.initial()
-      : id = 0,
-        name = '',
-        username = '';
+  User(
+      {this.id,
+      this.displayName,
+      this.title,
+      this.avatarSmall,
+      this.profileUrl});
 
   User.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    name = json['name'];
-    username = json['username'];
+    displayName = json['displayName'];
+    title = json['title'];
+    avatarSmall = json['avatarSmall'];
+    profileUrl = json['profileUrl'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['name'] = this.name;
-    data['username'] = this.username;
+    data['displayName'] = this.displayName;
+    data['title'] = this.title;
+    data['avatarSmall'] = this.avatarSmall;
+    data['profileUrl'] = this.profileUrl;
     return data;
   }
 }

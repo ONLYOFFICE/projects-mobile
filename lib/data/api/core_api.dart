@@ -62,6 +62,8 @@ class CoreApi {
   String tfaUrl(String code) =>
       '${getPortalURI()}/api/2.0/authentication/${code}';
 
+  String filteredProjectsUrl(String params) =>
+      '${getPortalURI()}/api/2.0/project/filter?${params}';
   String projectsUrl() => '${getPortalURI()}/api/2.0/project';
 
   Future<http.Response> getRequest(String url) async {

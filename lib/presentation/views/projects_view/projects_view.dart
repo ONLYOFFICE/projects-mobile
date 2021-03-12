@@ -32,7 +32,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/project.dart';
 import 'package:only_office_mobile/domain/controllers/projects_controller.dart';
 
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
