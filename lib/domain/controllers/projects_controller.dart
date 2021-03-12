@@ -26,7 +26,7 @@ class ProjectsController extends GetxController {
   }
 
   Future getProjects() async {
-    var items = await _api.getProjects();
+    var items = await _api.getFilteredProjects();
     projects.assignAll(items);
   }
 }

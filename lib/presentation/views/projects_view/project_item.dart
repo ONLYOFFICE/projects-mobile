@@ -1,36 +1,61 @@
 import 'package:flutter/material.dart';
 
-import 'package:only_office_mobile/data/models/project.dart';
+import 'package:only_office_mobile/data/models/project_detailed.dart';
 import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
 
 class ProjectItem extends StatelessWidget {
-  final Project project;
+  final ProjectDetailed project;
   const ProjectItem({this.project});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            width: 72,
             padding: const EdgeInsets.all(16),
-            child: SVG.create('resources/icons/project_icon.svg'),
+            child: SVG.createSized('resources/icons/project_icon.svg', 40, 40),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              const SizedBox(height: 16),
-              Text(project.title),
-              const SizedBox(height: 8),
-              Text(project.responsible.displayName),
-            ],
+          Expanded(
+            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Flexible(
+                  child: Text(
+                    project.title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(project.responsible.displayName),
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(width: 16),
+          Expanded(
+            flex: 1,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(project.createdDate()),
+                const SizedBox(height: 8),
+                Text(project.taskCount.toString()),
+              ],
+            ),
+          ),
+          const SizedBox(width: 16),
         ],
       ),
-      // Center(child: Text(project.title))
     );
   }
 }
