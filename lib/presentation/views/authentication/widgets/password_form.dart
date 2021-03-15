@@ -66,7 +66,7 @@ class _PasswordFormState extends State<PasswordForm> {
       validator: controller.emailValidator,
       autofillHints: [AutofillHints.email],
       obscureText: false,
-      style: mainStyle,
+      style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: localization.emailAddress,
@@ -79,7 +79,7 @@ class _PasswordFormState extends State<PasswordForm> {
       controller: passController,
       autofillHints: [AutofillHints.password],
       obscureText: true,
-      style: mainStyle,
+      style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: localization.password, //"Пароль",
@@ -102,8 +102,8 @@ class _PasswordFormState extends State<PasswordForm> {
         onPressed: onLoginPressed,
         child: Text("Login",
             textAlign: TextAlign.center,
-            style: mainStyle.copyWith(
-                color: backgroundColor, fontWeight: FontWeight.bold)),
+            style: TextStyleHelper.mainStyle
+                .copyWith(color: backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 

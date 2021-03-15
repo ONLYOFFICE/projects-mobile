@@ -40,6 +40,8 @@ import 'package:only_office_mobile/data/api/authentication_api.dart';
 import 'package:only_office_mobile/data/models/apiDTO.dart';
 import 'package:only_office_mobile/data/models/auth_token.dart';
 import 'package:only_office_mobile/data/models/error.dart';
+import 'package:only_office_mobile/data/models/portal_user.dart';
+import 'package:only_office_mobile/data/models/self_user_profile.dart';
 import 'package:only_office_mobile/data/services/secure_storage.dart';
 import 'package:only_office_mobile/domain/dialogs.dart';
 import 'package:only_office_mobile/internal/locator.dart';
@@ -47,6 +49,17 @@ import 'package:only_office_mobile/internal/locator.dart';
 class AuthenticationService {
   AuthApi _api = locator<AuthApi>();
   var _secureStorage = locator<Storage>();
+
+  Future<ApiDTO<SelfUserProfile>> getSelfInfo() async {
+    ApiDTO<SelfUserProfile> authResponse = await _api.getUserInfo();
+
+    var tokenReceived = authResponse.response != null;
+
+    if (!tokenReceived) {
+      ErrorDialog.show(authResponse.error);
+    }
+    return authResponse;
+  }
 
   Future<ApiDTO<AuthToken>> login(String email, String pass) async {
     ApiDTO<AuthToken> authResponse = await _api.loginByUsername(email, pass);

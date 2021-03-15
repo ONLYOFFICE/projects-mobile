@@ -30,43 +30,35 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:only_office_mobile/domain/controllers/projects_controller.dart';
+class PortalUser {
+  String id;
+  String displayName;
+  String title;
+  String avatarSmall;
+  String profileUrl;
 
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/shared/widgets/header_widget.dart';
-import 'package:only_office_mobile/presentation/views/projects_view/project_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+  PortalUser(
+      {this.id,
+      this.displayName,
+      this.title,
+      this.avatarSmall,
+      this.profileUrl});
 
-class ProjectsView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    ProjectsController controller = Get.put(ProjectsController());
+  PortalUser.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    displayName = json['displayName'];
+    title = json['title'];
+    avatarSmall = json['avatarSmall'];
+    profileUrl = json['profileUrl'];
+  }
 
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          HeaderWidget(),
-          Expanded(
-            child: Obx(() => SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: false,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectItem(project: controller.projects[i]),
-                    itemExtent: 100.0,
-                    itemCount: controller.projects.length,
-                  ),
-                )),
-          ),
-        ],
-      ),
-    );
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['displayName'] = this.displayName;
+    data['title'] = this.title;
+    data['avatarSmall'] = this.avatarSmall;
+    data['profileUrl'] = this.profileUrl;
+    return data;
   }
 }

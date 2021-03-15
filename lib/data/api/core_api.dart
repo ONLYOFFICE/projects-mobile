@@ -66,6 +66,8 @@ class CoreApi {
       '${getPortalURI()}/api/2.0/project/filter?${params}';
   String projectsUrl() => '${getPortalURI()}/api/2.0/project';
 
+  String selfInfoUrl() => '${getPortalURI()}/api/2.0/people/@self';
+
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);

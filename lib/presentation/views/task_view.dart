@@ -48,12 +48,13 @@ class TaskView extends StatelessWidget {
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
               'Welcome ',
-              style: headerStyle,
+              style: TextStyleHelper.headerStyle,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
-            child: Text('Here are all your projects', style: subHeaderStyle),
+            child: Text('Here are all your projects',
+                style: TextStyleHelper.subHeaderStyle),
           ),
           UIHelper.verticalSpaceSmall(),
         ],

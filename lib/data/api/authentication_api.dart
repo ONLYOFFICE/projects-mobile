@@ -34,7 +34,8 @@ import 'dart:convert';
 
 import 'package:only_office_mobile/data/models/apiDTO.dart';
 import 'package:only_office_mobile/data/models/auth_token.dart';
-import 'package:only_office_mobile/data/models/user.dart';
+import 'package:only_office_mobile/data/models/portal_user.dart';
+import 'package:only_office_mobile/data/models/self_user_profile.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 import 'package:only_office_mobile/data/api/core_api.dart';
 import 'package:only_office_mobile/data/models/error.dart';
@@ -84,6 +85,26 @@ class AuthApi {
 
       if (response.statusCode == 201) {
         result.response = AuthToken.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson);
+      }
+    } catch (e) {
+      result.error = new CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<SelfUserProfile>> getUserInfo() async {
+    var url = coreApi.selfInfoUrl();
+
+    var result = new ApiDTO<SelfUserProfile>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = SelfUserProfile.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson);
       }

@@ -32,38 +32,53 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/domain/controllers/projects_controller.dart';
+import 'package:only_office_mobile/domain/controllers/user_controller.dart';
+import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
+import 'package:only_office_mobile/presentation/shared/text_styles.dart';
 
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/shared/widgets/header_widget.dart';
-import 'package:only_office_mobile/presentation/views/projects_view/project_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+class HeaderWidget extends StatefulWidget {
+  @override
+  _HeaderWidgetState createState() => _HeaderWidgetState();
+}
 
-class ProjectsView extends StatelessWidget {
+class _HeaderWidgetState extends State<HeaderWidget> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    ProjectsController controller = Get.put(ProjectsController());
-
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    UserController controller = Get.put(UserController());
+    return new Container(
+      height: 70,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          HeaderWidget(),
+          Container(
+            width: 72,
+            child: SVG.createSized(
+                'lib/assets/images/icons/project_icon.svg', 40, 40),
+          ),
           Expanded(
-            child: Obx(() => SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: false,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectItem(project: controller.projects[i]),
-                    itemExtent: 100.0,
-                    itemCount: controller.projects.length,
-                  ),
-                )),
+            child: Text(
+              'Projects',
+              style: TextStyleHelper.headerStyle,
+            ),
+          ),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                IconButton(icon: const Icon(Icons.search), onPressed: () {}),
+                IconButton(icon: const Icon(Icons.filter), onPressed: () {}),
+                IconButton(
+                    icon: const Icon(Icons.more_vert_outlined),
+                    onPressed: () {}),
+              ],
+            ),
           ),
         ],
       ),

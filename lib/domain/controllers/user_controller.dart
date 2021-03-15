@@ -30,35 +30,26 @@
  *
  */
 
-class User {
-  String id;
-  String displayName;
-  String title;
-  String avatarSmall;
-  String profileUrl;
+import 'package:get/get.dart';
+import 'package:only_office_mobile/data/models/portal_user.dart';
+import 'package:only_office_mobile/data/models/self_user_profile.dart';
+import 'package:only_office_mobile/data/services/authentication_service.dart';
+import 'package:only_office_mobile/internal/locator.dart';
 
-  User(
-      {this.id,
-      this.displayName,
-      this.title,
-      this.avatarSmall,
-      this.profileUrl});
+class UserController extends GetxController {
+  var _api = locator<AuthenticationService>();
 
-  User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    displayName = json['displayName'];
-    title = json['title'];
-    avatarSmall = json['avatarSmall'];
-    profileUrl = json['profileUrl'];
+  SelfUserProfile user;
+
+  @override
+  void onInit() {
+    super.onInit();
+
+    Future.wait([getUserInfo()]);
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['displayName'] = this.displayName;
-    data['title'] = this.title;
-    data['avatarSmall'] = this.avatarSmall;
-    data['profileUrl'] = this.profileUrl;
-    return data;
+  Future getUserInfo() async {
+    var data = await _api.getSelfInfo();
+    user = data.response;
   }
 }
