@@ -32,7 +32,7 @@ class _CodeFormState extends State<CodeForm> {
       controller: codeController,
       autofillHints: [AutofillHints.password],
       obscureText: true,
-      style: mainStyle,
+      style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: "Код",
@@ -54,8 +54,8 @@ class _CodeFormState extends State<CodeForm> {
         onPressed: onLoginPressed,
         child: Text("Send",
             textAlign: TextAlign.center,
-            style: mainStyle.copyWith(
-                color: backgroundColor, fontWeight: FontWeight.bold)),
+            style: TextStyleHelper.mainStyle
+                .copyWith(color: backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 

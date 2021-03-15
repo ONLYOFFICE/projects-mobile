@@ -3,8 +3,7 @@ import 'package:get/get.dart';
 import 'package:only_office_mobile/domain/controllers/projects_controller.dart';
 
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/shared/text_styles.dart';
-import 'package:only_office_mobile/presentation/shared/ui_helpers.dart';
+import 'package:only_office_mobile/presentation/shared/widgets/header_widget.dart';
 import 'package:only_office_mobile/presentation/views/projects_view/project_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -18,8 +17,7 @@ class ProjectsView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          UIHelper.verticalSpaceSmall(),
-          createHeader(),
+          HeaderWidget(),
           Expanded(
             child: Obx(() => SmartRefresher(
                   enablePullDown: true,
@@ -39,20 +37,4 @@ class ProjectsView extends StatelessWidget {
       ),
     );
   }
-
-  createHeader() =>
-      Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0),
-          child: Text(
-            'Welcome ',
-            style: headerStyle,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 20.0),
-          child: Text('Here are all your projects', style: subHeaderStyle),
-        ),
-        UIHelper.verticalSpaceSmall(),
-      ]);
 }

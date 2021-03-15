@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:only_office_mobile/data/models/user.dart';
+import 'package:only_office_mobile/data/models/portal_user.dart';
 
 class ProjectDetailed {
   bool canEdit;
@@ -10,7 +10,7 @@ class ProjectDetailed {
   String title;
   String description;
   int status;
-  User responsible;
+  PortalUser responsible;
   bool isPrivate;
   int taskCount;
   int taskCountTotal;
@@ -20,9 +20,9 @@ class ProjectDetailed {
   String timeTrackingTotal;
   int documentsCount;
   bool isFollow;
-  User updatedBy;
+  PortalUser updatedBy;
   String created;
-  User createdBy;
+  PortalUser createdBy;
   String updated;
 
   ProjectDetailed(
@@ -60,7 +60,7 @@ class ProjectDetailed {
     description = json['description'];
     status = json['status'];
     responsible = json['responsible'] != null
-        ? new User.fromJson(json['responsible'])
+        ? new PortalUser.fromJson(json['responsible'])
         : null;
     isPrivate = json['isPrivate'];
     taskCount = json['taskCount'];
@@ -71,11 +71,13 @@ class ProjectDetailed {
     timeTrackingTotal = json['timeTrackingTotal'];
     documentsCount = json['documentsCount'];
     isFollow = json['isFollow'];
-    updatedBy =
-        json['updatedBy'] != null ? new User.fromJson(json['updatedBy']) : null;
+    updatedBy = json['updatedBy'] != null
+        ? new PortalUser.fromJson(json['updatedBy'])
+        : null;
     created = json['created'];
-    createdBy =
-        json['createdBy'] != null ? new User.fromJson(json['createdBy']) : null;
+    createdBy = json['createdBy'] != null
+        ? new PortalUser.fromJson(json['createdBy'])
+        : null;
     updated = json['updated'];
   }
 

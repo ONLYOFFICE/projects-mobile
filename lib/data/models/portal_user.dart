@@ -1,18 +1,18 @@
-class User {
+class PortalUser {
   String id;
   String displayName;
   String title;
   String avatarSmall;
   String profileUrl;
 
-  User(
+  PortalUser(
       {this.id,
       this.displayName,
       this.title,
       this.avatarSmall,
       this.profileUrl});
 
-  User.fromJson(Map<String, dynamic> json) {
+  PortalUser.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     displayName = json['displayName'];
     title = json['title'];

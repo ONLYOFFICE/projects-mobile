@@ -33,7 +33,7 @@ class _PortalFormState extends State<PortalForm> {
       controller: portalController,
       autofillHints: [AutofillHints.url],
       obscureText: false,
-      style: mainStyle,
+      style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
@@ -54,8 +54,8 @@ class _PortalFormState extends State<PortalForm> {
         onPressed: onContinuePressed,
         child: Text(localization.continueButton,
             textAlign: TextAlign.center,
-            style: mainStyle.copyWith(
-                color: backgroundColor, fontWeight: FontWeight.bold)),
+            style: TextStyleHelper.mainStyle
+                .copyWith(color: backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 
