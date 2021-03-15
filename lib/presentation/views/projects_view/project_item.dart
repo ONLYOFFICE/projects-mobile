@@ -52,10 +52,29 @@ class ProjectItem extends StatelessWidget {
             child: SVG.createSized(
                 'lib/assets/images/icons/project_icon.svg', 40, 40),
           ),
-          ProjectTitle(project: project),
-          const SizedBox(width: 16),
-          ProjectSubtitle(project: project),
-          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      ProjectTitle(project: project),
+                      const SizedBox(width: 16),
+                      ProjectSubtitle(project: project),
+                      const SizedBox(width: 16),
+                    ],
+                  ),
+                ),
+                const Divider(
+                  height: 1,
+                  thickness: 1,
+                  indent: 0,
+                  endIndent: 0,
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -147,4 +166,3 @@ class ProjectSubtitle extends StatelessWidget {
     );
   }
 }
-// lib/assets/images/icons/
