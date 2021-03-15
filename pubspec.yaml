@@ -64,6 +64,12 @@ flutter:
     - lib/assets/images/icons/project_statuses/arrow_right.svg
     - lib/assets/images/icons/project_statuses/pause.svg
     - lib/assets/images/icons/project_statuses/checkmark.svg
+    - lib/assets/images/icons/sorting_3_descend.svg
+    - lib/assets/images/icons/preferences.svg
+    - lib/assets/images/icons/project_attribute.svg
+    
+    
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
