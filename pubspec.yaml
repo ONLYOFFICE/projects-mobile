@@ -58,6 +58,16 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/images/logo_new.svg
+
+    - lib/assets/images/icons/tab_bar/dashboard.svg
+    - lib/assets/images/icons/tab_bar/tasks.svg
+    - lib/assets/images/icons/tab_bar/projects.svg
+    - lib/assets/images/icons/tab_bar/more.svg
+    - lib/assets/images/icons/tab_bar/dashboard_active.svg
+    - lib/assets/images/icons/tab_bar/tasks_active.svg
+    - lib/assets/images/icons/tab_bar/projects_active.svg
+    - lib/assets/images/icons/tab_bar/more_active.svg
+
     - lib/assets/images/icons/project_icon.svg
     - lib/assets/images/icons/avatar.svg
     - lib/assets/images/icons/check_round.svg
@@ -67,6 +77,8 @@ flutter:
     - lib/assets/images/icons/sorting_3_descend.svg
     - lib/assets/images/icons/preferences.svg
     - lib/assets/images/icons/project_attribute.svg
+    
+    
     
     
     

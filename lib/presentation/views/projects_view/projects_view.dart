@@ -13,7 +13,7 @@ class ProjectsView extends StatelessWidget {
     ProjectsController controller = Get.put(ProjectsController());
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: AppColors.backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
