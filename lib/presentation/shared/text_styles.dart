@@ -34,17 +34,32 @@ import 'package:flutter/material.dart';
 
 class TextStyleHelper {
   static const mainStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+
   static const headerStyle = TextStyle(
       fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);
 
-  static const subHeaderStyle =
-      TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500);
+  static const subHeaderStyle = TextStyle(
+    fontSize: 14.0,
+    fontWeight: FontWeight.w500,
+  );
 
   static const projectTitle = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 16,
   );
+
+  static const subtitleProjects = TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: Color.fromRGBO(0, 0, 0, 0.6));
+
+  static const projectsSorting = TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 14,
+      fontWeight: FontWeight.normal,
+      color: Color.fromRGBO(0, 0, 0, 0.6));
 
   static const projectResponsible = TextStyle(
       fontFamily: 'Roboto',

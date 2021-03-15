@@ -46,12 +46,7 @@ class ProjectItem extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 72,
-            padding: const EdgeInsets.all(16),
-            child: SVG.createSized(
-                'lib/assets/images/icons/project_icon.svg', 40, 40),
-          ),
+          ProjectIcon(),
           Expanded(
             child: Column(
               children: [
@@ -74,6 +69,36 @@ class ProjectItem extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ProjectIcon extends StatelessWidget {
+  const ProjectIcon({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 72,
+      padding: const EdgeInsets.all(16),
+      child: Stack(
+        children: <Widget>[
+          SVG.createSized('lib/assets/images/icons/project_icon.svg', 40, 40),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: SVG.createSized(
+                'lib/assets/images/icons/project_attribute.svg', 16, 16),
+            // IconButton(
+            //   onPressed: () {},
+            //   icon: SVG.createSized(
+            //       'lib/assets/images/icons/project_attribute.svg', 16, 16),
+            // ),
           ),
         ],
       ),
