@@ -86,8 +86,8 @@ class _CodeFormState extends State<CodeForm> {
         onPressed: onLoginPressed,
         child: Text("Send",
             textAlign: TextAlign.center,
-            style: TextStyleHelper.mainStyle
-                .copyWith(color: backgroundColor, fontWeight: FontWeight.bold)),
+            style: TextStyleHelper.mainStyle.copyWith(
+                color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 

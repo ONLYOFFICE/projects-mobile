@@ -54,7 +54,7 @@ class PortalView extends StatelessWidget {
             ? Center(child: CircularProgressIndicator())
             : Center(
                 child: Container(
-                  color: backgroundColor,
+                  color: AppColors.backgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(36.0),
                     child: Column(

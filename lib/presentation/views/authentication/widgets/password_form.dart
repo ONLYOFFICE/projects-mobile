@@ -102,8 +102,8 @@ class _PasswordFormState extends State<PasswordForm> {
         onPressed: onLoginPressed,
         child: Text("Login",
             textAlign: TextAlign.center,
-            style: TextStyleHelper.mainStyle
-                .copyWith(color: backgroundColor, fontWeight: FontWeight.bold)),
+            style: TextStyleHelper.mainStyle.copyWith(
+                color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 

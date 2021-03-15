@@ -35,6 +35,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:only_office_mobile/domain/controllers/navigation_controller.dart';
+import 'package:only_office_mobile/presentation/shared/app_colors.dart';
+import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
 
 import 'package:only_office_mobile/presentation/views/projects_view/projects_view.dart';
 import 'package:only_office_mobile/presentation/views/task_view.dart';
@@ -51,29 +53,49 @@ class NavigationView extends StatelessWidget {
             child: IndexedStack(
               index: controller.tabIndex,
               children: [
+                TaskView(),
+                TaskView(),
                 ProjectsView(),
                 TaskView(),
               ],
             ),
           ),
           bottomNavigationBar: BottomNavigationBar(
-            unselectedItemColor: Colors.black,
-            selectedItemColor: Colors.redAccent,
+            unselectedItemColor: AppColors.tabSecondary,
+            selectedItemColor: AppColors.tabActive,
             onTap: controller.changeTabIndex,
             currentIndex: controller.tabIndex,
             showSelectedLabels: true,
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.white,
+            backgroundColor: AppColors.lightSecondary,
             elevation: 0,
             items: [
               _bottomNavigationBarItem(
-                icon: CupertinoIcons.checkmark_rectangle_fill,
+                icon:
+                    SVG.create('lib/assets/images/icons/tab_bar/dashboard.svg'),
+                activeIcon: SVG.create(
+                    'lib/assets/images/icons/tab_bar/dashboard_active.svg'),
+                label: 'Dashboard',
+              ),
+              _bottomNavigationBarItem(
+                icon: SVG.create('lib/assets/images/icons/tab_bar/tasks.svg'),
+                activeIcon: SVG
+                    .create('lib/assets/images/icons/tab_bar/tasks_active.svg'),
+                label: 'Tasks',
+              ),
+              _bottomNavigationBarItem(
+                icon:
+                    SVG.create('lib/assets/images/icons/tab_bar/projects.svg'),
+                activeIcon: SVG.create(
+                    'lib/assets/images/icons/tab_bar/projects_active.svg'),
                 label: 'Projects',
               ),
               _bottomNavigationBarItem(
-                icon: CupertinoIcons.alarm,
-                label: 'Tasks',
+                icon: SVG.create('lib/assets/images/icons/tab_bar/more.svg'),
+                activeIcon: SVG
+                    .create('lib/assets/images/icons/tab_bar/more_active.svg'),
+                label: 'More',
               ),
             ],
           ),
@@ -82,9 +104,10 @@ class NavigationView extends StatelessWidget {
     );
   }
 
-  _bottomNavigationBarItem({IconData icon, String label}) {
+  _bottomNavigationBarItem({Widget icon, Widget activeIcon, String label}) {
     return BottomNavigationBarItem(
-      icon: Icon(icon),
+      icon: icon,
+      activeIcon: activeIcon,
       label: label,
     );
   }

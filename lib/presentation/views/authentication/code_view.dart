@@ -41,7 +41,7 @@ class CodeView extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-          color: backgroundColor,
+          color: AppColors.backgroundColor,
           child: Padding(
             padding: const EdgeInsets.all(36.0),
             child: Column(
