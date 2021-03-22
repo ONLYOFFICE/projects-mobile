@@ -49,4 +49,13 @@ class SVG {
       height: height,
     );
   }
+
+  static Widget createSizedFromString(
+      String imageString, double width, double height) {
+    return SvgPicture.string(
+      imageString,
+      width: width,
+      height: height,
+    );
+  }
 }

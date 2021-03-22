@@ -34,7 +34,7 @@ dependencies:
   source_gen: 0.9.10+2 
   firebase_core: ^1.0.0
   firebase_auth: ^1.0.0
-  google_sign_in: "^4.5.1"
+  google_sign_in: ^4.5.1
   pull_to_refresh: ^1.6.4
   # flutter_facebook_auth: "^1.0.0"
   # flutter_twitter_login: ^1.1.0
@@ -58,30 +58,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/images/logo_new.svg
-
-    - lib/assets/images/icons/tab_bar/dashboard.svg
-    - lib/assets/images/icons/tab_bar/tasks.svg
-    - lib/assets/images/icons/tab_bar/projects.svg
-    - lib/assets/images/icons/tab_bar/more.svg
-    - lib/assets/images/icons/tab_bar/dashboard_active.svg
-    - lib/assets/images/icons/tab_bar/tasks_active.svg
-    - lib/assets/images/icons/tab_bar/projects_active.svg
-    - lib/assets/images/icons/tab_bar/more_active.svg
-
-    - lib/assets/images/icons/project_icon.svg
-    - lib/assets/images/icons/avatar.svg
-    - lib/assets/images/icons/check_round.svg
-    - lib/assets/images/icons/project_statuses/arrow_right.svg
-    - lib/assets/images/icons/project_statuses/pause.svg
-    - lib/assets/images/icons/project_statuses/checkmark.svg
-    - lib/assets/images/icons/sorting_3_descend.svg
-    - lib/assets/images/icons/preferences.svg
-    - lib/assets/images/icons/project_attribute.svg
-    
-    
-    
-    
-    
+    - lib/assets/images/icons/
+    - lib/assets/images/icons/tab_bar/
+    - lib/assets/images/icons/project_statuses/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

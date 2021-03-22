@@ -39,16 +39,15 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:only_office_mobile/data/api/authentication_api.dart';
 import 'package:only_office_mobile/data/models/apiDTO.dart';
 import 'package:only_office_mobile/data/models/auth_token.dart';
-import 'package:only_office_mobile/data/models/error.dart';
-import 'package:only_office_mobile/data/models/portal_user.dart';
-import 'package:only_office_mobile/data/models/self_user_profile.dart';
-import 'package:only_office_mobile/data/services/secure_storage.dart';
+import 'package:only_office_mobile/data/models/from_api/error.dart';
+import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
+import 'package:only_office_mobile/data/services/storage.dart';
 import 'package:only_office_mobile/domain/dialogs.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 
-class AuthenticationService {
+class AuthService {
   AuthApi _api = locator<AuthApi>();
-  var _secureStorage = locator<Storage>();
+  var _storage = locator<Storage>();
 
   Future<ApiDTO<SelfUserProfile>> getSelfInfo() async {
     ApiDTO<SelfUserProfile> authResponse = await _api.getUserInfo();
@@ -79,8 +78,8 @@ class AuthenticationService {
 
     var tokenReceived = authResponse.response != null;
 
-    _secureStorage.putString('token', authResponse.response.token);
-    _secureStorage.putString('expires', authResponse.response.expires);
+    _storage.putString('token', authResponse.response.token);
+    _storage.putString('expires', authResponse.response.expires);
 
     if (!tokenReceived) {
       ErrorDialog.show(authResponse.error);

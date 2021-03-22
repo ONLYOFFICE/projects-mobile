@@ -31,17 +31,24 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
-import 'package:only_office_mobile/data/models/project_detailed.dart';
+import 'package:only_office_mobile/data/models/from_api/project_detailed.dart';
+import 'package:only_office_mobile/data/models/item.dart';
+import 'package:only_office_mobile/domain/controllers/project_item_controller.dart';
+
 import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
 
 class ProjectItem extends StatelessWidget {
-  final ProjectDetailed project;
-  const ProjectItem({this.project});
+  final Item item;
+  const ProjectItem({this.item});
 
   @override
   Widget build(BuildContext context) {
+    ProjectItemController itemController =
+        Get.put(ProjectItemController(item), tag: item.title);
+
     return Container(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,9 +61,15 @@ class ProjectItem extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      ProjectTitle(project: project),
+                      SecondColumn(
+                        item: item,
+                        itemController: itemController,
+                      ),
                       const SizedBox(width: 16),
-                      ProjectSubtitle(project: project),
+                      ThirdColumn(
+                        item: item,
+                        controller: itemController,
+                      ),
                       const SizedBox(width: 16),
                     ],
                   ),
@@ -106,13 +119,15 @@ class ProjectIcon extends StatelessWidget {
   }
 }
 
-class ProjectTitle extends StatelessWidget {
-  const ProjectTitle({
+class SecondColumn extends StatelessWidget {
+  const SecondColumn({
     Key key,
-    @required this.project,
+    @required this.item,
+    @required this.itemController,
   }) : super(key: key);
 
-  final ProjectDetailed project;
+  final Item item;
+  final ProjectItemController itemController;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +140,7 @@ class ProjectTitle extends StatelessWidget {
         children: <Widget>[
           Flexible(
             child: Text(
-              project.title,
+              item.title,
               overflow: TextOverflow.ellipsis,
               style: TextStyleHelper.projectTitle,
             ),
@@ -133,8 +148,16 @@ class ProjectTitle extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: <Widget>[
-              SVG.createSized(
-                  'lib/assets/images/icons/project_statuses/pause.svg', 16, 16),
+              Obx(
+                () => (itemController.statusImageString.value == null ||
+                        itemController.statusImageString.value.isEmpty)
+                    ? SVG.createSized(
+                        'lib/assets/images/icons/project_statuses/pause.svg',
+                        16,
+                        16)
+                    : SVG.createSizedFromString(
+                        itemController.statusImageString.value, 16, 16),
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(
@@ -143,7 +166,7 @@ class ProjectTitle extends StatelessWidget {
                 ),
               ),
               Text(
-                project.responsible.displayName,
+                item.responsible.displayName,
                 style: TextStyleHelper.projectResponsible,
               ),
             ],
@@ -154,13 +177,15 @@ class ProjectTitle extends StatelessWidget {
   }
 }
 
-class ProjectSubtitle extends StatelessWidget {
-  const ProjectSubtitle({
+class ThirdColumn extends StatelessWidget {
+  const ThirdColumn({
     Key key,
-    @required this.project,
+    @required this.item,
+    @required this.controller,
   }) : super(key: key);
 
-  final ProjectDetailed project;
+  final Item item;
+  final ProjectItemController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +196,7 @@ class ProjectSubtitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            project.createdDate(),
+            item.date,
             style: TextStyleHelper.projectDate,
           ),
           const SizedBox(height: 8),
@@ -181,7 +206,7 @@ class ProjectSubtitle extends StatelessWidget {
               SVG.createSized(
                   'lib/assets/images/icons/check_round.svg', 20, 20),
               Text(
-                project.taskCount.toString(),
+                item.subCount.toString(),
                 style: TextStyleHelper.projectCompleatetTasks,
               ),
             ],

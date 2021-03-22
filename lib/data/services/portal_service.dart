@@ -34,7 +34,7 @@ import 'dart:async';
 
 import 'package:only_office_mobile/data/api/portal_api.dart';
 import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/capabilities.dart';
+import 'package:only_office_mobile/data/models/from_api/capabilities.dart';
 import 'package:only_office_mobile/domain/dialogs.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 

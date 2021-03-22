@@ -37,6 +37,9 @@ import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
 import 'package:only_office_mobile/presentation/shared/text_styles.dart';
 
 class HeaderWidget extends StatefulWidget {
+  String title;
+  HeaderWidget({this.title});
+
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
 }
@@ -49,7 +52,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    UserController controller = Get.put(UserController());
+    UserController controller = Get.find();
+
     return Column(
       children: <Widget>[
         Container(
@@ -65,7 +69,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               ),
               Expanded(
                 child: Text(
-                  'Projects',
+                  widget.title,
                   style: TextStyleHelper.headerStyle,
                 ),
               ),

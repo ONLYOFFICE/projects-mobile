@@ -31,12 +31,16 @@
  */
 
 import 'package:get/get.dart';
+import 'package:only_office_mobile/data/models/from_api/status.dart';
+import 'package:only_office_mobile/data/models/item.dart';
 import 'package:only_office_mobile/data/services/project_service.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends GetxController {
   var _api = locator<ProjectService>();
+
+  List<Status> statuses;
 
   @override
   void onInit() {
@@ -58,7 +62,20 @@ class ProjectsController extends GetxController {
   }
 
   Future getProjects() async {
-    var items = await _api.getFilteredProjects();
-    projects.assignAll(items);
+    var items = await _api.getProjectsByParams();
+
+    items.forEach(
+      (element) {
+        projects.add(new Item(
+          id: element.id,
+          title: element.title,
+          status: element.status,
+          responsible: element.responsible,
+          date: element.creationDate(),
+          subCount: element.taskCount,
+          isImportant: false,
+        ));
+      },
+    );
   }
 }

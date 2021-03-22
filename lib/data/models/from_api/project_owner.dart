@@ -30,33 +30,27 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
-import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
-import 'package:only_office_mobile/data/services/authentication_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+class ProjectOwner {
+  int id;
+  String title;
+  int status;
+  bool isPrivate;
 
-class UserController extends GetxController {
-  var _api = locator<AuthService>();
+  ProjectOwner({this.id, this.title, this.status, this.isPrivate});
 
-  SelfUserProfile user;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    Future.wait([getUserInfo()]);
+  ProjectOwner.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    status = json['status'];
+    isPrivate = json['isPrivate'];
   }
 
-  Future getUserInfo() async {
-    var data = await _api.getSelfInfo();
-    user = data.response;
-  }
-
-  Future<String> getUserId() async {
-    if (user == null || user.id == null) {
-      await getUserInfo();
-    }
-    return user.id;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['title'] = this.title;
+    data['status'] = this.status;
+    data['isPrivate'] = this.isPrivate;
+    return data;
   }
 }

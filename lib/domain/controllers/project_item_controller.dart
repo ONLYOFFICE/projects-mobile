@@ -30,33 +30,34 @@
  *
  */
 
+import 'dart:convert';
+
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
-import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
-import 'package:only_office_mobile/data/services/authentication_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:only_office_mobile/data/models/from_api/status.dart';
+import 'package:only_office_mobile/data/models/item.dart';
+import 'package:only_office_mobile/domain/controllers/statuses_controller.dart';
 
-class UserController extends GetxController {
-  var _api = locator<AuthService>();
+class ProjectItemController extends GetxController {
+  List<Status> statuses;
 
-  SelfUserProfile user;
+  ProjectItemController(Item project) {
+    this.project = project;
+    StatusesController statusesController = Get.find();
 
-  @override
-  void onInit() {
-    super.onInit();
-
-    Future.wait([getUserInfo()]);
+    statusesController.getStatuses().then((value) => {
+          statuses = value,
+          statusImageString =
+              decodeImageString(statuses[project.status].image).obs,
+        });
   }
 
-  Future getUserInfo() async {
-    var data = await _api.getSelfInfo();
-    user = data.response;
-  }
+  var project;
 
-  Future<String> getUserId() async {
-    if (user == null || user.id == null) {
-      await getUserInfo();
-    }
-    return user.id;
+  var statusImageString = ''.obs;
+
+  decodeImageString(String image) {
+    return utf8.decode(
+      base64.decode(statuses[project.status].image),
+    );
   }
 }

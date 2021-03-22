@@ -30,7 +30,7 @@
  *
  */
 
-import 'package:only_office_mobile/data/models/error.dart';
+import 'package:only_office_mobile/data/models/from_api/error.dart';
 
 class ApiDTO<T> {
   ApiDTO({

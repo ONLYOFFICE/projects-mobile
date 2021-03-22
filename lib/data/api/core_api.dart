@@ -31,19 +31,13 @@
  */
 
 import 'package:http/http.dart' as http;
-import 'package:only_office_mobile/data/services/secure_storage.dart';
+import 'package:only_office_mobile/data/services/storage.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 
 class CoreApi {
   var client = new http.Client();
-  var _secureStorage = locator<Storage>();
+  var _storage = locator<Storage>();
   String _portalName;
-
-  CoreApi() {
-    _secureStorage
-        .getString('portalName')
-        .then((value) => {_portalName = value});
-  }
 
   Future<Map<String, String>> getHeaders() async {
     var token = await getToken();
@@ -57,16 +51,26 @@ class CoreApi {
   String capabilitiesUrl(String portalName) =>
       'https://$portalName/api/2.0/capabilities';
 
-  String authUrl() => '${getPortalURI()}/api/2.0/authentication.json';
+  Future<String> authUrl() async =>
+      '${await getPortalURI()}/api/2.0/authentication.json';
 
-  String tfaUrl(String code) =>
-      '${getPortalURI()}/api/2.0/authentication/${code}';
+  Future<String> tfaUrl(String code) async =>
+      '${await getPortalURI()}/api/2.0/authentication/${code}';
 
-  String filteredProjectsUrl(String params) =>
-      '${getPortalURI()}/api/2.0/project/filter?${params}';
-  String projectsUrl() => '${getPortalURI()}/api/2.0/project';
+  Future<String> projectsByParamsUrl(String params) async =>
+      '${await getPortalURI()}/api/2.0/project/filter?${params}';
 
-  String selfInfoUrl() => '${getPortalURI()}/api/2.0/people/@self';
+  Future<String> tasksByFilterUrl(String params) async =>
+      '${await getPortalURI()}/api/2.0/project/task/filter?${params}';
+
+  Future<String> projectsUrl() async =>
+      '${await getPortalURI()}/api/2.0/project';
+
+  Future<String> selfInfoUrl() async =>
+      '${await getPortalURI()}/api/2.0/people/@self';
+
+  Future<String> statusesUrl() async =>
+      '${await getPortalURI()}/api/2.0/project/status';
 
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();
@@ -86,18 +90,16 @@ class CoreApi {
     return response;
   }
 
-  String getPortalURI() {
+  Future<String> getPortalURI() async {
     if (_portalName == null || _portalName.isEmpty) {
-      _secureStorage
-          .getString('portalName')
-          .then((value) => {_portalName = value});
+      _portalName = await _storage.getString('portalName');
     }
 
     return 'https://${_portalName}';
   }
 
   Future<String> getToken() async {
-    String token = await _secureStorage.getString('token');
+    String token = await _storage.getString('token');
 
     return token;
   }

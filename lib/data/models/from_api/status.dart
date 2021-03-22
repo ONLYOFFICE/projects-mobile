@@ -30,33 +30,59 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
-import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
-import 'package:only_office_mobile/data/services/authentication_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+class Status {
+  int statusType;
+  bool canChangeAvailable;
+  int id;
+  String image;
+  String imageType;
+  String title;
+  String description;
+  String color;
+  int order;
+  bool isDefault;
+  bool available;
 
-class UserController extends GetxController {
-  var _api = locator<AuthService>();
+  Status(
+      {this.statusType,
+      this.canChangeAvailable,
+      this.id,
+      this.image,
+      this.imageType,
+      this.title,
+      this.description,
+      this.color,
+      this.order,
+      this.isDefault,
+      this.available});
 
-  SelfUserProfile user;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    Future.wait([getUserInfo()]);
+  Status.fromJson(Map<String, dynamic> json) {
+    statusType = json['statusType'];
+    canChangeAvailable = json['canChangeAvailable'];
+    id = json['id'];
+    image = json['image'];
+    imageType = json['imageType'];
+    title = json['title'];
+    description = json['description'];
+    color = json['color'];
+    order = json['order'];
+    isDefault = json['isDefault'];
+    available = json['available'];
   }
 
-  Future getUserInfo() async {
-    var data = await _api.getSelfInfo();
-    user = data.response;
-  }
-
-  Future<String> getUserId() async {
-    if (user == null || user.id == null) {
-      await getUserInfo();
-    }
-    return user.id;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['statusType'] = this.statusType;
+    data['canChangeAvailable'] = this.canChangeAvailable;
+    data['id'] = this.id;
+    data['image'] = this.image;
+    data['imageType'] = this.imageType;
+    data['title'] = this.title;
+    data['description'] = this.description;
+    data['color'] = this.color;
+    data['order'] = this.order;
+    data['isDefault'] = this.isDefault;
+    data['available'] = this.available;
+    return data;
   }
 }
