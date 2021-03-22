@@ -30,7 +30,7 @@
  *
  */
 
-import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 
 class Project {
   Project({

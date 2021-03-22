@@ -33,12 +33,12 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/enums/viewstate.dart';
-import 'package:only_office_mobile/data/models/from_api/capabilities.dart';
-import 'package:only_office_mobile/data/services/authentication_service.dart';
-import 'package:only_office_mobile/data/services/portal_service.dart';
-import 'package:only_office_mobile/data/services/storage.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/data/models/from_api/capabilities.dart';
+import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/data/services/portal_service.dart';
+import 'package:projects/data/services/storage.dart';
+import 'package:projects/internal/locator.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();

@@ -31,10 +31,10 @@
  */
 
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/status.dart';
-import 'package:only_office_mobile/data/models/item.dart';
-import 'package:only_office_mobile/data/services/project_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/item.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends GetxController {

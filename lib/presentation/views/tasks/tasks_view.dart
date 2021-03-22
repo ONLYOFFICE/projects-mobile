@@ -33,10 +33,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:only_office_mobile/domain/controllers/tasks_controller.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/shared/widgets/header_widget.dart';
-import 'package:only_office_mobile/presentation/shared/widgets/project_item.dart';
+import 'package:projects/domain/controllers/tasks_controller.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
+import 'package:projects/presentation/shared/widgets/header_widget.dart';
+import 'package:projects/presentation/shared/widgets/project_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TasksView extends StatelessWidget {

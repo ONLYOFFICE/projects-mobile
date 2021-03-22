@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
 class ErrorDialog {
   static show(CustomError error) {

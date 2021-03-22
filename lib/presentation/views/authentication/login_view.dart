@@ -33,10 +33,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:only_office_mobile/domain/controllers/login_controller.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/authentication/widgets/login_sources_panel.dart';
-import 'package:only_office_mobile/presentation/views/authentication/widgets/password_form.dart';
+import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
+import 'package:projects/presentation/views/authentication/widgets/login_sources_panel.dart';
+import 'package:projects/presentation/views/authentication/widgets/password_form.dart';
 
 class LoginView extends StatelessWidget {
   @override

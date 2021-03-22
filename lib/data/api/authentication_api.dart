@@ -32,12 +32,12 @@
 
 import 'dart:convert';
 
-import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/auth_token.dart';
-import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
-import 'package:only_office_mobile/internal/locator.dart';
-import 'package:only_office_mobile/data/api/core_api.dart';
-import 'package:only_office_mobile/data/models/from_api/error.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/auth_token.dart';
+import 'package:projects/data/models/from_api/self_user_profile.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
 class AuthApi {
   var coreApi = locator<CoreApi>();

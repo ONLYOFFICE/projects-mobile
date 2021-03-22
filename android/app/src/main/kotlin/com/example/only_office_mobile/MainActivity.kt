@@ -1,4 +1,4 @@
-package com.example.only_office_mobile
+package com.onlyoffice.projects
 
 import io.flutter.embedding.android.FlutterActivity
 

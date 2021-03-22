@@ -33,11 +33,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/enums/viewstate.dart';
-import 'package:only_office_mobile/domain/controllers/login_controller.dart';
+import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/login_controller.dart';
 
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/authentication/widgets/portal_form.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
+import 'package:projects/presentation/views/authentication/widgets/portal_form.dart';
 
 class PortalView extends StatelessWidget {
   @override

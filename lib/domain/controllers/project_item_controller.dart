@@ -33,9 +33,9 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/status.dart';
-import 'package:only_office_mobile/data/models/item.dart';
-import 'package:only_office_mobile/domain/controllers/statuses_controller.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/item.dart';
+import 'package:projects/domain/controllers/statuses_controller.dart';
 
 class ProjectItemController extends GetxController {
   List<Status> statuses;

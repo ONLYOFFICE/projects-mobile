@@ -31,10 +31,10 @@
  */
 
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
-import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
-import 'package:only_office_mobile/data/services/authentication_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/self_user_profile.dart';
+import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/internal/locator.dart';
 
 class UserController extends GetxController {
   var _api = locator<AuthService>();

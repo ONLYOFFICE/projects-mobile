@@ -32,9 +32,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/domain/controllers/login_controller.dart';
+import 'package:projects/domain/controllers/login_controller.dart';
 
-import 'package:only_office_mobile/presentation/views/authentication/widgets/login_service_button.dart';
+import 'package:projects/presentation/views/authentication/widgets/login_service_button.dart';
 
 class LoginSources extends StatelessWidget {
   final List<String> capabilities;

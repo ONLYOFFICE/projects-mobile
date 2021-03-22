@@ -32,8 +32,8 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/views/authentication/widgets/tfacode_form.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
+import 'package:projects/presentation/views/authentication/widgets/tfacode_form.dart';
 
 class CodeView extends StatelessWidget {
   @override

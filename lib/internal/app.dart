@@ -33,8 +33,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:only_office_mobile/internal/localization/localization_setup.dart';
-import 'package:only_office_mobile/internal/pages_setup.dart';
+import 'package:projects/internal/localization/localization_setup.dart';
+import 'package:projects/internal/pages_setup.dart';
 
 class App extends StatelessWidget {
   @override

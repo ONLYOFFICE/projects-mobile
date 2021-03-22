@@ -1,4 +1,4 @@
-name: only_office_mobile
+name: projects
 description: ONLYOFFICE Projects on Mobile.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -89,7 +89,7 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 
-#   name: only_office_mobile
+#   name: projects
 # description: ONLYOFFICE Projects on Mobile.
 
 # publish_to: 'none' # Remove this line if you wish to publish to pub.dev

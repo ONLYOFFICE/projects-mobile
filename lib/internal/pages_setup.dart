@@ -32,11 +32,11 @@
 
 import 'package:get/get.dart';
 
-import 'package:only_office_mobile/presentation/views/authentication/code_view.dart';
-import 'package:only_office_mobile/presentation/views/authentication/login_view.dart';
-import 'package:only_office_mobile/presentation/views/authentication/portal_view.dart';
-import 'package:only_office_mobile/presentation/views/navigation_view.dart';
-import 'package:only_office_mobile/presentation/views/projects_view/projects_view.dart';
+import 'package:projects/presentation/views/authentication/code_view.dart';
+import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:projects/presentation/views/authentication/portal_view.dart';
+import 'package:projects/presentation/views/navigation_view.dart';
+import 'package:projects/presentation/views/projects_view/projects_view.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/', page: () => NavigationView()),
