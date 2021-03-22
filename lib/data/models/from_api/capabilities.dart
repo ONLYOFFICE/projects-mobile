@@ -11,9 +11,9 @@ class Capabilities {
   String ssoUrl;
 
   Capabilities.fromJson(Map<String, dynamic> json) {
-    ldapEnabled = json['response']['ldapEnabled'];
-    providers = List<String>.from(json['response']['providers']);
-    ssoLabel = json['response']['ssoLabel'];
-    ldapEnabled = json['response']['ldapEnabled'];
+    ldapEnabled = json['ldapEnabled'];
+    providers = List<String>.from(json['providers']);
+    ssoLabel = json['ssoLabel'];
+    ldapEnabled = json['ldapEnabled'];
   }
 }

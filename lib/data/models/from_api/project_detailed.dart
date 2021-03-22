@@ -1,5 +1,5 @@
 import 'package:intl/intl.dart';
-import 'package:only_office_mobile/data/models/portal_user.dart';
+import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
 
 class ProjectDetailed {
   bool canEdit;
@@ -81,7 +81,7 @@ class ProjectDetailed {
     updated = json['updated'];
   }
 
-  String createdDate() {
+  String creationDate() {
     final DateTime now = DateTime.parse(created);
     final DateFormat formatter = DateFormat('d MMM.yyy');
     return formatter.format(now);

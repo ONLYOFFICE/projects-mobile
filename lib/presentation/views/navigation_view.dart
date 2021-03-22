@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:only_office_mobile/domain/controllers/navigation_controller.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
+import 'package:only_office_mobile/presentation/views/dashboard/dashboard_view.dart';
 
 import 'package:only_office_mobile/presentation/views/projects_view/projects_view.dart';
 import 'package:only_office_mobile/presentation/views/task_view.dart';
+import 'package:only_office_mobile/presentation/views/tasks/tasks_view.dart';
 
 class NavigationView extends StatelessWidget {
   final NavigationController controller = Get.put(NavigationController());
@@ -21,8 +23,8 @@ class NavigationView extends StatelessWidget {
             child: IndexedStack(
               index: controller.tabIndex,
               children: [
-                TaskView(),
-                TaskView(),
+                DashboardView(),
+                TasksView(),
                 ProjectsView(),
                 TaskView(),
               ],

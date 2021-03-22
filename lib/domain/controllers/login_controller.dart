@@ -2,18 +2,17 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:only_office_mobile/data/enums/viewstate.dart';
-import 'package:only_office_mobile/data/models/capabilities.dart';
+import 'package:only_office_mobile/data/models/from_api/capabilities.dart';
 import 'package:only_office_mobile/data/services/authentication_service.dart';
 import 'package:only_office_mobile/data/services/portal_service.dart';
-import 'package:only_office_mobile/data/services/secure_storage.dart';
+import 'package:only_office_mobile/data/services/storage.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 
 class LoginController extends GetxController {
-  final AuthenticationService _authenticationService =
-      locator<AuthenticationService>();
+  final AuthService _authService = locator<AuthService>();
 
   final PortalService _portalService = locator<PortalService>();
-  final Storage _secureStorage = locator<Storage>();
+  final Storage _storage = locator<Storage>();
 
   Capabilities capabilities;
   String _portalName;
@@ -33,10 +32,10 @@ class LoginController extends GetxController {
         });
   }
 
-  Future<bool> loginByPassword(String email, String password) async {
+  Future<void> loginByPassword(String email, String password) async {
     setState(ViewState.Busy);
 
-    var result = await _authenticationService.login(email, password);
+    var result = await _authService.login(email, password);
 
     if (result.response.token != null) {
       setState(ViewState.Idle);
@@ -51,11 +50,10 @@ class LoginController extends GetxController {
     setState(ViewState.Idle);
   }
 
-  Future<bool> sendCode(String code) async {
+  Future<void> sendCode(String code) async {
     setState(ViewState.Busy);
 
-    var result =
-        await _authenticationService.confirmTFACode(_email, _pass, code);
+    var result = await _authService.confirmTFACode(_email, _pass, code);
 
     if (result.response.token != null) {
       setState(ViewState.Idle);
@@ -70,7 +68,7 @@ class LoginController extends GetxController {
     switch (provider) {
       case 'google':
         try {
-          var result = await _authenticationService.signInWithGoogle();
+          var result = await _authService.signInWithGoogle();
         } catch (e) {}
 
         break;
@@ -133,9 +131,9 @@ class LoginController extends GetxController {
   }
 
   Future<bool> isTokenExpired() async {
-    String expirationDate = await _secureStorage.getString('expires');
-    String token = await _secureStorage.getString('token');
-    String portalName = await _secureStorage.getString('portalName');
+    String expirationDate = await _storage.getString('expires');
+    String token = await _storage.getString('token');
+    String portalName = await _storage.getString('portalName');
 
     if (expirationDate == null ||
         expirationDate.isEmpty ||

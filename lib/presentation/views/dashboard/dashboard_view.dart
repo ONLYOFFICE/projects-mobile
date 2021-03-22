@@ -7,7 +7,7 @@ import 'package:only_office_mobile/presentation/shared/widgets/header_widget.dar
 import 'package:only_office_mobile/presentation/shared/widgets/project_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectsView extends StatelessWidget {
+class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProjectsController controller = Get.put(ProjectsController());
@@ -17,7 +17,7 @@ class ProjectsView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          HeaderWidget(title: 'Projects'),
+          HeaderWidget(title: 'Dashboard'),
           Expanded(
             child: Obx(() => SmartRefresher(
                   enablePullDown: true,

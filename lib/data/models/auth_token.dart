@@ -9,9 +9,9 @@ class AuthToken {
   bool tfa;
 
   AuthToken.fromJson(Map<String, dynamic> json) {
-    token = json['response']['token'];
-    expires = json['response']['expires'];
-    tfa = json['response']['tfa'];
+    token = json['token'];
+    expires = json['expires'];
+    tfa = json['tfa'];
   }
 
   Map<String, dynamic> toJson() {

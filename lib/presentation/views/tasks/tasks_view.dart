@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/domain/controllers/projects_controller.dart';
 
+import 'package:only_office_mobile/domain/controllers/tasks_controller.dart';
 import 'package:only_office_mobile/presentation/shared/app_colors.dart';
 import 'package:only_office_mobile/presentation/shared/widgets/header_widget.dart';
 import 'package:only_office_mobile/presentation/shared/widgets/project_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectsView extends StatelessWidget {
+class TasksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ProjectsController controller = Get.put(ProjectsController());
+    TasksController controller = Get.put(TasksController());
 
     return Scaffold(
       backgroundColor: AppColors.backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          HeaderWidget(title: 'Projects'),
+          HeaderWidget(title: 'Tasks'),
           Expanded(
             child: Obx(() => SmartRefresher(
                   enablePullDown: true,
@@ -27,9 +27,9 @@ class ProjectsView extends StatelessWidget {
                   onLoading: controller.onLoading,
                   child: ListView.builder(
                     itemBuilder: (c, i) =>
-                        ProjectItem(item: controller.projects[i]),
+                        ProjectItem(item: controller.tasks[i]),
                     itemExtent: 100.0,
-                    itemCount: controller.projects.length,
+                    itemCount: controller.tasks.length,
                   ),
                 )),
           ),

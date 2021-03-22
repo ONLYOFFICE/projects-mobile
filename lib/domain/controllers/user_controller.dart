@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/portal_user.dart';
-import 'package:only_office_mobile/data/models/self_user_profile.dart';
+import 'package:only_office_mobile/data/models/from_api/portal_user.dart';
+import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
 import 'package:only_office_mobile/data/services/authentication_service.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 
 class UserController extends GetxController {
-  var _api = locator<AuthenticationService>();
+  var _api = locator<AuthService>();
 
   SelfUserProfile user;
 
@@ -19,5 +19,12 @@ class UserController extends GetxController {
   Future getUserInfo() async {
     var data = await _api.getSelfInfo();
     user = data.response;
+  }
+
+  Future<String> getUserId() async {
+    if (user == null || user.id == null) {
+      await getUserInfo();
+    }
+    return user.id;
   }
 }

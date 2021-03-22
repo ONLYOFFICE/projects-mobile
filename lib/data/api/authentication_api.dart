@@ -2,17 +2,16 @@ import 'dart:convert';
 
 import 'package:only_office_mobile/data/models/apiDTO.dart';
 import 'package:only_office_mobile/data/models/auth_token.dart';
-import 'package:only_office_mobile/data/models/portal_user.dart';
-import 'package:only_office_mobile/data/models/self_user_profile.dart';
+import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
 import 'package:only_office_mobile/internal/locator.dart';
 import 'package:only_office_mobile/data/api/core_api.dart';
-import 'package:only_office_mobile/data/models/error.dart';
+import 'package:only_office_mobile/data/models/from_api/error.dart';
 
 class AuthApi {
   var coreApi = locator<CoreApi>();
 
   Future<ApiDTO<AuthToken>> loginByUsername(String email, String pass) async {
-    var url = coreApi.authUrl();
+    var url = await coreApi.authUrl();
     var body =
         jsonEncode(<String, String>{'userName': email, 'password': pass});
 
@@ -22,7 +21,7 @@ class AuthApi {
       final responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
-        result.response = AuthToken.fromJson(responseJson);
+        result.response = AuthToken.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson);
       }
@@ -38,7 +37,7 @@ class AuthApi {
     String pass,
     String code,
   ) async {
-    var url = coreApi.tfaUrl(code);
+    var url = await coreApi.tfaUrl(code);
     var body = jsonEncode(<String, String>{
       'userName': email,
       'password': pass,
@@ -64,7 +63,7 @@ class AuthApi {
   }
 
   Future<ApiDTO<SelfUserProfile>> getUserInfo() async {
-    var url = coreApi.selfInfoUrl();
+    var url = await coreApi.selfInfoUrl();
 
     var result = new ApiDTO<SelfUserProfile>();
     try {
