@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:flutter_twitter_login/flutter_twitter_login.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-import 'package:only_office_mobile/data/api/authentication_api.dart';
-import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/auth_token.dart';
-import 'package:only_office_mobile/data/models/from_api/error.dart';
-import 'package:only_office_mobile/data/models/from_api/self_user_profile.dart';
-import 'package:only_office_mobile/data/services/storage.dart';
-import 'package:only_office_mobile/domain/dialogs.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/api/authentication_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/auth_token.dart';
+import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/self_user_profile.dart';
+import 'package:projects/data/services/storage.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
 class AuthService {
   AuthApi _api = locator<AuthApi>();

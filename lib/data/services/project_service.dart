@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:only_office_mobile/data/api/project_api.dart';
-import 'package:only_office_mobile/data/models/apiDTO.dart';
-import 'package:only_office_mobile/data/models/from_api/project.dart';
-import 'package:only_office_mobile/data/models/from_api/project_detailed.dart';
-import 'package:only_office_mobile/data/models/from_api/status.dart';
-import 'package:only_office_mobile/data/models/from_api/task.dart';
-import 'package:only_office_mobile/domain/dialogs.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/api/project_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/project.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
 class ProjectService {
   ProjectApi _api = locator<ProjectApi>();

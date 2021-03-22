@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:only_office_mobile/domain/controllers/user_controller.dart';
-import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
-import 'package:only_office_mobile/presentation/shared/text_styles.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/presentation/shared/svg_manager.dart';
+import 'package:projects/presentation/shared/text_styles.dart';
 
 class HeaderWidget extends StatefulWidget {
   String title;

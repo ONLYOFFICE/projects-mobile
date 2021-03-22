@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:only_office_mobile/data/models/from_api/status.dart';
-import 'package:only_office_mobile/data/services/project_service.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/internal/locator.dart';
 
 class StatusesController extends GetxController {
   var _api = locator<ProjectService>();

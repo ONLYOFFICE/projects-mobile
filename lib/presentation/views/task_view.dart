@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:only_office_mobile/presentation/shared/app_colors.dart';
-import 'package:only_office_mobile/presentation/shared/text_styles.dart';
-import 'package:only_office_mobile/presentation/shared/ui_helpers.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
+import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/ui_helpers.dart';
 
 class TaskView extends StatelessWidget {
   @override

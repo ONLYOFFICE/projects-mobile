@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:only_office_mobile/internal/app.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/internal/app.dart';
+import 'package:projects/internal/locator.dart';
 
 void main() {
   setupLocator();

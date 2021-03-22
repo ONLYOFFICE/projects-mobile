@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:only_office_mobile/data/models/from_api/project_detailed.dart';
-import 'package:only_office_mobile/data/models/item.dart';
-import 'package:only_office_mobile/domain/controllers/project_item_controller.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/item.dart';
+import 'package:projects/domain/controllers/project_item_controller.dart';
 
-import 'package:only_office_mobile/presentation/shared/svg_manager.dart';
-import 'package:only_office_mobile/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/svg_manager.dart';
+import 'package:projects/presentation/shared/text_styles.dart';
 
 class ProjectItem extends StatelessWidget {
   final Item item;

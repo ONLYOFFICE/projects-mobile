@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
-import 'package:only_office_mobile/data/services/storage.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:projects/data/services/storage.dart';
+import 'package:projects/internal/locator.dart';
 
 class CoreApi {
   var client = new http.Client();
