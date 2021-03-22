@@ -11,7 +11,7 @@
         android:allowBackup="false"
         android:fullBackupContent="false"
         android:name="io.flutter.app.FlutterApplication"
-        android:label="projects"
+        android:label="Projects"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
