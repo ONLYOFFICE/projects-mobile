@@ -14,6 +14,7 @@ Icon?
 profile
 xcuserdata
 **/.generated/
+Podfile.lock
 Flutter/App.framework
 Flutter/Flutter.framework
 Flutter/Flutter.podspec
@@ -30,3 +31,6 @@ Runner/GeneratedPluginRegistrant.*
 !default.mode2v3
 !default.pbxuser
 !default.perspectivev3
+
+# fastlane
+fastlane/report.xml
