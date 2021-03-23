@@ -70,7 +70,7 @@ class NavigationView extends StatelessWidget {
             showSelectedLabels: true,
             showUnselectedLabels: true,
             type: BottomNavigationBarType.fixed,
-            backgroundColor: AppColors.lightSecondary,
+            backgroundColor: AppColors.primarySurface,
             elevation: 0,
             items: [
               _bottomNavigationBarItem(
