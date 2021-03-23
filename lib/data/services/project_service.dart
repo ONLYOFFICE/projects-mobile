@@ -51,7 +51,7 @@ class ProjectService {
     }
   }
 
-  Future<List<PortalTask>> getTasksByParams({String participant}) async {
+  Future<List<PortalTask>> getTasksByParams({String participant = ''}) async {
     ApiDTO<List<PortalTask>> projects =
         await _api.getTasksByFilter(participant: participant);
 

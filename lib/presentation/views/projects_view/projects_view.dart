@@ -19,19 +19,21 @@ class ProjectsView extends StatelessWidget {
         children: <Widget>[
           HeaderWidget(title: 'Projects'),
           Expanded(
-            child: Obx(() => SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: false,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectItem(item: controller.projects[i]),
-                    itemExtent: 100.0,
-                    itemCount: controller.projects.length,
-                  ),
-                )),
+            child: Obx(
+              () => SmartRefresher(
+                enablePullDown: true,
+                enablePullUp: false,
+                controller: controller.refreshController,
+                onRefresh: controller.onRefresh,
+                onLoading: controller.onLoading,
+                child: ListView.builder(
+                  itemBuilder: (c, i) =>
+                      ProjectItem(item: controller.projects[i]),
+                  itemExtent: 100.0,
+                  itemCount: controller.projects.length,
+                ),
+              ),
+            ),
           ),
         ],
       ),

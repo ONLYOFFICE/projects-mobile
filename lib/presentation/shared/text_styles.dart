@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextStyleHelper {
-  static const mainStyle = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
 
   static const headerStyle = TextStyle(
       fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);

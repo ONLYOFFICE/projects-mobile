@@ -25,17 +25,24 @@ class LoginController extends GetxController {
   void onInit() {
     super.onInit();
     setState(ViewState.Busy);
-    Future.wait([isTokenExpired()]).then((value) => {
-          _tokenExpired = value[0],
-          setState(ViewState.Idle),
-          if (!_tokenExpired) Get.offNamed('NavigationView'),
-        });
+    isTokenExpired().then(
+      (value) => {
+        _tokenExpired = value,
+        setState(ViewState.Idle),
+        if (!_tokenExpired) Get.offNamed('NavigationView'),
+      },
+    );
   }
 
   Future<void> loginByPassword(String email, String password) async {
     setState(ViewState.Busy);
 
     var result = await _authService.login(email, password);
+
+    if (result.response == null) {
+      setState(ViewState.Idle);
+      return;
+    }
 
     if (result.response.token != null) {
       setState(ViewState.Idle);
@@ -55,9 +62,14 @@ class LoginController extends GetxController {
 
     var result = await _authService.confirmTFACode(_email, _pass, code);
 
+    if (result.response == null) {
+      setState(ViewState.Idle);
+      return;
+    }
+
     if (result.response.token != null) {
       setState(ViewState.Idle);
-      Get.toNamed('HomeView');
+      Get.toNamed('NavigationView');
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
       Get.toNamed('CodeView');

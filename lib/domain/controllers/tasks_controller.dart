@@ -8,6 +8,8 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
+import 'package:projects/internal/extentions.dart';
+
 class TasksController extends GetxController {
   var _api = locator<ProjectService>();
   UserController userController = Get.find();
@@ -39,9 +41,11 @@ class TasksController extends GetxController {
 // &StartIndex=0
 // &simple=true
 // &__=651640
+    tasks.clear();
     items.forEach(
       (element) {
-        var responsible = element.responsibles[0] ?? element.createdBy;
+        var responsible =
+            CustomList.firstOrNull(element.responsibles) ?? element.createdBy;
         tasks.add(new Item(
           id: element.id,
           title: element.title,
@@ -53,5 +57,6 @@ class TasksController extends GetxController {
         ));
       },
     );
+    update();
   }
 }

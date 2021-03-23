@@ -34,6 +34,7 @@ class _PortalFormState extends State<PortalForm> {
       autofillHints: [AutofillHints.url],
       obscureText: false,
       style: TextStyleHelper.mainStyle,
+      keyboardType: TextInputType.url,
       decoration: InputDecoration(
         prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

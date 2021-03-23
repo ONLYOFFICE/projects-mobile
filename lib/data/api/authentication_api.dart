@@ -18,12 +18,16 @@ class AuthApi {
     var result = new ApiDTO<AuthToken>();
     try {
       var response = await coreApi.postRequest(url, body);
-      final responseJson = json.decode(response.body);
 
+      if (response.statusCode == 500) {
+        result.error = new CustomError(message: response.reasonPhrase);
+        return result;
+      }
       if (response.statusCode == 201) {
-        result.response = AuthToken.fromJson(responseJson['response']);
+        result.response =
+            AuthToken.fromJson(json.decode(response.body)['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(json.decode(response.body));
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');
@@ -51,9 +55,9 @@ class AuthApi {
       final responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
-        result.response = AuthToken.fromJson(responseJson);
+        result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');
@@ -73,7 +77,7 @@ class AuthApi {
       if (response.statusCode == 200) {
         result.response = SelfUserProfile.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');
