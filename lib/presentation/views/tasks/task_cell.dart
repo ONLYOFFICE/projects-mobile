@@ -40,9 +40,9 @@ import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ProjectItem extends StatelessWidget {
+class TaskCell extends StatelessWidget {
   final Item item;
-  const ProjectItem({this.item});
+  const TaskCell({this.item});
 
   @override
   Widget build(BuildContext context) {
