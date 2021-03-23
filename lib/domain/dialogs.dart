@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class ErrorDialog {
-  static show(CustomError error) {
+  static void show(CustomError error) {
     Get.defaultDialog(
         title: '${error.message}',
         textConfirm: 'ok',
@@ -11,17 +11,17 @@ class ErrorDialog {
         barrierDismissible: false);
   }
 
-  static hide() {
+  static void hide() {
     Get.back();
   }
 }
 
 class ProgressDialog {
-  static show(CustomError error) {
+  static void show(CustomError error) {
     Get.dialog(Center(child: CircularProgressIndicator()));
   }
 
-  static hide() {
+  static void hide() {
     Get.back();
   }
 }

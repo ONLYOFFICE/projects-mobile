@@ -14,8 +14,8 @@ class PasswordForm extends StatefulWidget {
 }
 
 class _PasswordFormState extends State<PasswordForm> {
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +27,7 @@ class _PasswordFormState extends State<PasswordForm> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
-    LoginController controller = Get.find();
+    var controller = Get.find<LoginController>();
 
     final emailField = TextFormField(
       controller: emailController,
@@ -69,14 +69,14 @@ class _PasswordFormState extends State<PasswordForm> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
-        child: Text("Login",
+        child: Text('Login',
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
                 color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 
-    return new Container(
+    return Container(
       child: Form(
         key: _formKey,
         child: Column(

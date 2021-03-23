@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
@@ -15,7 +14,7 @@ class PortalForm extends StatefulWidget {
 }
 
 class _PortalFormState extends State<PortalForm> {
-  TextEditingController portalController = new TextEditingController();
+  TextEditingController portalController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -27,7 +26,7 @@ class _PortalFormState extends State<PortalForm> {
   @override
   Widget build(BuildContext context) {
     final localization = AppLocalizations.of(context);
-    LoginController controller = Get.put(LoginController());
+    var controller = Get.put(LoginController());
 
     final portalField = TextFormField(
       controller: portalController,
@@ -60,7 +59,7 @@ class _PortalFormState extends State<PortalForm> {
       ),
     );
 
-    return new Container(
+    return Container(
       child: Form(
         key: _formKey,
         child: Column(

@@ -21,7 +21,7 @@ class PortalUser {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['displayName'] = displayName;
     data['title'] = title;
