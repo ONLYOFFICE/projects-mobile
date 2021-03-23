@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
 class HeaderWidget extends StatefulWidget {
-  String title;
+  final String title;
   HeaderWidget({this.title});
 
   @override
@@ -20,8 +18,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    UserController controller = Get.find();
-
     return Column(
       children: <Widget>[
         Container(

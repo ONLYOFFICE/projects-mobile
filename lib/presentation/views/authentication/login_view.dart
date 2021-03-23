@@ -9,7 +9,7 @@ import 'package:projects/presentation/views/authentication/widgets/password_form
 class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    LoginController controller = Get.put(LoginController());
+    var controller = Get.put(LoginController());
 
     return Scaffold(
       body: Center(

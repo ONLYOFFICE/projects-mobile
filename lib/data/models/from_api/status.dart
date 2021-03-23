@@ -39,7 +39,7 @@ class Status {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['statusType'] = statusType;
     data['canChangeAvailable'] = canChangeAvailable;
     data['id'] = id;

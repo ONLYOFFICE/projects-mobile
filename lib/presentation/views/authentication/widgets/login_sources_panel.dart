@@ -11,7 +11,7 @@ class LoginSources extends StatelessWidget {
   final LoginController controller = Get.find();
   @override
   Widget build(BuildContext context) {
-    return new Container(
+    return Container(
       height: 90,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
