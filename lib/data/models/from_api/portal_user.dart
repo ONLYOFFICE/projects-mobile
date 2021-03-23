@@ -53,12 +53,12 @@ class PortalUser {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['displayName'] = this.displayName;
-    data['title'] = this.title;
-    data['avatarSmall'] = this.avatarSmall;
-    data['profileUrl'] = this.profileUrl;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['displayName'] = displayName;
+    data['title'] = title;
+    data['avatarSmall'] = avatarSmall;
+    data['profileUrl'] = profileUrl;
     return data;
   }
 }

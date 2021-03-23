@@ -92,18 +92,18 @@ class PortalTask {
     priority = json['priority'];
     milestoneId = json['milestoneId'];
     projectOwner = json['projectOwner'] != null
-        ? new ProjectOwner.fromJson(json['projectOwner'])
+        ? ProjectOwner.fromJson(json['projectOwner'])
         : null;
     status = json['status'];
     responsible = json['responsible'] != null
-        ? new PortalUser.fromJson(json['responsible'])
+        ? PortalUser.fromJson(json['responsible'])
         : null;
     updatedBy = json['updatedBy'] != null
-        ? new PortalUser.fromJson(json['updatedBy'])
+        ? PortalUser.fromJson(json['updatedBy'])
         : null;
     created = json['created'];
     createdBy = json['createdBy'] != null
-        ? new PortalUser.fromJson(json['createdBy'])
+        ? PortalUser.fromJson(json['createdBy'])
         : null;
     updated = json['updated'];
 
@@ -115,40 +115,40 @@ class PortalTask {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['canEdit'] = this.canEdit;
-    data['canCreateSubtask'] = this.canCreateSubtask;
-    data['canCreateTimeSpend'] = this.canCreateTimeSpend;
-    data['canDelete'] = this.canDelete;
-    data['canReadFiles'] = this.canReadFiles;
-    data['startDate'] = this.startDate;
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['deadline'] = this.deadline;
-    data['priority'] = this.priority;
-    data['milestoneId'] = this.milestoneId;
-    if (this.projectOwner != null) {
-      data['projectOwner'] = this.projectOwner.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['canEdit'] = canEdit;
+    data['canCreateSubtask'] = canCreateSubtask;
+    data['canCreateTimeSpend'] = canCreateTimeSpend;
+    data['canDelete'] = canDelete;
+    data['canReadFiles'] = canReadFiles;
+    data['startDate'] = startDate;
+    data['id'] = id;
+    data['title'] = title;
+    data['description'] = description;
+    data['deadline'] = deadline;
+    data['priority'] = priority;
+    data['milestoneId'] = milestoneId;
+    if (projectOwner != null) {
+      data['projectOwner'] = projectOwner.toJson();
     }
-    data['status'] = this.status;
-    if (this.responsible != null) {
-      data['responsible'] = this.responsible.toJson();
+    data['status'] = status;
+    if (responsible != null) {
+      data['responsible'] = responsible.toJson();
     }
-    if (this.updatedBy != null) {
-      data['updatedBy'] = this.updatedBy.toJson();
+    if (updatedBy != null) {
+      data['updatedBy'] = updatedBy.toJson();
     }
-    data['created'] = this.created;
-    if (this.createdBy != null) {
-      data['createdBy'] = this.createdBy.toJson();
+    data['created'] = created;
+    if (createdBy != null) {
+      data['createdBy'] = createdBy.toJson();
     }
-    data['updated'] = this.updated;
+    data['updated'] = updated;
     return data;
   }
 
   String creationDate() {
-    final DateTime now = DateTime.parse(created);
-    final DateFormat formatter = DateFormat('d MMM.yyy');
+    final now = DateTime.parse(created);
+    final formatter = DateFormat('d MMM.yyy');
     return formatter.format(now);
   }
 }

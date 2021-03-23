@@ -46,11 +46,11 @@ class ProjectOwner {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['status'] = this.status;
-    data['isPrivate'] = this.isPrivate;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['title'] = title;
+    data['status'] = status;
+    data['isPrivate'] = isPrivate;
     return data;
   }
 }

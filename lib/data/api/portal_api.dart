@@ -46,7 +46,7 @@ class PortalApi {
   Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
     var url = coreApi.capabilitiesUrl(portalName);
 
-    var result = new ApiDTO<Capabilities>();
+    var result = ApiDTO<Capabilities>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -58,7 +58,7 @@ class PortalApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;

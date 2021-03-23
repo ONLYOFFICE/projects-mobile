@@ -111,15 +111,15 @@ class SelfUserProfile {
     displayName = json['displayName'];
     title = json['title'];
     if (json['contacts'] != null) {
-      contacts = new List<Contacts>();
+      contacts = List<Contacts>();
       json['contacts'].forEach((v) {
-        contacts.add(new Contacts.fromJson(v));
+        contacts.add(Contacts.fromJson(v));
       });
     }
     if (json['groups'] != null) {
-      groups = new List<Groups>();
+      groups = List<Groups>();
       json['groups'].forEach((v) {
-        groups.add(new Groups.fromJson(v));
+        groups.add(Groups.fromJson(v));
       });
     }
     avatarMedium = json['avatarMedium'];
@@ -135,40 +135,40 @@ class SelfUserProfile {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['userName'] = this.userName;
-    data['isVisitor'] = this.isVisitor;
-    data['firstName'] = this.firstName;
-    data['lastName'] = this.lastName;
-    data['email'] = this.email;
-    data['birthday'] = this.birthday;
-    data['sex'] = this.sex;
-    data['status'] = this.status;
-    data['activationStatus'] = this.activationStatus;
-    data['terminated'] = this.terminated;
-    data['department'] = this.department;
-    data['workFrom'] = this.workFrom;
-    data['location'] = this.location;
-    data['notes'] = this.notes;
-    data['displayName'] = this.displayName;
-    data['title'] = this.title;
-    if (this.contacts != null) {
-      data['contacts'] = this.contacts.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['userName'] = userName;
+    data['isVisitor'] = isVisitor;
+    data['firstName'] = firstName;
+    data['lastName'] = lastName;
+    data['email'] = email;
+    data['birthday'] = birthday;
+    data['sex'] = sex;
+    data['status'] = status;
+    data['activationStatus'] = activationStatus;
+    data['terminated'] = terminated;
+    data['department'] = department;
+    data['workFrom'] = workFrom;
+    data['location'] = location;
+    data['notes'] = notes;
+    data['displayName'] = displayName;
+    data['title'] = title;
+    if (contacts != null) {
+      data['contacts'] = contacts.map((v) => v.toJson()).toList();
     }
-    if (this.groups != null) {
+    if (groups != null) {
       data['groups'] = this.groups.map((v) => v.toJson()).toList();
     }
-    data['avatarMedium'] = this.avatarMedium;
-    data['avatar'] = this.avatar;
-    data['isAdmin'] = this.isAdmin;
-    data['isLDAP'] = this.isLDAP;
-    data['listAdminModules'] = this.listAdminModules;
-    data['isOwner'] = this.isOwner;
-    data['cultureName'] = this.cultureName;
-    data['isSSO'] = this.isSSO;
-    data['avatarSmall'] = this.avatarSmall;
-    data['profileUrl'] = this.profileUrl;
+    data['avatarMedium'] = avatarMedium;
+    data['avatar'] = avatar;
+    data['isAdmin'] = isAdmin;
+    data['isLDAP'] = isLDAP;
+    data['listAdminModules'] = listAdminModules;
+    data['isOwner'] = isOwner;
+    data['cultureName'] = cultureName;
+    data['isSSO'] = isSSO;
+    data['avatarSmall'] = avatarSmall;
+    data['profileUrl'] = profileUrl;
     return data;
   }
 }
@@ -185,9 +185,9 @@ class Contacts {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['value'] = this.value;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['type'] = type;
+    data['value'] = value;
     return data;
   }
 }
@@ -206,10 +206,10 @@ class Groups {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
-    data['manager'] = this.manager;
+    final data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
+    data['manager'] = manager;
     return data;
   }
 }

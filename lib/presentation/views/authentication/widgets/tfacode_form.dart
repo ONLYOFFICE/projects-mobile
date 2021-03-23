@@ -83,14 +83,14 @@ class _CodeFormState extends State<CodeForm> {
         minWidth: MediaQuery.of(context).size.width,
         padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
-        child: Text("Send",
+        child: Text('Send',
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
                 color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 
-    return new Container(
+    return Container(
       child: Form(
         key: _formKey,
         child: Column(
