@@ -8,8 +8,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      // initialRoute: 'PortalView',
-      initialRoute: 'NavigationView',
+      initialRoute: 'PortalView',
       getPages: getxPages(),
       localizationsDelegates: localizationsDelegates(),
       supportedLocales: supportedLocales(),
