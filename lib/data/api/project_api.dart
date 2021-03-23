@@ -15,7 +15,7 @@ class ProjectApi {
   Future<ApiDTO<List<Project>>> getProjects() async {
     var url = await coreApi.projectsUrl();
 
-    var result = new ApiDTO<List<Project>>();
+    var result = ApiDTO<List<Project>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -28,7 +28,7 @@ class ProjectApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;
@@ -42,7 +42,7 @@ class ProjectApi {
 // &follow=True
 
     var url = await coreApi.projectsByParamsUrl("");
-    var result = await new ApiDTO<List<ProjectDetailed>>();
+    var result = await ApiDTO<List<ProjectDetailed>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -55,7 +55,7 @@ class ProjectApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;
@@ -63,7 +63,7 @@ class ProjectApi {
 
   Future<ApiDTO<List<Status>>> getStatuses() async {
     var url = await coreApi.statusesUrl();
-    var result = new ApiDTO<List<Status>>();
+    var result = ApiDTO<List<Status>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -76,7 +76,7 @@ class ProjectApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;
@@ -100,7 +100,7 @@ class ProjectApi {
   Future<ApiDTO<List<PortalTask>>> getTasksByFilter(
       {String participant}) async {
     var url = await coreApi.tasksByFilterUrl("&participant=${participant}");
-    var result = new ApiDTO<List<PortalTask>>();
+    var result = ApiDTO<List<PortalTask>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -113,7 +113,7 @@ class ProjectApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;

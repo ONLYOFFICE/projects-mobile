@@ -15,12 +15,12 @@ class AuthApi {
     var body =
         jsonEncode(<String, String>{'userName': email, 'password': pass});
 
-    var result = new ApiDTO<AuthToken>();
+    var result = ApiDTO<AuthToken>();
     try {
       var response = await coreApi.postRequest(url, body);
 
       if (response.statusCode == 500) {
-        result.error = new CustomError(message: response.reasonPhrase);
+        result.error = CustomError(message: response.reasonPhrase);
         return result;
       }
       if (response.statusCode == 201) {
@@ -30,7 +30,7 @@ class AuthApi {
         result.error = CustomError.fromJson(json.decode(response.body));
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;
@@ -49,7 +49,7 @@ class AuthApi {
       'provider': ''
     });
 
-    var result = new ApiDTO<AuthToken>();
+    var result = ApiDTO<AuthToken>();
     try {
       var response = await coreApi.postRequest(url, body);
       final responseJson = json.decode(response.body);
@@ -60,7 +60,7 @@ class AuthApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;
@@ -69,7 +69,7 @@ class AuthApi {
   Future<ApiDTO<SelfUserProfile>> getUserInfo() async {
     var url = await coreApi.selfInfoUrl();
 
-    var result = new ApiDTO<SelfUserProfile>();
+    var result = ApiDTO<SelfUserProfile>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -80,7 +80,7 @@ class AuthApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = new CustomError(message: 'Ошибка');
+      result.error = CustomError(message: 'Ошибка');
     }
 
     return result;

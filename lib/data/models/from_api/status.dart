@@ -40,17 +40,17 @@ class Status {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['statusType'] = this.statusType;
-    data['canChangeAvailable'] = this.canChangeAvailable;
-    data['id'] = this.id;
-    data['image'] = this.image;
-    data['imageType'] = this.imageType;
-    data['title'] = this.title;
-    data['description'] = this.description;
-    data['color'] = this.color;
-    data['order'] = this.order;
-    data['isDefault'] = this.isDefault;
-    data['available'] = this.available;
+    data['statusType'] = statusType;
+    data['canChangeAvailable'] = canChangeAvailable;
+    data['id'] = id;
+    data['image'] = image;
+    data['imageType'] = imageType;
+    data['title'] = title;
+    data['description'] = description;
+    data['color'] = color;
+    data['order'] = order;
+    data['isDefault'] = isDefault;
+    data['available'] = available;
     return data;
   }
 }

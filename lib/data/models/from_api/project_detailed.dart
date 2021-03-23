@@ -60,7 +60,7 @@ class ProjectDetailed {
     description = json['description'];
     status = json['status'];
     responsible = json['responsible'] != null
-        ? new PortalUser.fromJson(json['responsible'])
+        ? PortalUser.fromJson(json['responsible'])
         : null;
     isPrivate = json['isPrivate'];
     taskCount = json['taskCount'];
@@ -72,11 +72,11 @@ class ProjectDetailed {
     documentsCount = json['documentsCount'];
     isFollow = json['isFollow'];
     updatedBy = json['updatedBy'] != null
-        ? new PortalUser.fromJson(json['updatedBy'])
+        ? PortalUser.fromJson(json['updatedBy'])
         : null;
     created = json['created'];
     createdBy = json['createdBy'] != null
-        ? new PortalUser.fromJson(json['createdBy'])
+        ? PortalUser.fromJson(json['createdBy'])
         : null;
     updated = json['updated'];
   }

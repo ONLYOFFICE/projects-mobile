@@ -12,7 +12,7 @@ class PortalView extends StatelessWidget {
   Widget build(BuildContext context) {
     LoginController controller = Get.put(LoginController());
 
-    final String assetName = 'lib/assets/images/logo_new.svg';
+    final assetName = 'lib/assets/images/logo_new.svg';
     final Widget svg = SvgPicture.asset(assetName,
         semanticsLabel: 'lib/assets/images/logo_new.svg');
 

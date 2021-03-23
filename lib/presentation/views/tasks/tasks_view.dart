@@ -20,18 +20,19 @@ class TasksView extends StatelessWidget {
           HeaderWidget(title: 'Tasks'),
           Expanded(
             child: Obx(() => SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: false,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectItem(item: controller.tasks[i]),
-                    itemExtent: 100.0,
-                    itemCount: controller.tasks.length,
-                  ),
-                )),
+                enablePullDown: true,
+                enablePullUp: false,
+                controller: controller.refreshController,
+                onRefresh: controller.onRefresh,
+                onLoading: controller.onLoading,
+                child: ListView.builder(
+                  itemBuilder: (c, i) =>
+                      ProjectItem(item: controller.tasks[i]),
+                  itemExtent: 100.0,
+                  itemCount: controller.tasks.length,
+                ),
+              )
+            ),
           ),
         ],
       ),

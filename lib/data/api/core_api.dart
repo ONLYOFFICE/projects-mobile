@@ -3,7 +3,7 @@ import 'package:projects/data/services/storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class CoreApi {
-  var client = new http.Client();
+  var client = http.Client();
   var _storage = locator<Storage>();
   String _portalName;
 
@@ -23,13 +23,13 @@ class CoreApi {
       '${await getPortalURI()}/api/2.0/authentication.json';
 
   Future<String> tfaUrl(String code) async =>
-      '${await getPortalURI()}/api/2.0/authentication/${code}';
+      '${await getPortalURI()}/api/2.0/authentication/$code';
 
   Future<String> projectsByParamsUrl(String params) async =>
-      '${await getPortalURI()}/api/2.0/project/filter?${params}';
+      '${await getPortalURI()}/api/2.0/project/filter?$params';
 
   Future<String> tasksByFilterUrl(String params) async =>
-      '${await getPortalURI()}/api/2.0/project/task/filter?${params}';
+      '${await getPortalURI()}/api/2.0/project/task/filter?$params';
 
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/2.0/project';
@@ -43,7 +43,7 @@ class CoreApi {
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);
-    final http.Response response = await request;
+    final response = await request;
     return response;
   }
 
@@ -54,7 +54,7 @@ class CoreApi {
       headers: headers,
       body: body,
     );
-    final http.Response response = await request;
+    final response = await request;
     return response;
   }
 
