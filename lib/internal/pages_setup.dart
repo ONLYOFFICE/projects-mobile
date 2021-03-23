@@ -5,6 +5,7 @@ import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
+import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/', page: () => NavigationView()),
@@ -13,4 +14,5 @@ List<GetPage> getxPages() => [
       GetPage(name: 'CodeView', page: () => CodeView()),
       GetPage(name: 'HomeView', page: () => ProjectsView()),
       GetPage(name: 'NavigationView', page: () => NavigationView()),
+      GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
     ];
