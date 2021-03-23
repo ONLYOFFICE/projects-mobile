@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks_controller.dart';
 import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
-import 'package:projects/presentation/shared/widgets/project_item.dart';
+import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TasksView extends StatelessWidget {
@@ -26,8 +26,7 @@ class TasksView extends StatelessWidget {
                   onRefresh: controller.onRefresh,
                   onLoading: controller.onLoading,
                   child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectItem(item: controller.tasks[i]),
+                    itemBuilder: (c, i) => TaskCell(item: controller.tasks[i]),
                     itemExtent: 100.0,
                     itemCount: controller.tasks.length,
                   ),
