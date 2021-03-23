@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/enums/viewstate.dart';
@@ -45,7 +44,7 @@ class CodeForm extends StatefulWidget {
 }
 
 class _CodeFormState extends State<CodeForm> {
-  TextEditingController codeController = new TextEditingController();
+  TextEditingController codeController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -56,8 +55,7 @@ class _CodeFormState extends State<CodeForm> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AppLocalizations.of(context);
-    LoginController controller = Get.find();
+    var controller = Get.find<LoginController>();
 
     final codeField = TextFormField(
       controller: codeController,
@@ -66,7 +64,7 @@ class _CodeFormState extends State<CodeForm> {
       style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: "Код",
+        hintText: 'Код',
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),

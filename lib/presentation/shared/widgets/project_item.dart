@@ -33,7 +33,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/domain/controllers/project_item_controller.dart';
 
@@ -47,7 +46,7 @@ class ProjectItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProjectItemController itemController =
+    var itemController =
         Get.put(ProjectItemController(item), tag: item.id.toString());
 
     return VisibilityDetector(

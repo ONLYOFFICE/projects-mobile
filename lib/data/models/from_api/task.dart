@@ -115,7 +115,7 @@ class PortalTask {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['canEdit'] = canEdit;
     data['canCreateSubtask'] = canCreateSubtask;
     data['canCreateTimeSpend'] = canCreateTimeSpend;

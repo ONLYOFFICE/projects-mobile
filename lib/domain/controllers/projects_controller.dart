@@ -38,7 +38,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends GetxController {
-  var _api = locator<ProjectService>();
+  final _api = locator<ProjectService>();
 
   List<Status> statuses;
 
@@ -67,7 +67,7 @@ class ProjectsController extends GetxController {
 
     items.forEach(
       (element) {
-        projects.add(new Item(
+        projects.add(Item(
           id: element.id,
           title: element.title,
           status: element.status,

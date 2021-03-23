@@ -111,13 +111,13 @@ class SelfUserProfile {
     displayName = json['displayName'];
     title = json['title'];
     if (json['contacts'] != null) {
-      contacts = List<Contacts>();
+      contacts = <Contacts>[];
       json['contacts'].forEach((v) {
         contacts.add(Contacts.fromJson(v));
       });
     }
     if (json['groups'] != null) {
-      groups = List<Groups>();
+      groups = <Groups>[];
       json['groups'].forEach((v) {
         groups.add(Groups.fromJson(v));
       });
@@ -135,7 +135,7 @@ class SelfUserProfile {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['userName'] = userName;
     data['isVisitor'] = isVisitor;
@@ -157,7 +157,7 @@ class SelfUserProfile {
       data['contacts'] = contacts.map((v) => v.toJson()).toList();
     }
     if (groups != null) {
-      data['groups'] = this.groups.map((v) => v.toJson()).toList();
+      data['groups'] = groups.map((v) => v.toJson()).toList();
     }
     data['avatarMedium'] = avatarMedium;
     data['avatar'] = avatar;
@@ -185,7 +185,7 @@ class Contacts {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['type'] = type;
     data['value'] = value;
     return data;
@@ -206,7 +206,7 @@ class Groups {
   }
 
   Map<String, dynamic> toJson() {
-    final data = Map<String, dynamic>();
+    final data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
     data['manager'] = manager;

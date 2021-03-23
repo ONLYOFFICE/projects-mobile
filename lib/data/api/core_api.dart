@@ -36,7 +36,7 @@ import 'package:projects/internal/locator.dart';
 
 class CoreApi {
   var client = http.Client();
-  var _storage = locator<Storage>();
+  final _storage = locator<Storage>();
   String _portalName;
 
   Future<Map<String, String>> getHeaders() async {
@@ -95,11 +95,11 @@ class CoreApi {
       _portalName = await _storage.getString('portalName');
     }
 
-    return 'https://${_portalName}';
+    return 'https://$_portalName';
   }
 
   Future<String> getToken() async {
-    String token = await _storage.getString('token');
+    var token = await _storage.getString('token');
 
     return token;
   }

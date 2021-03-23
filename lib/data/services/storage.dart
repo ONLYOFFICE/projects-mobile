@@ -33,7 +33,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Storage {
-  final storage = new FlutterSecureStorage();
+  final storage = FlutterSecureStorage();
 
   Future<String> getString(String key) async {
     return await storage.read(key: key);

@@ -73,8 +73,8 @@ class ProjectApi {
 // &departament=9924256A-739C-462b-AF15-E652A3B1B6EB
 // &follow=True
 
-    var url = await coreApi.projectsByParamsUrl("");
-    var result = await ApiDTO<List<ProjectDetailed>>();
+    var url = await coreApi.projectsByParamsUrl('');
+    var result = ApiDTO<List<ProjectDetailed>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
@@ -131,7 +131,7 @@ class ProjectApi {
 // Accept: application/json
   Future<ApiDTO<List<PortalTask>>> getTasksByFilter(
       {String participant}) async {
-    var url = await coreApi.tasksByFilterUrl("&participant=${participant}");
+    var url = await coreApi.tasksByFilterUrl('&participant=$participant');
     var result = ApiDTO<List<PortalTask>>();
     try {
       var response = await coreApi.getRequest(url);

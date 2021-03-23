@@ -73,27 +73,27 @@ class NavigationView extends StatelessWidget {
             backgroundColor: AppColors.lightSecondary,
             elevation: 0,
             items: [
-              _bottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon:
                     SVG.create('lib/assets/images/icons/tab_bar/dashboard.svg'),
                 activeIcon: SVG.create(
                     'lib/assets/images/icons/tab_bar/dashboard_active.svg'),
                 label: 'Dashboard',
               ),
-              _bottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: SVG.create('lib/assets/images/icons/tab_bar/tasks.svg'),
                 activeIcon: SVG
                     .create('lib/assets/images/icons/tab_bar/tasks_active.svg'),
                 label: 'Tasks',
               ),
-              _bottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon:
                     SVG.create('lib/assets/images/icons/tab_bar/projects.svg'),
                 activeIcon: SVG.create(
                     'lib/assets/images/icons/tab_bar/projects_active.svg'),
                 label: 'Projects',
               ),
-              _bottomNavigationBarItem(
+              BottomNavigationBarItem(
                 icon: SVG.create('lib/assets/images/icons/tab_bar/more.svg'),
                 activeIcon: SVG
                     .create('lib/assets/images/icons/tab_bar/more_active.svg'),
@@ -103,14 +103,6 @@ class NavigationView extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-
-  _bottomNavigationBarItem({Widget icon, Widget activeIcon, String label}) {
-    return BottomNavigationBarItem(
-      icon: icon,
-      activeIcon: activeIcon,
-      label: label,
     );
   }
 }
