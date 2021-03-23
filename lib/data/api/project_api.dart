@@ -57,7 +57,7 @@ class ProjectApi {
             .map((i) => Project.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');
@@ -84,7 +84,7 @@ class ProjectApi {
             .map((i) => ProjectDetailed.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');
@@ -105,7 +105,7 @@ class ProjectApi {
             .map((i) => Status.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');
@@ -142,7 +142,7 @@ class ProjectApi {
             .map((i) => PortalTask.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');

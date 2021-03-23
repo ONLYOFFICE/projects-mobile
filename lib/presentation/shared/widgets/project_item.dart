@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/project_item_controller.dart';
 
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 class ProjectItem extends StatelessWidget {
   final Item item;
@@ -47,43 +48,47 @@ class ProjectItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProjectItemController itemController =
-        Get.put(ProjectItemController(item), tag: item.title);
+        Get.put(ProjectItemController(item), tag: item.id.toString());
 
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ProjectIcon(),
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SecondColumn(
-                        item: item,
-                        itemController: itemController,
-                      ),
-                      const SizedBox(width: 16),
-                      ThirdColumn(
-                        item: item,
-                        controller: itemController,
-                      ),
-                      const SizedBox(width: 16),
-                    ],
+    return VisibilityDetector(
+      key: Key('${item.id.toString()}_${item.title}'),
+      onVisibilityChanged: itemController.handleVisibilityChanged,
+      child: Container(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ProjectIcon(),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SecondColumn(
+                          item: item,
+                          itemController: itemController,
+                        ),
+                        const SizedBox(width: 16),
+                        ThirdColumn(
+                          item: item,
+                          controller: itemController,
+                        ),
+                        const SizedBox(width: 16),
+                      ],
+                    ),
                   ),
-                ),
-                const Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 0,
-                  endIndent: 0,
-                ),
-              ],
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 0,
+                    endIndent: 0,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -151,10 +156,11 @@ class SecondColumn extends StatelessWidget {
               Obx(
                 () => (itemController.statusImageString.value == null ||
                         itemController.statusImageString.value.isEmpty)
-                    ? SVG.createSized(
-                        'lib/assets/images/icons/project_statuses/pause.svg',
-                        16,
-                        16)
+                    ? SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(),
+                      )
                     : SVG.createSizedFromString(
                         itemController.statusImageString.value, 16, 16),
               ),

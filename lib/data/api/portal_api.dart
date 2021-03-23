@@ -55,7 +55,7 @@ class PortalApi {
         result.response = Capabilities.fromJson(responseJson['response']);
         secureStorage.putString('portalName', portalName);
       } else {
-        result.error = CustomError.fromJson(responseJson);
+        result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
       result.error = new CustomError(message: 'Ошибка');

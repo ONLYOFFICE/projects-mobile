@@ -35,6 +35,6 @@ class CustomError {
   CustomError({this.message});
 
   CustomError.fromJson(Map<String, dynamic> json) {
-    message = json['error']['message'];
+    message = json['message'];
   }
 }

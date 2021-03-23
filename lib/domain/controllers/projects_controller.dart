@@ -63,6 +63,7 @@ class ProjectsController extends GetxController {
 
   Future getProjects() async {
     var items = await _api.getProjectsByParams();
+    projects.clear();
 
     items.forEach(
       (element) {

@@ -60,10 +60,9 @@ class _CodeFormState extends State<CodeForm> {
     LoginController controller = Get.find();
 
     final codeField = TextFormField(
-      validator: controller.passValidator,
       controller: codeController,
-      autofillHints: [AutofillHints.password],
-      obscureText: true,
+      obscureText: false,
+      keyboardType: TextInputType.number,
       style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),

@@ -67,6 +67,7 @@ class _PasswordFormState extends State<PasswordForm> {
       autofillHints: [AutofillHints.email],
       obscureText: false,
       style: TextStyleHelper.mainStyle,
+      keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: localization.emailAddress,

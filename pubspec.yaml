@@ -36,6 +36,7 @@ dependencies:
   firebase_auth: ^1.0.0
   google_sign_in: ^4.5.1
   pull_to_refresh: ^1.6.4
+  visibility_detector: ^0.1.5
   # flutter_facebook_auth: "^1.0.0"
   # flutter_twitter_login: ^1.1.0
 
