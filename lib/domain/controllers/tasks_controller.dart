@@ -43,7 +43,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/internal/extentions.dart';
 
 class TasksController extends GetxController {
-  var _api = locator<ProjectService>();
+  final _api = locator<ProjectService>();
   UserController userController = Get.find();
 
   List<Status> statuses;
@@ -78,7 +78,7 @@ class TasksController extends GetxController {
       (element) {
         var responsible =
             CustomList.firstOrNull(element.responsibles) ?? element.createdBy;
-        tasks.add(new Item(
+        tasks.add(Item(
           id: element.id,
           title: element.title,
           status: element.status,

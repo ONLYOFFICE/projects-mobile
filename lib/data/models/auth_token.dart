@@ -47,9 +47,9 @@ class AuthToken {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['token'] = this.token;
-    data['expires'] = this.expires;
+    final data = <String, dynamic>{};
+    data['token'] = token;
+    data['expires'] = expires;
 
     return data;
   }

@@ -42,7 +42,7 @@ import 'package:projects/presentation/views/authentication/widgets/portal_form.d
 class PortalView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    LoginController controller = Get.put(LoginController());
+    var controller = Get.put(LoginController());
 
     final assetName = 'lib/assets/images/logo_new.svg';
     final Widget svg = SvgPicture.asset(assetName,

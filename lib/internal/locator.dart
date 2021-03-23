@@ -58,5 +58,5 @@ void setupLocator() {
   locator.registerLazySingleton(() => ProjectService());
 
   Get.lazyPut(() => UserController());
-  Get.lazyPut(() => StatusesController());
+  Get.lazyPut(() => StatusesController(), fenix: true);
 }

@@ -77,16 +77,15 @@ class LoginController extends GetxController {
     }
 
     if (result.response.token != null) {
-      setState(ViewState.Idle);
-
       await saveToken(result);
       await Get.offNamed('NavigationView');
-    } else if (result.response.tfa) {
       setState(ViewState.Idle);
+    } else if (result.response.tfa) {
       _email = email;
       _pass = password;
 
       await Get.toNamed('CodeView');
+      setState(ViewState.Idle);
     }
     setState(ViewState.Idle);
   }
@@ -151,7 +150,7 @@ class LoginController extends GetxController {
 
     if (_capabilities != null) {
       capabilities = _capabilities;
-      Get.toNamed('LoginView');
+      await Get.toNamed('LoginView');
     }
 
     setState(ViewState.Idle);
@@ -182,9 +181,9 @@ class LoginController extends GetxController {
   }
 
   Future<bool> isTokenExpired() async {
-    String expirationDate = await _storage.getString('expires');
-    String token = await _storage.getString('token');
-    String portalName = await _storage.getString('portalName');
+    var expirationDate = await _storage.getString('expires');
+    var token = await _storage.getString('token');
+    var portalName = await _storage.getString('portalName');
 
     if (expirationDate == null ||
         expirationDate.isEmpty ||
@@ -193,7 +192,7 @@ class LoginController extends GetxController {
         portalName == null ||
         portalName.isEmpty) return true;
 
-    DateTime expiration = DateTime.parse(expirationDate);
+    var expiration = DateTime.parse(expirationDate);
     if (expiration.isBefore(DateTime.now())) return true;
 
     return false;

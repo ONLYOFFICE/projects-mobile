@@ -114,8 +114,8 @@ class ProjectDetailed {
   }
 
   String creationDate() {
-    final DateTime now = DateTime.parse(created);
-    final DateFormat formatter = DateFormat('d MMM.yyy');
-    return formatter.format(now);
+    final date = DateTime.parse(created);
+    final formatter = DateFormat('d MMM.yyy');
+    return formatter.format(date);
   }
 }
