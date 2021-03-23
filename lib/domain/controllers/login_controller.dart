@@ -34,6 +34,8 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
@@ -42,12 +44,10 @@ import 'package:projects/internal/locator.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
-
   final PortalService _portalService = locator<PortalService>();
   final Storage _storage = locator<Storage>();
 
   Capabilities capabilities;
-  String _portalName;
   String _pass;
   String _email;
 
@@ -78,15 +78,22 @@ class LoginController extends GetxController {
 
     if (result.response.token != null) {
       setState(ViewState.Idle);
-      Get.offNamed('NavigationView');
+
+      await saveToken(result);
+      await Get.offNamed('NavigationView');
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
       _email = email;
       _pass = password;
 
-      Get.toNamed('CodeView');
+      await Get.toNamed('CodeView');
     }
     setState(ViewState.Idle);
+  }
+
+  Future saveToken(ApiDTO<AuthToken> result) async {
+    await _storage.putString('token', result.response.token);
+    await _storage.putString('expires', result.response.expires);
   }
 
   Future<void> sendCode(String code) async {
@@ -100,20 +107,21 @@ class LoginController extends GetxController {
     }
 
     if (result.response.token != null) {
+      await saveToken(result);
+      await Get.offNamed('NavigationView');
       setState(ViewState.Idle);
-      Get.toNamed('NavigationView');
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
-      Get.toNamed('CodeView');
+      await Get.toNamed('CodeView');
     }
   }
 
   Future<void> loginByProvider(String provider) async {
     switch (provider) {
       case 'google':
-        try {
-          var result = await _authService.signInWithGoogle();
-        } catch (e) {}
+        // try {
+        //   var result = await _authService.signInWithGoogle();
+        // } catch (e) {}
 
         break;
       case 'facebook':
@@ -136,9 +144,8 @@ class LoginController extends GetxController {
     }
   }
 
-  getPortalCapabilities(String portalName) async {
+  Future<bool> getPortalCapabilities(String portalName) async {
     setState(ViewState.Busy);
-    _portalName = portalName;
 
     var _capabilities = await _portalService.portalCapabilities(portalName);
 

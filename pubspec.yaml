@@ -60,8 +60,8 @@ flutter:
   assets:
     - lib/assets/images/logo_new.svg
     - lib/assets/images/icons/
-    # - lib/assets/images/icons/tab_bar/
-    # - lib/assets/images/icons/project_statuses/
+    - lib/assets/images/icons/tab_bar/
+    - lib/assets/images/icons/project_statuses/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
