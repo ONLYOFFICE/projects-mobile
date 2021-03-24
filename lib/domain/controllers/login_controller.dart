@@ -46,14 +46,14 @@ class LoginController extends GetxController {
 
     if (result.response.token != null) {
       await saveToken(result);
-      await Get.offNamed('NavigationView');
       setState(ViewState.Idle);
+      await Get.offNamed('NavigationView');
     } else if (result.response.tfa) {
       _email = email;
       _pass = password;
 
-      await Get.toNamed('CodeView');
       setState(ViewState.Idle);
+      await Get.toNamed('CodeView');
     }
     setState(ViewState.Idle);
   }
@@ -75,8 +75,8 @@ class LoginController extends GetxController {
 
     if (result.response.token != null) {
       await saveToken(result);
-      await Get.offNamed('NavigationView');
       setState(ViewState.Idle);
+      await Get.offNamed('NavigationView');
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
       await Get.toNamed('CodeView');
@@ -111,18 +111,18 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<bool> getPortalCapabilities(String portalName) async {
+  Future<void> getPortalCapabilities(String portalName) async {
     setState(ViewState.Busy);
 
     var _capabilities = await _portalService.portalCapabilities(portalName);
 
     if (_capabilities != null) {
       capabilities = _capabilities;
+      setState(ViewState.Idle);
       await Get.toNamed('LoginView');
     }
 
     setState(ViewState.Idle);
-    return true;
   }
 
   String emailValidator(value) {
