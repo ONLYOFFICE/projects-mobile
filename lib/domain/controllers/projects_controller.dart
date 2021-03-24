@@ -42,6 +42,8 @@ class ProjectsController extends GetxController {
 
   List<Status> statuses;
 
+  var startIndex = 0;
+
   @override
   void onInit() {
     super.onInit();
@@ -52,18 +54,20 @@ class ProjectsController extends GetxController {
   RefreshController refreshController = RefreshController(initialRefresh: true);
 
   void onRefresh() async {
-    await getProjects();
+    startIndex = 0;
+    await getProjects(needToClear: true);
     refreshController.refreshCompleted();
   }
 
   void onLoading() async {
+    startIndex++;
     await getProjects();
     refreshController.loadComplete();
   }
 
-  Future getProjects() async {
-    var items = await _api.getProjectsByParams();
-    projects.clear();
+  Future getProjects({needToClear = false}) async {
+    var items = await _api.getProjectsByParams(startIndex: startIndex);
+    if (needToClear) projects.clear();
 
     items.forEach(
       (element) {

@@ -57,8 +57,8 @@ class CoreApi {
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/2.0/authentication/$code';
 
-  Future<String> projectsByParamsUrl(String params) async =>
-      '${await getPortalURI()}/api/2.0/project/filter?$params';
+  Future<String> projectsByParamsBaseUrl() async =>
+      '${await getPortalURI()}/api/2.0/project/filter?';
 
   Future<String> tasksByFilterUrl(String params) async =>
       '${await getPortalURI()}/api/2.0/project/task/filter?$params';

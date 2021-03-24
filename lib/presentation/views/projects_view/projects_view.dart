@@ -54,7 +54,7 @@ class ProjectsView extends StatelessWidget {
             child: Obx(
               () => SmartRefresher(
                 enablePullDown: true,
-                enablePullUp: false,
+                enablePullUp: true,
                 controller: controller.refreshController,
                 onRefresh: controller.onRefresh,
                 onLoading: controller.onLoading,
