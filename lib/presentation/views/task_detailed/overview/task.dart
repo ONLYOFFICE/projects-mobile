@@ -17,7 +17,8 @@ class Task extends StatelessWidget {
           ),
           const SizedBox(height: 22),
           OutlinedButton(
-            onPressed: () => print('Tapped'),
+            onPressed: () => Get.bottomSheet(
+                bottom_sheet.BottomSheet(title: 'Select status')),
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
                 return Color(0xff81C4FF).withOpacity(0.1);
