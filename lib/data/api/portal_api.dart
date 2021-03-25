@@ -41,7 +41,7 @@ import 'package:projects/data/models/from_api/error.dart';
 
 class PortalApi {
   var coreApi = locator<CoreApi>();
-  var secureStorage = locator<Storage>();
+  var secureStorage = locator<SecureStorage>();
 
   Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
     var url = coreApi.capabilitiesUrl(portalName);

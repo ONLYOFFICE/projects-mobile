@@ -47,7 +47,7 @@ import 'package:projects/domain/controllers/statuses_controller.dart';
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
-  locator.registerLazySingleton(() => Storage());
+  locator.registerLazySingleton(() => SecureStorage());
   locator.registerLazySingleton(() => CoreApi());
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => PortalApi());

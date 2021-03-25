@@ -34,7 +34,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects_controller.dart';
 
-import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -45,7 +44,7 @@ class ProjectsView extends StatelessWidget {
     var controller = Get.put(ProjectsController());
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

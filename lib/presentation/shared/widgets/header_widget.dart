@@ -101,7 +101,8 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   children: <Widget>[
                     Text(
                       '3 projects',
-                      style: TextStyleHelper.subtitleProjects,
+                      style:
+                          TextStyleHelper.subtitleProjects(Theme.of(context)),
                     ),
                   ],
                 ),
@@ -112,7 +113,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   children: <Widget>[
                     Text(
                       'Deadline',
-                      style: TextStyleHelper.projectsSorting,
+                      style: TextStyleHelper.projectsSorting(Theme.of(context)),
                     ),
                     const SizedBox(width: 8),
                     SVG.createSized(

@@ -31,25 +31,40 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/theme_service.dart';
 
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: 'PortalView',
-      getPages: getxPages(),
-      localizationsDelegates: localizationsDelegates(),
-      supportedLocales: supportedLocales(),
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
-    );
+extension ThemeDataExtensions on ThemeData {
+  AppColors customColors() {
+    if (ThemeService().isDark()) return darkColors;
+    return lightColors;
   }
 }
+
+AppColors customTheme(BuildContext context) => Theme.of(context).customColors();
+
+final AppColors lightColors = AppColors(
+  backgroundColor: Colors.white,
+  activeTabTitle: Colors.white,
+  inactiveTabTitle: Colors.white.withOpacity(0.4),
+  tabbarBackground: Color(0xff2E4057),
+  projectsSubtitle: Colors.black.withOpacity(0.6),
+);
+
+final AppColors darkColors = AppColors(
+  backgroundColor: Colors.black,
+  activeTabTitle: Colors.white,
+  inactiveTabTitle: Colors.white.withOpacity(0.4),
+  tabbarBackground: Color(0xff2E4057),
+  projectsSubtitle: Colors.white.withOpacity(0.6),
+);
+
+final ThemeData lightTheme = ThemeData.light().copyWith(
+  brightness: Brightness.light,
+  backgroundColor: Colors.white,
+);
+
+final ThemeData darkTheme = ThemeData.dark().copyWith(
+  brightness: Brightness.dark,
+  backgroundColor: Colors.black,
+);

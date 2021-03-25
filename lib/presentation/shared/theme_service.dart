@@ -31,25 +31,35 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/theme_service.dart';
+class ThemeService {
+  final storage = GetStorage();
+  final _key = 'isDarkMode';
 
-class App extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: 'PortalView',
-      getPages: getxPages(),
-      localizationsDelegates: localizationsDelegates(),
-      supportedLocales: supportedLocales(),
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
-    );
+  ThemeMode get themeMode => isDark() ? ThemeMode.dark : ThemeMode.light;
+
+  bool isDark() {
+    var appDarkModeIsOn = storage.read(_key);
+
+    if (appDarkModeIsOn == null) {
+      var brightness = SchedulerBinding.instance.window.platformBrightness;
+      var systemDarkModeIsOn = brightness == Brightness.dark;
+      _saveThemeToStorage(systemDarkModeIsOn);
+
+      return systemDarkModeIsOn;
+    }
+
+    return appDarkModeIsOn;
+  }
+
+  void _saveThemeToStorage(bool isDarkMode) => storage.write(_key, isDarkMode);
+
+  void switchTheme() {
+    Get.changeThemeMode(isDark() ? ThemeMode.light : ThemeMode.dark);
+
+    _saveThemeToStorage(!isDark());
   }
 }
