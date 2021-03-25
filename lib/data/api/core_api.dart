@@ -31,6 +31,9 @@ class CoreApi {
   Future<String> tasksByFilterUrl(String params) async =>
       '${await getPortalURI()}/api/2.0/project/task/filter?$params';
 
+  Future<String> taskByIdUrl(int id) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$id';
+
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/2.0/project';
 
