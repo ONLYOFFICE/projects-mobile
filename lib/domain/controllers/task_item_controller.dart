@@ -30,49 +30,42 @@
  *
  */
 
-import 'package:flutter/widgets.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'dart:convert';
 
-class SVG {
-  static Widget create(String path) {
-    return SvgPicture.asset(
-      path,
-      semanticsLabel: path,
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/domain/controllers/statuses_controller.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+class TaskItemController extends GetxController {
+
+  PortalTask task;
+  final statuses = [];
+  var status = Status().obs;
+
+  TaskItemController(PortalTask task) {
+    this.task = task;
+    var statusesController = Get.find<StatusesController>();
+    
+    statusesController.getStatuses().then(
+      (value) => {
+        status.value = (value.firstWhere(
+            (element) => element.statusType == task.status)),
+        statusImageString = decodeImageString(status.value.image).obs,
+      },
     );
   }
 
-  static Widget createSized(String path, double width, double height) {
-    return SvgPicture.asset(
-      path,
-      semanticsLabel: path,
-      width: width,
-      height: height,
-    );
-  }
-
-  static Widget createSizedFromString(
-      String imageString, double width, double height, [String color]) {
-    return SvgPicture.string(
-      imageString,
-      width: width,
-      height: height,
-      // color: toColor(color),
-    );
-  }
-}
-
-
-extension ColorExtension on String {
-  Color toColor() {
-    // ignore: unnecessary_this
-    var hexColor = this.replaceAll('#', '');
-    if (hexColor.length == 6) {
-      hexColor = 'FF' + hexColor;
+  void handleVisibilityChanged(VisibilityInfo info) {
+    if (info.visibleFraction == 1) {
+      update();
     }
-    if (hexColor.length == 8) {
-      return Color(int.parse('0x$hexColor'));
-    } else {
-      return const Color(0xffffffff);
-    }
+  }
+
+  RxString statusImageString = ''.obs;
+
+  String decodeImageString(String image) {
+    return utf8.decode(base64.decode(image));
   }
 }

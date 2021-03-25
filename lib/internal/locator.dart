@@ -42,7 +42,7 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage.dart';
-import 'package:projects/domain/controllers/tasks_controller.dart';
+import 'package:projects/data/services/tasks_service.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/statuses_controller.dart';
 

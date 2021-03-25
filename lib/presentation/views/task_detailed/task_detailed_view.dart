@@ -31,13 +31,23 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/data/models/item.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/views/task_detailed/detailed_task_app_bar.dart';
+import 'package:projects/presentation/views/task_detailed/overview/overview_screen.dart';
 
 class TaskDetailedView extends StatelessWidget {
-  const TaskDetailedView({Key key}) : super(key: key);
+
+  final Item item;
+  const TaskDetailedView({
+    Key key,
+    this.item
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return DefaultTabController(
       length: 6,
       child: Scaffold(
@@ -48,17 +58,28 @@ class TaskDetailedView extends StatelessWidget {
               padding: const EdgeInsets.only(left: 16, right: 16),
               child: TabBar(
                 isScrollable: true,
-                indicator: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(20)
-                ),
+                indicatorColor: Theme.of(context).customColors().onPrimary,
+                labelColor: Theme.of(context).customColors().onPrimary,
+                unselectedLabelColor: 
+                    Theme.of(context).customColors().onPrimary.withOpacity(0.6),
+                labelStyle: TextStyleHelper.subtitle2,
                 tabs: [
-                  for (var i = 0; i < 6; i++)
-                    Tab(text: '312')
+                  Tab(text: 'Overview'),
+                  Tab(text: 'Subtasks'),
+                  Tab(text: 'Documents'),
+                  Tab(text: 'Related Tasks'),
+                  Tab(text: 'Comments'),
+                  Tab(text: 'Gantt Chart'),
                 ]
               ),
             ),
           ),
+        ),
+        body: TabBarView(
+          children: [
+            for (var i = 0; i < 6; i++)
+              OverviewScreen()
+          ]
         ),
       ),
     );
