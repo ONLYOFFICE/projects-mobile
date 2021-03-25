@@ -68,15 +68,17 @@ platform :android do
     # push changes
     push_to_git_remote
 
-    begin
-      telegram(
-        token: ENV['TELEGRAM_BOT_TOKEN'],
-        chat_id: ENV['TELEGRAM_CHAT_ID'],
-        parse_mode: 'Markdown',
-        text: ENV["TELEGRAM_PROJECTS_ANDROID_APK_MESSAGE"] % [version_number: "#{version_name}", build_number: "#{increase_version_code}", change_log: "#{change_log}"]
-      )
-    rescue => ex
-      UI.error(ex)
+    if ENV["TELEGRAM_PROJECTS_ANDROID_APK_MESSAGE"]
+      begin
+        telegram(
+          token: ENV['TELEGRAM_BOT_TOKEN'],
+          chat_id: ENV['TELEGRAM_CHAT_ID'],
+          parse_mode: 'Markdown',
+          text: ENV["TELEGRAM_PROJECTS_ANDROID_APK_MESSAGE"] % [version_number: "#{version_name}", build_number: "#{increase_version_code}", change_log: "#{change_log}"]
+        )
+      rescue => ex
+        UI.error(ex)
+      end
     end
 
   end
