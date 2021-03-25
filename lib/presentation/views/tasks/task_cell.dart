@@ -39,6 +39,8 @@ import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
+  as bottom_sheet;
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskCell extends StatelessWidget {
@@ -62,7 +64,7 @@ class TaskCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => Get.bottomSheet(BottomSheet(title: 'Select status')),
+              onTap: () => Get.bottomSheet(bottom_sheet.BottomSheet(title: 'Select status')),
               child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(
@@ -93,58 +95,6 @@ class TaskCell extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-  }
-}
-
-class BottomSheet extends StatelessWidget {
-
-  final String title;
-  const BottomSheet({
-    Key key,
-    this.title
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 464,
-      decoration: BoxDecoration(
-        color: Theme.of(context).customColors().onPrimarySurface,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(12),
-          topRight: Radius.circular(12),
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0, bottom: 18.5),
-              child: SizedBox(
-                height: 4,
-                width: 40,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).customColors().onSurface.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(2)
-                  ),
-                ),
-              ),
-            ),
-          ),
-          if (title != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                title,
-                style: TextStyleHelper.h6,
-              ),
-            ),
-          Divider(),
-        ],
       ),
     );
   }

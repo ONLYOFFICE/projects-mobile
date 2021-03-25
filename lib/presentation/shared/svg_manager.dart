@@ -56,7 +56,6 @@ class SVG {
       imageString,
       width: width,
       height: height,
-      // color: toColor(color),
     );
   }
 }
