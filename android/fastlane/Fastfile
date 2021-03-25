@@ -50,7 +50,7 @@ platform :android do
     
     # get the last commit comments from Git history
     # and creates our changelog
-    changelog = changelog_from_git_commits(
+    change_log = changelog_from_git_commits(
       pretty: "- %s",
       date_format: "short",
       match_lightweight_tag: false,
