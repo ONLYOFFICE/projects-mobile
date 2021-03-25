@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/custom_theme.dart';
 
@@ -20,38 +21,38 @@ class TextStyleHelper {
       height: 1.25,
       letterSpacing: 0.15);
 
-  static TextStyle projectStatus(ThemeData theme) => TextStyle(
+  static TextStyle projectStatus = TextStyle(
       fontFamily: 'Roboto',
-      color: theme.customColors().links,
+      color: Get.theme.customColors().links,
       fontWeight: FontWeight.w500,
       fontSize: 12,
       height: 1.33,
       letterSpacing: 0.5);
 
-  static TextStyle subtitleProjects(ThemeData theme) => TextStyle(
+  static TextStyle subtitleProjects = TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      color: theme.customColors().projectsSubtitle);
+      color: Get.theme.customColors().projectsSubtitle);
 
-  static TextStyle projectsSorting(ThemeData theme) => TextStyle(
+  static TextStyle projectsSorting = TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: theme.customColors().projectsSubtitle);
+      color: Get.theme.customColors().projectsSubtitle);
 
-  static TextStyle projectResponsible(ThemeData theme) => TextStyle(
-        fontFamily: 'Roboto',
-        fontWeight: FontWeight.normal,
-        fontSize: 14,
-        color: theme.customColors().projectsSubtitle,
-      );
+  static TextStyle projectResponsible = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.normal,
+    fontSize: 14,
+    color: Get.theme.customColors().projectsSubtitle,
+  );
 
-  static TextStyle projectDate(ThemeData theme) => TextStyle(
+  static TextStyle projectDate = TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.normal,
       fontSize: 16,
-      color: theme.customColors().projectsSubtitle);
+      color: Get.theme.customColors().projectsSubtitle);
 
   static TextStyle projectCompleatedTasks = TextStyle(
       fontFamily: 'Roboto',

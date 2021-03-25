@@ -135,18 +135,16 @@ class SecondColumn extends StatelessWidget {
                         height: 16,
                         child: CircularProgressIndicator(),
                       )
-                    : Text(
-                        _getStatus(item.status),
-                        style: TextStyleHelper.projectStatus(Theme.of(context)),
-                      );
+                    : Text(_getStatus(item.status),
+                        style: TextStyleHelper.projectStatus);
               }),
               Text(
                 ' • ',
-                style: TextStyleHelper.projectResponsible(Theme.of(context)),
+                style: TextStyleHelper.projectResponsible,
               ),
               Text(
                 item.responsible.displayName,
-                style: TextStyleHelper.projectResponsible(Theme.of(context)),
+                style: TextStyleHelper.projectResponsible,
               ),
             ],
           ),
@@ -187,7 +185,7 @@ class ThirdColumn extends StatelessWidget {
         children: <Widget>[
           Text(
             item.date,
-            style: TextStyleHelper.projectDate(Theme.of(context)),
+            style: TextStyleHelper.projectDate,
           ),
         ],
       ),
