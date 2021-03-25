@@ -210,15 +210,15 @@ class SecondColumn extends StatelessWidget {
                     )
                   : Text(
                       itemController.status.value.title,
-                      style: TextStyleHelper.projectStatus(Theme.of(context)).copyWith(
-                        color: itemController.status.value.color.toColor()));
+                      style: TextStyleHelper
+                          .taskStatus(itemController.status.value.color.toColor()));
               }),
               Text(
                 ' • ', 
-                style: TextStyleHelper.projectResponsible(Theme.of(context))),
+                style: TextStyleHelper.projectResponsible),
               Text(
                 task.createdBy.displayName, 
-                style: TextStyleHelper.projectResponsible(Theme.of(context))),
+                style: TextStyleHelper.projectResponsible),
             ],
           ),
         ],
@@ -251,7 +251,7 @@ class ThirdColumn extends StatelessWidget {
         children: <Widget>[
           if (task.deadline != null)
             Text(task.formatedDate(now: _now, stringDate: task.deadline), 
-                style: TextStyleHelper.projectDate(Theme.of(context))),
+                style: TextStyleHelper.projectDate),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,

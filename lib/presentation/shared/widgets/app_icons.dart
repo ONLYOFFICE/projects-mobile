@@ -6,6 +6,7 @@ class SvgIcons {
   SvgIcons._();
 // I didn't add all the icons (!)
   static const String logo_new = 'lib/assets/images/logo_new.svg';
+
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
@@ -15,7 +16,15 @@ class SvgIcons {
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
   static const String search = 'lib/assets/images/icons/search.svg';
   static const String sorting_3_descend = 'lib/assets/images/icons/sorting_3_descend.svg';
+  static const String subtasks = 'lib/assets/images/icons/subtasks.svg';
   static const String tasklist = 'lib/assets/images/icons/tasklist.svg';
+  
+  static const String due_date = 'lib/assets/images/icons/task_detailed/due_date.svg';
+  static const String milestone = 'lib/assets/images/icons/task_detailed/milestone.svg';
+  static const String person = 'lib/assets/images/icons/task_detailed/person.svg';
+  static const String priority = 'lib/assets/images/icons/task_detailed/priority.svg';
+  static const String project = 'lib/assets/images/icons/task_detailed/project.svg';
+  static const String start_date = 'lib/assets/images/icons/task_detailed/project.svg';
   
 }
 

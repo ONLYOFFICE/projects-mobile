@@ -138,14 +138,14 @@ class SecondColumn extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(
                   '•',
-                  style: TextStyleHelper.projectResponsible(Theme.of(context)),
+                  style: TextStyleHelper.projectResponsible,
                 ),
               ),
               Flexible(
                 child: Text(
                   item.responsible.displayName,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectResponsible(Theme.of(context)),
+                  style: TextStyleHelper.projectResponsible,
                 ),
               ),
             ],

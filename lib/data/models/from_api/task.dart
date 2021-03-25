@@ -21,6 +21,7 @@ class PortalTask {
   PortalUser updatedBy;
   String created;
   PortalUser createdBy;
+  List<Subtask> subtasks;
   String updated;
   List<PortalUser> responsibles;
 
@@ -75,6 +76,9 @@ class PortalTask {
         : null;
     updated = json['updated'];
 
+    subtasks = List<Subtask>.from(json['subtasks']
+        .map((x) => Subtask.fromJson(x)));
+
     responsibles = json['responsibles'] != null
         ? (json['responsibles'] as List)
             .map((i) => PortalUser.fromJson(i))
@@ -110,13 +114,78 @@ class PortalTask {
     if (createdBy != null) {
       data['createdBy'] = createdBy.toJson();
     }
+
+    data['subtasks'] = List<dynamic>
+        .from(subtasks.map((x) => x.toJson()));
+        
     data['updated'] = updated;
     return data;
   }
 
-  String creationDate() {
-    final now = DateTime.parse(created);
-    final formatter = DateFormat('d MMM.yyy');
-    return formatter.format(now);
+  String formatedDate({DateTime now, String stringDate}) {
+
+    var date = DateTime.parse(stringDate);
+
+    if (now.year == date.year)  {
+      final formatter = DateFormat('d MMM');
+      return formatter.format(date);
+    } else {
+      final formatter = DateFormat('d MMM yyy');
+      return formatter.format(date);
+    }
   }
+}
+
+
+class Subtask {
+
+    final bool canEdit;
+    final int taskId;
+    final int id;
+    final String title;
+    final dynamic description;
+    final int status;
+    final PortalUser responsible;
+    final DateTime created;
+    final PortalUser createdBy;
+    final DateTime updated;
+
+    Subtask({
+        this.canEdit,
+        this.taskId,
+        this.id,
+        this.title,
+        this.description,
+        this.status,
+        this.responsible,
+        this.created,
+        this.createdBy,
+        this.updated,
+    });
+
+    factory Subtask.fromJson(Map<String, dynamic> json) => Subtask(
+        canEdit: json['canEdit'],
+        taskId: json['taskId'],
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        status: json['status'],
+        responsible: PortalUser.fromJson(json['responsible']),
+        created: DateTime.parse(json['created']),
+        createdBy: PortalUser.fromJson(json['createdBy']),
+        updated: DateTime.parse(json['updated']),
+    );
+
+    Map<String, dynamic> toJson() => {
+        'canEdit': canEdit,
+        'taskId': taskId,
+        'id': id,
+        'title': title,
+        'description': description,
+        'status': status,
+        'responsible': responsible.toJson(),
+        'created': created.toIso8601String(),
+        'createdBy': createdBy.toJson(),
+        'updated': updated.toIso8601String(),
+    };
 }
