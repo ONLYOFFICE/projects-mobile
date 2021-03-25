@@ -32,58 +32,64 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/task.dart';
 
-import 'package:projects/data/models/item.dart';
-import 'package:projects/domain/controllers/project_item_controller.dart';
+import 'package:projects/domain/controllers/task_item_controller.dart';
+import 'package:projects/presentation/shared/app_colors.dart';
 
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskCell extends StatelessWidget {
-  final Item item;
-  const TaskCell({this.item});
+  final PortalTask task;
+  const TaskCell({this.task});
 
   @override
   Widget build(BuildContext context) {
-    var itemController =
-        Get.put(ProjectItemController(item), tag: item.id.toString());
+
+    // ignore: omit_local_variable_types
+    TaskItemController itemController =
+        Get.put(TaskItemController(task), tag: task.id.toString());
 
     return VisibilityDetector(
-      key: Key('${item.id.toString()}_${item.title}'),
+      key: Key('${task.id.toString()}_${task.title}'),
       onVisibilityChanged: itemController.handleVisibilityChanged,
       child: Container(
+        height: 72,
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ProjectIcon(),
+            GestureDetector(
+              onTap: () => Get.bottomSheet(BottomSheet(title: 'Select status')),
+              child: TaskStatus(itemController: itemController)),
+            const SizedBox(width: 16),
             Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SecondColumn(
-                          item: item,
-                          itemController: itemController,
-                        ),
-                        const SizedBox(width: 16),
-                        ThirdColumn(
-                          item: item,
-                          controller: itemController,
-                        ),
-                        const SizedBox(width: 16),
-                      ],
+              child: GestureDetector(
+                onTap: () => Get.toNamed('TaskDetailedView'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SecondColumn(
+                            task: task,
+                            itemController: itemController,
+                          ),
+                          const SizedBox(width: 8),
+                          ThirdColumn(
+                            task: task,
+                            controller: itemController,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -93,45 +99,111 @@ class TaskCell extends StatelessWidget {
   }
 }
 
-class ProjectIcon extends StatelessWidget {
-  const ProjectIcon({
+class BottomSheet extends StatelessWidget {
+
+  final String title;
+  const BottomSheet({
     Key key,
+    this.title
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 72,
-      padding: const EdgeInsets.all(16),
-      child: Stack(
-        children: <Widget>[
-          SVG.createSized('lib/assets/images/icons/project_icon.svg', 40, 40),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: SVG.createSized(
-                'lib/assets/images/icons/project_attribute.svg', 16, 16),
-            // IconButton(
-            //   onPressed: () {},
-            //   icon: SVG.createSized(
-            //       'lib/assets/images/icons/project_attribute.svg', 16, 16),
-            // ),
+      height: 464,
+      decoration: BoxDecoration(
+        color: AppColors.onPrimarySurface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0, bottom: 18.5),
+              child: SizedBox(
+                height: 4,
+                width: 40,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: AppColors.onSurface.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(2)
+                  ),
+                ),
+              ),
+            ),
           ),
+          if (title != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                title,
+                style: TextStyleHelper.h6,
+              ),
+            ),
+          Divider(),
         ],
       ),
     );
   }
 }
 
-class SecondColumn extends StatelessWidget {
-  const SecondColumn({
+class TaskStatus extends StatelessWidget {
+
+  final TaskItemController itemController;
+
+  const TaskStatus({
     Key key,
-    @required this.item,
     @required this.itemController,
   }) : super(key: key);
 
-  final Item item;
-  final ProjectItemController itemController;
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xffD8D8D8)
+      ),
+      child: Container(
+        width: 40,
+        height: 40,
+        margin: const EdgeInsets.all(0.5),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: AppColors.background
+        ),
+        child: Obx(() {
+          return (itemController.statusImageString.value == null ||
+                itemController.statusImageString.value.isEmpty)
+          ? SizedBox(
+              width: 16,
+              height: 16,
+              child: CircularProgressIndicator(),
+            )
+          : Center(child: SVG.createSizedFromString(
+                itemController.statusImageString.value, 16, 16, 
+                itemController.status.value.color),
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class SecondColumn extends StatelessWidget {
+
+  final PortalTask task;
+  final TaskItemController itemController;
+
+  const SecondColumn({
+    Key key,
+    @required this.task,
+    @required this.itemController,
+  }) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
@@ -142,38 +214,40 @@ class SecondColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Flexible(
-            child: Text(
-              item.title,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyleHelper.projectTitle,
-            ),
-          ),
-          const SizedBox(height: 8),
           Row(
-            children: <Widget>[
-              Obx(
-                () => (itemController.statusImageString.value == null ||
-                        itemController.statusImageString.value.isEmpty)
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(),
-                      )
-                    : SVG.createSizedFromString(
-                        itemController.statusImageString.value, 16, 16),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
+            children: [
+              Flexible(
                 child: Text(
-                  '•',
-                  style: TextStyleHelper.projectResponsible,
+                  task.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper.projectTitle,
                 ),
               ),
-              Text(
-                item.responsible.displayName,
-                style: TextStyleHelper.projectResponsible,
-              ),
+              const SizedBox(width: 6),
+              if (task.priority == 1)
+              AppIcon(
+                icon: SvgIcons.high_priority,
+              )
+            ],
+          ),
+          Row(
+            children: [
+              Obx(() {
+                return (itemController.statusImageString.value == null ||
+                        itemController.statusImageString.value.isEmpty)
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(),
+                    )
+                  : Text(
+                      itemController.status.value.title,
+                      style: TextStyleHelper.projectStatus.copyWith(
+                        color: itemController.status.value.color.toColor()));
+              }),
+              Text(' • ', style: TextStyleHelper.projectResponsible),
+              Text(task.createdBy.displayName, style: TextStyleHelper.projectResponsible),
             ],
           ),
         ],
@@ -183,36 +257,40 @@ class SecondColumn extends StatelessWidget {
 }
 
 class ThirdColumn extends StatelessWidget {
+
+  final PortalTask task;
+  final TaskItemController controller;
+
   const ThirdColumn({
     Key key,
-    @required this.item,
+    @required this.task,
     @required this.controller,
   }) : super(key: key);
 
-  final Item item;
-  final ProjectItemController controller;
-
   @override
   Widget build(BuildContext context) {
+
+    var _now = DateTime.now();
+
     return Expanded(
       flex: 1,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(
-            item.date,
-            style: TextStyleHelper.projectDate,
-          ),
-          const SizedBox(height: 8),
+          if (task.deadline != null)
+            Text(task.formatedDate(now: _now, stringDate: task.deadline), 
+                style: TextStyleHelper.projectDate),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SVG.createSized(
-                  'lib/assets/images/icons/check_round.svg', 20, 20),
+            children: [
+              AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
+              const SizedBox(width: 5),
               Text(
-                item.subCount.toString(),
-                style: TextStyleHelper.projectCompleatetTasks,
+                task.subtasks.length.toString(), 
+                style: TextStyleHelper.body2
+                    .copyWith(color: AppColors.onSurface.withOpacity(0.6))
               ),
             ],
           ),

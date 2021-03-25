@@ -37,6 +37,7 @@ dependencies:
   google_sign_in: ^4.5.1
   pull_to_refresh: ^1.6.4
   visibility_detector: ^0.1.5
+  shimmer: ^1.1.2
   # flutter_facebook_auth: "^1.0.0"
   # flutter_twitter_login: ^1.1.0
 
@@ -62,6 +63,7 @@ flutter:
     - lib/assets/images/icons/
     - lib/assets/images/icons/tab_bar/
     - lib/assets/images/icons/project_statuses/
+    - lib/assets/images/icons/task_detailed/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
