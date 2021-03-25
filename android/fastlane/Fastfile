@@ -1,0 +1,85 @@
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+fastlane_require 'dotenv'
+Dotenv.load '.env.secret'
+
+default_platform(:android)
+skip_docs
+
+platform :android do
+  version_name = '1.0'
+  version_code = 1
+  increase_version_code = nil
+
+  before_all do
+    readVersion()
+  end
+  
+  desc "Read flutter app version info from local(pubspec.yaml)"
+  lane :readVersion do
+    version_name = flutter_version()["version_name"]
+    version_code = flutter_version()["version_code"]
+    increase_version_code = version_code.to_i + 1
+  end
+
+  desc "Prepare and archive app"
+  lane :prepare  do |options|
+    #bundle_install
+    # RegExr for increasing build number. e.g version: 1.0+1 > version: 1.0+2
+    increase_pubspec_build_number = 's/^(version:\\s+\d+\.\d+\+)(\d+)$/$1.(' + "#{increase_version_code}" + ')/e'
+
+    Dir.chdir "../.." do
+      sh("perl", "-i", "-pe", increase_pubspec_build_number, "pubspec.yaml") # Bump pubspec's build number
+      sh("flutter", "packages", "get")
+      sh("flutter", "clean")
+      sh("flutter", "build", "apk", "--split-per-abi", "--release", "--build-name=#{version_name}", "--build-number=#{increase_version_code}")
+    end
+  end
+  
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Build the application as APK files for all platforms"
+  lane :apk do
+    # reset any changes
+    reset_git_repo(force: true)
+    
+    # get the last commit comments from Git history
+    # and creates our changelog
+    change_log = changelog_from_git_commits(
+      pretty: "- %s",
+      date_format: "short",
+      match_lightweight_tag: false,
+      merge_commit_filtering: "exclude_merges"
+    )
+
+    prepare(release: true)
+
+    # create a local tag with the new version
+    add_git_tag(
+      tag: "android/v#{version_name}-#{increase_version_code}",
+      build_number: increase_version_code
+    )
+
+    # push changes
+    push_to_git_remote
+
+    if ENV["TELEGRAM_PROJECTS_ANDROID_APK_MESSAGE"]
+      begin
+        telegram(
+          token: ENV['TELEGRAM_BOT_TOKEN'],
+          chat_id: ENV['TELEGRAM_CHAT_ID'],
+          parse_mode: 'Markdown',
+          text: ENV["TELEGRAM_PROJECTS_ANDROID_APK_MESSAGE"] % [version_number: "#{version_name}", build_number: "#{increase_version_code}", change_log: "#{change_log}"]
+        )
+      rescue => ex
+        UI.error(ex)
+      end
+    end
+
+  end
+end
