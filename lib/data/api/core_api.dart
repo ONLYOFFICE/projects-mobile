@@ -36,7 +36,7 @@ import 'package:projects/internal/locator.dart';
 
 class CoreApi {
   var client = http.Client();
-  final _storage = locator<Storage>();
+  final _secureStorage = locator<SecureStorage>();
   String _portalName;
 
   Future<Map<String, String>> getHeaders() async {
@@ -57,8 +57,8 @@ class CoreApi {
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/2.0/authentication/$code';
 
-  Future<String> projectsByParamsUrl(String params) async =>
-      '${await getPortalURI()}/api/2.0/project/filter?$params';
+  Future<String> projectsByParamsBaseUrl() async =>
+      '${await getPortalURI()}/api/2.0/project/filter?';
 
   Future<String> tasksByFilterUrl(String params) async =>
       '${await getPortalURI()}/api/2.0/project/task/filter?$params';
@@ -95,14 +95,14 @@ class CoreApi {
 
   Future<String> getPortalURI() async {
     if (_portalName == null || _portalName.isEmpty) {
-      _portalName = await _storage.getString('portalName');
+      _portalName = await _secureStorage.getString('portalName');
     }
 
     return 'https://$_portalName';
   }
 
   Future<String> getToken() async {
-    var token = await _storage.getString('token');
+    var token = await _secureStorage.getString('token');
 
     return token;
   }

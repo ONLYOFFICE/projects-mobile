@@ -150,29 +150,34 @@ class SecondColumn extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: <Widget>[
-              Obx(
-                () => (itemController.statusImageString.value == null ||
-                        itemController.statusImageString.value.isEmpty)
-                    ? SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(),
-                      )
-                    : SVG.createSizedFromString(
-                        itemController.statusImageString.value, 16, 16),
-              ),
+              // Obx(
+              //   () => (itemController.statusImageString.value == null ||
+              //           itemController.statusImageString.value.isEmpty)
+              //       ? SizedBox(
+              //           width: 16,
+              //           height: 16,
+              //           child: CircularProgressIndicator(),
+              //         )
+              //       :
+              SVG.createSized(
+                  'lib/assets/images/icons/project_statuses/checkmark.svg',
+                  16,
+                  16),
+              // SVG.createSizedFromString(
+              //           itemController.statusImageString.value, 16, 16),
+              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(
                   '•',
-                  style: TextStyleHelper.projectResponsible,
+                  style: TextStyleHelper.projectResponsible(Theme.of(context)),
                 ),
               ),
               Flexible(
                 child: Text(
                   item.responsible.displayName,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectResponsible,
+                  style: TextStyleHelper.projectResponsible(Theme.of(context)),
                 ),
               ),
             ],
@@ -208,7 +213,7 @@ class ThirdColumn extends StatelessWidget {
                   'lib/assets/images/icons/check_square.svg', 20, 20),
               Text(
                 item.subCount.toString(),
-                style: TextStyleHelper.projectCompleatetTasks,
+                style: TextStyleHelper.projectCompleatedTasks,
               ),
             ],
           ),

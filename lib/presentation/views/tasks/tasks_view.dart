@@ -34,7 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/tasks_controller.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
@@ -49,7 +49,7 @@ class TasksView extends StatelessWidget {
     // var dtc = Get.put(DetailedTaskController());
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
         child: Icon(Icons.add_rounded),
       ),
@@ -63,6 +63,8 @@ class TasksView extends StatelessWidget {
               if (controller.loaded.isTrue) 
                 Expanded(
                   child: SmartRefresher(
+                  enablePullDown: true,
+                  enablePullUp: false,
                   controller: controller.refreshController,
                   onRefresh: () => controller.onRefresh(),
                   child: ListView.builder(
@@ -89,7 +91,7 @@ class _TasksLoading extends StatelessWidget {
   Widget build(BuildContext context) {
 
     var _decoration = BoxDecoration(
-      color: AppColors.bgDescription,
+      color: Theme.of(context).customColors().bgDescription,
       borderRadius: BorderRadius.circular(2)
     );
 
@@ -98,11 +100,11 @@ class _TasksLoading extends StatelessWidget {
         children: [
           LinearProgressIndicator(
             minHeight: 4,
-            backgroundColor: AppColors.primary,
+            backgroundColor: Theme.of(context).customColors().primary,
             valueColor: AlwaysStoppedAnimation<Color>(const Color(0xffb5c4d2)),
           ),
           Shimmer.fromColors(
-            baseColor: AppColors.bgDescription, 
+            baseColor: Theme.of(context).customColors().bgDescription, 
             highlightColor: Colors.white,
             child: Column(
               children: [
@@ -115,9 +117,9 @@ class _TasksLoading extends StatelessWidget {
                         margin: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
                         height: 40,
                         width: 40,
-                        decoration: const BoxDecoration(
+                        decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.bgDescription
+                          color: Theme.of(context).customColors().bgDescription
                         ),
                       ),
                       Expanded(

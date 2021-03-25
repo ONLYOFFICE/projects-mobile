@@ -31,7 +31,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
+
+import 'package:projects/presentation/shared/custom_theme.dart';
 
 class TextStyleHelper {
 
@@ -41,7 +42,7 @@ class TextStyleHelper {
     fontSize: 16,
     height: 1.5,
     letterSpacing: 0.44,
-    color: AppColors.onBackground
+    // color: AppColors.onBackground
   );
 
   static const body2 = TextStyle(
@@ -50,7 +51,7 @@ class TextStyleHelper {
     fontSize: 14,
     height: 1.429,
     letterSpacing: 0.25,
-    color: AppColors.onSurface
+    // color: AppColors.onSurface
   );
 
   static final caption = TextStyle(
@@ -59,7 +60,7 @@ class TextStyleHelper {
     height: 1.33,
     letterSpacing: 0.6,
     fontWeight: FontWeight.w400,
-    color: AppColors.onSurface.withOpacity(0.75)
+    // color: AppColors.onSurface.withOpacity(0.75)
   );
 
   static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
@@ -70,7 +71,7 @@ class TextStyleHelper {
     fontSize: 20,
     height: 1.172,
     letterSpacing: 0.15,
-    color: AppColors.onSurface
+    // color: AppColors.onSurface
   );
 
   static const headline6 = TextStyle(
@@ -92,50 +93,50 @@ class TextStyleHelper {
     fontSize: 10,
     height: 1.6,
     letterSpacing: 1.5,
-    color: AppColors.onSurface.withOpacity(0.6)
+    // color: AppColors.onSurface.withOpacity(0.6)
   );
 
-  static const projectTitle = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w400,
-    fontSize: 16,
-    height: 1.25,
-    letterSpacing: 0.15
-  );
+  static TextStyle projectTitle = TextStyle(
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+      height: 1.25,
+      letterSpacing: 0.15);
 
-  static const projectStatus = TextStyle(
-    fontFamily: 'Roboto',
-    color: AppColors.links,
-    fontWeight: FontWeight.w500,
-    fontSize: 12,
-    height: 1.33,
-    letterSpacing: 0.5
-  );
+  static TextStyle projectStatus(ThemeData theme) => TextStyle(
+      fontFamily: 'Roboto',
+      color: theme.customColors().links,
+      fontWeight: FontWeight.w500,
+      fontSize: 12,
+      height: 1.33,
+      letterSpacing: 0.5);
 
-  static const projectsSorting = TextStyle(
+  static TextStyle subtitleProjects(ThemeData theme) => TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 14,
+      fontWeight: FontWeight.w500,
+      color: theme.customColors().projectsSubtitle);
+
+  static TextStyle projectsSorting(ThemeData theme) => TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Color.fromRGBO(0, 0, 0, 0.6));
+      color: theme.customColors().projectsSubtitle);
 
-  static final projectResponsible = TextStyle(
+  static TextStyle projectResponsible(ThemeData theme) => TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+        color: theme.customColors().projectsSubtitle,
+      );
+
+  static TextStyle projectDate(ThemeData theme) => TextStyle(
       fontFamily: 'Roboto',
-      fontWeight: FontWeight.w400,
-      fontSize: 12,
-      height: 1.33,
-      letterSpacing: 0.5,
-      color: AppColors.onSurface.withOpacity(0.6));
+      fontWeight: FontWeight.normal,
+      fontSize: 16,
+      color: theme.customColors().projectsSubtitle);
 
-  static final projectDate = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w400,
-    color: AppColors.onSurface,
-    fontSize: 12,
-    height: 0.33,
-    letterSpacing: 0.5
-  );
-
-  static const projectCompleatetTasks = TextStyle(
+  static TextStyle projectCompleatedTasks = TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.w400,
       fontSize: 14,
@@ -161,12 +162,6 @@ class TextStyleHelper {
     letterSpacing: 0.1,
     fontWeight: FontWeight.w500
   );
-
-  static const subtitleProjects = TextStyle(
-      fontFamily: 'Roboto',
-      fontSize: 14,
-      fontWeight: FontWeight.w500,
-      color: Color.fromRGBO(0, 0, 0, 0.6));
 
 
 }

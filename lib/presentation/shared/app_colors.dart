@@ -30,24 +30,47 @@
  *
  */
 
-
 import 'dart:ui';
 
+import 'package:flutter/cupertino.dart';
+
 class AppColors {
+  
+  final Color activeTabTitle;
+  final Color background;
+  final Color backgroundColor;
+  final Color bgDescription;
+  final Color inactiveTabTitle;
+  final Color lightSecondary;
+  final Color links;
+  final Color onBackground;
+  final Color onPrimary;
+  final Color onPrimarySurface;
+  final Color onSurface;
+  final Color primary;
+  final Color primarySurface;
+  final Color projectsSubtitle;
+  final Color tabActive;
+  final Color tabSecondary;
+  final Color tabbarBackground;
 
-  static const Color backgroundColor = Color(0xffffffff);
-  static const Color background = Color(0xffFBFBFB);
-  static const Color bgDescription = Color(0xffF1F3F8);
-
-  static const Color lightSecondary = Color(0xffED7309);
-  static const Color links = Color(0xff0C76D5);
-  static const Color onBackground = Color(0xff000000);
-  static const Color onPrimary = Color(0xffffffff);
-  static const Color onPrimarySurface = Color(0xffffffff);
-  static const Color onSurface = Color(0xff000000);
-  static const Color primary = Color(0xff0C76D5);
-  static const Color primarySurface = Color(0xff0F4071);
-  static const Color tabSecondary = Color.fromRGBO(255, 255, 255, 0.4);
-  static const Color tabActive = Color.fromRGBO(255, 255, 255, 1);
-
+  const AppColors({
+    @required this.activeTabTitle,
+    @required this.background,
+    @required this.backgroundColor,
+    @required this.bgDescription,
+    @required this.inactiveTabTitle,
+    @required this.lightSecondary,
+    @required this.links,
+    @required this.onBackground,
+    @required this.onPrimary,
+    @required this.onPrimarySurface,
+    @required this.onSurface,
+    @required this.primary,
+    @required this.primarySurface,
+    @required this.projectsSubtitle,
+    @required this.tabActive,
+    @required this.tabSecondary,
+    @required this.tabbarBackground,
+  });
 }
