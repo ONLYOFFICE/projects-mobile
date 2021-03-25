@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/tasks_controller.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -13,7 +12,7 @@ class TasksView extends StatelessWidget {
     var controller = Get.put(TasksController());
 
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

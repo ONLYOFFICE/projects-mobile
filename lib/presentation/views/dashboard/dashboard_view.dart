@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 
 class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.backgroundColor,
+      backgroundColor: Theme.of(context).backgroundColor,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[

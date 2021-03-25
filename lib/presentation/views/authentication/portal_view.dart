@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
 
-import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/views/authentication/widgets/portal_form.dart';
 
 class PortalView extends StatelessWidget {
@@ -22,7 +21,7 @@ class PortalView extends StatelessWidget {
             ? Center(child: CircularProgressIndicator())
             : Center(
                 child: Container(
-                  color: AppColors.backgroundColor,
+                  color: Theme.of(context).backgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(36.0),
                     child: Column(

@@ -1,47 +1,50 @@
 import 'package:flutter/material.dart';
 
-class TextStyleHelper {
-  static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
+import 'package:projects/presentation/shared/custom_theme.dart';
 
-  static const headerStyle = TextStyle(
+class TextStyleHelper {
+  static TextStyle mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
+
+  static TextStyle headerStyle = TextStyle(
       fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);
 
-  static const subHeaderStyle = TextStyle(
+  static TextStyle subHeaderStyle = TextStyle(
     fontSize: 14.0,
     fontWeight: FontWeight.w500,
   );
 
-  static const projectTitle = TextStyle(
+  static TextStyle projectTitle = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 16,
   );
 
-  static const subtitleProjects = TextStyle(
+  static TextStyle subtitleProjects(ThemeData theme) => TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      color: Color.fromRGBO(0, 0, 0, 0.6));
+      color: theme.customColors().projectsSubtitle);
 
-  static const projectsSorting = TextStyle(
+  static TextStyle projectsSorting(ThemeData theme) => TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Color.fromRGBO(0, 0, 0, 0.6));
+      color: theme.customColors().projectsSubtitle);
 
-  static const projectResponsible = TextStyle(
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.normal,
-      fontSize: 14,
-      color: Color.fromRGBO(0, 0, 0, 0.6));
+  static TextStyle projectResponsible(ThemeData theme) => TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.normal,
+        fontSize: 14,
+        color: theme.customColors().projectsSubtitle,
+      );
 
-  static const projectDate = TextStyle(
+  static TextStyle projectDate(ThemeData theme) => TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.normal,
       fontSize: 16,
-      color: Color.fromRGBO(0, 0, 0, 0.6));
+      color: theme.customColors().projectsSubtitle);
 
-  static const projectCompleatetTasks = TextStyle(
+  static TextStyle projectCompleatedTasks = TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.w400,
       fontSize: 14,

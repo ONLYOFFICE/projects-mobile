@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  static const Color backgroundColor = Colors.white;
+  final Color backgroundColor;
+  final Color tabbarBackground;
+  final Color inactiveTabTitle;
+  final Color activeTabTitle;
+  final Color projectsSubtitle;
 
-  static const Color lightSecondary = Color(0xff2E4057);
-  static const Color tabSecondary = Color.fromRGBO(255, 255, 255, 0.4);
-  static const Color tabActive = Color.fromRGBO(255, 255, 255, 1);
+  const AppColors(
+      {this.backgroundColor,
+      this.tabbarBackground,
+      this.projectsSubtitle,
+      this.activeTabTitle,
+      this.inactiveTabTitle});
 }

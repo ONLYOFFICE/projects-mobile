@@ -135,12 +135,12 @@ class SecondColumn extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(
                   '•',
-                  style: TextStyleHelper.projectResponsible,
+                  style: TextStyleHelper.projectResponsible(Theme.of(context)),
                 ),
               ),
               Text(
                 item.responsible.displayName,
-                style: TextStyleHelper.projectResponsible,
+                style: TextStyleHelper.projectResponsible(Theme.of(context)),
               ),
             ],
           ),
@@ -170,7 +170,7 @@ class ThirdColumn extends StatelessWidget {
         children: <Widget>[
           Text(
             item.date,
-            style: TextStyleHelper.projectDate,
+            style: TextStyleHelper.projectDate(Theme.of(context)),
           ),
           const SizedBox(height: 8),
           Row(
@@ -180,7 +180,7 @@ class ThirdColumn extends StatelessWidget {
                   'lib/assets/images/icons/check_round.svg', 20, 20),
               Text(
                 item.subCount.toString(),
-                style: TextStyleHelper.projectCompleatetTasks,
+                style: TextStyleHelper.projectCompleatedTasks,
               ),
             ],
           ),

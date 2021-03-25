@@ -3,7 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/login_controller.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
 class PortalForm extends StatefulWidget {
@@ -55,7 +54,8 @@ class _PortalFormState extends State<PortalForm> {
         child: Text(localization.continueButton,
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
-                color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
+                color: Theme.of(context).backgroundColor,
+                fontWeight: FontWeight.bold)),
       ),
     );
 

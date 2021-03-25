@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
 class CodeForm extends StatefulWidget {
@@ -52,7 +51,8 @@ class _CodeFormState extends State<CodeForm> {
         child: Text('Send',
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
-                color: AppColors.backgroundColor, fontWeight: FontWeight.bold)),
+                color: Theme.of(context).backgroundColor,
+                fontWeight: FontWeight.bold)),
       ),
     );
 

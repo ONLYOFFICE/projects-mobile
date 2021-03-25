@@ -13,7 +13,7 @@ import 'package:projects/internal/locator.dart';
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
   final PortalService _portalService = locator<PortalService>();
-  final Storage _storage = locator<Storage>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   Capabilities capabilities;
   String _pass;
@@ -59,8 +59,8 @@ class LoginController extends GetxController {
   }
 
   Future saveToken(ApiDTO<AuthToken> result) async {
-    await _storage.putString('token', result.response.token);
-    await _storage.putString('expires', result.response.expires);
+    await _secureStorage.putString('token', result.response.token);
+    await _secureStorage.putString('expires', result.response.expires);
   }
 
   Future<void> sendCode(String code) async {
@@ -149,9 +149,9 @@ class LoginController extends GetxController {
   }
 
   Future<bool> isTokenExpired() async {
-    var expirationDate = await _storage.getString('expires');
-    var token = await _storage.getString('token');
-    var portalName = await _storage.getString('portalName');
+    var expirationDate = await _secureStorage.getString('expires');
+    var token = await _secureStorage.getString('token');
+    var portalName = await _secureStorage.getString('portalName');
 
     if (expirationDate == null ||
         expirationDate.isEmpty ||
