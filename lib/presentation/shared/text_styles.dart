@@ -80,6 +80,16 @@ class TextStyleHelper {
       height: 1.33,
       letterSpacing: 0.5);
 
+  static TextStyle taskStatus(Color color) {
+    return TextStyle(
+      fontFamily: 'Roboto',
+      color: color,
+      fontWeight: FontWeight.w500,
+      fontSize: 12,
+      height: 1.33,
+      letterSpacing: 0.5);
+  }
+
   static TextStyle subtitleProjects = TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
