@@ -17,6 +17,10 @@ final AppColors lightColors = AppColors(
   inactiveTabTitle: Colors.white.withOpacity(0.4),
   tabbarBackground: Color(0xff2E4057),
   projectsSubtitle: Colors.black.withOpacity(0.6),
+  background: Color(0xffFBFBFB),
+  links: Color(0xff0C76D5),
+  onSurface: Color(0xff000000),
+  primarySurface: Color(0xff0F4071),
 );
 
 final AppColors darkColors = AppColors(
@@ -25,6 +29,10 @@ final AppColors darkColors = AppColors(
   inactiveTabTitle: Colors.white.withOpacity(0.4),
   tabbarBackground: Color(0xff2E4057),
   projectsSubtitle: Colors.white.withOpacity(0.6),
+  background: Color(0xffFBFBFB),
+  links: Color(0xff0C76D5),
+  onSurface: Color(0xff000000),
+  primarySurface: Color(0xff0F4071),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
