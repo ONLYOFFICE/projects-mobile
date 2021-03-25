@@ -35,6 +35,7 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
+// import 'package:projects/presentation/shared/theme_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends GetxController {
@@ -62,6 +63,7 @@ class ProjectsController extends GetxController {
   void onLoading() async {
     startIndex++;
     await getProjects();
+    // ThemeService().switchTheme();
     refreshController.loadComplete();
   }
 

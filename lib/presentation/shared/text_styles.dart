@@ -46,10 +46,19 @@ class TextStyleHelper {
   );
 
   static TextStyle projectTitle = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w400,
-    fontSize: 16,
-  );
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w400,
+      fontSize: 16,
+      height: 1.25,
+      letterSpacing: 0.15);
+
+  static TextStyle projectStatus(ThemeData theme) => TextStyle(
+      fontFamily: 'Roboto',
+      color: theme.customColors().links,
+      fontWeight: FontWeight.w500,
+      fontSize: 12,
+      height: 1.33,
+      letterSpacing: 0.5);
 
   static TextStyle subtitleProjects(ThemeData theme) => TextStyle(
       fontFamily: 'Roboto',
