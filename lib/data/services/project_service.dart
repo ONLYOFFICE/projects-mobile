@@ -24,8 +24,8 @@ class ProjectService {
     }
   }
 
-  Future<List<ProjectDetailed>> getProjectsByParams() async {
-    var projects = await _api.getProjectsByParams();
+  Future<List<ProjectDetailed>> getProjectsByParams({int startIndex}) async {
+    var projects = await _api.getProjectsByParams(startIndex: startIndex);
 
     var success = projects.response != null;
 

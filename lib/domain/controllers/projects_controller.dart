@@ -3,12 +3,15 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
+// import 'package:projects/presentation/shared/theme_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends GetxController {
   final _api = locator<ProjectService>();
 
   List<Status> statuses;
+
+  var startIndex = 0;
 
   @override
   void onInit() {
@@ -20,18 +23,21 @@ class ProjectsController extends GetxController {
   RefreshController refreshController = RefreshController(initialRefresh: true);
 
   void onRefresh() async {
-    await getProjects();
+    startIndex = 0;
+    await getProjects(needToClear: true);
     refreshController.refreshCompleted();
   }
 
   void onLoading() async {
+    startIndex++;
     await getProjects();
+    // ThemeService().switchTheme();
     refreshController.loadComplete();
   }
 
-  Future getProjects() async {
-    var items = await _api.getProjectsByParams();
-    projects.clear();
+  Future getProjects({needToClear = false}) async {
+    var items = await _api.getProjectsByParams(startIndex: startIndex);
+    if (needToClear) projects.clear();
 
     items.forEach(
       (element) {

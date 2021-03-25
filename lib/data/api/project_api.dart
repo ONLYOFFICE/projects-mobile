@@ -34,14 +34,25 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<List<ProjectDetailed>>> getProjectsByParams() async {
 // ?tag=1234
 // &participant=9924256A-739C-462b-AF15-E652A3B1B6EB
 // &manager=9924256A-739C-462b-AF15-E652A3B1B6EB
 // &departament=9924256A-739C-462b-AF15-E652A3B1B6EB
 // &follow=True
 
-    var url = await coreApi.projectsByParamsUrl('');
+//https://nct.onlyoffice.com/api/2.0/project/filter.json
+// ?sortBy=create_on
+// &sortOrder=ascending
+// &status=open
+// &Count=25
+// &StartIndex=25
+// &simple=true
+// &__=291475
+  Future<ApiDTO<List<ProjectDetailed>>> getProjectsByParams(
+      {int startIndex}) async {
+    var url = await coreApi.projectsByParamsBaseUrl();
+    if (startIndex != null) url += '&Count=25&StartIndex=$startIndex';
+
     var result = ApiDTO<List<ProjectDetailed>>();
     try {
       var response = await coreApi.getRequest(url);

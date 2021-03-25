@@ -3,8 +3,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/task.dart';
 
 import 'package:projects/domain/controllers/task_item_controller.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
-
+import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -80,7 +79,7 @@ class BottomSheet extends StatelessWidget {
     return Container(
       height: 464,
       decoration: BoxDecoration(
-        color: AppColors.onPrimarySurface,
+        color: Theme.of(context).customColors().onPrimarySurface,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
@@ -97,7 +96,7 @@ class BottomSheet extends StatelessWidget {
                 width: 40,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: AppColors.onSurface.withOpacity(0.2),
+                    color: Theme.of(context).customColors().onSurface.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(2)
                   ),
                 ),
@@ -141,7 +140,7 @@ class TaskStatus extends StatelessWidget {
         margin: const EdgeInsets.all(0.5),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: AppColors.background
+          color: Theme.of(context).customColors().background
         ),
         child: Obx(() {
           return (itemController.statusImageString.value == null ||
@@ -211,11 +210,15 @@ class SecondColumn extends StatelessWidget {
                     )
                   : Text(
                       itemController.status.value.title,
-                      style: TextStyleHelper.projectStatus.copyWith(
+                      style: TextStyleHelper.projectStatus(Theme.of(context)).copyWith(
                         color: itemController.status.value.color.toColor()));
               }),
-              Text(' • ', style: TextStyleHelper.projectResponsible),
-              Text(task.createdBy.displayName, style: TextStyleHelper.projectResponsible),
+              Text(
+                ' • ', 
+                style: TextStyleHelper.projectResponsible(Theme.of(context))),
+              Text(
+                task.createdBy.displayName, 
+                style: TextStyleHelper.projectResponsible(Theme.of(context))),
             ],
           ),
         ],
@@ -248,7 +251,7 @@ class ThirdColumn extends StatelessWidget {
         children: <Widget>[
           if (task.deadline != null)
             Text(task.formatedDate(now: _now, stringDate: task.deadline), 
-                style: TextStyleHelper.projectDate),
+                style: TextStyleHelper.projectDate(Theme.of(context))),
           Row(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -257,8 +260,7 @@ class ThirdColumn extends StatelessWidget {
               const SizedBox(width: 5),
               Text(
                 task.subtasks.length.toString(), 
-                style: TextStyleHelper.body2
-                    .copyWith(color: AppColors.onSurface.withOpacity(0.6))
+                style: TextStyleHelper.projectCompleatedTasks
               ),
             ],
           ),
