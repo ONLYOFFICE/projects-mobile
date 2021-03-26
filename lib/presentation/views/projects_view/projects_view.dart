@@ -35,8 +35,8 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:projects/presentation/views/tasks/tasks_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsView extends StatelessWidget {
@@ -51,7 +51,7 @@ class ProjectsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             HeaderWidget(controller: controller),
-            if (controller.loaded.isFalse) TasksLoading(),
+            if (controller.loaded.isFalse) ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
                 child: SmartRefresher(
