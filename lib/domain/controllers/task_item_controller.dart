@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/statuses_controller.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskItemController extends GetxController {
-
   PortalTask task;
   final statuses = [];
   var status = Status().obs;
@@ -47,14 +46,14 @@ class TaskItemController extends GetxController {
   TaskItemController(PortalTask task) {
     this.task = task;
     var statusesController = Get.find<StatusesController>();
-    
+
     statusesController.getStatuses().then(
-      (value) => {
-        status.value = (value.firstWhere(
-            (element) => element.statusType == task.status)),
-        statusImageString = decodeImageString(status.value.image).obs,
-      },
-    );
+          (value) => {
+            status.value = (value
+                .firstWhere((element) => element.statusType == task.status)),
+            statusImageString.value = decodeImageString(status.value.image),
+          },
+        );
   }
 
   void handleVisibilityChanged(VisibilityInfo info) {

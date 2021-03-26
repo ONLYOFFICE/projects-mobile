@@ -48,32 +48,34 @@ class CoreApi {
     };
   }
 
+  var version = '2.0';
+
   String capabilitiesUrl(String portalName) =>
-      'https://$portalName/api/2.0/capabilities';
+      'https://$portalName/api/$version/capabilities';
 
   Future<String> authUrl() async =>
-      '${await getPortalURI()}/api/2.0/authentication.json';
+      '${await getPortalURI()}/api/$version/authentication.json';
 
   Future<String> tfaUrl(String code) async =>
-      '${await getPortalURI()}/api/2.0/authentication/$code';
+      '${await getPortalURI()}/api/$version/authentication/$code';
 
   Future<String> projectsByParamsBaseUrl() async =>
-      '${await getPortalURI()}/api/2.0/project/filter?';
+      '${await getPortalURI()}/api/$version/project/filter?';
 
   Future<String> tasksByFilterUrl(String params) async =>
-      '${await getPortalURI()}/api/2.0/project/task/filter?$params';
+      '${await getPortalURI()}/api/$version/project/task/filter?$params';
 
   Future<String> taskByIdUrl(int id) async =>
-      '${await getPortalURI()}/api/2.0/project/task/$id';
+      '${await getPortalURI()}/api/$version/project/task/$id';
 
   Future<String> projectsUrl() async =>
-      '${await getPortalURI()}/api/2.0/project';
+      '${await getPortalURI()}/api/$version/project';
 
   Future<String> selfInfoUrl() async =>
-      '${await getPortalURI()}/api/2.0/people/@self';
+      '${await getPortalURI()}/api/$version/people/@self';
 
   Future<String> statusesUrl() async =>
-      '${await getPortalURI()}/api/2.0/project/status';
+      '${await getPortalURI()}/api/$version/project/status';
 
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();

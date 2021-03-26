@@ -53,21 +53,21 @@ class TasksView extends StatelessWidget {
       floatingActionButton: StyledFloatingActionButton(
         child: Icon(Icons.add_rounded),
       ),
-      body: Obx(() {
+      body: Obx(
+        () {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              HeaderWidget(title: 'Tasks'),
-              if (controller.loaded.isFalse)
-                _TasksLoading(),
-              if (controller.loaded.isTrue) 
+              HeaderWidget(controller: controller),
+              if (controller.loaded.isFalse) TasksLoading(),
+              if (controller.loaded.isTrue)
                 Expanded(
                   child: SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: false,
-                  controller: controller.refreshController,
-                  onRefresh: () => controller.onRefresh(),
-                  child: ListView.builder(
+                    enablePullDown: true,
+                    enablePullUp: false,
+                    controller: controller.refreshController,
+                    onRefresh: () => controller.onRefresh(),
+                    child: ListView.builder(
                       itemCount: controller.tasks.length,
                       itemBuilder: (BuildContext context, int index) {
                         return TaskCell(task: controller.tasks[index]);
@@ -83,17 +83,14 @@ class TasksView extends StatelessWidget {
   }
 }
 
-
-class _TasksLoading extends StatelessWidget {
-  const _TasksLoading({Key key}) : super(key: key);
+class TasksLoading extends StatelessWidget {
+  const TasksLoading({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     var _decoration = BoxDecoration(
-      color: Theme.of(context).customColors().bgDescription,
-      borderRadius: BorderRadius.circular(2)
-    );
+        color: Theme.of(context).customColors().bgDescription,
+        borderRadius: BorderRadius.circular(2));
 
     return Container(
       child: Column(
@@ -104,7 +101,7 @@ class _TasksLoading extends StatelessWidget {
             valueColor: AlwaysStoppedAnimation<Color>(const Color(0xffb5c4d2)),
           ),
           Shimmer.fromColors(
-            baseColor: Theme.of(context).customColors().bgDescription, 
+            baseColor: Theme.of(context).customColors().bgDescription,
             highlightColor: Colors.white,
             child: Column(
               children: [
@@ -114,41 +111,37 @@ class _TasksLoading extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        margin: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
+                        margin: const EdgeInsets.only(
+                            bottom: 32, left: 16, right: 16),
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).customColors().bgDescription
-                        ),
+                            shape: BoxShape.circle,
+                            color:
+                                Theme.of(context).customColors().bgDescription),
                       ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            Container(height: 12, decoration: _decoration),
                             Container(
-                              height: 12,
-                              decoration: _decoration
-                            ),
-                            Container(
-                              height: 12,
-                              margin: const EdgeInsets.only(top: 6),
-                              width: Get.width / 3,
-                              decoration: _decoration
-                            )
+                                height: 12,
+                                margin: const EdgeInsets.only(top: 6),
+                                width: Get.width / 3,
+                                decoration: _decoration)
                           ],
                         ),
                       ),
                       Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        width: 41,
-                        height: 12,
-                        decoration: _decoration
-                      )
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          width: 41,
+                          height: 12,
+                          decoration: _decoration)
                     ],
                   )
               ],
-            ), 
+            ),
           )
         ],
       ),

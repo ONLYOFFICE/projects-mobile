@@ -30,17 +30,46 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class DashboardView extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[],
-      ),
-    );
+import 'package:get/get.dart';
+import 'package:projects/data/models/item.dart';
+import 'package:visibility_detector/visibility_detector.dart';
+
+class ProjectCellController extends GetxController {
+  final statuses = [].obs;
+
+  ProjectCellController(Item project) {
+    this.project = project;
+  }
+
+  void handleVisibilityChanged(VisibilityInfo info) {
+    if (info.visibleFraction == 1) {
+      update();
+    }
+  }
+
+  var project;
+
+  RxString statusImageString = ''.obs;
+
+  String decodeImageString(String image) {
+    return utf8.decode(base64.decode(image));
+  }
+
+  String get statusName {
+    switch (project.status) {
+      case 0:
+        return 'Open';
+        break;
+      case 1:
+        return 'Closed';
+        break;
+      case 2:
+        return 'Paused';
+        break;
+      default:
+        return 'n/a';
+    }
   }
 }
