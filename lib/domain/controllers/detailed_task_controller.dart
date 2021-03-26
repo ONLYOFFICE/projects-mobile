@@ -1,46 +1,47 @@
-// import 'package:get/get.dart';
-// import 'package:projects/data/api/tasks_api.dart';
-// import 'package:projects/data/models/from_api/task.dart';
-// import 'package:projects/domain/dialogs.dart';
-// import 'package:projects/internal/locator.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/api/tasks_api.dart';
+import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-// class DetailedTaskController extends GetxController {
+class DetailedTaskController extends GetxController {
   
-//   final _api = locator<DetailedTaskService>();
+  final _api = locator<DetailedTaskService>();
 
-//   Future getTask(int id) async {
+  var loaded = false.obs;
 
-//     var task = await _api.getTaskByID(id: id);
-//     print(task);
+  var task = PortalTask();
 
-//   }
+  Future getTask(int id) async {
 
-// }
+    loaded.value = false;
+    task = await _api.getTaskByID(id: id);
+    loaded.value = true;
 
-// class DetailedTaskService {
+  }
 
-//   final TaskApi _api = locator<TaskApi>();
+}
 
-//   var portalTask = PortalTask().obs;
+class DetailedTaskService {
 
+  final TasksApi _api = locator<TasksApi>();
 
-//   Future getTaskByID({int id}) async {
-//     var task = await _api.getTaskByID(id: id);
+  var portalTask = PortalTask().obs;
 
-//     print('TASK!!');
-//     print(task);
+  Future getTaskByID({int id}) async {
+    var task = await _api.getTaskByID(id: id);
 
-//     var success = task.response != null;
+    var success = task.response != null;
 
-//     if (success) {
-//       return task.response;
-//     } else {
-//       ErrorDialog.show(task.error);
-//       return null;
-//     }
-//   }
+    if (success) {
+      return task.response;
+    } else {
+      ErrorDialog.show(task.error);
+      return null;
+    }
+  }
   
-// }
+}
 
 // // class TasksController extends GetxController {
 // //   final _api = locator<ProjectService>();

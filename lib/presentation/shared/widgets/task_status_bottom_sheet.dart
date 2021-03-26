@@ -53,7 +53,7 @@ class BottomSheet extends StatelessWidget {
           StatusTile(
             icon: Icon(Icons.ac_unit),
             selected: true,
-            title: 'Задача создана',
+            title: 'Задача создана',  
           ),
           StatusTile(
             icon: Icon(Icons.ac_unit),
@@ -141,7 +141,8 @@ class StatusTile extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Icon(
-                  Icons.done_sharp
+                  Icons.done_rounded,
+                  color: Theme.of(context).customColors().primary,
                 ),
               ),
             )

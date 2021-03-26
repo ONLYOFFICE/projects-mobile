@@ -46,7 +46,7 @@ class OverviewScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(left: 56, right: 32, top: 42, bottom: 42),
               child: ReadMoreText(
-                text,
+                _text,
                 trimLines: 3,
                 colorClickableText: Colors.pink,
                 style: TextStyleHelper.body1,
@@ -100,7 +100,7 @@ class OverviewScreen extends StatelessWidget {
   }
 }
 
-String text = 'Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m... Show more';
+String _text = 'Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m... Show more';
 
 
 class InfoTile extends StatelessWidget {
