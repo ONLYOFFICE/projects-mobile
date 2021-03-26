@@ -81,9 +81,6 @@ platform :android do
   desc "Submit to Play Market via CI"
   lane :ci do
 
-    # reset any changes
-    reset_git_repo(force: true)
-
     # Build artifacts and upload to store
     get_packages
     cleanup
