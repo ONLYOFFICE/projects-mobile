@@ -39,6 +39,7 @@ dependencies:
   pull_to_refresh: ^1.6.4
   visibility_detector: ^0.1.5
   shimmer: ^1.1.2
+  drop_cap_text: ^1.0.7
   # flutter_facebook_auth: "^1.0.0"
   # flutter_twitter_login: ^1.1.0
 

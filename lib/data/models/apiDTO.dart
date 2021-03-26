@@ -8,3 +8,17 @@ class ApiDTO<T> {
   T response;
   CustomError error;
 }
+
+class ProjectsApiDTO<T> {
+  ProjectsApiDTO({
+    this.response,
+    this.error,
+    this.startIndex,
+    this.total,
+  });
+  T response;
+  CustomError error;
+  int startIndex;
+
+  int total;
+}

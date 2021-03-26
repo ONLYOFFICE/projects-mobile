@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
 class HeaderWidget extends StatefulWidget {
-  final String title;
-  HeaderWidget({this.title});
+  final BaseController controller;
+  HeaderWidget({this.controller});
 
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
@@ -33,7 +35,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               ),
               Expanded(
                 child: Text(
-                  widget.title,
+                  widget.controller.screenName,
                   style: TextStyleHelper.headerStyle,
                 ),
               ),
@@ -43,7 +45,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     IconButton(
-                        icon: const Icon(Icons.search), onPressed: () {}),
+                      icon: const Icon(Icons.search),
+                      onPressed: () {
+                        widget.controller.showSearch();
+                      },
+                    ),
                     IconButton(
                         icon: SVG
                             .create('lib/assets/images/icons/preferences.svg'),
@@ -67,9 +73,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               Container(
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      '3 projects',
-                      style: TextStyleHelper.subtitleProjects,
+                    Obx(
+                      () => Text(
+                        '${widget.controller.itemList.length} ${widget.controller.screenName.toLowerCase()}',
+                        style: TextStyleHelper.subtitleProjects,
+                      ),
                     ),
                   ],
                 ),

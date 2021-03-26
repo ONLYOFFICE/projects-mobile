@@ -37,14 +37,11 @@ class TaskItemController extends GetxController {
   }
 
   Future updateTask() async {
-
     loaded.value = false;
     var t = await _api.getTaskByID(id: task.value.id);
     task.value = t;
     loaded.value = true;
-
   }
-
 
   void handleVisibilityChanged(VisibilityInfo info) {
     if (info.visibleFraction == 1) {
@@ -60,13 +57,11 @@ class TaskItemController extends GetxController {
 
 
 class TaskItemService {
-
   final TasksApi _api = locator<TasksApi>();
 
   var portalTask = PortalTask().obs;
 
   Future getTaskByID({int id}) async {
-
     var task = await _api.getTaskByID(id: id);
 
     var success = task.response != null;
@@ -78,5 +73,4 @@ class TaskItemService {
       return null;
     }
   }
-  
 }
