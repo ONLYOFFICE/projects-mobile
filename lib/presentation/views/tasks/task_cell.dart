@@ -64,12 +64,20 @@ class TaskCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => Get.bottomSheet(bottom_sheet.BottomSheet(title: 'Select status')),
+              onTap: () {
+                return Get.bottomSheet(
+                  bottom_sheet.BottomSheet(title: 'Select status'),
+                  isScrollControlled: true
+                );
+              },
               child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(
               child: GestureDetector(
-                onTap: () => Get.toNamed('TaskDetailedView'),
+                onTap: () => Get.toNamed(
+                  'TaskDetailedView', 
+                  parameters: {'taskID': task.id.toString()}
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -198,9 +206,13 @@ class SecondColumn extends StatelessWidget {
               Text(
                 ' • ', 
                 style: TextStyleHelper.projectResponsible),
-              Text(
-                task.createdBy.displayName, 
-                style: TextStyleHelper.projectResponsible),
+              Flexible(
+                child: Text(
+                  task.createdBy.displayName,
+                  maxLines: 1, 
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper.projectResponsible),
+              ),
             ],
           ),
         ],

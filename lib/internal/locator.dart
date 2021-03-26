@@ -43,6 +43,7 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/data/services/tasks_service.dart';
+import 'package:projects/domain/controllers/detailed_task_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/statuses_controller.dart';
 
@@ -60,6 +61,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => PortalService());
   locator.registerLazySingleton(() => ProjectService());
   locator.registerLazySingleton(() => TasksService());
+  locator.registerLazySingleton(() => DetailedTaskService());
 
   Get.lazyPut(() => UserController());
   Get.lazyPut(() => StatusesController(), fenix: true);

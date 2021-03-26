@@ -31,7 +31,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/data/models/item.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/detailed_task_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/views/task_detailed/detailed_task_app_bar.dart';
@@ -39,14 +40,15 @@ import 'package:projects/presentation/views/task_detailed/overview/overview_scre
 
 class TaskDetailedView extends StatelessWidget {
 
-  final Item item;
   const TaskDetailedView({
     Key key,
-    this.item
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    var controller = Get.put(DetailedTaskController());
+    controller.getTask(int.parse(Get.parameters['taskID']));
 
     return DefaultTabController(
       length: 6,

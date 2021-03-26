@@ -57,18 +57,17 @@ class TasksService {
 
 
   Future getTasks() async {
-    var task = await _api.getTasks();
+    var tasks = await _api.getTasks();
 
-    var success = task.response != null;
+    var success = tasks.response != null;
 
     if (success) {
-      return task.response;
+      return tasks.response;
     } else {
-      ErrorDialog.show(task.error);
+      ErrorDialog.show(tasks.error);
       return null;
     }
   }
-
 
 }
 
