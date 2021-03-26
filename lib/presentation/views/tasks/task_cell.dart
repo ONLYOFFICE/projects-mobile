@@ -44,7 +44,7 @@ class TaskCell extends StatelessWidget {
               child: GestureDetector(
                 onTap: () => Get.toNamed(
                   'TaskDetailedView', 
-                  parameters: {'taskID': task.id.toString()}
+                  arguments: {'controller': itemController}
                 ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -173,13 +173,18 @@ class SecondColumn extends StatelessWidget {
               }),
               Text(
                 ' • ', 
-                style: TextStyleHelper.projectResponsible),
+                style: TextStyleHelper.caption(
+                  color: Theme.of(context)
+                    .customColors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
                   task.createdBy.displayName,
                   maxLines: 1, 
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectResponsible),
+                  style: TextStyleHelper.caption(
+                    color: Theme.of(context)
+                        .customColors().onSurface.withOpacity(0.6)
+                  )),
               ),
             ],
           ),
@@ -213,16 +218,19 @@ class ThirdColumn extends StatelessWidget {
         children: <Widget>[
           if (task.deadline != null)
             Text(task.formatedDate(now: _now, stringDate: task.deadline), 
-                style: TextStyleHelper.projectDate),
+                style: TextStyleHelper.caption(
+                  color: Theme.of(context).customColors().onSurface)),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
               const SizedBox(width: 5),
               Text(
                 task.subtasks.length.toString(), 
-                style: TextStyleHelper.projectCompleatedTasks
+                style: TextStyleHelper.body2(
+                  color: Theme.of(context)
+                      .customColors().onSurface.withOpacity(0.6))
               ),
             ],
           ),

@@ -13,16 +13,15 @@ class TasksApi {
   Future <ApiDTO> getTaskByID({int id})  async {
 
     var url = await coreApi.taskByIdUrl(id);
-    var result;
+    var result = ApiDTO();
 
     try {
+
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        result.response = (responseJson['response'])
-            .map((i) => PortalTask.fromJson(i))
-            .toList();
+        result.response = PortalTask.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
