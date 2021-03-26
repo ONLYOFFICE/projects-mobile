@@ -24,7 +24,7 @@ class ProjectsView extends StatelessWidget {
               Expanded(
                 child: SmartRefresher(
                   enablePullDown: true,
-                  enablePullUp: controller.projects.length >= 25,
+                  enablePullUp: controller.pullUpEnabled,
                   controller: controller.refreshController,
                   onRefresh: controller.onRefresh,
                   onLoading: controller.onLoading,

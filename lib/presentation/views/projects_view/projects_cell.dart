@@ -26,7 +26,9 @@ class ProjectCell extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ProjectIcon(),
+            ProjectIcon(
+              itemController: itemController,
+            ),
             Expanded(
               child: Column(
                 children: [
@@ -66,7 +68,10 @@ class ProjectCell extends StatelessWidget {
 class ProjectIcon extends StatelessWidget {
   const ProjectIcon({
     Key key,
+    @required this.itemController,
   }) : super(key: key);
+
+  final ProjectCellController itemController;
 
   @override
   Widget build(BuildContext context) {
@@ -76,15 +81,25 @@ class ProjectIcon extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          SVG.createSized('lib/assets/images/icons/back_round.svg', 40, 40),
+          AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
+          AppIcon(
+            icon: SvgIcons.back_round,
+            // color: const Color(0xff666666),
+            width: 40,
+            height: 40,
+          ),
           Positioned(
             bottom: 0,
             right: 0,
-            child: SVG.createSized(
-                'lib/assets/images/icons/project_icon.svg', 16, 16),
+            child: AppIcon(
+              icon: SvgIcons.project_icon,
+              // color: const Color(0xff666666),
+              width: 16,
+              height: 16,
+            ),
           ),
-          SVG.createSized(
-              'lib/assets/images/icons/project_statuses/checkmark.svg', 16, 16),
+          AppIcon(
+              icon: itemController.statusImage, color: const Color(0xff666666)),
         ],
       ),
     );
@@ -134,14 +149,6 @@ class SecondColumn extends StatelessWidget {
               Text(
                 itemController.statusName,
               ),
-
-              // SVG.createSized(
-              //     'lib/assets/images/icons/project_statuses/checkmark.svg',
-              //     16,
-              //     16),
-              // SVG.createSizedFromString(
-              //           itemController.statusImageString.value, 16, 16),
-              // ),
               Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(

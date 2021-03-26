@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:projects/data/models/item.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProjectCellController extends GetxController {
@@ -35,6 +36,22 @@ class ProjectCellController extends GetxController {
         break;
       case 2:
         return 'Paused';
+        break;
+      default:
+        return 'n/a';
+    }
+  }
+
+  String get statusImage {
+    switch (project.status) {
+      case 0:
+        return SvgIcons.open;
+        break;
+      case 1:
+        return SvgIcons.closed;
+        break;
+      case 2:
+        return SvgIcons.paused;
         break;
       default:
         return 'n/a';
