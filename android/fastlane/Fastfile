@@ -81,6 +81,14 @@ platform :android do
 
   desc "Submit to Play Market via CI"
   lane :ci do
+    # get the last commit comments from Git history
+    # and creates our changelog
+    change_log = changelog_from_git_commits(
+      pretty: "- %s",
+      date_format: "short",
+      match_lightweight_tag: false,
+      merge_commit_filtering: "exclude_merges"
+    )
 
     # Build artifacts and upload to store
     get_packages
