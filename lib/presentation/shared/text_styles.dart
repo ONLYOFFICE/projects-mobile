@@ -46,23 +46,27 @@ class TextStyleHelper {
     // color: AppColors.onBackground
   );
 
-  static const body2 = TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w400,
-    fontSize: 14,
-    height: 1.429,
-    letterSpacing: 0.25,
-    // color: AppColors.onSurface
-  );
+  static TextStyle body2 ({Color color}){
+    return TextStyle(
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w400,
+      fontSize: 14,
+      height: 1.429,
+      letterSpacing: 0.25,
+      color: color
+    );
+  } 
 
-  static final caption = TextStyle(
-    fontFamily: 'Roboto',
-    fontSize: 12,
-    height: 1.33,
-    letterSpacing: 0.6,
-    fontWeight: FontWeight.w400,
-    // color: AppColors.onSurface.withOpacity(0.75)
-  );
+  static TextStyle caption({Color color}) {
+    return TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 12,
+      height: 1.33,
+      letterSpacing: 0.6,
+      fontWeight: FontWeight.w400,
+      color: color
+    );
+  }
 
   static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
 
@@ -158,13 +162,17 @@ class TextStyleHelper {
     fontWeight: FontWeight.w500,
   );
 
-  static const subtitle1 = TextStyle(
-    fontFamily: 'Roboto',
-    fontSize: 16,
-    height: 1.5,
-    letterSpacing: 0.15,
-    fontWeight: FontWeight.w400,
-  );
+  static TextStyle subtitle1({Color color}) {
+
+    return TextStyle(
+      fontFamily: 'Roboto',
+      fontSize: 16,
+      height: 1.5,
+      letterSpacing: 0.15,
+      fontWeight: FontWeight.w400,
+      color: color
+    );
+  }
 
   static const subtitle2 = TextStyle(
     fontFamily: 'Roboto',

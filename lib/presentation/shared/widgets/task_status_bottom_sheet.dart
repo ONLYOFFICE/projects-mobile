@@ -166,7 +166,7 @@ class StatusTile extends StatelessWidget {
             left: 48,
             top: 10,
             bottom: 10,
-            child: Text(title, style: TextStyleHelper.body2)),
+            child: Text(title, style: TextStyleHelper.body2())),
           if (selected)
             Align(
               alignment: Alignment.centerRight,
