@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/projects_view/search_appbar.dart';
-import 'package:projects/presentation/views/tasks/tasks_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchView extends StatelessWidget {
@@ -54,7 +54,7 @@ class ProjectSearchView extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (controller.loaded.isFalse) TasksLoading(),
+            if (controller.loaded.isFalse) ListLoadingSkeleton(),
             if (controller.nothingFound.isTrue)
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
