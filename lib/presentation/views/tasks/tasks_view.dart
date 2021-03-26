@@ -46,7 +46,6 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.put(TasksController());
     controller.getTasks();
-    // var dtc = Get.put(DetailedTaskController());
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
