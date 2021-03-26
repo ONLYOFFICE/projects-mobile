@@ -35,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -72,23 +73,23 @@ class ProjectsController extends BaseController {
 
   void onRefresh() async {
     startIndex = 0;
-    await getProjects(needToClear: true);
+    await _getProjects(needToClear: true);
     refreshController.refreshCompleted();
   }
 
   void onLoading() async {
     startIndex++;
-    await getProjects();
+    await _getProjects();
     refreshController.loadComplete();
   }
 
   Future<void> setupProjects() async {
     loaded.value = false;
-    await getProjects();
+    await _getProjects(needToClear: true);
     loaded.value = true;
   }
 
-  Future getProjects({needToClear = false}) async {
+  Future _getProjects({needToClear = false}) async {
     var items = await _api.getProjectsByParams(startIndex: startIndex);
     if (needToClear) projects.clear();
 
@@ -106,11 +107,4 @@ class ProjectsController extends BaseController {
       },
     );
   }
-}
-
-abstract class BaseController extends GetxController {
-  String get screenName;
-  RxList<dynamic> get itemList;
-
-  void showSearch() {}
 }

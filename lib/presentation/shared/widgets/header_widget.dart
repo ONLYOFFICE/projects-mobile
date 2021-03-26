@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
@@ -105,9 +105,11 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               Container(
                 child: Row(
                   children: <Widget>[
-                    Text(
-                      '3 projects',
-                      style: TextStyleHelper.subtitleProjects,
+                    Obx(
+                      () => Text(
+                        '${widget.controller.itemList.length} ${widget.controller.screenName.toLowerCase()}',
+                        style: TextStyleHelper.subtitleProjects,
+                      ),
                     ),
                   ],
                 ),
