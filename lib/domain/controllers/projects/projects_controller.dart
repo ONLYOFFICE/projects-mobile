@@ -1,26 +1,42 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
-// import 'package:projects/presentation/shared/theme_service.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectsController extends GetxController {
+class ProjectsController extends BaseController {
   final _api = locator<ProjectService>();
 
+  var loaded = false.obs;
   List<Status> statuses;
 
   var startIndex = 0;
+
+  var searchInputController = TextEditingController();
+
+  var nothingFound = false.obs;
 
   @override
   void onInit() {
     super.onInit();
   }
 
-  var projects = [].obs;
+  @override
+  String get screenName => 'Projects';
 
-  RefreshController refreshController = RefreshController(initialRefresh: true);
+  @override
+  RxList get itemList => projects;
+
+  RxList projects = [].obs;
+
+  RefreshController refreshController = RefreshController();
+
+  @override
+  void showSearch() {
+    Get.toNamed('ProjectSearchView');
+  }
 
   void onRefresh() async {
     startIndex = 0;
@@ -31,8 +47,13 @@ class ProjectsController extends GetxController {
   void onLoading() async {
     startIndex++;
     await getProjects();
-    // ThemeService().switchTheme();
     refreshController.loadComplete();
+  }
+
+  Future<void> setupProjects() async {
+    loaded.value = false;
+    await getProjects();
+    loaded.value = true;
   }
 
   Future getProjects({needToClear = false}) async {
@@ -53,4 +74,11 @@ class ProjectsController extends GetxController {
       },
     );
   }
+}
+
+abstract class BaseController extends GetxController {
+  String get screenName;
+  RxList<dynamic> get itemList;
+
+  void showSearch() {}
 }

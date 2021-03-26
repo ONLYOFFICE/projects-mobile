@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-class ProjectItemController extends GetxController {
+class ProjectCellController extends GetxController {
   final statuses = [].obs;
 
-  ProjectItemController(Item project) {
+  ProjectCellController(Item project) {
     this.project = project;
   }
 

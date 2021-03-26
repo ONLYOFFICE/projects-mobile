@@ -48,10 +48,18 @@ class ProjectApi {
 // &StartIndex=25
 // &simple=true
 // &__=291475
+// &FilterValue=searchquerry
   Future<ApiDTO<List<ProjectDetailed>>> getProjectsByParams(
-      {int startIndex}) async {
+      {int startIndex, String query}) async {
     var url = await coreApi.projectsByParamsBaseUrl();
-    if (startIndex != null) url += '&Count=25&StartIndex=$startIndex';
+
+    if (startIndex != null) {
+      url += '&Count=25&StartIndex=$startIndex';
+    }
+
+    if (startIndex != null && query != null) {
+      url += '&Count=25&StartIndex=$startIndex&FilterValue=$query';
+    }
 
     var result = ApiDTO<List<ProjectDetailed>>();
     try {
