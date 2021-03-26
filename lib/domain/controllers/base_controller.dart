@@ -30,27 +30,11 @@
  *
  */
 
-import 'package:projects/data/models/from_api/error.dart';
+import 'package:get/get.dart';
 
-class ApiDTO<T> {
-  ApiDTO({
-    this.response,
-    this.error,
-  });
-  T response;
-  CustomError error;
-}
+abstract class BaseController extends GetxController {
+  String get screenName;
+  RxList<dynamic> get itemList;
 
-class ProjectsApiDTO<T> {
-  ProjectsApiDTO({
-    this.response,
-    this.error,
-    this.startIndex,
-    this.total,
-  });
-  T response;
-  CustomError error;
-  int startIndex;
-
-  int total;
+  void showSearch() {}
 }

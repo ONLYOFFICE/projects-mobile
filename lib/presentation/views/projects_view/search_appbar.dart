@@ -30,46 +30,33 @@
  *
  */
 
-import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/item.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Widget title;
 
-class ProjectItemController extends GetxController {
-  final statuses = [].obs;
+  SearchAppBar({Key key, this.title}) : super(key: key);
 
-  ProjectItemController(Item project) {
-    this.project = project;
-  }
+  @override
+  final Size preferredSize = Size(double.infinity, 90);
 
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
-    }
-  }
-
-  var project;
-
-  RxString statusImageString = ''.obs;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  String get statusName {
-    switch (project.status) {
-      case 0:
-        return 'Open';
-        break;
-      case 1:
-        return 'Closed';
-        break;
-      case 2:
-        return 'Paused';
-        break;
-      default:
-        return 'n/a';
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.blue,
+            ),
+            backgroundColor: Theme.of(context).customColors().background,
+            centerTitle: false,
+            title: title,
+          ),
+        ],
+      ),
+    );
   }
 }

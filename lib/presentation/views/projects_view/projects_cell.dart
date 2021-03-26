@@ -30,14 +30,16 @@
  *
  */
 
+import 'package:drop_cap_text/drop_cap_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/models/item.dart';
-import 'package:projects/domain/controllers/project_item_controller.dart';
+import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProjectCell extends StatelessWidget {
@@ -47,7 +49,7 @@ class ProjectCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var itemController =
-        Get.put(ProjectItemController(item), tag: item.id.toString());
+        Get.put(ProjectCellController(item), tag: item.id.toString());
 
     return VisibilityDetector(
       key: Key('${item.id.toString()}_${item.title}'),
@@ -56,7 +58,9 @@ class ProjectCell extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ProjectIcon(),
+            ProjectIcon(
+              itemController: itemController,
+            ),
             Expanded(
               child: Column(
                 children: [
@@ -96,7 +100,10 @@ class ProjectCell extends StatelessWidget {
 class ProjectIcon extends StatelessWidget {
   const ProjectIcon({
     Key key,
+    @required this.itemController,
   }) : super(key: key);
+
+  final ProjectCellController itemController;
 
   @override
   Widget build(BuildContext context) {
@@ -106,15 +113,25 @@ class ProjectIcon extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: <Widget>[
-          SVG.createSized('lib/assets/images/icons/back_round.svg', 40, 40),
+          AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
+          AppIcon(
+            icon: SvgIcons.back_round,
+            // color: const Color(0xff666666),
+            width: 40,
+            height: 40,
+          ),
           Positioned(
             bottom: 0,
             right: 0,
-            child: SVG.createSized(
-                'lib/assets/images/icons/project_icon.svg', 16, 16),
+            child: AppIcon(
+              icon: SvgIcons.project_icon,
+              // color: const Color(0xff666666),
+              width: 16,
+              height: 16,
+            ),
           ),
-          SVG.createSized(
-              'lib/assets/images/icons/project_statuses/checkmark.svg', 16, 16),
+          AppIcon(
+              icon: itemController.statusImage, color: const Color(0xff666666)),
         ],
       ),
     );
@@ -129,7 +146,7 @@ class SecondColumn extends StatelessWidget {
   }) : super(key: key);
 
   final Item item;
-  final ProjectItemController itemController;
+  final ProjectCellController itemController;
 
   @override
   Widget build(BuildContext context) {
@@ -140,32 +157,30 @@ class SecondColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Flexible(
-            child: Text(
-              item.title,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyleHelper.projectTitle,
-            ),
+          Row(
+            children: <Widget>[
+              Flexible(
+                child: DropCapText(
+                  item.title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper.projectTitle,
+                  dropCapPadding: EdgeInsets.only(top: 4),
+                  dropCap: DropCap(
+                    width: 12,
+                    height: 12,
+                    child: AppIcon(icon: SvgIcons.lock),
+                  ),
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 8),
           Row(
             children: <Widget>[
-              // Obx(
-              //   () => (itemController.statusImageString.value == null ||
-              //           itemController.statusImageString.value.isEmpty)
-              //       ? SizedBox(
-              //           width: 16,
-              //           height: 16,
-              //           child: CircularProgressIndicator(),
-              //         )
-              //       :
-              SVG.createSized(
-                  'lib/assets/images/icons/project_statuses/checkmark.svg',
-                  16,
-                  16),
-              // SVG.createSizedFromString(
-              //           itemController.statusImageString.value, 16, 16),
-              // ),
+              Text(
+                itemController.statusName,
+              ),
               Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Text(
@@ -196,7 +211,7 @@ class ThirdColumn extends StatelessWidget {
   }) : super(key: key);
 
   final Item item;
-  final ProjectItemController controller;
+  final ProjectCellController controller;
 
   @override
   Widget build(BuildContext context) {

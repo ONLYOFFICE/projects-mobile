@@ -31,67 +31,87 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/item.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:projects/data/services/tasks_service.dart';
 
-class TasksController extends BaseController {
-  final _api = locator<TasksService>();
+class ProjectsController extends BaseController {
+  final _api = locator<ProjectService>();
 
-  var tasks = <PortalTask>[].obs;
+  var loaded = false.obs;
+  List<Status> statuses;
 
-  var refreshController = RefreshController(initialRefresh: false);
+  var startIndex = 0;
 
-//for shimmer and progress indicator
-  RxBool loaded = false.obs;
+  int totalProjects = 0;
+
+  bool get pullUpEnabled => projects.length != totalProjects;
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  @override
+  String get screenName => 'Projects';
+
+  @override
+  RxList get itemList => projects;
+
+  RxList projects = [].obs;
+
+  RefreshController refreshController = RefreshController();
+
+  @override
+  void showSearch() {
+    Get.toNamed('ProjectSearchView');
+  }
 
   void onRefresh() async {
-    await getTasks();
+    startIndex = 0;
+    await _getProjects(needToClear: true);
     refreshController.refreshCompleted();
   }
 
-  Future getTasks() async {
+  void onLoading() async {
+    startIndex += 25;
+    if (startIndex >= totalProjects) {
+      refreshController.loadComplete();
+      startIndex -= 25;
+      return;
+    }
+    await _getProjects();
+    refreshController.loadComplete();
+  }
+
+  Future<void> setupProjects() async {
     loaded.value = false;
-    tasks.value = await _api.getTasks();
+    startIndex = 0;
+    await _getProjects(needToClear: true);
     loaded.value = true;
   }
 
-  @override
-  String get screenName => 'Tasks';
+  Future _getProjects({needToClear = false}) async {
+    var result = await _api.getProjectsByParams(startIndex: startIndex);
+    totalProjects = result.total;
 
-  @override
-  RxList get itemList => tasks;
+    if (needToClear) projects.clear();
 
-//   Future getTasks() async {
-//     var items = await _api.getTasksByParams(
-//         participant: await userController.getUserId());
-// // https://nct.onlyoffice.com/api/2.0/project/task/filter.json
-// // ?sortBy=deadline
-// // &sortOrder=ascending
-// // &participant=0f6e1c96-a452-4d1d-b064-0fd015625e4d
-// // &Count=25
-// // &StartIndex=0
-// // &simple=true
-// // &__=651640
-//     tasks.clear();
-//     items.forEach(
-//       (element) {
-//         var responsible =
-//             CustomList.firstOrNull(element.responsibles) ?? element.createdBy;
-//         tasks.add(Item(
-//           id: element.id,
-//           title: element.title,
-//           status: element.status,
-//           responsible: responsible,
-//           date: element.creationDate(),
-//           subCount: 0,
-//           isImportant: false,
-//         ));
-//       },
-//     );
-//     update();
-//   }
-
+    result.response.forEach(
+      (element) {
+        projects.add(Item(
+          id: element.id,
+          title: element.title,
+          status: element.status,
+          responsible: element.responsible,
+          date: element.creationDate(),
+          subCount: element.taskCount,
+          isImportant: false,
+        ));
+      },
+    );
+  }
 }
