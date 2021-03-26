@@ -180,6 +180,7 @@ class Subtask {
     final PortalUser responsible;
     final DateTime created;
     final PortalUser createdBy;
+    final PortalUser updatedBy;
     final DateTime updated;
 
     Subtask({
@@ -192,6 +193,7 @@ class Subtask {
         this.responsible,
         this.created,
         this.createdBy,
+        this.updatedBy,
         this.updated,
     });
 
@@ -202,10 +204,22 @@ class Subtask {
         title: json['title'],
         description: json['description'],
         status: json['status'],
-        responsible: PortalUser.fromJson(json['responsible']),
-        created: DateTime.parse(json['created']),
-        createdBy: PortalUser.fromJson(json['createdBy']),
-        updated: DateTime.parse(json['updated']),
+        responsible: json['responsible'] == null
+            ? null 
+            : PortalUser.fromJson(json['responsible']),
+        updatedBy: json['updatedBy'] == null
+            ? null 
+            : PortalUser.fromJson(json['updatedBy']),
+        created: json['created'] == null
+            ? null 
+            : DateTime.parse(json['created']),
+        createdBy: json['createdBy'] == null
+            ? null
+            : PortalUser.fromJson(json['createdBy']),
+        updated: json['updated'] == null
+            ? null
+            : DateTime.parse(json['updated']),
+        
     );
 
     Map<String, dynamic> toJson() => {
@@ -215,9 +229,20 @@ class Subtask {
         'title': title,
         'description': description,
         'status': status,
-        'responsible': responsible.toJson(),
-        'created': created.toIso8601String(),
-        'createdBy': createdBy.toJson(),
-        'updated': updated.toIso8601String(),
+        'responsible': responsible == null
+            ? null 
+            : responsible.toJson(),
+        'updatedBy': updatedBy == null
+            ? null 
+            : updatedBy.toJson(),
+        'created': created == null
+            ? null
+            : created.toIso8601String(),
+        'createdBy': createdBy == null
+            ? null
+            : createdBy.toJson(),
+        'updated': updated == null 
+            ? null
+            : updated.toIso8601String(),
     };
 }
