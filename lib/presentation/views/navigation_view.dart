@@ -18,18 +18,16 @@ class NavigationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<NavigationController>(
       builder: (controller) {
+
+        var _pages = [
+          DashboardView(),
+          TasksView(),
+          ProjectsView(),
+          TaskView(),
+        ];
+
         return Scaffold(
-          body: SafeArea(
-            child: IndexedStack(
-              index: controller.tabIndex,
-              children: [
-                DashboardView(),
-                TasksView(),
-                ProjectsView(),
-                TaskView(),
-              ],
-            ),
-          ),
+          body: SafeArea(child: _pages[controller.tabIndex]),
           bottomNavigationBar: BottomNavigationBar(
             unselectedItemColor:  
                 Theme.of(context).customColors().inactiveTabTitle,
