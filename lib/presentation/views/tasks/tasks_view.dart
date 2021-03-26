@@ -8,10 +8,14 @@ import 'package:projects/presentation/shared/widgets/styled_floating_action_butt
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:projects/domain/controllers/task_status_controller.dart';
+
 
 class TasksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var taskStatusesController = Get.find<TaskStatusesController>();
+    taskStatusesController.getStatuses();
     var controller = Get.put(TasksController());
     controller.getTasks();
 

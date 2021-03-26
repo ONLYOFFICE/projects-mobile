@@ -14,6 +14,7 @@ import 'package:projects/data/services/tasks_service.dart';
 import 'package:projects/domain/controllers/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/statuses_controller.dart';
+import 'package:projects/domain/controllers/task_status_controller.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -33,4 +34,5 @@ void setupLocator() {
 
   Get.lazyPut(() => UserController());
   Get.lazyPut(() => StatusesController(), fenix: true);
+  Get.lazyPut(() => TaskStatusesController(), fenix: true);
 }
