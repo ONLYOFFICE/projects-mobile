@@ -47,9 +47,9 @@ class ProjectsController extends BaseController {
 
   var startIndex = 0;
 
-  var searchInputController = TextEditingController();
+  int totalProjects = 0;
 
-  var nothingFound = false.obs;
+  bool get pullUpEnabled => projects.length != totalProjects;
 
   @override
   void onInit() {
@@ -78,22 +78,30 @@ class ProjectsController extends BaseController {
   }
 
   void onLoading() async {
-    startIndex++;
+    startIndex += 25;
+    if (startIndex >= totalProjects) {
+      refreshController.loadComplete();
+      startIndex -= 25;
+      return;
+    }
     await _getProjects();
     refreshController.loadComplete();
   }
 
   Future<void> setupProjects() async {
     loaded.value = false;
+    startIndex = 0;
     await _getProjects(needToClear: true);
     loaded.value = true;
   }
 
   Future _getProjects({needToClear = false}) async {
-    var items = await _api.getProjectsByParams(startIndex: startIndex);
+    var result = await _api.getProjectsByParams(startIndex: startIndex);
+    totalProjects = result.total;
+
     if (needToClear) projects.clear();
 
-    items.forEach(
+    result.response.forEach(
       (element) {
         projects.add(Item(
           id: element.id,

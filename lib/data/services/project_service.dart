@@ -33,6 +33,7 @@
 import 'dart:async';
 
 import 'package:projects/data/api/project_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/status.dart';
@@ -56,7 +57,7 @@ class ProjectService {
     }
   }
 
-  Future<List<ProjectDetailed>> getProjectsByParams(
+  Future<ProjectsApiDTO<List<ProjectDetailed>>> getProjectsByParams(
       {int startIndex, String query}) async {
     var projects =
         await _api.getProjectsByParams(startIndex: startIndex, query: query);
@@ -64,7 +65,7 @@ class ProjectService {
     var success = projects.response != null;
 
     if (success) {
-      return projects.response;
+      return projects;
     } else {
       ErrorDialog.show(projects.error);
       return null;

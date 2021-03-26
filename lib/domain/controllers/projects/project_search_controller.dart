@@ -49,8 +49,15 @@ class ProjectSearchController extends GetxController {
 
   RefreshController refreshController = RefreshController();
 
+  var _totalProjects;
+
   void onLoading() async {
-    _startIndex++;
+    _startIndex += 25;
+    if (_startIndex >= _totalProjects) {
+      refreshController.loadComplete();
+      _startIndex -= 25;
+      return;
+    }
     _performSearch();
     refreshController.loadComplete();
   }
@@ -69,10 +76,12 @@ class ProjectSearchController extends GetxController {
     var result = await _api.getProjectsByParams(
         startIndex: _startIndex, query: _query.toLowerCase());
 
-    if (result.isEmpty) {
+    _totalProjects = result.total;
+
+    if (result.response.isEmpty) {
       nothingFound.value = true;
     } else {
-      result.forEach(
+      result.response.forEach(
         (element) {
           searchResult.add(Item(
             id: element.id,
