@@ -66,7 +66,7 @@ class TaskCell extends StatelessWidget {
             GestureDetector(
               onTap: () {
                 return Get.bottomSheet(
-                  bottom_sheet.BottomSheet(title: 'Select status'),
+                  bottom_sheet.BottomSheet(taskItemController: itemController),
                   isScrollControlled: true
                 );
               },
@@ -132,19 +132,11 @@ class TaskStatus extends StatelessWidget {
           shape: BoxShape.circle,
           color: Theme.of(context).customColors().background
         ),
-        child: Obx(() {
-          return (itemController.statusImageString.value == null ||
-                itemController.statusImageString.value.isEmpty)
-          ? SizedBox(
-              width: 16,
-              height: 16,
-              child: CircularProgressIndicator(),
-            )
-          : Center(child: SVG.createSizedFromString(
+        child: Center(
+          child: SVG.createSizedFromString(
                 itemController.statusImageString.value, 16, 16, 
                 itemController.status.value.color),
-          );
-        }),
+          )
       ),
     );
   }
@@ -182,27 +174,16 @@ class SecondColumn extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              if (task.priority == 1)
-              AppIcon(
-                icon: SvgIcons.high_priority,
-              )
+              if (task.priority == 1) 
+                AppIcon(icon: SvgIcons.high_priority,)
             ],
           ),
           Row(
             children: [
-              Obx(() {
-                return (itemController.statusImageString.value == null ||
-                        itemController.statusImageString.value.isEmpty)
-                  ? const SizedBox(
-                      width: 16,
-                      height: 16,
-                      child: CircularProgressIndicator(),
-                    )
-                  : Text(
-                      itemController.status.value.title,
-                      style: TextStyleHelper
-                          .taskStatus(itemController.status.value.color.toColor()));
-              }),
+              Text(
+                itemController.status.value.title,
+                style: TextStyleHelper
+                    .taskStatus(itemController.status.value.color.toColor())),
               Text(
                 ' • ', 
                 style: TextStyleHelper.caption(

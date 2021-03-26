@@ -31,19 +31,25 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/task_item_controller.dart';
+import 'package:projects/domain/controllers/task_status_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
 class BottomSheet extends StatelessWidget {
 
-  final String title;
+  final TaskItemController taskItemController;
   const BottomSheet({
     Key key,
-    this.title
+    @required this.taskItemController
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
+    var _statusesController = Get.find<TaskStatusesController>();
 
     return Container(
       height: 464,
@@ -72,50 +78,22 @@ class BottomSheet extends StatelessWidget {
               ),
             ),
           ),
-          if (title != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                title,
-                style: TextStyleHelper.h6,
-              ),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Select status',
+              style: TextStyleHelper.h6,
             ),
+          ),
           const SizedBox(height: 14.5),
           Divider(height: 9),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            selected: true,
-            title: 'Задача создана',  
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача назначена',
-            selected: false, 
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача открыта',
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача на паузе',
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача выполнена',
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача завершена',
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача на подтверждении',
-          ),
-          StatusTile(
-            icon: Icon(Icons.ac_unit),
-            title: 'Задача отменена',
-          ),
+          for (var i = 0; i < _statusesController.statuses.length; i++)
+            StatusTile(
+              title: _statusesController.statuses[i].title,  
+              icon: SVG.createSizedFromString(
+                   _statusesController.statusImagesDecoded[i], 16, 16),
+              selected: _statusesController.statuses[i].title 
+                            == taskItemController.status.value.title),
         ],
       ),
     );
@@ -139,34 +117,25 @@ class StatusTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
     BoxDecoration _selectedDecoration(){
-
       return BoxDecoration(
         color: Theme.of(context).customColors().bgDescription,
         borderRadius: BorderRadius.circular(6)
       );
-
     }
+    
     return Container(
       height: 40,
       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
       decoration: selected
           ? _selectedDecoration() 
           : null,
-      child: Stack(
+      child: Row(
         children: [
-          Positioned(
-            left: 15,
-            top: 10,
-            bottom: 10,
-            child: icon
-          ),
-          Positioned(
-            left: 48,
-            top: 10,
-            bottom: 10,
-            child: Text(title, style: TextStyleHelper.body2())),
+          SizedBox(
+            width: 48,
+            child: icon),
+          Flexible(child: Text(title, style: TextStyleHelper.body2())),
           if (selected)
             Align(
               alignment: Alignment.centerRight,
