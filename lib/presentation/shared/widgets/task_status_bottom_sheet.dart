@@ -39,20 +39,16 @@ import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 
 class BottomSheet extends StatelessWidget {
-
   final TaskItemController taskItemController;
-  const BottomSheet({
-    Key key,
-    @required this.taskItemController
-  }) : super(key: key);
+  const BottomSheet({Key key, @required this.taskItemController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     var _statusesController = Get.find<TaskStatusesController>();
 
     return Container(
-      height: 464,
+      height: Get.height / 2,
       decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
         borderRadius: BorderRadius.only(
@@ -62,6 +58,7 @@ class BottomSheet extends StatelessWidget {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Center(
             child: Padding(
@@ -71,80 +68,93 @@ class BottomSheet extends StatelessWidget {
                 width: 40,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).customColors().onSurface.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(2)
-                  ),
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(2)),
                 ),
               ),
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               'Select status',
-              style: TextStyleHelper.h6,
+              style: TextStyleHelper.h6(),
             ),
           ),
           const SizedBox(height: 14.5),
           Divider(height: 9),
-          for (var i = 0; i < _statusesController.statuses.length; i++)
-            StatusTile(
-              title: _statusesController.statuses[i].title,  
-              icon: SVG.createSizedFromString(
-                   _statusesController.statusImagesDecoded[i], 16, 16),
-              selected: _statusesController.statuses[i].title 
-                  == taskItemController.status.value.title),
+          Flexible(
+            child: ListView(
+              children: [
+                for (var i = 0; i < _statusesController.statuses.length; i++)
+                  InkWell(
+                    onTap: () {
+                      taskItemController.updateTaskStatus(
+                          id: taskItemController.task.value.id,
+                          newStatusId: _statusesController.statuses[i].id,
+                          newStatusType: 'open');
+                    },
+                    child: StatusTile(
+                        title: _statusesController.statuses[i].title,
+                        icon: SVG.createSizedFromString(
+                            _statusesController.statusImagesDecoded[i], 16, 16),
+                        selected: _statusesController.statuses[i].title ==
+                            taskItemController.status.value.title),
+                  ),
+              ],
+            ),
+          ),
         ],
       ),
     );
   }
 }
 
-
 class StatusTile extends StatelessWidget {
-
   final String title;
   final Widget icon;
   final bool selected;
 
-  const StatusTile({
-    Key key,
-    this.icon,
-    this.title,
-    this.selected = false
-  }) : super(key: key);
+  const StatusTile({Key key, this.icon, this.title, this.selected = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    BoxDecoration _selectedDecoration(){
+    BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-        color: Theme.of(context).customColors().bgDescription,
-        borderRadius: BorderRadius.circular(6)
-      );
+          color: Theme.of(context).customColors().bgDescription,
+          borderRadius: BorderRadius.circular(6));
     }
-    
+
     return Container(
       height: 40,
       margin: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
-      decoration: selected
-          ? _selectedDecoration() 
-          : null,
+      decoration: selected ? _selectedDecoration() : null,
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            width: 48,
-            child: icon),
-          Flexible(child: Text(title, style: TextStyleHelper.body2())),
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 48, child: icon),
+                Flexible(
+                    child: Text(title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyleHelper.body2())),
+              ],
+            ),
+          ),
           if (selected)
-            Align(
-              alignment: Alignment.centerRight,
-              child: Padding(
-                padding: const EdgeInsets.only(right: 15),
-                child: Icon(
-                  Icons.done_rounded,
-                  color: Theme.of(context).customColors().primary,
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Icon(
+                Icons.done_rounded,
+                color: Theme.of(context).customColors().primary,
               ),
             )
         ],

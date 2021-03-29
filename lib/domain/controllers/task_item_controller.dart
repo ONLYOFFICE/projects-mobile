@@ -43,7 +43,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskItemController extends GetxController {
-
   final _api = locator<TaskItemService>();
 
   var task = PortalTask().obs;
@@ -55,31 +54,36 @@ class TaskItemController extends GetxController {
   RxString statusImageString = ''.obs;
 
   TaskItemController(PortalTask task) {
+    this.task.value = task;
+    var statusesController = Get.find<TaskStatusesController>();
 
-      this.task.value = task;
-      var statusesController = Get.find<TaskStatusesController>();
+    var statuss;
 
-      var statuss;
+    if (task.customTaskStatus != null) {
+      statuss = statusesController.statuses
+          .firstWhere((element) => element.id == task.customTaskStatus);
+    } else {
+      statuss = statusesController.statuses
+          .firstWhere((element) => element.statusType == task.status);
+    }
 
-      if (task.customTaskStatus != null) {
-        statuss = statusesController.statuses.firstWhere(
-          (element) => element.id == task.customTaskStatus
-        );
-      } else {
-        statuss = statusesController.statuses.firstWhere(
-          (element) => element.statusType == task.status
-        );
-      }
-
-      statusImageString.value = decodeImageString(statuss.image);
-      status.value = statuss;
-
+    statusImageString.value = decodeImageString(statuss.image);
+    status.value = statuss;
   }
 
-  Future updateTask() async {
+  Future reloadTask() async {
     loaded.value = false;
     var t = await _api.getTaskByID(id: task.value.id);
     task.value = t;
+    loaded.value = true;
+  }
+
+  Future updateTaskStatus(
+      {int id, int newStatusId, String newStatusType}) async {
+    loaded.value = false;
+    var t = await _api.updateTaskStatus(
+        taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
+    // task.value.customTaskStatus = t;
     loaded.value = true;
   }
 
@@ -92,9 +96,7 @@ class TaskItemController extends GetxController {
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
   }
-
 }
-
 
 class TaskItemService {
   final TasksApi _api = locator<TasksApi>();
@@ -103,6 +105,21 @@ class TaskItemService {
 
   Future getTaskByID({int id}) async {
     var task = await _api.getTaskByID(id: id);
+
+    var success = task.response != null;
+
+    if (success) {
+      return task.response;
+    } else {
+      ErrorDialog.show(task.error);
+      return null;
+    }
+  }
+
+  Future updateTaskStatus(
+      {int taskId, int newStatusId, String newStatusType}) async {
+    var task = await _api.updateTaskStatus(
+        taskId: taskId, newStatusId: newStatusId, newStatusType: newStatusType);
 
     var success = task.response != null;
 
