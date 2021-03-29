@@ -93,7 +93,7 @@ class BottomSheet extends StatelessWidget {
               icon: SVG.createSizedFromString(
                    _statusesController.statusImagesDecoded[i], 16, 16),
               selected: _statusesController.statuses[i].title 
-                            == taskItemController.status.value.title),
+                  == taskItemController.status.value.title),
         ],
       ),
     );

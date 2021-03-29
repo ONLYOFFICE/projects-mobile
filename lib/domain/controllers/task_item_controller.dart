@@ -59,9 +59,17 @@ class TaskItemController extends GetxController {
       this.task.value = task;
       var statusesController = Get.find<TaskStatusesController>();
 
-      var statuss = statusesController.statuses.firstWhere(
-        (element) => element.statusType == task.status
-      );
+      var statuss;
+
+      if (task.customTaskStatus != null) {
+        statuss = statusesController.statuses.firstWhere(
+          (element) => element.id == task.customTaskStatus
+        );
+      } else {
+        statuss = statusesController.statuses.firstWhere(
+          (element) => element.statusType == task.status
+        );
+      }
 
       statusImageString.value = decodeImageString(statuss.image);
       status.value = statuss;
