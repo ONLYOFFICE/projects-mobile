@@ -36,7 +36,6 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 
 class TextStyleHelper {
-
   static final body1 = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
@@ -46,51 +45,58 @@ class TextStyleHelper {
     // color: AppColors.onBackground
   );
 
-  static TextStyle body2 ({Color color}){
+  static TextStyle body2({Color color}) {
     return TextStyle(
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.w400,
-      fontSize: 14,
-      height: 1.429,
-      letterSpacing: 0.25,
-      color: color
-    );
-  } 
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w400,
+        fontSize: 14,
+        height: 1.429,
+        letterSpacing: 0.25,
+        color: color);
+  }
 
   static TextStyle caption({Color color}) {
     return TextStyle(
-      fontFamily: 'Roboto',
-      fontSize: 12,
-      height: 1.33,
-      letterSpacing: 0.6,
-      fontWeight: FontWeight.w400,
-      color: color
-    );
+        fontFamily: 'Roboto',
+        fontSize: 12,
+        height: 1.33,
+        letterSpacing: 0.6,
+        fontWeight: FontWeight.w400,
+        color: color);
   }
 
   static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
 
-  static const h6 = TextStyle(
-    fontFamily: 'Roboto', 
-    fontWeight: FontWeight.w500,
-    fontSize: 20,
-    height: 1.172,
-    letterSpacing: 0.15,
-    // color: AppColors.onSurface
-  );
+  static TextStyle h6({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+        fontSize: 20,
+        height: 1.172,
+        letterSpacing: 0.15,
+        color: color);
+  }
 
   static const headline6 = TextStyle(
-    fontFamily: 'Roboto', 
-    fontWeight: FontWeight.w500,
-    fontSize: 20,
-    height: 1.4,
-    letterSpacing: 0.15,
-    color: Color.fromRGBO(0, 0, 0, 0.87)
-  );
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w500,
+      fontSize: 20,
+      height: 1.56,
+      letterSpacing: 0.15,
+      color: Color.fromRGBO(0, 0, 0, 0.87));
+
+  static TextStyle headline7({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+        fontSize: 18,
+        height: 1.556,
+        letterSpacing: 0.15,
+        color: color);
+  }
 
   static const headerStyle = TextStyle(
       fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);
-
 
   static final overline = TextStyle(
     fontFamily: 'Roboto',
@@ -118,12 +124,12 @@ class TextStyleHelper {
 
   static TextStyle taskStatus(Color color) {
     return TextStyle(
-      fontFamily: 'Roboto',
-      color: color,
-      fontWeight: FontWeight.w500,
-      fontSize: 12,
-      height: 1.33,
-      letterSpacing: 0.5);
+        fontFamily: 'Roboto',
+        color: color,
+        fontWeight: FontWeight.w500,
+        fontSize: 12,
+        height: 1.33,
+        letterSpacing: 0.5);
   }
 
   static TextStyle subtitleProjects = TextStyle(
@@ -163,24 +169,19 @@ class TextStyleHelper {
   );
 
   static TextStyle subtitle1({Color color}) {
-
     return TextStyle(
-      fontFamily: 'Roboto',
-      fontSize: 16,
-      height: 1.5,
-      letterSpacing: 0.15,
-      fontWeight: FontWeight.w400,
-      color: color
-    );
+        fontFamily: 'Roboto',
+        fontSize: 16,
+        height: 1.5,
+        letterSpacing: 0.15,
+        fontWeight: FontWeight.w400,
+        color: color);
   }
 
   static const subtitle2 = TextStyle(
-    fontFamily: 'Roboto',
-    fontSize: 14,
-    height: 1.429,
-    letterSpacing: 0.1,
-    fontWeight: FontWeight.w500
-  );
-
-
+      fontFamily: 'Roboto',
+      fontSize: 14,
+      height: 1.429,
+      letterSpacing: 0.1,
+      fontWeight: FontWeight.w500);
 }
