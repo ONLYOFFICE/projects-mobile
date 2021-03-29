@@ -45,6 +45,9 @@ class CoreApi {
   Future<String> statusesUrl() async =>
       '${await getPortalURI()}/api/$version/project/status';
 
+  Future<String> updateTaskStatusUrl({int taskId}) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$taskId/status';
+
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);
@@ -55,6 +58,17 @@ class CoreApi {
   Future<http.Response> postRequest(String url, String body) async {
     var headers = await getHeaders();
     var request = client.post(
+      Uri.parse(url),
+      headers: headers,
+      body: body,
+    );
+    final response = await request;
+    return response;
+  }
+
+  Future<http.Response> putRequest(String url, Map body) async {
+    var headers = await getHeaders();
+    var request = client.put(
       Uri.parse(url),
       headers: headers,
       body: body,
