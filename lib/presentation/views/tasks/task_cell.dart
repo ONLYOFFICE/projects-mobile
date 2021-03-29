@@ -148,10 +148,14 @@ class SecondColumn extends StatelessWidget {
           ),
           Row(
             children: [
-              Text(
-                itemController.status.value.title,
-                style: TextStyleHelper
-                    .taskStatus(itemController.status.value.color.toColor())),
+              Flexible(
+                child: Text(
+                  itemController.status.value.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper
+                      .taskStatus(itemController.status.value.color.toColor())),
+              ),
               Text(
                 ' • ', 
                 style: TextStyleHelper.caption(

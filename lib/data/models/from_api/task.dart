@@ -3,49 +3,55 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_owner.dart';
 
 class PortalTask {
-  bool canEdit;
+  int customTaskStatus;
+  int id;
+  int milestoneId;
+  int priority;
+  int status;
   bool canCreateSubtask;
   bool canCreateTimeSpend;
   bool canDelete;
+  bool canEdit;
   bool canReadFiles;
-  String startDate;
-  int id;
-  String title;
-  String description;
-  String deadline;
-  int priority;
-  int milestoneId;
-  ProjectOwner projectOwner;
-  int status;
-  PortalUser responsible;
-  PortalUser updatedBy;
   String created;
-  PortalUser createdBy;
-  List<Subtask> subtasks;
+  String deadline;
+  String description;
+  String startDate;
+  String title;
   String updated;
   List<PortalUser> responsibles;
+  List<Subtask> subtasks;
+  PortalUser createdBy;
+  PortalUser responsible;
+  PortalUser updatedBy;
+  ProjectOwner projectOwner;
 
-  PortalTask(
-      {this.canEdit,
+
+
+
+  PortalTask({
       this.canCreateSubtask,
       this.canCreateTimeSpend,
       this.canDelete,
+      this.canEdit,
       this.canReadFiles,
-      this.startDate,
-      this.id,
-      this.title,
-      this.description,
-      this.deadline,
-      this.priority,
-      this.milestoneId,
-      this.projectOwner,
-      this.status,
-      this.responsible,
-      this.updatedBy,
       this.created,
       this.createdBy,
+      this.customTaskStatus,
+      this.deadline,
+      this.description,
+      this.id,
+      this.milestoneId,
+      this.priority,
+      this.projectOwner,
+      this.responsible,
+      this.responsibles,
+      this.startDate,
+      this.status,
+      this.title,
       this.updated,
-      this.responsibles});
+      this.updatedBy
+    });
 
   PortalTask.fromJson(Map<String, dynamic> json) {
     canEdit = json['canEdit'];
@@ -53,6 +59,7 @@ class PortalTask {
     canCreateTimeSpend = json['canCreateTimeSpend'];
     canDelete = json['canDelete'];
     canReadFiles = json['canReadFiles'];
+    customTaskStatus = json['customTaskStatus'];
     startDate = json['startDate'];
     id = json['id'];
     title = json['title'];
@@ -93,6 +100,7 @@ class PortalTask {
     data['canCreateTimeSpend'] = canCreateTimeSpend;
     data['canDelete'] = canDelete;
     data['canReadFiles'] = canReadFiles;
+    data['customTaskStatus'] = customTaskStatus;
     data['startDate'] = startDate;
     data['id'] = id;
     data['title'] = title;
