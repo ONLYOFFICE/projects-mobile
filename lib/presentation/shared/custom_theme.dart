@@ -23,7 +23,7 @@ final AppColors lightColors = AppColors(
   onPrimary: Color(0xffffffff),
   onPrimarySurface: Color(0xffffffff),
   onSurface: Color(0xff000000),
-  primary: Color(0xff0C76D5),
+  primary: Color(0xff1A73E9),
   primarySurface: Color(0xff0F4071),
   projectsSubtitle: Color(0xff000000).withOpacity(0.6),
   tabActive: Color.fromRGBO(255, 255, 255, 1),
@@ -32,18 +32,16 @@ final AppColors lightColors = AppColors(
 );
 
 final AppColors darkColors = AppColors(
-  backgroundColor: Color(0xff000000),
-  activeTabTitle: Color(0xffffffff),
-  inactiveTabTitle: Color(0xffffffff).withOpacity(0.4),
-  tabbarBackground: Color(0xff2E4057),
-  projectsSubtitle: Color(0xffffffff).withOpacity(0.6),
-  background: Color(0xffFBFBFB),
-  links: Color(0xff0C76D5),
-  onSurface: Color(0xff000000),
-  primarySurface: Color(0xff0F4071),
-  primary: Color(0xff0C76D5)
-);
-
+    backgroundColor: Color(0xff000000),
+    activeTabTitle: Color(0xffffffff),
+    inactiveTabTitle: Color(0xffffffff).withOpacity(0.4),
+    tabbarBackground: Color(0xff2E4057),
+    projectsSubtitle: Color(0xffffffff).withOpacity(0.6),
+    background: Color(0xffFBFBFB),
+    links: Color(0xff0C76D5),
+    onSurface: Color(0xff000000),
+    primarySurface: Color(0xff0F4071),
+    primary: Color(0xff0C76D5));
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,

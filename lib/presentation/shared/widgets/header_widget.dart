@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/header_filter_view.dart';
 
 class HeaderWidget extends StatefulWidget {
   final BaseController controller;
@@ -53,7 +54,10 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     IconButton(
                         icon: SVG
                             .create('lib/assets/images/icons/preferences.svg'),
-                        onPressed: () {}),
+                        onPressed: () {
+                          Get.bottomSheet(HeaderFilterView(),
+                              isScrollControlled: true);
+                        }),
                     IconButton(
                         icon: const Icon(Icons.more_vert_outlined),
                         onPressed: () {}),
