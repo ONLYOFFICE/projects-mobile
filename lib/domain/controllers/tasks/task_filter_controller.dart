@@ -33,21 +33,20 @@
 import 'package:get/get.dart';
 import 'package:projects/data/services/tasks_service.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskFilterController extends GetxController {
   final _api = locator<TasksService>();
 
   var projectFilters = '';
+  var milestoneFilters = '';
+
   RxInt suitableTasksCount = (-1).obs;
   List filteredTaskList = [];
 
-  RxMap<String, bool> responsible = {
-    'Me': false,
-    'Other': false,
-    'Groups': false,
-    'No responsible': false
-  }.obs;
+  RxMap<String, bool> responsible =
+      {'Me': true, 'Other': false, 'Groups': false, 'No': false}.obs;
 
   RxMap creator = {'Me': false, 'Other': false}.obs;
 
@@ -61,13 +60,18 @@ class TaskFilterController extends GetxController {
   RxMap milestone = {'My': false, 'No': false, 'Other': false}.obs;
 
   void changeResponsible(String filter) {
-    responsible.updateAll((key, value) => false);
+    for (var item in responsible.keys) {
+      if (item != filter) responsible.update(item, (value) => false);
+    }
     responsible[filter] = !responsible[filter];
+    getSuitableTasksCount();
   }
 
   void changeCreator(String filter) {
-    creator.updateAll((key, value) => false);
+    if (filter == 'Me') creator['Other'] = false;
+    if (filter == 'Other') creator['Me'] = false;
     creator[filter] = !creator[filter];
+    getSuitableTasksCount();
   }
 
   void changeProject(String filter) async {
@@ -97,13 +101,63 @@ class TaskFilterController extends GetxController {
   }
 
   void changeMilestone(String filter) {
-    milestone.updateAll((key, value) => false);
+    for (var item in milestone.keys) {
+      if (item != filter) milestone.update(item, (value) => false);
+    }
     milestone[filter] = !milestone[filter];
+    milestoneFilters = '';
+    if (milestone['My']) {
+      milestoneFilters = milestoneFilters + '&myMilestones=true';
+    }
+    if (project['Other']) {
+      projectFilters = projectFilters + '&myMilestones=false';
+    }
+    if (milestone['No']) {
+      milestoneFilters = milestoneFilters + '&nomilestone=true';
+    }
+    getSuitableTasksCount();
   }
 
   void getSuitableTasksCount() async {
     suitableTasksCount.value = -1;
-    filteredTaskList = await _api.getTasks(filter: projectFilters);
+    var fltr = projectFilters + milestoneFilters;
+    filteredTaskList = await _api.getTasks(filter: fltr);
+
+    var _myId = await Get.find<UserController>().getUserId();
+
+    filteredTaskList = filteredTaskList.where((element) {
+      var f = true;
+      // the creator and responsible are filtered locally
+      // because I didn't find any matching queries
+      if (creator['Me']) f = f && element.createdBy.id == _myId;
+      if (creator['Other']) f = f && element.createdBy.id != _myId;
+      if (responsible['Me']) {
+        if (element.responsibles != null && !element.responsibles.isEmpty) {
+          f = f && element.responsibles[0].id == _myId;
+        } else {
+          f = false;
+        }
+      }
+      if (responsible['Other']) {
+        if (element.responsibles != null && !element.responsibles.isEmpty) {
+          f = f && element.responsibles[0].id != _myId;
+        } else {
+          f = false;
+        }
+      }
+      if (responsible['Groups']) {
+        if (element.responsibles != null && !element.responsibles.isEmpty) {
+          f = f && element.responsibles.length > 1;
+        } else {
+          f = false;
+        }
+      }
+      if (responsible['No']) {
+        f = f && (element.responsible == null || element.responsibles.isEmpty);
+      }
+      return f;
+    }).toList();
+
     suitableTasksCount.value = filteredTaskList.length;
   }
 
