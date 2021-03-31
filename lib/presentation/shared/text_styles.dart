@@ -23,6 +23,16 @@ class TextStyleHelper {
         color: color);
   }
 
+  static TextStyle button({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+        fontSize: 14,
+        height: 1.714,
+        letterSpacing: 1.5,
+        color: color);
+  }
+
   static TextStyle caption({Color color}) {
     return TextStyle(
         fontFamily: 'Roboto',

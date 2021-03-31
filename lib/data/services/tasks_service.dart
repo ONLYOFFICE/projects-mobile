@@ -5,7 +5,6 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class TasksService {
-
   final TasksApi _api = locator<TasksApi>();
 
   var portalTask = PortalTask().obs;
@@ -23,9 +22,8 @@ class TasksService {
     }
   }
 
-
-  Future getTasks() async {
-    var tasks = await _api.getTasks();
+  Future getTasks({filter = ''}) async {
+    var tasks = await _api.getTasks(filter: filter);
 
     var success = tasks.response != null;
 
@@ -38,7 +36,6 @@ class TasksService {
   }
 
   Future getStatuses() async {
-
     var statuses = await _api.getStatuses();
 
     var success = statuses.response != null;
@@ -50,5 +47,4 @@ class TasksService {
       return null;
     }
   }
-
 }

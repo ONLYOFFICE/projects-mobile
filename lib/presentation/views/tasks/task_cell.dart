@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/task.dart';
 
-import 'package:projects/domain/controllers/task_item_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
-  as bottom_sheet;
+    as bottom_sheet;
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskCell extends StatelessWidget {
@@ -17,7 +17,6 @@ class TaskCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     // ignore: omit_local_variable_types
     TaskItemController itemController =
         Get.put(TaskItemController(task), tag: task.id.toString());
@@ -32,20 +31,18 @@ class TaskCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () {
-                return Get.bottomSheet(
-                  bottom_sheet.BottomSheet(taskItemController: itemController),
-                  isScrollControlled: true
-                );
-              },
-              child: TaskStatus(itemController: itemController)),
+                onTap: () {
+                  return Get.bottomSheet(
+                      bottom_sheet.BottomSheet(
+                          taskItemController: itemController),
+                      isScrollControlled: true);
+                },
+                child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(
               child: GestureDetector(
-                onTap: () => Get.toNamed(
-                  'TaskDetailedView', 
-                  arguments: {'controller': itemController}
-                ),
+                onTap: () => Get.toNamed('TaskDetailedView',
+                    arguments: {'controller': itemController}),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -77,7 +74,6 @@ class TaskCell extends StatelessWidget {
 }
 
 class TaskStatus extends StatelessWidget {
-
   final TaskItemController itemController;
 
   const TaskStatus({
@@ -88,30 +84,27 @@ class TaskStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: const Color(0xffD8D8D8)
-      ),
+      decoration:
+          BoxDecoration(shape: BoxShape.circle, color: const Color(0xffD8D8D8)),
       child: Container(
-        width: 40,
-        height: 40,
-        margin: const EdgeInsets.all(0.5),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Theme.of(context).customColors().background
-        ),
-        child: Center(
-          child: SVG.createSizedFromString(
-                itemController.statusImageString.value, 16, 16, 
+          width: 40,
+          height: 40,
+          margin: const EdgeInsets.all(0.5),
+          decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Theme.of(context).customColors().background),
+          child: Center(
+            child: SVG.createSizedFromString(
+                itemController.statusImageString.value,
+                16,
+                16,
                 itemController.status.value.color),
-          )
-      ),
+          )),
     );
   }
 }
 
 class SecondColumn extends StatelessWidget {
-
   final PortalTask task;
   final TaskItemController itemController;
 
@@ -120,7 +113,6 @@ class SecondColumn extends StatelessWidget {
     @required this.task,
     @required this.itemController,
   }) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -142,34 +134,36 @@ class SecondColumn extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 6),
-              if (task.priority == 1) 
-                AppIcon(icon: SvgIcons.high_priority,)
+              if (task.priority == 1)
+                AppIcon(
+                  icon: SvgIcons.high_priority,
+                )
             ],
           ),
           Row(
             children: [
               Flexible(
-                child: Text(
-                  itemController.status.value.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper
-                      .taskStatus(itemController.status.value.color.toColor())),
+                child: Text(itemController.status.value.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleHelper.taskStatus(
+                        itemController.status.value.color.toColor())),
               ),
-              Text(
-                ' • ', 
-                style: TextStyleHelper.caption(
-                  color: Theme.of(context)
-                    .customColors().onSurface.withOpacity(0.6))),
-              Flexible(
-                child: Text(
-                  task.createdBy.displayName,
-                  maxLines: 1, 
-                  overflow: TextOverflow.ellipsis,
+              Text(' • ',
                   style: TextStyleHelper.caption(
-                    color: Theme.of(context)
-                        .customColors().onSurface.withOpacity(0.6)
-                  )),
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.6))),
+              Flexible(
+                child: Text(task.createdBy.displayName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleHelper.caption(
+                        color: Theme.of(context)
+                            .customColors()
+                            .onSurface
+                            .withOpacity(0.6))),
               ),
             ],
           ),
@@ -180,7 +174,6 @@ class SecondColumn extends StatelessWidget {
 }
 
 class ThirdColumn extends StatelessWidget {
-
   final PortalTask task;
   final TaskItemController controller;
 
@@ -192,7 +185,6 @@ class ThirdColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var _now = DateTime.now();
 
     return Expanded(
@@ -202,21 +194,21 @@ class ThirdColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           if (task.deadline != null)
-            Text(task.formatedDate(now: _now, stringDate: task.deadline), 
+            Text(task.formatedDate(now: _now, stringDate: task.deadline),
                 style: TextStyleHelper.caption(
-                  color: Theme.of(context).customColors().onSurface)),
+                    color: Theme.of(context).customColors().onSurface)),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
               const SizedBox(width: 5),
-              Text(
-                task.subtasks.length.toString(), 
-                style: TextStyleHelper.body2(
-                  color: Theme.of(context)
-                      .customColors().onSurface.withOpacity(0.6))
-              ),
+              Text(task.subtasks.length.toString(),
+                  style: TextStyleHelper.body2(
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.6))),
             ],
           ),
         ],

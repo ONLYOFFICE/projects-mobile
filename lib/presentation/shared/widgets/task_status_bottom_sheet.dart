@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/task_item_controller.dart';
-import 'package:projects/domain/controllers/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
