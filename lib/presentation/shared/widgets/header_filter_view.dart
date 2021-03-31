@@ -92,14 +92,10 @@ class HeaderFilterView extends StatelessWidget {
                     selected: filterController.responsible['Groups'],
                     onTap: () => filterController.changeResponsible('Groups')),
                 _FilterElement(
-                    title: 'No responsible',
+                    title: 'No',
                     titleColor: Theme.of(context).customColors().onSurface,
-                    selected: filterController.responsible['No responsible'],
-                    onTap: () =>
-                        filterController.changeResponsible('No responsible'))
-                // onTap: () =>
-                //     filterController.responsible['No responsible'] =
-                //         !filterController.responsible['No responsible'])
+                    selected: filterController.responsible['No'],
+                    onTap: () => filterController.changeResponsible('No'))
               ]),
             ),
             const _FilterLabel(label: 'Creator'),

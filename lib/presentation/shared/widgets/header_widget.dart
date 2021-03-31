@@ -88,18 +88,21 @@ class _HeaderWidgetState extends State<HeaderWidget> {
               ),
               Container(
                 padding: EdgeInsets.only(right: 4),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      'Deadline',
-                      style: TextStyleHelper.projectsSorting,
-                    ),
-                    const SizedBox(width: 8),
-                    SVG.createSized(
-                        'lib/assets/images/icons/sorting_3_descend.svg',
-                        20,
-                        20),
-                  ],
+                child: GestureDetector(
+                  onTap: () {},
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'Deadline',
+                        style: TextStyleHelper.projectsSorting,
+                      ),
+                      const SizedBox(width: 8),
+                      SVG.createSized(
+                          'lib/assets/images/icons/sorting_3_descend.svg',
+                          20,
+                          20),
+                    ],
+                  ),
                 ),
               ),
             ],

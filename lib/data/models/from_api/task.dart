@@ -26,11 +26,8 @@ class PortalTask {
   PortalUser updatedBy;
   ProjectOwner projectOwner;
 
-
-
-
-  PortalTask({
-      this.canCreateSubtask,
+  PortalTask(
+      {this.canCreateSubtask,
       this.canCreateTimeSpend,
       this.canDelete,
       this.canEdit,
@@ -50,8 +47,7 @@ class PortalTask {
       this.status,
       this.title,
       this.updated,
-      this.updatedBy
-    });
+      this.updatedBy});
 
   PortalTask.fromJson(Map<String, dynamic> json) {
     canEdit = json['canEdit'];
@@ -83,8 +79,8 @@ class PortalTask {
         : null;
     updated = json['updated'];
 
-    subtasks = List<Subtask>.from(json['subtasks']
-        .map((x) => Subtask.fromJson(x)));
+    subtasks =
+        List<Subtask>.from(json['subtasks'].map((x) => Subtask.fromJson(x)));
 
     responsibles = json['responsibles'] != null
         ? (json['responsibles'] as List)
@@ -123,18 +119,16 @@ class PortalTask {
       data['createdBy'] = createdBy.toJson();
     }
 
-    data['subtasks'] = List<dynamic>
-        .from(subtasks.map((x) => x.toJson()));
-        
+    data['subtasks'] = List<dynamic>.from(subtasks.map((x) => x.toJson()));
+
     data['updated'] = updated;
     return data;
   }
 
   String formatedDate({DateTime now, String stringDate}) {
-
     var date = DateTime.parse(stringDate);
 
-    if (now.year == date.year)  {
+    if (now.year == date.year) {
       final formatter = DateFormat('d MMM');
       return formatter.format(date);
     } else {
@@ -144,36 +138,34 @@ class PortalTask {
   }
 }
 
-
 class Subtask {
+  final bool canEdit;
+  final int taskId;
+  final int id;
+  final String title;
+  final dynamic description;
+  final int status;
+  final PortalUser responsible;
+  final DateTime created;
+  final PortalUser createdBy;
+  final PortalUser updatedBy;
+  final DateTime updated;
 
-    final bool canEdit;
-    final int taskId;
-    final int id;
-    final String title;
-    final dynamic description;
-    final int status;
-    final PortalUser responsible;
-    final DateTime created;
-    final PortalUser createdBy;
-    final PortalUser updatedBy;
-    final DateTime updated;
+  Subtask({
+    this.canEdit,
+    this.taskId,
+    this.id,
+    this.title,
+    this.description,
+    this.status,
+    this.responsible,
+    this.created,
+    this.createdBy,
+    this.updatedBy,
+    this.updated,
+  });
 
-    Subtask({
-        this.canEdit,
-        this.taskId,
-        this.id,
-        this.title,
-        this.description,
-        this.status,
-        this.responsible,
-        this.created,
-        this.createdBy,
-        this.updatedBy,
-        this.updated,
-    });
-
-    factory Subtask.fromJson(Map<String, dynamic> json) => Subtask(
+  factory Subtask.fromJson(Map<String, dynamic> json) => Subtask(
         canEdit: json['canEdit'],
         taskId: json['taskId'],
         id: json['id'],
@@ -181,44 +173,31 @@ class Subtask {
         description: json['description'],
         status: json['status'],
         responsible: json['responsible'] == null
-            ? null 
+            ? null
             : PortalUser.fromJson(json['responsible']),
         updatedBy: json['updatedBy'] == null
-            ? null 
+            ? null
             : PortalUser.fromJson(json['updatedBy']),
-        created: json['created'] == null
-            ? null 
-            : DateTime.parse(json['created']),
+        created:
+            json['created'] == null ? null : DateTime.parse(json['created']),
         createdBy: json['createdBy'] == null
             ? null
             : PortalUser.fromJson(json['createdBy']),
-        updated: json['updated'] == null
-            ? null
-            : DateTime.parse(json['updated']),
-        
-    );
+        updated:
+            json['updated'] == null ? null : DateTime.parse(json['updated']),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         'canEdit': canEdit,
         'taskId': taskId,
         'id': id,
         'title': title,
         'description': description,
         'status': status,
-        'responsible': responsible == null
-            ? null 
-            : responsible.toJson(),
-        'updatedBy': updatedBy == null
-            ? null 
-            : updatedBy.toJson(),
-        'created': created == null
-            ? null
-            : created.toIso8601String(),
-        'createdBy': createdBy == null
-            ? null
-            : createdBy.toJson(),
-        'updated': updated == null 
-            ? null
-            : updated.toIso8601String(),
-    };
+        'responsible': responsible == null ? null : responsible.toJson(),
+        'updatedBy': updatedBy == null ? null : updatedBy.toJson(),
+        'created': created == null ? null : created.toIso8601String(),
+        'createdBy': createdBy == null ? null : createdBy.toJson(),
+        'updated': updated == null ? null : updated.toIso8601String(),
+      };
 }
