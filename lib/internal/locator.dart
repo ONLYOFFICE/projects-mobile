@@ -11,6 +11,7 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/data/services/tasks_service.dart';
+import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -37,4 +38,5 @@ void setupLocator() {
   Get.lazyPut(() => StatusesController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
   Get.lazyPut(() => TaskFilterController(), fenix: true);
+  Get.lazyPut(() => TasksSortController(), fenix: true);
 }
