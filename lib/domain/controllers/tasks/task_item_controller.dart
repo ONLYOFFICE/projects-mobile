@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/task.dart';
-import 'package:projects/domain/controllers/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

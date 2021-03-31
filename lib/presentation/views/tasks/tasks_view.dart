@@ -33,13 +33,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/domain/controllers/tasks_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:projects/domain/controllers/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 
 class TasksView extends StatelessWidget {
   @override

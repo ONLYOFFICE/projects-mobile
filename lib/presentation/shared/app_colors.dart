@@ -35,7 +35,6 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 
 class AppColors {
-  
   final Color activeTabTitle;
   final Color background;
   final Color backgroundColor;
@@ -50,6 +49,7 @@ class AppColors {
   final Color primary;
   final Color primarySurface;
   final Color projectsSubtitle;
+  final Color systemBlue;
   final Color tabActive;
   final Color tabSecondary;
   final Color tabbarBackground;
@@ -69,6 +69,7 @@ class AppColors {
     @required this.primary,
     @required this.primarySurface,
     @required this.projectsSubtitle,
+    @required this.systemBlue,
     @required this.tabActive,
     @required this.tabSecondary,
     @required this.tabbarBackground,
