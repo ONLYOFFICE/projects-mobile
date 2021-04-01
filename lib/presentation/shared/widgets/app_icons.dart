@@ -33,7 +33,7 @@ class SvgIcons {
   static const String project =
       'lib/assets/images/icons/task_detailed/project.svg';
   static const String start_date =
-      'lib/assets/images/icons/task_detailed/project.svg';
+      'lib/assets/images/icons/task_detailed/start_date.svg';
 
   static const String open =
       'lib/assets/images/icons/project_statuses/open.svg';

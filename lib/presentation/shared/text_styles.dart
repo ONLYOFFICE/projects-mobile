@@ -55,13 +55,15 @@ class TextStyleHelper {
         color: color);
   }
 
-  static const headline6 = TextStyle(
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.w500,
-      fontSize: 20,
-      height: 1.56,
-      letterSpacing: 0.15,
-      color: Color.fromRGBO(0, 0, 0, 0.87));
+  static TextStyle headline6({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w500,
+        fontSize: 20,
+        height: 1.56,
+        letterSpacing: 0.15,
+        color: color);
+  }
 
   static TextStyle headline7({Color color}) {
     return TextStyle(

@@ -20,6 +20,7 @@ class TasksView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
+        onPressed: () => Get.toNamed('NewTaskView'),
         child: Icon(Icons.add_rounded),
       ),
       body: Obx(

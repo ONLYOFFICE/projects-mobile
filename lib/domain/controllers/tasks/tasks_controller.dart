@@ -25,7 +25,7 @@ class TasksController extends BaseController {
     var sortController = Get.find<TasksSortController>();
     loaded.value = false;
     tasks.value = await _api.getTasks();
-    sortController.sortTasks();
+    await sortController.sortTasks();
     loaded.value = true;
   }
 
