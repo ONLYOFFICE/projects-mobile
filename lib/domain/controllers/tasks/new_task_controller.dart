@@ -30,25 +30,14 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/presentation/views/authentication/code_view.dart';
-import 'package:projects/presentation/views/authentication/login_view.dart';
-import 'package:projects/presentation/views/authentication/portal_view.dart';
-import 'package:projects/presentation/views/navigation_view.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/projects_view/projects_view.dart';
-import 'package:projects/presentation/views/projects_view/project_search_view.dart';
-import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+class NewTaskController extends GetxController {
+  RxBool projectSelected = false.obs;
 
-List<GetPage> getxPages() => [
-      GetPage(name: '/', page: () => NavigationView()),
-      GetPage(name: 'PortalView', page: () => PortalView()),
-      GetPage(name: 'LoginView', page: () => LoginView()),
-      GetPage(name: 'CodeView', page: () => CodeView()),
-      GetPage(name: 'HomeView', page: () => ProjectsView()),
-      GetPage(name: 'NavigationView', page: () => NavigationView()),
-      GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
-      GetPage(name: 'NewTaskView', page: () => NewTaskView()),
-      GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
-    ];
+  var projectFieldC = TextEditingController();
+  var descriptionFieldC = TextEditingController();
+  var startDateFieldC = TextEditingController();
+  var dueDateFieldC = TextEditingController();
+}

@@ -81,32 +81,50 @@ class TasksSort extends StatelessWidget {
             SortTile(
               title: 'Deadline',
               selected: sortController.currentSort.startsWith('Deadline'),
-              onTap: () => sortController.changeCurrentSort('Deadline'),
+              onTap: () {
+                sortController.changeCurrentSort('Deadline');
+                Get.back();
+              },
             ),
             SortTile(
               title: 'Priority',
               selected: sortController.currentSort.startsWith('Priority'),
-              onTap: () => sortController.changeCurrentSort('Priority'),
+              onTap: () {
+                sortController.changeCurrentSort('Priority');
+                Get.back();
+              },
             ),
             SortTile(
               title: 'Creation date',
               selected: sortController.currentSort.startsWith('Creation date'),
-              onTap: () => sortController.changeCurrentSort('Creation date'),
+              onTap: () {
+                sortController.changeCurrentSort('Creation date');
+                Get.back();
+              },
             ),
             SortTile(
               title: 'Start date',
               selected: sortController.currentSort.startsWith('Start date'),
-              onTap: () => sortController.changeCurrentSort('Start date'),
+              onTap: () {
+                sortController.changeCurrentSort('Start date');
+                Get.back();
+              },
             ),
             SortTile(
               title: 'Title',
               selected: sortController.currentSort.startsWith('Title'),
-              onTap: () => sortController.changeCurrentSort('Title'),
+              onTap: () {
+                sortController.changeCurrentSort('Title');
+                Get.back();
+              },
             ),
             SortTile(
               title: 'Order',
               selected: sortController.currentSort.startsWith('Order'),
-              onTap: () => sortController.changeCurrentSort('Order'),
+              onTap: () {
+                sortController.changeCurrentSort('Order');
+                Get.back();
+              },
             ),
             const SizedBox(height: 20)
           ],
@@ -119,7 +137,7 @@ class TasksSort extends StatelessWidget {
 class SortTile extends StatelessWidget {
   final String title;
   final bool selected;
-  final Function() onTap;
+  final Function onTap;
 
   const SortTile({Key key, this.title, this.selected = false, this.onTap})
       : super(key: key);
