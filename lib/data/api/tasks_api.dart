@@ -62,8 +62,11 @@ class TasksApi {
     return result;
   }
 
-  Future<ApiDTO<List<PortalTask>>> getTasks({filter = ''}) async {
-    var url = await coreApi.tasksByFilterUrl(filter);
+  Future<ApiDTO<List<PortalTask>>> getTasks(
+      {params = '&sortBy=Deadline&sortOrder=descending'}) async {
+    var url = await coreApi.tasksByFilterUrl(params);
+
+    print(url);
 
     var result = ApiDTO<List<PortalTask>>();
     try {

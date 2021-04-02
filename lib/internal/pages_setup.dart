@@ -37,6 +37,7 @@ import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/views/new_task/select_project_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -50,5 +51,6 @@ List<GetPage> getxPages() => [
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(name: 'NewTaskView', page: () => NewTaskView()),
+      GetPage(name: 'SelectProjectView', page: () => SelectProjectView()),
       GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
     ];

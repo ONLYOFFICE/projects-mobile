@@ -54,8 +54,8 @@ class TasksService {
     }
   }
 
-  Future getTasks({filter = ''}) async {
-    var tasks = await _api.getTasks(filter: filter);
+  Future getTasks({params = ''}) async {
+    var tasks = await _api.getTasks(params: params);
 
     var success = tasks.response != null;
 

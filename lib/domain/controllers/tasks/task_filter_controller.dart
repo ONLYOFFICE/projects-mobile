@@ -121,7 +121,7 @@ class TaskFilterController extends GetxController {
   void getSuitableTasksCount() async {
     suitableTasksCount.value = -1;
     var fltr = projectFilters + milestoneFilters;
-    filteredTaskList = await _api.getTasks(filter: fltr);
+    filteredTaskList = await _api.getTasks(params: fltr);
 
     var _myId = await Get.find<UserController>().getUserId();
 
