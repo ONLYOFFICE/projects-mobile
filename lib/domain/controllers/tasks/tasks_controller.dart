@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/task.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
-import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/data/services/tasks_service.dart';
@@ -21,11 +20,9 @@ class TasksController extends BaseController {
     refreshController.refreshCompleted();
   }
 
-  Future getTasks() async {
-    var sortController = Get.find<TasksSortController>();
+  Future getTasks({String params}) async {
     loaded.value = false;
-    tasks.value = await _api.getTasks();
-    await sortController.sortTasks();
+    tasks.value = await _api.getTasks(params: params);
     loaded.value = true;
   }
 
