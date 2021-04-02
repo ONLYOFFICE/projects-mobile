@@ -39,7 +39,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
-class TasksApi {
+class TaskApi {
   var coreApi = locator<CoreApi>();
 
   Future<ApiDTO> getTaskByID({int id}) async {

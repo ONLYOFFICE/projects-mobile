@@ -74,7 +74,7 @@ class TasksSort extends StatelessWidget {
                   style: TextStyleHelper.h6(
                       color: Theme.of(context).customColors().onSurface))),
           const SizedBox(height: 14.5),
-          const Divider(height: 9),
+          const Divider(height: 9, thickness: 1),
           const SortTile(title: 'Deadline'),
           const SortTile(title: 'Priority'),
           const SortTile(title: 'Creation date'),

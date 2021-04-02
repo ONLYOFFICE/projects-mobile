@@ -30,31 +30,22 @@
  *
  */
 
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/data/services/user_service.dart';
 
-class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
+class UsersController extends GetxController {
+  final _api = locator<UserService>();
 
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
+  var users = <PortalUser>[].obs;
+
+//for shimmer and progress indicator
   RxBool loaded = false.obs;
 
-  Future getStatuses() async {
+  Future getAllProfiles({String params}) async {
     loaded.value = false;
-    statuses.value = await _api.getStatuses();
-    statusImagesDecoded.clear();
-    statuses.forEach((element) {
-      statusImagesDecoded.add(decodeImageString(element.image));
-    });
+    users.value = await _api.getAllProfiles();
     loaded.value = true;
-  }
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
   }
 }

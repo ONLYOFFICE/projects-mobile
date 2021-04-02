@@ -36,7 +36,7 @@ import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/header_filter_view.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_sort.dart';
 
 class HeaderWidget extends StatefulWidget {
@@ -91,7 +91,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                           icon: SVG.create(
                               'lib/assets/images/icons/preferences.svg'),
                           onPressed: () {
-                            Get.bottomSheet(HeaderFilterView(),
+                            Get.bottomSheet(TasksFilter(),
                                 isScrollControlled: true);
                           }),
                       IconButton(

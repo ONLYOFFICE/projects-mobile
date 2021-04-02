@@ -30,31 +30,42 @@
  *
  */
 
-import 'dart:convert';
+part of '../tasks_filter.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task_service.dart';
-import 'package:projects/internal/locator.dart';
+class _Milestone extends StatelessWidget {
+  const _Milestone({Key key}) : super(key: key);
 
-class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
-
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
-  RxBool loaded = false.obs;
-
-  Future getStatuses() async {
-    loaded.value = false;
-    statuses.value = await _api.getStatuses();
-    statusImagesDecoded.clear();
-    statuses.forEach((element) {
-      statusImagesDecoded.add(decodeImageString(element.image));
-    });
-    loaded.value = true;
-  }
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<TaskFilterController>();
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FilterLabel(label: 'Milestone'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(runSpacing: 16, spacing: 16, children: [
+              _FilterElement(
+                  title: 'Milestones with my tasks',
+                  titleColor: Theme.of(context).customColors().onSurface,
+                  selected: filterController.milestone['My'],
+                  onTap: () => filterController.changeMilestone('My')),
+              _FilterElement(
+                  title: 'No milestone',
+                  titleColor: Theme.of(context).customColors().onSurface,
+                  selected: filterController.milestone['No'],
+                  onTap: () => filterController.changeMilestone('No')),
+              _FilterElement(
+                  title: filterController.milestone['Other'] != ''
+                      ? filterController.milestone['Other']
+                      : 'Other milestones',
+                  selected: filterController.milestone['Other'] != '',
+                  onTap: () => filterController.changeMilestone('Other')),
+            ]),
+          ),
+        ],
+      ),
+    );
   }
 }

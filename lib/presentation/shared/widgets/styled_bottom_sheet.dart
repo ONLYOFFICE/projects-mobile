@@ -31,45 +31,60 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 
-import 'package:projects/presentation/shared/widgets/header_widget.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+class StyledButtomSheet extends StatelessWidget {
+  final double height;
+  final Widget title;
+  final List<Widget> actions;
+  final Widget content;
+  const StyledButtomSheet({
+    Key key,
+    this.height,
+    this.title,
+    this.actions,
+    this.content,
+  }) : super(key: key);
 
-class ProjectsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ProjectsController>();
-    controller.setupProjects();
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            HeaderWidget(controller: controller),
-            if (controller.loaded.isFalse) ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
-              Expanded(
-                child: SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: controller.pullUpEnabled,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectCell(item: controller.projects[i]),
-                    itemExtent: 100.0,
-                    itemCount: controller.projects.length,
-                  ),
+    return Container(
+      height: height,
+      decoration: BoxDecoration(
+        color: Theme.of(context).customColors().onPrimarySurface,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(12),
+          topRight: Radius.circular(12),
+        ),
+      ),
+      child: Column(
+        children: [
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: SizedBox(
+                height: 4,
+                width: 40,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(2)),
                 ),
               ),
-          ],
-        ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (title != null) title,
+              if (actions != null) Row(children: actions),
+            ],
+          ),
+          if (content != null) Expanded(child: content)
+        ],
       ),
     );
   }

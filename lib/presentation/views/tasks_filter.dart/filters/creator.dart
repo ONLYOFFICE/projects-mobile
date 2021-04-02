@@ -30,31 +30,44 @@
  *
  */
 
-import 'dart:convert';
+part of '../tasks_filter.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task_service.dart';
-import 'package:projects/internal/locator.dart';
+class _Creator extends StatelessWidget {
+  const _Creator({Key key}) : super(key: key);
 
-class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
-
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
-  RxBool loaded = false.obs;
-
-  Future getStatuses() async {
-    loaded.value = false;
-    statuses.value = await _api.getStatuses();
-    statusImagesDecoded.clear();
-    statuses.forEach((element) {
-      statusImagesDecoded.add(decodeImageString(element.image));
-    });
-    loaded.value = true;
-  }
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<TaskFilterController>();
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FilterLabel(label: 'Creator'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(runSpacing: 16, spacing: 16, children: [
+              _FilterElement(
+                  title: 'Me',
+                  titleColor: Theme.of(context).customColors().onSurface,
+                  selected: filterController.creator['Me'],
+                  onTap: () => filterController.changeCreator('Me')),
+              _FilterElement(
+                title: filterController.creator['Other'] != ''
+                    ? filterController.creator['Other']
+                    : 'Other user',
+                selected: filterController.creator['Other'] != '',
+                cancelButton: true,
+                onTap: () async {
+                  var newUser = await Get.bottomSheet(SelectUser());
+                  filterController.changeCreator('Other', newUser);
+                },
+                onCancelTap: () =>
+                    filterController.changeCreator('Other', null),
+              ),
+            ]),
+          ),
+        ],
+      ),
+    );
   }
 }

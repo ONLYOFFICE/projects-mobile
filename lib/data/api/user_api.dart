@@ -32,29 +32,34 @@
 
 import 'dart:convert';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
-class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
+class UserApi {
+  var coreApi = locator<CoreApi>();
 
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
-  RxBool loaded = false.obs;
+  Future<ApiDTO<List<PortalUser>>> getAllProfiles() async {
+    var url = await coreApi.allProfiles();
 
-  Future getStatuses() async {
-    loaded.value = false;
-    statuses.value = await _api.getStatuses();
-    statusImagesDecoded.clear();
-    statuses.forEach((element) {
-      statusImagesDecoded.add(decodeImageString(element.image));
-    });
-    loaded.value = true;
-  }
+    var result = ApiDTO<List<PortalUser>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
 
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalUser.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
   }
 }
