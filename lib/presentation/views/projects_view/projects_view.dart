@@ -10,7 +10,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProjectsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(ProjectsController());
+    var controller = Get.find<ProjectsController>();
     controller.setupProjects();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,

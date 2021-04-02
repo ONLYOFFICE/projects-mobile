@@ -4,8 +4,8 @@ import 'package:projects/data/models/from_api/task.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
-class TasksService {
-  final TasksApi _api = locator<TasksApi>();
+class TaskService {
+  final TaskApi _api = locator<TaskApi>();
 
   var portalTask = PortalTask().obs;
 
