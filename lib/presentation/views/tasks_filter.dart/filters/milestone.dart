@@ -30,38 +30,42 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+part of '../tasks_filter.dart';
 
-class TasksSortController extends GetxController {
-  var currentSort = 'Deadline'.obs;
-  var currentSortOrder = 'ascending'.obs;
+class _Milestone extends StatelessWidget {
+  const _Milestone({Key key}) : super(key: key);
 
-  final _taskController = Get.find<TasksController>();
-
-  Future<void> sortTasks(String newSort) async {
-    if (newSort == currentSort.value) {
-      if (currentSortOrder.value == 'ascending') {
-        currentSortOrder.value = 'descending';
-      } else {
-        currentSortOrder.value = 'ascending';
-      }
-    } else {
-      currentSort.value = newSort;
-      currentSortOrder.value == 'ascending';
-    }
-
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<TaskFilterController>();
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FilterLabel(label: 'Milestone'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(runSpacing: 16, spacing: 16, children: [
+              _FilterElement(
+                  title: 'Milestones with my tasks',
+                  titleColor: Theme.of(context).customColors().onSurface,
+                  selected: filterController.milestone['My'],
+                  onTap: () => filterController.changeMilestone('My')),
+              _FilterElement(
+                  title: 'No milestone',
+                  titleColor: Theme.of(context).customColors().onSurface,
+                  selected: filterController.milestone['No'],
+                  onTap: () => filterController.changeMilestone('No')),
+              _FilterElement(
+                  title: filterController.milestone['Other'] != ''
+                      ? filterController.milestone['Other']
+                      : 'Other milestones',
+                  selected: filterController.milestone['Other'] != '',
+                  onTap: () => filterController.changeMilestone('Other')),
+            ]),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -31,37 +31,26 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/data/api/user_api.dart';
+import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-class TasksSortController extends GetxController {
-  var currentSort = 'Deadline'.obs;
-  var currentSortOrder = 'ascending'.obs;
+class UserService {
+  final UserApi _api = locator<UserApi>();
 
-  final _taskController = Get.find<TasksController>();
+  var portalTask = PortalTask().obs;
 
-  Future<void> sortTasks(String newSort) async {
-    if (newSort == currentSort.value) {
-      if (currentSortOrder.value == 'ascending') {
-        currentSortOrder.value = 'descending';
-      } else {
-        currentSortOrder.value = 'ascending';
-      }
+  Future getAllProfiles() async {
+    var profiles = await _api.getAllProfiles();
+
+    var success = profiles.response != null;
+
+    if (success) {
+      return profiles.response;
     } else {
-      currentSort.value = newSort;
-      currentSortOrder.value == 'ascending';
+      ErrorDialog.show(profiles.error);
+      return null;
     }
-
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
   }
 }

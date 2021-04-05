@@ -41,6 +41,7 @@ class SvgIcons {
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
+  static const String down_arrow = 'lib/assets/images/icons/down_arrow.svg';
   static const String high_priority =
       'lib/assets/images/icons/high_priority.svg';
   static const String lock = 'lib/assets/images/icons/lock.svg';
@@ -53,6 +54,7 @@ class SvgIcons {
       'lib/assets/images/icons/sorting_3_descend.svg';
   static const String subtasks = 'lib/assets/images/icons/subtasks.svg';
   static const String tasklist = 'lib/assets/images/icons/tasklist.svg';
+  static const String up_arrow = 'lib/assets/images/icons/up_arrow.svg';
 
   static const String due_date =
       'lib/assets/images/icons/task_detailed/due_date.svg';

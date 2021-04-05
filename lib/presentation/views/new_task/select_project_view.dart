@@ -30,38 +30,30 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/views/new_task/styled_app_bar.dart';
 
-class TasksSortController extends GetxController {
-  var currentSort = 'Deadline'.obs;
-  var currentSortOrder = 'ascending'.obs;
+class SelectProjectView extends StatelessWidget {
+  const SelectProjectView({Key key}) : super(key: key);
 
-  final _taskController = Get.find<TasksController>();
-
-  Future<void> sortTasks(String newSort) async {
-    if (newSort == currentSort.value) {
-      if (currentSortOrder.value == 'ascending') {
-        currentSortOrder.value = 'descending';
-      } else {
-        currentSortOrder.value = 'ascending';
-      }
-    } else {
-      currentSort.value = newSort;
-      currentSortOrder.value == 'ascending';
-    }
-
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      // child: child,
+      appBar: StyledAppBar(),
+      body: ListView.builder(
+        itemCount: 3,
+        itemBuilder: (context, index) {
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            decoration: BoxDecoration(
+                border: Border(
+              bottom: BorderSide(),
+            )),
+          );
+        },
+      ),
+    );
   }
 }

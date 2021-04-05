@@ -31,37 +31,21 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/data/services/user_service.dart';
 
-class TasksSortController extends GetxController {
-  var currentSort = 'Deadline'.obs;
-  var currentSortOrder = 'ascending'.obs;
+class UsersController extends GetxController {
+  final _api = locator<UserService>();
 
-  final _taskController = Get.find<TasksController>();
+  var users = <PortalUser>[].obs;
 
-  Future<void> sortTasks(String newSort) async {
-    if (newSort == currentSort.value) {
-      if (currentSortOrder.value == 'ascending') {
-        currentSortOrder.value = 'descending';
-      } else {
-        currentSortOrder.value = 'ascending';
-      }
-    } else {
-      currentSort.value = newSort;
-      currentSortOrder.value == 'ascending';
-    }
+//for shimmer and progress indicator
+  RxBool loaded = false.obs;
 
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
+  Future getAllProfiles({String params}) async {
+    loaded.value = false;
+    users.value = await _api.getAllProfiles();
+    loaded.value = true;
   }
 }

@@ -30,38 +30,36 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'dart:convert';
 
-class TasksSortController extends GetxController {
-  var currentSort = 'Deadline'.obs;
-  var currentSortOrder = 'ascending'.obs;
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
-  final _taskController = Get.find<TasksController>();
+class UserApi {
+  var coreApi = locator<CoreApi>();
 
-  Future<void> sortTasks(String newSort) async {
-    if (newSort == currentSort.value) {
-      if (currentSortOrder.value == 'ascending') {
-        currentSortOrder.value = 'descending';
+  Future<ApiDTO<List<PortalUser>>> getAllProfiles() async {
+    var url = await coreApi.allProfiles();
+
+    var result = ApiDTO<List<PortalUser>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalUser.fromJson(i))
+            .toList();
       } else {
-        currentSortOrder.value = 'ascending';
+        result.error = CustomError.fromJson(responseJson['error']);
       }
-    } else {
-      currentSort.value = newSort;
-      currentSortOrder.value == 'ascending';
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
     }
 
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
+    return result;
   }
 }

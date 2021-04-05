@@ -30,38 +30,44 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+part of '../tasks_filter.dart';
 
-class TasksSortController extends GetxController {
-  var currentSort = 'Deadline'.obs;
-  var currentSortOrder = 'ascending'.obs;
+class _Creator extends StatelessWidget {
+  const _Creator({Key key}) : super(key: key);
 
-  final _taskController = Get.find<TasksController>();
-
-  Future<void> sortTasks(String newSort) async {
-    if (newSort == currentSort.value) {
-      if (currentSortOrder.value == 'ascending') {
-        currentSortOrder.value = 'descending';
-      } else {
-        currentSortOrder.value = 'ascending';
-      }
-    } else {
-      currentSort.value = newSort;
-      currentSortOrder.value == 'ascending';
-    }
-
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<TaskFilterController>();
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const _FilterLabel(label: 'Creator'),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Wrap(runSpacing: 16, spacing: 16, children: [
+              _FilterElement(
+                  title: 'Me',
+                  titleColor: Theme.of(context).customColors().onSurface,
+                  selected: filterController.creator['Me'],
+                  onTap: () => filterController.changeCreator('Me')),
+              _FilterElement(
+                title: filterController.creator['Other'] != ''
+                    ? filterController.creator['Other']
+                    : 'Other user',
+                selected: filterController.creator['Other'] != '',
+                cancelButton: true,
+                onTap: () async {
+                  var newUser = await Get.bottomSheet(SelectUser());
+                  filterController.changeCreator('Other', newUser);
+                },
+                onCancelTap: () =>
+                    filterController.changeCreator('Other', null),
+              ),
+            ]),
+          ),
+        ],
+      ),
+    );
   }
 }
