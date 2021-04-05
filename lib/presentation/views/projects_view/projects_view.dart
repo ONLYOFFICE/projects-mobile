@@ -4,6 +4,7 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -14,6 +15,12 @@ class ProjectsView extends StatelessWidget {
     controller.setupProjects();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
+      floatingActionButton: StyledFloatingActionButton(
+        onPressed: () {
+          controller.createNewProject();
+        },
+        child: Icon(Icons.add_rounded),
+      ),
       body: Obx(
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,

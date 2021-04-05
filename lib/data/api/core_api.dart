@@ -46,7 +46,10 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project/status';
 
   Future<String> updateTaskStatusUrl({int taskId}) async =>
-      '${await getPortalURI()}/api/2.0/project/task/$taskId/status';
+      '${await getPortalURI()}/api/$version/project/task/$taskId/status';
+
+  Future<String> createProjectUrl() async =>
+      '${await getPortalURI()}/api/$version/project';
 
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();

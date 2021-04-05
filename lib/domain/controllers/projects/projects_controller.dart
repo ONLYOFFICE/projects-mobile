@@ -82,4 +82,8 @@ class ProjectsController extends BaseController {
       },
     );
   }
+
+  void createNewProject() {
+    Get.toNamed('NewProject');
+  }
 }
