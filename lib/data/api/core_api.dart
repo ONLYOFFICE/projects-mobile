@@ -21,6 +21,9 @@ class CoreApi {
   String capabilitiesUrl(String portalName) =>
       'https://$portalName/api/$version/capabilities';
 
+  Future<String> allProfiles() async =>
+      '${await getPortalURI()}/api/2.0/people';
+
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
 

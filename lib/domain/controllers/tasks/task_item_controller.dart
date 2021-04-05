@@ -67,7 +67,7 @@ class TaskItemController extends GetxController {
 }
 
 class TaskItemService {
-  final TasksApi _api = locator<TasksApi>();
+  final TaskApi _api = locator<TaskApi>();
 
   var portalTask = PortalTask().obs;
 

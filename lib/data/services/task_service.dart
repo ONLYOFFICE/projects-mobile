@@ -4,8 +4,8 @@ import 'package:projects/data/models/from_api/task.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
-class TasksService {
-  final TasksApi _api = locator<TasksApi>();
+class TaskService {
+  final TaskApi _api = locator<TaskApi>();
 
   var portalTask = PortalTask().obs;
 
@@ -22,8 +22,8 @@ class TasksService {
     }
   }
 
-  Future getTasks({filter = ''}) async {
-    var tasks = await _api.getTasks(filter: filter);
+  Future getTasks({params = ''}) async {
+    var tasks = await _api.getTasks(params: params);
 
     var success = tasks.response != null;
 

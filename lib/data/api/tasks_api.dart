@@ -7,7 +7,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
-class TasksApi {
+class TaskApi {
   var coreApi = locator<CoreApi>();
 
   Future<ApiDTO> getTaskByID({int id}) async {
@@ -30,8 +30,11 @@ class TasksApi {
     return result;
   }
 
-  Future<ApiDTO<List<PortalTask>>> getTasks({filter = ''}) async {
-    var url = await coreApi.tasksByFilterUrl(filter);
+  Future<ApiDTO<List<PortalTask>>> getTasks(
+      {params = '&sortBy=Deadline&sortOrder=descending'}) async {
+    var url = await coreApi.tasksByFilterUrl(params);
+
+    print(url);
 
     var result = ApiDTO<List<PortalTask>>();
     try {
