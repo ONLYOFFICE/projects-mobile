@@ -36,7 +36,7 @@ import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
@@ -134,33 +134,18 @@ class ProjectApi {
     return result;
   }
 
-//   GET api/2.0/project/task/filter
-// ?projectid=1234
-// &tag=1234
-// &departament=9924256A-739C-462b-AF15-E652A3B1B6EB
-// &creator=9924256A-739C-462b-AF15-E652A3B1B6EB
-// &deadlineStart=2008-04-10T06-30-00.000Z
-// &deadlineStop=2008-04-10T06-30-00.000Z
-// &lastId=1234
-// &myProjects=True
-// &myMilestones=True
-// &nomilestone=True
-// &follow=True
-// Host: yourportal.onlyoffice.com
-// Content-Type: application/json
-// Accept: application/json
-  Future<ApiDTO<List<PortalTask>>> getTasksByFilter(
-      {String participant}) async {
-    var url = await coreApi.tasksByFilterUrl('&participant=$participant');
-    var result = ApiDTO<List<PortalTask>>();
+  Future<ApiDTO<ProjectDetailed>> createProject({NewProjectDTO project}) async {
+    var url = await coreApi.createProjectUrl();
+
+    var result = ApiDTO<ProjectDetailed>();
+    var body = jsonEncode(project.toJson());
+
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await coreApi.postRequest(url, body);
       final responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        result.response = (responseJson['response'] as List)
-            .map((i) => PortalTask.fromJson(i))
-            .toList();
+        result.response = ProjectDetailed.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

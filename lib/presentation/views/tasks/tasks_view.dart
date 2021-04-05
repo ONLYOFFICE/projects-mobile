@@ -46,7 +46,7 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
-    var controller = Get.put(TasksController());
+    var controller = Get.find<TasksController>();
     controller.getTasks();
 
     return Scaffold(

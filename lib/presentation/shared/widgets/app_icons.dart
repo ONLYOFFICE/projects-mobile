@@ -73,6 +73,9 @@ class SvgIcons {
       'lib/assets/images/icons/project_statuses/closed.svg';
   static const String paused =
       'lib/assets/images/icons/project_statuses/paused.svg';
+
+  static const String user = 'lib/assets/images/icons/user.svg';
+  static const String users = 'lib/assets/images/icons/users.svg';
 }
 
 class PngIcons {

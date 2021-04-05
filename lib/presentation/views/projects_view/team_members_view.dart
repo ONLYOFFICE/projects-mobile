@@ -32,50 +32,36 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
-import 'package:projects/presentation/shared/widgets/header_widget.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/domain/controllers/projects/new_project_controller.dart';
+import 'package:projects/presentation/views/projects_view/search_appbar.dart';
+import 'package:projects/presentation/views/projects_view/widgets/header.dart';
 
-class ProjectsView extends StatelessWidget {
+class TeamMembersSelectionView extends StatelessWidget {
+  const TeamMembersSelectionView({
+    Key key,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(ProjectsController());
-    controller.setupProjects();
+    var controller = Get.find<NewProjectController>();
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () {
-          controller.createNewProject();
-        },
-        child: Icon(Icons.add_rounded),
+      appBar: SearchAppBar(
+        title: CustomHeader(
+          function: controller.confirmDescription,
+          title: 'Select project manager',
+        ),
       ),
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            HeaderWidget(controller: controller),
-            if (controller.loaded.isFalse) ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
-              Expanded(
-                child: SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: controller.pullUpEnabled,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectCell(item: controller.projects[i]),
-                    itemExtent: 100.0,
-                    itemCount: controller.projects.length,
-                  ),
-                ),
-              ),
-          ],
+      body: Padding(
+        padding: EdgeInsets.all(12.0),
+        child: TextField(
+          maxLines: null,
+          keyboardType: TextInputType.multiline,
+          controller: controller.descriptionController,
+          decoration:
+              InputDecoration.collapsed(hintText: 'Enter your text here'),
         ),
       ),
     );

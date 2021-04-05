@@ -37,8 +37,12 @@ import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/views/projects_view/descriprion_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project_view.dart';
+import 'package:projects/presentation/views/projects_view/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
+import 'package:projects/presentation/views/projects_view/team_members_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 List<GetPage> getxPages() => [
@@ -51,4 +55,13 @@ List<GetPage> getxPages() => [
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(name: 'NewTaskView', page: () => NewTaskView()),
       GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
+      GetPage(name: 'NewProject', page: () => NewProject()),
+      GetPage(
+          name: 'NewProjectDescription', page: () => NewProjectDescription()),
+      GetPage(
+          name: 'ProjectManagerSelectionView',
+          page: () => ProjectManagerSelectionView()),
+      GetPage(
+          name: 'TeamMembersSelectionView',
+          page: () => TeamMembersSelectionView()),
     ];
