@@ -122,4 +122,8 @@ class ProjectsController extends BaseController {
     tags.value = await _api.getProjectTags();
     loaded.value = true;
   }
+
+  void createNewProject() {
+    Get.toNamed('NewProject');
+  }
 }

@@ -38,7 +38,7 @@ import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -112,15 +112,15 @@ class ProjectService {
     }
   }
 
-  Future<List<PortalTask>> getTasksByParams({String participant = ''}) async {
-    var projects = await _api.getTasksByFilter(participant: participant);
+  Future<ProjectDetailed> createProject({NewProjectDTO project}) async {
+    var result = await _api.createProject();
 
-    var success = projects.response != null;
+    var success = result.response != null;
 
     if (success) {
-      return projects.response;
+      return result.response;
     } else {
-      ErrorDialog.show(projects.error);
+      ErrorDialog.show(result.error);
       return null;
     }
   }

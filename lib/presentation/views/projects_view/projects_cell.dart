@@ -42,6 +42,8 @@ import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
+import 'package:projects/presentation/shared/custom_theme.dart';
+
 class ProjectCell extends StatelessWidget {
   final Item item;
   const ProjectCell({this.item});
@@ -107,33 +109,61 @@ class ProjectIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 72,
-      padding: const EdgeInsets.all(16),
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
-          AppIcon(
-            icon: SvgIcons.back_round,
-            // color: const Color(0xff666666),
-            width: 40,
-            height: 40,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(width: 16),
+        Container(
+          width: 48,
+          child: Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color:
+                      Theme.of(context).customColors().primary.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: Theme.of(context)
+                          .customColors()
+                          .primary
+                          .withOpacity(0.1),
+                    ),
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(4),
+                    child: AppIcon(
+                      icon: SvgIcons.project_icon,
+                      color: const Color(0xff666666),
+                      width: 12,
+                      height: 12,
+                    ),
+                  ),
+                ),
+              ),
+              AppIcon(
+                  icon: itemController.statusImage,
+                  color: const Color(0xff666666)),
+            ],
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: AppIcon(
-              icon: SvgIcons.project_icon,
-              // color: const Color(0xff666666),
-              width: 16,
-              height: 16,
-            ),
-          ),
-          AppIcon(
-              icon: itemController.statusImage, color: const Color(0xff666666)),
-        ],
-      ),
+        ),
+        const SizedBox(width: 16),
+      ],
     );
   }
 }

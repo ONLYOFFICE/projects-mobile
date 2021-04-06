@@ -46,41 +46,7 @@ class ProjectSearchView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: SearchAppBar(
-        title: SizedBox(
-          height: 50,
-          child: Container(
-            child: Material(
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      textInputAction: TextInputAction.search,
-                      controller: controller.searchInputController,
-                      decoration: InputDecoration.collapsed(
-                        hintText: 'Enter your query',
-                      ),
-                      onSubmitted: (value) {
-                        controller.newSearch(value);
-                      },
-                      // onChanged: (value) {
-                      //   controller.performSearch(value);
-                      // },
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      controller.clearSearch();
-                    },
-                    child: Icon(
-                      Icons.close,
-                      color: Colors.blue,
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-        ),
+        title: SearchHeader(controller: controller),
       ),
       body: Obx(
         () => Column(
@@ -116,6 +82,54 @@ class ProjectSearchView extends StatelessWidget {
                 ),
               ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SearchHeader extends StatelessWidget {
+  const SearchHeader({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final ProjectSearchController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 50,
+      child: Container(
+        child: Material(
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  textInputAction: TextInputAction.search,
+                  controller: controller.searchInputController,
+                  decoration: InputDecoration.collapsed(
+                    hintText: 'Enter your query',
+                  ),
+                  onSubmitted: (value) {
+                    controller.newSearch(value);
+                  },
+                  // onChanged: (value) {
+                  //   controller.performSearch(value);
+                  // },
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  controller.clearSearch();
+                },
+                child: Icon(
+                  Icons.close,
+                  color: Colors.blue,
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
