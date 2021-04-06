@@ -53,21 +53,31 @@ class _Responsible extends StatelessWidget {
                   selected: filterController.responsible['Me'],
                   onTap: () => filterController.changeResponsible('Me')),
               _FilterElement(
-                  title: filterController.responsible['Other'] != ''
-                      ? filterController.responsible['Other']
-                      : 'Other user',
-                  selected: filterController.responsible['Other'] != '',
+                  title: filterController.responsible['Other'].isEmpty
+                      ? 'Other user'
+                      : filterController.responsible['Other'],
+                  selected: filterController.responsible['Other'].isNotEmpty,
+                  cancelButton:
+                      filterController.responsible['Other'].isNotEmpty,
                   onTap: () async {
                     var newUser = await Get.bottomSheet(SelectUser());
                     filterController.changeResponsible('Other', newUser);
                   },
-                  cancelButton: true,
                   onCancelTap: () =>
                       filterController.changeResponsible('Other', null)),
               _FilterElement(
-                  title: 'Groups',
-                  selected: filterController.responsible['Groups'] != '',
-                  onTap: () => filterController.changeResponsible('Groups')),
+                  title: filterController.responsible['Groups'].isEmpty
+                      ? 'Groups'
+                      : filterController.responsible['Groups'],
+                  selected: filterController.responsible['Groups'].isNotEmpty,
+                  cancelButton:
+                      filterController.responsible['Groups'].isNotEmpty,
+                  onTap: () async {
+                    var newGroup = await Get.bottomSheet(SelectGroup());
+                    filterController.changeResponsible('Groups', newGroup);
+                  },
+                  onCancelTap: () =>
+                      filterController.changeResponsible('Groups', null)),
               _FilterElement(
                   title: 'No responsible',
                   titleColor: Theme.of(context).customColors().onSurface,

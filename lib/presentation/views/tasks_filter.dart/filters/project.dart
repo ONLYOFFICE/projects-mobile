@@ -52,11 +52,11 @@ class _Project extends StatelessWidget {
                   selected: filterController.project['My'],
                   onTap: () => filterController.changeProject('My')),
               _FilterElement(
-                  title: filterController.project['Other'] == ''
+                  title: filterController.project['Other'].isEmpty
                       ? 'Other projects'
                       : filterController.project['Other'],
-                  selected: filterController.project['Other'] != '',
-                  cancelButton: filterController.project['Other'] != '',
+                  selected: filterController.project['Other'].isNotEmpty,
+                  cancelButton: filterController.project['Other'].isNotEmpty,
                   onTap: () async {
                     var selectedProject =
                         await Get.bottomSheet(SelectProject());
@@ -67,7 +67,10 @@ class _Project extends StatelessWidget {
               _FilterElement(
                   title: 'With tag',
                   selected: filterController.project['With tag'],
-                  onTap: () => filterController.changeProject('With tag')),
+                  onTap: () async {
+                    var selectedTag = await Get.bottomSheet(SelectTag());
+                    filterController.changeProject('With tag', selectedTag);
+                  }),
               _FilterElement(
                   title: 'Without tag',
                   selected: filterController.project['Without tag'],

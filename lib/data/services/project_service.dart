@@ -36,6 +36,7 @@ import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/task.dart';
 import 'package:projects/domain/dialogs.dart';
@@ -68,6 +69,19 @@ class ProjectService {
       return projects;
     } else {
       ErrorDialog.show(projects.error);
+      return null;
+    }
+  }
+
+  Future<List<ProjectTag>> getProjectTags() async {
+    var tags = await _api.getProjectTags();
+
+    var success = tags.response != null;
+
+    if (success) {
+      return tags.response;
+    } else {
+      ErrorDialog.show(tags.error);
       return null;
     }
   }

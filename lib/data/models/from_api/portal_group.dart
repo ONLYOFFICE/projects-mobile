@@ -30,21 +30,26 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/user_service.dart';
+class PortalGroup {
+  PortalGroup({
+    this.id,
+    this.name,
+    this.manager,
+  });
 
-class UsersController extends GetxController {
-  final _api = locator<UserService>();
+  String id;
+  String name;
+  String manager;
 
-  var users = <PortalUser>[].obs;
+  factory PortalGroup.fromJson(Map<String, dynamic> json) => PortalGroup(
+        id: json['id'],
+        name: json['name'],
+        manager: json['manager'],
+      );
 
-  RxBool loaded = false.obs;
-
-  Future getAllProfiles({String params}) async {
-    loaded.value = false;
-    users.value = await _api.getAllProfiles();
-    loaded.value = true;
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'manager': manager,
+      };
 }

@@ -53,8 +53,11 @@ class CoreApi {
   String capabilitiesUrl(String portalName) =>
       'https://$portalName/api/$version/capabilities';
 
+  Future<String> allGroups() async =>
+      '${await getPortalURI()}/api/$version/group';
+
   Future<String> allProfiles() async =>
-      '${await getPortalURI()}/api/2.0/people';
+      '${await getPortalURI()}/api/$version/people';
 
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
@@ -74,6 +77,9 @@ class CoreApi {
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/$version/project';
 
+  Future<String> projectTags() async =>
+      '${await getPortalURI()}/api/$version/project/tag';
+
   Future<String> selfInfoUrl() async =>
       '${await getPortalURI()}/api/$version/people/@self';
 
@@ -81,7 +87,7 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project/status';
 
   Future<String> updateTaskStatusUrl({int taskId}) async =>
-      '${await getPortalURI()}/api/2.0/project/task/$taskId/status';
+      '${await getPortalURI()}/api/$version/project/task/$taskId/status';
 
   Future<http.Response> getRequest(String url) async {
     var headers = await getHeaders();

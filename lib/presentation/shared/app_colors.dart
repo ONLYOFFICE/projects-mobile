@@ -50,6 +50,7 @@ class AppColors {
   final Color primarySurface;
   final Color projectsSubtitle;
   final Color systemBlue;
+  final Color surface;
   final Color tabActive;
   final Color tabSecondary;
   final Color tabbarBackground;
@@ -70,6 +71,7 @@ class AppColors {
     @required this.primarySurface,
     @required this.projectsSubtitle,
     @required this.systemBlue,
+    @required this.surface,
     @required this.tabActive,
     @required this.tabSecondary,
     @required this.tabbarBackground,

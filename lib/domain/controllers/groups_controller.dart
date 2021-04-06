@@ -31,20 +31,21 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/portal_group.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/user_service.dart';
+import 'package:projects/data/services/group_service.dart';
 
-class UsersController extends GetxController {
-  final _api = locator<UserService>();
+class GroupsController extends GetxController {
+  final _api = locator<GroupService>();
 
-  var users = <PortalUser>[].obs;
+  RxList<PortalGroup> groups = <PortalGroup>[].obs;
 
+//for shimmer and progress indicator
   RxBool loaded = false.obs;
 
-  Future getAllProfiles({String params}) async {
+  Future getAllGroups() async {
     loaded.value = false;
-    users.value = await _api.getAllProfiles();
+    groups.value = await _api.getAllGroups();
     loaded.value = true;
   }
 }

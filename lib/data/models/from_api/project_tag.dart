@@ -30,21 +30,30 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/user_service.dart';
+class ProjectTag {
+  final int id;
+  String title;
+  String description;
+  int status;
 
-class UsersController extends GetxController {
-  final _api = locator<UserService>();
+  ProjectTag({
+    this.id,
+    this.title,
+    this.description,
+    this.status,
+  });
 
-  var users = <PortalUser>[].obs;
+  factory ProjectTag.fromJson(Map<String, dynamic> json) => ProjectTag(
+        id: json['id'],
+        title: json['title'],
+        description: json['description'],
+        status: json['status'],
+      );
 
-  RxBool loaded = false.obs;
-
-  Future getAllProfiles({String params}) async {
-    loaded.value = false;
-    users.value = await _api.getAllProfiles();
-    loaded.value = true;
-  }
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'title': title,
+        'description': description,
+        'status': status,
+      };
 }

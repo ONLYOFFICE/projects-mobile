@@ -33,7 +33,6 @@
 import 'package:get/get.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskFilterController extends GetxController {
@@ -92,10 +91,13 @@ class TaskFilterController extends GetxController {
         responsible['Me'] = false;
         responsible['Other'] = '';
         responsible['No'] = false;
+        print('dsadsa'.isEmpty.toString() + 'dsadsa isEmpty');
+        print(''.isEmpty.toString() + ' isEmpty');
+        print(' '.isEmpty.toString() + '  isEmpty');
         if (newValue == null) {
           responsible['Groups'] = '';
         } else {
-          responsible['Groups'] = 'Some Groups';
+          responsible['Groups'] = newValue['name'];
         }
         break;
       case 'No':

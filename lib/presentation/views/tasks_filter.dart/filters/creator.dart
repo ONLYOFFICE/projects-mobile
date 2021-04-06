@@ -52,11 +52,11 @@ class _Creator extends StatelessWidget {
                   selected: filterController.creator['Me'],
                   onTap: () => filterController.changeCreator('Me')),
               _FilterElement(
-                title: filterController.creator['Other'] != ''
-                    ? filterController.creator['Other']
-                    : 'Other user',
-                selected: filterController.creator['Other'] != '',
-                cancelButton: true,
+                title: filterController.creator['Other'].isEmpty
+                    ? 'Other user'
+                    : filterController.creator['Other'],
+                selected: filterController.creator['Other'].isNotEmpty,
+                cancelButton: filterController.creator['Other'].isNotEmpty,
                 onTap: () async {
                   var newUser = await Get.bottomSheet(SelectUser());
                   filterController.changeCreator('Other', newUser);

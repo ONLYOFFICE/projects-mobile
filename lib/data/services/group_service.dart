@@ -30,21 +30,23 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/user_service.dart';
+import 'package:projects/data/api/group_api.dart';
 
-class UsersController extends GetxController {
-  final _api = locator<UserService>();
+class GroupService {
+  final GroupApi _api = locator<GroupApi>();
 
-  var users = <PortalUser>[].obs;
+  Future getAllGroups() async {
+    var groups = await _api.getAllGroups();
 
-  RxBool loaded = false.obs;
+    var success = groups.response != null;
 
-  Future getAllProfiles({String params}) async {
-    loaded.value = false;
-    users.value = await _api.getAllProfiles();
-    loaded.value = true;
+    if (success) {
+      return groups.response;
+    } else {
+      ErrorDialog.show(groups.error);
+      return null;
+    }
   }
 }
