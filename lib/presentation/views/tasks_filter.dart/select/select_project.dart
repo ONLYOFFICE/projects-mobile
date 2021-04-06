@@ -35,7 +35,7 @@ class SelectProject extends StatelessWidget {
               ],
             ),
           ),
-          Divider(),
+          Divider(height: 1),
           Obx(
             () {
               if (_projectsController.loaded.isTrue) {

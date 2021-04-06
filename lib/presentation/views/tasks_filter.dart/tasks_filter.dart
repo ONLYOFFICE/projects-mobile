@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/select_project.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/select_user.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/select/select_group.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/select/select_project.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/select/select_tag.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/select/select_user.dart';
 
 part 'filter_label.dart';
 part 'filter_element.dart';
@@ -19,8 +21,8 @@ class TasksFilter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var filterController = Get.find<TaskFilterController>();
-
     return Container(
+      height: Get.height - 40,
       decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
         borderRadius: BorderRadius.only(
@@ -80,39 +82,56 @@ class TasksFilter extends StatelessWidget {
                                       .systemBlue)))
                     ])),
             const Divider(height: 18),
-            const _Responsible(),
-            const _Creator(),
-            const _Project(),
-            const _Milestone(),
-            if (filterController.suitableTasksCount.value != -1)
-              Center(
-                child: TextButton(
-                  onPressed: () async {
-                    filterController.filter();
-                    Get.back();
-                  },
-                  style: ButtonStyle(
-                      padding:
-                          MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                              (_) => EdgeInsets.only(
-                                  left: Get.width * 0.243,
-                                  right: Get.width * 0.243,
-                                  top: 10,
-                                  bottom: 12)),
-                      backgroundColor:
-                          MaterialStateProperty.resolveWith<Color>((_) {
-                        return Theme.of(context).customColors().primary;
-                      }),
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)))),
-                  child: Text(
-                      'SHOW ${filterController.suitableTasksCount.value} TASK',
-                      style: TextStyleHelper.button(
-                          color: Theme.of(context).customColors().onPrimary)),
-                ),
+            Expanded(
+              child: Stack(
+                children: [
+                  ListView(
+                    children: [
+                      const _Responsible(),
+                      const _Creator(),
+                      const _Project(),
+                      const _Milestone(),
+                      const SizedBox(height: 40)
+                    ],
+                  ),
+                  if (filterController.suitableTasksCount.value != -1)
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.only(bottom: 32),
+                        child: TextButton(
+                          onPressed: () async {
+                            filterController.filter();
+                            Get.back();
+                          },
+                          style: ButtonStyle(
+                              padding: MaterialStateProperty.resolveWith<
+                                      EdgeInsetsGeometry>(
+                                  (_) => EdgeInsets.only(
+                                      left: Get.width * 0.243,
+                                      right: Get.width * 0.243,
+                                      top: 10,
+                                      bottom: 12)),
+                              backgroundColor:
+                                  MaterialStateProperty.resolveWith<Color>((_) {
+                                return Theme.of(context).customColors().primary;
+                              }),
+                              shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(6)))),
+                          child: Text(
+                              'SHOW ${filterController.suitableTasksCount.value} TASK',
+                              style: TextStyleHelper.button(
+                                  color: Theme.of(context)
+                                      .customColors()
+                                      .onPrimary)),
+                        ),
+                      ),
+                    ),
+                ],
               ),
-            const SizedBox(height: 40)
+            ),
           ],
         ),
       ),

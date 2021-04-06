@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/task.dart';
 import 'package:projects/internal/locator.dart';
@@ -91,6 +92,27 @@ class ProjectApi {
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)
             .map((i) => Status.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<List<ProjectTag>>> getProjectTags() async {
+    var url = await coreApi.projectTags();
+    var result = ApiDTO<List<ProjectTag>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => ProjectTag.fromJson(i))
             .toList();
       } else {
         result.error = CustomError.fromJson(responseJson['error']);

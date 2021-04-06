@@ -25,10 +25,10 @@ class _Milestone extends StatelessWidget {
                   selected: filterController.milestone['No'],
                   onTap: () => filterController.changeMilestone('No')),
               _FilterElement(
-                  title: filterController.milestone['Other'] != ''
-                      ? filterController.milestone['Other']
-                      : 'Other milestones',
-                  selected: filterController.milestone['Other'] != '',
+                  title: filterController.milestone['Other'].isEmpty
+                      ? 'Other milestones'
+                      : filterController.milestone['Other'],
+                  selected: filterController.milestone['Other'].isNotEmpty,
                   onTap: () => filterController.changeMilestone('Other')),
             ]),
           ),

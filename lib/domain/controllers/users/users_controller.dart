@@ -8,7 +8,6 @@ class UsersController extends GetxController {
 
   var users = <PortalUser>[].obs;
 
-//for shimmer and progress indicator
   RxBool loaded = false.obs;
 
   Future getAllProfiles({String params}) async {

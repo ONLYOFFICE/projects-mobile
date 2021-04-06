@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -11,6 +12,7 @@ class ProjectsController extends BaseController {
 
   var loaded = false.obs;
   List<Status> statuses;
+  RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   var startIndex = 0;
 
@@ -81,5 +83,11 @@ class ProjectsController extends BaseController {
         ));
       },
     );
+  }
+
+  Future getProjectTags() async {
+    loaded.value = false;
+    tags.value = await _api.getProjectTags();
+    loaded.value = true;
   }
 }
