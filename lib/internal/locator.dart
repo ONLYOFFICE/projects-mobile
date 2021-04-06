@@ -53,7 +53,7 @@ void setupLocator() {
   Get.lazyPut(() => StatusesController(), fenix: true);
   Get.lazyPut(() => TaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
-  Get.lazyPut(() => TasksController());
+  Get.lazyPut(() => TasksController(), fenix: true);
   Get.lazyPut(() => TasksSortController(), fenix: false);
   Get.lazyPut(() => UserController());
   Get.lazyPut(() => UsersController());
