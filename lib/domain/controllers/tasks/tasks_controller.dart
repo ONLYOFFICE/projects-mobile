@@ -20,9 +20,9 @@ class TasksController extends BaseController {
     refreshController.refreshCompleted();
   }
 
-  Future getTasks({String params}) async {
+  Future getTasks() async {
     loaded.value = false;
-    tasks.value = await _api.getTasks(params: params);
+    tasks.value = await _api.getFilteredAndSortedTasks();
     loaded.value = true;
   }
 

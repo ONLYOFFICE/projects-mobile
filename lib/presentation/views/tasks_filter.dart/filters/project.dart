@@ -33,12 +33,17 @@ class _Project extends StatelessWidget {
                   onCancelTap: () =>
                       filterController.changeProject('Other', null)),
               _FilterElement(
-                  title: 'With tag',
-                  selected: filterController.project['With tag'],
+                  title: filterController.project['With tag'].isEmpty
+                      ? 'With tag'
+                      : filterController.project['With tag'],
+                  selected: filterController.project['With tag'].isNotEmpty,
+                  cancelButton: filterController.project['With tag'].isNotEmpty,
                   onTap: () async {
                     var selectedTag = await Get.bottomSheet(SelectTag());
                     filterController.changeProject('With tag', selectedTag);
-                  }),
+                  },
+                  onCancelTap: () =>
+                      filterController.changeProject('With tag', null)),
               _FilterElement(
                   title: 'Without tag',
                   selected: filterController.project['Without tag'],

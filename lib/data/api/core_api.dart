@@ -30,6 +30,9 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
 
+  Future<String> milestonesByFilter() async =>
+      '${await getPortalURI()}/api/$version/project/milestone/filter';
+
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/$version/authentication/$code';
 
@@ -61,6 +64,7 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project';
 
   Future<http.Response> getRequest(String url) async {
+    print(url);
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);
     final response = await request;

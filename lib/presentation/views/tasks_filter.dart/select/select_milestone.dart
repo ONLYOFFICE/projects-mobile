@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+
+class SelectMilestone extends StatelessWidget {
+  final selectedId;
+  const SelectMilestone({
+    Key key,
+    this.selectedId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var _milestoneController = Get.find<MilestonesController>();
+
+    _milestoneController.getMilestonesByFilter();
+
+    return StyledButtomSheet(
+      content: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Select milestone', style: TextStyleHelper.h6()),
+                IconButton(
+                  icon: Icon(Icons.search),
+                  onPressed: () => print(''),
+                )
+              ],
+            ),
+          ),
+          Divider(height: 1),
+          Obx(
+            () {
+              if (_milestoneController.loaded.isTrue) {
+                return Expanded(
+                  child: ListView.separated(
+                    itemCount: _milestoneController.milestones.length,
+                    padding: const EdgeInsets.only(bottom: 16),
+                    separatorBuilder: (BuildContext context, int index) {
+                      return Divider();
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      return Material(
+                        child: InkWell(
+                          onTap: () => Get.back(result: {
+                            'id': _milestoneController.milestones[index].id,
+                            'title':
+                                _milestoneController.milestones[index].title
+                          }),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        _milestoneController
+                                            .milestones[index].title,
+                                        style: TextStyleHelper.projectTitle,
+                                      ),
+                                      Text(
+                                          _milestoneController.milestones[index]
+                                              .responsible.displayName,
+                                          style: TextStyleHelper.caption(
+                                                  color: Theme.of(context)
+                                                      .customColors()
+                                                      .onSurface
+                                                      .withOpacity(0.6))
+                                              .copyWith(height: 1.667)),
+                                    ],
+                                  ),
+                                ),
+                                // Icon(Icons.check_rounded)
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              } else {
+                return ListLoadingSkeleton();
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
