@@ -30,37 +30,36 @@
  *
  */
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/task.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+import 'dart:convert';
+
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
-class TasksController extends BaseController {
-  final _api = locator<TaskService>();
+class MilestoneApi {
+  var coreApi = locator<CoreApi>();
 
-  var tasks = <PortalTask>[].obs;
+  Future<ApiDTO<List<Milestone>>> milestonesByFilter() async {
+    var url = await coreApi.milestonesByFilter();
 
-  var refreshController = RefreshController(initialRefresh: false);
+    var result = ApiDTO<List<Milestone>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
 
-//for shimmer and progress indicator
-  RxBool loaded = false.obs;
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => Milestone.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
 
-  void onRefresh() async {
-    await getTasks();
-    refreshController.refreshCompleted();
+    return result;
   }
-
-  Future getTasks() async {
-    loaded.value = false;
-    tasks.value = await _api.getFilteredAndSortedTasks();
-    loaded.value = true;
-  }
-
-  @override
-  String get screenName => 'Tasks';
-
-  @override
-  RxList get itemList => tasks;
 }

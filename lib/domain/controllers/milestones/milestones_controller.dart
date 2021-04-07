@@ -31,36 +31,20 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/task.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/milestone_service.dart';
 
-class TasksController extends BaseController {
-  final _api = locator<TaskService>();
+class MilestonesController extends GetxController {
+  final _api = locator<MilestoneService>();
 
-  var tasks = <PortalTask>[].obs;
+  var milestones = <Milestone>[].obs;
 
-  var refreshController = RefreshController(initialRefresh: false);
-
-//for shimmer and progress indicator
   RxBool loaded = false.obs;
 
-  void onRefresh() async {
-    await getTasks();
-    refreshController.refreshCompleted();
-  }
-
-  Future getTasks() async {
+  Future getMilestonesByFilter() async {
     loaded.value = false;
-    tasks.value = await _api.getFilteredAndSortedTasks();
+    milestones.value = await _api.milestonesByFilter();
     loaded.value = true;
   }
-
-  @override
-  String get screenName => 'Tasks';
-
-  @override
-  RxList get itemList => tasks;
 }

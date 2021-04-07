@@ -31,15 +31,12 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
 class TasksSortController extends GetxController {
   var currentSort = 'Deadline'.obs;
   var currentSortOrder = 'ascending'.obs;
 
-  final _taskController = Get.find<TasksController>();
-
-  Future<void> sortTasks(String newSort) async {
+  Future<void> changeSort(String newSort) async {
     if (newSort == currentSort.value) {
       if (currentSortOrder.value == 'ascending') {
         currentSortOrder.value = 'descending';
@@ -50,18 +47,17 @@ class TasksSortController extends GetxController {
       currentSort.value = newSort;
       currentSortOrder.value == 'ascending';
     }
-
-    var toFilters = {
-      'Deadline': 'deadline',
-      'Priority': 'priority',
-      'Creation date': 'create_on',
-      'Start date': 'start_date',
-      'Title': 'title',
-      'Order': 'sort_order',
-    };
-
-    var params =
-        '&sortBy=${toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
-    await _taskController.getTasks(params: params);
   }
+
+  String get sort =>
+      '&sortBy=${_toFilters[currentSort.value]}&sortOrder=${currentSortOrder.value}';
 }
+
+const _toFilters = {
+  'Deadline': 'deadline',
+  'Priority': 'priority',
+  'Creation date': 'create_on',
+  'Start date': 'start_date',
+  'Title': 'title',
+  'Order': 'sort_order',
+};

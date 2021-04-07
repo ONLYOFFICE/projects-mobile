@@ -61,7 +61,13 @@ class _Milestone extends StatelessWidget {
                       ? 'Other milestones'
                       : filterController.milestone['Other'],
                   selected: filterController.milestone['Other'].isNotEmpty,
-                  onTap: () => filterController.changeMilestone('Other')),
+                  onTap: () async {
+                    var milestone = await Get.bottomSheet(SelectMilestone());
+                    filterController.changeMilestone('Other', milestone);
+                  },
+                  cancelButton: filterController.milestone['Other'].isNotEmpty,
+                  onCancelTap: () =>
+                      filterController.changeMilestone('Other', null)),
             ]),
           ),
         ],

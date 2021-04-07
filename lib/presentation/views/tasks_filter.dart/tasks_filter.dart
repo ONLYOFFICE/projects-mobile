@@ -33,9 +33,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/select/select_group.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/select/select_milestone.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/select/select_project.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/select/select_tag.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/select/select_user.dart';
@@ -106,7 +108,12 @@ class TasksFilter extends StatelessWidget {
                         ],
                       ),
                       TextButton(
-                          onPressed: () => print('ok'),
+                          onPressed: () async {
+                            filterController.resetFilters();
+                            var tasksC = Get.find<TasksController>();
+                            tasksC.onRefresh();
+                            Get.back();
+                          },
                           child: Text('RESET',
                               style: TextStyleHelper.button(
                                   color: Theme.of(context)
