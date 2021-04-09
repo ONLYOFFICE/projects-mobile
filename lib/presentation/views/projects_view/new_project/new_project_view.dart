@@ -182,21 +182,21 @@ class ProjectManager extends StatelessWidget {
               children: [
                 SizedBox(height: 10),
                 Obx(
-                  () => controller.projectManager.value != null
+                  () => controller.isPMSelected.isTrue
                       ? Tile(
                           subtitle: controller.managerName.value,
                           closeFunction: controller.removeManager,
                           title: 'Project manager:',
                           iconData: Icons.close,
                         )
-                      : InkWell(
-                          onTap: () {
-                            Get.toNamed('ProjectManagerSelectionView');
-                          },
+                      : Expanded(
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Expanded(
+                              InkWell(
+                                onTap: () {
+                                  Get.toNamed('ProjectManagerSelectionView');
+                                },
                                 child: Text(
                                   'Choose project manager',
                                   style: TextStyleHelper.subtitle1(
@@ -298,12 +298,12 @@ class TeamMembers extends StatelessWidget {
               children: [
                 SizedBox(height: 10),
                 Obx(
-                  () => controller.teamMembers.isNotEmpty
+                  () => controller.selectedTeamMembers.isNotEmpty
                       ? Tile(
                           subtitle: controller.teamMembersTitle,
                           closeFunction: controller.editTeamMember,
                           title: 'Team',
-                          iconData: controller.teamMembers.length >= 2
+                          iconData: controller.selectedTeamMembers.length >= 2
                               ? Icons.navigate_next
                               : Icons.close,
                         )
@@ -526,7 +526,6 @@ class AdvancedOptions extends StatelessWidget {
                         ),
                       ),
                       OptionWithSwitch(
-                        // controller: controller,
                         title: 'Follow this project',
                         switcher: Obx(
                           () => Switch(

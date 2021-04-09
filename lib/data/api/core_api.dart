@@ -64,7 +64,7 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project/task/$taskId/status';
 
   Future<String> createProjectUrl() async =>
-      '${await getPortalURI()}/api/$version/project';
+      '${await getPortalURI()}/api/$version/project/withSecurity';
 
   Future<http.Response> getRequest(String url) async {
     print(url);

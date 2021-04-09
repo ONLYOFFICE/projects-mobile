@@ -124,33 +124,19 @@ class ProjectApi {
     return result;
   }
 
-//   GET api/2.0/project/task/filter
-// ?projectid=1234
-// &tag=1234
-// &departament=9924256A-739C-462b-AF15-E652A3B1B6EB
-// &creator=9924256A-739C-462b-AF15-E652A3B1B6EB
-// &deadlineStart=2008-04-10T06-30-00.000Z
-// &deadlineStop=2008-04-10T06-30-00.000Z
-// &lastId=1234
-// &myProjects=True
-// &myMilestones=True
-// &nomilestone=True
-// &follow=True
-// Host: yourportal.onlyoffice.com
-// Content-Type: application/json
-// Accept: application/json
-  Future<ApiDTO<ProjectDetailed>> createProject({NewProjectDTO project}) async {
+  Future<ApiDTO<Map<String, dynamic>>> createProject(
+      {NewProjectDTO project}) async {
     var url = await coreApi.createProjectUrl();
 
-    var result = ApiDTO<ProjectDetailed>();
+    var result = ApiDTO<Map<String, dynamic>>();
     var body = jsonEncode(project.toJson());
 
     try {
       var response = await coreApi.postRequest(url, body);
       final responseJson = json.decode(response.body);
 
-      if (response.statusCode == 200) {
-        result.response = ProjectDetailed.fromJson(responseJson['response']);
+      if (response.statusCode == 201) {
+        result.response = responseJson['response'];
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

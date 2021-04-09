@@ -1,3 +1,6 @@
+import 'package:projects/data/models/from_api/contact.dart';
+import 'package:projects/data/models/from_api/portal_group.dart';
+
 class SelfUserProfile {
   String id;
   String userName;
@@ -16,8 +19,8 @@ class SelfUserProfile {
   String notes;
   String displayName;
   String title;
-  List<Contacts> contacts;
-  List<Groups> groups;
+  List<Contact> contacts;
+  List<PortalGroup> groups;
   String avatarMedium;
   String avatar;
   bool isAdmin;
@@ -79,15 +82,15 @@ class SelfUserProfile {
     displayName = json['displayName'];
     title = json['title'];
     if (json['contacts'] != null) {
-      contacts = <Contacts>[];
+      contacts = <Contact>[];
       json['contacts'].forEach((v) {
-        contacts.add(Contacts.fromJson(v));
+        contacts.add(Contact.fromJson(v));
       });
     }
     if (json['groups'] != null) {
-      groups = <Groups>[];
+      groups = <PortalGroup>[];
       json['groups'].forEach((v) {
-        groups.add(Groups.fromJson(v));
+        groups.add(PortalGroup.fromJson(v));
       });
     }
     avatarMedium = json['avatarMedium'];
@@ -137,47 +140,6 @@ class SelfUserProfile {
     data['isSSO'] = isSSO;
     data['avatarSmall'] = avatarSmall;
     data['profileUrl'] = profileUrl;
-    return data;
-  }
-}
-
-class Contacts {
-  String type;
-  String value;
-
-  Contacts({this.type, this.value});
-
-  Contacts.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    value = json['value'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['type'] = type;
-    data['value'] = value;
-    return data;
-  }
-}
-
-class Groups {
-  String id;
-  String name;
-  String manager;
-
-  Groups({this.id, this.name, this.manager});
-
-  Groups.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    manager = json['manager'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['id'] = id;
-    data['name'] = name;
-    data['manager'] = manager;
     return data;
   }
 }
