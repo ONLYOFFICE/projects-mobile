@@ -36,6 +36,7 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/views/task_detailed/detailed_task_app_bar.dart';
+import 'package:projects/presentation/views/task_detailed/documents/documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 
@@ -83,10 +84,11 @@ class TaskDetailedView extends StatelessWidget {
           ),
           body: TabBarView(children: [
             OverviewScreen(taskController: controller),
-            for (var i = 0; i < 5; i++)
-              SubtasksView(
-                controller: controller,
-              )
+            SubtasksView(
+              controller: controller,
+            ),
+            for (var i = 0; i < 4; i++)
+              DocumentsView(taskId: controller.task.value.id)
           ]),
         ),
       );

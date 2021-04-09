@@ -30,26 +30,22 @@
  *
  */
 
-import 'package:intl/intl.dart';
+import 'package:projects/data/api/files_api.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-extension CustomList<T> on List<T> {
-  static T firstOrNull<T>(List<T> list) {
-    if (list.isEmpty) {
-      return null;
+class FilesService {
+  final FilesApi _api = locator<FilesApi>();
+
+  Future getTaskFiles({int taskId}) async {
+    var files = await _api.getTaskFiles(taskId: taskId);
+    var success = files.response != null;
+
+    if (success) {
+      return files.response;
     } else {
-      return list.first;
+      ErrorDialog.show(files.error);
+      return null;
     }
-  }
-}
-
-String formatedDate({DateTime now, String stringDate}) {
-  var date = DateTime.parse(stringDate);
-
-  if (now.year == date.year) {
-    final formatter = DateFormat('d MMM');
-    return formatter.format(date);
-  } else {
-    final formatter = DateFormat('d MMM yyy');
-    return formatter.format(date);
   }
 }

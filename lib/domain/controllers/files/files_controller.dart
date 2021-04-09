@@ -30,26 +30,21 @@
  *
  */
 
-import 'package:intl/intl.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/files_service.dart';
+import 'package:projects/internal/locator.dart';
 
-extension CustomList<T> on List<T> {
-  static T firstOrNull<T>(List<T> list) {
-    if (list.isEmpty) {
-      return null;
-    } else {
-      return list.first;
-    }
-  }
-}
+class FilesController extends GetxController {
+  final _api = locator<FilesService>();
 
-String formatedDate({DateTime now, String stringDate}) {
-  var date = DateTime.parse(stringDate);
+  var files = <PortalFile>[].obs;
 
-  if (now.year == date.year) {
-    final formatter = DateFormat('d MMM');
-    return formatter.format(date);
-  } else {
-    final formatter = DateFormat('d MMM yyy');
-    return formatter.format(date);
+  RxBool loaded = false.obs;
+
+  Future getTaskFiles({int taskId}) async {
+    loaded.value = false;
+    files.value = await _api.getTaskFiles(taskId: taskId);
+    loaded.value = true;
   }
 }
