@@ -98,6 +98,11 @@ platform :android do
     make_appbundle
     upload_playmarket
 
+    git_commit(
+      path: "../pubspec.yaml",
+      message: "Version bumped to v#{version_name}(#{increase_version_code})",
+    )
+
     # create a local tag with the new version
     add_git_tag(
       tag: "android/v#{version_name}-#{increase_version_code}",
