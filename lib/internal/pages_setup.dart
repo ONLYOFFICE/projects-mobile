@@ -37,13 +37,13 @@ import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/projects_view/descriprion_view.dart';
-import 'package:projects/presentation/views/projects_view/new_project_view.dart';
-import 'package:projects/presentation/views/projects_view/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/new_task/select_project_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
-import 'package:projects/presentation/views/projects_view/team_members_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 List<GetPage> getxPages() => [
