@@ -30,6 +30,9 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
 
+  Future<String> getTaskFiles({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/files';
+
   Future<String> milestonesByFilter() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter';
 

@@ -54,18 +54,12 @@ class SubtasksView extends StatelessWidget {
                   ],
                 ),
               ),
-              // Expanded(
-              //   child: IconButton(
-              //     icon: Icon(Icons.more_vert),
-              //     onPressed: () => print('da'),
-              //   ),
-              // ),
               PopupMenuButton(
                 itemBuilder: (context) {
                   return [
-                    PopupMenuItem(child: Text(';da')),
-                    PopupMenuItem(child: Text(';da')),
-                    PopupMenuItem(child: Text(';da')),
+                    PopupMenuItem(child: Text('Accept task')),
+                    PopupMenuItem(child: Text('Copy task')),
+                    PopupMenuItem(child: Text('Delete task')),
                   ];
                 },
               ),

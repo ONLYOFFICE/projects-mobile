@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_owner.dart';
 
@@ -123,18 +122,6 @@ class PortalTask {
 
     data['updated'] = updated;
     return data;
-  }
-
-  String formatedDate({DateTime now, String stringDate}) {
-    var date = DateTime.parse(stringDate);
-
-    if (now.year == date.year) {
-      final formatter = DateFormat('d MMM');
-      return formatter.format(date);
-    } else {
-      final formatter = DateFormat('d MMM yyy');
-      return formatter.format(date);
-    }
   }
 }
 

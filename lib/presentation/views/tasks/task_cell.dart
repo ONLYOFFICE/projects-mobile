@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/task.dart';
 
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
@@ -194,7 +195,7 @@ class ThirdColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           if (task.deadline != null)
-            Text(task.formatedDate(now: _now, stringDate: task.deadline),
+            Text(formatedDate(now: _now, stringDate: task.deadline),
                 style: TextStyleHelper.caption(
                     color: Theme.of(context).customColors().onSurface)),
           Row(
