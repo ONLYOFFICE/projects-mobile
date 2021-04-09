@@ -30,40 +30,21 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+class Contact {
+  String type;
+  String value;
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/projects_view/search_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+  Contact({this.type, this.value});
 
-class TeamMembersSelectionView extends StatelessWidget {
-  const TeamMembersSelectionView({
-    Key key,
-  }) : super(key: key);
+  Contact.fromJson(Map<String, dynamic> json) {
+    type = json['type'];
+    value = json['value'];
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
-
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: SearchAppBar(
-        title: CustomHeader(
-          function: controller.confirmDescription,
-          title: 'Select project manager',
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(12.0),
-        child: TextField(
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          controller: controller.descriptionController,
-          decoration:
-              InputDecoration.collapsed(hintText: 'Enter your text here'),
-        ),
-      ),
-    );
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['type'] = type;
+    data['value'] = value;
+    return data;
   }
 }

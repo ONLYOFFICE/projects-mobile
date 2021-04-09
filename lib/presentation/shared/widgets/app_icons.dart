@@ -78,6 +78,7 @@ class SvgIcons {
 
   static const String user = 'lib/assets/images/icons/user.svg';
   static const String users = 'lib/assets/images/icons/users.svg';
+  static const String avatar = 'lib/assets/images/icons/avatar.svg';
 }
 
 class PngIcons {

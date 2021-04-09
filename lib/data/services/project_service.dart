@@ -112,16 +112,16 @@ class ProjectService {
     }
   }
 
-  Future<ProjectDetailed> createProject({NewProjectDTO project}) async {
-    var result = await _api.createProject();
+  Future<bool> createProject({NewProjectDTO project}) async {
+    var result = await _api.createProject(project: project);
 
     var success = result.response != null;
 
     if (success) {
-      return result.response;
+      return success;
     } else {
       ErrorDialog.show(result.error);
-      return null;
+      return false;
     }
   }
 }

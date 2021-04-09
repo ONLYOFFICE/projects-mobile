@@ -46,22 +46,27 @@ class NewProjectDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<NewProjectController>();
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: SearchAppBar(
-        title: CustomHeader(
-          function: controller.confirmDescription,
-          title: 'Description',
+    return WillPopScope(
+      onWillPop: () async {
+        return controller.canPopBack();
+      },
+      child: Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        appBar: SearchAppBar(
+          title: CustomHeader(
+            function: controller.confirmDescription,
+            title: 'Description',
+          ),
         ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(12.0),
-        child: TextField(
-          maxLines: null,
-          keyboardType: TextInputType.multiline,
-          controller: controller.descriptionController,
-          decoration:
-              InputDecoration.collapsed(hintText: 'Enter your text here'),
+        body: Padding(
+          padding: EdgeInsets.all(12.0),
+          child: TextField(
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            controller: controller.descriptionController,
+            decoration:
+                InputDecoration.collapsed(hintText: 'Enter your text here'),
+          ),
         ),
       ),
     );

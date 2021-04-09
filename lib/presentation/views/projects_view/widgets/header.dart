@@ -39,12 +39,10 @@ import 'package:projects/presentation/shared/text_styles.dart';
 class CustomHeader extends StatelessWidget {
   const CustomHeader({
     Key key,
-    // @required this.controller,
     @required this.function,
     @required this.title,
   }) : super(key: key);
 
-  // final NewProjectController controller;
   final Function() function;
   final String title;
 
