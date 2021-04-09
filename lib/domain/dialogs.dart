@@ -16,6 +16,31 @@ class ErrorDialog {
   }
 }
 
+class ConfirmDialog {
+  static void show({
+    String title,
+    String message,
+    String textConfirm,
+    String textCancel,
+    Function confirmFunction,
+    Function cancelFunction,
+  }) {
+    Get.defaultDialog(
+      title: title,
+      middleText: message,
+      textConfirm: textConfirm,
+      onConfirm: confirmFunction(),
+      onCancel: cancelFunction(),
+      barrierDismissible: false,
+      textCancel: textCancel,
+    );
+  }
+
+  static void hide() {
+    Get.back();
+  }
+}
+
 class ProgressDialog {
   static void show(CustomError error) {
     Get.dialog(Center(child: CircularProgressIndicator()));

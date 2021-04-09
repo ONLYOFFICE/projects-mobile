@@ -4,7 +4,7 @@ class NewProjectDTO {
   String responsibleId;
   String tags;
   bool private;
-  List<String> participants;
+  List<Participant> participants;
   bool notify;
   // List<Null> tasks;
   // List<Null> milestones;
@@ -18,8 +18,8 @@ class NewProjectDTO {
       this.private,
       this.participants,
       this.notify,
-      // this.tasks,
-      // this.milestones,
+      // tasks,
+      // milestones,
       this.notifyResponsibles});
 
   NewProjectDTO.fromJson(Map<String, dynamic> json) {
@@ -28,20 +28,13 @@ class NewProjectDTO {
     responsibleId = json['responsibleId'];
     tags = json['tags'];
     private = json['private'];
-    participants = json['participants'].cast<String>();
+    if (json['participants'] != null) {
+      participants = <Participant>[];
+      json['participants'].forEach((v) {
+        participants.add(Participant.fromJson(v));
+      });
+    }
     notify = json['notify'];
-    // if (json['tasks'] != null) {
-    //   tasks = [];
-    //   json['tasks'].forEach((v) {
-    //     tasks.add(new Null.fromJson(v));
-    //   });
-    // }
-    // if (json['milestones'] != null) {
-    //   milestones = new List<Null>();
-    //   json['milestones'].forEach((v) {
-    //     milestones.add(new Null.fromJson(v));
-    //   });
-    // }
     notifyResponsibles = json['notifyResponsibles'];
   }
 
@@ -52,15 +45,87 @@ class NewProjectDTO {
     data['responsibleId'] = responsibleId;
     data['tags'] = tags;
     data['private'] = private;
-    data['participants'] = participants;
+    if (participants != null) {
+      data['participants'] = participants.map((v) => v.toJson()).toList();
+    }
     data['notify'] = notify;
-    // if (this.tasks != null) {
-    //   data['tasks'] = this.tasks.map((v) => v.toJson()).toList();
+    // if (tasks != null) {
+    //   data['tasks'] = tasks.map((v) => v.toJson()).toList();
     // }
-    // if (this.milestones != null) {
-    //   data['milestones'] = this.milestones.map((v) => v.toJson()).toList();
+    // if (milestones != null) {
+    //   data['milestones'] = milestones.map((v) => v.toJson()).toList();
     // }
     data['notifyResponsibles'] = notifyResponsibles;
+    return data;
+  }
+}
+
+class Participant {
+  String iD;
+  // int projectID;
+  bool canReadFiles;
+  bool canReadMilestones;
+  bool canReadMessages;
+  bool canReadTasks;
+  bool canReadContacts;
+  // bool isVisitor;
+  // bool isFullAdmin;
+  // Null userInfo;
+  // bool isAdmin;
+  // bool isManager;
+  // bool isRemovedFromTeam;
+  // int projectTeamSecurity;
+
+  Participant({
+    this.iD,
+    // this.projectID,
+    this.canReadFiles,
+    this.canReadMilestones,
+    this.canReadMessages,
+    this.canReadTasks,
+    this.canReadContacts,
+    // this.isVisitor,
+    // this.isFullAdmin,
+    // this.userInfo,
+    // this.isAdmin,
+    // this.isManager,
+    // this.isRemovedFromTeam,
+    // this.projectTeamSecurity
+  });
+
+  Participant.fromJson(Map<String, dynamic> json) {
+    iD = json['ID'];
+    // projectID = json['ProjectID'];
+    canReadFiles = json['CanReadFiles'];
+    canReadMilestones = json['CanReadMilestones'];
+    canReadMessages = json['CanReadMessages'];
+    canReadTasks = json['CanReadTasks'];
+    canReadContacts = json['CanReadContacts'];
+    // isVisitor = json['IsVisitor'];
+    // isFullAdmin = json['IsFullAdmin'];
+    // userInfo = json['UserInfo'];
+    // isAdmin = json['IsAdmin'];
+    // isManager = json['IsManager'];
+    // isRemovedFromTeam = json['IsRemovedFromTeam'];
+    // projectTeamSecurity = json['ProjectTeamSecurity'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['ID'] = iD;
+    // data['ProjectID'] = projectID;
+    data['CanReadFiles'] = canReadFiles;
+    data['CanReadMilestones'] = canReadMilestones;
+    data['CanReadMessages'] = canReadMessages;
+    data['CanReadTasks'] = canReadTasks;
+    data['CanReadContacts'] = canReadContacts;
+    // data['IsVisitor'] = isVisitor;
+    // data['IsFullAdmin'] = isFullAdmin;
+    // data['UserInfo'] = userInfo;
+    // data['IsAdmin'] = isAdmin;
+    // data['IsManager'] = isManager;
+    // data['IsRemovedFromTeam'] = isRemovedFromTeam;
+    // data['ProjectTeamSecurity'] = projectTeamSecurity;
     return data;
   }
 }

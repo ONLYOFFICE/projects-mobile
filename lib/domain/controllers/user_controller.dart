@@ -7,17 +7,13 @@ class UserController extends GetxController {
   final _api = locator<AuthService>();
 
   SelfUserProfile user;
-
-  @override
-  void onInit() {
-    super.onInit();
-
-    Future.wait([getUserInfo()]);
-  }
+  RxBool loaded = false.obs;
 
   Future getUserInfo() async {
+    loaded.value = false;
     var data = await _api.getSelfInfo();
     user = data.response;
+    loaded.value = true;
   }
 
   Future<String> getUserId() async {
