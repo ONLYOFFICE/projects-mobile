@@ -5,6 +5,7 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DocumentsView extends StatelessWidget {
   final int taskId;
@@ -22,7 +23,9 @@ class DocumentsView extends StatelessWidget {
     return Obx(
       () {
         if (_filesC.loaded.isTrue) {
-          return Container(
+          return SmartRefresher(
+            controller: _filesC.refreshController,
+            onRefresh: () => _filesC.onRefresh(taskId: taskId),
             child: ListView.separated(
               itemCount: _filesC.files.length,
               separatorBuilder: (BuildContext context, int index) {
