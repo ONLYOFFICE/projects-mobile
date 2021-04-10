@@ -37,6 +37,7 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
     as bottom_sheet;
 import 'package:projects/presentation/views/task_detailed/readmore.dart';
@@ -143,9 +144,7 @@ class OverviewScreen extends StatelessWidget {
             ),
           );
         } else {
-          return const Material(
-            child: Center(child: Text('LOADING')),
-          );
+          return const ListLoadingSkeleton();
         }
       },
     );
