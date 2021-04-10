@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_owner.dart';
 
@@ -52,6 +53,7 @@ class PortalTask {
   String updated;
   List<PortalUser> responsibles;
   List<Subtask> subtasks;
+  Milestone milestone;
   PortalUser createdBy;
   PortalUser responsible;
   PortalUser updatedBy;
@@ -69,6 +71,7 @@ class PortalTask {
       this.deadline,
       this.description,
       this.id,
+      this.milestone,
       this.milestoneId,
       this.priority,
       this.projectOwner,
@@ -93,6 +96,9 @@ class PortalTask {
     description = json['description'];
     deadline = json['deadline'];
     priority = json['priority'];
+    milestone = json['milestone'] != null
+        ? Milestone.fromJson(json['milestone'])
+        : null;
     milestoneId = json['milestoneId'];
     projectOwner = json['projectOwner'] != null
         ? ProjectOwner.fromJson(json['projectOwner'])
@@ -134,6 +140,7 @@ class PortalTask {
     data['description'] = description;
     data['deadline'] = deadline;
     data['priority'] = priority;
+    if (milestone != null) data['milestone'] = milestone.toJson();
     data['milestoneId'] = milestoneId;
     if (projectOwner != null) {
       data['projectOwner'] = projectOwner.toJson();

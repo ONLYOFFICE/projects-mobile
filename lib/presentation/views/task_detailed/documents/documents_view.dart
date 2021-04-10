@@ -69,8 +69,7 @@ class DocumentsView extends StatelessWidget {
                           child: Center(
                               child: Text(
                                   _filesC.files[index].fileType.toString()))),
-                      SizedBox(
-                        width: Get.width * 0.63,
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -92,13 +91,22 @@ class DocumentsView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Expanded(
+                      SizedBox(
+                        width: 60,
                         child: PopupMenuButton(
+                          icon: Icon(Icons.more_vert,
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .onSurface
+                                  .withOpacity(0.6)),
                           itemBuilder: (context) {
                             return [
-                              PopupMenuItem(child: Text('Accept task')),
-                              PopupMenuItem(child: Text('Copy task')),
-                              PopupMenuItem(child: Text('Delete task')),
+                              PopupMenuItem(child: Text('Open')),
+                              PopupMenuItem(child: Text('Copy link')),
+                              PopupMenuItem(child: Text('Download')),
+                              PopupMenuItem(child: Text('Move')),
+                              PopupMenuItem(child: Text('Copy')),
+                              PopupMenuItem(child: Text('Delete')),
                             ];
                           },
                         ),
