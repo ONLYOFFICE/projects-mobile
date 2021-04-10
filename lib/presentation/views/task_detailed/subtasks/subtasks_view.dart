@@ -31,8 +31,7 @@ class SubtasksView extends StatelessWidget {
                           ? Icons.check_box
                           : Icons.check_box_outline_blank_rounded,
                       color: Color(0xFF666666))),
-              SizedBox(
-                width: Get.width * 0.71,
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -54,14 +53,17 @@ class SubtasksView extends StatelessWidget {
                   ],
                 ),
               ),
-              PopupMenuButton(
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(child: Text('Accept task')),
-                    PopupMenuItem(child: Text('Copy task')),
-                    PopupMenuItem(child: Text('Delete task')),
-                  ];
-                },
+              SizedBox(
+                width: 52,
+                child: PopupMenuButton(
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(child: Text('Accept task')),
+                      PopupMenuItem(child: Text('Copy task')),
+                      PopupMenuItem(child: Text('Delete task')),
+                    ];
+                  },
+                ),
               ),
             ],
           ),

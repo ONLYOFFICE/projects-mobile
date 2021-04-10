@@ -46,13 +46,15 @@ class Milestone {
         id: json['id'],
         title: json['title'],
         description: json['description'],
-        deadline: DateTime.parse(json['deadline']),
+        deadline:
+            json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
         isKey: json['isKey'],
         isNotify: json['isNotify'],
         activeTaskCount: json['activeTaskCount'],
         closedTaskCount: json['closedTaskCount'],
         status: json['status'],
-        created: DateTime.parse(json['created']),
+        created:
+            json['created'] != null ? DateTime.parse(json['created']) : null,
         createdBy: json['createdBy'] != null
             ? PortalUser.fromJson(json['createdBy'])
             : null,
@@ -65,7 +67,8 @@ class Milestone {
         updatedBy: json['updatedBy'] != null
             ? PortalUser.fromJson(json['updatedBy'])
             : null,
-        updated: DateTime.parse(json['updated']),
+        updated:
+            json['updated'] != null ? DateTime.parse(json['updated']) : null,
       );
 
   Map<String, dynamic> toJson() => {

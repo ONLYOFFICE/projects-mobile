@@ -57,7 +57,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => TaskService());
   locator.registerLazySingleton(() => UserService());
 
-  Get.lazyPut(() => FilesController(), fenix: false);
+  Get.lazyPut(() => FilesController(), fenix: true);
   Get.lazyPut(() => GroupsController(), fenix: false);
   Get.lazyPut(() => MilestonesController());
   Get.lazyPut(() => NewTaskController(), fenix: false);
