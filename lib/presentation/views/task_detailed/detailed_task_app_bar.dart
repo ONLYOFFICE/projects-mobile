@@ -14,9 +14,11 @@ class DetailedTaskAppBar extends StatelessWidget
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).customColors().primary,
+      backgroundColor: Theme.of(context).customColors().background,
       centerTitle: false,
       title: title,
+      elevation: 1,
+      iconTheme: IconThemeData(color: Theme.of(context).customColors().primary),
       bottom: PreferredSize(preferredSize: Size.fromHeight(20), child: bottom),
     );
   }

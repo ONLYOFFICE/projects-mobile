@@ -1,4 +1,6 @@
 import 'package:projects/data/models/from_api/milestone.dart';
+import 'package:projects/data/models/from_api/portal_comment.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_owner.dart';
 
@@ -8,17 +10,22 @@ class PortalTask {
   int milestoneId;
   int priority;
   int status;
+  bool canCreateComment;
   bool canCreateSubtask;
   bool canCreateTimeSpend;
   bool canDelete;
   bool canEdit;
+  bool canEditFiles;
   bool canReadFiles;
+  bool isSubscribed;
   String created;
   String deadline;
   String description;
   String startDate;
   String title;
   String updated;
+  List<PortalComment> comments;
+  List<PortalFile> files;
   List<PortalUser> responsibles;
   List<Subtask> subtasks;
   Milestone milestone;
@@ -33,11 +40,13 @@ class PortalTask {
       this.canDelete,
       this.canEdit,
       this.canReadFiles,
+      this.comments,
       this.created,
       this.createdBy,
       this.customTaskStatus,
       this.deadline,
       this.description,
+      this.files,
       this.id,
       this.milestone,
       this.milestoneId,
@@ -57,8 +66,16 @@ class PortalTask {
     canCreateTimeSpend = json['canCreateTimeSpend'];
     canDelete = json['canDelete'];
     canReadFiles = json['canReadFiles'];
+    comments = json['comments'] != null
+        ? List<PortalComment>.from(
+            json['comments'].map((x) => PortalComment.fromJson(x)))
+        : null;
     customTaskStatus = json['customTaskStatus'];
     startDate = json['startDate'];
+    files = json['files'] != null
+        ? List<PortalFile>.from(
+            json['files'].map((x) => PortalFile.fromJson(x)))
+        : null;
     id = json['id'];
     title = json['title'];
     description = json['description'];
@@ -102,7 +119,9 @@ class PortalTask {
     data['canDelete'] = canDelete;
     data['canReadFiles'] = canReadFiles;
     data['customTaskStatus'] = customTaskStatus;
+    data['comments'] = comments?.toSet();
     data['startDate'] = startDate;
+    data['files'] = files?.toSet();
     data['id'] = id;
     data['title'] = title;
     data['description'] = description;

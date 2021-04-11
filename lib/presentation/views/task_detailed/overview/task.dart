@@ -41,7 +41,7 @@ class Task extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 8, bottom: 8),
                         child: Text(taskController.status.value.title,
-                            style: TextStyleHelper.subtitle2),
+                            style: TextStyleHelper.subtitle2()),
                       ),
                     ),
                     const Icon(Icons.arrow_drop_down_sharp)

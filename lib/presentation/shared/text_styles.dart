@@ -158,10 +158,13 @@ class TextStyleHelper {
         color: color);
   }
 
-  static const subtitle2 = TextStyle(
-      fontFamily: 'Roboto',
-      fontSize: 14,
-      height: 1.429,
-      letterSpacing: 0.1,
-      fontWeight: FontWeight.w500);
+  static TextStyle subtitle2({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontSize: 14,
+        height: 1.429,
+        letterSpacing: 0.1,
+        fontWeight: FontWeight.w500,
+        color: color);
+  }
 }

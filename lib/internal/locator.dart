@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/authentication_api.dart';
+import 'package:projects/data/api/comments_api.dart';
 
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/api/files_api.dart';
@@ -11,6 +12,7 @@ import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/api/user_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/group_service.dart';
 import 'package:projects/data/services/milestone_service.dart';
@@ -19,6 +21,7 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
+import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/files/files_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
@@ -38,6 +41,7 @@ GetIt locator = GetIt.instance;
 void setupLocator() {
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => CoreApi());
+  locator.registerLazySingleton(() => CommentsApi());
   locator.registerLazySingleton(() => FilesApi());
   locator.registerLazySingleton(() => GroupApi());
   locator.registerLazySingleton(() => MilestoneApi());
@@ -48,6 +52,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserApi());
 
   locator.registerLazySingleton(() => AuthService());
+  locator.registerLazySingleton(() => CommentsService());
   locator.registerLazySingleton(() => FilesService());
   locator.registerLazySingleton(() => GroupService());
   locator.registerLazySingleton(() => MilestoneService());
@@ -57,6 +62,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => TaskService());
   locator.registerLazySingleton(() => UserService());
 
+  Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => FilesController(), fenix: true);
   Get.lazyPut(() => GroupsController(), fenix: false);
   Get.lazyPut(() => MilestonesController());
