@@ -51,6 +51,7 @@ class PortalFile {
   String contentLength;
   String fileExst;
   String title;
+  String thumbnailUrl;
   String viewUrl;
 
   PortalFile({
@@ -67,6 +68,7 @@ class PortalFile {
     this.rootFolderType,
     this.shared,
     this.title,
+    this.thumbnailUrl,
     this.updated,
     this.updatedBy,
     this.version,
@@ -91,6 +93,7 @@ class PortalFile {
         rootFolderType: json['rootFolderType'],
         shared: json['shared'],
         title: json['title'],
+        thumbnailUrl: json['thumbnailUrl'],
         updated: DateTime.parse(json['updated']),
         updatedBy: json['updatedBy'] != null
             ? PortalUser.fromJson(json['updatedBy'])
@@ -105,8 +108,8 @@ class PortalFile {
         'access': access,
         'comment': comment,
         'contentLength': contentLength,
-        'created': created.toIso8601String(),
-        'createdBy': createdBy.toJson(),
+        'created': created?.toIso8601String(),
+        'createdBy': createdBy?.toJson(),
         'fileExst': fileExst,
         'fileStatus': fileStatus,
         'fileType': fileType,
@@ -116,8 +119,9 @@ class PortalFile {
         'rootFolderType': rootFolderType,
         'shared': shared,
         'title': title,
-        'updated': updated.toIso8601String(),
-        'updatedBy': updatedBy.toJson(),
+        'thumbnailUrl': thumbnailUrl,
+        'updated': updated?.toIso8601String(),
+        'updatedBy': updatedBy?.toJson(),
         'version': version,
         'versionGroup': versionGroup,
         'viewUrl': viewUrl,

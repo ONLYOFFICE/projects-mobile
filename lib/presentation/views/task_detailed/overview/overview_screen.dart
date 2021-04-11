@@ -58,7 +58,7 @@ class OverviewScreen extends StatelessWidget {
         if (taskController.loaded.isTrue) {
           var task = taskController.task.value;
           return SmartRefresher(
-            controller: taskController.refreshController.value,
+            controller: taskController.refreshController,
             onRefresh: () => taskController.reloadTask(),
             child: ListView(
               children: [
@@ -74,14 +74,13 @@ class OverviewScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 if (task.milestone != null)
                   InfoTile(
-                    icon: AppIcon(
-                        icon: SvgIcons.milestone,
-                        color: const Color(0xff707070)),
-                    caption: 'Milestone:',
-                    subtitle: task.milestone.title,
-                    subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Theme.of(context).customColors().links),
-                  ),
+                      icon: AppIcon(
+                          icon: SvgIcons.milestone,
+                          color: const Color(0xff707070)),
+                      caption: 'Milestone:',
+                      subtitle: task.milestone.title,
+                      subtitleStyle: TextStyleHelper.subtitle1(
+                          color: Theme.of(context).customColors().links)),
                 if (task.description != null)
                   Padding(
                     padding: const EdgeInsets.only(

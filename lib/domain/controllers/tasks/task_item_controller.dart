@@ -35,7 +35,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
@@ -49,7 +49,7 @@ class TaskItemController extends GetxController {
   var status = Status().obs;
 
   var loaded = true.obs;
-  var refreshController = RefreshController().obs;
+  var refreshController = RefreshController();
 
   RxString statusImageString = ''.obs;
 
@@ -81,8 +81,8 @@ class TaskItemController extends GetxController {
   Future updateTaskStatus(
       {int id, int newStatusId, String newStatusType}) async {
     loaded.value = false;
-    var t = await _api.updateTaskStatus(
-        taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
+    // var t = await _api.updateTaskStatus(
+    //     taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
     // task.value.customTaskStatus = t;
     loaded.value = true;
   }
@@ -105,7 +105,6 @@ class TaskItemService {
 
   Future getTaskByID({int id}) async {
     var task = await _api.getTaskByID(id: id);
-
     var success = task.response != null;
 
     if (success) {

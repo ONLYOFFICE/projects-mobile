@@ -80,6 +80,9 @@ class CoreApi {
   Future<String> taskByIdUrl(int id) async =>
       '${await getPortalURI()}/api/$version/project/task/$id';
 
+  Future<String> taskComments({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
+
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/$version/project';
 

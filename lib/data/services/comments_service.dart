@@ -30,28 +30,22 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/data/api/comments_api.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-class DetailedTaskAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  final Widget title;
-  final Widget bottom;
+class CommentsService {
+  final CommentsApi _api = locator<CommentsApi>();
 
-  DetailedTaskAppBar({Key key, this.title, this.bottom}) : super(key: key);
+  Future getTaskComments({int taskId}) async {
+    var files = await _api.getTaskComments(taskId: taskId);
+    var success = files.response != null;
 
-  @override
-  final Size preferredSize = Size(double.infinity, 100);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Theme.of(context).customColors().background,
-      centerTitle: false,
-      title: title,
-      elevation: 1,
-      iconTheme: IconThemeData(color: Theme.of(context).customColors().primary),
-      bottom: PreferredSize(preferredSize: Size.fromHeight(20), child: bottom),
-    );
+    if (success) {
+      return files.response;
+    } else {
+      ErrorDialog.show(files.error);
+      return null;
+    }
   }
 }

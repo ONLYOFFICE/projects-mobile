@@ -32,7 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
-import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/dialogs.dart';
