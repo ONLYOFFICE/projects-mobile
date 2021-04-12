@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/new_project_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/views/projects_view/search_appbar.dart';
+import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
 import 'package:projects/presentation/views/projects_view/widgets/header.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
@@ -54,7 +54,7 @@ class TeamMembersSelectionView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: SearchAppBar(
+      appBar: CustomAppBar(
         title: CustomHeader(
           function: controller.confirmDescription,
           title: 'Add team membres',

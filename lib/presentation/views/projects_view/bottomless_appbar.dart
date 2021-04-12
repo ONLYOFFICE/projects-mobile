@@ -31,43 +31,36 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
-
-class NewProjectDescription extends StatelessWidget {
-  const NewProjectDescription({
+class BottomlessAppBar extends StatelessWidget implements PreferredSizeWidget {
+  BottomlessAppBar({
     Key key,
+    this.title,
+    this.bottom,
   }) : super(key: key);
+
+  final Widget title;
+  final Widget bottom;
+
+  @override
+  final Size preferredSize = Size(double.infinity, 60);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
-
-    return WillPopScope(
-      onWillPop: () async {
-        return controller.canPopBack();
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(
-          title: CustomHeader(
-            function: controller.confirmDescription,
-            title: 'Description',
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.blue,
+            ),
+            backgroundColor: Theme.of(context).customColors().background,
+            centerTitle: false,
+            title: title,
           ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: TextField(
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            controller: controller.descriptionController,
-            decoration:
-                InputDecoration.collapsed(hintText: 'Enter your text here'),
-          ),
-        ),
+        ],
       ),
     );
   }

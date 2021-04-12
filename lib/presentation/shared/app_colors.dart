@@ -54,6 +54,7 @@ class AppColors {
   final Color tabActive;
   final Color tabSecondary;
   final Color tabbarBackground;
+  final Color error;
 
   const AppColors({
     @required this.activeTabTitle,
@@ -75,5 +76,6 @@ class AppColors {
     @required this.tabActive,
     @required this.tabSecondary,
     @required this.tabbarBackground,
+    @required this.error,
   });
 }
