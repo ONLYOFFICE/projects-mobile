@@ -21,7 +21,7 @@ class NewProjectDescription extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
         appBar: CustomAppBar(
-          title: CustomHeader(
+          title: CustomHeaderWithButton(
             function: controller.confirmDescription,
             title: 'Description',
           ),

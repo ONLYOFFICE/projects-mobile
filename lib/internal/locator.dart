@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/authentication_api.dart';
 
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/api/download_api.dart';
 import 'package:projects/data/api/group_api.dart';
 import 'package:projects/data/api/milestone_api.dart';
 import 'package:projects/data/api/portal_api.dart';
@@ -10,6 +11,7 @@ import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/api/user_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/group_service.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/portal_service.dart';
@@ -42,6 +44,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => SecureStorage());
   locator.registerLazySingleton(() => TaskApi());
   locator.registerLazySingleton(() => UserApi());
+  locator.registerLazySingleton(() => DownloadApi());
 
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => GroupService());
@@ -51,6 +54,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => TaskItemService());
   locator.registerLazySingleton(() => TaskService());
   locator.registerLazySingleton(() => UserService());
+  locator.registerLazySingleton(() => DownloadService());
 
   Get.lazyPut(() => GroupsController(), fenix: false);
   Get.lazyPut(() => MilestonesController());

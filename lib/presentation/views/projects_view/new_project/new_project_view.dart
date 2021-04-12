@@ -21,7 +21,7 @@ class NewProject extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: BottomlessAppBar(
-        title: CustomHeader(
+        title: CustomHeaderWithButton(
           function: controller.confirm,
           title: 'Project',
         ),
@@ -192,7 +192,7 @@ class ProjectManager extends StatelessWidget {
                 SizedBox(height: 10),
                 Obx(
                   () => controller.isPMSelected.isTrue
-                      ? Tile(
+                      ? NewProjectTile(
                           subtitle: controller.managerName.value,
                           closeFunction: controller.removeManager,
                           title: 'Project manager:',
@@ -247,8 +247,8 @@ class ProjectManager extends StatelessWidget {
   }
 }
 
-class Tile extends StatelessWidget {
-  const Tile(
+class NewProjectTile extends StatelessWidget {
+  const NewProjectTile(
       {Key key,
       @required this.subtitle,
       @required this.title,
@@ -319,7 +319,7 @@ class TeamMembers extends StatelessWidget {
                 SizedBox(height: 10),
                 Obx(
                   () => controller.selectedTeamMembers.isNotEmpty
-                      ? Tile(
+                      ? NewProjectTile(
                           subtitle: controller.teamMembersTitle,
                           closeFunction: controller.editTeamMember,
                           title: 'Team',
