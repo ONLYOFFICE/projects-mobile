@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 
-class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SearchAppBar({
+class BottomlessAppBar extends StatelessWidget implements PreferredSizeWidget {
+  BottomlessAppBar({
     Key key,
     this.title,
     this.bottom,
@@ -12,7 +12,7 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget bottom;
 
   @override
-  final Size preferredSize = Size(double.infinity, 90);
+  final Size preferredSize = Size(double.infinity, 60);
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,6 @@ class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
             backgroundColor: Theme.of(context).customColors().background,
             centerTitle: false,
             title: title,
-            bottom: bottom,
           ),
         ],
       ),

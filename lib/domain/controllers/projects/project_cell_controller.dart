@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class ProjectCellController extends GetxController {
   final statuses = [].obs;
+
+  RefreshController refreshController = RefreshController();
 
   ProjectCellController(Item project) {
     this.project = project;
@@ -57,4 +60,6 @@ class ProjectCellController extends GetxController {
         return 'n/a';
     }
   }
+
+  reloadTask() {}
 }
