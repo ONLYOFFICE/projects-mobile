@@ -30,45 +30,36 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/internal/locator.dart';
 
-class NewProjectDescription extends StatelessWidget {
-  const NewProjectDescription({
-    Key key,
-  }) : super(key: key);
+class DownloadApi {
+  var coreApi = locator<CoreApi>();
 
-  @override
-  Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+  Future<ApiDTO<Uint8List>> downloadImage(String avatarUrl) async {
+    var url = '';
+    if (avatarUrl.toLowerCase().contains('http')) {
+      url = avatarUrl;
+    } else {
+      url = await coreApi.getPortalURI() + avatarUrl;
+    }
 
-    return WillPopScope(
-      onWillPop: () async {
-        return controller.canPopBack();
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(
-          title: CustomHeaderWithButton(
-            function: controller.confirmDescription,
-            title: 'Description',
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: TextField(
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            controller: controller.descriptionController,
-            decoration:
-                InputDecoration.collapsed(hintText: 'Enter your text here'),
-          ),
-        ),
-      ),
-    );
+    var result = ApiDTO<Uint8List>();
+    try {
+      var response = await coreApi.getRequest(url);
+
+      if (response.statusCode == 200) {
+        result.response = response.bodyBytes;
+      } else {}
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
   }
 }

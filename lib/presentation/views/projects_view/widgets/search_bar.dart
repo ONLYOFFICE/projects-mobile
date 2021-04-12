@@ -31,42 +31,61 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 
-class NewProjectDescription extends StatelessWidget {
-  const NewProjectDescription({
+class SearchBar extends StatelessWidget {
+  const SearchBar({
     Key key,
+    @required this.controller,
   }) : super(key: key);
+
+  final NewProjectController controller;
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
-
-    return WillPopScope(
-      onWillPop: () async {
-        return controller.canPopBack();
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(
-          title: CustomHeaderWithButton(
-            function: controller.confirmDescription,
-            title: 'Description',
+    return SizedBox(
+      height: 50,
+      child: Container(
+        margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+        padding: EdgeInsets.only(
+          left: 16,
+          right: 16,
+        ),
+        decoration: BoxDecoration(
+          color: Theme.of(context).customColors().bgDescription,
+          borderRadius: BorderRadius.all(
+            Radius.circular(16),
           ),
         ),
-        body: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: TextField(
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            controller: controller.descriptionController,
-            decoration:
-                InputDecoration.collapsed(hintText: 'Enter your text here'),
-          ),
+        child: Row(
+          children: <Widget>[
+            Expanded(
+              child: TextField(
+                textInputAction: TextInputAction.search,
+                controller: controller.searchInputController,
+                decoration: InputDecoration.collapsed(
+                  hintText: 'Search for users...',
+                ),
+                onSubmitted: (value) {
+                  controller.newSearch(value);
+                },
+                onChanged: (value) {
+                  controller.performSearch(value);
+                },
+              ),
+            ),
+            InkWell(
+              onTap: () {
+                controller.clearSearch();
+              },
+              child: Icon(
+                Icons.close,
+                color: Colors.blue,
+              ),
+            )
+          ],
         ),
       ),
     );

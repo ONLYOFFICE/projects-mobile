@@ -30,45 +30,27 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:async';
+import 'dart:typed_data';
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+import 'package:projects/data/api/download_api.dart';
 
-class NewProjectDescription extends StatelessWidget {
-  const NewProjectDescription({
-    Key key,
-  }) : super(key: key);
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+class DownloadService {
+  final DownloadApi _api = locator<DownloadApi>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        return controller.canPopBack();
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(
-          title: CustomHeaderWithButton(
-            function: controller.confirmDescription,
-            title: 'Description',
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: TextField(
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            controller: controller.descriptionController,
-            decoration:
-                InputDecoration.collapsed(hintText: 'Enter your text here'),
-          ),
-        ),
-      ),
-    );
+  Future<Uint8List> downloadImage(String url) async {
+    var projects = await _api.downloadImage(url);
+
+    var success = projects.response != null;
+
+    if (success) {
+      return projects.response;
+    } else {
+      // ErrorDialog.show(projects.error);
+      return null;
+    }
   }
 }

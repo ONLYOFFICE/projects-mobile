@@ -53,7 +53,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: title,
       bottom: PreferredSize(
-          preferredSize: Size.fromHeight(20), child: bottom ?? SizedBox()),
+          preferredSize: Size.fromHeight(50), child: bottom ?? SizedBox()),
     );
   }
 }

@@ -30,45 +30,37 @@
  *
  */
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/services/download_service.dart';
+import 'package:projects/internal/locator.dart';
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+class PortalUserItemController extends GetxController {
+  final _downloadService = locator<DownloadService>();
 
-class NewProjectDescription extends StatelessWidget {
-  const NewProjectDescription({
-    Key key,
-  }) : super(key: key);
+  PortalUserItemController({
+    this.portalUser,
+  }) {
+    loadAvatar();
+  }
+  final PortalUser portalUser;
+  var isSelected = false.obs;
+  var multipleSelectionEnabled = false.obs;
 
-  @override
-  Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+  Rx<Image> avatarImage = Rx<Image>();
 
-    return WillPopScope(
-      onWillPop: () async {
-        return controller.canPopBack();
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(
-          title: CustomHeaderWithButton(
-            function: controller.confirmDescription,
-            title: 'Description',
-          ),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(12.0),
-          child: TextField(
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            controller: controller.descriptionController,
-            decoration:
-                InputDecoration.collapsed(hintText: 'Enter your text here'),
-          ),
-        ),
-      ),
-    );
+  String get displayName => portalUser.displayName;
+
+  Future<void> loadAvatar() async {
+    Uint8List avatarBytes =
+        await _downloadService.downloadImage(portalUser.avatarMedium);
+
+    if (avatarBytes == null) return;
+
+    var image = Image.memory(avatarBytes);
+    avatarImage.value = image;
   }
 }
