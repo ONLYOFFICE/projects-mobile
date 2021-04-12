@@ -83,7 +83,7 @@ class ProjectDetailedView extends StatelessWidget {
                       .customColors()
                       .onSurface
                       .withOpacity(0.6),
-                  labelStyle: TextStyleHelper.subtitle2,
+                  labelStyle: TextStyleHelper.subtitle2(),
                   tabs: [
                     Tab(text: 'Overview'),
                     Tab(text: 'Tasks'),
