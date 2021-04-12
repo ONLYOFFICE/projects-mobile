@@ -30,28 +30,31 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/files_service.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class DetailedTaskAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  final Widget title;
-  final Widget bottom;
+class FilesController extends GetxController {
+  final _api = locator<FilesService>();
 
-  DetailedTaskAppBar({Key key, this.title, this.bottom}) : super(key: key);
+  var files = <PortalFile>[].obs;
 
-  @override
-  final Size preferredSize = Size(double.infinity, 100);
+  var refreshController = RefreshController(initialRefresh: false);
 
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Theme.of(context).customColors().background,
-      centerTitle: false,
-      title: title,
-      elevation: 1,
-      iconTheme: IconThemeData(color: Theme.of(context).customColors().primary),
-      bottom: PreferredSize(preferredSize: Size.fromHeight(20), child: bottom),
-    );
+//for shimmer and progress indicator
+  RxBool loaded = false.obs;
+
+  void onRefresh({@required int taskId}) async {
+    await getTaskFiles(taskId: taskId);
+    refreshController.refreshCompleted();
+  }
+
+  Future getTaskFiles({int taskId}) async {
+    loaded.value = false;
+    files.value = await _api.getTaskFiles(taskId: taskId);
+    loaded.value = true;
   }
 }

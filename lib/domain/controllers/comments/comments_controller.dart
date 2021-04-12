@@ -30,28 +30,20 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/internal/locator.dart';
 
-class DetailedTaskAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  final Widget title;
-  final Widget bottom;
+class CommentsController extends GetxController {
+  final _api = locator<CommentsService>();
 
-  DetailedTaskAppBar({Key key, this.title, this.bottom}) : super(key: key);
+  var comments = [].obs;
+  RxBool loaded = false.obs;
 
-  @override
-  final Size preferredSize = Size(double.infinity, 100);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Theme.of(context).customColors().background,
-      centerTitle: false,
-      title: title,
-      elevation: 1,
-      iconTheme: IconThemeData(color: Theme.of(context).customColors().primary),
-      bottom: PreferredSize(preferredSize: Size.fromHeight(20), child: bottom),
-    );
+  Future getTaskComments({@required int taskId}) async {
+    loaded.value = false;
+    comments.value = await _api.getTaskComments(taskId: taskId);
+    loaded.value = true;
   }
 }

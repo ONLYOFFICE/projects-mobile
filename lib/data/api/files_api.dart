@@ -30,28 +30,37 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'dart:convert';
 
-class DetailedTaskAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
-  final Widget title;
-  final Widget bottom;
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
-  DetailedTaskAppBar({Key key, this.title, this.bottom}) : super(key: key);
+class FilesApi {
+  var coreApi = locator<CoreApi>();
 
-  @override
-  final Size preferredSize = Size(double.infinity, 100);
+  Future<ApiDTO<List<PortalFile>>> getTaskFiles({int taskId}) async {
+    var url = await coreApi.getTaskFiles(taskId: taskId);
 
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Theme.of(context).customColors().background,
-      centerTitle: false,
-      title: title,
-      elevation: 1,
-      iconTheme: IconThemeData(color: Theme.of(context).customColors().primary),
-      bottom: PreferredSize(preferredSize: Size.fromHeight(20), child: bottom),
-    );
+    var result = ApiDTO<List<PortalFile>>();
+
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalFile.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
   }
 }
