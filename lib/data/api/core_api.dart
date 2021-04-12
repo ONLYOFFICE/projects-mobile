@@ -30,6 +30,9 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
 
+  Future<String> getTaskFiles({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/files';
+
   Future<String> milestonesByFilter() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter';
 
@@ -44,6 +47,9 @@ class CoreApi {
 
   Future<String> taskByIdUrl(int id) async =>
       '${await getPortalURI()}/api/$version/project/task/$id';
+
+  Future<String> taskComments({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/$version/project';

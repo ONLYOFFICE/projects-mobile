@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/task.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
