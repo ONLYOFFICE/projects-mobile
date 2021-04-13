@@ -5,6 +5,7 @@ import 'package:projects/domain/controllers/projects/new_project_controller.dart
 import 'package:projects/domain/controllers/projects/users_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
+import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/header.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
@@ -39,74 +40,21 @@ class TeamMembersSelectionView extends StatelessWidget {
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.isFalse) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Text('Me', style: TextStyleHelper.body2()),
-                ),
-                SizedBox(height: 26),
-                PortalUserItem(
-                  onTapFunction: controller.selectTeamMember,
-                  userController: controller.selfUserItem,
-                ),
-                SizedBox(height: 26),
-                Container(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Text('Users', style: TextStyleHelper.body2()),
-                ),
-                SizedBox(height: 26),
-                Expanded(
-                  child: SmartRefresher(
-                    enablePullDown: false,
-                    enablePullUp: usersDataSource.pullUpEnabled,
-                    controller: usersDataSource.refreshController,
-                    onLoading: usersDataSource.onLoading,
-                    child: ListView.builder(
-                      itemBuilder: (c, i) => PortalUserItem(
-                        userController: usersDataSource.usersList[i],
-                        onTapFunction: controller.selectTeamMember,
-                      ),
-                      itemExtent: 65.0,
-                      itemCount: usersDataSource.usersList.length,
-                    ),
-                  ),
-                ),
-              ],
+            return UsersDefault(
+              selfUserItem: controller.selfUserItem,
+              usersDataSource: usersDataSource,
+              onTapFunction: controller.selectTeamMember,
             );
           }
           if (usersDataSource.nothingFound.isTrue) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  'Not found',
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            );
+            return NothingFound();
           }
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.isTrue) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (c, i) => PortalUserItem(
-                      userController: usersDataSource.usersList[i],
-                      onTapFunction: controller.selectTeamMember,
-                    ),
-                    itemExtent: 65.0,
-                    itemCount: usersDataSource.usersList.length,
-                  ),
-                )
-              ],
+            return UsersSearchResult(
+              usersDataSource: usersDataSource,
+              onTapFunction: controller.selectTeamMember,
             );
           }
           return ListLoadingSkeleton();
