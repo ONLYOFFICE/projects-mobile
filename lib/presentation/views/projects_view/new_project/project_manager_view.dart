@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/projects/new_project_controller.dart';
+import 'package:projects/domain/controllers/projects/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/users_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
@@ -71,7 +72,10 @@ class ProjectManagerSelectionView extends StatelessWidget {
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.isFalse) {
             return UsersDefault(
-                controller: controller, usersDataSource: usersDataSource);
+              selfUserItem: controller.selfUserItem,
+              usersDataSource: usersDataSource,
+              onTapFunction: controller.changePMSelection,
+            );
           }
           if (usersDataSource.nothingFound.isTrue) {
             return NothingFound();
@@ -80,7 +84,9 @@ class ProjectManagerSelectionView extends StatelessWidget {
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.isTrue) {
             return UsersSearchResult(
-                usersDataSource: usersDataSource, controller: controller);
+              usersDataSource: usersDataSource,
+              onTapFunction: controller.changePMSelection,
+            );
           }
           return ListLoadingSkeleton();
         },
@@ -93,11 +99,10 @@ class UsersSearchResult extends StatelessWidget {
   const UsersSearchResult({
     Key key,
     @required this.usersDataSource,
-    @required this.controller,
+    @required this.onTapFunction,
   }) : super(key: key);
-
+  final Function onTapFunction;
   final UsersDataSource usersDataSource;
-  final NewProjectController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +118,7 @@ class UsersSearchResult extends StatelessWidget {
             child: ListView.builder(
               itemBuilder: (c, i) => PortalUserItem(
                   userController: usersDataSource.usersList[i],
-                  onTapFunction: controller.changePMSelection),
+                  onTapFunction: onTapFunction),
               itemExtent: 65.0,
               itemCount: usersDataSource.usersList.length,
             ),
@@ -149,11 +154,12 @@ class NothingFound extends StatelessWidget {
 class UsersDefault extends StatelessWidget {
   const UsersDefault({
     Key key,
-    @required this.controller,
+    @required this.selfUserItem,
     @required this.usersDataSource,
+    @required this.onTapFunction,
   }) : super(key: key);
-
-  final NewProjectController controller;
+  final Function onTapFunction;
+  final PortalUserItemController selfUserItem;
   final UsersDataSource usersDataSource;
 
   @override
@@ -167,8 +173,8 @@ class UsersDefault extends StatelessWidget {
         ),
         SizedBox(height: 26),
         PortalUserItem(
-          onTapFunction: controller.changePMSelection,
-          userController: controller.selfUserItem,
+          onTapFunction: onTapFunction,
+          userController: selfUserItem,
         ),
         SizedBox(height: 26),
         Container(
@@ -185,7 +191,7 @@ class UsersDefault extends StatelessWidget {
             child: ListView.builder(
               itemBuilder: (c, i) => PortalUserItem(
                   userController: usersDataSource.usersList[i],
-                  onTapFunction: controller.changePMSelection),
+                  onTapFunction: onTapFunction),
               itemExtent: 65.0,
               itemCount: usersDataSource.usersList.length,
             ),
