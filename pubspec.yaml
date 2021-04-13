@@ -27,7 +27,7 @@ dependencies:
   get: ^4.0.0-nullsafety.2
   get_storage: ^2.0.1
   http: ^0.13.0
-  flutter_svg: ^0.19.3
+  flutter_svg: ^0.20.0-nullsafety.3
   flutter_secure_storage: 3.3.5 
   get_it: ^4.0.2
   json_serializable: ^3.5.1 
@@ -41,7 +41,6 @@ dependencies:
   shimmer: ^1.1.2
   drop_cap_text: ^1.0.7
   readmore: ^2.0.0
-  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
