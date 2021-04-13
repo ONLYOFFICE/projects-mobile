@@ -30,68 +30,37 @@
  *
  */
 
-import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/item.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/services/download_service.dart';
+import 'package:projects/internal/locator.dart';
 
-class ProjectCellController extends GetxController {
-  final statuses = [].obs;
+class PortalUserItemController extends GetxController {
+  final _downloadService = locator<DownloadService>();
 
-  RefreshController refreshController = RefreshController();
-
-  ProjectCellController(Item project) {
-    this.project = project;
+  PortalUserItemController({
+    this.portalUser,
+  }) {
+    loadAvatar();
   }
+  final PortalUser portalUser;
+  var isSelected = false.obs;
+  var multipleSelectionEnabled = false.obs;
 
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
-    }
+  Rx<Image> avatarImage = Rx<Image>();
+
+  String get displayName => portalUser.displayName;
+
+  Future<void> loadAvatar() async {
+    Uint8List avatarBytes =
+        await _downloadService.downloadImage(portalUser.avatarMedium);
+
+    if (avatarBytes == null) return;
+
+    var image = Image.memory(avatarBytes);
+    avatarImage.value = image;
   }
-
-  var project;
-
-  RxString statusImageString = ''.obs;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  String get statusName {
-    switch (project.status) {
-      case 0:
-        return 'Open';
-        break;
-      case 1:
-        return 'Closed';
-        break;
-      case 2:
-        return 'Paused';
-        break;
-      default:
-        return 'n/a';
-    }
-  }
-
-  String get statusImage {
-    switch (project.status) {
-      case 0:
-        return SvgIcons.open;
-        break;
-      case 1:
-        return SvgIcons.closed;
-        break;
-      case 2:
-        return SvgIcons.paused;
-        break;
-      default:
-        return 'n/a';
-    }
-  }
-
-  reloadTask() {}
 }

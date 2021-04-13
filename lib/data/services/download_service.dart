@@ -30,39 +30,27 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'dart:async';
+import 'dart:typed_data';
 
-class SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
-  SearchAppBar({
-    Key key,
-    this.title,
-    this.bottom,
-  }) : super(key: key);
+import 'package:projects/data/api/download_api.dart';
 
-  final Widget title;
-  final Widget bottom;
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-  @override
-  final Size preferredSize = Size(double.infinity, 90);
+class DownloadService {
+  final DownloadApi _api = locator<DownloadApi>();
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          AppBar(
-            iconTheme: IconThemeData(
-              color: Colors.blue,
-            ),
-            backgroundColor: Theme.of(context).customColors().background,
-            centerTitle: false,
-            title: title,
-            bottom: bottom,
-          ),
-        ],
-      ),
-    );
+  Future<Uint8List> downloadImage(String url) async {
+    var projects = await _api.downloadImage(url);
+
+    var success = projects.response != null;
+
+    if (success) {
+      return projects.response;
+    } else {
+      // ErrorDialog.show(projects.error);
+      return null;
+    }
   }
 }

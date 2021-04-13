@@ -35,7 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:projects/presentation/views/projects_view/search_appbar.dart';
+import 'package:projects/presentation/views/projects_view/bottomless_appbar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchView extends StatelessWidget {
@@ -45,7 +45,7 @@ class ProjectSearchView extends StatelessWidget {
     controller.clearSearch();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: SearchAppBar(
+      appBar: BottomlessAppBar(
         title: SearchHeader(controller: controller),
       ),
       body: Obx(

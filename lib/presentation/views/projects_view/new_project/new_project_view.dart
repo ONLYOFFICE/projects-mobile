@@ -38,7 +38,7 @@ import 'package:projects/domain/controllers/projects/new_project_controller.dart
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/projects_view/search_appbar.dart';
+import 'package:projects/presentation/views/projects_view/bottomless_appbar.dart';
 import 'package:projects/presentation/views/projects_view/widgets/header.dart';
 
 class NewProject extends StatelessWidget {
@@ -52,8 +52,8 @@ class NewProject extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: SearchAppBar(
-        title: CustomHeader(
+      appBar: BottomlessAppBar(
+        title: CustomHeaderWithButton(
           function: controller.confirm,
           title: 'Project',
         ),
@@ -153,19 +153,28 @@ class TitleInput extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Flexible(
-                        child: TextFormField(
-                          controller: controller.titleController,
-                          obscureText: false,
-                          style: TextStyleHelper.headline7(
-                              color:
-                                  Theme.of(context).customColors().onSurface),
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            hintText: 'Project Title',
+                        child: Obx(
+                          () => TextFormField(
+                            controller: controller.titleController,
+                            obscureText: false,
+                            style: TextStyleHelper.headline7(
+                                color:
+                                    Theme.of(context).customColors().onSurface),
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              errorBorder: InputBorder.none,
+                              disabledBorder: InputBorder.none,
+                              hintText: 'Project Title',
+                              hintStyle: TextStyleHelper.headline7(
+                                  color: controller.needToFillTitle.isTrue
+                                      ? Theme.of(context).customColors().error
+                                      : Theme.of(context)
+                                          .customColors()
+                                          .onSurface
+                                          .withOpacity(0.3)),
+                            ),
                           ),
                         ),
                       ),
@@ -215,7 +224,7 @@ class ProjectManager extends StatelessWidget {
                 SizedBox(height: 10),
                 Obx(
                   () => controller.isPMSelected.isTrue
-                      ? Tile(
+                      ? NewProjectTile(
                           subtitle: controller.managerName.value,
                           closeFunction: controller.removeManager,
                           title: 'Project manager:',
@@ -229,13 +238,24 @@ class ProjectManager extends StatelessWidget {
                                 onTap: () {
                                   Get.toNamed('ProjectManagerSelectionView');
                                 },
-                                child: Text(
-                                  'Choose project manager',
-                                  style: TextStyleHelper.subtitle1(
-                                    color: Theme.of(context)
-                                        .customColors()
-                                        .onSurface
-                                        .withOpacity(0.4),
+                                child: Obx(
+                                  () => Text(
+                                    'Choose project manager',
+                                    style: TextStyleHelper.subtitle1(
+                                      color: controller.needToFillManager.isTrue
+                                          ? Theme.of(context)
+                                              .customColors()
+                                              .error
+                                          : Theme.of(context)
+                                              .customColors()
+                                              .onSurface
+                                              .withOpacity(0.4),
+                                    ),
+
+                                    //  Theme.of(context)
+                                    //     .customColors()
+                                    //     .onSurface
+                                    //     .withOpacity(0.4),
                                   ),
                                 ),
                               ),
@@ -259,8 +279,8 @@ class ProjectManager extends StatelessWidget {
   }
 }
 
-class Tile extends StatelessWidget {
-  const Tile(
+class NewProjectTile extends StatelessWidget {
+  const NewProjectTile(
       {Key key,
       @required this.subtitle,
       @required this.title,
@@ -331,7 +351,7 @@ class TeamMembers extends StatelessWidget {
                 SizedBox(height: 10),
                 Obx(
                   () => controller.selectedTeamMembers.isNotEmpty
-                      ? Tile(
+                      ? NewProjectTile(
                           subtitle: controller.teamMembersTitle,
                           closeFunction: controller.editTeamMember,
                           title: 'Team',

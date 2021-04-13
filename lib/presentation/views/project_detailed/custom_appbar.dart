@@ -30,68 +30,30 @@
  *
  */
 
-import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/item.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Widget title;
+  final Widget bottom;
+  final double height;
+  CustomAppBar({Key key, this.title, this.bottom, this.height})
+      : super(key: key);
 
-class ProjectCellController extends GetxController {
-  final statuses = [].obs;
+  @override
+  final Size preferredSize = Size(double.infinity, 100);
 
-  RefreshController refreshController = RefreshController();
-
-  ProjectCellController(Item project) {
-    this.project = project;
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      iconTheme: IconThemeData(
+        color: Colors.blue,
+      ),
+      backgroundColor: Theme.of(context).customColors().background,
+      centerTitle: false,
+      title: title,
+      bottom: PreferredSize(
+          preferredSize: Size.fromHeight(50), child: bottom ?? SizedBox()),
+    );
   }
-
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
-    }
-  }
-
-  var project;
-
-  RxString statusImageString = ''.obs;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  String get statusName {
-    switch (project.status) {
-      case 0:
-        return 'Open';
-        break;
-      case 1:
-        return 'Closed';
-        break;
-      case 2:
-        return 'Paused';
-        break;
-      default:
-        return 'n/a';
-    }
-  }
-
-  String get statusImage {
-    switch (project.status) {
-      case 0:
-        return SvgIcons.open;
-        break;
-      case 1:
-        return SvgIcons.closed;
-        break;
-      case 2:
-        return SvgIcons.paused;
-        break;
-      default:
-        return 'n/a';
-    }
-  }
-
-  reloadTask() {}
 }

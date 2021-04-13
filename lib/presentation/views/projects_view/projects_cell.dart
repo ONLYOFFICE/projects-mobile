@@ -57,42 +57,46 @@ class ProjectCell extends StatelessWidget {
       key: Key('${item.id.toString()}_${item.title}'),
       onVisibilityChanged: itemController.handleVisibilityChanged,
       child: Container(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ProjectIcon(
-              itemController: itemController,
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SecondColumn(
-                          item: item,
-                          itemController: itemController,
-                        ),
-                        const SizedBox(width: 16),
-                        ThirdColumn(
-                          item: item,
-                          controller: itemController,
-                        ),
-                        const SizedBox(width: 16),
-                      ],
-                    ),
-                  ),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  ),
-                ],
+        child: GestureDetector(
+          onTap: () => Get.toNamed('ProjectDetailedView',
+              arguments: {'controller': itemController}),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              ProjectIcon(
+                itemController: itemController,
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SecondColumn(
+                            item: item,
+                            itemController: itemController,
+                          ),
+                          const SizedBox(width: 16),
+                          ThirdColumn(
+                            item: item,
+                            controller: itemController,
+                          ),
+                          const SizedBox(width: 16),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

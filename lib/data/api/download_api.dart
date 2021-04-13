@@ -31,67 +31,35 @@
  */
 
 import 'dart:convert';
+import 'dart:typed_data';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/item.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/internal/locator.dart';
 
-class ProjectCellController extends GetxController {
-  final statuses = [].obs;
+class DownloadApi {
+  var coreApi = locator<CoreApi>();
 
-  RefreshController refreshController = RefreshController();
-
-  ProjectCellController(Item project) {
-    this.project = project;
-  }
-
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
+  Future<ApiDTO<Uint8List>> downloadImage(String avatarUrl) async {
+    var url = '';
+    if (avatarUrl.toLowerCase().contains('http')) {
+      url = avatarUrl;
+    } else {
+      url = await coreApi.getPortalURI() + avatarUrl;
     }
-  }
 
-  var project;
+    var result = ApiDTO<Uint8List>();
+    try {
+      var response = await coreApi.getRequest(url);
 
-  RxString statusImageString = ''.obs;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  String get statusName {
-    switch (project.status) {
-      case 0:
-        return 'Open';
-        break;
-      case 1:
-        return 'Closed';
-        break;
-      case 2:
-        return 'Paused';
-        break;
-      default:
-        return 'n/a';
+      if (response.statusCode == 200) {
+        result.response = response.bodyBytes;
+      } else {}
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
     }
-  }
 
-  String get statusImage {
-    switch (project.status) {
-      case 0:
-        return SvgIcons.open;
-        break;
-      case 1:
-        return SvgIcons.closed;
-        break;
-      case 2:
-        return SvgIcons.paused;
-        break;
-      default:
-        return 'n/a';
-    }
+    return result;
   }
-
-  reloadTask() {}
 }
