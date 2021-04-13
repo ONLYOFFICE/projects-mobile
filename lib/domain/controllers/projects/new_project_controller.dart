@@ -1,21 +1,21 @@
-import 'dart:typed_data';
-
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
 import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/data/models/from_api/self_user_profile.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
-import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/project_service.dart';
+
 import 'package:projects/domain/controllers/projects/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/domain/controllers/users/users_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class NewProjectController extends GetxController {
   final _api = locator<ProjectService>();
+  // final _userService = locator<UserService>();
+  var usersSearchController = Get.find<UsersDataSource>();
+  var multipleSelectionEnabled = false;
 
-  final _usersController = Get.find<UsersController>();
   final _userController = Get.find<UserController>();
   var usersLoaded = false.obs;
 
@@ -23,50 +23,26 @@ class NewProjectController extends GetxController {
   var descriptionController = TextEditingController();
 
   var responsiblesNotificationEnabled = false;
-
-  var participants = [];
   var responsible = '';
 
   var notificationEnabled = false.obs;
   var isPrivate = true.obs;
   var isFolowed = false.obs;
   var descriptionText = ''.obs;
+  var selectedTeamMembers = <PortalUserItemController>[].obs;
 
   PortalUser selectedProjectManager;
+  var needToFillManager = false.obs;
+  var needToFillTitle = false.obs;
+
   var isPMSelected = false.obs;
   var managerName = ''.obs;
 
-  SelfUserProfile selfUser;
   PortalUserItemController selfUserItem;
 
-  var allUsers = <PortalUserItemController>[];
-  var selectedTeamMembers = <PortalUserItemController>[].obs;
-
-  var needToFillTitle = false.obs;
-  var needToFillManager = false.obs;
-
-  var searchInputController = TextEditingController();
-
-  var searchResult = <PortalUserItemController>[].obs;
-
-  var nothingFound = false.obs;
-
-  Future<void> getUsersInfo() async {
-    usersLoaded.value = false;
-    await _usersController.getAllProfiles();
-    await _userController.getUserInfo();
-
-    selfUser = _userController.user;
-
-    allUsers.clear();
-    _usersController.users.forEach((element) {
-      allUsers.add(PortalUserItemController(portalUser: element));
-    });
-
-    selfUserItem =
-        allUsers.firstWhere((element) => element.portalUser.id == selfUser.id);
-
-    usersLoaded.value = true;
+  NewProjectController() {
+    multipleSelectionEnabled = false;
+    responsible = '';
   }
 
   String get teamMembersTitle => selectedTeamMembers.length == 1
@@ -154,7 +130,7 @@ class NewProjectController extends GetxController {
       managerName.value = selectedProjectManager.displayName;
       isPMSelected.value = true;
 
-      allUsers.forEach((element) {
+      usersSearchController.usersList.forEach((element) {
         element.isSelected.value =
             element.portalUser.id == selectedProjectManager.id;
       });
@@ -172,7 +148,7 @@ class NewProjectController extends GetxController {
     selectedProjectManager = null;
     isPMSelected.value = false;
 
-    allUsers.forEach((element) {
+    usersSearchController.usersList.forEach((element) {
       element.isSelected.value = false;
     });
     selfUserItem.isSelected.value = false;
@@ -185,6 +161,9 @@ class NewProjectController extends GetxController {
       selectedTeamMembers.removeWhere(
           (element) => user.portalUser.id == element.portalUser.id);
     }
+    if (selfUserItem.portalUser.id == user.portalUser.id) {
+      selfUserItem.isSelected.value = user.isSelected.value;
+    }
   }
 
   void editTeamMember() {
@@ -196,50 +175,51 @@ class NewProjectController extends GetxController {
   }
 
   Future<void> setupTeamMembers() async {
-    await getUsersInfo();
-    allUsers.forEach((element) {
+    usersSearchController.usersList.forEach((element) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = true;
+      element.multipleSelectionEnabled.value = multipleSelectionEnabled;
     });
 
     selectedTeamMembers.forEach((selectedMember) {
-      allUsers.forEach((user) {
+      usersSearchController.usersList.forEach((user) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
       });
+      if (selfUserItem.portalUser.id == selectedMember.portalUser.id) {
+        selfUserItem.isSelected.value = selectedMember.isSelected.value;
+      }
     });
   }
 
   Future<void> setupPMSelection() async {
-    await getUsersInfo();
-    allUsers.forEach((element) {
+    usersSearchController.usersList.forEach((element) {
       element.isSelected.value =
           element.portalUser.id == selectedProjectManager?.id;
-      element.multipleSelectionEnabled.value = false;
+      element.multipleSelectionEnabled.value = multipleSelectionEnabled;
     });
-  }
-
-  void newSearch(String value) {}
-
-  void clearSearch() {
-    searchResult.clear();
-    searchInputController.clear();
-    nothingFound.value = false;
-  }
-
-  void performSearch(String querry) async {
-    nothingFound.value = false;
-    searchResult.clear();
-
-    allUsers.forEach((element) => {
-          if (element.displayName.toLowerCase().contains(querry.toLowerCase()))
-            {searchResult.add(element)}
-        });
-    nothingFound.value = searchResult.isEmpty;
   }
 
   void confirmTeamMembers() {
     Get.back();
+  }
+
+  Future<void> setupUsersSelection() async {
+    usersLoaded.value = false;
+
+    await _userController.getUserInfo();
+    var selfUser = _userController.user;
+    selfUserItem = PortalUserItemController(portalUser: selfUser);
+    selfUserItem.multipleSelectionEnabled.value = multipleSelectionEnabled;
+
+    if (multipleSelectionEnabled) {
+      usersSearchController.presets = setupTeamMembers;
+    } else {
+      usersSearchController.presets = setupPMSelection;
+    }
+
+    await usersSearchController.getProfiles(needToClear: true);
+
+    usersLoaded.value = true;
   }
 }

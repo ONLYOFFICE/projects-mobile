@@ -28,6 +28,7 @@ import 'package:projects/domain/controllers/files/files_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/projects/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -80,4 +81,6 @@ void setupLocator() {
   Get.lazyPut(() => TasksSortController(), fenix: true);
   Get.lazyPut(() => UserController(), fenix: true);
   Get.lazyPut(() => UsersController(), fenix: true);
+
+  Get.lazyPut(() => UsersDataSource(), fenix: true);
 }
