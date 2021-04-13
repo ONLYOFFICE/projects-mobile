@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/projects_view/bottomless_appbar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -53,19 +54,7 @@ class ProjectSearchView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             if (controller.loaded.isFalse) ListLoadingSkeleton(),
-            if (controller.nothingFound.isTrue)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                    'Not found',
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
+            if (controller.nothingFound.isTrue) NothingFound(),
             if (controller.loaded.isTrue && controller.searchResult.isNotEmpty)
               Expanded(
                 child: SmartRefresher(

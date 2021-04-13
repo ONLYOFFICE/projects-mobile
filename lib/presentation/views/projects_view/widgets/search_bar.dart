@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
+import 'package:projects/domain/controllers/projects/users_data_source.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 
 class SearchBar extends StatelessWidget {
@@ -41,7 +41,7 @@ class SearchBar extends StatelessWidget {
     @required this.controller,
   }) : super(key: key);
 
-  final NewProjectController controller;
+  final UsersDataSource controller;
 
   @override
   Widget build(BuildContext context) {
@@ -69,10 +69,7 @@ class SearchBar extends StatelessWidget {
                   hintText: 'Search for users...',
                 ),
                 onSubmitted: (value) {
-                  controller.newSearch(value);
-                },
-                onChanged: (value) {
-                  controller.performSearch(value);
+                  controller.searchUsers(value);
                 },
               ),
             ),

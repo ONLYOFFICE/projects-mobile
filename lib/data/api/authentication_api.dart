@@ -34,6 +34,7 @@ import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/self_user_profile.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
@@ -98,16 +99,16 @@ class AuthApi {
     return result;
   }
 
-  Future<ApiDTO<SelfUserProfile>> getUserInfo() async {
+  Future<ApiDTO<PortalUser>> getUserInfo() async {
     var url = await coreApi.selfInfoUrl();
 
-    var result = ApiDTO<SelfUserProfile>();
+    var result = ApiDTO<PortalUser>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        result.response = SelfUserProfile.fromJson(responseJson['response']);
+        result.response = PortalUser.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
