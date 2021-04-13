@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-<<<<<<< HEAD
-=======
-
->>>>>>> ccfb5567664e5f15dcef505650755e232f6197fe
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
