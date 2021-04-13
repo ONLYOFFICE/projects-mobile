@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
@@ -23,7 +21,7 @@ class PortalUserItemController extends GetxController {
   String get displayName => portalUser.displayName;
 
   Future<void> loadAvatar() async {
-    Uint8List avatarBytes =
+    var avatarBytes =
         await _downloadService.downloadImage(portalUser.avatarMedium);
 
     if (avatarBytes == null) return;
