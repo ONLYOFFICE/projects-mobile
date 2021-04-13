@@ -39,10 +39,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/header.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TeamMembersSelectionView extends StatelessWidget {
   const TeamMembersSelectionView({

@@ -35,7 +35,6 @@ import 'dart:typed_data';
 
 import 'package:projects/data/api/download_api.dart';
 
-import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class DownloadService {
