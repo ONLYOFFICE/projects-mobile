@@ -18,8 +18,15 @@ class CoreApi {
 
   var version = '2.0';
 
-  String capabilitiesUrl(String portalName) =>
-      'https://$portalName/api/$version/capabilities';
+  String capabilitiesUrl(String portalName) {
+    if (portalName.contains('http')) {
+      _portalName = portalName;
+    } else {
+      _portalName = 'https://$portalName';
+    }
+
+    return '$_portalName/api/$version/capabilities';
+  }
 
   Future<String> allGroups() async =>
       '${await getPortalURI()}/api/$version/group';
@@ -104,12 +111,16 @@ class CoreApi {
       _portalName = await _secureStorage.getString('portalName');
     }
 
-    return 'https://$_portalName';
+    return _portalName;
   }
 
   Future<String> getToken() async {
     var token = await _secureStorage.getString('token');
 
     return token;
+  }
+
+  Future<void> savePortalName() async {
+    await _secureStorage.putString('portalName', _portalName);
   }
 }
