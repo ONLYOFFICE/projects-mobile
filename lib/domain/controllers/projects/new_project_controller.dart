@@ -1,9 +1,13 @@
+import 'dart:typed_data';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/self_user_profile.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
+import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/projects/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -33,13 +37,19 @@ class NewProjectController extends GetxController {
   var managerName = ''.obs;
 
   SelfUserProfile selfUser;
-  PortalUserItem selfUserItem;
+  PortalUserItemController selfUserItem;
 
-  var allUsers = <PortalUserItem>[];
-  var selectedTeamMembers = <PortalUserItem>[].obs;
+  var allUsers = <PortalUserItemController>[];
+  var selectedTeamMembers = <PortalUserItemController>[].obs;
 
   var needToFillTitle = false.obs;
   var needToFillManager = false.obs;
+
+  var searchInputController = TextEditingController();
+
+  var searchResult = <PortalUserItemController>[].obs;
+
+  var nothingFound = false.obs;
 
   Future<void> getUsersInfo() async {
     usersLoaded.value = false;
@@ -48,8 +58,9 @@ class NewProjectController extends GetxController {
 
     selfUser = _userController.user;
 
+    allUsers.clear();
     _usersController.users.forEach((element) {
-      allUsers.add(PortalUserItem(portalUser: element));
+      allUsers.add(PortalUserItemController(portalUser: element));
     });
 
     selfUserItem =
@@ -137,7 +148,7 @@ class NewProjectController extends GetxController {
     Get.back();
   }
 
-  void changePMSelection(PortalUserItem user) {
+  void changePMSelection(PortalUserItemController user) {
     if (user.isSelected.isTrue) {
       selectedProjectManager = user.portalUser;
       managerName.value = selectedProjectManager.displayName;
@@ -149,6 +160,8 @@ class NewProjectController extends GetxController {
       });
       selfUserItem.isSelected.value =
           selfUserItem.portalUser.id == selectedProjectManager.id;
+
+      Get.back();
     } else {
       removeManager();
     }
@@ -165,10 +178,13 @@ class NewProjectController extends GetxController {
     selfUserItem.isSelected.value = false;
   }
 
-  void selectTeamMember(PortalUserItem user) {
-    user.isSelected.isTrue
-        ? selectedTeamMembers.add(user)
-        : selectedTeamMembers.remove(user);
+  void selectTeamMember(PortalUserItemController user) {
+    if (user.isSelected.isTrue) {
+      selectedTeamMembers.add(user);
+    } else {
+      selectedTeamMembers.removeWhere(
+          (element) => user.portalUser.id == element.portalUser.id);
+    }
   }
 
   void editTeamMember() {
@@ -183,6 +199,7 @@ class NewProjectController extends GetxController {
     await getUsersInfo();
     allUsers.forEach((element) {
       element.isSelected.value = false;
+      element.multipleSelectionEnabled.value = true;
     });
 
     selectedTeamMembers.forEach((selectedMember) {
@@ -199,16 +216,30 @@ class NewProjectController extends GetxController {
     allUsers.forEach((element) {
       element.isSelected.value =
           element.portalUser.id == selectedProjectManager?.id;
+      element.multipleSelectionEnabled.value = false;
     });
   }
-}
 
-class PortalUserItem {
-  PortalUserItem({
-    this.portalUser,
-  });
-  final PortalUser portalUser;
-  var isSelected = false.obs;
+  void newSearch(String value) {}
 
-  String get displayName => portalUser.displayName;
+  void clearSearch() {
+    searchResult.clear();
+    searchInputController.clear();
+    nothingFound.value = false;
+  }
+
+  void performSearch(String querry) async {
+    nothingFound.value = false;
+    searchResult.clear();
+
+    allUsers.forEach((element) => {
+          if (element.displayName.toLowerCase().contains(querry.toLowerCase()))
+            {searchResult.add(element)}
+        });
+    nothingFound.value = searchResult.isEmpty;
+  }
+
+  void confirmTeamMembers() {
+    Get.back();
+  }
 }

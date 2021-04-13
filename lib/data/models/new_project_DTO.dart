@@ -62,19 +62,11 @@ class NewProjectDTO {
 
 class Participant {
   String iD;
-  // int projectID;
   bool canReadFiles;
   bool canReadMilestones;
   bool canReadMessages;
   bool canReadTasks;
   bool canReadContacts;
-  // bool isVisitor;
-  // bool isFullAdmin;
-  // Null userInfo;
-  // bool isAdmin;
-  // bool isManager;
-  // bool isRemovedFromTeam;
-  // int projectTeamSecurity;
 
   Participant({
     this.iD,
@@ -84,48 +76,25 @@ class Participant {
     this.canReadMessages,
     this.canReadTasks,
     this.canReadContacts,
-    // this.isVisitor,
-    // this.isFullAdmin,
-    // this.userInfo,
-    // this.isAdmin,
-    // this.isManager,
-    // this.isRemovedFromTeam,
-    // this.projectTeamSecurity
   });
 
   Participant.fromJson(Map<String, dynamic> json) {
     iD = json['ID'];
-    // projectID = json['ProjectID'];
     canReadFiles = json['CanReadFiles'];
     canReadMilestones = json['CanReadMilestones'];
     canReadMessages = json['CanReadMessages'];
     canReadTasks = json['CanReadTasks'];
     canReadContacts = json['CanReadContacts'];
-    // isVisitor = json['IsVisitor'];
-    // isFullAdmin = json['IsFullAdmin'];
-    // userInfo = json['UserInfo'];
-    // isAdmin = json['IsAdmin'];
-    // isManager = json['IsManager'];
-    // isRemovedFromTeam = json['IsRemovedFromTeam'];
-    // projectTeamSecurity = json['ProjectTeamSecurity'];
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     data['ID'] = iD;
-    // data['ProjectID'] = projectID;
     data['CanReadFiles'] = canReadFiles;
     data['CanReadMilestones'] = canReadMilestones;
     data['CanReadMessages'] = canReadMessages;
     data['CanReadTasks'] = canReadTasks;
     data['CanReadContacts'] = canReadContacts;
-    // data['IsVisitor'] = isVisitor;
-    // data['IsFullAdmin'] = isFullAdmin;
-    // data['UserInfo'] = userInfo;
-    // data['IsAdmin'] = isAdmin;
-    // data['IsManager'] = isManager;
-    // data['IsRemovedFromTeam'] = isRemovedFromTeam;
-    // data['ProjectTeamSecurity'] = projectTeamSecurity;
     return data;
   }
 }

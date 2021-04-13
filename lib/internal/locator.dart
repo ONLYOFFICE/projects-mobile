@@ -2,8 +2,8 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/api/comments_api.dart';
-
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/api/download_api.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/api/group_api.dart';
 import 'package:projects/data/api/milestone_api.dart';
@@ -12,6 +12,7 @@ import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/api/user_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/group_service.dart';
@@ -21,6 +22,7 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
+
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/files/files_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
@@ -50,6 +52,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => SecureStorage());
   locator.registerLazySingleton(() => TaskApi());
   locator.registerLazySingleton(() => UserApi());
+  locator.registerLazySingleton(() => DownloadApi());
 
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => CommentsService());
@@ -61,6 +64,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => TaskItemService());
   locator.registerLazySingleton(() => TaskService());
   locator.registerLazySingleton(() => UserService());
+  locator.registerLazySingleton(() => DownloadService());
 
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => FilesController(), fenix: true);
@@ -73,7 +77,7 @@ void setupLocator() {
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
   Get.lazyPut(() => TasksController(), fenix: true);
 
-  Get.lazyPut(() => TasksSortController());
-  Get.lazyPut(() => UserController());
-  Get.lazyPut(() => UsersController());
+  Get.lazyPut(() => TasksSortController(), fenix: true);
+  Get.lazyPut(() => UserController(), fenix: true);
+  Get.lazyPut(() => UsersController(), fenix: true);
 }

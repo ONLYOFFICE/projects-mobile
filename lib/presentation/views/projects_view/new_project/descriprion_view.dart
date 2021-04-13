@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/views/projects_view/search_appbar.dart';
+import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
 import 'package:projects/presentation/views/projects_view/widgets/header.dart';
 
 class NewProjectDescription extends StatelessWidget {
@@ -20,8 +20,8 @@ class NewProjectDescription extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        appBar: SearchAppBar(
-          title: CustomHeader(
+        appBar: CustomAppBar(
+          title: CustomHeaderWithButton(
             function: controller.confirmDescription,
             title: 'Description',
           ),

@@ -31,6 +31,7 @@ final AppColors lightColors = AppColors(
   tabActive: const Color.fromRGBO(255, 255, 255, 1),
   tabSecondary: const Color.fromRGBO(255, 255, 255, 0.4),
   tabbarBackground: const Color(0xff2E4057),
+  error: const Color(0xffFF0C3E),
 );
 
 final AppColors darkColors = AppColors(
