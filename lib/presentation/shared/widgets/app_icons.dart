@@ -35,8 +35,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class SvgIcons {
   SvgIcons._();
-// I didn't add all the icons (!)
   static const String logo_new = 'lib/assets/images/logo_new.svg';
+
+  static const String tab_bar_dashboard =
+      'lib/assets/images/icons/tab_bar/dashboard.svg';
+  static const String tab_bar_dashboard_active =
+      'lib/assets/images/icons/tab_bar/dashboard_active.svg';
+  static const String tab_bar_tasks =
+      'lib/assets/images/icons/tab_bar/tasks.svg';
+  static const String tab_bar_tasks_active =
+      'lib/assets/images/icons/tab_bar/tasks_active.svg';
+  static const String tab_bar_projects =
+      'lib/assets/images/icons/tab_bar/projects.svg';
+  static const String tab_bar_projects_active =
+      'lib/assets/images/icons/tab_bar/projects_active.svg';
+  static const String tab_bar_more = 'lib/assets/images/icons/tab_bar/more.svg';
+  static const String tab_bar_more_active =
+      'lib/assets/images/icons/tab_bar/more_active.svg';
 
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';

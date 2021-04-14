@@ -81,6 +81,8 @@ final AppColors darkColors = AppColors(
 final ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
   backgroundColor: Color(0xffffffff),
+  navigationRailTheme:
+      NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
 );
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(
