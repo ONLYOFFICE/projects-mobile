@@ -60,6 +60,4 @@ class ProjectCellController extends GetxController {
         return 'n/a';
     }
   }
-
-  reloadTask() {}
 }

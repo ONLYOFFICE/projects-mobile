@@ -21,8 +21,8 @@ class PortalUserItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         userController.isSelected.value = !userController.isSelected.value;
-        onTapFunction(
-            userController); // controller.selectTeamMember(userController);
+        onTapFunction(userController);
+        // controller.selectTeamMember(userController);
       },
       child: Container(
         height: 48,

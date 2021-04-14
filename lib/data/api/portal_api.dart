@@ -21,7 +21,7 @@ class PortalApi {
 
       if (response.statusCode == 200) {
         result.response = Capabilities.fromJson(responseJson['response']);
-        await secureStorage.putString('portalName', portalName);
+        await coreApi.savePortalName();
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

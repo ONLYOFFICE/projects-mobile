@@ -26,7 +26,7 @@ class ProjectOverview extends StatelessWidget {
         'Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m';
     return SmartRefresher(
       controller: controller.refreshController,
-      onRefresh: () => controller.reloadTask(),
+      onRefresh: () => {},
       child: ListView(
         children: [
           // Task(

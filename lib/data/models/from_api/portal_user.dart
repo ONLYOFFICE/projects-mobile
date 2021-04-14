@@ -12,7 +12,7 @@ class PortalUser {
   String sex;
   int status;
   int activationStatus;
-  Null terminated;
+  bool terminated;
   String department;
   String workFrom;
   String displayName;

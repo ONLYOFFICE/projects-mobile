@@ -30,4 +30,36 @@ class UserApi {
 
     return result;
   }
+
+  Future<ProjectsApiDTO<List<PortalUser>>> getProfilesByParams(
+      {int startIndex, String query}) async {
+    var url = await coreApi.allProfiles();
+
+    if (startIndex != null) {
+      url += '/filter?Count=25&StartIndex=$startIndex';
+    }
+
+    if (startIndex != null && query != null) {
+      url += '&Count=25&StartIndex=$startIndex&FilterValue=$query';
+    }
+
+    var result = ProjectsApiDTO<List<PortalUser>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.total = responseJson['total'];
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalUser.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
 }

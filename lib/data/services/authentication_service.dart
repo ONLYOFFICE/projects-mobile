@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
-import 'package:projects/data/models/from_api/self_user_profile.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class AuthService {
   final AuthApi _api = locator<AuthApi>();
 
-  Future<ApiDTO<SelfUserProfile>> getSelfInfo() async {
+  Future<ApiDTO<PortalUser>> getSelfInfo() async {
     var authResponse = await _api.getUserInfo();
 
     var tokenReceived = authResponse.response != null;
