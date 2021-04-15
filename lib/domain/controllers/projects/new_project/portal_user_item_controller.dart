@@ -7,10 +7,12 @@ import 'package:projects/internal/locator.dart';
 class PortalUserItemController extends GetxController {
   final _downloadService = locator<DownloadService>();
 
+  var userTitle = ''.obs;
+
   PortalUserItemController({
     this.portalUser,
   }) {
-    loadAvatar();
+    setupUser();
   }
   final PortalUser portalUser;
   var isSelected = false.obs;
@@ -28,5 +30,12 @@ class PortalUserItemController extends GetxController {
 
     var image = Image.memory(avatarBytes);
     avatarImage.value = image;
+  }
+
+  void setupUser() {
+    if (portalUser.title != null) {
+      userTitle.value = portalUser.title;
+    }
+    loadAvatar();
   }
 }

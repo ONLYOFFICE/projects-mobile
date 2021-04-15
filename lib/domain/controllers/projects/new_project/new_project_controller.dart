@@ -1,19 +1,24 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:darq/darq.dart';
+
+import 'package:projects/data/models/from_api/portal_group.dart';
 
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/data/services/user_service.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 
-import 'package:projects/domain/controllers/projects/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/users_data_source.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class NewProjectController extends GetxController {
   final _api = locator<ProjectService>();
-  // final _userService = locator<UserService>();
-  var usersSearchController = Get.find<UsersDataSource>();
+  final _userService = locator<UserService>();
+  var usersDataSourse = Get.find<UsersDataSource>();
   var multipleSelectionEnabled = false;
 
   final _userController = Get.find<UserController>();
@@ -130,7 +135,7 @@ class NewProjectController extends GetxController {
       managerName.value = selectedProjectManager.displayName;
       isPMSelected.value = true;
 
-      usersSearchController.usersList.forEach((element) {
+      usersDataSourse.usersList.forEach((element) {
         element.isSelected.value =
             element.portalUser.id == selectedProjectManager.id;
       });
@@ -148,7 +153,7 @@ class NewProjectController extends GetxController {
     selectedProjectManager = null;
     isPMSelected.value = false;
 
-    usersSearchController.usersList.forEach((element) {
+    usersDataSourse.usersList.forEach((element) {
       element.isSelected.value = false;
     });
     selfUserItem.isSelected.value = false;
@@ -175,13 +180,13 @@ class NewProjectController extends GetxController {
   }
 
   Future<void> setupTeamMembers() async {
-    usersSearchController.usersList.forEach((element) {
+    usersDataSourse.usersList.forEach((element) {
       element.isSelected.value = false;
       element.multipleSelectionEnabled.value = multipleSelectionEnabled;
     });
 
     selectedTeamMembers.forEach((selectedMember) {
-      usersSearchController.usersList.forEach((user) {
+      usersDataSourse.usersList.forEach((user) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -193,11 +198,15 @@ class NewProjectController extends GetxController {
   }
 
   Future<void> setupPMSelection() async {
-    usersSearchController.usersList.forEach((element) {
+    usersDataSourse.usersList.forEach((element) {
       element.isSelected.value =
           element.portalUser.id == selectedProjectManager?.id;
       element.multipleSelectionEnabled.value = multipleSelectionEnabled;
     });
+
+    if (selfUserItem?.portalUser?.id == selectedProjectManager?.id) {
+      selfUserItem.isSelected.value = true;
+    }
   }
 
   void confirmTeamMembers() {
@@ -213,13 +222,46 @@ class NewProjectController extends GetxController {
     selfUserItem.multipleSelectionEnabled.value = multipleSelectionEnabled;
 
     if (multipleSelectionEnabled) {
-      usersSearchController.presets = setupTeamMembers;
+      usersDataSourse.applyUsersSelection = setupTeamMembers;
     } else {
-      usersSearchController.presets = setupPMSelection;
+      usersDataSourse.applyUsersSelection = setupPMSelection;
     }
 
-    await usersSearchController.getProfiles(needToClear: true);
+    await usersDataSourse.getProfiles(needToClear: true);
 
     usersLoaded.value = true;
+  }
+
+  var selectedGroups = <PortalGroupItemController>[];
+  void selectGroupMembers(PortalGroupItemController group) {
+    if (group.isSelected.isTrue) {
+      selectedGroups.add(group);
+    } else {
+      selectedGroups.removeWhere(
+          (element) => group.portalGroup.id == element.portalGroup.id);
+    }
+  }
+
+  void confirmGroupSelection() async {
+    selectedGroups.forEach((group) async {
+      var groupMembers = await _userService.getProfilesByExtendedFilter(
+          groupId: group.portalGroup.id);
+
+      if (groupMembers.response.isNotEmpty) {
+        groupMembers.response.forEach((element) {
+          var user = PortalUserItemController(portalUser: element);
+          user.isSelected.value = true;
+          selectedTeamMembers.add(user);
+        });
+      }
+    });
+
+    selectedTeamMembers.value =
+        selectedTeamMembers.distinct((d) => d.portalUser.id).toList();
+    await setupTeamMembers();
+
+    await usersDataSourse.updateUsers();
+
+    Get.back();
   }
 }

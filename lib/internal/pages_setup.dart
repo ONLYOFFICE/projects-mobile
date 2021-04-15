@@ -10,6 +10,7 @@ import 'package:projects/presentation/views/projects_view/new_project/descriprio
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/new_task/select_project_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
@@ -36,4 +37,7 @@ List<GetPage> getxPages() => [
           name: 'TeamMembersSelectionView',
           page: () => TeamMembersSelectionView()),
       GetPage(name: 'ProjectDetailedView', page: () => ProjectDetailedView()),
+      GetPage(
+          name: 'GroupMembersSelectionView',
+          page: () => GroupMembersSelectionView()),
     ];

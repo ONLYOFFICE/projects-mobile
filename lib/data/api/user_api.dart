@@ -31,17 +31,23 @@ class UserApi {
     return result;
   }
 
-  Future<ProjectsApiDTO<List<PortalUser>>> getProfilesByParams(
-      {int startIndex, String query}) async {
+  Future<ProjectsApiDTO<List<PortalUser>>> getProfilesByExtendedFilter({
+    int startIndex,
+    String query,
+    String groupId,
+  }) async {
     var url = await coreApi.allProfiles();
+    url += '/filter?';
 
     if (startIndex != null) {
-      url += '/filter?Count=25&StartIndex=$startIndex';
+      url += 'Count=25&StartIndex=$startIndex';
     }
 
     if (startIndex != null && query != null) {
-      url += '&Count=25&StartIndex=$startIndex&FilterValue=$query';
+      url += '&FilterValue=$query';
     }
+
+    if (groupId != null && groupId.isNotEmpty) url += '&groupId=$groupId';
 
     var result = ProjectsApiDTO<List<PortalUser>>();
     try {
