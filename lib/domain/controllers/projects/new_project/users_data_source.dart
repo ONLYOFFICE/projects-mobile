@@ -33,7 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/user_service.dart';
-import 'package:projects/domain/controllers/projects/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -54,7 +54,7 @@ class UsersDataSource extends GetxController {
 
   var totalProfiles;
 
-  Future<void> Function() presets;
+  Future<void> Function() applyUsersSelection;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
@@ -84,10 +84,10 @@ class UsersDataSource extends GetxController {
 
     var result;
     if (_query == null || _query.isEmpty) {
-      result = await _api.getProfilesByParams(startIndex: _startIndex);
+      result = await _api.getProfilesByExtendedFilter(startIndex: _startIndex);
       isSearchResult.value = false;
     } else {
-      result = await _api.getProfilesByParams(
+      result = await _api.getProfilesByExtendedFilter(
           startIndex: _startIndex, query: _query.toLowerCase());
       isSearchResult.value = true;
     }
@@ -104,8 +104,8 @@ class UsersDataSource extends GetxController {
       );
     }
 
-    if (presets != null) {
-      await presets();
+    if (applyUsersSelection != null) {
+      await applyUsersSelection();
     }
   }
 
@@ -127,5 +127,10 @@ class UsersDataSource extends GetxController {
     loaded.value = false;
     _loadUsers(needToClear: true);
     loaded.value = true;
+  }
+
+  Future<void> updateUsers() async {
+    _clear();
+    _loadUsers();
   }
 }

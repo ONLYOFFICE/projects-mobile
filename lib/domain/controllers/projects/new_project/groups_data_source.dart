@@ -30,60 +30,54 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/services/group_service.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+class GroupsDataSource extends GetxController {
+  final _api = locator<GroupService>();
+  var groupsList = [].obs;
+  var loaded = true.obs;
 
-class UsersSearchBar extends StatelessWidget {
-  const UsersSearchBar({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+  var multipleSelectionEnabled = false;
+  RefreshController refreshController = RefreshController();
 
-  final UsersDataSource controller;
+  void onLoading() async {
+    refreshController.loadComplete();
+    _loadGroups();
+    refreshController.loadComplete();
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 6,
-        bottom: 6,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).customColors().bgDescription,
-        borderRadius: BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              textInputAction: TextInputAction.search,
-              controller: controller.searchInputController,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Search for users...',
-              ),
-              onSubmitted: (value) {
-                controller.searchUsers(value);
-              },
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              controller.clearSearch();
-            },
-            child: Icon(
-              Icons.close,
-              color: Colors.blue,
-            ),
-          )
-        ],
-      ),
-    );
+  void _loadGroups({bool needToClear = false}) async {
+    if (needToClear) groupsList.clear();
+
+    var result;
+
+    result = await _api.getAllGroups();
+
+    if (result.isEmpty) {
+    } else {
+      result.forEach(
+        (element) {
+          var portalUser = PortalGroupItemController(portalGroup: element);
+
+          groupsList.add(portalUser);
+        },
+      );
+    }
+  }
+
+  void _clear() {
+    groupsList.clear();
+  }
+
+  Future getGroups({bool needToClear}) async {
+    _clear();
+    loaded.value = false;
+    _loadGroups(needToClear: true);
+    loaded.value = true;
   }
 }

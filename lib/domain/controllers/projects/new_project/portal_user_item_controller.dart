@@ -31,59 +31,43 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/services/download_service.dart';
+import 'package:projects/internal/locator.dart';
 
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+class PortalUserItemController extends GetxController {
+  final _downloadService = locator<DownloadService>();
 
-class UsersSearchBar extends StatelessWidget {
-  const UsersSearchBar({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+  var userTitle = ''.obs;
 
-  final UsersDataSource controller;
+  PortalUserItemController({
+    this.portalUser,
+  }) {
+    setupUser();
+  }
+  final PortalUser portalUser;
+  var isSelected = false.obs;
+  var multipleSelectionEnabled = false.obs;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      padding: EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 6,
-        bottom: 6,
-      ),
-      decoration: BoxDecoration(
-        color: Theme.of(context).customColors().bgDescription,
-        borderRadius: BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              textInputAction: TextInputAction.search,
-              controller: controller.searchInputController,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Search for users...',
-              ),
-              onSubmitted: (value) {
-                controller.searchUsers(value);
-              },
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              controller.clearSearch();
-            },
-            child: Icon(
-              Icons.close,
-              color: Colors.blue,
-            ),
-          )
-        ],
-      ),
-    );
+  Rx<Image> avatarImage = Rx<Image>();
+
+  String get displayName => portalUser.displayName;
+
+  Future<void> loadAvatar() async {
+    var avatarBytes =
+        await _downloadService.downloadImage(portalUser.avatarMedium);
+
+    if (avatarBytes == null) return;
+
+    var image = Image.memory(avatarBytes);
+    avatarImage.value = image;
+  }
+
+  void setupUser() {
+    if (portalUser.title != null) {
+      userTitle.value = portalUser.title;
+    }
+    loadAvatar();
   }
 }
