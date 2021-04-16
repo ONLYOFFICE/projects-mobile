@@ -4,7 +4,9 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/projects_view/project_sort.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends BaseController {
@@ -14,9 +16,12 @@ class ProjectsController extends BaseController {
   List<Status> statuses;
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
-  var startIndex = 0;
+  var _startIndex = 0;
 
   int totalProjects = 0;
+
+  var _sortBy;
+  var _sortOrder;
 
   bool get pullUpEnabled => projects.length != totalProjects;
 
@@ -35,22 +40,33 @@ class ProjectsController extends BaseController {
 
   RefreshController refreshController = RefreshController();
 
+  ProjectsSortController sortController;
+
   @override
   void showSearch() {
     Get.toNamed('ProjectSearchView');
   }
 
+  @override
+  void showSortView() {
+    Get.bottomSheet(ProjectSort(), isScrollControlled: true);
+  }
+
+  void updateSort() {
+    _getProjects(needToClear: true);
+  }
+
   void onRefresh() async {
-    startIndex = 0;
+    _startIndex = 0;
     await _getProjects(needToClear: true);
     refreshController.refreshCompleted();
   }
 
   void onLoading() async {
-    startIndex += 25;
-    if (startIndex >= totalProjects) {
+    _startIndex += 25;
+    if (_startIndex >= totalProjects) {
       refreshController.loadComplete();
-      startIndex -= 25;
+      _startIndex -= 25;
       return;
     }
     await _getProjects();
@@ -59,13 +75,16 @@ class ProjectsController extends BaseController {
 
   Future<void> setupProjects() async {
     loaded.value = false;
-    startIndex = 0;
+    _startIndex = 0;
     await _getProjects(needToClear: true);
     loaded.value = true;
   }
 
   Future _getProjects({needToClear = false}) async {
-    var result = await _api.getProjectsByParams(startIndex: startIndex);
+    var result = await _api.getProjectsByParams(
+        startIndex: _startIndex,
+        sortBy: sortController.currentSortfilter,
+        sortOrder: sortController.currentSortOrder);
     totalProjects = result.total;
 
     if (needToClear) projects.clear();

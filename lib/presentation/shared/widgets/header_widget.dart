@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
-import 'package:projects/domain/controllers/tasks/sort_controller.dart';
+import 'package:projects/domain/controllers/base_sort_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
-import 'package:projects/presentation/views/tasks/tasks_sort.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 
 class HeaderWidget extends StatefulWidget {
+  HeaderWidget({
+    this.controller,
+    this.sortController,
+  });
   final BaseController controller;
-  HeaderWidget({this.controller});
+  final BaseSortController sortController;
 
   @override
   _HeaderWidgetState createState() => _HeaderWidgetState();
@@ -25,7 +28,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var sortController = Get.find<TasksSortController>();
     return Obx(
       () => Column(
         children: <Widget>[
@@ -79,9 +81,6 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                         color: Theme.of(context).customColors().primary,
                       ),
                     ),
-                    // IconButton(
-                    //     icon: const Icon(Icons.more_vert_outlined),
-                    //     onPressed: () {}),
                   ],
                 ),
               ],
@@ -97,12 +96,12 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                   padding: EdgeInsets.only(right: 4),
                   child: GestureDetector(
                     onTap: () {
-                      Get.bottomSheet(TasksSort(), isScrollControlled: true);
+                      widget.controller.showSortView();
                     },
                     child: Row(
                       children: <Widget>[
                         Text(
-                          sortController.currentSort.value,
+                          widget.sortController.currentSortText.value,
                           style: TextStyleHelper.projectsSorting,
                         ),
                         const SizedBox(width: 8),
@@ -119,8 +118,13 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                     children: <Widget>[
                       Obx(
                         () => Text(
-                          '${widget.controller.itemList.length} ${widget.controller.screenName.toLowerCase()}',
-                          style: TextStyleHelper.subtitleProjects,
+                          'Total ${widget.controller.itemList.length}',
+                          style: TextStyleHelper.body2(
+                            color: Theme.of(context)
+                                .customColors()
+                                .onSurface
+                                .withOpacity(0.6),
+                          ),
                         ),
                       ),
                     ],

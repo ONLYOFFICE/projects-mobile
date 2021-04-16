@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
@@ -17,6 +18,8 @@ class TasksView extends StatelessWidget {
     var controller = Get.find<TasksController>();
     controller.getTasks();
 
+    var sortController = Get.find<TasksSortController>();
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
@@ -28,7 +31,10 @@ class TasksView extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              HeaderWidget(controller: controller),
+              HeaderWidget(
+                controller: controller,
+                sortController: sortController,
+              ),
               if (controller.loaded.isFalse) ListLoadingSkeleton(),
               if (controller.loaded.isTrue)
                 Expanded(

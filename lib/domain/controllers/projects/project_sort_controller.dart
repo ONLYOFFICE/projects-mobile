@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_sort_controller.dart';
 
-class TasksSortController extends BaseSortController {
+class ProjectsSortController extends BaseSortController {
   @override
-  var currentSortText = 'Deadline'.obs;
+  var currentSortText = 'Creation date'.obs;
   @override
   var currentSortOrderText = 'ascending'.obs;
 
@@ -12,24 +12,12 @@ class TasksSortController extends BaseSortController {
       '&sortBy=${_toFilters[currentSortText.value]}&sortOrder=${currentSortOrderText.value}';
 
   @override
-  // TODO: implement currentSortOrder
-  String get currentSortOrder => throw UnimplementedError();
-
-  @override
-  // TODO: implement currentSortfilter
-  String get currentSortfilter => throw UnimplementedError();
-
-  @override
   String toFilters(value) {
     return _toFilters[value];
   }
 }
 
 const _toFilters = {
-  'Deadline': 'deadline',
-  'Priority': 'priority',
   'Creation date': 'create_on',
-  'Start date': 'start_date',
   'Title': 'title',
-  'Order': 'sort_order',
 };
