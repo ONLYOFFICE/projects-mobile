@@ -31,37 +31,34 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base_sort_controller.dart';
 
-class TasksSortController extends BaseSortController {
-  @override
-  var currentSortText = 'Deadline'.obs;
-  @override
-  var currentSortOrderText = 'ascending'.obs;
+abstract class BaseSortController extends GetxController {
+  var currentSortText;
+  var currentSortOrderText;
+  Function updateSortDelegate;
 
-  @override
-  String get sort =>
-      '&sortBy=${_toFilters[currentSortText.value]}&sortOrder=${currentSortOrderText.value}';
+  Future<void> changeSort(String newSort) async {
+    if (newSort == currentSortText.value) {
+      if (currentSortOrderText.value == 'ascending') {
+        currentSortOrderText.value = 'descending';
+      } else {
+        currentSortOrderText.value = 'ascending';
+      }
+    } else {
+      currentSortText.value = newSort;
+      currentSortOrderText.value == 'ascending';
+    }
 
-  @override
-  // TODO: implement currentSortOrder
-  String get currentSortOrder => throw UnimplementedError();
-
-  @override
-  // TODO: implement currentSortfilter
-  String get currentSortfilter => throw UnimplementedError();
-
-  @override
-  String toFilters(value) {
-    return _toFilters[value];
+    if (updateSortDelegate != null) {
+      updateSortDelegate();
+    }
   }
-}
 
-const _toFilters = {
-  'Deadline': 'deadline',
-  'Priority': 'priority',
-  'Creation date': 'create_on',
-  'Start date': 'start_date',
-  'Title': 'title',
-  'Order': 'sort_order',
-};
+  String get sort;
+
+  String get currentSortfilter => toFilters(currentSortText.value);
+
+  String get currentSortOrder => currentSortOrderText.value;
+
+  String toFilters(value);
+}

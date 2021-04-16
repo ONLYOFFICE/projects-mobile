@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
@@ -45,7 +46,12 @@ class ProjectsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<ProjectsController>();
+    var sortController = Get.find<ProjectsSortController>();
+
+    sortController.updateSortDelegate = controller.updateSort;
+    controller.sortController = sortController;
     controller.setupProjects();
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
@@ -62,7 +68,10 @@ class ProjectsView extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            HeaderWidget(controller: controller),
+            HeaderWidget(
+              controller: controller,
+              sortController: sortController,
+            ),
             if (controller.loaded.isFalse) ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
