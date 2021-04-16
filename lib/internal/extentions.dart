@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:flutter/widgets.dart';
 
 extension CustomList<T> on List<T> {
   static T firstOrNull<T>(List<T> list) {
@@ -20,5 +21,20 @@ String formatedDate({DateTime now, String stringDate}) {
   } else {
     final formatter = DateFormat('d MMM yyy');
     return formatter.format(date);
+  }
+}
+
+extension ColorExtension on String {
+  Color toColor() {
+    // ignore: unnecessary_this
+    var hexColor = this.replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse('0x$hexColor'));
+    } else {
+      return const Color(0xffffffff);
+    }
   }
 }

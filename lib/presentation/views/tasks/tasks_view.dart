@@ -4,7 +4,7 @@ import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';

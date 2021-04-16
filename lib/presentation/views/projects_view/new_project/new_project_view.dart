@@ -3,11 +3,11 @@ import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/projects_view/bottomless_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+import 'package:projects/presentation/shared/widgets/bottomless_appbar.dart';
+import 'package:projects/presentation/shared/widgets/header.dart';
 
 class NewProject extends StatelessWidget {
   const NewProject({

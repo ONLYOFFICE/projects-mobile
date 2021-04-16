@@ -9,8 +9,8 @@ import 'package:projects/presentation/views/project_detailed/custom_appbar.dart'
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
 
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TeamMembersSelectionView extends StatelessWidget {
   const TeamMembersSelectionView({

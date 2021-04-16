@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget title;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class TextStyleHelper {
   static final body1 = TextStyle(
