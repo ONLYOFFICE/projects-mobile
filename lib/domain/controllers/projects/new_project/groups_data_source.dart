@@ -31,11 +31,11 @@
  */
 
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
+
 import 'package:projects/data/services/group_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class GroupsDataSource extends GetxController {
   final _api = locator<GroupService>();
