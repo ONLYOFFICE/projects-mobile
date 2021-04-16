@@ -25,7 +25,7 @@ class ProjectCell extends StatelessWidget {
       key: Key('${item.id.toString()}_${item.title}'),
       onVisibilityChanged: itemController.handleVisibilityChanged,
       child: Container(
-        child: GestureDetector(
+        child: InkWell(
           onTap: () => Get.toNamed('ProjectDetailedView',
               arguments: {'controller': itemController}),
           child: Row(
@@ -45,7 +45,7 @@ class ProjectCell extends StatelessWidget {
                             item: item,
                             itemController: itemController,
                           ),
-                          const SizedBox(width: 16),
+                          // const SizedBox(width: 16),
                           ThirdColumn(
                             item: item,
                             controller: itemController,
@@ -155,29 +155,21 @@ class SecondColumn extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              Flexible(
-                child: DropCapText(
-                  item.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectTitle,
-                  dropCapPadding: EdgeInsets.only(top: 4),
-                  dropCap: DropCap(
-                    width: 12,
-                    height: 12,
-                    child: AppIcon(icon: SvgIcons.lock),
-                  ),
-                ),
-              ),
-            ],
+          DropCapText(
+            item.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyleHelper.projectTitle,
+            dropCapPadding: EdgeInsets.only(top: 4, right: 4),
+            dropCap: DropCap(
+              width: 12,
+              height: 12,
+              child: AppIcon(icon: SvgIcons.lock),
+            ),
           ),
-          const SizedBox(height: 8),
           Row(
             children: <Widget>[
               Text(
@@ -190,12 +182,10 @@ class SecondColumn extends StatelessWidget {
                   style: TextStyleHelper.projectResponsible,
                 ),
               ),
-              Flexible(
-                child: Text(
-                  item.responsible.displayName,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectResponsible,
-                ),
+              Text(
+                item.responsible.displayName,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyleHelper.projectResponsible,
               ),
             ],
           ),
@@ -217,25 +207,21 @@ class ThirdColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              SVG.createSized(
-                  'lib/assets/images/icons/check_square.svg', 20, 20),
-              Text(
-                item.subCount.toString(),
-                style: TextStyleHelper.projectCompleatedTasks,
-              ),
-            ],
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            SVG.createSized('lib/assets/images/icons/check_square.svg', 20, 20),
+            Text(
+              item.subCount.toString(),
+              style: TextStyleHelper.projectCompleatedTasks,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

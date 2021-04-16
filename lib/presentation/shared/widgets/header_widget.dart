@@ -4,8 +4,10 @@ import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_sort.dart';
+import 'package:projects/presentation/shared/custom_theme.dart';
 
 class HeaderWidget extends StatefulWidget {
   final BaseController controller;
@@ -28,68 +30,69 @@ class _HeaderWidgetState extends State<HeaderWidget> {
       () => Column(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(8),
+            padding: EdgeInsets.all(16),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Container(
-                  width: 56,
-                  child: SVG.createSized(
-                      'lib/assets/images/icons/project_icon.svg', 40, 40),
-                ),
                 Expanded(
                   child: Text(
                     widget.controller.screenName,
                     style: TextStyleHelper.headerStyle,
                   ),
                 ),
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          widget.controller.showSearch();
-                        },
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () {
+                        widget.controller.showSearch();
+                      },
+                      child: AppIcon(
+                        width: 24,
+                        height: 24,
+                        icon: SvgIcons.search,
+                        color: Theme.of(context).customColors().primary,
                       ),
-                      IconButton(
-                          icon: SVG.create(
-                              'lib/assets/images/icons/preferences.svg'),
-                          onPressed: () {
-                            Get.bottomSheet(TasksFilter(),
-                                isScrollControlled: true);
-                          }),
-                      IconButton(
-                          icon: const Icon(Icons.more_vert_outlined),
-                          onPressed: () {}),
-                    ],
-                  ),
+                    ),
+                    SizedBox(width: 24),
+                    InkWell(
+                      onTap: () {
+                        Get.bottomSheet(TasksFilter(),
+                            isScrollControlled: true);
+                      },
+                      child: AppIcon(
+                        width: 24,
+                        height: 24,
+                        icon: SvgIcons.preferences,
+                        color: Theme.of(context).customColors().primary,
+                      ),
+                    ),
+                    SizedBox(width: 24),
+                    InkWell(
+                      onTap: () {},
+                      child: AppIcon(
+                        width: 24,
+                        height: 24,
+                        icon: SvgIcons.tasklist,
+                        color: Theme.of(context).customColors().primary,
+                      ),
+                    ),
+                    // IconButton(
+                    //     icon: const Icon(Icons.more_vert_outlined),
+                    //     onPressed: () {}),
+                  ],
                 ),
               ],
             ),
           ),
           Container(
-            padding: EdgeInsets.all(16),
+            padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                // const SizedBox(width: 16),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Obx(
-                        () => Text(
-                          '${widget.controller.itemList.length} ${widget.controller.screenName.toLowerCase()}',
-                          style: TextStyleHelper.subtitleProjects,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
                 Container(
                   padding: EdgeInsets.only(right: 4),
                   child: GestureDetector(
@@ -109,6 +112,18 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                             20),
                       ],
                     ),
+                  ),
+                ),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      Obx(
+                        () => Text(
+                          '${widget.controller.itemList.length} ${widget.controller.screenName.toLowerCase()}',
+                          style: TextStyleHelper.subtitleProjects,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
