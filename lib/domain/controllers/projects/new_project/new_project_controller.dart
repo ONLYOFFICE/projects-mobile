@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:darq/darq.dart';
 
-import 'package:projects/data/models/from_api/portal_group.dart';
-
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';

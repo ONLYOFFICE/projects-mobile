@@ -6,7 +6,7 @@ class PortalGroupItemController extends GetxController {
 
   PortalGroupItemController({
     this.portalGroup,
-  }) {}
+  });
   final PortalGroup portalGroup;
   var isSelected = false.obs;
 
