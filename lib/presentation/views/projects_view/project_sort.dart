@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
-import 'package:projects/domain/controllers/tasks/sort_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/custom_theme.dart';
 import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';

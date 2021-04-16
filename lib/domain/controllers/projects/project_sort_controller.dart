@@ -8,16 +8,15 @@ class ProjectsSortController extends BaseSortController {
   var currentSortOrderText = 'ascending'.obs;
 
   @override
-  String get sort =>
-      '&sortBy=${_toFilters[currentSortText.value]}&sortOrder=${currentSortOrderText.value}';
+  String get sort => '';
 
   @override
   String toFilters(value) {
-    return _toFilters[value];
+    return _filtersMapping[value];
   }
 }
 
-const _toFilters = {
+const _filtersMapping = {
   'Creation date': 'create_on',
   'Title': 'title',
 };
