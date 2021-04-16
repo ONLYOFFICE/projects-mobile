@@ -31,79 +31,36 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
-
-class CustomHeaderWithButton extends StatelessWidget {
-  const CustomHeaderWithButton({
+class BottomlessAppBar extends StatelessWidget implements PreferredSizeWidget {
+  BottomlessAppBar({
     Key key,
-    @required this.function,
-    @required this.title,
+    this.title,
+    this.bottom,
   }) : super(key: key);
 
-  final Function() function;
-  final String title;
+  final Widget title;
+  final Widget bottom;
+
+  @override
+  final Size preferredSize = Size(double.infinity, 60);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Material(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onSurface),
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  function();
-                },
-                child: Icon(
-                  Icons.check,
-                  color: Colors.blue,
-                ),
-              )
-            ],
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.blue,
+            ),
+            backgroundColor: Theme.of(context).customColors().background,
+            centerTitle: false,
+            title: title,
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class CustomHeaderWithoutButton extends StatelessWidget {
-  const CustomHeaderWithoutButton({
-    Key key,
-    @required this.title,
-  }) : super(key: key);
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Material(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onSurface),
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }

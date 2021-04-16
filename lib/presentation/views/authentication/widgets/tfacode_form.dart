@@ -35,7 +35,7 @@ import 'package:get/get.dart';
 
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class CodeForm extends StatefulWidget {
   @override

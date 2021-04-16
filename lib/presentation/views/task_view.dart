@@ -31,8 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/shared/ui_helpers.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TaskView extends StatelessWidget {
   @override
@@ -42,7 +41,6 @@ class TaskView extends StatelessWidget {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          UIHelper.verticalSpaceLarge(),
           Padding(
             padding: const EdgeInsets.only(left: 20.0),
             child: Text(
@@ -57,7 +55,6 @@ class TaskView extends StatelessWidget {
               style: TextStyleHelper.subHeaderStyle,
             ),
           ),
-          UIHelper.verticalSpaceSmall(),
         ],
       ),
     );

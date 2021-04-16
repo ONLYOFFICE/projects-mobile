@@ -31,8 +31,8 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/app_colors.dart';
-import 'package:projects/presentation/shared/theme_service.dart';
+import 'package:projects/presentation/shared/theme/app_colors.dart';
+import 'package:projects/presentation/shared/theme/theme_service.dart';
 
 extension ThemeDataExtensions on ThemeData {
   AppColors customColors() {

@@ -33,7 +33,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class UsersSearchBar extends StatelessWidget {
   const UsersSearchBar({

@@ -38,11 +38,11 @@ import 'package:projects/data/models/item.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 
 import 'package:projects/presentation/shared/svg_manager.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectCell extends StatelessWidget {
   final Item item;
