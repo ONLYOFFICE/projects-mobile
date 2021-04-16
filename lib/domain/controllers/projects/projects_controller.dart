@@ -52,9 +52,6 @@ class ProjectsController extends BaseController {
 
   int totalProjects = 0;
 
-  var _sortBy;
-  var _sortOrder;
-
   bool get pullUpEnabled => projects.length != totalProjects;
 
   @override

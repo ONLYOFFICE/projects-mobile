@@ -41,7 +41,7 @@ class TasksSortController extends BaseSortController {
 
   @override
   String get sort =>
-      '&sortBy=${_toFilters[currentSortText.value]}&sortOrder=${currentSortOrderText.value}';
+      '&sortBy=${_filtersMapping[currentSortText.value]}&sortOrder=${currentSortOrderText.value}';
 
   @override
   // TODO: implement currentSortOrder
@@ -53,11 +53,11 @@ class TasksSortController extends BaseSortController {
 
   @override
   String toFilters(value) {
-    return _toFilters[value];
+    return _filtersMapping[value];
   }
 }
 
-const _toFilters = {
+const _filtersMapping = {
   'Deadline': 'deadline',
   'Priority': 'priority',
   'Creation date': 'create_on',
