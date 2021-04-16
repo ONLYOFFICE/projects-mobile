@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -51,7 +52,11 @@ class ProjectsView extends StatelessWidget {
         onPressed: () {
           controller.createNewProject();
         },
-        child: Icon(Icons.add_rounded),
+        child: AppIcon(
+          icon: SvgIcons.add_project,
+          width: 32,
+          height: 32,
+        ),
       ),
       body: Obx(
         () => Column(
