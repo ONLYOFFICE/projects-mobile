@@ -1,11 +1,18 @@
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_sort_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
 class TasksSortController extends BaseSortController {
   @override
   var currentSortText = 'Deadline'.obs;
   @override
   var currentSortOrderText = 'ascending'.obs;
+
+  @override
+  void changeSort(String newSort) {
+    super.changeSort(newSort);
+    Get.find<TasksController>().getTasks();
+  }
 
   @override
   String get sort =>

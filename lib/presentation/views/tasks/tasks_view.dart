@@ -3,9 +3,12 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/svg_manager.dart';
+import 'package:projects/presentation/shared/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
@@ -18,8 +21,6 @@ class TasksView extends StatelessWidget {
     var controller = Get.find<TasksController>();
     controller.getTasks();
 
-    var sortController = Get.find<TasksSortController>();
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
@@ -31,10 +32,7 @@ class TasksView extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              HeaderWidget(
-                controller: controller,
-                sortController: sortController,
-              ),
+              TasksHeader(),
               if (controller.loaded.isFalse) ListLoadingSkeleton(),
               if (controller.loaded.isTrue)
                 Expanded(
@@ -56,5 +54,54 @@ class TasksView extends StatelessWidget {
         },
       ),
     );
+  }
+}
+
+class TasksHeader extends StatelessWidget {
+  TasksHeader({
+    Key key,
+  }) : super(key: key);
+
+  final controller = Get.find<TasksController>();
+  final sortController = Get.find<TasksSortController>();
+
+  @override
+  Widget build(BuildContext context) {
+    var options = Column(
+      children: [
+        SizedBox(height: 14.5),
+        Divider(height: 9, thickness: 1),
+        SortTile(title: 'Deadline', sortController: sortController),
+        SortTile(title: 'Priority', sortController: sortController),
+        SortTile(title: 'Creation date', sortController: sortController),
+        SortTile(title: 'Start date', sortController: sortController),
+        SortTile(title: 'Title', sortController: sortController),
+        SortTile(title: 'Order', sortController: sortController),
+        SizedBox(height: 20)
+      ],
+    );
+
+    var sortButton = Container(
+      padding: EdgeInsets.only(right: 4),
+      child: GestureDetector(
+        onTap: () {
+          Get.bottomSheet(SortView(sortOptions: options),
+              isScrollControlled: true);
+        },
+        child: Row(
+          children: <Widget>[
+            Text(
+              sortController.currentSortText.value,
+              style: TextStyleHelper.projectsSorting,
+            ),
+            const SizedBox(width: 8),
+            SVG.createSized(
+                'lib/assets/images/icons/sorting_3_descend.svg', 20, 20),
+          ],
+        ),
+      ),
+    );
+
+    return HeaderWidget(controller: controller, sortButton: sortButton);
   }
 }

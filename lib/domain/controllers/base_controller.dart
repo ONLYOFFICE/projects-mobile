@@ -5,6 +5,4 @@ abstract class BaseController extends GetxController {
   RxList<dynamic> get itemList;
 
   void showSearch() {}
-
-  void showSortView() {}
 }

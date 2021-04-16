@@ -1,4 +1,6 @@
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:get/get.dart';
+
 import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
@@ -6,8 +8,6 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/views/projects_view/project_sort.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectsController extends BaseController {
   final _api = locator<ProjectService>();
@@ -37,16 +37,15 @@ class ProjectsController extends BaseController {
 
   RefreshController refreshController = RefreshController();
 
-  ProjectsSortController sortController;
+  final _sortController = Get.find<ProjectsSortController>();
+
+  ProjectsController() {
+    _sortController.updateSortDelegate = updateSort;
+  }
 
   @override
   void showSearch() {
     Get.toNamed('ProjectSearchView');
-  }
-
-  @override
-  void showSortView() {
-    Get.bottomSheet(ProjectSort(), isScrollControlled: true);
   }
 
   void updateSort() {
@@ -80,8 +79,8 @@ class ProjectsController extends BaseController {
   Future _getProjects({needToClear = false}) async {
     var result = await _api.getProjectsByParams(
         startIndex: _startIndex,
-        sortBy: sortController.currentSortfilter,
-        sortOrder: sortController.currentSortOrder);
+        sortBy: _sortController.currentSortfilter,
+        sortOrder: _sortController.currentSortOrder);
     totalProjects = result.total;
 
     if (needToClear) projects.clear();
