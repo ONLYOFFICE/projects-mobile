@@ -32,15 +32,15 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/sort_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/domain/controllers/base_sort_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
-class TasksSort extends StatelessWidget {
-  const TasksSort({Key key}) : super(key: key);
+class SortView extends StatelessWidget {
+  const SortView({Key key, @required this.sortOptions}) : super(key: key);
 
+  final sortOptions;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -74,15 +74,7 @@ class TasksSort extends StatelessWidget {
               child: Text('Sort by',
                   style: TextStyleHelper.h6(
                       color: Theme.of(context).customColors().onSurface))),
-          const SizedBox(height: 14.5),
-          const Divider(height: 9, thickness: 1),
-          const SortTile(title: 'Deadline'),
-          const SortTile(title: 'Priority'),
-          const SortTile(title: 'Creation date'),
-          const SortTile(title: 'Start date'),
-          const SortTile(title: 'Title'),
-          const SortTile(title: 'Order'),
-          const SizedBox(height: 20)
+          sortOptions,
         ],
       ),
     );
@@ -91,15 +83,13 @@ class TasksSort extends StatelessWidget {
 
 class SortTile extends StatelessWidget {
   final String title;
-  final Function onTap;
-
-  const SortTile({Key key, this.title, this.onTap}) : super(key: key);
+  final BaseSortController sortController;
+  const SortTile({Key key, this.title, @required this.sortController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _sortController = Get.find<TasksSortController>();
-
-    var _selected = _sortController.currentSortText.value == title;
+    var _selected = sortController.currentSortText.value == title;
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
           color: Theme.of(context).customColors().bgDescription,
@@ -107,12 +97,10 @@ class SortTile extends StatelessWidget {
     }
 
     return InkWell(
-      onTap: onTap ??
-          () {
-            _sortController.changeSort(title);
-            Get.find<TasksController>().getTasks();
-            Get.back();
-          },
+      onTap: () {
+        sortController.changeSort(title);
+        Get.back();
+      },
       child: Container(
         height: 40,
         margin: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
@@ -135,10 +123,9 @@ class SortTile extends StatelessWidget {
             ),
             if (_selected)
               AppIcon(
-                  icon:
-                      _sortController.currentSortOrderText.value == 'ascending'
-                          ? SvgIcons.up_arrow
-                          : SvgIcons.down_arrow)
+                  icon: sortController.currentSortOrderText.value == 'ascending'
+                      ? SvgIcons.up_arrow
+                      : SvgIcons.down_arrow)
           ],
         ),
       ),

@@ -34,7 +34,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/views/tasks/tasks_sort.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/data/services/task_service.dart';
 
@@ -64,11 +63,6 @@ class TasksController extends BaseController {
 
   @override
   RxList get itemList => tasks;
-
-  @override
-  void showSortView() {
-    Get.bottomSheet(TasksSort(), isScrollControlled: true);
-  }
 
   @override
   void updateSort(String sortBy, String sortOrder) {

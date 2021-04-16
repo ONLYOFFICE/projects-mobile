@@ -37,7 +37,7 @@ abstract class BaseSortController extends GetxController {
   var currentSortOrderText;
   Function updateSortDelegate;
 
-  Future<void> changeSort(String newSort) async {
+  void changeSort(String newSort) async {
     if (newSort == currentSortText.value) {
       if (currentSortOrderText.value == 'ascending') {
         currentSortOrderText.value = 'descending';
