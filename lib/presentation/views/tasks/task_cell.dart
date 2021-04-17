@@ -124,21 +124,16 @@ class SecondColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Row(
+          Wrap(
             children: [
-              Flexible(
-                child: Text(
-                  task.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectTitle,
-                ),
+              Text(
+                task.title,
+                maxLines: 2,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
               ),
-              const SizedBox(width: 6),
-              if (task.priority == 1)
-                AppIcon(
-                  icon: SvgIcons.high_priority,
-                )
+              if (task.priority == 1) const SizedBox(width: 6),
+              if (task.priority == 1) AppIcon(icon: SvgIcons.high_priority)
             ],
           ),
           Row(
