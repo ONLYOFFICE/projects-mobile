@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 

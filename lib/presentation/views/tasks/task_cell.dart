@@ -4,9 +4,10 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
     as bottom_sheet;

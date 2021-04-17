@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ListLoadingSkeleton extends StatelessWidget {
   const ListLoadingSkeleton({Key key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class Comment extends StatelessWidget {
   final PortalComment comment;

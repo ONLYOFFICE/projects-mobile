@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/domain/controllers/projects/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class PortalUserItem extends StatelessWidget {
   const PortalUserItem({
@@ -72,6 +72,21 @@ class PortalUserItem extends StatelessWidget {
                                     .replaceAll(' ', '\u00A0'),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyleHelper.subtitle1(),
+                              ),
+                              Obx(
+                                () => userController.userTitle != null &&
+                                        userController.userTitle.isNotEmpty
+                                    ? Text(
+                                        userController.userTitle
+                                            .replaceAll(' ', '\u00A0'),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyleHelper.body2(
+                                          color: Theme.of(context)
+                                              .customColors()
+                                              .onBackground,
+                                        ),
+                                      )
+                                    : SizedBox(),
                               ),
                             ],
                           ),
