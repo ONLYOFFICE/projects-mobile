@@ -80,6 +80,7 @@ class PortalTask {
       this.description,
       this.files,
       this.id,
+      this.isSubscribed,
       this.milestone,
       this.milestoneId,
       this.priority,
@@ -109,6 +110,7 @@ class PortalTask {
             json['files'].map((x) => PortalFile.fromJson(x)))
         : null;
     id = json['id'];
+    isSubscribed = json['isSubscribed'];
     title = json['title'];
     description = json['description'];
     deadline = json['deadline'];
@@ -155,6 +157,7 @@ class PortalTask {
     data['startDate'] = startDate;
     data['files'] = files?.toSet();
     data['id'] = id;
+    data['isSubscribed'] = isSubscribed;
     data['title'] = title;
     data['description'] = description;
     data['deadline'] = deadline;

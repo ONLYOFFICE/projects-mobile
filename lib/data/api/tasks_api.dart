@@ -110,20 +110,59 @@ class TaskApi {
   }
 
   Future<ApiDTO> updateTaskStatus(
-      {int taskId, int newStatusId, String newStatusType}) async {
+      {int taskId, int newStatusId, int newStatusType}) async {
     var url = await coreApi.updateTaskStatusUrl(taskId: taskId);
 
     var result = ApiDTO();
 
-    var body = {'status': 'open', 'statusId': newStatusId};
+    var body = {'status': newStatusType, 'statusId': newStatusId};
     var responseJson;
     try {
-      var response = await coreApi.putRequest(url, body);
-      // final responseJson = json.decode(response.body);
+      var response = await coreApi.putRequest(url, body: body);
       responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        result.response = (responseJson['response'] as List);
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+    return result;
+  }
+
+  Future<ApiDTO> deleteTask({int taskId}) async {
+    var url = await coreApi.deleteTask(taskId: taskId);
+
+    var result = ApiDTO();
+
+    var responseJson;
+    try {
+      var response = await coreApi.deleteRequest(url);
+      responseJson = json.decode(response.body);
+      if (response.statusCode == 200) {
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+    return result;
+  }
+
+  Future<ApiDTO> subscribeToTask({int taskId}) async {
+    var url = await coreApi.subscribeTask(taskId: taskId);
+
+    var result = ApiDTO();
+
+    var responseJson;
+    try {
+      var response = await coreApi.putRequest(url);
+      responseJson = json.decode(response.body);
+      if (response.statusCode == 200) {
+        result.response = responseJson['response'];
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

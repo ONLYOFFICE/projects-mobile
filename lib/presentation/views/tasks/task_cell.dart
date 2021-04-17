@@ -107,6 +107,7 @@ class TaskCell extends StatelessWidget {
   }
 }
 
+// refactor
 class TaskStatus extends StatelessWidget {
   final TaskItemController itemController;
 
@@ -117,27 +118,30 @@ class TaskStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration:
-          BoxDecoration(shape: BoxShape.circle, color: const Color(0xffD8D8D8)),
-      child: Container(
-          width: 40,
-          height: 40,
-          margin: const EdgeInsets.all(0.5),
-          decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Theme.of(context).customColors().background),
-          child: Center(
-            child: SVG.createSizedFromString(
-                itemController.statusImageString.value,
-                16,
-                16,
-                itemController.status.value.color),
-          )),
+    return Obx(
+      () => DecoratedBox(
+        decoration: BoxDecoration(
+            shape: BoxShape.circle, color: const Color(0xffD8D8D8)),
+        child: Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.all(0.5),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Theme.of(context).customColors().background),
+            child: Center(
+              child: SVG.createSizedFromString(
+                  itemController.statusImageString.value,
+                  16,
+                  16,
+                  itemController.status.value.color),
+            )),
+      ),
     );
   }
 }
 
+// refactor
 class SecondColumn extends StatelessWidget {
   final PortalTask task;
   final TaskItemController itemController;
@@ -150,53 +154,55 @@ class SecondColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 2,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Wrap(
-            children: [
-              Text(
-                task.title,
-                maxLines: 2,
-                softWrap: true,
-                overflow: TextOverflow.ellipsis,
-              ),
-              if (task.priority == 1) const SizedBox(width: 6),
-              if (task.priority == 1) AppIcon(icon: SvgIcons.high_priority)
-            ],
-          ),
-          Row(
-            children: [
-              Flexible(
-                child: Text(itemController.status.value.title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyleHelper.taskStatus(
-                        itemController.status.value.color.toColor())),
-              ),
-              Text(' • ',
-                  style: TextStyleHelper.caption(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6))),
-              Flexible(
-                child: Text(task.createdBy.displayName,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+    return Obx(
+      () => Expanded(
+        flex: 2,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Wrap(
+              children: [
+                Text(
+                  task.title,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (task.priority == 1) const SizedBox(width: 6),
+                if (task.priority == 1) AppIcon(icon: SvgIcons.high_priority)
+              ],
+            ),
+            Row(
+              children: [
+                Flexible(
+                  child: Text(itemController.status.value.title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyleHelper.taskStatus(
+                          itemController.status.value.color.toColor())),
+                ),
+                Text(' • ',
                     style: TextStyleHelper.caption(
                         color: Theme.of(context)
                             .customColors()
                             .onSurface
                             .withOpacity(0.6))),
-              ),
-            ],
-          ),
-        ],
+                Flexible(
+                  child: Text(task.createdBy.displayName,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyleHelper.caption(
+                          color: Theme.of(context)
+                              .customColors()
+                              .onSurface
+                              .withOpacity(0.6))),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

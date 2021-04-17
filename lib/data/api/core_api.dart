@@ -69,6 +69,9 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
 
+  Future<String> deleteTask({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId';
+
   Future<String> getTaskFiles({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
 
@@ -102,6 +105,9 @@ class CoreApi {
   Future<String> statusesUrl() async =>
       '${await getPortalURI()}/api/$version/project/status';
 
+  Future<String> subscribeTask({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
+
   Future<String> updateTaskStatusUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/status';
 
@@ -127,12 +133,22 @@ class CoreApi {
     return response;
   }
 
-  Future<http.Response> putRequest(String url, Map body) async {
+  Future<http.Response> putRequest(String url, {Map body = const {}}) async {
     var headers = await getHeaders();
     var request = client.put(
       Uri.parse(url),
       headers: headers,
-      body: body,
+      body: body.isEmpty ? null : body.toString(),
+    );
+    final response = await request;
+    return response;
+  }
+
+  Future<http.Response> deleteRequest(String url) async {
+    var headers = await getHeaders();
+    var request = client.delete(
+      Uri.parse(url),
+      headers: headers,
     );
     final response = await request;
     return response;

@@ -91,11 +91,13 @@ class BottomSheet extends StatelessWidget {
               children: [
                 for (var i = 0; i < _statusesController.statuses.length; i++)
                   InkWell(
-                    onTap: () {
-                      taskItemController.updateTaskStatus(
+                    onTap: () async {
+                      await taskItemController.updateTaskStatus(
                           id: taskItemController.task.value.id,
                           newStatusId: _statusesController.statuses[i].id,
-                          newStatusType: 'open');
+                          newStatusType:
+                              _statusesController.statuses[i].statusType);
+                      Get.back();
                     },
                     child: StatusTile(
                         title: _statusesController.statuses[i].title,
