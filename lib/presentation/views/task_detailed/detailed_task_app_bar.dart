@@ -5,8 +5,16 @@ class DetailedTaskAppBar extends StatelessWidget
     implements PreferredSizeWidget {
   final Widget title;
   final Widget bottom;
+  final double elevation;
+  final List<Widget> actions;
 
-  DetailedTaskAppBar({Key key, this.title, this.bottom}) : super(key: key);
+  DetailedTaskAppBar({
+    Key key,
+    this.title,
+    this.bottom,
+    this.elevation = 1,
+    this.actions,
+  }) : super(key: key);
 
   @override
   final Size preferredSize = Size(double.infinity, 100);
@@ -17,9 +25,10 @@ class DetailedTaskAppBar extends StatelessWidget
       backgroundColor: Theme.of(context).customColors().background,
       centerTitle: false,
       title: title,
-      elevation: 1,
+      elevation: elevation,
       iconTheme: IconThemeData(color: Theme.of(context).customColors().primary),
       bottom: PreferredSize(preferredSize: Size.fromHeight(20), child: bottom),
+      actions: actions,
     );
   }
 }

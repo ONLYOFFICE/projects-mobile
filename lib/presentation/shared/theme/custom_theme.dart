@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/theme/app_colors.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/theme_service.dart';
 
 extension ThemeDataExtensions on ThemeData {
@@ -51,6 +52,14 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   backgroundColor: Color(0xffffffff),
   navigationRailTheme:
       NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
+  popupMenuTheme: PopupMenuThemeData(
+    textStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
+    elevation: 10,
+  ),
+  dialogTheme: DialogTheme(
+      titleTextStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
+      contentTextStyle:
+          TextStyleHelper.body2(color: lightColors.onSurface.withOpacity(0.6))),
 );
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(

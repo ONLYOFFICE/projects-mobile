@@ -20,6 +20,7 @@ import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage.dart';
+import 'package:projects/data/services/task_item_service.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
 
@@ -34,7 +35,6 @@ import 'package:projects/domain/controllers/projects/new_project/users_data_sour
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/statuses_controller.dart';

@@ -1,11 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/services/task_item_service.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
-import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -23,16 +23,19 @@ class TaskItemController extends GetxController {
 
   TaskItemController(PortalTask task) {
     this.task.value = task;
-    var statusesController = Get.find<TaskStatusesController>();
+    initTaskStatus(task);
+  }
 
+  void initTaskStatus(PortalTask task) {
     var statuss;
+    var statusesController = Get.find<TaskStatusesController>();
 
     if (task.customTaskStatus != null) {
       statuss = statusesController.statuses
           .firstWhere((element) => element.id == task.customTaskStatus);
     } else {
       statuss = statusesController.statuses
-          .firstWhere((element) => element.statusType == task.status);
+          .firstWhere((element) => -element.id == task.status);
     }
 
     statusImageString.value = decodeImageString(statuss.image);
@@ -46,13 +49,24 @@ class TaskItemController extends GetxController {
     loaded.value = true;
   }
 
-  Future updateTaskStatus(
-      {int id, int newStatusId, String newStatusType}) async {
+  Future updateTaskStatus({int id, int newStatusId, int newStatusType}) async {
     loaded.value = false;
-    // var t = await _api.updateTaskStatus(
-    //     taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
-    // task.value.customTaskStatus = t;
+    var t = await _api.updateTaskStatus(
+        taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
+    var newTask = PortalTask.fromJson(t);
+    task.value = newTask;
+    initTaskStatus(newTask);
     loaded.value = true;
+  }
+
+  Future deleteTask({@required int taskId}) async {
+    var r = await _api.deleteTask(taskId: taskId);
+    if (r != null) return 'ok';
+  }
+
+  Future subscribeToTask({@required int taskId}) async {
+    var r = await _api.subscribeToTask(taskId: taskId);
+    if (r != null) return 'ok';
   }
 
   void handleVisibilityChanged(VisibilityInfo info) {
@@ -63,38 +77,5 @@ class TaskItemController extends GetxController {
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
-  }
-}
-
-class TaskItemService {
-  final TaskApi _api = locator<TaskApi>();
-
-  var portalTask = PortalTask().obs;
-
-  Future getTaskByID({int id}) async {
-    var task = await _api.getTaskByID(id: id);
-    var success = task.response != null;
-
-    if (success) {
-      return task.response;
-    } else {
-      ErrorDialog.show(task.error);
-      return null;
-    }
-  }
-
-  Future updateTaskStatus(
-      {int taskId, int newStatusId, String newStatusType}) async {
-    var task = await _api.updateTaskStatus(
-        taskId: taskId, newStatusId: newStatusId, newStatusType: newStatusType);
-
-    var success = task.response != null;
-
-    if (success) {
-      return task.response;
-    } else {
-      ErrorDialog.show(task.error);
-      return null;
-    }
   }
 }
