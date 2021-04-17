@@ -90,10 +90,7 @@ class _HeaderWidgetState extends State<HeaderWidget> {
                       IconButton(
                           icon: SVG.create(
                               'lib/assets/images/icons/preferences.svg'),
-                          onPressed: () {
-                            Get.bottomSheet(TasksFilter(),
-                                isScrollControlled: true);
-                          }),
+                          onPressed: () async => showFilters(context)),
                       IconButton(
                           icon: const Icon(Icons.more_vert_outlined),
                           onPressed: () {}),
