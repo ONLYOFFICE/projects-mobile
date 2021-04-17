@@ -36,7 +36,7 @@ import 'package:projects/domain/controllers/projects/project_search_controller.d
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:projects/presentation/views/projects_view/bottomless_appbar.dart';
+import 'package:projects/presentation/shared/widgets/bottomless_appbar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchView extends StatelessWidget {
@@ -103,9 +103,6 @@ class SearchHeader extends StatelessWidget {
                   onSubmitted: (value) {
                     controller.newSearch(value);
                   },
-                  // onChanged: (value) {
-                  //   controller.performSearch(value);
-                  // },
                 ),
               ),
               InkWell(

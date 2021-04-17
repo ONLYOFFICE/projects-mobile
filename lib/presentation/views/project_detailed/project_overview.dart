@@ -34,10 +34,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/task_detailed/overview/overview_screen.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 

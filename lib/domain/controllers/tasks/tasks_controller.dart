@@ -63,4 +63,9 @@ class TasksController extends BaseController {
 
   @override
   RxList get itemList => tasks;
+
+  @override
+  void updateSort(String sortBy, String sortOrder) {
+    // TODO: implement updateSort
+  }
 }

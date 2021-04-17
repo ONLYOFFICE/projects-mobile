@@ -31,34 +31,37 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/data/services/download_service.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
-class PortalUserItemController extends GetxController {
-  final _downloadService = locator<DownloadService>();
+class BottomlessAppBar extends StatelessWidget implements PreferredSizeWidget {
+  BottomlessAppBar({
+    Key key,
+    this.title,
+    this.bottom,
+  }) : super(key: key);
 
-  PortalUserItemController({
-    this.portalUser,
-  }) {
-    loadAvatar();
-  }
-  final PortalUser portalUser;
-  var isSelected = false.obs;
-  var multipleSelectionEnabled = false.obs;
+  final Widget title;
+  final Widget bottom;
 
-  Rx<Image> avatarImage = Rx<Image>();
+  @override
+  final Size preferredSize = Size(double.infinity, 60);
 
-  String get displayName => portalUser.displayName;
-
-  Future<void> loadAvatar() async {
-    var avatarBytes =
-        await _downloadService.downloadImage(portalUser.avatarMedium);
-
-    if (avatarBytes == null) return;
-
-    var image = Image.memory(avatarBytes);
-    avatarImage.value = image;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          AppBar(
+            iconTheme: IconThemeData(
+              color: Colors.blue,
+            ),
+            backgroundColor: Theme.of(context).customColors().background,
+            centerTitle: false,
+            title: title,
+          ),
+        ],
+      ),
+    );
   }
 }

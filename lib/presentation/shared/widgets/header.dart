@@ -33,8 +33,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:projects/presentation/shared/custom_theme.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class CustomHeaderWithButton extends StatelessWidget {
   const CustomHeaderWithButton({

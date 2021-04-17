@@ -30,42 +30,54 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class StyledFloatingActionButton extends StatelessWidget {
-  final Function() onPressed;
-  final Widget child;
-  final Color backgroundColor;
+import 'package:projects/data/services/group_service.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
+import 'package:projects/internal/locator.dart';
 
-  const StyledFloatingActionButton({
-    Key key,
-    this.backgroundColor, //= Theme.of(context).customColors().lightSecondary,
-    this.onPressed,
-    this.child,
-  }) : super(key: key);
+class GroupsDataSource extends GetxController {
+  final _api = locator<GroupService>();
+  var groupsList = [].obs;
+  var loaded = true.obs;
 
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
-        BoxShadow(
-            color: Theme.of(context).customColors().onSurface.withOpacity(0.2),
-            blurRadius: 10,
-            spreadRadius: 1,
-            offset: Offset(0, 1)),
-        BoxShadow(
-            color: Theme.of(context).customColors().onSurface.withOpacity(0.12),
-            blurRadius: 5,
-            spreadRadius: 1,
-            offset: Offset(0, 4)),
-      ]),
-      child: FloatingActionButton(
-        backgroundColor: Theme.of(context).customColors().lightSecondary,
-        onPressed: onPressed,
-        elevation: 0,
-        child: child,
-      ),
-    );
+  var multipleSelectionEnabled = false;
+  RefreshController refreshController = RefreshController();
+
+  void onLoading() async {
+    refreshController.loadComplete();
+    _loadGroups();
+    refreshController.loadComplete();
+  }
+
+  void _loadGroups({bool needToClear = false}) async {
+    if (needToClear) groupsList.clear();
+
+    var result;
+
+    result = await _api.getAllGroups();
+
+    if (result.isEmpty) {
+    } else {
+      result.forEach(
+        (element) {
+          var portalUser = PortalGroupItemController(portalGroup: element);
+
+          groupsList.add(portalUser);
+        },
+      );
+    }
+  }
+
+  void _clear() {
+    groupsList.clear();
+  }
+
+  Future getGroups({bool needToClear}) async {
+    _clear();
+    loaded.value = false;
+    _loadGroups(needToClear: true);
+    loaded.value = true;
   }
 }

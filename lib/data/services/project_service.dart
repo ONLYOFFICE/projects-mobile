@@ -58,10 +58,18 @@ class ProjectService {
     }
   }
 
-  Future<ProjectsApiDTO<List<ProjectDetailed>>> getProjectsByParams(
-      {int startIndex, String query}) async {
-    var projects =
-        await _api.getProjectsByParams(startIndex: startIndex, query: query);
+  Future<ProjectsApiDTO<List<ProjectDetailed>>> getProjectsByParams({
+    int startIndex,
+    String query,
+    String sortBy,
+    String sortOrder,
+  }) async {
+    var projects = await _api.getProjectsByParams(
+      startIndex: startIndex,
+      query: query,
+      sortBy: sortBy,
+      sortOrder: sortOrder,
+    );
 
     var success = projects.response != null;
 

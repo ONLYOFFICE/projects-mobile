@@ -30,38 +30,17 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_group.dart';
 
-class BottomlessAppBar extends StatelessWidget implements PreferredSizeWidget {
-  BottomlessAppBar({
-    Key key,
-    this.title,
-    this.bottom,
-  }) : super(key: key);
+class PortalGroupItemController extends GetxController {
+  var groupTitle = ''.obs;
 
-  final Widget title;
-  final Widget bottom;
+  PortalGroupItemController({
+    this.portalGroup,
+  });
+  final PortalGroup portalGroup;
+  var isSelected = false.obs;
 
-  @override
-  final Size preferredSize = Size(double.infinity, 60);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          AppBar(
-            iconTheme: IconThemeData(
-              color: Colors.blue,
-            ),
-            backgroundColor: Theme.of(context).customColors().background,
-            centerTitle: false,
-            title: title,
-          ),
-        ],
-      ),
-    );
-  }
+  String get displayName => portalGroup.name;
 }

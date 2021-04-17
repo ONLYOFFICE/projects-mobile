@@ -34,12 +34,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
-import 'package:projects/domain/controllers/projects/new_project_controller.dart';
-import 'package:projects/presentation/shared/text_styles.dart';
-import 'package:projects/presentation/shared/custom_theme.dart';
+import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/projects_view/bottomless_appbar.dart';
-import 'package:projects/presentation/views/projects_view/widgets/header.dart';
+import 'package:projects/presentation/shared/widgets/bottomless_appbar.dart';
+import 'package:projects/presentation/shared/widgets/header.dart';
 
 class NewProject extends StatelessWidget {
   const NewProject({
@@ -61,11 +61,21 @@ class NewProject extends StatelessWidget {
       body: ListView(
         children: [
           TitleInput(controller: controller),
-          ProjectManager(
-            controller: controller,
+          InkWell(
+            onTap: () {
+              Get.toNamed('ProjectManagerSelectionView');
+            },
+            child: ProjectManager(
+              controller: controller,
+            ),
           ),
-          TeamMembers(
-            controller: controller,
+          InkWell(
+            onTap: () {
+              Get.toNamed('TeamMembersSelectionView');
+            },
+            child: TeamMembers(
+              controller: controller,
+            ),
           ),
           InkWell(
             onTap: () {
@@ -78,48 +88,6 @@ class NewProject extends StatelessWidget {
             ),
           ),
           AdvancedOptions(controller: controller),
-        ],
-      ),
-    );
-  }
-}
-
-class OptionWithSwitch extends StatelessWidget {
-  const OptionWithSwitch({
-    Key key,
-    @required this.title,
-    @required this.switcher,
-  }) : super(key: key);
-
-  final String title;
-  final Obx switcher;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(56, 0, 16, 0),
-      height: 60,
-      child: Column(
-        children: <Widget>[
-          const Divider(
-            height: 1,
-            thickness: 1,
-            indent: 0,
-            endIndent: 0,
-            color: Color(0xffD8D8D8),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Text(
-                title,
-                style: TextStyleHelper.subtitle1(),
-              ),
-              switcher,
-            ],
-          ),
         ],
       ),
     );
@@ -251,11 +219,6 @@ class ProjectManager extends StatelessWidget {
                                               .onSurface
                                               .withOpacity(0.4),
                                     ),
-
-                                    //  Theme.of(context)
-                                    //     .customColors()
-                                    //     .onSurface
-                                    //     .withOpacity(0.4),
                                   ),
                                 ),
                               ),
@@ -550,45 +513,25 @@ class AdvancedOptions extends StatelessWidget {
                     ),
                     children: <Widget>[
                       OptionWithSwitch(
-                        // controller: controller,
                         title: 'Notify Project Manager by email',
-                        switcher: Obx(
-                          () => Switch(
-                            value: controller.notificationEnabled.value,
-                            onChanged: (value) {
-                              controller.enableNotification(value);
-                            },
-                            activeTrackColor: Colors.lightGreenAccent,
-                            activeColor: Colors.green,
-                          ),
-                        ),
+                        switchValue: controller.notificationEnabled,
+                        switchOnChanged: (value) {
+                          controller.enableNotification(value);
+                        },
                       ),
                       OptionWithSwitch(
-                        // controller: controller,
                         title: 'Save this project as private',
-                        switcher: Obx(
-                          () => Switch(
-                            value: controller.isPrivate.value,
-                            onChanged: (value) {
-                              controller.setPrivate(value);
-                            },
-                            activeTrackColor: Colors.lightGreenAccent,
-                            activeColor: Colors.green,
-                          ),
-                        ),
+                        switchValue: controller.isPrivate,
+                        switchOnChanged: (value) {
+                          controller.setPrivate(value);
+                        },
                       ),
                       OptionWithSwitch(
                         title: 'Follow this project',
-                        switcher: Obx(
-                          () => Switch(
-                            value: controller.isFolowed.value,
-                            onChanged: (value) {
-                              controller.folow(value);
-                            },
-                            activeTrackColor: Colors.lightGreenAccent,
-                            activeColor: Colors.green,
-                          ),
-                        ),
+                        switchValue: controller.isFolowed,
+                        switchOnChanged: (value) {
+                          controller.folow(value);
+                        },
                       ),
                     ],
                   ),
@@ -602,6 +545,69 @@ class AdvancedOptions extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class OptionWithSwitch extends StatelessWidget {
+  const OptionWithSwitch({
+    Key key,
+    @required this.title,
+    @required this.switchOnChanged,
+    @required this.switchValue,
+  }) : super(key: key);
+
+  final RxBool switchValue;
+  final Function switchOnChanged;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.fromLTRB(56, 0, 16, 0),
+      height: 60,
+      child: Column(
+        children: <Widget>[
+          const Divider(
+            height: 1,
+            thickness: 1,
+            indent: 0,
+            endIndent: 0,
+            color: Color(0xffD8D8D8),
+          ),
+          SizedBox(
+            height: 5,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Expanded(
+                child: FittedBox(
+                  alignment: Alignment.topLeft,
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    title,
+                    style: TextStyleHelper.subtitle1(),
+                  ),
+                ),
+              ),
+              Obx(
+                () => Switch(
+                  value: switchValue.value,
+                  onChanged: switchOnChanged,
+                  activeTrackColor: Theme.of(context)
+                      .customColors()
+                      .primary
+                      .withOpacity(0.54),
+                  activeColor: Theme.of(context).customColors().primary,
+                ),
+              ),
+            ],
           ),
         ],
       ),
