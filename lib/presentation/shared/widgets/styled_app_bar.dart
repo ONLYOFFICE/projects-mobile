@@ -43,18 +43,20 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget> actions;
   final Widget bottom;
   final double elevation;
+  final Widget leading;
 
-  StyledAppBar({
-    Key key,
-    this.actions,
-    this.elevation = 1,
-    this.title,
-    this.titleText,
-    this.centerTitle,
-    this.bottom,
-    this.bottomHeight = 44,
-    this.showBackButton = true,
-  })  : assert(titleText == null || title == null),
+  StyledAppBar(
+      {Key key,
+      this.actions,
+      this.elevation = 1,
+      this.title,
+      this.titleText,
+      this.centerTitle,
+      this.bottom,
+      this.bottomHeight = 44,
+      this.showBackButton = true,
+      this.leading})
+      : assert(titleText == null || title == null),
         // assert((bottom != null || bottomHeight == null) ||
         //     (bottom == null && bottomHeight == null)),
         // assert((bottom != null || bottomHeight == null)),
@@ -73,6 +75,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: lightColors.onPrimarySurface,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
+      leading: leading,
       textTheme: TextTheme(
           headline6: TextStyleHelper.headline6(color: lightColors.onSurface)),
       actions: actions,
