@@ -46,6 +46,7 @@ class AppColors {
   final Color onPrimary;
   final Color onPrimarySurface;
   final Color onSurface;
+  final Color outline;
   final Color primary;
   final Color primarySurface;
   final Color projectsSubtitle;
@@ -68,6 +69,7 @@ class AppColors {
     @required this.onPrimary,
     @required this.onPrimarySurface,
     @required this.onSurface,
+    @required this.outline,
     @required this.primary,
     @required this.primarySurface,
     @required this.projectsSubtitle,

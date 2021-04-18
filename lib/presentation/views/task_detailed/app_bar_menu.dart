@@ -42,37 +42,7 @@ class _AppBarMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: Icon(Icons.more_vert, size: 26),
       offset: Offset(0, 25),
-      onSelected: (value) async {
-        if (value == 'Delete task') {
-          await Get.dialog(StyledAlertDialog(
-            titleText: 'Delete task',
-            contentText:
-                'Are you sure you want to delete these task?\nNote: this action cannot be undone.',
-            acceptText: 'DELETE',
-            onAcceptTap: () async {
-              var result = await controller.deleteTask(taskId: task.id);
-              if (result != null) {
-                Get.find<TasksController>().onRefresh();
-                Get.back();
-                Get.back();
-              } else {
-                print('ERROR');
-              }
-            },
-          ));
-        }
-        if (value == 'Copy link') {
-          var taskId = task.id;
-          var prjId = task.projectOwner.id;
-          var link =
-              'https://alexanderyuzhin.teamlab.info/Products/Projects/Tasks.aspx?prjID=$prjId&id=$taskId#';
-          await Clipboard.setData(ClipboardData(text: link));
-        }
-        if (value == 'Follow task') {
-          var result = await controller.subscribeToTask(taskId: task.id);
-          if (result != null) await controller.reloadTask();
-        }
-      },
+      onSelected: (value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
           PopupMenuItem(value: 'Copy link', child: Text('Copy link')),
@@ -94,5 +64,41 @@ class _AppBarMenu extends StatelessWidget {
         ];
       },
     );
+  }
+}
+
+void _onSelected(value, TaskItemController controller) async {
+  var task = controller.task.value;
+  switch (value) {
+    case 'Delete task':
+      await Get.dialog(StyledAlertDialog(
+        titleText: 'Delete task',
+        contentText:
+            'Are you sure you want to delete these task?\nNote: this action cannot be undone.',
+        acceptText: 'DELETE',
+        onAcceptTap: () async {
+          var result = await controller.deleteTask(taskId: task.id);
+          if (result != null) {
+            Get.find<TasksController>().onRefresh();
+            Get.back();
+            Get.back();
+          } else {
+            print('ERROR');
+          }
+        },
+      ));
+      break;
+    case 'Copy link':
+      var taskId = task.id;
+      var prjId = task.projectOwner.id;
+      var link =
+          'https://alexanderyuzhin.teamlab.info/Products/Projects/Tasks.aspx?prjID=$prjId&id=$taskId#';
+      await Clipboard.setData(ClipboardData(text: link));
+      break;
+    case 'Follow task':
+      var result = await controller.subscribeToTask(taskId: task.id);
+      if (result != null) await controller.reloadTask();
+      break;
+    default:
   }
 }

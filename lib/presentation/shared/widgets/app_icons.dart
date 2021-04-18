@@ -101,7 +101,6 @@ class PngIcons {
   PngIcons._();
 }
 
-// TODO: icons. Delete todo as you see it
 class AppIcon extends StatelessWidget {
   final Color color;
   final double height;

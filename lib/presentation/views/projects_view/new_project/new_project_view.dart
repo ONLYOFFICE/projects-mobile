@@ -32,14 +32,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:readmore/readmore.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/bottomless_appbar.dart';
-import 'package:projects/presentation/shared/widgets/header.dart';
 
 class NewProject extends StatelessWidget {
   const NewProject({
@@ -52,12 +51,21 @@ class NewProject extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: BottomlessAppBar(
-        title: CustomHeaderWithButton(
-          function: controller.confirm,
-          title: 'Project',
-        ),
+      appBar: StyledAppBar(
+        titleText: 'Project',
+        elevation: 2,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.check_outlined),
+              onPressed: () => controller.confirm)
+        ],
       ),
+      // appBar: BottomlessAppBar(
+      //   title: CustomHeaderWithButton(
+      //     function: controller.confirm,
+      //     title: 'Project',
+      //   ),
+      // ),
       body: ListView(
         children: [
           TitleInput(controller: controller),

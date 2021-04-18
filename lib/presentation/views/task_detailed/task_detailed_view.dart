@@ -38,8 +38,8 @@ import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
-import 'package:projects/presentation/views/task_detailed/detailed_task_app_bar.dart';
 import 'package:projects/presentation/views/task_detailed/documents/documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
@@ -87,7 +87,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
     });
     return Obx(
       () => Scaffold(
-        appBar: DetailedTaskAppBar(
+        appBar: StyledAppBar(
           actions: [
             IconButton(
               icon: Icon(Icons.edit_outlined),
@@ -95,10 +95,10 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
             ),
             _AppBarMenu(controller: controller)
           ],
-          bottom: SizedBox(
-            height: 40,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16),
+          bottom: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              height: 40,
               child: TabBar(
                   isScrollable: true,
                   controller: _tabController,
@@ -171,11 +171,7 @@ class _Tab extends StatelessWidget {
                     style: TextStyle(
                         fontSize: 14,
                         color: Theme.of(context).customColors().surface,
-                        letterSpacing: 0.1))
-                // style: TextStyleHelper.subtitle2(
-                //         color: Theme.of(context).customColors().surface)
-                //     .copyWith(height: 1, letterSpacing: 0)),
-                ),
+                        letterSpacing: 0.1))),
           ),
       ],
     );

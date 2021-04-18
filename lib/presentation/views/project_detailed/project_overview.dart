@@ -32,7 +32,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -54,7 +53,7 @@ class ProjectOverview extends StatelessWidget {
     //  return Obx(
     //   () {
     //     if (controller.loaded.isTrue) {
-    String _text =
+    var _text =
         'Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m';
     return SmartRefresher(
       controller: controller.refreshController,
