@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
-import 'package:projects/presentation/shared/widgets/header.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
 class NewProjectDescription extends StatelessWidget {
   const NewProjectDescription({
@@ -20,12 +19,20 @@ class NewProjectDescription extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
-        appBar: CustomAppBar(
-          title: CustomHeaderWithButton(
-            function: controller.confirmDescription,
-            title: 'Description',
-          ),
+        appBar: StyledAppBar(
+          titleText: 'Description',
+          actions: [
+            IconButton(
+                icon: Icon(Icons.check_outlined),
+                onPressed: () => controller.confirmDescription)
+          ],
         ),
+        // appBar: CustomAppBar(
+        //   title: CustomHeaderWithButton(
+        //     function: controller.confirmDescription,
+        //     title: 'Description',
+        //   ),
+        // ),
         body: Padding(
           padding: EdgeInsets.all(12.0),
           child: TextField(

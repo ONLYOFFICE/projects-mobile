@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/bottomless_appbar.dart';
-import 'package:projects/presentation/shared/widgets/header.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_group_item.dart';
 
 class GroupMembersSelectionView extends StatelessWidget {
@@ -22,12 +21,21 @@ class GroupMembersSelectionView extends StatelessWidget {
     groupsDataSource.getGroups();
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: BottomlessAppBar(
-        title: CustomHeaderWithButton(
-          function: controller.confirmGroupSelection,
-          title: 'Add members of',
-        ),
+      appBar: StyledAppBar(
+        titleText: 'Add members of',
+        elevation: 2,
+        actions: [
+          IconButton(
+              icon: Icon(Icons.check_outlined),
+              onPressed: () => controller.confirmGroupSelection)
+        ],
       ),
+      // appBar: BottomlessAppBar(
+      //   title: CustomHeaderWithButton(
+      //     function: controller.confirmGroupSelection,
+      //     title: 'Add members of',
+      //   ),
+      // ),
       body: Obx(
         () {
           if (groupsDataSource.loaded.isTrue &&

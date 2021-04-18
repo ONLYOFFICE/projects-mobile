@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
@@ -27,19 +25,11 @@ class TaskItemController extends GetxController {
   }
 
   void initTaskStatus(PortalTask task) {
-    var statuss;
     var statusesController = Get.find<TaskStatusesController>();
 
-    if (task.customTaskStatus != null) {
-      statuss = statusesController.statuses
-          .firstWhere((element) => element.id == task.customTaskStatus);
-    } else {
-      statuss = statusesController.statuses
-          .firstWhere((element) => -element.id == task.status);
-    }
-
-    statusImageString.value = decodeImageString(statuss.image);
-    status.value = statuss;
+    status.value = statusesController.getTaskStatus(task);
+    statusImageString.value =
+        statusesController.decodeImageString(status.value.image);
   }
 
   Future reloadTask() async {
@@ -73,9 +63,5 @@ class TaskItemController extends GetxController {
     if (info.visibleFraction == 1) {
       update();
     }
-  }
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
   }
 }

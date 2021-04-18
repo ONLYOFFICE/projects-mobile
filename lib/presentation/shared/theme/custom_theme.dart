@@ -24,6 +24,7 @@ final AppColors lightColors = AppColors(
   onPrimary: const Color(0xffffffff),
   onPrimarySurface: const Color(0xffffffff),
   onSurface: const Color(0xff000000),
+  outline: const Color(0xffD8D8D8),
   primary: const Color(0xff1A73E9),
   primarySurface: const Color(0xff0F4071),
   projectsSubtitle: const Color(0xff000000).withOpacity(0.6),
@@ -35,6 +36,7 @@ final AppColors lightColors = AppColors(
   error: const Color(0xffFF0C3E),
 );
 
+// ignore: missing_required_param
 final AppColors darkColors = AppColors(
     backgroundColor: const Color(0xff000000),
     activeTabTitle: const Color(0xffffffff),
@@ -50,6 +52,12 @@ final AppColors darkColors = AppColors(
 final ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
   backgroundColor: Color(0xffffffff),
+  appBarTheme: AppBarTheme(
+    iconTheme: IconThemeData(color: const Color(0xff1A73E9)),
+    backgroundColor: lightColors.onPrimarySurface,
+    titleTextStyle: TextStyleHelper.headline6(color: lightColors.onSurface),
+    // text
+  ),
   navigationRailTheme:
       NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:projects/presentation/views/new_task/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
 class SelectProjectView extends StatelessWidget {
   const SelectProjectView({Key key}) : super(key: key);
@@ -7,8 +7,13 @@ class SelectProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // child: child,
-      appBar: StyledAppBar(),
+      appBar: StyledAppBar(
+        titleText: 'Select project',
+        actions: [
+          IconButton(
+              icon: Icon(Icons.check_rounded), onPressed: () => print('da'))
+        ],
+      ),
       body: ListView.builder(
         itemCount: 3,
         itemBuilder: (context, index) {

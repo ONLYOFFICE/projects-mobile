@@ -20,10 +20,8 @@ class Task extends StatelessWidget {
                       color: Theme.of(context).customColors().onSurface)),
               const SizedBox(height: 22),
               OutlinedButton(
-                onPressed: () => Get.bottomSheet(
-                    bottom_sheet.BottomSheet(
-                        taskItemController: taskController),
-                    isScrollControlled: true),
+                onPressed: () => bottom_sheet.showsStatusesBS(
+                    context: context, taskItemController: taskController),
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.resolveWith<Color>((_) {

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/presentation/shared/widgets/header.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/views/project_detailed/custom_appbar.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
@@ -28,16 +27,24 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      appBar: CustomAppBar(
-        title: CustomHeaderWithoutButton(
-          title: 'Select project manager',
-        ),
+      appBar: StyledAppBar(
+        titleText: 'Select project manager',
         bottom: Container(
           height: 40,
           margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
           child: UsersSearchBar(controller: usersDataSource),
         ),
       ),
+      // appBar: CustomAppBar(
+      //   title: CustomHeaderWithoutButton(
+      //     title: 'Select project manager',
+      //   ),
+      //   bottom: Container(
+      //     height: 40,
+      //     margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+      //     child: UsersSearchBar(controller: usersDataSource),
+      //   ),
+      // ),
       body: Obx(
         () {
           if (controller.usersLoaded.isTrue &&
