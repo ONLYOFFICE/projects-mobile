@@ -125,9 +125,11 @@ class _Tab extends StatelessWidget {
         if (count != null) const SizedBox(width: 8),
         if (count != null)
           Container(
-            constraints: BoxConstraints(minHeight: 25, minWidth: 25),
+            height: 20,
+            padding: const EdgeInsets.symmetric(horizontal: 6),
+            constraints: BoxConstraints(minWidth: 20),
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(12),
                 color: currentTab
                     ? Theme.of(context).customColors().primary
                     : Theme.of(context)

@@ -5,17 +5,25 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled_divider.dart';
 
 class NewTaskView extends StatelessWidget {
   const NewTaskView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _newTaskController = Get.find<NewTaskController>();
+    var controller = Get.find<NewTaskController>();
 
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
-      appBar: StyledAppBar(),
+      appBar: StyledAppBar(
+        titleText: 'New task',
+        actions: [
+          IconButton(
+              icon: Icon(Icons.check_rounded),
+              onPressed: () => controller.confirm())
+        ],
+      ),
       body: SingleChildScrollView(
         child: Obx(
           () => Column(
@@ -42,67 +50,49 @@ class NewTaskView extends StatelessWidget {
                       border: InputBorder.none),
                 ),
               ),
-              Row(
-                children: [
-                  SizedBox(width: 56),
-                  TextButton(
-                      onPressed: () => Get.toNamed('SelectProjectView'),
-                      child: Text('Select project'))
-                ],
+              NewTaskInfo(
+                text: controller.selectedProjectTitle.isEmpty
+                    ? 'Select project'
+                    : controller.selectedProjectTitle.value,
+                icon: SvgIcons.project,
+                textColor: controller.selectProjectError.isTrue
+                    ? Theme.of(context).customColors().error
+                    : null, //default color
+                onTap: () => Get.toNamed('SelectProjectView'),
               ),
-              // NewTaskInfo(
-              //     hintText: 'Select project',
-              //     controller: _newTaskController.projectFieldC,
-              //     onChanged: (value) =>
-              //         _newTaskController.projectSelected.value = true,
-              //     icon: AppIcon(
-              //         icon: SvgIcons.project,
-              //         color: Theme.of(context)
-              //             .customColors()
-              //             .onSurface
-              //             .withOpacity(0.6))),
-              if (_newTaskController.projectSelected.isTrue)
+              if (controller.selectedProjectTitle.isNotEmpty)
                 NewTaskInfo(
-                  hintText: 'Add milestone',
-                  icon: AppIcon(
-                      icon: SvgIcons.milestone,
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6)),
+                  text: controller.selectedMilestoneTitle.isEmpty
+                      ? 'Add milestone'
+                      : controller.selectedMilestoneTitle.value,
+                  icon: SvgIcons.milestone,
+                  onTap: () => Get.toNamed('SelectMilestoneView'),
                 ),
-              if (_newTaskController.projectSelected.isTrue)
-                NewTaskInfo(
-                    hintText: 'Add responsible',
-                    icon: AppIcon(
-                        icon: SvgIcons.person,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))),
-              NewTaskInfo(hintText: 'Add description'),
+              if (controller.selectedProjectTitle.isNotEmpty)
+                NewTaskInfo(text: 'Add responsible', icon: SvgIcons.person),
               NewTaskInfo(
-                  icon: AppIcon(
-                      icon: SvgIcons.start_date,
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6)),
-                  hintText: 'Set start date'),
-              NewTaskInfo(
-                icon: AppIcon(
-                    icon: SvgIcons.due_date,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6)),
-                hintText: 'Set due date',
+                text: controller.description.value.isEmpty
+                    ? 'Add description'
+                    : controller.description.value,
+                onTap: () => Get.toNamed('NewTaskDescription'),
               ),
-              NewTaskInfo(
-                hintText: 'High priority',
-                hintTextStyle: TextStyleHelper.subtitle1(
-                    color: Theme.of(context).customColors().onSurface),
-                enableBorder: false,
+              NewTaskInfo(icon: SvgIcons.start_date, text: 'Set start date'),
+              NewTaskInfo(icon: SvgIcons.due_date, text: 'Set due date'),
+              const SizedBox(height: 5),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 56),
+                    child: Text('High priority',
+                        style: TextStyleHelper.subtitle1(
+                            color: Theme.of(context).customColors().onSurface)),
+                  ),
+                  Switch(
+                    value: controller.highPriority.value,
+                    onChanged: (value) => controller.changePriority(value),
+                  )
+                ],
               ),
             ],
           ),
@@ -113,55 +103,60 @@ class NewTaskView extends StatelessWidget {
 }
 
 class NewTaskInfo extends StatelessWidget {
-  final Widget icon;
-  final TextEditingController controller;
-  final Function(String value) onChanged;
-  final String hintText;
-  final TextStyle hintTextStyle;
+  final String icon;
+  final Function() onTap;
+  final String text;
+  final TextStyle textStyle;
+  final Color textColor;
   final bool enableBorder;
-  const NewTaskInfo(
-      {Key key,
-      this.icon,
-      this.controller,
-      this.onChanged,
-      this.hintText,
-      this.hintTextStyle,
-      this.enableBorder = true})
-      : super(key: key);
+  const NewTaskInfo({
+    Key key,
+    this.icon,
+    this.onTap,
+    this.textStyle,
+    this.textColor,
+    this.enableBorder = true,
+    @required this.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(
-          width: 56,
-          child: icon,
-        ),
-        Expanded(
-          child: TextField(
-            controller: controller,
-            onChanged: onChanged,
-            cursorColor:
-                Theme.of(context).customColors().primary.withOpacity(0.87),
-            decoration: InputDecoration(
-                hintText: hintText,
-                contentPadding: const EdgeInsets.symmetric(vertical: 18),
-                counterStyle: TextStyle(color: Colors.red),
-                hintStyle: hintTextStyle ??
-                    TextStyleHelper.subtitle1(
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                width: 56,
+                child: icon != null
+                    ? AppIcon(
+                        icon: icon,
                         color: Theme.of(context)
                             .customColors()
                             .onSurface
-                            .withOpacity(0.6)),
-                suffixIcon: Icon(Icons.close),
-                border: enableBorder
-                    ? UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            width: 1, color: const Color(0xffD8D8D8)))
-                    : InputBorder.none),
+                            .withOpacity(0.6))
+                    : null,
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 18),
+                  child: Text(text,
+                      style: textStyle ??
+                          TextStyleHelper.subtitle1(
+                              color: textColor ??
+                                  Theme.of(context)
+                                      .customColors()
+                                      .onSurface
+                                      .withOpacity(0.6))),
+                ),
+              ),
+            ],
           ),
-        )
-      ],
+          if (enableBorder) StyledDivider(leftPadding: 56.5),
+        ],
+      ),
     );
   }
 }

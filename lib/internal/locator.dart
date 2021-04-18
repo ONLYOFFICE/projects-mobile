@@ -72,9 +72,9 @@ void setupLocator() {
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => FilesController(), fenix: true);
   Get.lazyPut(() => GroupsController(), fenix: true);
-  Get.lazyPut(() => MilestonesController());
+  Get.lazyPut(() => MilestonesController(), fenix: true);
   Get.lazyPut(() => NewTaskController(), fenix: true);
-  Get.lazyPut(() => ProjectsController());
+  Get.lazyPut(() => ProjectsController(), fenix: true);
   Get.lazyPut(() => StatusesController(), fenix: true);
   Get.lazyPut(() => TaskFilterController());
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
