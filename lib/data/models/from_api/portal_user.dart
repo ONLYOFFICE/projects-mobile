@@ -44,7 +44,7 @@ class PortalUser {
   String sex;
   int status;
   int activationStatus;
-  bool terminated;
+  String terminated;
   String department;
   String workFrom;
   String displayName;

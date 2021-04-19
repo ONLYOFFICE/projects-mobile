@@ -73,7 +73,8 @@ class SelectProject extends StatelessWidget {
               if (_projectsController.loaded.isTrue) {
                 return Expanded(
                   child: ListView.separated(
-                    itemCount: _projectsController.projects.length,
+                    itemCount:
+                        _projectsController.paginationController.data.length,
                     padding: const EdgeInsets.only(bottom: 16),
                     separatorBuilder: (BuildContext context, int index) {
                       return Divider();
@@ -82,8 +83,10 @@ class SelectProject extends StatelessWidget {
                       return Material(
                         child: InkWell(
                           onTap: () => Get.back(result: {
-                            'id': _projectsController.projects[index].id,
-                            'title': _projectsController.projects[index].title
+                            'id': _projectsController
+                                .paginationController.data[index].id,
+                            'title': _projectsController
+                                .paginationController.data[index].title
                           }),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -96,13 +99,16 @@ class SelectProject extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        _projectsController
-                                            .projects[index].title,
+                                        _projectsController.paginationController
+                                            .data[index].title,
                                         style: TextStyleHelper.projectTitle,
                                       ),
                                       Text(
-                                          _projectsController.projects[index]
-                                              .responsible.displayName,
+                                          _projectsController
+                                              .paginationController
+                                              .data[index]
+                                              .responsible
+                                              .displayName,
                                           style: TextStyleHelper.caption(
                                                   color: Theme.of(context)
                                                       .customColors()
