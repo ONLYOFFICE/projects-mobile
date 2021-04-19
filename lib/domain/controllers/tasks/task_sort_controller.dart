@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_sort_controller.dart';
 
-class ProjectsSortController extends BaseSortController {
+class TasksSortController extends BaseSortController {
   @override
-  var currentSortText = 'Creation date'.obs;
+  var currentSortText = 'Deadline'.obs;
   @override
   var currentSortOrderText = 'ascending'.obs;
 
@@ -14,6 +14,10 @@ class ProjectsSortController extends BaseSortController {
 }
 
 const _filtersMapping = {
+  'Deadline': 'deadline',
+  'Priority': 'priority',
   'Creation date': 'create_on',
+  'Start date': 'start_date',
   'Title': 'title',
+  'Order': 'sort_order',
 };

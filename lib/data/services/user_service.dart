@@ -24,7 +24,7 @@ class UserService {
     }
   }
 
-  Future<ProjectsApiDTO<List<PortalUser>>> getProfilesByExtendedFilter(
+  Future<PageDTO<List<PortalUser>>> getProfilesByExtendedFilter(
       {int startIndex, String query, String groupId}) async {
     var profiles = await _api.getProfilesByExtendedFilter(
         startIndex: startIndex, query: query, groupId: groupId);

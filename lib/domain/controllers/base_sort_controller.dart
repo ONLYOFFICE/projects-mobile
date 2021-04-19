@@ -22,7 +22,7 @@ abstract class BaseSortController extends GetxController {
     }
   }
 
-  String get sort;
+  // String get sort;
 
   String get currentSortfilter => toFilters(currentSortText.value);
 

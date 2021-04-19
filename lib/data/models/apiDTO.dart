@@ -9,8 +9,8 @@ class ApiDTO<T> {
   CustomError error;
 }
 
-class ProjectsApiDTO<T> {
-  ProjectsApiDTO({
+class PageDTO<T> {
+  PageDTO({
     this.response,
     this.error,
     this.startIndex,

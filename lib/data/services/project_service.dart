@@ -26,7 +26,7 @@ class ProjectService {
     }
   }
 
-  Future<ProjectsApiDTO<List<ProjectDetailed>>> getProjectsByParams({
+  Future<PageDTO<List<ProjectDetailed>>> getProjectsByParams({
     int startIndex,
     String query,
     String sortBy,

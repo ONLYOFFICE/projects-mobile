@@ -30,31 +30,6 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO<List<PortalTask>>> getTasks(
-      {params = '&sortBy=Deadline&sortOrder=descending'}) async {
-    var url = await coreApi.tasksByFilterUrl(params);
-
-    print(url);
-
-    var result = ApiDTO<List<PortalTask>>();
-    try {
-      var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        result.response = (responseJson['response'] as List)
-            .map((i) => PortalTask.fromJson(i))
-            .toList();
-      } else {
-        result.error = CustomError.fromJson(responseJson['error']);
-      }
-    } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
-    }
-
-    return result;
-  }
-
   Future<ApiDTO<List<Status>>> getStatuses() async {
     var url = await coreApi.statusesUrl();
 
@@ -137,6 +112,64 @@ class TaskApi {
     } catch (e) {
       result.error = CustomError(message: 'Ошибка');
     }
+    return result;
+  }
+
+  Future<PageDTO<List<PortalTask>>> getTasksByParams({
+    int startIndex,
+    String query,
+    String sortBy,
+    String sortOrder,
+    String responsibleFilter,
+    String creatorFilter,
+    String projectFilter,
+    String milestoneFilter,
+  }) async {
+    var url = await coreApi.tasksByParamsrUrl();
+
+    if (startIndex != null) {
+      url += '&Count=25&StartIndex=$startIndex';
+    }
+
+    if (query != null) {
+      url += '&FilterValue=$query';
+    }
+
+    if (sortBy != null &&
+        sortBy.isNotEmpty &&
+        sortOrder != null &&
+        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+
+    if (responsibleFilter != null) {
+      url += responsibleFilter;
+    }
+    if (creatorFilter != null) {
+      url += creatorFilter;
+    }
+    if (projectFilter != null) {
+      url += projectFilter;
+    }
+    if (milestoneFilter != null) {
+      url += milestoneFilter;
+    }
+
+    var result = PageDTO<List<PortalTask>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.total = responseJson['total'];
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalTask.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
     return result;
   }
 }

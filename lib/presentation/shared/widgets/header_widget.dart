@@ -48,12 +48,7 @@ class HeaderWidget extends StatelessWidget {
                   SizedBox(width: 24),
                   InkWell(
                     onTap: () async => showFilters(context),
-                    child: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.preferences,
-                      color: Theme.of(context).customColors().primary,
-                    ),
+                    child: FiltersButton(controler: controller),
                   ),
                   SizedBox(width: 24),
                   InkWell(
@@ -104,6 +99,52 @@ class HeaderWidget extends StatelessWidget {
           endIndent: 0,
         ),
       ],
+    );
+  }
+}
+
+class FiltersButton extends StatelessWidget {
+  const FiltersButton({
+    Key key,
+    this.controler,
+  }) : super(key: key);
+  final controler;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 24,
+      child: Stack(
+        alignment: Alignment.center,
+        children: <Widget>[
+          AppIcon(
+            width: 24,
+            height: 24,
+            icon: SvgIcons.preferences,
+            color: Theme.of(context).customColors().primary,
+          ),
+          Positioned(
+              top: 0,
+              right: 0,
+              child: Obx(
+                () => controler.hasFilters.isTrue
+                    ? Container(
+                        width: 12,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 2,
+                            color: Colors.white,
+                          ),
+                          color:
+                              Theme.of(context).customColors().lightSecondary,
+                          shape: BoxShape.circle,
+                        ),
+                      )
+                    : SizedBox(),
+              )),
+        ],
+      ),
     );
   }
 }

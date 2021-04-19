@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/sort_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 
 class TasksView extends StatelessWidget {
@@ -36,15 +36,18 @@ class TasksView extends StatelessWidget {
               if (controller.loaded.isFalse) ListLoadingSkeleton(),
               if (controller.loaded.isTrue)
                 Expanded(
-                  child: SmartRefresher(
-                    enablePullDown: true,
-                    enablePullUp: false,
-                    controller: controller.refreshController,
-                    onRefresh: () => controller.onRefresh(),
+                  child: PaginationListView(
+                    paginationController: controller.paginationController,
+                    // SmartRefresher(
+                    //   enablePullDown: true,
+                    //   enablePullUp: false,
+                    //   controller: controller.refreshController,
+                    //   onRefresh: () => controller.onRefresh(),
                     child: ListView.builder(
-                      itemCount: controller.tasks.length,
+                      itemCount: controller.paginationController.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return TaskCell(task: controller.tasks[index]);
+                        return TaskCell(
+                            task: controller.paginationController.data[index]);
                       },
                     ),
                   ),

@@ -1,11 +1,15 @@
 import 'package:get/get.dart';
 import 'package:projects/data/services/task_service.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class TaskFilterController extends GetxController {
+class TaskFilterController extends BaseFilterController {
   final _api = locator<TaskService>();
+
+  final _sortController = Get.find<TasksSortController>();
+  Function applyFiltersDelegate;
 
   // only accepted filters
   RxString acceptedFilters = ''.obs;
@@ -15,10 +19,21 @@ class TaskFilterController extends GetxController {
   String _projectFilter = '';
   String _milestoneFilter = '';
 
+  String get responsibleFilter => _responsibleFilter;
+  String get creatorFilter => _creatorFilter;
+  String get projectFilter => _projectFilter;
+  String get milestoneFilter => _milestoneFilter;
+
   var _selfId;
 
   RxInt suitableTasksCount = (-1).obs;
-  List _filteredTaskList = [];
+
+  @override
+  bool get hasFilters =>
+      _responsibleFilter.isNotEmpty ||
+      _creatorFilter.isNotEmpty ||
+      _projectFilter.isNotEmpty ||
+      _milestoneFilter.isNotEmpty;
 
   RxMap<String, dynamic> responsible =
       {'Me': false, 'Other': '', 'Groups': '', 'No': false}.obs;
@@ -175,10 +190,17 @@ class TaskFilterController extends GetxController {
 
   void getSuitableTasksCount() async {
     suitableTasksCount.value = -1;
-    var filters =
-        _responsibleFilter + _creatorFilter + _projectFilter + _milestoneFilter;
-    _filteredTaskList = await _api.getFilteredAndSortedTasks(filters: filters);
-    suitableTasksCount.value = _filteredTaskList.length;
+
+    var result = await _api.getTasksByParams(
+      sortBy: _sortController.currentSortfilter,
+      sortOrder: _sortController.currentSortOrder,
+      responsibleFilter: responsibleFilter,
+      creatorFilter: creatorFilter,
+      projectFilter: projectFilter,
+      milestoneFilter: milestoneFilter,
+    );
+
+    suitableTasksCount.value = result.response.length;
   }
 
   void resetFilters() async {
@@ -193,12 +215,10 @@ class TaskFilterController extends GetxController {
     milestone.value = {'My': false, 'No': false, 'Other': ''};
     acceptedFilters.value = '';
     suitableTasksCount.value = -1;
+    applyFilters();
   }
 
-  void filter() async {
-    var _tasksController = Get.find<TasksController>();
-    acceptedFilters.value =
-        _responsibleFilter + _creatorFilter + _projectFilter + _milestoneFilter;
-    _tasksController.tasks.value = _filteredTaskList;
+  void applyFilters() async {
+    if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 }

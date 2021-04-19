@@ -2,7 +2,6 @@ import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/views/tasks_filter.dart/select/select_group.dart';
@@ -77,8 +76,6 @@ void showFilters(context) async {
                       TextButton(
                           onPressed: () async {
                             filterController.resetFilters();
-                            var tasksC = Get.find<TasksController>();
-                            tasksC.onRefresh();
                             Get.back();
                           },
                           child: Text('RESET',
@@ -108,7 +105,7 @@ void showFilters(context) async {
                         padding: const EdgeInsets.only(bottom: 32),
                         child: TextButton(
                           onPressed: () async {
-                            filterController.filter();
+                            filterController.applyFilters();
                             Get.back();
                           },
                           style: ButtonStyle(

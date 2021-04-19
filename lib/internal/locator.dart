@@ -33,7 +33,7 @@ import 'package:projects/domain/controllers/projects/project_sort_controller.dar
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
-import 'package:projects/domain/controllers/tasks/sort_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
