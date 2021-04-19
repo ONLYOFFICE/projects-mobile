@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -40,17 +40,13 @@ class ProjectsView extends StatelessWidget {
             if (controller.loaded.isFalse) ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
-                child: SmartRefresher(
-                  enablePullDown: true,
-                  enablePullUp: controller.pullUpEnabled,
-                  controller: controller.refreshController,
-                  onRefresh: controller.onRefresh,
-                  onLoading: controller.onLoading,
+                child: PaginationListView(
+                  paginationController: controller.paginationController,
                   child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectCell(item: controller.projects[i]),
+                    itemBuilder: (c, i) => ProjectCell(
+                        item: controller.paginationController.data[i]),
                     itemExtent: 100.0,
-                    itemCount: controller.projects.length,
+                    itemCount: controller.paginationController.data.length,
                   ),
                 ),
               ),

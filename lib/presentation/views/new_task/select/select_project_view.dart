@@ -29,7 +29,7 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         if (_projectsController.loaded.isTrue) {
           return ListView.separated(
-            itemCount: _projectsController.projects.length,
+            itemCount: _projectsController.paginationController.data.length,
             padding: const EdgeInsets.only(bottom: 16),
             separatorBuilder: (BuildContext context, int index) {
               return StyledDivider(leftPadding: 16, rightPadding: 16);
@@ -39,8 +39,10 @@ class SelectProjectView extends StatelessWidget {
                 child: InkWell(
                   onTap: () {
                     controller.changeProjectSelection(
-                        id: _projectsController.projects[index].id,
-                        title: _projectsController.projects[index].title);
+                        id: _projectsController
+                            .paginationController.data[index].id,
+                        title: _projectsController
+                            .paginationController.data[index].title);
                   },
                   child: Padding(
                     padding:
@@ -52,12 +54,13 @@ class SelectProjectView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _projectsController.projects[index].title,
+                                _projectsController
+                                    .paginationController.data[index].title,
                                 style: TextStyleHelper.projectTitle,
                               ),
                               Text(
-                                  _projectsController
-                                      .projects[index].responsible.displayName,
+                                  _projectsController.paginationController
+                                      .data[index].responsible.displayName,
                                   style: TextStyleHelper.caption(
                                           color: Theme.of(context)
                                               .customColors()

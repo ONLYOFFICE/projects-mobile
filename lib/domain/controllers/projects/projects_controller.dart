@@ -1,8 +1,7 @@
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_tag.dart';
-import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
@@ -13,34 +12,29 @@ class ProjectsController extends BaseController {
   final _api = locator<ProjectService>();
 
   var loaded = false.obs;
-  List<Status> statuses;
+
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
-  var _startIndex = 0;
-
-  int totalProjects = 0;
-
-  bool get pullUpEnabled => projects.length != totalProjects;
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  var paginationController =
+      Get.put(PaginationController(), tag: 'ProjectsController');
 
   @override
   String get screenName => 'Projects';
 
   @override
-  RxList get itemList => projects;
-
-  RxList projects = [].obs;
-
-  RefreshController refreshController = RefreshController();
+  RxList get itemList => paginationController.data;
 
   final _sortController = Get.find<ProjectsSortController>();
 
   ProjectsController() {
     _sortController.updateSortDelegate = updateSort;
+    paginationController.loadDelegate = () async {
+      await _getProjects();
+    };
+    paginationController.refreshDelegate = () async {
+      await _getProjects(needToClear: true);
+    };
+    paginationController.pullDownEnabled = true;
   }
 
   @override
@@ -52,42 +46,25 @@ class ProjectsController extends BaseController {
     _getProjects(needToClear: true);
   }
 
-  void onRefresh() async {
-    _startIndex = 0;
-    await _getProjects(needToClear: true);
-    refreshController.refreshCompleted();
-  }
-
-  void onLoading() async {
-    _startIndex += 25;
-    if (_startIndex >= totalProjects) {
-      refreshController.loadComplete();
-      _startIndex -= 25;
-      return;
-    }
-    await _getProjects();
-    refreshController.loadComplete();
-  }
-
   Future<void> setupProjects() async {
     loaded.value = false;
-    _startIndex = 0;
+    paginationController.startIndex = 0;
     await _getProjects(needToClear: true);
     loaded.value = true;
   }
 
   Future _getProjects({needToClear = false}) async {
     var result = await _api.getProjectsByParams(
-        startIndex: _startIndex,
+        startIndex: paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
         sortOrder: _sortController.currentSortOrder);
-    totalProjects = result.total;
+    paginationController.total = result.total;
 
-    if (needToClear) projects.clear();
+    if (needToClear) paginationController.data.clear();
 
     result.response.forEach(
       (element) {
-        projects.add(Item(
+        paginationController.data.add(Item(
           id: element.id,
           title: element.title,
           status: element.status,
