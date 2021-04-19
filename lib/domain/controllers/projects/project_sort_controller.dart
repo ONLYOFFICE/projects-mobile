@@ -40,9 +40,6 @@ class ProjectsSortController extends BaseSortController {
   var currentSortOrderText = 'ascending'.obs;
 
   @override
-  String get sort => '';
-
-  @override
   String toFilters(value) {
     return _filtersMapping[value];
   }

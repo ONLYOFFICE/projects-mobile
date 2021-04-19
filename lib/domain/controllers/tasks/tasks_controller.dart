@@ -31,41 +31,72 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/data/services/task_service.dart';
 
 class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
-  var tasks = <PortalTask>[].obs;
+  var paginationController =
+      Get.put(PaginationController(), tag: 'TasksController');
 
-  var refreshController = RefreshController(initialRefresh: false);
+  final _sortController = Get.find<TasksSortController>();
+  final _filterController = Get.find<TaskFilterController>();
 
-//for shimmer and progress indicator
   RxBool loaded = false.obs;
 
-  void onRefresh() async {
-    await getTasks();
-    refreshController.refreshCompleted();
-  }
+  TasksController() {
+    _sortController.updateSortDelegate = reloadTasks;
 
-  Future getTasks() async {
-    loaded.value = false;
-    tasks.value = await _api.getFilteredAndSortedTasks();
-    loaded.value = true;
+    _filterController.applyFiltersDelegate = () {
+      hasFilters.value = _filterController.hasFilters;
+      reloadTasks();
+    };
+
+    paginationController.loadDelegate = () {
+      getTasks();
+    };
+    paginationController.refreshDelegate = reloadTasks;
+
+    paginationController.pullDownEnabled = true;
   }
 
   @override
   String get screenName => 'Tasks';
 
   @override
-  RxList get itemList => tasks;
+  RxList get itemList => paginationController.data;
 
-  @override
-  void updateSort(String sortBy, String sortOrder) {
-    // TODO: implement updateSort
+  Future reloadTasks() async {
+    loaded.value = false;
+    await _getTasks(needToClear: true);
+    loaded.value = true;
+  }
+
+  Future getTasks() async {
+    loaded.value = false;
+    await _getTasks();
+    loaded.value = true;
+  }
+
+  Future _getTasks({needToClear = false}) async {
+    var result = await _api.getTasksByParams(
+      startIndex: paginationController.startIndex,
+      sortBy: _sortController.currentSortfilter,
+      sortOrder: _sortController.currentSortOrder,
+      responsibleFilter: _filterController.responsibleFilter,
+      creatorFilter: _filterController.creatorFilter,
+      projectFilter: _filterController.projectFilter,
+      milestoneFilter: _filterController.milestoneFilter,
+    );
+    paginationController.total = result.total;
+
+    if (needToClear) paginationController.data.clear();
+
+    paginationController.data.addAll(result.response);
   }
 }

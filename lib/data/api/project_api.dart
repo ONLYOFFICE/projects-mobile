@@ -82,7 +82,7 @@ class ProjectApi {
 // &simple=true
 // &__=291475
 // &FilterValue=searchquerry
-  Future<ProjectsApiDTO<List<ProjectDetailed>>> getProjectsByParams({
+  Future<PageDTO<List<ProjectDetailed>>> getProjectsByParams({
     int startIndex,
     String query,
     String sortBy,
@@ -103,7 +103,7 @@ class ProjectApi {
         sortOrder != null &&
         sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
-    var result = ProjectsApiDTO<List<ProjectDetailed>>();
+    var result = PageDTO<List<ProjectDetailed>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);

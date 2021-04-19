@@ -63,7 +63,7 @@ class UserApi {
     return result;
   }
 
-  Future<ProjectsApiDTO<List<PortalUser>>> getProfilesByExtendedFilter({
+  Future<PageDTO<List<PortalUser>>> getProfilesByExtendedFilter({
     int startIndex,
     String query,
     String groupId,
@@ -81,7 +81,7 @@ class UserApi {
 
     if (groupId != null && groupId.isNotEmpty) url += '&groupId=$groupId';
 
-    var result = ProjectsApiDTO<List<PortalUser>>();
+    var result = PageDTO<List<PortalUser>>();
     try {
       var response = await coreApi.getRequest(url);
       final responseJson = json.decode(response.body);
