@@ -60,12 +60,6 @@ class NewProject extends StatelessWidget {
               onPressed: () => controller.confirm)
         ],
       ),
-      // appBar: BottomlessAppBar(
-      //   title: CustomHeaderWithButton(
-      //     function: controller.confirm,
-      //     title: 'Project',
-      //   ),
-      // ),
       body: ListView(
         children: [
           TitleInput(controller: controller),

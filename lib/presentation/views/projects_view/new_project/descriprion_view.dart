@@ -59,12 +59,6 @@ class NewProjectDescription extends StatelessWidget {
                 onPressed: () => controller.confirmDescription)
           ],
         ),
-        // appBar: CustomAppBar(
-        //   title: CustomHeaderWithButton(
-        //     function: controller.confirmDescription,
-        //     title: 'Description',
-        //   ),
-        // ),
         body: Padding(
           padding: EdgeInsets.all(12.0),
           child: TextField(

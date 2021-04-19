@@ -67,13 +67,6 @@ class TeamMembersSelectionView extends StatelessWidget {
         ),
         bottom: TeamMembersSearchBar(controller: usersDataSource),
       ),
-      // appBar: CustomAppBar(
-      // title: TeamMembersSelectionHeader(
-      //     controller: controller,
-      //     title: 'Add team membres',
-      //   ),
-      //   bottom: TeamMembersSearchBar(controller: usersDataSource),
-      // ),
       body: Obx(
         () {
           if (usersDataSource.loaded.isTrue &&
