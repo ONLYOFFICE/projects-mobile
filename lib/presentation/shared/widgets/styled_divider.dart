@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
-// TODO: Styled Divider. Delete as see
 class StyledDivider extends StatelessWidget {
   final double leftPadding;
   final double rightPadding;

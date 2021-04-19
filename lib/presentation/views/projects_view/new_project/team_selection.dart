@@ -30,12 +30,6 @@ class GroupMembersSelectionView extends StatelessWidget {
               onPressed: () => controller.confirmGroupSelection)
         ],
       ),
-      // appBar: BottomlessAppBar(
-      //   title: CustomHeaderWithButton(
-      //     function: controller.confirmGroupSelection,
-      //     title: 'Add members of',
-      //   ),
-      // ),
       body: Obx(
         () {
           if (groupsDataSource.loaded.isTrue &&

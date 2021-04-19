@@ -17,9 +17,6 @@ class ProjectSearchView extends StatelessWidget {
       appBar: StyledAppBar(
         title: SearchHeader(controller: controller),
       ),
-      // appBar: BottomlessAppBar(
-      //   title: SearchHeader(controller: controller),
-      // ),
       body: Obx(
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.center,

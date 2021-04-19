@@ -35,16 +35,6 @@ class ProjectManagerSelectionView extends StatelessWidget {
           child: UsersSearchBar(controller: usersDataSource),
         ),
       ),
-      // appBar: CustomAppBar(
-      //   title: CustomHeaderWithoutButton(
-      //     title: 'Select project manager',
-      //   ),
-      //   bottom: Container(
-      //     height: 40,
-      //     margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
-      //     child: UsersSearchBar(controller: usersDataSource),
-      //   ),
-      // ),
       body: Obx(
         () {
           if (controller.usersLoaded.isTrue &&

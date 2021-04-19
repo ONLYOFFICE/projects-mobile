@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-// TODO: Alert dialog. Давай использовать общий. Удали, как увидишь, пожалуйста.
 class StyledAlertDialog extends StatelessWidget {
   final Widget title;
   final String titleText;
