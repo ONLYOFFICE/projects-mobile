@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -11,7 +12,7 @@ class HeaderWidget extends StatelessWidget {
     this.controller,
     this.sortButton,
   });
-  final BaseController controller;
+  final ProjectsController controller;
   final Widget sortButton;
 
   @override
@@ -47,7 +48,7 @@ class HeaderWidget extends StatelessWidget {
                   ),
                   SizedBox(width: 24),
                   InkWell(
-                    onTap: () async => showFilters(context),
+                    onTap: () async => {},
                     child: FiltersButton(controler: controller),
                   ),
                   SizedBox(width: 24),
@@ -99,52 +100,6 @@ class HeaderWidget extends StatelessWidget {
           endIndent: 0,
         ),
       ],
-    );
-  }
-}
-
-class FiltersButton extends StatelessWidget {
-  const FiltersButton({
-    Key key,
-    this.controler,
-  }) : super(key: key);
-  final controler;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 24,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          AppIcon(
-            width: 24,
-            height: 24,
-            icon: SvgIcons.preferences,
-            color: Theme.of(context).customColors().primary,
-          ),
-          Positioned(
-              top: 0,
-              right: 0,
-              child: Obx(
-                () => controler.hasFilters.isTrue
-                    ? Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.white,
-                          ),
-                          color:
-                              Theme.of(context).customColors().lightSecondary,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    : SizedBox(),
-              )),
-        ],
-      ),
     );
   }
 }

@@ -8,8 +8,9 @@ import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
-import 'package:projects/presentation/shared/widgets/header_widget.dart';
+import 'package:projects/presentation/views/projects_view/projects_header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
@@ -32,11 +33,16 @@ class ProjectsView extends StatelessWidget {
           height: 32,
         ),
       ),
+      appBar: StyledAppBar(
+        bottom: ProjectHeader(),
+        titleHeight: 0,
+        bottomHeight: 100,
+      ),
       body: Obx(
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            ProjectHeader(),
+            // ProjectHeader(),
             if (controller.loaded.isFalse) ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(

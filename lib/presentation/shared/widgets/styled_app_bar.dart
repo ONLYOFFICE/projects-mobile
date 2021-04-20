@@ -12,12 +12,14 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget bottom;
   final double elevation;
   final Widget leading;
+  final double titleHeight;
 
   StyledAppBar(
       {Key key,
       this.actions,
       this.elevation = 1,
       this.title,
+      this.titleHeight = 56,
       this.titleText,
       this.centerTitle,
       this.bottom,
@@ -28,8 +30,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
         // assert((bottom != null || bottomHeight == null) ||
         //     (bottom == null && bottomHeight == null)),
         // assert((bottom != null || bottomHeight == null)),
-        preferredSize =
-            Size.fromHeight(bottom != null ? 56 + bottomHeight : 56),
+        preferredSize = Size.fromHeight(
+            bottom != null ? titleHeight + bottomHeight : titleHeight),
         super(key: key);
 
   @override
