@@ -7,6 +7,7 @@ import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/new_task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
+import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
@@ -30,6 +31,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'NewTaskDescription', page: () => NewTaskDescription()),
       GetPage(name: 'SelectProjectView', page: () => SelectProjectView()),
       GetPage(name: 'SelectMilestoneView', page: () => SelectMilestoneView()),
+      GetPage(name: 'SelectDateView', page: () => SelectDateView()),
       GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
       GetPage(name: 'NewProject', page: () => NewProject()),
       GetPage(
