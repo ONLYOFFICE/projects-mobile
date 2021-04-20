@@ -81,11 +81,10 @@ class TaskCommentsView extends StatelessWidget {
                             shrinkWrap: true,
                             primary: false,
                             padding: const EdgeInsets.symmetric(vertical: 29),
-                            separatorBuilder:
-                                (BuildContext context, int index) {
+                            separatorBuilder: (context, index) {
                               return const SizedBox(height: 30);
                             },
-                            itemBuilder: (BuildContext context, int i) {
+                            itemBuilder: (context, i) {
                               return Padding(
                                 padding:
                                     const EdgeInsets.only(left: 20, right: 12),
