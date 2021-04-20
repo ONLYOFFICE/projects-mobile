@@ -32,18 +32,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/presentation/views/tasks/tasks_header_widget.dart';
 
 class TasksView extends StatelessWidget {
   @override
@@ -59,22 +60,21 @@ class TasksView extends StatelessWidget {
         onPressed: () => Get.toNamed('NewTaskView'),
         child: Icon(Icons.add_rounded),
       ),
+      appBar: StyledAppBar(
+        bottom: TasksHeader(),
+        titleHeight: 0,
+        bottomHeight: 100,
+      ),
       body: Obx(
         () {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              TasksHeader(),
               if (controller.loaded.isFalse) ListLoadingSkeleton(),
               if (controller.loaded.isTrue)
                 Expanded(
                   child: PaginationListView(
                     paginationController: controller.paginationController,
-                    // SmartRefresher(
-                    //   enablePullDown: true,
-                    //   enablePullUp: false,
-                    //   controller: controller.refreshController,
-                    //   onRefresh: () => controller.onRefresh(),
                     child: ListView.builder(
                       itemCount: controller.paginationController.data.length,
                       itemBuilder: (BuildContext context, int index) {
@@ -137,6 +137,6 @@ class TasksHeader extends StatelessWidget {
       ),
     );
 
-    return HeaderWidget(controller: controller, sortButton: sortButton);
+    return TasksHeaderWidget(controller: controller, sortButton: sortButton);
   }
 }
