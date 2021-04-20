@@ -236,7 +236,7 @@ class TaskFilterController extends BaseFilterController {
   }
 
   void resetFilters() async {
-    responsible.value = {'Me': true, 'Other': '', 'Groups': '', 'No': false};
+    responsible.value = {'Me': false, 'Other': '', 'Groups': '', 'No': false};
     creator.value = {'Me': false, 'Other': ''};
     project.value = {
       'My': false,
@@ -247,6 +247,12 @@ class TaskFilterController extends BaseFilterController {
     milestone.value = {'My': false, 'No': false, 'Other': ''};
     acceptedFilters.value = '';
     suitableTasksCount.value = -1;
+
+    _responsibleFilter = '';
+    _creatorFilter = '';
+    _projectFilter = '';
+    _milestoneFilter = '';
+
     applyFilters();
   }
 

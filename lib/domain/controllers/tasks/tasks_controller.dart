@@ -57,10 +57,12 @@ class TasksController extends BaseController {
       reloadTasks();
     };
 
-    paginationController.loadDelegate = () {
-      getTasks();
+    paginationController.loadDelegate = () async {
+      await _getTasks();
     };
-    paginationController.refreshDelegate = reloadTasks;
+    paginationController.refreshDelegate = () async {
+      await _getTasks(needToClear: true);
+    };
 
     paginationController.pullDownEnabled = true;
   }
