@@ -1,12 +1,12 @@
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:get/get.dart';
 
+import 'package:projects/internal/locator.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
-import 'package:projects/data/models/item.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
-import 'package:projects/internal/locator.dart';
 
 class ProjectsController extends BaseController {
   final _api = locator<ProjectService>();
@@ -25,9 +25,16 @@ class ProjectsController extends BaseController {
   RxList get itemList => paginationController.data;
 
   final _sortController = Get.find<ProjectsSortController>();
+  final _filterController = Get.find<ProjectsFilterController>();
 
   ProjectsController() {
     _sortController.updateSortDelegate = updateSort;
+
+    _filterController.applyFiltersDelegate = () async {
+      hasFilters.value = _filterController.hasFilters;
+      await _getProjects(needToClear: true);
+    };
+
     paginationController.loadDelegate = () async {
       await _getProjects();
     };
@@ -55,26 +62,19 @@ class ProjectsController extends BaseController {
 
   Future _getProjects({needToClear = false}) async {
     var result = await _api.getProjectsByParams(
-        startIndex: paginationController.startIndex,
-        sortBy: _sortController.currentSortfilter,
-        sortOrder: _sortController.currentSortOrder);
+      startIndex: paginationController.startIndex,
+      sortBy: _sortController.currentSortfilter,
+      sortOrder: _sortController.currentSortOrder,
+      projectManagerFilter: _filterController.projectManagerFilter,
+      participantFilter: _filterController.teamMemberFilter,
+      otherFilter: _filterController.otherFilter,
+      statusFilter: _filterController.statusFilter,
+    );
     paginationController.total = result.total;
 
     if (needToClear) paginationController.data.clear();
 
-    result.response.forEach(
-      (element) {
-        paginationController.data.add(Item(
-          id: element.id,
-          title: element.title,
-          status: element.status,
-          responsible: element.responsible,
-          date: element.creationDate(),
-          subCount: element.taskCount,
-          isImportant: false,
-        ));
-      },
-    );
+    paginationController.data.addAll(result.response);
   }
 
   Future getProjectTags() async {

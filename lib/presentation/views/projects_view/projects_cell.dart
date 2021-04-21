@@ -2,18 +2,15 @@ import 'package:drop_cap_text/drop_cap_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/data/models/item.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
-
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:visibility_detector/visibility_detector.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectCell extends StatelessWidget {
-  final Item item;
+  final ProjectDetailed item;
   const ProjectCell({this.item});
 
   @override
@@ -21,50 +18,46 @@ class ProjectCell extends StatelessWidget {
     var itemController =
         Get.put(ProjectCellController(item), tag: item.id.toString());
 
-    return VisibilityDetector(
-      key: Key('${item.id.toString()}_${item.title}'),
-      onVisibilityChanged: itemController.handleVisibilityChanged,
-      child: Container(
-        child: InkWell(
-          onTap: () => Get.toNamed('ProjectDetailedView',
-              arguments: {'controller': itemController}),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ProjectIcon(
-                itemController: itemController,
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SecondColumn(
-                            item: item,
-                            itemController: itemController,
-                          ),
-                          // const SizedBox(width: 16),
-                          ThirdColumn(
-                            item: item,
-                            controller: itemController,
-                          ),
-                          const SizedBox(width: 16),
-                        ],
-                      ),
+    return Container(
+      child: InkWell(
+        onTap: () => Get.toNamed('ProjectDetailedView',
+            arguments: {'controller': itemController}),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            ProjectIcon(
+              itemController: itemController,
+            ),
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SecondColumn(
+                          item: item,
+                          itemController: itemController,
+                        ),
+                        // const SizedBox(width: 16),
+                        ThirdColumn(
+                          item: item,
+                          controller: itemController,
+                        ),
+                        const SizedBox(width: 16),
+                      ],
                     ),
-                    const Divider(
-                      height: 1,
-                      thickness: 1,
-                      indent: 0,
-                      endIndent: 0,
-                    ),
-                  ],
-                ),
+                  ),
+                  const Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 0,
+                    endIndent: 0,
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -147,7 +140,7 @@ class SecondColumn extends StatelessWidget {
     @required this.itemController,
   }) : super(key: key);
 
-  final Item item;
+  final ProjectDetailed item;
   final ProjectCellController itemController;
 
   @override
@@ -202,7 +195,7 @@ class ThirdColumn extends StatelessWidget {
     @required this.controller,
   }) : super(key: key);
 
-  final Item item;
+  final ProjectDetailed item;
   final ProjectCellController controller;
 
   @override
@@ -216,7 +209,7 @@ class ThirdColumn extends StatelessWidget {
           children: <Widget>[
             SVG.createSized('lib/assets/images/icons/check_square.svg', 20, 20),
             Text(
-              item.subCount.toString(),
+              item.taskCount.toString(),
               style: TextStyleHelper.projectCompleatedTasks,
             ),
           ],
