@@ -30,24 +30,38 @@
  *
  */
 
-part of 'tasks_filter.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class _FilterLabel extends StatelessWidget {
-  final String label;
-  final EdgeInsets padding;
-  const _FilterLabel({
-    Key key,
-    this.label,
-    this.padding,
-  }) : super(key: key);
+class FiltersRow extends StatelessWidget {
+  final String title;
+  final List<Widget> options;
+  const FiltersRow({Key key, this.title, this.options}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: padding ??
-            const EdgeInsets.only(left: 16, top: 36.5, bottom: 20.05),
-        child: Text(label,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 16, bottom: 20),
+          child: Text(
+            title,
             style: TextStyleHelper.h6(
-                color: Theme.of(context).customColors().onSurface)));
+                color: Theme.of(context).customColors().onSurface),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Wrap(
+            runSpacing: 16,
+            spacing: 16,
+            children: options,
+          ),
+        ),
+        const SizedBox(height: 35),
+      ],
+    );
   }
 }

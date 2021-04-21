@@ -32,19 +32,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectTag extends StatelessWidget {
-  const SelectTag({Key key}) : super(key: key);
+class GroupsBottomSheet extends StatelessWidget {
+  const GroupsBottomSheet({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _projectsController = Get.find<ProjectsController>();
+    var _groupsController = Get.find<GroupsController>();
 
-    _projectsController.getProjectTags();
+    _groupsController.getAllGroups();
 
     return StyledButtomSheet(
       content: Column(
@@ -54,7 +54,7 @@ class SelectTag extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select tag', style: TextStyleHelper.h6()),
+                Text('Select group', style: TextStyleHelper.h6()),
                 IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () => print(''),
@@ -64,10 +64,10 @@ class SelectTag extends StatelessWidget {
           ),
           Divider(height: 1),
           Obx(() {
-            if (_projectsController.loaded.isTrue) {
+            if (_groupsController.loaded.isTrue) {
               return Expanded(
                 child: ListView.separated(
-                  itemCount: _projectsController.tags.length,
+                  itemCount: _groupsController.groups.length,
                   separatorBuilder: (BuildContext context, int index) {
                     return Divider();
                   },
@@ -75,8 +75,8 @@ class SelectTag extends StatelessWidget {
                     return Material(
                       child: InkWell(
                         onTap: () => Get.back(result: {
-                          'id': _projectsController.tags[index].id,
-                          'title': _projectsController.tags[index].title
+                          'id': _groupsController.groups[index].id,
+                          'name': _groupsController.groups[index].name
                         }),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +88,7 @@ class SelectTag extends StatelessWidget {
                                 children: [
                                   Flexible(
                                       child: Text(
-                                          _projectsController.tags[index].title,
+                                          _groupsController.groups[index].name,
                                           style: TextStyleHelper.projectTitle)),
                                 ],
                               ),

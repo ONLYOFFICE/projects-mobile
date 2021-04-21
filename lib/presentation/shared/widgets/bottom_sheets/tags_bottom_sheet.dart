@@ -32,19 +32,19 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/users/users_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectUser extends StatelessWidget {
-  const SelectUser({Key key}) : super(key: key);
+class TagsBottomSheet extends StatelessWidget {
+  const TagsBottomSheet({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _usersController = Get.find<UsersController>();
+    var _projectsController = Get.find<ProjectsController>();
 
-    _usersController.getAllProfiles();
+    _projectsController.getProjectTags();
 
     return StyledButtomSheet(
       content: Column(
@@ -54,7 +54,7 @@ class SelectUser extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select user', style: TextStyleHelper.h6()),
+                Text('Select tag', style: TextStyleHelper.h6()),
                 IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () => print(''),
@@ -64,10 +64,10 @@ class SelectUser extends StatelessWidget {
           ),
           Divider(height: 1),
           Obx(() {
-            if (_usersController.loaded.isTrue) {
+            if (_projectsController.loaded.isTrue) {
               return Expanded(
                 child: ListView.separated(
-                  itemCount: _usersController.users.length,
+                  itemCount: _projectsController.tags.length,
                   separatorBuilder: (BuildContext context, int index) {
                     return Divider();
                   },
@@ -75,9 +75,8 @@ class SelectUser extends StatelessWidget {
                     return Material(
                       child: InkWell(
                         onTap: () => Get.back(result: {
-                          'id': _usersController.users[index].id,
-                          'displayName':
-                              _usersController.users[index].displayName
+                          'id': _projectsController.tags[index].id,
+                          'title': _projectsController.tags[index].title
                         }),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,8 +88,7 @@ class SelectUser extends StatelessWidget {
                                 children: [
                                   Flexible(
                                       child: Text(
-                                          _usersController
-                                              .users[index].displayName,
+                                          _projectsController.tags[index].title,
                                           style: TextStyleHelper.projectTitle)),
                                 ],
                               ),
