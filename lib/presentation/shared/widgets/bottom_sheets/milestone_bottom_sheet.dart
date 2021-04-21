@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectProject extends StatelessWidget {
+class MilestonesBottomSheet extends StatelessWidget {
   final selectedId;
-  const SelectProject({
+  const MilestonesBottomSheet({
     Key key,
     this.selectedId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _projectsController = Get.find<ProjectsController>();
+    var _milestoneController = Get.find<MilestonesController>();
 
-    _projectsController.setupProjects();
+    _milestoneController.getMilestonesByFilter();
 
     return StyledButtomSheet(
       content: Column(
@@ -27,7 +27,7 @@ class SelectProject extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select project', style: TextStyleHelper.h6()),
+                Text('Select milestone', style: TextStyleHelper.h6()),
                 IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () => print(''),
@@ -38,11 +38,10 @@ class SelectProject extends StatelessWidget {
           Divider(height: 1),
           Obx(
             () {
-              if (_projectsController.loaded.isTrue) {
+              if (_milestoneController.loaded.isTrue) {
                 return Expanded(
                   child: ListView.separated(
-                    itemCount:
-                        _projectsController.paginationController.data.length,
+                    itemCount: _milestoneController.milestones.length,
                     padding: const EdgeInsets.only(bottom: 16),
                     separatorBuilder: (BuildContext context, int index) {
                       return Divider();
@@ -51,10 +50,9 @@ class SelectProject extends StatelessWidget {
                       return Material(
                         child: InkWell(
                           onTap: () => Get.back(result: {
-                            'id': _projectsController
-                                .paginationController.data[index].id,
-                            'title': _projectsController
-                                .paginationController.data[index].title
+                            'id': _milestoneController.milestones[index].id,
+                            'title':
+                                _milestoneController.milestones[index].title
                           }),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -67,16 +65,13 @@ class SelectProject extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        _projectsController.paginationController
-                                            .data[index].title,
+                                        _milestoneController
+                                            .milestones[index].title,
                                         style: TextStyleHelper.projectTitle,
                                       ),
                                       Text(
-                                          _projectsController
-                                              .paginationController
-                                              .data[index]
-                                              .responsible
-                                              .displayName,
+                                          _milestoneController.milestones[index]
+                                              .responsible.displayName,
                                           style: TextStyleHelper.caption(
                                                   color: Theme.of(context)
                                                       .customColors()
