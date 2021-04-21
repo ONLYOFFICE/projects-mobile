@@ -63,12 +63,20 @@ class ProjectService {
     String query,
     String sortBy,
     String sortOrder,
+    String projectManagerFilter,
+    String participantFilter,
+    String otherFilter,
+    String statusFilter,
   }) async {
     var projects = await _api.getProjectsByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
       sortOrder: sortOrder,
+      projectManagerFilter: projectManagerFilter,
+      participantFilter: participantFilter,
+      otherFilter: otherFilter,
+      statusFilter: statusFilter,
     );
 
     var success = projects.response != null;

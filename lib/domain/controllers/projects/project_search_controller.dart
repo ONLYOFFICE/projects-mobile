@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/item.dart';
+
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -81,19 +81,7 @@ class ProjectSearchController extends GetxController {
     if (result.response.isEmpty) {
       nothingFound.value = true;
     } else {
-      result.response.forEach(
-        (element) {
-          searchResult.add(Item(
-            id: element.id,
-            title: element.title,
-            status: element.status,
-            responsible: element.responsible,
-            date: element.creationDate(),
-            subCount: element.taskCount,
-            isImportant: false,
-          ));
-        },
-      );
+      searchResult.addAll(result.response);
     }
     loaded.value = true;
   }

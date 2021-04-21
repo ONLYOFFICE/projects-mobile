@@ -30,25 +30,35 @@
  *
  */
 
-import 'dart:core';
+part of '../projects_filter.dart';
 
-import 'package:projects/data/models/from_api/portal_user.dart';
+class _Status extends StatelessWidget {
+  const _Status({Key key}) : super(key: key);
 
-class Item {
-  Item({
-    this.id,
-    this.title,
-    this.status,
-    this.responsible,
-    this.date,
-    this.subCount,
-    this.isImportant,
-  });
-  int id;
-  String title;
-  int status;
-  PortalUser responsible;
-  String date;
-  int subCount;
-  bool isImportant;
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<ProjectsFilterController>();
+    return Obx(
+      () => FiltersRow(
+        title: 'Status',
+        options: <Widget>[
+          FilterElement(
+              title: 'Active',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['Active'],
+              onTap: () => filterController.changeStatus('Active')),
+          FilterElement(
+              title: 'Paused',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['Paused'],
+              onTap: () => filterController.changeStatus('Paused')),
+          FilterElement(
+              title: 'Closed',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['Closed'],
+              onTap: () => filterController.changeStatus('Closed')),
+        ],
+      ),
+    );
+  }
 }
