@@ -55,7 +55,8 @@ class SelectProjectView extends StatelessWidget {
         titleText: 'Select project',
         actions: [
           IconButton(
-              icon: Icon(Icons.check_rounded), onPressed: () => print('da'))
+              icon: const Icon(Icons.check_rounded),
+              onPressed: () => print('da'))
         ],
       ),
       body: Obx(() {
@@ -64,7 +65,7 @@ class SelectProjectView extends StatelessWidget {
             itemCount: _projectsController.paginationController.data.length,
             padding: const EdgeInsets.only(bottom: 16),
             separatorBuilder: (BuildContext context, int index) {
-              return StyledDivider(leftPadding: 16, rightPadding: 16);
+              return const StyledDivider(leftPadding: 16, rightPadding: 16);
             },
             itemBuilder: (BuildContext context, int index) {
               return Material(
@@ -111,7 +112,7 @@ class SelectProjectView extends StatelessWidget {
             },
           );
         } else {
-          return ListLoadingSkeleton();
+          return const ListLoadingSkeleton();
         }
       }),
     );

@@ -46,7 +46,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectCell extends StatelessWidget {
   final Item item;
-  const ProjectCell({this.item});
+  const ProjectCell({Key key, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +150,7 @@ class ProjectIcon extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     child: AppIcon(
                       icon: SvgIcons.project_icon,
                       color: const Color(0xff666666),
@@ -195,7 +195,7 @@ class SecondColumn extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyleHelper.projectTitle,
-            dropCapPadding: EdgeInsets.only(top: 4, right: 4),
+            dropCapPadding: const EdgeInsets.only(top: 4, right: 4),
             dropCap: DropCap(
               width: 12,
               height: 12,

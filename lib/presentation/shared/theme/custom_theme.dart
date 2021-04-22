@@ -83,9 +83,9 @@ final AppColors darkColors = AppColors(
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
-  backgroundColor: Color(0xffffffff),
+  backgroundColor: const Color(0xffffffff),
   appBarTheme: AppBarTheme(
-    iconTheme: IconThemeData(color: const Color(0xff1A73E9)),
+    iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
     backgroundColor: lightColors.onPrimarySurface,
     titleTextStyle: TextStyleHelper.headline6(color: lightColors.onSurface),
     // text
@@ -104,5 +104,5 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(
   brightness: Brightness.dark,
-  backgroundColor: Color(0xff000000),
+  backgroundColor: const Color(0xff000000),
 );

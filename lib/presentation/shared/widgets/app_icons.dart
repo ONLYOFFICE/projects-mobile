@@ -109,11 +109,13 @@ class AppIcon extends StatelessWidget {
   final bool isPng;
 
   AppIcon(
-      {@required this.icon,
+      {Key key,
+      @required this.icon,
       this.color,
       this.height,
       this.width,
-      this.isPng = false});
+      this.isPng = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

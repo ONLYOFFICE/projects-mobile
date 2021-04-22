@@ -116,7 +116,7 @@ class NewTaskController extends GetxController {
           Get.back();
           Get.back();
         },
-        onCancelTap: () => Get.back(),
+        onCancelTap: Get.back,
       ));
     }
   }

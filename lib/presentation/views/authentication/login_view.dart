@@ -38,6 +38,7 @@ import 'package:projects/presentation/views/authentication/widgets/login_sources
 import 'package:projects/presentation/views/authentication/widgets/password_form.dart';
 
 class LoginView extends StatelessWidget {
+  LoginView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(LoginController());
@@ -55,9 +56,7 @@ class LoginView extends StatelessWidget {
                 (controller.capabilities != null)
                     ? LoginSources(
                         capabilities: controller.capabilities.providers)
-                    : SizedBox(
-                        height: 15.0,
-                      ),
+                    : const SizedBox(height: 15.0),
               ],
             ),
           ),

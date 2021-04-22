@@ -38,7 +38,7 @@ import 'package:projects/presentation/views/authentication/widgets/login_service
 
 class LoginSources extends StatelessWidget {
   final List<String> capabilities;
-  LoginSources({this.capabilities});
+  LoginSources({Key key, this.capabilities}) : super(key: key);
 
   final LoginController controller = Get.find();
   @override

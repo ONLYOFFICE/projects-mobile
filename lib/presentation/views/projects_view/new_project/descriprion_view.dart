@@ -55,18 +55,18 @@ class NewProjectDescription extends StatelessWidget {
           titleText: 'Description',
           actions: [
             IconButton(
-                icon: Icon(Icons.check_outlined),
+                icon: const Icon(Icons.check_outlined),
                 onPressed: () => controller.confirmDescription)
           ],
         ),
         body: Padding(
-          padding: EdgeInsets.all(12.0),
+          padding: const EdgeInsets.all(12.0),
           child: TextField(
             maxLines: null,
             keyboardType: TextInputType.multiline,
             controller: controller.descriptionController,
-            decoration:
-                InputDecoration.collapsed(hintText: 'Enter your text here'),
+            decoration: const InputDecoration.collapsed(
+                hintText: 'Enter your text here'),
           ),
         ),
       ),

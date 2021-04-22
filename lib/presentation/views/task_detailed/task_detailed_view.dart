@@ -90,7 +90,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
         appBar: StyledAppBar(
           actions: [
             IconButton(
-              icon: Icon(Icons.edit_outlined),
+              icon: const Icon(Icons.edit_outlined),
               onPressed: () => print('da'),
             ),
             _AppBarMenu(controller: controller)
@@ -159,7 +159,7 @@ class _Tab extends StatelessWidget {
           Container(
             height: 20,
             padding: const EdgeInsets.symmetric(horizontal: 6),
-            constraints: BoxConstraints(minWidth: 20),
+            constraints: const BoxConstraints(minWidth: 20),
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
                 color: currentTab

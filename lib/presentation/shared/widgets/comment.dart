@@ -122,9 +122,9 @@ class _CommentAuthor extends StatelessWidget {
                       .withOpacity(0.5)),
               itemBuilder: (context) {
                 return [
-                  PopupMenuItem(child: Text('Copy link')),
-                  PopupMenuItem(child: Text('Edit')),
-                  PopupMenuItem(child: Text('Delete')),
+                  const PopupMenuItem(child: Text('Copy link')),
+                  const PopupMenuItem(child: Text('Edit')),
+                  const PopupMenuItem(child: Text('Delete')),
                 ];
               },
             ),

@@ -58,7 +58,6 @@ class TaskItemController extends GetxController {
 
   void initTaskStatus(PortalTask task) {
     var statusesController = Get.find<TaskStatusesController>();
-
     status.value = statusesController.getTaskStatus(task);
     statusImageString.value =
         statusesController.decodeImageString(status.value.image);

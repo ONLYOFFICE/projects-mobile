@@ -40,6 +40,7 @@ import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchView extends StatelessWidget {
+  ProjectSearchView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(ProjectSearchController());
@@ -53,8 +54,8 @@ class ProjectSearchView extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (controller.loaded.isFalse) ListLoadingSkeleton(),
-            if (controller.nothingFound.isTrue) NothingFound(),
+            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
+            if (controller.nothingFound.isTrue) const NothingFound(),
             if (controller.loaded.isTrue && controller.searchResult.isNotEmpty)
               Expanded(
                 child: SmartRefresher(
@@ -97,9 +98,8 @@ class SearchHeader extends StatelessWidget {
                 child: TextField(
                   textInputAction: TextInputAction.search,
                   controller: controller.searchInputController,
-                  decoration: InputDecoration.collapsed(
-                    hintText: 'Enter your query',
-                  ),
+                  decoration: const InputDecoration.collapsed(
+                      hintText: 'Enter your query'),
                   onSubmitted: (value) {
                     controller.newSearch(value);
                   },
@@ -109,10 +109,7 @@ class SearchHeader extends StatelessWidget {
                 onTap: () {
                   controller.clearSearch();
                 },
-                child: Icon(
-                  Icons.close,
-                  color: Colors.blue,
-                ),
+                child: const Icon(Icons.close, color: Colors.blue),
               )
             ],
           ),

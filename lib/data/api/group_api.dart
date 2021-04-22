@@ -47,7 +47,7 @@ class GroupApi {
     var result = ApiDTO<List<PortalGroup>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)

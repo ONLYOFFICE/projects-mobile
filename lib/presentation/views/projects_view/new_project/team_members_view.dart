@@ -79,7 +79,7 @@ class TeamMembersSelectionView extends StatelessWidget {
             );
           }
           if (usersDataSource.nothingFound.isTrue) {
-            return NothingFound();
+            return const NothingFound();
           }
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
@@ -89,7 +89,7 @@ class TeamMembersSelectionView extends StatelessWidget {
               onTapFunction: controller.selectTeamMember,
             );
           }
-          return ListLoadingSkeleton();
+          return const ListLoadingSkeleton();
         },
       ),
     );
@@ -140,7 +140,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                           ),
                         );
                       }
-                      return SizedBox();
+                      return const SizedBox();
                     },
                   ),
                 ],
@@ -153,13 +153,10 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                     onTap: () {
                       controller.confirmTeamMembers();
                     },
-                    child: Icon(
-                      Icons.check,
-                      color: Colors.blue,
-                    ),
+                    child: const Icon(Icons.check, color: Colors.blue),
                   );
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             ),
           ],
@@ -181,16 +178,12 @@ class TeamMembersSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 40,
-      margin: EdgeInsets.only(left: 16, right: 20, bottom: 10),
+      margin: const EdgeInsets.only(left: 16, right: 20, bottom: 10),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Expanded(
-            child: UsersSearchBar(controller: controller),
-          ),
-          SizedBox(
-            width: 20,
-          ),
+          Expanded(child: UsersSearchBar(controller: controller)),
+          const SizedBox(width: 20),
           Container(
             height: 24,
             width: 24,
