@@ -63,7 +63,7 @@ class NewProjectController extends GetxController {
     if (needToFillTitle.isTrue || needToFillManager.isTrue) return;
 
     var participants = <Participant>[];
-
+// TODO: https://dart.dev/guides/language/effective-dart/usage#avoid-using-iterableforeach-with-a-function-literal
     selectedTeamMembers.forEach((element) {
       participants.add(
         Participant(

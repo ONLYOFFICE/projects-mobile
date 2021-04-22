@@ -1,20 +1,23 @@
-part of 'tasks_filter.dart';
+import 'package:flutter/material.dart';
 
-class _FilterElement extends StatelessWidget {
-  final bool selected;
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+
+class FilterElement extends StatelessWidget {
+  final bool isSelected;
   final String title;
   final Color titleColor;
-  final bool cancelButton;
+  final bool cancelButtonEnabled;
   final Function() onTap;
   final Function() onCancelTap;
 
-  const _FilterElement(
+  const FilterElement(
       {Key key,
-      this.selected = false,
+      this.isSelected = false,
       this.title,
       this.titleColor,
       this.onTap,
-      this.cancelButton = false,
+      this.cancelButtonEnabled = false,
       this.onCancelTap})
       : super(key: key);
 
@@ -28,7 +31,7 @@ class _FilterElement extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: const Color(0xffD8D8D8), width: 0.5),
           borderRadius: BorderRadius.circular(16),
-          color: selected
+          color: isSelected
               ? Theme.of(context).customColors().primary
               : Theme.of(context).customColors().bgDescription,
         ),
@@ -40,12 +43,12 @@ class _FilterElement extends StatelessWidget {
               child: Text(title,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
-                      color: selected
+                      color: isSelected
                           ? Theme.of(context).customColors().onPrimarySurface
                           : titleColor ??
                               Theme.of(context).customColors().primary)),
             ),
-            if (cancelButton)
+            if (cancelButtonEnabled)
               Padding(
                   padding: const EdgeInsets.only(left: 9),
                   child: InkWell(

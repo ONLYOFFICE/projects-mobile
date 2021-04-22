@@ -55,6 +55,10 @@ class ProjectApi {
     String query,
     String sortBy,
     String sortOrder,
+    String projectManagerFilter,
+    String participantFilter,
+    String otherFilter,
+    String statusFilter,
   }) async {
     var url = await coreApi.projectsByParamsBaseUrl();
 
@@ -70,6 +74,19 @@ class ProjectApi {
         sortBy.isNotEmpty &&
         sortOrder != null &&
         sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+
+    if (projectManagerFilter != null) {
+      url += projectManagerFilter;
+    }
+    if (participantFilter != null) {
+      url += participantFilter;
+    }
+    if (otherFilter != null) {
+      url += otherFilter;
+    }
+    if (statusFilter != null) {
+      url += statusFilter;
+    }
 
     var result = PageDTO<List<ProjectDetailed>>();
     try {

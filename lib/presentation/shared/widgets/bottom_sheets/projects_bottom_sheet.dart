@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectMilestone extends StatelessWidget {
+class ProjectsBottomSheet extends StatelessWidget {
   final selectedId;
-  const SelectMilestone({
+  const ProjectsBottomSheet({
     Key key,
     this.selectedId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _milestoneController = Get.find<MilestonesController>();
+    var _projectsController = Get.find<ProjectsController>();
 
-    _milestoneController.getMilestonesByFilter();
+    _projectsController.setupProjects();
 
     return StyledButtomSheet(
       content: Column(
@@ -27,19 +27,22 @@ class SelectMilestone extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select milestone', style: TextStyleHelper.h6()),
+                Text('Select project', style: TextStyleHelper.h6()),
                 IconButton(
-                    icon: const Icon(Icons.search), onPressed: () => print(''))
+                  icon: const Icon(Icons.search),
+                  onPressed: () => print(''),
+                )
               ],
             ),
           ),
           const Divider(height: 1),
           Obx(
             () {
-              if (_milestoneController.loaded.isTrue) {
+              if (_projectsController.loaded.isTrue) {
                 return Expanded(
                   child: ListView.separated(
-                    itemCount: _milestoneController.milestones.length,
+                    itemCount:
+                        _projectsController.paginationController.data.length,
                     padding: const EdgeInsets.only(bottom: 16),
                     separatorBuilder: (BuildContext context, int index) {
                       return const Divider();
@@ -48,9 +51,10 @@ class SelectMilestone extends StatelessWidget {
                       return Material(
                         child: InkWell(
                           onTap: () => Get.back(result: {
-                            'id': _milestoneController.milestones[index].id,
-                            'title':
-                                _milestoneController.milestones[index].title
+                            'id': _projectsController
+                                .paginationController.data[index].id,
+                            'title': _projectsController
+                                .paginationController.data[index].title
                           }),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -63,13 +67,16 @@ class SelectMilestone extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        _milestoneController
-                                            .milestones[index].title,
+                                        _projectsController.paginationController
+                                            .data[index].title,
                                         style: TextStyleHelper.projectTitle,
                                       ),
                                       Text(
-                                          _milestoneController.milestones[index]
-                                              .responsible.displayName,
+                                          _projectsController
+                                              .paginationController
+                                              .data[index]
+                                              .responsible
+                                              .displayName,
                                           style: TextStyleHelper.caption(
                                                   color: Theme.of(context)
                                                       .customColors()
