@@ -25,7 +25,7 @@ class Task extends StatelessWidget {
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.resolveWith<Color>((_) {
-                    return Color(0xff81C4FF).withOpacity(0.1);
+                    return const Color(0xff81C4FF).withOpacity(0.1);
                   }),
                   side: MaterialStateProperty.resolveWith((_) {
                     return const BorderSide(

@@ -7,6 +7,8 @@ import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/views/authentication/widgets/portal_form.dart';
 
 class PortalView extends StatelessWidget {
+  PortalView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(LoginController());
@@ -18,7 +20,7 @@ class PortalView extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () => controller.state.value == ViewState.Busy
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : Center(
                 child: Container(
                   color: Theme.of(context).backgroundColor,
@@ -28,7 +30,7 @@ class PortalView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         svg,
-                        SizedBox(height: 10.0),
+                        const SizedBox(height: 10.0),
                         PortalForm()
                       ],
                     ),

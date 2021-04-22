@@ -27,7 +27,7 @@ void showFilters(context) async {
     initHeight: 0.9,
     decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) => Container(
       child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,7 +63,7 @@ void showFilters(context) async {
                               size: 26,
                               color: Theme.of(context).customColors().primary,
                             ),
-                            onPressed: () => Get.back(),
+                            onPressed: () => Get.back,
                           ),
                           const SizedBox(width: 10),
                           Text('Filter',
@@ -125,6 +125,7 @@ void showFilters(context) async {
                                   RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(6)))),
                           child: Text(
+                              // ignore: lines_longer_than_80_chars
                               'SHOW ${filterController.suitableTasksCount.value} TASK',
                               style: TextStyleHelper.button(
                                   color: Theme.of(context)

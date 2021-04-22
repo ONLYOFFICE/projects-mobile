@@ -19,11 +19,11 @@ class NewTaskDescription extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: 'Description',
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => controller.leaveDescriptionView(_controller.text)),
         actions: [
           IconButton(
-              icon: Icon(Icons.check_rounded),
+              icon: const Icon(Icons.check_rounded),
               onPressed: () => controller.confirmDescription(_controller.text))
         ],
       ),

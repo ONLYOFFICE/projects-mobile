@@ -16,6 +16,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 
 class ProjectsView extends StatelessWidget {
+  const ProjectsView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<ProjectsController>();
@@ -43,7 +44,7 @@ class ProjectsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // ProjectHeader(),
-            if (controller.loaded.isFalse) ListLoadingSkeleton(),
+            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
                 child: PaginationListView(
@@ -75,16 +76,16 @@ class ProjectHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     var options = Column(
       children: [
-        SizedBox(height: 14.5),
-        Divider(height: 9, thickness: 1),
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
         SortTile(title: 'Creation date', sortController: sortController),
         SortTile(title: 'Title', sortController: sortController),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
 
     var sortButton = Container(
-      padding: EdgeInsets.only(right: 4),
+      padding: const EdgeInsets.only(right: 4),
       child: GestureDetector(
         onTap: () {
           Get.bottomSheet(

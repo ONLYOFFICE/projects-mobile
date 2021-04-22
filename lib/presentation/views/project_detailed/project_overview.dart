@@ -22,6 +22,7 @@ class ProjectOverview extends StatelessWidget {
     //   () {
     //     if (controller.loaded.isTrue) {
     var _text =
+        // ignore: lines_longer_than_80_chars
         'Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m Aliqua id fugiat nostrud irure ex duis ea quis id quis ad et. Sunt qui esse pariatur duis deserunt mollit dolore cillum m';
     return SmartRefresher(
       controller: controller.refreshController,

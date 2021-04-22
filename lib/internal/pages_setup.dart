@@ -24,26 +24,30 @@ List<GetPage> getxPages() => [
       GetPage(name: 'PortalView', page: () => PortalView()),
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),
-      GetPage(name: 'HomeView', page: () => ProjectsView()),
+      GetPage(name: 'HomeView', page: () => const ProjectsView()),
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
-      GetPage(name: 'NewTaskView', page: () => NewTaskView()),
-      GetPage(name: 'NewTaskDescription', page: () => NewTaskDescription()),
-      GetPage(name: 'SelectProjectView', page: () => SelectProjectView()),
-      GetPage(name: 'SelectMilestoneView', page: () => SelectMilestoneView()),
-      GetPage(name: 'SelectDateView', page: () => SelectDateView()),
-      GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
-      GetPage(name: 'NewProject', page: () => NewProject()),
+      GetPage(name: 'NewTaskView', page: () => const NewTaskView()),
       GetPage(
-          name: 'NewProjectDescription', page: () => NewProjectDescription()),
+          name: 'NewTaskDescription', page: () => const NewTaskDescription()),
+      GetPage(name: 'SelectProjectView', page: () => const SelectProjectView()),
+      GetPage(
+          name: 'SelectMilestoneView', page: () => const SelectMilestoneView()),
+      GetPage(name: 'SelectDateView', page: () => const SelectDateView()),
+      GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
+      GetPage(name: 'NewProject', page: () => const NewProject()),
+      GetPage(
+          name: 'NewProjectDescription',
+          page: () => const NewProjectDescription()),
       GetPage(
           name: 'ProjectManagerSelectionView',
-          page: () => ProjectManagerSelectionView()),
+          page: () => const ProjectManagerSelectionView()),
       GetPage(
           name: 'TeamMembersSelectionView',
-          page: () => TeamMembersSelectionView()),
-      GetPage(name: 'ProjectDetailedView', page: () => ProjectDetailedView()),
+          page: () => const TeamMembersSelectionView()),
+      GetPage(
+          name: 'ProjectDetailedView', page: () => const ProjectDetailedView()),
       GetPage(
           name: 'GroupMembersSelectionView',
-          page: () => GroupMembersSelectionView()),
+          page: () => const GroupMembersSelectionView()),
     ];

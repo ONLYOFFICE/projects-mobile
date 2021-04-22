@@ -25,7 +25,7 @@ class SelectMilestoneView extends StatelessWidget {
     return Scaffold(
       appBar: StyledAppBar(titleText: 'Select milestone', actions: [
         IconButton(
-            icon: Icon(Icons.check_rounded), onPressed: () => print('da'))
+            icon: const Icon(Icons.check_rounded), onPressed: () => print('da'))
       ]),
       body: Column(
         children: [
@@ -37,7 +37,7 @@ class SelectMilestoneView extends StatelessWidget {
                     itemCount: _milestoneController.milestones.length,
                     padding: const EdgeInsets.only(bottom: 16),
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
+                      return const Divider();
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return Material(
@@ -90,7 +90,7 @@ class SelectMilestoneView extends StatelessWidget {
                   ),
                 );
               } else {
-                return ListLoadingSkeleton();
+                return const ListLoadingSkeleton();
               }
             },
           ),

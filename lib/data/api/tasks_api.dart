@@ -16,7 +16,7 @@ class TaskApi {
 
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = PortalTask.fromJson(responseJson['response']);
@@ -36,7 +36,7 @@ class TaskApi {
     var result = ApiDTO<List<Status>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)
@@ -59,7 +59,7 @@ class TaskApi {
     var result = ApiDTO();
 
     var body = {'status': newStatusType, 'statusId': newStatusId};
-    var responseJson;
+    Map responseJson;
     try {
       var response = await coreApi.putRequest(url, body: body);
       responseJson = json.decode(response.body);
@@ -80,7 +80,7 @@ class TaskApi {
 
     var result = ApiDTO();
 
-    var responseJson;
+    Map responseJson;
     try {
       var response = await coreApi.deleteRequest(url);
       responseJson = json.decode(response.body);
@@ -100,7 +100,7 @@ class TaskApi {
 
     var result = ApiDTO();
 
-    var responseJson;
+    Map responseJson;
     try {
       var response = await coreApi.putRequest(url);
       responseJson = json.decode(response.body);
@@ -156,13 +156,15 @@ class TaskApi {
     var result = PageDTO<List<PortalTask>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.total = responseJson['total'];
-        result.response = (responseJson['response'] as List)
-            .map((i) => PortalTask.fromJson(i))
-            .toList();
+        {
+          result.response = (responseJson['response'] as List)
+              .map((i) => PortalTask.fromJson(i))
+              .toList();
+        }
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

@@ -11,6 +11,6 @@ class ResponsibleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return NewTaskInfo(text: 'Add responsible', icon: SvgIcons.person);
+    return const NewTaskInfo(text: 'Add responsible', icon: SvgIcons.person);
   }
 }

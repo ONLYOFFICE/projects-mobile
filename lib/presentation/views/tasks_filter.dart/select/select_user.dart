@@ -24,20 +24,18 @@ class SelectUser extends StatelessWidget {
               children: [
                 Text('Select user', style: TextStyleHelper.h6()),
                 IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => print(''),
-                )
+                    icon: const Icon(Icons.search), onPressed: () => print(''))
               ],
             ),
           ),
-          Divider(height: 1),
+          const Divider(height: 1),
           Obx(() {
             if (_usersController.loaded.isTrue) {
               return Expanded(
                 child: ListView.separated(
                   itemCount: _usersController.users.length,
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider();
+                    return const Divider();
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
@@ -71,7 +69,7 @@ class SelectUser extends StatelessWidget {
                 ),
               );
             } else {
-              return ListLoadingSkeleton();
+              return const ListLoadingSkeleton();
             }
           })
         ],

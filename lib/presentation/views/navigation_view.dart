@@ -13,6 +13,7 @@ import 'package:projects/presentation/views/task_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 class NavigationView extends StatelessWidget {
+  NavigationView({Key key}) : super(key: key);
   final NavigationController controller = Get.put(NavigationController());
 
   @override
@@ -21,8 +22,8 @@ class NavigationView extends StatelessWidget {
       builder: (controller) {
         var _pages = [
           DashboardView(),
-          TasksView(),
-          ProjectsView(),
+          const TasksView(),
+          const ProjectsView(),
           TaskView(),
         ];
 
@@ -97,14 +98,14 @@ class NavigationView extends StatelessWidget {
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_dashboard_active,
                               height: _iconSize),
-                          label: Text('Dashboard')),
+                          label: const Text('Dashboard')),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_tasks, height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_tasks_active,
                               height: _iconSize),
-                          label: Text('Tasks')),
+                          label: const Text('Tasks')),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_projects,
@@ -112,14 +113,14 @@ class NavigationView extends StatelessWidget {
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_projects_active,
                               height: _iconSize),
-                          label: Text('Projects')),
+                          label: const Text('Projects')),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_more, height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_more_active,
                               height: _iconSize),
-                          label: Text('More')),
+                          label: const Text('More')),
                     ],
                   ),
                 ),

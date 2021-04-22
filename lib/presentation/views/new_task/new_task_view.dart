@@ -28,7 +28,7 @@ class NewTaskView extends StatelessWidget {
         titleText: 'New task',
         actions: [
           IconButton(
-              icon: Icon(Icons.check_rounded),
+              icon: const Icon(Icons.check_rounded),
               onPressed: () => controller.confirm())
         ],
       ),
@@ -108,7 +108,7 @@ class NewTaskInfo extends StatelessWidget {
               ),
             ],
           ),
-          if (enableBorder) StyledDivider(leftPadding: 56.5),
+          if (enableBorder) const StyledDivider(leftPadding: 56.5),
         ],
       ),
     );

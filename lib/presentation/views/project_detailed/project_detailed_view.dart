@@ -20,8 +20,8 @@ class ProjectDetailedView extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           actions: [
-            IconButton(icon: Icon(Icons.edit), onPressed: () {}),
-            IconButton(icon: Icon(Icons.check_rounded), onPressed: () {})
+            IconButton(icon: const Icon(Icons.edit), onPressed: () {}),
+            IconButton(icon: const Icon(Icons.check_rounded), onPressed: () {})
           ],
           bottom: TabBar(
               isScrollable: true,
@@ -31,12 +31,12 @@ class ProjectDetailedView extends StatelessWidget {
                   Theme.of(context).customColors().onSurface.withOpacity(0.6),
               labelStyle: TextStyleHelper.subtitle2(),
               tabs: [
-                Tab(text: 'Overview'),
-                Tab(text: 'Tasks'),
-                Tab(text: 'Milestones'),
-                Tab(text: 'Discussions'),
-                Tab(text: 'Documents'),
-                Tab(text: 'Team'),
+                const Tab(text: 'Overview'),
+                const Tab(text: 'Tasks'),
+                const Tab(text: 'Milestones'),
+                const Tab(text: 'Discussions'),
+                const Tab(text: 'Documents'),
+                const Tab(text: 'Team'),
               ]),
         ),
         body: TabBarView(
