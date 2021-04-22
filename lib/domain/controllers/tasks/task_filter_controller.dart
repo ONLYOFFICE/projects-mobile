@@ -51,6 +51,9 @@ class TaskFilterController extends BaseFilterController {
   String _projectFilter = '';
   String _milestoneFilter = '';
 
+  @override
+  var filtersTitle = 'TASKS';
+
   String get responsibleFilter => _responsibleFilter;
   String get creatorFilter => _creatorFilter;
   String get projectFilter => _projectFilter;
@@ -58,6 +61,7 @@ class TaskFilterController extends BaseFilterController {
 
   var _selfId;
 
+  @override
   RxInt suitableTasksCount = (-1).obs;
 
   @override
@@ -235,6 +239,7 @@ class TaskFilterController extends BaseFilterController {
     suitableTasksCount.value = result.response.length;
   }
 
+  @override
   void resetFilters() async {
     responsible.value = {'Me': false, 'Other': '', 'Groups': '', 'No': false};
     creator.value = {'Me': false, 'Other': ''};
@@ -256,6 +261,7 @@ class TaskFilterController extends BaseFilterController {
     applyFilters();
   }
 
+  @override
   void applyFilters() async {
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }

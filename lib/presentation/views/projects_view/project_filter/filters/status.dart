@@ -30,24 +30,35 @@
  *
  */
 
-part of 'tasks_filter.dart';
+part of '../projects_filter.dart';
 
-class _FilterLabel extends StatelessWidget {
-  final String label;
-  final EdgeInsets padding;
-  const _FilterLabel({
-    Key key,
-    this.label,
-    this.padding,
-  }) : super(key: key);
+class _Status extends StatelessWidget {
+  const _Status({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: padding ??
-            const EdgeInsets.only(left: 16, top: 36.5, bottom: 20.05),
-        child: Text(label,
-            style: TextStyleHelper.h6(
-                color: Theme.of(context).customColors().onSurface)));
+    var filterController = Get.find<ProjectsFilterController>();
+    return Obx(
+      () => FiltersRow(
+        title: 'Status',
+        options: <Widget>[
+          FilterElement(
+              title: 'Active',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['Active'],
+              onTap: () => filterController.changeStatus('Active')),
+          FilterElement(
+              title: 'Paused',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['Paused'],
+              onTap: () => filterController.changeStatus('Paused')),
+          FilterElement(
+              title: 'Closed',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['Closed'],
+              onTap: () => filterController.changeStatus('Closed')),
+        ],
+      ),
+    );
   }
 }

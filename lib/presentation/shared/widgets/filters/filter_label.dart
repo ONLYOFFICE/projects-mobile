@@ -30,25 +30,26 @@
  *
  */
 
-import 'dart:core';
+// import 'package:projects/presentation/shared/theme/custom_theme.dart';
+// import 'package:projects/presentation/shared/theme/text_styles.dart';
+// import 'package:flutter/material.dart';
 
-import 'package:projects/data/models/from_api/portal_user.dart';
+// class FilterLabel extends StatelessWidget {
+//   final String label;
+//   final EdgeInsets padding;
+//   const FilterLabel({
+//     Key key,
+//     this.label,
+//     this.padding,
+//   }) : super(key: key);
 
-class Item {
-  Item({
-    this.id,
-    this.title,
-    this.status,
-    this.responsible,
-    this.date,
-    this.subCount,
-    this.isImportant,
-  });
-  int id;
-  String title;
-  int status;
-  PortalUser responsible;
-  String date;
-  int subCount;
-  bool isImportant;
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Padding(
+//         padding: padding ??
+//             const EdgeInsets.only(left: 16, top: 36.5, bottom: 20.05),
+//         child: Text(label,
+//             style: TextStyleHelper.h6(
+//                 color: Theme.of(context).customColors().onSurface)));
+//   }
+// }

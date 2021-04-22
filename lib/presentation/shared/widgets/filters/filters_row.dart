@@ -30,66 +30,38 @@
  *
  */
 
-import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+class FiltersRow extends StatelessWidget {
+  final String title;
+  final List<Widget> options;
+  const FiltersRow({Key key, this.title, this.options}) : super(key: key);
 
-class ProjectCellController extends GetxController {
-  final statuses = [].obs;
-
-  RefreshController refreshController = RefreshController();
-
-  ProjectCellController(ProjectDetailed project) {
-    this.project = project;
-  }
-
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
-    }
-  }
-
-  var project;
-
-  RxString statusImageString = ''.obs;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  String get statusName {
-    switch (project.status) {
-      case 0:
-        return 'Open';
-        break;
-      case 1:
-        return 'Closed';
-        break;
-      case 2:
-        return 'Paused';
-        break;
-      default:
-        return 'n/a';
-    }
-  }
-
-  String get statusImage {
-    switch (project.status) {
-      case 0:
-        return SvgIcons.open;
-        break;
-      case 1:
-        return SvgIcons.closed;
-        break;
-      case 2:
-        return SvgIcons.paused;
-        break;
-      default:
-        return 'n/a';
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 16, bottom: 20),
+          child: Text(
+            title,
+            style: TextStyleHelper.h6(
+                color: Theme.of(context).customColors().onSurface),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Wrap(
+            runSpacing: 16,
+            spacing: 16,
+            children: options,
+          ),
+        ),
+        const SizedBox(height: 35),
+      ],
+    );
   }
 }

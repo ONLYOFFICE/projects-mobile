@@ -30,66 +30,38 @@
  *
  */
 
-import 'dart:convert';
+part of '../projects_filter.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+class _TeamMember extends StatelessWidget {
+  const _TeamMember({Key key}) : super(key: key);
 
-class ProjectCellController extends GetxController {
-  final statuses = [].obs;
-
-  RefreshController refreshController = RefreshController();
-
-  ProjectCellController(ProjectDetailed project) {
-    this.project = project;
-  }
-
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
-    }
-  }
-
-  var project;
-
-  RxString statusImageString = ''.obs;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  String get statusName {
-    switch (project.status) {
-      case 0:
-        return 'Open';
-        break;
-      case 1:
-        return 'Closed';
-        break;
-      case 2:
-        return 'Paused';
-        break;
-      default:
-        return 'n/a';
-    }
-  }
-
-  String get statusImage {
-    switch (project.status) {
-      case 0:
-        return SvgIcons.open;
-        break;
-      case 1:
-        return SvgIcons.closed;
-        break;
-      case 2:
-        return SvgIcons.paused;
-        break;
-      default:
-        return 'n/a';
-    }
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<ProjectsFilterController>();
+    return Obx(
+      () => FiltersRow(
+        title: 'Team member',
+        options: <Widget>[
+          FilterElement(
+              title: 'Me',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.teamMember['Me'],
+              onTap: () => filterController.changeTeamMember('Me')),
+          FilterElement(
+            title: filterController.teamMember['Other'].isEmpty
+                ? 'Other user'
+                : filterController.teamMember['Other'],
+            isSelected: filterController.teamMember['Other'].isNotEmpty,
+            cancelButtonEnabled:
+                filterController.teamMember['Other'].isNotEmpty,
+            onTap: () async {
+              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              await filterController.changeTeamMember('Other', newUser);
+            },
+            onCancelTap: () => filterController.changeTeamMember('Other', null),
+          ),
+        ],
+      ),
+    );
   }
 }

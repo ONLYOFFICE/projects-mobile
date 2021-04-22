@@ -37,8 +37,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectUser extends StatelessWidget {
-  const SelectUser({Key key}) : super(key: key);
+class UsersBottomSheet extends StatelessWidget {
+  const UsersBottomSheet({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -38,9 +38,9 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectMilestone extends StatelessWidget {
+class MilestonesBottomSheet extends StatelessWidget {
   final selectedId;
-  const SelectMilestone({
+  const MilestonesBottomSheet({
     Key key,
     this.selectedId,
   }) : super(key: key);

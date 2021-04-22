@@ -38,9 +38,9 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
-class SelectProject extends StatelessWidget {
+class ProjectsBottomSheet extends StatelessWidget {
   final selectedId;
-  const SelectProject({
+  const ProjectsBottomSheet({
     Key key,
     this.selectedId,
   }) : super(key: key);

@@ -38,6 +38,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({
@@ -81,7 +82,7 @@ class HeaderWidget extends StatelessWidget {
                   ),
                   const SizedBox(width: 24),
                   InkWell(
-                    onTap: () async => {},
+                    onTap: () async => showFilters(context),
                     child: FiltersButton(controler: controller),
                   ),
                   const SizedBox(width: 24),
