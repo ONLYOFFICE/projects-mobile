@@ -30,22 +30,21 @@
  *
  */
 
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_sort_controller.dart';
 
 class ProjectsSortController extends BaseSortController {
   ProjectsSortController() {
-    currentSortText = 'Creation date'.obs;
-    currentSortOrderText = 'ascending'.obs;
+    currentSortfilter = 'create_on';
+    currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
   @override
-  String toFilters(value) {
+  String getFilterLabel(value) {
     return _filtersMapping[value];
   }
 }
 
 const _filtersMapping = {
-  'Creation date': 'create_on',
-  'Title': 'title',
+  'create_on': 'Creation date',
+  'title': 'Title',
 };

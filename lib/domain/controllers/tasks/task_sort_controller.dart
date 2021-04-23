@@ -30,25 +30,24 @@
  *
  */
 
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_sort_controller.dart';
 
 class TasksSortController extends BaseSortController {
   TasksSortController() {
-    currentSortText.value = 'Deadline';
-    currentSortOrderText.value = 'ascending';
+    currentSortfilter = 'deadline';
+    currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
   @override
-  String toFilters(value) {
+  String getFilterLabel(value) {
     return _filtersMapping[value];
   }
 }
 
 const _filtersMapping = {
-  'Deadline': 'deadline',
-  'Priority': 'priority',
-  'Creation date': 'create_on',
-  'Start date': 'start_date',
-  'Title': 'title',
-  'Order': 'sort_order',
+  'deadline': 'Deadline',
+  'priority': 'Priority',
+  'create_on': 'Creation date',
+  'start_date': 'Start date',
+  'title': 'Title',
+  'sort_order': 'Order',
 };

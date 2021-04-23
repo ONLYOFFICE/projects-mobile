@@ -33,32 +33,28 @@
 import 'package:get/get.dart';
 
 abstract class BaseSortController extends GetxController {
-  var currentSortText;
-  var currentSortOrderText;
+  RxString currentSortTitle = ''.obs;
+  RxBool isSortAscending = true.obs;
   Function updateSortDelegate;
 
+  String currentSortfilter;
+
   void changeSort(String newSort) async {
-    if (newSort == currentSortText.value) {
-      if (currentSortOrderText.value == 'ascending') {
-        currentSortOrderText.value = 'descending';
-      } else {
-        currentSortOrderText.value = 'ascending';
-      }
+    if (newSort == currentSortfilter) {
+      isSortAscending.value = !isSortAscending.value;
     } else {
-      currentSortText.value = newSort;
-      currentSortOrderText.value = 'ascending';
+      currentSortfilter = newSort;
+      isSortAscending.value = true;
     }
+    currentSortTitle.value = getFilterLabel(currentSortfilter);
 
     if (updateSortDelegate != null) {
       updateSortDelegate();
     }
   }
 
-  // String get sort;
+  String get currentSortOrder =>
+      isSortAscending.isTrue ? 'ascending' : 'descending';
 
-  String get currentSortfilter => toFilters(currentSortText.value);
-
-  String get currentSortOrder => currentSortOrderText.value;
-
-  String toFilters(value);
+  String getFilterLabel(value);
 }

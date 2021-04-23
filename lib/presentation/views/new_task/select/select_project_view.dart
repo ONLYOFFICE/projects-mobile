@@ -75,7 +75,7 @@ class SelectProjectView extends StatelessWidget {
                         id: _projectsController
                             .paginationController.data[index].id,
                         title: _projectsController
-                            .paginationController.data[index].title);
+                            .paginationController.data[index].sortParameter);
                   },
                   child: Padding(
                     padding:
@@ -87,8 +87,8 @@ class SelectProjectView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                _projectsController
-                                    .paginationController.data[index].title,
+                                _projectsController.paginationController
+                                    .data[index].sortParameter,
                                 style: TextStyleHelper.projectTitle,
                               ),
                               Text(

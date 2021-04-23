@@ -93,13 +93,14 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
                         Get.back();
                       },
                       child: StatusTile(
-                          title: _statusesController.statuses[i].title,
+                          title: _statusesController.statuses[i].sortParameter,
                           icon: SVG.createSizedFromString(
                               _statusesController.statusImagesDecoded[i],
                               16,
                               16),
-                          selected: _statusesController.statuses[i].title ==
-                              taskItemController.status.value.title),
+                          selected:
+                              _statusesController.statuses[i].sortParameter ==
+                                  taskItemController.status.value.title),
                     ),
                   const SizedBox(height: 16),
                 ],
