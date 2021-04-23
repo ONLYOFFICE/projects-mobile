@@ -40,7 +40,7 @@ class TaskCell extends StatelessWidget {
                 child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(
-              child: GestureDetector(
+              child: InkWell(
                 onTap: () => Get.toNamed('TaskDetailedView',
                     arguments: {'controller': itemController}),
                 child: Column(

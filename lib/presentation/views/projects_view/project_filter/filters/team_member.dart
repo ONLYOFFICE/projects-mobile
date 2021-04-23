@@ -13,20 +13,20 @@ class _TeamMember extends StatelessWidget {
           FilterElement(
               title: 'Me',
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.teamMember['Me'],
-              onTap: () => filterController.changeTeamMember('Me')),
+              isSelected: filterController.teamMember['me'],
+              onTap: () => filterController.changeTeamMember('me')),
           FilterElement(
-            title: filterController.teamMember['Other'].isEmpty
+            title: filterController.teamMember['other'].isEmpty
                 ? 'Other user'
-                : filterController.teamMember['Other'],
-            isSelected: filterController.teamMember['Other'].isNotEmpty,
+                : filterController.teamMember['other'],
+            isSelected: filterController.teamMember['other'].isNotEmpty,
             cancelButtonEnabled:
-                filterController.teamMember['Other'].isNotEmpty,
+                filterController.teamMember['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.bottomSheet(UsersBottomSheet());
-              await filterController.changeTeamMember('Other', newUser);
+              await filterController.changeTeamMember('other', newUser);
             },
-            onCancelTap: () => filterController.changeTeamMember('Other', null),
+            onCancelTap: () => filterController.changeTeamMember('other', null),
           ),
         ],
       ),

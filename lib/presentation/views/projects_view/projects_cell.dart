@@ -1,4 +1,3 @@
-import 'package:drop_cap_text/drop_cap_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -19,17 +18,18 @@ class ProjectCell extends StatelessWidget {
         Get.put(ProjectCellController(item), tag: item.id.toString());
 
     return Container(
-      child: InkWell(
-        onTap: () => Get.toNamed('ProjectDetailedView',
-            arguments: {'controller': itemController}),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            ProjectIcon(
-              itemController: itemController,
-            ),
-            Expanded(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          ProjectIcon(
+            itemController: itemController,
+          ),
+          Expanded(
+            child: InkWell(
+              onTap: () => Get.toNamed('ProjectDetailedView',
+                  arguments: {'controller': itemController}),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Expanded(
                     child: Row(
@@ -39,26 +39,19 @@ class ProjectCell extends StatelessWidget {
                           item: item,
                           itemController: itemController,
                         ),
-                        // const SizedBox(width: 16),
+                        const SizedBox(width: 8),
                         ThirdColumn(
                           item: item,
                           controller: itemController,
                         ),
-                        const SizedBox(width: 16),
                       ],
                     ),
-                  ),
-                  const Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -134,51 +127,59 @@ class ProjectIcon extends StatelessWidget {
 }
 
 class SecondColumn extends StatelessWidget {
+  final ProjectDetailed item;
+  final ProjectCellController itemController;
+
   const SecondColumn({
     Key key,
     @required this.item,
     @required this.itemController,
   }) : super(key: key);
 
-  final ProjectDetailed item;
-  final ProjectCellController itemController;
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
       flex: 2,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          DropCapText(
-            item.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyleHelper.projectTitle,
-            dropCapPadding: EdgeInsets.only(top: 4, right: 4),
-            dropCap: DropCap(
-              width: 12,
-              height: 12,
-              child: AppIcon(icon: SvgIcons.lock),
-            ),
+          Wrap(
+            children: [
+              Text(
+                item.title.replaceAll(' ', '\u00A0'),
+                maxLines: 2,
+                softWrap: true,
+                style: TextStyleHelper.projectTitle,
+                overflow: TextOverflow.ellipsis,
+              ),
+              // AppIcon(icon: SvgIcons.lock),
+            ],
           ),
           Row(
-            children: <Widget>[
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
               Text(
                 itemController.statusName,
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
+              Text(' • ',
+                  style: TextStyleHelper.caption(
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.6))),
+              Flexible(
                 child: Text(
-                  '•',
-                  style: TextStyleHelper.projectResponsible,
-                ),
-              ),
-              Text(
-                item.responsible.displayName,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.projectResponsible,
+                    item.responsible.displayName.replaceAll(' ', '\u00A0'),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleHelper.caption(
+                        color: Theme.of(context)
+                            .customColors()
+                            .onSurface
+                            .withOpacity(0.6))),
               ),
             ],
           ),
@@ -212,6 +213,9 @@ class ThirdColumn extends StatelessWidget {
               item.taskCount.toString(),
               style: TextStyleHelper.projectCompleatedTasks,
             ),
+            SizedBox(
+              width: 16,
+            )
           ],
         ),
       ],

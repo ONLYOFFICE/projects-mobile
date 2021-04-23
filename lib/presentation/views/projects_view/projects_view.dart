@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'dart:math' as math;
 
+import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
-import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
@@ -85,7 +85,7 @@ class ProjectHeader extends StatelessWidget {
 
     var sortButton = Container(
       padding: EdgeInsets.only(right: 4),
-      child: GestureDetector(
+      child: InkWell(
         onTap: () {
           Get.bottomSheet(
             SortView(sortOptions: options),
@@ -101,8 +101,23 @@ class ProjectHeader extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            SVG.createSized(
-                'lib/assets/images/icons/sorting_3_descend.svg', 20, 20),
+            Obx(
+              () => (sortController.currentSortOrder == 'ascending')
+                  ? AppIcon(
+                      icon: SvgIcons.sorting_4_ascend,
+                      width: 20,
+                      height: 20,
+                    )
+                  : Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationX(math.pi),
+                      child: AppIcon(
+                        icon: SvgIcons.sorting_4_ascend,
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+            ),
           ],
         ),
       ),

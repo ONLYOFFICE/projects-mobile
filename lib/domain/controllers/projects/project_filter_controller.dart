@@ -39,29 +39,29 @@ class ProjectsFilterController extends BaseFilterController {
       _otherFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
 
-  RxMap<String, dynamic> projectManager = {'Me': false, 'Other': ''}.obs;
-  RxMap<String, dynamic> teamMember = {'Me': false, 'Other': ''}.obs;
+  RxMap<String, dynamic> projectManager = {'me': false, 'other': ''}.obs;
+  RxMap<String, dynamic> teamMember = {'me': false, 'other': ''}.obs;
 
   RxMap<String, dynamic> other =
-      {'Followed': false, 'With tag': '', 'Without tag': false}.obs;
+      {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
 
   RxMap<String, dynamic> status =
-      {'Active': false, 'Paused': false, 'Closed': false}.obs;
+      {'active': false, 'paused': false, 'closed': false}.obs;
 
   Future<void> changeProjectManager(String filter, [newValue = '']) async {
     _selfId ??= await Get.find<UserController>().getUserId();
     _projectManagerFilter = '';
-    if (filter == 'Me') {
-      projectManager['Other'] = '';
-      projectManager['Me'] = !projectManager['Me'];
-      if (projectManager['Me']) _projectManagerFilter = '&manager=$_selfId';
+    if (filter == 'me') {
+      projectManager['other'] = '';
+      projectManager['me'] = !projectManager['me'];
+      if (projectManager['me']) _projectManagerFilter = '&manager=$_selfId';
     }
-    if (filter == 'Other') {
-      projectManager['Me'] = false;
+    if (filter == 'other') {
+      projectManager['me'] = false;
       if (newValue == null) {
-        projectManager['Other'] = '';
+        projectManager['other'] = '';
       } else {
-        projectManager['Other'] = newValue['displayName'];
+        projectManager['other'] = newValue['displayName'];
         _projectManagerFilter = '&manager=${newValue["id"]}';
       }
     }
@@ -71,17 +71,17 @@ class ProjectsFilterController extends BaseFilterController {
   Future<void> changeTeamMember(String filter, [newValue = '']) async {
     _selfId ??= await Get.find<UserController>().getUserId();
     _teamMemberFilter = '';
-    if (filter == 'Me') {
-      teamMember['Other'] = '';
-      teamMember['Me'] = !teamMember['Me'];
-      if (teamMember['Me']) _teamMemberFilter = '&participant=$_selfId';
+    if (filter == 'me') {
+      teamMember['other'] = '';
+      teamMember['me'] = !teamMember['me'];
+      if (teamMember['me']) _teamMemberFilter = '&participant=$_selfId';
     }
-    if (filter == 'Other') {
-      teamMember['Me'] = false;
+    if (filter == 'other') {
+      teamMember['me'] = false;
       if (newValue == null) {
-        teamMember['Other'] = '';
+        teamMember['other'] = '';
       } else {
-        teamMember['Other'] = newValue['displayName'];
+        teamMember['other'] = newValue['displayName'];
         _teamMemberFilter = '&participant=${newValue["id"]}';
       }
     }
@@ -91,28 +91,28 @@ class ProjectsFilterController extends BaseFilterController {
   void changeOther(String filter, [newValue = '']) async {
     _otherFilter = '';
     switch (filter) {
-      case 'Followed':
-        other['Followed'] = !other['Followed'];
-        other['With tag'] = '';
-        other['Without tag'] = false;
+      case 'followed':
+        other['followed'] = !other['followed'];
+        other['withTag'] = '';
+        other['withoutTag'] = false;
 
-        if (other['Followed']) _otherFilter = '&follow=true';
+        if (other['followed']) _otherFilter = '&follow=true';
         break;
-      case 'With tag':
-        other['Followed'] = false;
-        other['Without tag'] = false;
+      case 'withTag':
+        other['followed'] = false;
+        other['withoutTag'] = false;
         if (newValue == null) {
-          other['With tag'] = '';
+          other['withTag'] = '';
         } else {
-          other['With tag'] = newValue['title'];
+          other['withTag'] = newValue['title'];
           _otherFilter = '&tag=${newValue["id"]}';
         }
         break;
-      case 'Without tag':
-        other['Followed'] = false;
-        other['With tag'] = '';
-        other['Without tag'] = !other['Without tag'];
-        if (other['Without tag']) _otherFilter = '&tag=-1';
+      case 'withoutTag':
+        other['followed'] = false;
+        other['withTag'] = '';
+        other['withoutTag'] = !other['withoutTag'];
+        if (other['withoutTag']) _otherFilter = '&tag=-1';
         break;
       default:
     }
@@ -122,26 +122,26 @@ class ProjectsFilterController extends BaseFilterController {
   void changeStatus(String filter, [newValue = '']) async {
     _statusFilter = '';
     switch (filter) {
-      case 'Active':
-        status['Active'] = !status['Active'];
-        status['Paused'] = false;
-        status['Closed'] = false;
+      case 'active':
+        status['active'] = !status['active'];
+        status['paused'] = false;
+        status['closed'] = false;
 
-        if (status['Active']) _statusFilter = '&status=open';
+        if (status['active']) _statusFilter = '&status=open';
         break;
-      case 'Paused':
-        status['Active'] = false;
-        status['Paused'] = !status['Paused'];
-        status['Closed'] = false;
+      case 'paused':
+        status['active'] = false;
+        status['paused'] = !status['paused'];
+        status['closed'] = false;
 
-        if (status['Paused']) _statusFilter = '&status=paused';
+        if (status['paused']) _statusFilter = '&status=paused';
         break;
-      case 'Closed':
-        status['Active'] = false;
-        status['Paused'] = false;
-        status['Closed'] = !status['Closed'];
+      case 'closed':
+        status['active'] = false;
+        status['paused'] = false;
+        status['closed'] = !status['closed'];
 
-        if (status['Closed']) _statusFilter = '&status=closed';
+        if (status['closed']) _statusFilter = '&status=closed';
         break;
       default:
     }
@@ -165,10 +165,10 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    projectManager = {'Me': false, 'Other': ''}.obs;
-    teamMember = {'Me': false, 'Other': ''}.obs;
-    other = {'Followed': false, 'With tag': '', 'Without tag': false}.obs;
-    status = {'Active': false, 'Paused': false, 'Closed': false}.obs;
+    projectManager = {'me': false, 'other': ''}.obs;
+    teamMember = {'me': false, 'other': ''}.obs;
+    other = {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
+    status = {'active': false, 'paused': false, 'closed': false}.obs;
 
     acceptedFilters.value = '';
     suitableTasksCount.value = -1;
