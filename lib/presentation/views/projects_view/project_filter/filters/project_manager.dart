@@ -43,23 +43,23 @@ class _ProjectManager extends StatelessWidget {
         title: 'Project manager',
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: 'me',
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.projectManager['Me'],
-              onTap: () => filterController.changeProjectManager('Me')),
+              isSelected: filterController.projectManager['me'],
+              onTap: () => filterController.changeProjectManager('me')),
           FilterElement(
-            title: filterController.projectManager['Other'].isEmpty
+            title: filterController.projectManager['other'].isEmpty
                 ? 'Other user'
-                : filterController.projectManager['Other'],
-            isSelected: filterController.projectManager['Other'].isNotEmpty,
+                : filterController.projectManager['other'],
+            isSelected: filterController.projectManager['other'].isNotEmpty,
             cancelButtonEnabled:
-                filterController.projectManager['Other'].isNotEmpty,
+                filterController.projectManager['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.bottomSheet(UsersBottomSheet());
-              await filterController.changeProjectManager('Other', newUser);
+              await filterController.changeProjectManager('other', newUser);
             },
             onCancelTap: () =>
-                filterController.changeProjectManager('Other', null),
+                filterController.changeProjectManager('other', null),
           ),
         ],
       ),

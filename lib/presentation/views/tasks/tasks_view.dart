@@ -32,11 +32,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'dart:math' as math;
 
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
-import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -118,7 +119,7 @@ class TasksHeader extends StatelessWidget {
 
     var sortButton = Container(
       padding: EdgeInsets.only(right: 4),
-      child: GestureDetector(
+      child: InkWell(
         onTap: () {
           Get.bottomSheet(SortView(sortOptions: options),
               isScrollControlled: true);
@@ -130,8 +131,23 @@ class TasksHeader extends StatelessWidget {
               style: TextStyleHelper.projectsSorting,
             ),
             const SizedBox(width: 8),
-            SVG.createSized(
-                'lib/assets/images/icons/sorting_3_descend.svg', 20, 20),
+            Obx(
+              () => (sortController.currentSortOrder == 'ascending')
+                  ? AppIcon(
+                      icon: SvgIcons.sorting_4_ascend,
+                      width: 20,
+                      height: 20,
+                    )
+                  : Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationX(math.pi),
+                      child: AppIcon(
+                        icon: SvgIcons.sorting_4_ascend,
+                        width: 20,
+                        height: 20,
+                      ),
+                    ),
+            ),
           ],
         ),
       ),

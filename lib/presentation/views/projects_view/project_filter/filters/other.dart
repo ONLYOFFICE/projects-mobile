@@ -45,26 +45,24 @@ class _Other extends StatelessWidget {
           FilterElement(
               title: 'Followed',
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.other['Followed'],
-              onTap: () => filterController.changeOther('Followed')),
+              isSelected: filterController.other['followed'],
+              onTap: () => filterController.changeOther('followed')),
           FilterElement(
-              title: filterController.other['With tag'].isEmpty
-                  ? 'With tag'
-                  : filterController.other['With tag'],
-              isSelected: filterController.other['With tag'].isNotEmpty,
-              cancelButtonEnabled:
-                  filterController.other['With tag'].isNotEmpty,
+              title: filterController.other['withTag'].isEmpty
+                  ? 'With Tag'
+                  : filterController.other['withTag'],
+              isSelected: filterController.other['withTag'].isNotEmpty,
+              cancelButtonEnabled: filterController.other['withTag'].isNotEmpty,
               onTap: () async {
                 var selectedTag = await Get.bottomSheet(TagsBottomSheet());
-                filterController.changeOther('With tag', selectedTag);
+                filterController.changeOther('withTag', selectedTag);
               },
-              onCancelTap: () =>
-                  filterController.changeOther('With tag', null)),
+              onCancelTap: () => filterController.changeOther('withTag', null)),
           FilterElement(
-              title: 'Without tag',
+              title: 'Without Tag',
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.other['Without tag'],
-              onTap: () => filterController.changeOther('Without tag')),
+              isSelected: filterController.other['withoutTag'],
+              onTap: () => filterController.changeOther('withoutTag')),
         ],
       ),
     );
