@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class CodeForm extends StatefulWidget {
+  CodeForm({Key key}) : super(key: key);
   @override
   _CodeFormState createState() => _CodeFormState();
 }
@@ -61,7 +62,7 @@ class _CodeFormState extends State<CodeForm> {
       obscureText: false,
       keyboardType: TextInputType.number,
       style: TextStyleHelper.mainStyle,
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: 'Код',
         // border:
@@ -75,10 +76,10 @@ class _CodeFormState extends State<CodeForm> {
     final loginButon = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: const Color(0xff01A0C7),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
         child: Text('Send',
             textAlign: TextAlign.center,
@@ -94,17 +95,13 @@ class _CodeFormState extends State<CodeForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             codeField,
-            SizedBox(
-              height: 10.0,
-            ),
+            const SizedBox(height: 10.0),
             Obx(() => controller.state.value == ViewState.Busy
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : loginButon),
-            SizedBox(
-              height: 15.0,
-            ),
+            const SizedBox(height: 15.0),
           ],
         ),
       ),

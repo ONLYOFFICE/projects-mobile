@@ -46,7 +46,7 @@ abstract class BaseSortController extends GetxController {
       }
     } else {
       currentSortText.value = newSort;
-      currentSortOrderText.value == 'ascending';
+      currentSortOrderText.value = 'ascending';
     }
 
     if (updateSortDelegate != null) {

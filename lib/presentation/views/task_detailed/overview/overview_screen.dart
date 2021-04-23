@@ -59,7 +59,7 @@ class OverviewScreen extends StatelessWidget {
           var task = taskController.task.value;
           return SmartRefresher(
             controller: taskController.refreshController,
-            onRefresh: () => taskController.reloadTask(),
+            onRefresh: taskController.reloadTask,
             child: ListView(
               children: [
                 Task(taskController: taskController),

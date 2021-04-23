@@ -32,25 +32,24 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
+class DueDateTile extends StatelessWidget {
+  final controller;
+  const DueDateTile({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
 
-class App extends StatelessWidget {
-  App({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: 'PortalView',
-      getPages: getxPages(),
-      localizationsDelegates: localizationsDelegates(),
-      supportedLocales: supportedLocales(),
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
+    return Obx(
+      () => NewTaskInfo(
+          icon: SvgIcons.due_date,
+          text: controller.dueDateText.value,
+          onTap: () => Get.toNamed('SelectDateView',
+              arguments: {'controller': controller, 'startDate': false})),
     );
   }
 }

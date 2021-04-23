@@ -32,25 +32,31 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
+class SelectDateView extends StatelessWidget {
+  const SelectDateView({
+    Key key,
+  }) : super(key: key);
 
-class App extends StatelessWidget {
-  App({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: 'PortalView',
-      getPages: getxPages(),
-      localizationsDelegates: localizationsDelegates(),
-      supportedLocales: supportedLocales(),
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
+    var controller = Get.arguments['controller'];
+    bool startDate = Get.arguments['startDate'];
+    return Scaffold(
+      appBar: StyledAppBar(
+          titleText: startDate ? 'Select start date' : 'Select due date'),
+      body: CalendarDatePicker(
+          initialDate: DateTime.now(),
+          currentDate: DateTime.now(),
+          firstDate: DateTime(2000),
+          lastDate: DateTime(3000),
+          onDateChanged: (value) {
+            return startDate
+                ? controller.changeStartDate(value.toString())
+                : controller.changeDueDate(value.toString());
+          }),
+      // ),
     );
   }
 }

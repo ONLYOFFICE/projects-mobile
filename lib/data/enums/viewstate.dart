@@ -1,4 +1,3 @@
-enum ViewState { Idle, Busy }
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -31,3 +30,5 @@ enum ViewState { Idle, Busy }
  *
  */
 
+// ignore: constant_identifier_names
+enum ViewState { Idle, Busy }

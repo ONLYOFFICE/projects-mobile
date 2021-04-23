@@ -81,7 +81,7 @@ class FiltersHeader extends StatelessWidget {
                             size: 26,
                             color: Theme.of(context).customColors().primary,
                           ),
-                          onPressed: () => Get.back(),
+                          onPressed: () => Get.back,
                         ),
                         const SizedBox(width: 10),
                         Text('Filter',

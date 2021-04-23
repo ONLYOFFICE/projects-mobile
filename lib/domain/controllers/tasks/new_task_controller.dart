@@ -31,26 +31,41 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 
 class NewTaskController extends GetxController {
   var _selectedProjectId;
-  RxString selectedProjectTitle = ''.obs;
-
   var _selectedMilestoneId;
-  RxString selectedMilestoneTitle = ''.obs;
-
-  RxString description = ''.obs;
-  RxBool highPriority = false.obs;
-
-  RxBool selectProjectError = false.obs;
+  String _description;
+  String _startDate = '';
+  String _dueDate = '';
 
   int get selectedProjectId => _selectedProjectId;
   int get selectedMilestoneId => _selectedMilestoneId;
+  String get description => _description;
+  String get startDate => _startDate;
+  String get dueDate => _dueDate;
+
+  RxString titleText = ''.obs;
+
+  RxString projectTileText = 'Select project'.obs;
+
+  RxString milestoneTileText = 'Select milestone'.obs;
+
+  RxString descriptionText = 'Add description'.obs;
+  RxBool highPriority = false.obs;
+
+  RxString startDateText = 'Set start date'.obs;
+  RxString dueDateText = 'Set due date'.obs;
+
+  RxBool selectProjectError = false.obs;
+
+  void changeTitle(String newText) => titleText.value = newText;
 
   void changeProjectSelection({var id, String title}) {
     if (id != null && title != null) {
-      selectedProjectTitle.value = title;
+      projectTileText.value = title;
       _selectedProjectId = id;
       selectProjectError.value = false;
     } else {
@@ -61,12 +76,12 @@ class NewTaskController extends GetxController {
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    selectedProjectTitle.value = '';
+    projectTileText.value = 'Select project';
   }
 
   void changeMilestoneSelection({var id, String title}) {
     if (id != null && title != null) {
-      selectedMilestoneTitle.value = title;
+      milestoneTileText.value = title;
       _selectedMilestoneId = id;
     } else {
       removeMilestoneSelection();
@@ -76,7 +91,7 @@ class NewTaskController extends GetxController {
 
   void removeMilestoneSelection() {
     _selectedMilestoneId = null;
-    selectedMilestoneTitle.value = '';
+    milestoneTileText.value = 'Select milestone';
   }
 
   void changePriority(bool value) {
@@ -84,7 +99,8 @@ class NewTaskController extends GetxController {
   }
 
   void confirmDescription(String newText) {
-    description.value = newText;
+    descriptionText.value = newText;
+    _description = newText;
     Get.back();
   }
 
@@ -100,8 +116,26 @@ class NewTaskController extends GetxController {
           Get.back();
           Get.back();
         },
-        onCancelTap: () => Get.back(),
+        onCancelTap: Get.back,
       ));
+    }
+  }
+
+  void changeStartDate(String newDate) {
+    if (newDate != null) {
+      _startDate = newDate;
+      startDateText.value =
+          formatedDate(now: DateTime.now(), stringDate: newDate);
+      Get.back();
+    }
+  }
+
+  void changeDueDate(String newDate) {
+    if (newDate != null) {
+      _dueDate = newDate;
+      dueDateText.value =
+          formatedDate(now: DateTime.now(), stringDate: newDate);
+      Get.back();
     }
   }
 

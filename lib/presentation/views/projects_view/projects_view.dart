@@ -30,24 +30,24 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'dart:math' as math;
 
-import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-
-import 'package:projects/presentation/views/projects_view/projects_header_widget.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
+import 'package:projects/presentation/views/projects_view/projects_header_widget.dart';
 
 class ProjectsView extends StatelessWidget {
+  const ProjectsView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<ProjectsController>();
@@ -75,7 +75,7 @@ class ProjectsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             // ProjectHeader(),
-            if (controller.loaded.isFalse) ListLoadingSkeleton(),
+            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
                 child: PaginationListView(
@@ -107,16 +107,16 @@ class ProjectHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     var options = Column(
       children: [
-        SizedBox(height: 14.5),
-        Divider(height: 9, thickness: 1),
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
         SortTile(title: 'Creation date', sortController: sortController),
         SortTile(title: 'Title', sortController: sortController),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
       ],
     );
 
     var sortButton = Container(
-      padding: EdgeInsets.only(right: 4),
+      padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
           Get.bottomSheet(

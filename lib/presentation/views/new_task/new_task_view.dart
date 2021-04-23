@@ -38,6 +38,14 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/priority_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/project_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/start_date_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/title_tile.dart';
 
 class NewTaskView extends StatelessWidget {
   const NewTaskView({Key key}) : super(key: key);
@@ -52,7 +60,7 @@ class NewTaskView extends StatelessWidget {
         titleText: 'New task',
         actions: [
           IconButton(
-              icon: Icon(Icons.check_rounded),
+              icon: const Icon(Icons.check_rounded),
               onPressed: () => controller.confirm())
         ],
       ),
@@ -60,72 +68,18 @@ class NewTaskView extends StatelessWidget {
         child: Obx(
           () => Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 56, right: 16, top: 16),
-                child: TextField(
-                  autofocus: true,
-                  maxLines: 2,
-                  style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onBackground),
-                  cursorColor: Theme.of(context)
-                      .customColors()
-                      .primary
-                      .withOpacity(0.87),
-                  decoration: InputDecoration(
-                      hintText: 'Task title',
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
-                      hintStyle: TextStyleHelper.headline6(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.5)),
-                      border: InputBorder.none),
-                ),
-              ),
-              NewTaskInfo(
-                text: controller.selectedProjectTitle.isEmpty
-                    ? 'Select project'
-                    : controller.selectedProjectTitle.value,
-                icon: SvgIcons.project,
-                textColor: controller.selectProjectError.isTrue
-                    ? Theme.of(context).customColors().error
-                    : null, //default color
-                onTap: () => Get.toNamed('SelectProjectView'),
-              ),
-              if (controller.selectedProjectTitle.isNotEmpty)
-                NewTaskInfo(
-                  text: controller.selectedMilestoneTitle.isEmpty
-                      ? 'Add milestone'
-                      : controller.selectedMilestoneTitle.value,
-                  icon: SvgIcons.milestone,
-                  onTap: () => Get.toNamed('SelectMilestoneView'),
-                ),
-              if (controller.selectedProjectTitle.isNotEmpty)
-                NewTaskInfo(text: 'Add responsible', icon: SvgIcons.person),
-              NewTaskInfo(
-                text: controller.description.value.isEmpty
-                    ? 'Add description'
-                    : controller.description.value,
-                onTap: () => Get.toNamed('NewTaskDescription'),
-              ),
-              NewTaskInfo(icon: SvgIcons.start_date, text: 'Set start date'),
-              NewTaskInfo(icon: SvgIcons.due_date, text: 'Set due date'),
+              const SizedBox(height: 16),
+              TitleTile(controller: controller),
+              ProjectTile(controller: controller),
+              if (controller.projectTileText.value != 'Select project')
+                MilestoneTile(controller: controller),
+              if (controller.projectTileText.value != 'Select project')
+                ResponsibleTile(controller: controller),
+              DescriptionTile(controller: controller),
+              StartDateTile(controller: controller),
+              DueDateTile(controller: controller),
               const SizedBox(height: 5),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 56),
-                    child: Text('High priority',
-                        style: TextStyleHelper.subtitle1(
-                            color: Theme.of(context).customColors().onSurface)),
-                  ),
-                  Switch(
-                    value: controller.highPriority.value,
-                    onChanged: (value) => controller.changePriority(value),
-                  )
-                ],
-              ),
+              PriorityTile(controller: controller)
             ],
           ),
         ),
@@ -186,7 +140,7 @@ class NewTaskInfo extends StatelessWidget {
               ),
             ],
           ),
-          if (enableBorder) StyledDivider(leftPadding: 56.5),
+          if (enableBorder) const StyledDivider(leftPadding: 56.5),
         ],
       ),
     );

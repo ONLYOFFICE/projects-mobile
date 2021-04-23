@@ -72,14 +72,12 @@ class DocumentsView extends StatelessWidget {
                           children: [
                             Text(_files[index].title),
                             Text(
+                                // ignore: prefer_interpolation_to_compose_strings
                                 formatedDate(
                                         now: _now,
                                         stringDate:
-                                            _files[index].updated.toString()) +
-                                    ' • ' +
-                                    _files[index].contentLength +
-                                    ' • ' +
-                                    _files[index].updatedBy.displayName,
+                                            '${_files[index].updated}') +
+                                    ''' • ${_files[index].contentLength} • ${_files[index].updatedBy.displayName}''',
                                 style: TextStyleHelper.caption(
                                     color: Theme.of(context)
                                         .customColors()
@@ -100,12 +98,12 @@ class DocumentsView extends StatelessWidget {
                                     .withOpacity(0.5)),
                             itemBuilder: (context) {
                               return [
-                                PopupMenuItem(child: Text('Open')),
-                                PopupMenuItem(child: Text('Copy link')),
-                                PopupMenuItem(child: Text('Download')),
-                                PopupMenuItem(child: Text('Move')),
-                                PopupMenuItem(child: Text('Copy')),
-                                PopupMenuItem(child: Text('Delete')),
+                                const PopupMenuItem(child: Text('Open')),
+                                const PopupMenuItem(child: Text('Copy link')),
+                                const PopupMenuItem(child: Text('Download')),
+                                const PopupMenuItem(child: Text('Move')),
+                                const PopupMenuItem(child: Text('Copy')),
+                                const PopupMenuItem(child: Text('Delete')),
                               ];
                             },
                           ),
@@ -118,7 +116,7 @@ class DocumentsView extends StatelessWidget {
             ),
           );
         } else {
-          return ListLoadingSkeleton();
+          return const ListLoadingSkeleton();
         }
       },
     );

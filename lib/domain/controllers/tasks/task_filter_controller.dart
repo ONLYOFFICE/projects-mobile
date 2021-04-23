@@ -43,7 +43,6 @@ class TaskFilterController extends BaseFilterController {
   final _sortController = Get.find<TasksSortController>();
   Function applyFiltersDelegate;
 
-  // only accepted filters
   RxString acceptedFilters = ''.obs;
 
   String _responsibleFilter = '';
@@ -51,18 +50,12 @@ class TaskFilterController extends BaseFilterController {
   String _projectFilter = '';
   String _milestoneFilter = '';
 
-  @override
-  var filtersTitle = 'TASKS';
-
   String get responsibleFilter => _responsibleFilter;
   String get creatorFilter => _creatorFilter;
   String get projectFilter => _projectFilter;
   String get milestoneFilter => _milestoneFilter;
 
   var _selfId;
-
-  @override
-  RxInt suitableTasksCount = (-1).obs;
 
   @override
   bool get hasFilters =>
@@ -81,6 +74,11 @@ class TaskFilterController extends BaseFilterController {
 
   RxMap<String, dynamic> milestone =
       {'My': false, 'No': false, 'Other': ''}.obs;
+
+  TaskFilterController() {
+    filtersTitle = 'TASKS';
+    suitableTasksCount = (-1).obs;
+  }
 
   void changeResponsible(String filter, [newValue = '']) async {
     _selfId ??= await Get.find<UserController>().getUserId();

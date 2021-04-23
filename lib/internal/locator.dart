@@ -89,7 +89,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => TaskApi());
   locator.registerLazySingleton(() => UserApi());
   locator.registerLazySingleton(() => DownloadApi());
-
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => CommentsService());
   locator.registerLazySingleton(() => FilesService());

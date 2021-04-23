@@ -56,7 +56,7 @@ class NewProject extends StatelessWidget {
         elevation: 2,
         actions: [
           IconButton(
-              icon: Icon(Icons.check_outlined),
+              icon: const Icon(Icons.check_outlined),
               onPressed: () => controller.confirm)
         ],
       ),
@@ -112,9 +112,7 @@ class TitleInput extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: 56,
-          ),
+          const SizedBox(width: 56),
           Expanded(
             child: Column(
               children: [
@@ -191,7 +189,7 @@ class ProjectManager extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Obx(
                   () => controller.isPMSelected.isTrue
                       ? NewProjectTile(
@@ -273,15 +271,13 @@ class NewProjectTile extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {
-              closeFunction();
-            },
+            onTap: closeFunction,
             child: Icon(
               iconData,
               color: Colors.blue,
             ),
           ),
-          SizedBox(width: 23),
+          const SizedBox(width: 23),
         ],
       ),
     );
@@ -313,7 +309,7 @@ class TeamMembers extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 Obx(
                   () => controller.selectedTeamMembers.isNotEmpty
                       ? NewProjectTile(
@@ -378,9 +374,7 @@ class DescriptionButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: 56,
-          ),
+          const SizedBox(width: 56),
           Flexible(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -402,9 +396,7 @@ class DescriptionButton extends StatelessWidget {
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: 18,
-                ),
+                const SizedBox(height: 18),
                 const Divider(
                   height: 1,
                   thickness: 1,
@@ -502,9 +494,7 @@ class AdvancedOptions extends StatelessWidget {
                                   .onSurface
                                   .withOpacity(0.6)),
                         ),
-                        SizedBox(
-                          width: 16,
-                        ),
+                        const SizedBox(width: 16),
                         Text(
                           'Advanced options',
                           style: TextStyleHelper.subtitle1(
@@ -569,7 +559,7 @@ class OptionWithSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(56, 0, 16, 0),
+      padding: const EdgeInsets.fromLTRB(56, 0, 16, 0),
       height: 60,
       child: Column(
         children: <Widget>[
@@ -580,9 +570,7 @@ class OptionWithSwitch extends StatelessWidget {
             endIndent: 0,
             color: Color(0xffD8D8D8),
           ),
-          SizedBox(
-            height: 5,
-          ),
+          const SizedBox(height: 5),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

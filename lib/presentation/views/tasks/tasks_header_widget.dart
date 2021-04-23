@@ -40,10 +40,11 @@ import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart'
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class TasksHeaderWidget extends StatelessWidget {
-  TasksHeaderWidget({
+  const TasksHeaderWidget({
+    Key key,
     this.controller,
     this.sortButton,
-  });
+  }) : super(key: key);
   final TasksController controller;
   final Widget sortButton;
 
@@ -52,7 +53,7 @@ class TasksHeaderWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -78,12 +79,12 @@ class TasksHeaderWidget extends StatelessWidget {
                       color: Theme.of(context).customColors().primary,
                     ),
                   ),
-                  SizedBox(width: 24),
+                  const SizedBox(width: 24),
                   InkWell(
                     onTap: () async => showFilters(context),
                     child: FiltersButton(controler: controller),
                   ),
-                  SizedBox(width: 24),
+                  const SizedBox(width: 24),
                   InkWell(
                     onTap: () {},
                     child: AppIcon(
@@ -99,7 +100,7 @@ class TasksHeaderWidget extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

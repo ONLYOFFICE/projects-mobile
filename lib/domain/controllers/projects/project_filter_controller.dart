@@ -43,16 +43,10 @@ class ProjectsFilterController extends BaseFilterController {
   final _sortController = Get.find<TasksSortController>();
   Function applyFiltersDelegate;
 
-  // only accepted filters
-  RxString acceptedFilters = ''.obs;
-
   String _teamMemberFilter = '';
   String _projectManagerFilter = '';
   String _otherFilter = '';
   String _statusFilter = '';
-
-  @override
-  var filtersTitle = 'PROJECTS';
 
   String get projectManagerFilter => _projectManagerFilter;
   String get teamMemberFilter => _teamMemberFilter;
@@ -60,9 +54,6 @@ class ProjectsFilterController extends BaseFilterController {
   String get statusFilter => _statusFilter;
 
   var _selfId;
-
-  @override
-  RxInt suitableTasksCount = (-1).obs;
 
   @override
   bool get hasFilters =>
@@ -79,6 +70,11 @@ class ProjectsFilterController extends BaseFilterController {
 
   RxMap<String, dynamic> status =
       {'active': false, 'paused': false, 'closed': false}.obs;
+
+  ProjectsFilterController() {
+    filtersTitle = 'PROJECTS';
+    suitableTasksCount = (-1).obs;
+  }
 
   Future<void> changeProjectManager(String filter, [newValue = '']) async {
     _selfId ??= await Get.find<UserController>().getUserId();
@@ -202,7 +198,6 @@ class ProjectsFilterController extends BaseFilterController {
     other = {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
     status = {'active': false, 'paused': false, 'closed': false}.obs;
 
-    acceptedFilters.value = '';
     suitableTasksCount.value = -1;
 
     _projectManagerFilter = '';

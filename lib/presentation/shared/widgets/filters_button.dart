@@ -73,7 +73,7 @@ class FiltersButton extends StatelessWidget {
                           shape: BoxShape.circle,
                         ),
                       )
-                    : SizedBox(),
+                    : const SizedBox(),
               )),
         ],
       ),

@@ -55,8 +55,8 @@ class _ProjectManager extends StatelessWidget {
             cancelButtonEnabled:
                 filterController.projectManager['other'].isNotEmpty,
             onTap: () async {
-              var newUser = await Get.bottomSheet(UsersBottomSheet());
-              await filterController.changeProjectManager('other', newUser);
+              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              await filterController.changeProjectManager('Other', newUser);
             },
             onCancelTap: () =>
                 filterController.changeProjectManager('other', null),

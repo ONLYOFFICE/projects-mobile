@@ -61,13 +61,13 @@ class ProjectsBottomSheet extends StatelessWidget {
               children: [
                 Text('Select project', style: TextStyleHelper.h6()),
                 IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () => print(''),
                 )
               ],
             ),
           ),
-          Divider(height: 1),
+          const Divider(height: 1),
           Obx(
             () {
               if (_projectsController.loaded.isTrue) {
@@ -77,7 +77,7 @@ class ProjectsBottomSheet extends StatelessWidget {
                         _projectsController.paginationController.data.length,
                     padding: const EdgeInsets.only(bottom: 16),
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
+                      return const Divider();
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return Material(
@@ -128,7 +128,7 @@ class ProjectsBottomSheet extends StatelessWidget {
                   ),
                 );
               } else {
-                return ListLoadingSkeleton();
+                return const ListLoadingSkeleton();
               }
             },
           ),

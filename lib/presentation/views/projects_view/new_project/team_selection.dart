@@ -58,7 +58,7 @@ class GroupMembersSelectionView extends StatelessWidget {
         elevation: 2,
         actions: [
           IconButton(
-              icon: Icon(Icons.check_outlined),
+              icon: const Icon(Icons.check_outlined),
               onPressed: () => controller.confirmGroupSelection)
         ],
       ),
@@ -71,7 +71,7 @@ class GroupMembersSelectionView extends StatelessWidget {
               onTapFunction: controller.selectGroupMembers,
             );
           }
-          return ListLoadingSkeleton();
+          return const ListLoadingSkeleton();
         },
       ),
     );
@@ -95,7 +95,7 @@ class GroupsOverview extends StatelessWidget {
       controller: groupsDataSource.refreshController,
       onLoading: groupsDataSource.onLoading,
       child: ListView.builder(
-        physics: ScrollPhysics(),
+        physics: const ScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (c, i) => PortalGroupItem(
             groupController: groupsDataSource.groupsList[i],

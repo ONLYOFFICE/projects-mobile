@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class TextStyleHelper {
-  static final body1 = TextStyle(
+  static final body1 = const TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 16,
@@ -110,7 +110,7 @@ class TextStyleHelper {
   static const headerStyle = TextStyle(
       fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);
 
-  static final overline = TextStyle(
+  static final overline = const TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w500,
     fontSize: 10,
@@ -119,7 +119,7 @@ class TextStyleHelper {
     // color: AppColors.onSurface.withOpacity(0.6)
   );
 
-  static TextStyle projectTitle = TextStyle(
+  static TextStyle projectTitle = const TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.w400,
       fontSize: 16,
@@ -169,7 +169,7 @@ class TextStyleHelper {
       fontSize: 16,
       color: Get.theme.customColors().projectsSubtitle);
 
-  static TextStyle projectCompleatedTasks = TextStyle(
+  static TextStyle projectCompleatedTasks = const TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.w400,
       fontSize: 14,

@@ -40,18 +40,18 @@ class _AppBarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     var task = controller.task.value;
     return PopupMenuButton(
-      icon: Icon(Icons.more_vert, size: 26),
-      offset: Offset(0, 25),
+      icon: const Icon(Icons.more_vert, size: 26),
+      offset: const Offset(0, 25),
       onSelected: (value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
-          PopupMenuItem(value: 'Copy link', child: Text('Copy link')),
+          const PopupMenuItem(value: 'Copy link', child: Text('Copy link')),
           if (task.canEdit)
-            PopupMenuItem(value: 'Edit task', child: Text('Edit task')),
+            const PopupMenuItem(value: 'Edit task', child: Text('Edit task')),
           PopupMenuItem(
               value: 'Follow task',
               child: Text(task.isSubscribed ? 'Unfollow task' : 'Follow task')),
-          PopupMenuItem(child: Text('Copy task')),
+          const PopupMenuItem(child: Text('Copy task')),
           if (task.canDelete)
             PopupMenuItem(
               textStyle: Theme.of(context)
@@ -59,7 +59,7 @@ class _AppBarMenu extends StatelessWidget {
                   .textStyle
                   .copyWith(color: Theme.of(context).customColors().error),
               value: 'Delete task',
-              child: Text('Delete task'),
+              child: const Text('Delete task'),
             )
         ];
       },
@@ -74,6 +74,7 @@ void _onSelected(value, TaskItemController controller) async {
       await Get.dialog(StyledAlertDialog(
         titleText: 'Delete task',
         contentText:
+            // ignore: lines_longer_than_80_chars
             'Are you sure you want to delete these task?\nNote: this action cannot be undone.',
         acceptText: 'DELETE',
         onAcceptTap: () async {

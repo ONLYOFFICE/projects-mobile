@@ -52,7 +52,7 @@ class ListLoadingSkeleton extends StatelessWidget {
           LinearProgressIndicator(
             minHeight: 4,
             backgroundColor: Theme.of(context).customColors().primary,
-            valueColor: AlwaysStoppedAnimation<Color>(const Color(0xffb5c4d2)),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffb5c4d2)),
           ),
           Shimmer.fromColors(
             baseColor: Theme.of(context).customColors().bgDescription,

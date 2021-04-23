@@ -46,7 +46,7 @@ class SortView extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
       child: Column(

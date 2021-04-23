@@ -42,7 +42,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectCell extends StatelessWidget {
   final ProjectDetailed item;
-  const ProjectCell({this.item});
+  const ProjectCell({Key key, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +136,7 @@ class ProjectIcon extends StatelessWidget {
                     shape: BoxShape.circle,
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(4),
                     child: AppIcon(
                       icon: SvgIcons.project_icon,
                       color: const Color(0xff666666),
@@ -245,7 +245,7 @@ class ThirdColumn extends StatelessWidget {
               item.taskCount.toString(),
               style: TextStyleHelper.projectCompleatedTasks,
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             )
           ],

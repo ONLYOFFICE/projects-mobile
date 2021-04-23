@@ -39,7 +39,7 @@ class ErrorDialog {
     Get.defaultDialog(
         title: '${error.message}',
         textConfirm: 'ok',
-        onConfirm: () => Get.back(),
+        onConfirm: Get.back,
         barrierDismissible: false);
   }
 
@@ -75,7 +75,7 @@ class ConfirmDialog {
 
 class ProgressDialog {
   static void show(CustomError error) {
-    Get.dialog(Center(child: CircularProgressIndicator()));
+    Get.dialog(const Center(child: CircularProgressIndicator()));
   }
 
   static void hide() {

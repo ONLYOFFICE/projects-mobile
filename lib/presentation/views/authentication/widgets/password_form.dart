@@ -39,7 +39,7 @@ import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class PasswordForm extends StatefulWidget {
-  PasswordForm();
+  PasswordForm({Key key}) : super(key: key);
   @override
   _PasswordFormState createState() => _PasswordFormState();
 }
@@ -68,7 +68,7 @@ class _PasswordFormState extends State<PasswordForm> {
       style: TextStyleHelper.mainStyle,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: localization.emailAddress,
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
@@ -81,7 +81,7 @@ class _PasswordFormState extends State<PasswordForm> {
       obscureText: true,
       style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: localization.password, //"Пароль",
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
@@ -95,10 +95,10 @@ class _PasswordFormState extends State<PasswordForm> {
     final loginButon = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: const Color(0xff01A0C7),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
         child: Text('Login',
             textAlign: TextAlign.center,
@@ -114,17 +114,17 @@ class _PasswordFormState extends State<PasswordForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             emailField,
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             passwordField,
-            SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
             Obx(() => controller.state.value == ViewState.Busy
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : loginButon),
-            SizedBox(
+            const SizedBox(
               height: 15.0,
             ),
           ],
