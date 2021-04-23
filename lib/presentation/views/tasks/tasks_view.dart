@@ -71,12 +71,12 @@ class TasksHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(title: 'Deadline', sortController: sortController),
-        SortTile(title: 'Priority', sortController: sortController),
-        SortTile(title: 'Creation date', sortController: sortController),
-        SortTile(title: 'Start date', sortController: sortController),
-        SortTile(title: 'Title', sortController: sortController),
-        SortTile(title: 'Order', sortController: sortController),
+        SortTile(sortParameter: 'deadline', sortController: sortController),
+        SortTile(sortParameter: 'priority', sortController: sortController),
+        SortTile(sortParameter: 'create_on', sortController: sortController),
+        SortTile(sortParameter: 'start_date', sortController: sortController),
+        SortTile(sortParameter: 'title', sortController: sortController),
+        SortTile(sortParameter: 'sort_order', sortController: sortController),
         const SizedBox(height: 20)
       ],
     );
@@ -92,7 +92,7 @@ class TasksHeader extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                sortController.currentSortText.value,
+                sortController.currentSortTitle.value,
                 style: TextStyleHelper.projectsSorting,
               ),
             ),

@@ -77,8 +77,14 @@ class ProjectHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(title: 'Creation date', sortController: sortController),
-        SortTile(title: 'Title', sortController: sortController),
+        SortTile(
+          sortParameter: 'create_on',
+          sortController: sortController,
+        ),
+        SortTile(
+          sortParameter: 'title',
+          sortController: sortController,
+        ),
         const SizedBox(height: 20),
       ],
     );
@@ -96,7 +102,7 @@ class ProjectHeader extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                sortController.currentSortText.value,
+                sortController.currentSortTitle.value,
                 style: TextStyleHelper.projectsSorting,
               ),
             ),

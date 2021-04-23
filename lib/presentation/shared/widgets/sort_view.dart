@@ -50,14 +50,16 @@ class SortView extends StatelessWidget {
 }
 
 class SortTile extends StatelessWidget {
-  final String title;
+  final String sortParameter;
   final BaseSortController sortController;
-  const SortTile({Key key, this.title, @required this.sortController})
+  const SortTile({Key key, this.sortParameter, @required this.sortController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _selected = sortController.currentSortText.value == title;
+    var _selected = sortController.currentSortfilter == sortParameter;
+    var title = sortController.getFilterLabel(sortParameter);
+
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
           color: Theme.of(context).customColors().bgDescription,
@@ -66,7 +68,7 @@ class SortTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        sortController.changeSort(title);
+        sortController.changeSort(sortParameter);
         Get.back();
       },
       child: Container(
@@ -91,7 +93,7 @@ class SortTile extends StatelessWidget {
             ),
             if (_selected)
               AppIcon(
-                  icon: sortController.currentSortOrderText.value == 'ascending'
+                  icon: sortController.isSortAscending.isTrue
                       ? SvgIcons.up_arrow
                       : SvgIcons.down_arrow)
           ],
