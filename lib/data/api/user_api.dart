@@ -15,7 +15,7 @@ class UserApi {
     var result = ApiDTO<List<PortalUser>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)
@@ -52,13 +52,15 @@ class UserApi {
     var result = PageDTO<List<PortalUser>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.total = responseJson['total'];
-        result.response = (responseJson['response'] as List)
-            .map((i) => PortalUser.fromJson(i))
-            .toList();
+        {
+          result.response = (responseJson['response'] as List)
+              .map((i) => PortalUser.fromJson(i))
+              .toList();
+        }
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

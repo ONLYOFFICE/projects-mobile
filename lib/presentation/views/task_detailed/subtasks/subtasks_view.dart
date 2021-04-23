@@ -21,12 +21,12 @@ class SubtasksView extends StatelessWidget {
         if (controller.loaded.isTrue) {
           return SmartRefresher(
             controller: controller.refreshController,
-            onRefresh: () => controller.reloadTask(),
+            onRefresh: controller.reloadTask,
             child: ListView.separated(
               itemCount: _task.subtasks.length,
               padding: const EdgeInsets.symmetric(vertical: 6),
               separatorBuilder: (BuildContext context, int index) {
-                return Divider(indent: 56, thickness: 1);
+                return const Divider(indent: 56, thickness: 1);
               },
               itemBuilder: (BuildContext context, int index) {
                 return Container(
@@ -38,7 +38,7 @@ class SubtasksView extends StatelessWidget {
                               _task.subtasks[index].status == 2
                                   ? Icons.check_box
                                   : Icons.check_box_outline_blank_rounded,
-                              color: Color(0xFF666666))),
+                              color: const Color(0xFF666666))),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,9 +70,9 @@ class SubtasksView extends StatelessWidget {
                         child: PopupMenuButton(
                           itemBuilder: (context) {
                             return [
-                              PopupMenuItem(child: Text('Accept task')),
-                              PopupMenuItem(child: Text('Copy task')),
-                              PopupMenuItem(child: Text('Delete task')),
+                              const PopupMenuItem(child: Text('Accept task')),
+                              const PopupMenuItem(child: Text('Copy task')),
+                              const PopupMenuItem(child: Text('Delete task')),
                             ];
                           },
                         ),

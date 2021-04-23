@@ -31,7 +31,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
         titleText: 'Select project manager',
         bottom: Container(
           height: 40,
-          margin: EdgeInsets.only(left: 16, right: 16, bottom: 10),
+          margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
           child: UsersSearchBar(controller: usersDataSource),
         ),
       ),
@@ -47,7 +47,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
             );
           }
           if (usersDataSource.nothingFound.isTrue) {
-            return NothingFound();
+            return const NothingFound();
           }
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
@@ -57,7 +57,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
               onTapFunction: controller.changePMSelection,
             );
           }
-          return ListLoadingSkeleton();
+          return const ListLoadingSkeleton();
         },
       ),
     );
@@ -108,13 +108,8 @@ class NothingFound extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 50,
-        ),
-        Text(
-          'Not found',
-          textAlign: TextAlign.center,
-        ),
+        const SizedBox(height: 50),
+        const Text('Not found', textAlign: TextAlign.center),
       ],
     );
   }
@@ -141,23 +136,23 @@ class UsersDefault extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.only(left: 16),
             child: Text('Me', style: TextStyleHelper.body2()),
           ),
-          SizedBox(height: 26),
+          const SizedBox(height: 26),
           PortalUserItem(
             onTapFunction: onTapFunction,
             userController: selfUserItem,
           ),
-          SizedBox(height: 26),
+          const SizedBox(height: 26),
           Container(
-            padding: EdgeInsets.only(left: 16),
+            padding: const EdgeInsets.only(left: 16),
             child: Text('Users', style: TextStyleHelper.body2()),
           ),
-          SizedBox(height: 26),
+          const SizedBox(height: 26),
           Column(children: [
             ListView.builder(
-              physics: ScrollPhysics(),
+              physics: const ScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (c, i) => PortalUserItem(
                   userController: usersDataSource.usersList[i],

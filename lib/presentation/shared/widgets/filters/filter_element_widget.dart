@@ -53,8 +53,8 @@ class FilterElement extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 9),
                   child: InkWell(
                       onTap: onCancelTap,
-                      child:
-                          Icon(Icons.cancel, color: Colors.white, size: 18))),
+                      child: const Icon(Icons.cancel,
+                          color: Colors.white, size: 18))),
           ],
         ),
       ),

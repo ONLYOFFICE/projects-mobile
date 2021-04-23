@@ -24,20 +24,20 @@ class TagsBottomSheet extends StatelessWidget {
               children: [
                 Text('Select tag', style: TextStyleHelper.h6()),
                 IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () => print(''),
                 )
               ],
             ),
           ),
-          Divider(height: 1),
+          const Divider(height: 1),
           Obx(() {
             if (_projectsController.loaded.isTrue) {
               return Expanded(
                 child: ListView.separated(
                   itemCount: _projectsController.tags.length,
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider();
+                    return const Divider();
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
@@ -69,7 +69,7 @@ class TagsBottomSheet extends StatelessWidget {
                 ),
               );
             } else {
-              return ListLoadingSkeleton();
+              return const ListLoadingSkeleton();
             }
           })
         ],

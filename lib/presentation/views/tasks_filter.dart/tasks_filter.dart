@@ -29,7 +29,7 @@ void showFilters(context) async {
     initHeight: 0.9,
     decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16))),
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) => Container(
       child: FiltersHeader(filterController: filterController),
     ),

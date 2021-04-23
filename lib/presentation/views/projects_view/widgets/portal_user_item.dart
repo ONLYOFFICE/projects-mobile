@@ -86,7 +86,7 @@ class PortalUserItem extends StatelessWidget {
                                               .onBackground,
                                         ),
                                       )
-                                    : SizedBox(),
+                                    : const SizedBox(),
                               ),
                             ],
                           ),
@@ -100,9 +100,10 @@ class PortalUserItem extends StatelessWidget {
             Obx(() {
               if (userController.multipleSelectionEnabled.isTrue) {
                 if (userController.isSelected.isTrue) {
-                  return SizedBox(width: 72, child: Icon(Icons.check_box));
+                  return const SizedBox(
+                      width: 72, child: Icon(Icons.check_box));
                 } else {
-                  return SizedBox(
+                  return const SizedBox(
                       width: 72,
                       child: Icon(Icons.check_box_outline_blank_outlined));
                 }
@@ -116,7 +117,7 @@ class PortalUserItem extends StatelessWidget {
                     ),
                   );
                 } else {
-                  return SizedBox(width: 72);
+                  return const SizedBox(width: 72);
                 }
               }
             }),

@@ -7,6 +7,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/theme_service.dart';
 
 class App extends StatelessWidget {
+  App({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

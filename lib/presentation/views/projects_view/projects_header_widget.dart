@@ -9,10 +9,11 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 
 class HeaderWidget extends StatelessWidget {
-  HeaderWidget({
+  const HeaderWidget({
+    Key key,
     this.controller,
     this.sortButton,
-  });
+  }) : super(key: key);
   final ProjectsController controller;
   final Widget sortButton;
 
@@ -21,7 +22,7 @@ class HeaderWidget extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
@@ -47,12 +48,12 @@ class HeaderWidget extends StatelessWidget {
                       color: Theme.of(context).customColors().primary,
                     ),
                   ),
-                  SizedBox(width: 24),
+                  const SizedBox(width: 24),
                   InkWell(
                     onTap: () async => showFilters(context),
                     child: FiltersButton(controler: controller),
                   ),
-                  SizedBox(width: 24),
+                  const SizedBox(width: 24),
                   InkWell(
                     onTap: () {},
                     child: AppIcon(
@@ -68,7 +69,7 @@ class HeaderWidget extends StatelessWidget {
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -15,7 +15,7 @@ class UsersSearchBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 32,
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         left: 16,
         right: 16,
         top: 6,
@@ -23,7 +23,7 @@ class UsersSearchBar extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Theme.of(context).customColors().bgDescription,
-        borderRadius: BorderRadius.all(
+        borderRadius: const BorderRadius.all(
           Radius.circular(16),
         ),
       ),
@@ -33,9 +33,8 @@ class UsersSearchBar extends StatelessWidget {
             child: TextField(
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController,
-              decoration: InputDecoration.collapsed(
-                hintText: 'Search for users...',
-              ),
+              decoration: const InputDecoration.collapsed(
+                  hintText: 'Search for users...'),
               onSubmitted: (value) {
                 controller.searchUsers(value);
               },
@@ -45,10 +44,7 @@ class UsersSearchBar extends StatelessWidget {
             onTap: () {
               controller.clearSearch();
             },
-            child: Icon(
-              Icons.close,
-              color: Colors.blue,
-            ),
+            child: const Icon(Icons.close, color: Colors.blue),
           )
         ],
       ),

@@ -21,12 +21,12 @@ class StyledFloatingActionButton extends StatelessWidget {
             color: Theme.of(context).customColors().onSurface.withOpacity(0.2),
             blurRadius: 10,
             spreadRadius: 1,
-            offset: Offset(0, 1)),
+            offset: const Offset(0, 1)),
         BoxShadow(
             color: Theme.of(context).customColors().onSurface.withOpacity(0.12),
             blurRadius: 5,
             spreadRadius: 1,
-            offset: Offset(0, 4)),
+            offset: const Offset(0, 4)),
       ]),
       child: FloatingActionButton(
         backgroundColor: Theme.of(context).customColors().lightSecondary,

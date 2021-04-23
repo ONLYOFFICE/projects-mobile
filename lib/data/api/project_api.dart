@@ -19,7 +19,7 @@ class ProjectApi {
     var result = ApiDTO<List<Project>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)
@@ -91,13 +91,15 @@ class ProjectApi {
     var result = PageDTO<List<ProjectDetailed>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.total = responseJson['total'];
-        result.response = (responseJson['response'] as List)
-            .map((i) => ProjectDetailed.fromJson(i))
-            .toList();
+        {
+          result.response = (responseJson['response'] as List)
+              .map((i) => ProjectDetailed.fromJson(i))
+              .toList();
+        }
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
@@ -113,7 +115,7 @@ class ProjectApi {
     var result = ApiDTO<List<Status>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)
@@ -134,7 +136,7 @@ class ProjectApi {
     var result = ApiDTO<List<ProjectTag>>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = (responseJson['response'] as List)
@@ -159,7 +161,7 @@ class ProjectApi {
 
     try {
       var response = await coreApi.postRequest(url, body);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
         result.response = responseJson['response'];

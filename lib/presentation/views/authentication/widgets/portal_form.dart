@@ -6,7 +6,7 @@ import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class PortalForm extends StatefulWidget {
-  PortalForm();
+  PortalForm({Key key}) : super(key: key);
 
   @override
   _PortalFormState createState() => _PortalFormState();
@@ -34,8 +34,8 @@ class _PortalFormState extends State<PortalForm> {
       style: TextStyleHelper.mainStyle,
       keyboardType: TextInputType.url,
       decoration: InputDecoration(
-        prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         hintText: localization.portalName, //"Адрес портала",
       ),
     );
@@ -46,10 +46,10 @@ class _PortalFormState extends State<PortalForm> {
     final continueButton = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-      color: Color(0xff01A0C7),
+      color: const Color(0xff01A0C7),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onContinuePressed,
         child: Text(localization.continueButton,
             textAlign: TextAlign.center,
@@ -66,13 +66,9 @@ class _PortalFormState extends State<PortalForm> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             portalField,
-            SizedBox(
-              height: 10.0,
-            ),
+            const SizedBox(height: 10.0),
             continueButton,
-            SizedBox(
-              height: 15.0,
-            ),
+            const SizedBox(height: 15.0),
           ],
         ),
       ),

@@ -1,21 +1,22 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'dart:math' as math;
 
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/presentation/views/tasks/tasks_header_widget.dart';
 
 class TasksView extends StatelessWidget {
+  const TasksView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var taskStatusesController = Get.find<TaskStatusesController>();
@@ -27,7 +28,7 @@ class TasksView extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
         onPressed: () => Get.toNamed('NewTaskView'),
-        child: Icon(Icons.add_rounded),
+        child: const Icon(Icons.add_rounded),
       ),
       appBar: StyledAppBar(
         bottom: TasksHeader(),
@@ -36,25 +37,20 @@ class TasksView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              if (controller.loaded.isFalse) ListLoadingSkeleton(),
-              if (controller.loaded.isTrue)
-                Expanded(
-                  child: PaginationListView(
-                    paginationController: controller.paginationController,
-                    child: ListView.builder(
-                      itemCount: controller.paginationController.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return TaskCell(
-                            task: controller.paginationController.data[index]);
-                      },
-                    ),
-                  ),
-                ),
-            ],
-          );
+          if (controller.loaded.isFalse)
+            return const ListLoadingSkeleton();
+          else {
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: ListView.builder(
+                itemCount: controller.paginationController.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return TaskCell(
+                      task: controller.paginationController.data[index]);
+                },
+              ),
+            );
+          }
         },
       ),
     );
@@ -73,20 +69,20 @@ class TasksHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     var options = Column(
       children: [
-        SizedBox(height: 14.5),
-        Divider(height: 9, thickness: 1),
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
         SortTile(title: 'Deadline', sortController: sortController),
         SortTile(title: 'Priority', sortController: sortController),
         SortTile(title: 'Creation date', sortController: sortController),
         SortTile(title: 'Start date', sortController: sortController),
         SortTile(title: 'Title', sortController: sortController),
         SortTile(title: 'Order', sortController: sortController),
-        SizedBox(height: 20)
+        const SizedBox(height: 20)
       ],
     );
 
     var sortButton = Container(
-      padding: EdgeInsets.only(right: 4),
+      padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
           Get.bottomSheet(SortView(sortOptions: options),
@@ -94,9 +90,11 @@ class TasksHeader extends StatelessWidget {
         },
         child: Row(
           children: <Widget>[
-            Text(
-              sortController.currentSortText.value,
-              style: TextStyleHelper.projectsSorting,
+            Obx(
+              () => Text(
+                sortController.currentSortText.value,
+                style: TextStyleHelper.projectsSorting,
+              ),
             ),
             const SizedBox(width: 8),
             Obx(

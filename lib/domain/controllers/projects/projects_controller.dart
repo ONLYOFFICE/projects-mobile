@@ -38,9 +38,11 @@ class ProjectsController extends BaseController {
     paginationController.loadDelegate = () async {
       await _getProjects();
     };
-    paginationController.refreshDelegate = () async {
-      await _getProjects(needToClear: true);
-    };
+    {
+      paginationController.refreshDelegate = () async {
+        await _getProjects(needToClear: true);
+      };
+    }
     paginationController.pullDownEnabled = true;
   }
 

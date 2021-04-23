@@ -23,7 +23,7 @@ class _Project extends StatelessWidget {
               cancelButtonEnabled: filterController.project['Other'].isNotEmpty,
               onTap: () async {
                 var selectedProject =
-                    await Get.bottomSheet(ProjectsBottomSheet());
+                    await Get.bottomSheet(const ProjectsBottomSheet());
                 filterController.changeProject('Other', selectedProject);
               },
               onCancelTap: () => filterController.changeProject('Other', null)),
@@ -35,7 +35,8 @@ class _Project extends StatelessWidget {
               cancelButtonEnabled:
                   filterController.project['With tag'].isNotEmpty,
               onTap: () async {
-                var selectedTag = await Get.bottomSheet(TagsBottomSheet());
+                var selectedTag =
+                    await Get.bottomSheet(const TagsBottomSheet());
                 filterController.changeProject('With tag', selectedTag);
               },
               onCancelTap: () =>

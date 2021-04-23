@@ -24,20 +24,20 @@ class GroupsBottomSheet extends StatelessWidget {
               children: [
                 Text('Select group', style: TextStyleHelper.h6()),
                 IconButton(
-                  icon: Icon(Icons.search),
+                  icon: const Icon(Icons.search),
                   onPressed: () => print(''),
                 )
               ],
             ),
           ),
-          Divider(height: 1),
+          const Divider(height: 1),
           Obx(() {
             if (_groupsController.loaded.isTrue) {
               return Expanded(
                 child: ListView.separated(
                   itemCount: _groupsController.groups.length,
                   separatorBuilder: (BuildContext context, int index) {
-                    return Divider();
+                    return const Divider();
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
@@ -69,7 +69,7 @@ class GroupsBottomSheet extends StatelessWidget {
                 ),
               );
             } else {
-              return ListLoadingSkeleton();
+              return const ListLoadingSkeleton();
             }
           })
         ],

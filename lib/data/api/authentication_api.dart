@@ -25,6 +25,7 @@ class AuthApi {
       }
       if (response.statusCode == 201) {
         result.response =
+            // ignore: avoid_dynamic_calls
             AuthToken.fromJson(json.decode(response.body)['response']);
       } else {
         result.error = CustomError.fromJson(json.decode(response.body));
@@ -52,7 +53,7 @@ class AuthApi {
     var result = ApiDTO<AuthToken>();
     try {
       var response = await coreApi.postRequest(url, body);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
         result.response = AuthToken.fromJson(responseJson['response']);
@@ -72,7 +73,7 @@ class AuthApi {
     var result = ApiDTO<PortalUser>();
     try {
       var response = await coreApi.getRequest(url);
-      final responseJson = json.decode(response.body);
+      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
         result.response = PortalUser.fromJson(responseJson['response']);

@@ -29,13 +29,11 @@ class MilestonesBottomSheet extends StatelessWidget {
               children: [
                 Text('Select milestone', style: TextStyleHelper.h6()),
                 IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => print(''),
-                )
+                    icon: const Icon(Icons.search), onPressed: () => print(''))
               ],
             ),
           ),
-          Divider(height: 1),
+          const Divider(height: 1),
           Obx(
             () {
               if (_milestoneController.loaded.isTrue) {
@@ -44,7 +42,7 @@ class MilestonesBottomSheet extends StatelessWidget {
                     itemCount: _milestoneController.milestones.length,
                     padding: const EdgeInsets.only(bottom: 16),
                     separatorBuilder: (BuildContext context, int index) {
-                      return Divider();
+                      return const Divider();
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return Material(
@@ -91,7 +89,7 @@ class MilestonesBottomSheet extends StatelessWidget {
                   ),
                 );
               } else {
-                return ListLoadingSkeleton();
+                return const ListLoadingSkeleton();
               }
             },
           ),

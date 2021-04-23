@@ -41,7 +41,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: centerTitle,
-      iconTheme: IconThemeData(color: const Color(0xff1A73E9)),
+      iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: lightColors.onPrimarySurface,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,

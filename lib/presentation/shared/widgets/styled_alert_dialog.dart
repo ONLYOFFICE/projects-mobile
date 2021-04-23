@@ -38,7 +38,7 @@ class StyledAlertDialog extends StatelessWidget {
       content: content ?? Text(contentText),
       actions: [
         TextButton(
-          onPressed: onCancelTap ?? () => Get.back(),
+          onPressed: onCancelTap ?? () => Get.back,
           child: Text(cancelText, style: TextStyleHelper.button()),
         ),
         TextButton(

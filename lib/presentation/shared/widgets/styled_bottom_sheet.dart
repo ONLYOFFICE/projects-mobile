@@ -20,7 +20,7 @@ class StyledButtomSheet extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
           topLeft: Radius.circular(12),
           topRight: Radius.circular(12),
         ),

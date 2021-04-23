@@ -12,7 +12,7 @@ class ProjectCellController extends GetxController {
   RefreshController refreshController = RefreshController();
 
   ProjectCellController(ProjectDetailed project) {
-    this.project = project;
+    _project = project;
   }
 
   void handleVisibilityChanged(VisibilityInfo info) {
@@ -21,7 +21,7 @@ class ProjectCellController extends GetxController {
     }
   }
 
-  var project;
+  var _project;
 
   RxString statusImageString = ''.obs;
 
@@ -30,7 +30,7 @@ class ProjectCellController extends GetxController {
   }
 
   String get statusName {
-    switch (project.status) {
+    switch (_project.status) {
       case 0:
         return 'Open';
         break;
@@ -46,7 +46,7 @@ class ProjectCellController extends GetxController {
   }
 
   String get statusImage {
-    switch (project.status) {
+    switch (_project.status) {
       case 0:
         return SvgIcons.open;
         break;

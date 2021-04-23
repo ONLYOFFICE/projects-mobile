@@ -13,7 +13,7 @@ class FiltersRow extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 16, bottom: 20),
+          padding: const EdgeInsets.only(left: 16, bottom: 20),
           child: Text(
             title,
             style: TextStyleHelper.h6(
