@@ -86,7 +86,7 @@ class ProjectsBottomSheet extends StatelessWidget {
                             'id': _projectsController
                                 .paginationController.data[index].id,
                             'title': _projectsController
-                                .paginationController.data[index].sortParameter
+                                .paginationController.data[index].title
                           }),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
@@ -100,7 +100,7 @@ class ProjectsBottomSheet extends StatelessWidget {
                                     children: [
                                       Text(
                                         _projectsController.paginationController
-                                            .data[index].sortParameter,
+                                            .data[index].title,
                                         style: TextStyleHelper.projectTitle,
                                       ),
                                       Text(

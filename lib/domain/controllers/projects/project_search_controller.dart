@@ -44,6 +44,8 @@ class ProjectSearchController extends GetxController {
   var searchInputController = TextEditingController();
 
   var nothingFound = false.obs;
+  // for select project view
+  var switchToSearchView = false.obs;
   var _startIndex;
   var _query;
 
@@ -71,6 +73,7 @@ class ProjectSearchController extends GetxController {
   void _performSearch() async {
     loaded.value = false;
     nothingFound.value = false;
+    switchToSearchView.value = true;
     searchResult.clear();
 
     var result = await _api.getProjectsByParams(
@@ -92,5 +95,6 @@ class ProjectSearchController extends GetxController {
     searchResult.clear();
     searchInputController.clear();
     nothingFound.value = false;
+    switchToSearchView.value = false;
   }
 }

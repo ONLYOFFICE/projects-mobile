@@ -35,9 +35,9 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class TitleTile extends StatelessWidget {
+class TaskTitle extends StatelessWidget {
   final controller;
-  const TitleTile({
+  const TaskTitle({
     Key key,
     @required this.controller,
   }) : super(key: key);
@@ -49,7 +49,7 @@ class TitleTile extends StatelessWidget {
         return Padding(
           padding: const EdgeInsets.only(left: 56, right: 16),
           child: TextField(
-              autofocus: controller.titleText.isEmpty,
+              autofocus: controller.title.isEmpty,
               maxLines: 2,
               onChanged: (value) => controller.changeTitle(value),
               style: TextStyleHelper.headline6(
