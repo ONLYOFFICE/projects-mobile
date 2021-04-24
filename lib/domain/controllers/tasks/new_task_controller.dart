@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
@@ -5,35 +6,33 @@ import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 class NewTaskController extends GetxController {
   var _selectedProjectId;
   var _selectedMilestoneId;
-  String _description;
+  // for dateTime format
   String _startDate = '';
   String _dueDate = '';
 
   int get selectedProjectId => _selectedProjectId;
   int get selectedMilestoneId => _selectedMilestoneId;
-  String get description => _description;
   String get startDate => _startDate;
   String get dueDate => _dueDate;
 
-  RxString titleText = ''.obs;
+  RxString title = ''.obs;
+  RxString slectedProjectTitle = ''.obs;
+  RxString slectedMilestoneTitle = ''.obs;
 
-  RxString projectTileText = 'Select project'.obs;
-
-  RxString milestoneTileText = 'Select milestone'.obs;
-
-  RxString descriptionText = 'Add description'.obs;
+  RxString descriptionText = ''.obs;
+  var descriptionController = TextEditingController().obs;
+  // for readable format
+  RxString startDateText = ''.obs;
+  RxString dueDateText = ''.obs;
   RxBool highPriority = false.obs;
-
-  RxString startDateText = 'Set start date'.obs;
-  RxString dueDateText = 'Set due date'.obs;
 
   RxBool selectProjectError = false.obs;
 
-  void changeTitle(String newText) => titleText.value = newText;
+  void changeTitle(String newText) => title.value = newText;
 
   void changeProjectSelection({var id, String title}) {
     if (id != null && title != null) {
-      projectTileText.value = title;
+      slectedProjectTitle.value = title;
       _selectedProjectId = id;
       selectProjectError.value = false;
     } else {
@@ -44,12 +43,12 @@ class NewTaskController extends GetxController {
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    projectTileText.value = 'Select project';
+    slectedProjectTitle.value = '';
   }
 
   void changeMilestoneSelection({var id, String title}) {
     if (id != null && title != null) {
-      milestoneTileText.value = title;
+      slectedMilestoneTitle.value = title;
       _selectedMilestoneId = id;
     } else {
       removeMilestoneSelection();
@@ -59,7 +58,7 @@ class NewTaskController extends GetxController {
 
   void removeMilestoneSelection() {
     _selectedMilestoneId = null;
-    milestoneTileText.value = 'Select milestone';
+    slectedMilestoneTitle.value = '';
   }
 
   void changePriority(bool value) {
@@ -68,12 +67,11 @@ class NewTaskController extends GetxController {
 
   void confirmDescription(String newText) {
     descriptionText.value = newText;
-    _description = newText;
     Get.back();
   }
 
   void leaveDescriptionView(String typedText) {
-    if (typedText.isEmpty) {
+    if (typedText == descriptionText.value) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -81,6 +79,7 @@ class NewTaskController extends GetxController {
         contentText: 'If you leave, all changes will be lost.',
         acceptText: 'DELETE',
         onAcceptTap: () {
+          descriptionController.value.text = descriptionText.value;
           Get.back();
           Get.back();
         },

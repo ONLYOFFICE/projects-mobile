@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 
 class SelectProjectView extends StatelessWidget {
   const SelectProjectView({Key key}) : super(key: key);
@@ -15,74 +18,93 @@ class SelectProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     var _projectsController = Get.find<ProjectsController>();
     _projectsController.setupProjects();
-
-    var controller = Get.find<NewTaskController>();
-
+    var _searchController = Get.put(ProjectSearchController());
     return Scaffold(
       appBar: StyledAppBar(
         titleText: 'Select project',
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () => print('da'))
-        ],
+        bottomHeight: 44,
+        bottom: SearchField(
+          hintText: 'Search for projects...',
+          controller: _searchController.searchInputController,
+          showClearIcon: true,
+          onSubmitted: (value) => _searchController.newSearch(value),
+          onClearPressed: () => _searchController.clearSearch(),
+        ),
       ),
       body: Obx(() {
-        if (_projectsController.loaded.isTrue) {
-          return ListView.separated(
-            itemCount: _projectsController.paginationController.data.length,
-            padding: const EdgeInsets.only(bottom: 16),
-            separatorBuilder: (BuildContext context, int index) {
-              return const StyledDivider(leftPadding: 16, rightPadding: 16);
+        if (_searchController.switchToSearchView.isTrue &&
+            _searchController.searchResult.isNotEmpty) {
+          return ProjectsList(projects: _searchController.searchResult);
+        }
+        if (_searchController.switchToSearchView.isTrue &&
+            _searchController.searchResult.isEmpty &&
+            _searchController.loaded.isTrue) {
+          return const NothingFound();
+        }
+        if (_projectsController.loaded.isTrue &&
+            _searchController.switchToSearchView.isFalse) {
+          return ProjectsList(
+              projects: _projectsController.paginationController.data);
+        }
+        return const ListLoadingSkeleton();
+      }),
+    );
+  }
+}
+
+class ProjectsList extends StatelessWidget {
+  final List projects;
+  const ProjectsList({
+    Key key,
+    @required this.projects,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = Get.find<NewTaskController>();
+    return ListView.separated(
+      itemCount: projects.length,
+      separatorBuilder: (BuildContext context, int index) {
+        return const StyledDivider(leftPadding: 16, rightPadding: 16);
+      },
+      itemBuilder: (BuildContext context, int index) {
+        return Material(
+          child: InkWell(
+            onTap: () {
+              controller.changeProjectSelection(
+                  id: projects[index].id, title: projects[index].title);
             },
-            itemBuilder: (BuildContext context, int index) {
-              return Material(
-                child: InkWell(
-                  onTap: () {
-                    controller.changeProjectSelection(
-                        id: _projectsController
-                            .paginationController.data[index].id,
-                        title: _projectsController
-                            .paginationController.data[index].sortParameter);
-                  },
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Row(
+                children: [
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _projectsController.paginationController
-                                    .data[index].sortParameter,
-                                style: TextStyleHelper.projectTitle,
-                              ),
-                              Text(
-                                  _projectsController.paginationController
-                                      .data[index].responsible.displayName,
-                                  style: TextStyleHelper.caption(
-                                          color: Theme.of(context)
-                                              .customColors()
-                                              .onSurface
-                                              .withOpacity(0.6))
-                                      .copyWith(height: 1.667)),
-                            ],
-                          ),
+                        Text(
+                          projects[index].title,
+                          style: TextStyleHelper.projectTitle,
                         ),
-                        // Icon(Icons.check_rounded)
+                        Text(projects[index].responsible.displayName,
+                            style: TextStyleHelper.caption(
+                                    color: Theme.of(context)
+                                        .customColors()
+                                        .onSurface
+                                        .withOpacity(0.6))
+                                .copyWith(height: 1.667)),
                       ],
                     ),
                   ),
-                ),
-              );
-            },
-          );
-        } else {
-          return const ListLoadingSkeleton();
-        }
-      }),
+                  // Icon(Icons.check_rounded)
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
+    // },
+    // );
   }
 }

@@ -39,6 +39,8 @@ class SvgIcons {
   static const String tasklist = 'lib/assets/images/icons/tasklist.svg';
   static const String up_arrow = 'lib/assets/images/icons/up_arrow.svg';
 
+  static const String description =
+      'lib/assets/images/icons/task_detailed/description.svg';
   static const String due_date =
       'lib/assets/images/icons/task_detailed/due_date.svg';
   static const String milestone =

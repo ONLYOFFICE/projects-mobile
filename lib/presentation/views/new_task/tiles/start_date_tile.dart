@@ -13,11 +13,17 @@ class StartDateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => NewTaskInfo(
-          icon: SvgIcons.start_date,
-          text: controller.startDateText.value,
-          onTap: () => Get.toNamed('SelectDateView',
-              arguments: {'controller': controller, 'startDate': true})),
+      () {
+        bool _isSelected = controller.startDateText.value.isNotEmpty;
+        return NewTaskInfo(
+            icon: SvgIcons.start_date,
+            text:
+                _isSelected ? controller.startDateText.value : 'Set start date',
+            caption: _isSelected ? 'Start date:' : null,
+            isSelected: _isSelected,
+            onTap: () => Get.toNamed('SelectDateView',
+                arguments: {'controller': controller, 'startDate': true}));
+      },
     );
   }
 }

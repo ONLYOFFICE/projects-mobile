@@ -13,10 +13,16 @@ class MilestoneTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => NewTaskInfo(
-          text: controller.milestoneTileText.value,
-          icon: SvgIcons.milestone,
-          onTap: () => Get.toNamed('SelectMilestoneView')),
+      () {
+        bool _isSelected = controller.slectedMilestoneTitle.value.isNotEmpty;
+        return NewTaskInfo(
+            text: _isSelected ? controller.slectedMilestoneTitle.value : 'None',
+            icon: SvgIcons.milestone,
+            // because color is always black
+            isSelected: true,
+            caption: 'Milestone:',
+            onTap: () => Get.toNamed('SelectMilestoneView'));
+      },
     );
   }
 }

@@ -48,11 +48,6 @@ class SelectMilestoneView extends StatelessWidget {
                                 title: _milestoneController
                                     .milestones[index].title);
                           },
-                          // onTap: () => Get.back(result: {
-                          //   'id': _milestoneController.milestones[index].id,
-                          //   'title':
-                          //       _milestoneController.milestones[index].title
-                          // }),
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 16, vertical: 8),
