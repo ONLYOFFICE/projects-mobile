@@ -31,7 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+// import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -42,17 +42,20 @@ class ThemeService {
   ThemeMode get themeMode => isDark() ? ThemeMode.dark : ThemeMode.light;
 
   bool isDark() {
-    var appDarkModeIsOn = storage.read(_key);
+    //TODO: fix dark mode when dark theme is ready
+    return false;
 
-    if (appDarkModeIsOn == null) {
-      var brightness = SchedulerBinding.instance.window.platformBrightness;
-      var systemDarkModeIsOn = brightness == Brightness.dark;
-      _saveThemeToStorage(systemDarkModeIsOn);
+    // var appDarkModeIsOn = storage.read(_key);
 
-      return systemDarkModeIsOn;
-    }
+    // if (appDarkModeIsOn == null) {
+    //   var brightness = SchedulerBinding.instance.window.platformBrightness;
+    //   var systemDarkModeIsOn = brightness == Brightness.dark;
+    //   _saveThemeToStorage(systemDarkModeIsOn);
 
-    return appDarkModeIsOn;
+    //   return systemDarkModeIsOn;
+    // }
+
+    // return appDarkModeIsOn;
   }
 
   void _saveThemeToStorage(bool isDarkMode) => storage.write(_key, isDarkMode);

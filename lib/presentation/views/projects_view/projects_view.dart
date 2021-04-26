@@ -51,7 +51,7 @@ class ProjectsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<ProjectsController>();
-    controller.setupProjects();
+    controller.loadProjects();
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
@@ -83,7 +83,7 @@ class ProjectsView extends StatelessWidget {
                   child: ListView.builder(
                     itemBuilder: (c, i) => ProjectCell(
                         item: controller.paginationController.data[i]),
-                    itemExtent: 100.0,
+                    itemExtent: 72.0,
                     itemCount: controller.paginationController.data.length,
                   ),
                 ),

@@ -84,10 +84,10 @@ class ProjectsController extends BaseController {
   }
 
   void updateSort() {
-    _getProjects(needToClear: true);
+    loadProjects();
   }
 
-  Future<void> setupProjects() async {
+  Future<void> loadProjects() async {
     loaded.value = false;
     paginationController.startIndex = 0;
     await _getProjects(needToClear: true);

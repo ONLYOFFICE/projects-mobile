@@ -46,7 +46,7 @@ class SelectProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _projectsController = Get.find<ProjectsController>();
-    _projectsController.setupProjects();
+    _projectsController.loadProjects();
 
     var controller = Get.find<NewTaskController>();
 

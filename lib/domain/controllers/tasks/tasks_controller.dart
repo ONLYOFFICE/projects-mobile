@@ -50,11 +50,13 @@ class TasksController extends BaseController {
   RxBool loaded = false.obs;
 
   TasksController() {
-    _sortController.updateSortDelegate = reloadTasks;
+    _sortController.updateSortDelegate = () async {
+      await loadTasks();
+    };
 
     _filterController.applyFiltersDelegate = () {
       hasFilters.value = _filterController.hasFilters;
-      reloadTasks();
+      loadTasks();
     };
 
     paginationController.loadDelegate = () async {
@@ -73,15 +75,10 @@ class TasksController extends BaseController {
   @override
   RxList get itemList => paginationController.data;
 
-  Future reloadTasks() async {
+  Future loadTasks() async {
     loaded.value = false;
+    paginationController.startIndex = 0;
     await _getTasks(needToClear: true);
-    loaded.value = true;
-  }
-
-  Future getTasks() async {
-    loaded.value = false;
-    await _getTasks();
     loaded.value = true;
   }
 

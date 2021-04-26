@@ -43,7 +43,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
     as bottom_sheet;
-import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskCell extends StatelessWidget {
   final PortalTask task;
@@ -55,51 +54,47 @@ class TaskCell extends StatelessWidget {
     TaskItemController itemController =
         Get.put(TaskItemController(task), tag: task.id.toString());
 
-    return VisibilityDetector(
-      key: Key('${task.id.toString()}_${task.title}'),
-      onVisibilityChanged: itemController.handleVisibilityChanged,
-      child: Container(
-        height: 72,
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            GestureDetector(
-                onTap: () async {
-                  bottom_sheet.showsStatusesBS(
-                      context: context, taskItemController: itemController);
-                },
-                child: TaskStatus(itemController: itemController)),
-            const SizedBox(width: 16),
-            Expanded(
-              child: InkWell(
-                onTap: () => Get.toNamed('TaskDetailedView',
-                    arguments: {'controller': itemController}),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SecondColumn(
-                            task: task,
-                            itemController: itemController,
-                          ),
-                          const SizedBox(width: 8),
-                          ThirdColumn(
-                            task: task,
-                            controller: itemController,
-                          ),
-                        ],
-                      ),
+    return Container(
+      height: 72,
+      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          GestureDetector(
+              onTap: () async {
+                bottom_sheet.showsStatusesBS(
+                    context: context, taskItemController: itemController);
+              },
+              child: TaskStatus(itemController: itemController)),
+          const SizedBox(width: 16),
+          Expanded(
+            child: InkWell(
+              onTap: () => Get.toNamed('TaskDetailedView',
+                  arguments: {'controller': itemController}),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Expanded(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SecondColumn(
+                          task: task,
+                          itemController: itemController,
+                        ),
+                        const SizedBox(width: 8),
+                        ThirdColumn(
+                          task: task,
+                          controller: itemController,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -167,6 +162,7 @@ class SecondColumn extends StatelessWidget {
                     task.title,
                     maxLines: 2,
                     softWrap: true,
+                    style: TextStyleHelper.projectTitle,
                     overflow: TextOverflow.ellipsis,
                   ),
                   if (task.priority == 1) const SizedBox(width: 6),
