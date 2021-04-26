@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -9,6 +10,19 @@ class TaskService {
   final TaskApi _api = locator<TaskApi>();
 
   var portalTask = PortalTask().obs;
+
+  Future addTask({NewTaskDTO newTask}) async {
+    var task = await _api.addTask(newTask: newTask);
+
+    var success = task.response != null;
+
+    if (success) {
+      return task.response;
+    } else {
+      ErrorDialog.show(task.error);
+      return null;
+    }
+  }
 
   Future getTaskByID({int id}) async {
     var task = await _api.getTaskByID(id: id);

@@ -8,6 +8,7 @@ import 'package:projects/presentation/views/new_task/new_task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
+import 'package:projects/presentation/views/new_task/select/select_responsibles_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
@@ -30,10 +31,13 @@ List<GetPage> getxPages() => [
       GetPage(name: 'NewTaskView', page: () => const NewTaskView()),
       GetPage(
           name: 'NewTaskDescription', page: () => const NewTaskDescription()),
-      GetPage(name: 'SelectProjectView', page: () => const SelectProjectView()),
+      GetPage(name: 'SelectDateView', page: () => const SelectDateView()),
       GetPage(
           name: 'SelectMilestoneView', page: () => const SelectMilestoneView()),
-      GetPage(name: 'SelectDateView', page: () => const SelectDateView()),
+      GetPage(name: 'SelectProjectView', page: () => const SelectProjectView()),
+      GetPage(
+          name: 'SelectResponsiblesView',
+          page: () => const SelectResponsiblesView()),
       GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
       GetPage(name: 'NewProject', page: () => const NewProject()),
       GetPage(
