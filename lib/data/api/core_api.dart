@@ -55,9 +55,6 @@ class CoreApi {
   Future<String> tasksByParamsrUrl() async =>
       '${await getPortalURI()}/api/$version/project/task/filter?';
 
-  Future<String> tasksByFilterUrl(String params) async =>
-      '${await getPortalURI()}/api/$version/project/task/filter?$params';
-
   Future<String> taskByIdUrl(int id) async =>
       '${await getPortalURI()}/api/$version/project/task/$id';
 
@@ -84,6 +81,8 @@ class CoreApi {
 
   Future<String> createProjectUrl() async =>
       '${await getPortalURI()}/api/$version/project/withSecurity';
+  Future<String> projectTeamUrl(String projectID) async =>
+      '${await getPortalURI()}/api/$version/project/$projectID/team';
 
   Future<http.Response> getRequest(String url) async {
     print(url);

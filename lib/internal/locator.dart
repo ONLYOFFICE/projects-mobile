@@ -28,6 +28,7 @@ import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/files/files_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
@@ -38,7 +39,6 @@ import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/domain/controllers/statuses_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
 
@@ -75,8 +75,7 @@ void setupLocator() {
   Get.lazyPut(() => MilestonesController(), fenix: true);
   Get.lazyPut(() => NewTaskController(), fenix: true);
   Get.lazyPut(() => ProjectsController(), fenix: true);
-  Get.lazyPut(() => StatusesController(), fenix: true);
-  Get.lazyPut(() => TaskFilterController());
+  Get.lazyPut(() => TaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
   Get.lazyPut(() => TasksController(), fenix: true);
 
@@ -88,4 +87,5 @@ void setupLocator() {
   Get.lazyPut(() => GroupsDataSource(), fenix: true);
   Get.lazyPut(() => ProjectsSortController(), fenix: true);
   Get.lazyPut(() => ProjectsFilterController());
+  Get.lazyPut(() => ProjectTasksController(), fenix: true);
 }

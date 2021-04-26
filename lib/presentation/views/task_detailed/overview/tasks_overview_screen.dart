@@ -5,6 +5,7 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
     as bottom_sheet;
@@ -13,10 +14,10 @@ import 'package:readmore/readmore.dart';
 
 part 'task.dart';
 
-class OverviewScreen extends StatelessWidget {
+class TasksOverviewScreen extends StatelessWidget {
   final TaskItemController taskController;
 
-  const OverviewScreen({Key key, @required this.taskController})
+  const TasksOverviewScreen({Key key, @required this.taskController})
       : super(key: key);
 
   @override
@@ -114,44 +115,6 @@ class OverviewScreen extends StatelessWidget {
           return const ListLoadingSkeleton();
         }
       },
-    );
-  }
-}
-
-class InfoTile extends StatelessWidget {
-  final Widget icon;
-  final String caption;
-  final String subtitle;
-  final TextStyle captionStyle;
-  final TextStyle subtitleStyle;
-
-  const InfoTile({
-    Key key,
-    this.icon,
-    this.caption,
-    this.captionStyle,
-    this.subtitle,
-    this.subtitleStyle,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          SizedBox(width: 56, child: icon),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(caption, style: captionStyle ?? TextStyleHelper.caption()),
-                Text(subtitle,
-                    style: subtitleStyle ?? TextStyleHelper.subtitle1())
-              ],
-            ),
-          )
-        ],
-      ),
     );
   }
 }

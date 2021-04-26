@@ -9,7 +9,7 @@ import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/documents/documents_view.dart';
-import 'package:projects/presentation/views/task_detailed/overview/overview_screen.dart';
+import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 
 part 'app_bar_menu.dart';
@@ -79,15 +79,15 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                   labelStyle: TextStyleHelper.subtitle2(),
                   tabs: [
                     const Tab(text: 'Overview'),
-                    _Tab(
+                    CustomTab(
                         title: 'Subtasks',
                         currentTab: _activeIndex == 1,
                         count: controller.task.value?.subtasks?.length),
-                    _Tab(
+                    CustomTab(
                         title: 'Documents',
                         currentTab: _activeIndex == 2,
                         count: controller.task.value?.files?.length),
-                    _Tab(
+                    CustomTab(
                         title: 'Comments',
                         currentTab: _activeIndex == 3,
                         count: controller.task.value?.comments?.length),
@@ -96,7 +96,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          OverviewScreen(taskController: controller),
+          TasksOverviewScreen(taskController: controller),
           SubtasksView(controller: controller),
           DocumentsView(controller: controller),
           TaskCommentsView(controller: controller)
@@ -106,11 +106,11 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   }
 }
 
-class _Tab extends StatelessWidget {
+class CustomTab extends StatelessWidget {
   final String title;
   final int count;
   final bool currentTab;
-  const _Tab({
+  const CustomTab({
     Key key,
     this.title,
     this.count,

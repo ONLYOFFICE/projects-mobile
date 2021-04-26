@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
@@ -70,28 +71,15 @@ class ProjectService {
     }
   }
 
-  Future<List<Status>> getStatuses() async {
-    var projects = await _api.getStatuses();
+  Future<List<PortalUser>> getProjectTeam(String projectID) async {
+    var team = await _api.getProjectTeam(projectID);
 
-    var success = projects.response != null;
-
-    if (success) {
-      return projects.response;
-    } else {
-      ErrorDialog.show(projects.error);
-      return null;
-    }
-  }
-
-  Future<List<Status>> getProjectStatuses() async {
-    var projects = await _api.getStatuses();
-
-    var success = projects.response != null;
+    var success = team.response != null;
 
     if (success) {
-      return projects.response;
+      return team.response;
     } else {
-      ErrorDialog.show(projects.error);
+      ErrorDialog.show(team.error);
       return null;
     }
   }
