@@ -97,6 +97,9 @@ class SvgIcons {
   static const String add_project = 'lib/assets/images/icons/add_project.svg';
   static const String sorting_4_ascend =
       'lib/assets/images/icons/sorting_4_ascend.svg';
+  static const String description = 'lib/assets/images/icons/description.svg';
+  static const String calendar = 'lib/assets/images/icons/calendar.svg';
+  static const String tag = 'lib/assets/images/icons/tag.svg';
 }
 
 class PngIcons {

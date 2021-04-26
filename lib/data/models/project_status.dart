@@ -30,33 +30,38 @@
  *
  */
 
-import 'dart:convert';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
-class ProjectCellController extends GetxController {
-  final statuses = [].obs;
-
-  RefreshController refreshController = RefreshController();
-
-  ProjectCellController(ProjectDetailed project) {
-    _project = project;
+class ProjectStatus {
+  static String toName(int status) {
+    switch (status) {
+      case 0:
+        return 'Open';
+        break;
+      case 1:
+        return 'Closed';
+        break;
+      case 2:
+        return 'Paused';
+        break;
+      default:
+        return 'n/a';
+    }
   }
 
-  var _project;
-
-  dynamic get projectData => _project;
-
-  RxString statusImageString = ''.obs;
-
-  String get statusImage => ProjectStatus.toImageString(_project.status);
-
-  String get statusName => ProjectStatus.toName(_project.status);
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+  static String toImageString(int status) {
+    switch (status) {
+      case 0:
+        return SvgIcons.open;
+        break;
+      case 1:
+        return SvgIcons.closed;
+        break;
+      case 2:
+        return SvgIcons.paused;
+        break;
+      default:
+        return 'n/a';
+    }
   }
 }

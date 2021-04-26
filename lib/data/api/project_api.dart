@@ -33,6 +33,7 @@
 import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
@@ -197,6 +198,28 @@ class ProjectApi {
 
       if (response.statusCode == 201) {
         result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<List<PortalUser>>> getProjectTeam(String projectID) async {
+    var url = await coreApi.projectTeamUrl(projectID);
+
+    var result = ApiDTO<List<PortalUser>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalUser.fromJson(i))
+            .toList();
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
