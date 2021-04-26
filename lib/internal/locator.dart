@@ -86,6 +86,7 @@ void setupLocator() {
   Get.lazyPut(() => UsersDataSource(), fenix: true);
   Get.lazyPut(() => GroupsDataSource(), fenix: true);
   Get.lazyPut(() => ProjectsSortController(), fenix: true);
-  Get.lazyPut(() => ProjectsFilterController());
+
   Get.lazyPut(() => ProjectTasksController(), fenix: true);
+  Get.lazyPut(() => ProjectsFilterController(), fenix: true);
 }

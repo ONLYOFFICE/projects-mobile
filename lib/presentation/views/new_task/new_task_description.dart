@@ -10,27 +10,25 @@ class NewTaskDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _controller = TextEditingController();
-
     var controller = Get.find<NewTaskController>();
-    _controller.text =
-        'Description of task. Description of task. AdDescription of task. Description of task. Description of task|';
     return Scaffold(
       appBar: StyledAppBar(
         titleText: 'Description',
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => controller.leaveDescriptionView(_controller.text)),
+            onPressed: () => controller.leaveDescriptionView(
+                controller.descriptionController.value.text)),
         actions: [
           IconButton(
               icon: const Icon(Icons.check_rounded),
-              onPressed: () => controller.confirmDescription(_controller.text))
+              onPressed: () => controller.confirmDescription(
+                  controller.descriptionController.value.text))
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: TextField(
-          controller: _controller,
+          controller: controller.descriptionController.value,
           maxLines: null,
           style: TextStyleHelper.subtitle1(
               color: Theme.of(context).customColors().onSurface),
