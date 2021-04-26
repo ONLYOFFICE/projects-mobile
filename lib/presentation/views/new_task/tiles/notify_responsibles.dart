@@ -32,43 +32,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/data/services/download_service.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
-class PortalUserItemController extends GetxController {
-  final _downloadService = locator<DownloadService>();
+class NotifyResponsiblesTile extends StatelessWidget {
+  final NewTaskController controller;
+  const NotifyResponsiblesTile({
+    Key key,
+    this.controller,
+  }) : super(key: key);
 
-  var userTitle = ''.obs;
-
-  PortalUserItemController({
-    this.portalUser,
-  }) {
-    setupUser();
-  }
-  final PortalUser portalUser;
-  var isSelected = false.obs;
-  var multipleSelectionEnabled = false.obs;
-
-  Rx<Image> avatarImage = Rx<Image>();
-
-  String get displayName => portalUser.displayName;
-  String get id => portalUser.id;
-
-  Future<void> loadAvatar() async {
-    var avatarBytes =
-        await _downloadService.downloadImage(portalUser.avatarMedium);
-
-    if (avatarBytes == null) return;
-
-    var image = Image.memory(avatarBytes);
-    avatarImage.value = image;
-  }
-
-  void setupUser() {
-    if (portalUser.title != null) {
-      userTitle.value = portalUser.title;
-    }
-    loadAvatar();
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() => TileWithSwitch(
+        title: 'Notify responsibles',
+        isSelected: controller.notifyResponsibles.value,
+        onChanged: controller.changeNotifyResponsiblesValue,
+        enableBorder: true));
   }
 }
