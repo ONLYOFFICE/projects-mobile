@@ -252,12 +252,15 @@ class NewTaskController extends GetxController {
 
       print(newTask.toJson());
       var createdTask = await _api.addTask(newTask: newTask);
-      var tasksController = Get.find<TasksController>();
-      // ignore: unawaited_futures
-      tasksController.reloadTasks();
-      Get.back();
-      ScaffoldMessenger.of(context)
-          .showSnackBar(_snackBar(context, createdTask));
+      print('createdTask $createdTask');
+      if (createdTask != null) {
+        var tasksController = Get.find<TasksController>();
+        // ignore: unawaited_futures
+        tasksController.loadTasks();
+        Get.back();
+        ScaffoldMessenger.of(context)
+            .showSnackBar(_snackBar(context, createdTask));
+      }
     }
   }
 
