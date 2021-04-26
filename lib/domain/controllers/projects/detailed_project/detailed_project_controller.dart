@@ -30,59 +30,71 @@
  *
  */
 
-import 'dart:async';
+import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/status.dart';
+import 'package:intl/intl.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class StatusesController extends GetxController {
+class ProjectDetailsController extends GetxController {
   final _api = locator<ProjectService>();
+  final statuses = [].obs;
 
-  List<Status> statuses;
-  List<Status> projectStatuses;
-  Future<Null> isWorking;
+  var projectTitleText = ''.obs;
+  var descriptionText = ''.obs;
+  var managerText = ''.obs;
+  var teamMembers = [].obs;
+  var creationDateText = ''.obs;
+  var tags = [].obs;
 
-  Future<List<Status>> getStatuses() async {
-    if (statuses != null) {
-      return statuses;
-    }
+  var statusText = ''.obs;
+  var tasksCount = ''.obs;
 
-    if (isWorking != null) {
-      await isWorking;
-      return statuses;
-    }
+  RefreshController refreshController = RefreshController();
 
-    var completer = Completer<Null>();
-    isWorking = completer.future;
+  var loaded = false.obs;
 
-    statuses = await _api.getStatuses();
+  var tagsText = ''.obs;
 
-    completer.complete();
-    isWorking = null;
+  var currentTab = ''.obs;
 
-    return statuses;
+  var tabController;
+
+  ProjectDetailsController(ProjectDetailed project) {
+    _project = project;
   }
 
-  Future<List<Status>> getProjectStatuses() async {
-    if (statuses != null) {
-      return statuses;
+  ProjectDetailed _project;
+
+  String decodeImageString(String image) {
+    return utf8.decode(base64.decode(image));
+  }
+
+  Future<void> setup() async {
+    loaded.value = false;
+
+    tasksCount.value = _project.taskCount.toString();
+
+    if (teamMembers.isEmpty) {
+      var team = await _api.getProjectTeam(_project.id.toString());
+      teamMembers.addAll(team);
     }
+    var tag = await _api.getProjectTags();
+    tags.addAll(tag);
 
-    if (isWorking != null) {
-      await isWorking;
-      return statuses;
-    }
+    statusText.value = 'Project ${ProjectStatus.toName(_project.status)}';
 
-    var completer = Completer<Null>();
-    isWorking = completer.future;
+    projectTitleText.value = _project.title;
+    descriptionText.value = _project.description;
+    managerText.value = _project.responsible.displayName;
 
-    statuses = await _api.getStatuses();
+    final formatter = DateFormat('dd MMM yyyy');
+    creationDateText.value = formatter.format(DateTime.parse(_project.created));
 
-    completer.complete();
-    isWorking = null;
-
-    return statuses;
+    loaded.value = true;
   }
 }

@@ -30,7 +30,7 @@
  *
  */
 
-part of 'overview_screen.dart';
+part of 'tasks_overview_screen.dart';
 
 class Task extends StatelessWidget {
   final TaskItemController taskController;

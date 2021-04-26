@@ -54,7 +54,7 @@ class TasksView extends StatelessWidget {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
     var controller = Get.find<TasksController>();
-    controller.getTasks();
+    controller.loadTasks();
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,

@@ -31,77 +31,73 @@
  */
 
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:projects/presentation/views/projects_view/projects_header_widget.dart';
+import 'package:projects/presentation/views/tasks/task_cell.dart';
 
-class ProjectsView extends StatelessWidget {
-  const ProjectsView({Key key}) : super(key: key);
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
+
+class ProjectTaskScreen extends StatelessWidget {
+  final ProjectDetailed projectDetailed;
+
+  const ProjectTaskScreen({Key key, @required this.projectDetailed})
+      : super(
+          key: key,
+        );
+
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ProjectsController>();
-    controller.loadProjects();
+    var taskStatusesController = Get.find<TaskStatusesController>();
+    taskStatusesController.getStatuses();
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () {
-          controller.createNewProject();
-        },
-        child: AppIcon(
-          icon: SvgIcons.add_project,
-          width: 32,
-          height: 32,
-        ),
-      ),
-      appBar: StyledAppBar(
-        bottom: ProjectHeader(),
-        titleHeight: 0,
-        bottomHeight: 100,
-      ),
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            // ProjectHeader(),
-            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
-              Expanded(
-                child: PaginationListView(
-                  paginationController: controller.paginationController,
-                  child: ListView.builder(
-                    itemBuilder: (c, i) => ProjectCell(
-                        item: controller.paginationController.data[i]),
-                    itemExtent: 72.0,
-                    itemCount: controller.paginationController.data.length,
-                  ),
+    var controller = Get.find<ProjectTasksController>();
+    controller.setup(projectDetailed.id);
+
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Header(),
+          if (controller.loaded.isFalse) const ListLoadingSkeleton(),
+          if (controller.loaded.isTrue)
+            Expanded(
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: ListView.builder(
+                  itemBuilder: (c, i) =>
+                      TaskCell(task: controller.paginationController.data[i]),
+                  itemExtent: 72.0,
+                  itemCount: controller.paginationController.data.length,
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }
 }
 
-class ProjectHeader extends StatelessWidget {
-  ProjectHeader({
+class Header extends StatelessWidget {
+  Header({
     Key key,
   }) : super(key: key);
 
-  final controller = Get.find<ProjectsController>();
-  final sortController = Get.find<ProjectsSortController>();
+  final controller = Get.find<ProjectTasksController>();
+  final sortController = Get.find<TasksSortController>();
+  final filterController = Get.find<TaskFilterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -109,15 +105,13 @@ class ProjectHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: sortController,
-        ),
-        SortTile(
-          sortParameter: 'title',
-          sortController: sortController,
-        ),
-        const SizedBox(height: 20),
+        SortTile(sortParameter: 'deadline', sortController: sortController),
+        SortTile(sortParameter: 'priority', sortController: sortController),
+        SortTile(sortParameter: 'create_on', sortController: sortController),
+        SortTile(sortParameter: 'start_date', sortController: sortController),
+        SortTile(sortParameter: 'title', sortController: sortController),
+        SortTile(sortParameter: 'sort_order', sortController: sortController),
+        const SizedBox(height: 20)
       ],
     );
 
@@ -125,10 +119,8 @@ class ProjectHeader extends StatelessWidget {
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: options),
-            isScrollControlled: true,
-          );
+          Get.bottomSheet(SortView(sortOptions: options),
+              isScrollControlled: true);
         },
         child: Row(
           children: <Widget>[
@@ -161,9 +153,29 @@ class ProjectHeader extends StatelessWidget {
       ),
     );
 
-    return HeaderWidget(
-      controller: controller,
-      sortButton: sortButton,
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              sortButton,
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () async => showFilters(context),
+                      child: FiltersButton(controler: controller),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }

@@ -56,6 +56,7 @@ class TaskFilterController extends BaseFilterController {
   String get milestoneFilter => _milestoneFilter;
 
   var _selfId;
+  String _projectId;
 
   @override
   bool get hasFilters =>
@@ -79,6 +80,8 @@ class TaskFilterController extends BaseFilterController {
     filtersTitle = 'TASKS';
     suitableTasksCount = (-1).obs;
   }
+
+  set projectId(String value) => _projectId = value;
 
   void changeResponsible(String filter, [newValue = '']) async {
     _selfId ??= await Get.find<UserController>().getUserId();
@@ -129,7 +132,8 @@ class TaskFilterController extends BaseFilterController {
     getSuitableTasksCount();
   }
 
-  void changeCreator(String filter, [newValue = '']) {
+  Future<void> changeCreator(String filter, [newValue = '']) async {
+    _selfId ??= await Get.find<UserController>().getUserId();
     _creatorFilter = '';
     if (filter == 'Me') {
       creator['Other'] = '';
@@ -232,6 +236,7 @@ class TaskFilterController extends BaseFilterController {
       creatorFilter: creatorFilter,
       projectFilter: projectFilter,
       milestoneFilter: milestoneFilter,
+      projectId: _projectId,
     );
 
     suitableTasksCount.value = result.response.length;

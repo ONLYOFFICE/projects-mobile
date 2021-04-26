@@ -47,10 +47,12 @@ class TaskStatusesController extends GetxController {
 
   Future getStatuses() async {
     loaded.value = false;
-    statuses.value = await _api.getStatuses();
-    statusImagesDecoded.clear();
-    for (var element in statuses) {
-      statusImagesDecoded.add(decodeImageString(element.image));
+    if (statuses.isEmpty) {
+      statuses.value = await _api.getStatuses();
+      statusImagesDecoded.clear();
+      for (var element in statuses) {
+        statusImagesDecoded.add(decodeImageString(element.image));
+      }
     }
     loaded.value = true;
   }

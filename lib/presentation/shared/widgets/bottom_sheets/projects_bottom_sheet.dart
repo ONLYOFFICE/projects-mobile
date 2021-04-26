@@ -49,7 +49,7 @@ class ProjectsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     var _projectsController = Get.find<ProjectsController>();
 
-    _projectsController.setupProjects();
+    _projectsController.loadProjects();
 
     return StyledButtomSheet(
       content: Column(
