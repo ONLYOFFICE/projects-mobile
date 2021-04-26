@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 class ProjectCellController extends GetxController {
   final statuses = [].obs;
@@ -15,13 +14,9 @@ class ProjectCellController extends GetxController {
     _project = project;
   }
 
-  void handleVisibilityChanged(VisibilityInfo info) {
-    if (info.visibleFraction == 1) {
-      update();
-    }
-  }
-
   var _project;
+
+  dynamic get projectData => _project;
 
   RxString statusImageString = ''.obs;
 
