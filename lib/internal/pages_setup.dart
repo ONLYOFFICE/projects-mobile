@@ -49,8 +49,7 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'TeamMembersSelectionView',
           page: () => const TeamMembersSelectionView()),
-      GetPage(
-          name: 'ProjectDetailedView', page: () => const ProjectDetailedView()),
+      GetPage(name: 'ProjectDetailedView', page: () => ProjectDetailedView()),
       GetPage(
           name: 'GroupMembersSelectionView',
           page: () => const GroupMembersSelectionView()),

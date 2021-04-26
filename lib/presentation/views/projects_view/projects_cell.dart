@@ -18,6 +18,7 @@ class ProjectCell extends StatelessWidget {
         Get.put(ProjectCellController(item), tag: item.id.toString());
 
     return Container(
+      height: 72,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -27,7 +28,7 @@ class ProjectCell extends StatelessWidget {
           Expanded(
             child: InkWell(
               onTap: () => Get.toNamed('ProjectDetailedView',
-                  arguments: {'controller': itemController}),
+                  arguments: {'projectDetailed': itemController.projectData}),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -81,8 +82,10 @@ class ProjectIcon extends StatelessWidget {
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color:
-                      Theme.of(context).customColors().primary.withOpacity(0.1),
+                  color: Theme.of(context)
+                      .customColors()
+                      .onBackground
+                      .withOpacity(0.05),
                   shape: BoxShape.circle,
                 ),
               ),

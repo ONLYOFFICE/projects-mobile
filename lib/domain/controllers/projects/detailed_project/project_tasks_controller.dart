@@ -1,23 +1,26 @@
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task_service.dart';
 
-class TasksController extends BaseController {
+class ProjectTasksController extends GetxController {
   final _api = locator<TaskService>();
 
-  var paginationController =
-      Get.put(PaginationController(), tag: 'TasksController');
+  final paginationController =
+      Get.put(PaginationController(), tag: 'ProjectTasksController');
 
   final _sortController = Get.find<TasksSortController>();
   final _filterController = Get.find<TaskFilterController>();
 
   RxBool loaded = false.obs;
 
-  TasksController() {
+  var hasFilters = false.obs;
+
+  int _projectId;
+
+  ProjectTasksController() {
     _sortController.updateSortDelegate = () async {
       await loadTasks();
     };
@@ -37,10 +40,6 @@ class TasksController extends BaseController {
     paginationController.pullDownEnabled = true;
   }
 
-  @override
-  String get screenName => 'Tasks';
-
-  @override
   RxList get itemList => paginationController.data;
 
   Future loadTasks() async {
@@ -52,18 +51,24 @@ class TasksController extends BaseController {
 
   Future _getTasks({needToClear = false}) async {
     var result = await _api.getTasksByParams(
-      startIndex: paginationController.startIndex,
-      sortBy: _sortController.currentSortfilter,
-      sortOrder: _sortController.currentSortOrder,
-      responsibleFilter: _filterController.responsibleFilter,
-      creatorFilter: _filterController.creatorFilter,
-      projectFilter: _filterController.projectFilter,
-      milestoneFilter: _filterController.milestoneFilter,
-    );
+        startIndex: paginationController.startIndex,
+        sortBy: _sortController.currentSortfilter,
+        sortOrder: _sortController.currentSortOrder,
+        responsibleFilter: _filterController.responsibleFilter,
+        creatorFilter: _filterController.creatorFilter,
+        projectFilter: _filterController.projectFilter,
+        milestoneFilter: _filterController.milestoneFilter,
+        projectId: _projectId.toString());
     paginationController.total = result.total;
 
     if (needToClear) paginationController.data.clear();
 
     paginationController.data.addAll(result.response);
+  }
+
+  void setup(int projectId) {
+    _projectId = projectId;
+    _filterController.projectId = _projectId.toString();
+    loadTasks();
   }
 }

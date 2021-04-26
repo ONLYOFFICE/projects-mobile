@@ -1,69 +1,71 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
-import 'package:projects/presentation/views/tasks/tasks_header_widget.dart';
 
-class TasksView extends StatelessWidget {
-  const TasksView({Key key}) : super(key: key);
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
+
+class ProjectTaskScreen extends StatelessWidget {
+  final ProjectDetailed projectDetailed;
+
+  const ProjectTaskScreen({Key key, @required this.projectDetailed})
+      : super(
+          key: key,
+        );
+
   @override
   Widget build(BuildContext context) {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
-    var controller = Get.find<TasksController>();
-    controller.loadTasks();
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () => Get.toNamed('NewTaskView'),
-        child: const Icon(Icons.add_rounded),
-      ),
-      appBar: StyledAppBar(
-        bottom: TasksHeader(),
-        titleHeight: 0,
-        bottomHeight: 100,
-      ),
-      body: Obx(
-        () {
-          if (controller.loaded.isFalse)
-            return const ListLoadingSkeleton();
-          else {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.builder(
-                itemCount: controller.paginationController.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return TaskCell(
-                      task: controller.paginationController.data[index]);
-                },
+    var controller = Get.find<ProjectTasksController>();
+    controller.setup(projectDetailed.id);
+
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Header(),
+          if (controller.loaded.isFalse) const ListLoadingSkeleton(),
+          if (controller.loaded.isTrue)
+            Expanded(
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: ListView.builder(
+                  itemBuilder: (c, i) =>
+                      TaskCell(task: controller.paginationController.data[i]),
+                  itemExtent: 72.0,
+                  itemCount: controller.paginationController.data.length,
+                ),
               ),
-            );
-          }
-        },
+            ),
+        ],
       ),
     );
   }
 }
 
-class TasksHeader extends StatelessWidget {
-  TasksHeader({
+class Header extends StatelessWidget {
+  Header({
     Key key,
   }) : super(key: key);
 
-  final controller = Get.find<TasksController>();
+  final controller = Get.find<ProjectTasksController>();
   final sortController = Get.find<TasksSortController>();
+  final filterController = Get.find<TaskFilterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -119,6 +121,29 @@ class TasksHeader extends StatelessWidget {
       ),
     );
 
-    return TasksHeaderWidget(controller: controller, sortButton: sortButton);
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              sortButton,
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () async => showFilters(context),
+                      child: FiltersButton(controler: controller),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }

@@ -145,6 +145,7 @@ class TaskApi {
     String creatorFilter,
     String projectFilter,
     String milestoneFilter,
+    String projectId,
   }) async {
     var url = await coreApi.tasksByParamsrUrl();
 
@@ -172,6 +173,10 @@ class TaskApi {
     }
     if (milestoneFilter != null) {
       url += milestoneFilter;
+    }
+
+    if (projectId != null) {
+      url += '&projectId=$projectId';
     }
 
     var result = PageDTO<List<PortalTask>>();

@@ -39,8 +39,6 @@ class SvgIcons {
   static const String tasklist = 'lib/assets/images/icons/tasklist.svg';
   static const String up_arrow = 'lib/assets/images/icons/up_arrow.svg';
 
-  static const String description =
-      'lib/assets/images/icons/task_detailed/description.svg';
   static const String due_date =
       'lib/assets/images/icons/task_detailed/due_date.svg';
   static const String milestone =
@@ -67,6 +65,9 @@ class SvgIcons {
   static const String add_project = 'lib/assets/images/icons/add_project.svg';
   static const String sorting_4_ascend =
       'lib/assets/images/icons/sorting_4_ascend.svg';
+  static const String description = 'lib/assets/images/icons/description.svg';
+  static const String calendar = 'lib/assets/images/icons/calendar.svg';
+  static const String tag = 'lib/assets/images/icons/tag.svg';
 }
 
 class PngIcons {
