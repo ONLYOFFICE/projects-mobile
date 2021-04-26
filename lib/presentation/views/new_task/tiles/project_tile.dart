@@ -46,13 +46,20 @@ class ProjectTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => NewTaskInfo(
-          text: controller.projectTileText.value,
-          icon: SvgIcons.project,
-          textColor: controller.selectProjectError.isTrue
-              ? Theme.of(context).customColors().error
-              : null,
-          onTap: () => Get.toNamed('SelectProjectView')),
+      () {
+        bool _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
+        return NewTaskInfo(
+            text: _isSelected
+                ? controller.slectedProjectTitle.value
+                : 'Select project',
+            icon: SvgIcons.project,
+            textColor: controller.selectProjectError.isTrue
+                ? Theme.of(context).customColors().error
+                : null,
+            isSelected: _isSelected,
+            caption: _isSelected ? 'Project:' : null,
+            onTap: () => Get.toNamed('SelectProjectView'));
+      },
     );
   }
 }

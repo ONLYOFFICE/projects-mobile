@@ -45,11 +45,16 @@ class DueDateTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => NewTaskInfo(
-          icon: SvgIcons.due_date,
-          text: controller.dueDateText.value,
-          onTap: () => Get.toNamed('SelectDateView',
-              arguments: {'controller': controller, 'startDate': false})),
+      () {
+        bool _isSelected = controller.dueDateText.value.isNotEmpty;
+        return NewTaskInfo(
+            icon: SvgIcons.due_date,
+            text: _isSelected ? controller.dueDateText.value : 'Set due date',
+            caption: _isSelected ? 'Start date:' : null,
+            isSelected: _isSelected,
+            onTap: () => Get.toNamed('SelectDateView',
+                arguments: {'controller': controller, 'startDate': false}));
+      },
     );
   }
 }
