@@ -94,7 +94,7 @@ class TasksOverviewScreen extends StatelessWidget {
                     caption: 'Priority:',
                     subtitle: task.priority == 1 ? 'High' : 'Normal'),
                 if (task.responsibles != null) const SizedBox(height: 20),
-                if (task.responsibles != null)
+                if (task.responsibles != null && task.responsibles.isNotEmpty)
                   InfoTile(
                       icon: AppIcon(
                           icon: SvgIcons.person,
