@@ -49,6 +49,9 @@ class TasksController extends BaseController {
 
   RxBool loaded = false.obs;
 
+  // when snackbar appears
+  RxBool fabIsRaised = false.obs;
+
   TasksController() {
     _sortController.updateSortDelegate = () async {
       await loadTasks();
@@ -97,5 +100,11 @@ class TasksController extends BaseController {
     if (needToClear) paginationController.data.clear();
 
     paginationController.data.addAll(result.response);
+  }
+
+  Future raiseFAB() async {
+    fabIsRaised.value = true;
+    await Future.delayed(const Duration(milliseconds: 4600));
+    fabIsRaised.value = false;
   }
 }
