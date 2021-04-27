@@ -3,12 +3,33 @@ import 'dart:convert';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class TaskApi {
   var coreApi = locator<CoreApi>();
+
+  Future<ApiDTO> addTask({NewTaskDTO newTask}) async {
+    var url = await coreApi.addTaskUrl(projectId: newTask.projectId);
+    var result = ApiDTO();
+
+    try {
+      var response =
+          await coreApi.postRequest(url, jsonEncode(newTask.toJson()));
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 201) {
+        result.response = PortalTask.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+    return result;
+  }
 
   Future<ApiDTO> getTaskByID({int id}) async {
     var url = await coreApi.taskByIdUrl(id);

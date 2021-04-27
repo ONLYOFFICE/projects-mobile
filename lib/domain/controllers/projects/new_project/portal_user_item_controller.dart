@@ -21,6 +21,7 @@ class PortalUserItemController extends GetxController {
   Rx<Image> avatarImage = Rx<Image>();
 
   String get displayName => portalUser.displayName;
+  String get id => portalUser.id;
 
   Future<void> loadAvatar() async {
     var avatarBytes =

@@ -21,8 +21,8 @@ class SelectDateView extends StatelessWidget {
           lastDate: DateTime(3000),
           onDateChanged: (value) {
             return startDate
-                ? controller.changeStartDate(value.toString())
-                : controller.changeDueDate(value.toString());
+                ? controller.changeStartDate(value)
+                : controller.changeDueDate(value);
           }),
       // ),
     );

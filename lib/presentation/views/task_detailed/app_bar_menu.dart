@@ -45,6 +45,7 @@ void _onSelected(value, TaskItemController controller) async {
             // ignore: lines_longer_than_80_chars
             'Are you sure you want to delete these task?\nNote: this action cannot be undone.',
         acceptText: 'DELETE',
+        onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           var result = await controller.deleteTask(taskId: task.id);
           if (result != null) {

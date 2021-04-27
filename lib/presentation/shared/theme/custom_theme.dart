@@ -28,6 +28,7 @@ final AppColors lightColors = AppColors(
   primary: const Color(0xff1A73E9),
   primarySurface: const Color(0xff0F4071),
   projectsSubtitle: const Color(0xff000000).withOpacity(0.6),
+  snackBarColor: const Color(0xff333333),
   systemBlue: const Color(0xff007aff),
   surface: const Color(0xffffffff),
   tabActive: const Color.fromRGBO(255, 255, 255, 1),

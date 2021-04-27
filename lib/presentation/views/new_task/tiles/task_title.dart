@@ -28,10 +28,12 @@ class TaskTitle extends StatelessWidget {
                   hintText: 'Task title',
                   contentPadding: const EdgeInsets.symmetric(vertical: 0),
                   hintStyle: TextStyleHelper.headline6(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.5)),
+                      color: controller.setTitleError.isTrue
+                          ? Theme.of(context).customColors().error
+                          : Theme.of(context)
+                              .customColors()
+                              .onSurface
+                              .withOpacity(0.5)),
                   border: InputBorder.none)),
         );
       },

@@ -18,6 +18,7 @@ class AppColors {
   final Color primary;
   final Color primarySurface;
   final Color projectsSubtitle;
+  final Color snackBarColor;
   final Color systemBlue;
   final Color surface;
   final Color tabActive;
@@ -41,6 +42,7 @@ class AppColors {
     @required this.primary,
     @required this.primarySurface,
     @required this.projectsSubtitle,
+    @required this.snackBarColor,
     @required this.systemBlue,
     @required this.surface,
     @required this.tabActive,
