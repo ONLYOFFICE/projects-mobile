@@ -58,10 +58,13 @@ class TasksView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () => Get.toNamed('NewTaskView'),
-        child: const Icon(Icons.add_rounded),
-      ),
+      floatingActionButton: Obx(() => AnimatedPadding(
+          padding:
+              EdgeInsets.only(bottom: controller.fabIsRaised.isTrue ? 48 : 0),
+          duration: const Duration(milliseconds: 100),
+          child: StyledFloatingActionButton(
+              onPressed: () => Get.toNamed('NewTaskView'),
+              child: const Icon(Icons.add_rounded)))),
       appBar: StyledAppBar(
         bottom: TasksHeader(),
         titleHeight: 0,

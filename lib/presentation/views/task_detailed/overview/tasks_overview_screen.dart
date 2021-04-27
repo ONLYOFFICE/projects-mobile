@@ -64,6 +64,25 @@ class TasksOverviewScreen extends StatelessWidget {
             child: ListView(
               children: [
                 Task(taskController: taskController),
+                if (task.description != null && task.description.isNotEmpty)
+                  Padding(
+                      padding: const EdgeInsets.only(bottom: 21),
+                      child: InfoTile(
+                          caption: 'Description:',
+                          icon: AppIcon(
+                              icon: SvgIcons.description,
+                              color: const Color(0xff707070)),
+                          subtitleWidget: ReadMoreText(task.description,
+                              trimLines: 3,
+                              colorClickableText: Colors.pink,
+                              style: TextStyleHelper.body1,
+                              trimMode: TrimMode.Line,
+                              trimCollapsedText: 'Show more',
+                              trimExpandedText: 'Show less',
+                              moreStyle: TextStyleHelper.body2(
+                                  color: Theme.of(context)
+                                      .customColors()
+                                      .links)))),
                 InfoTile(
                   icon: AppIcon(
                       icon: SvgIcons.project, color: const Color(0xff707070)),
@@ -72,7 +91,7 @@ class TasksOverviewScreen extends StatelessWidget {
                   subtitleStyle: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().links),
                 ),
-                const SizedBox(height: 20),
+                if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
                   InfoTile(
                       icon: AppIcon(
@@ -82,21 +101,7 @@ class TasksOverviewScreen extends StatelessWidget {
                       subtitle: task.milestone.title,
                       subtitleStyle: TextStyleHelper.subtitle1(
                           color: Theme.of(context).customColors().links)),
-                if (task.description != null)
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 56, right: 32, top: 42, bottom: 42),
-                    child: ReadMoreText(task.description,
-                        trimLines: 3,
-                        colorClickableText: Colors.pink,
-                        style: TextStyleHelper.body1,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: 'Show more',
-                        trimExpandedText: 'Show less',
-                        moreStyle: TextStyleHelper.body2(
-                            color: Theme.of(context).customColors().links)),
-                  ),
-                const SizedBox(height: 20),
+                if (task.startDate != null) const SizedBox(height: 20),
                 if (task.startDate != null)
                   InfoTile(
                       icon: AppIcon(
@@ -104,7 +109,7 @@ class TasksOverviewScreen extends StatelessWidget {
                           color: const Color(0xff707070)),
                       caption: 'Start date:',
                       subtitle: task.startDate),
-                const SizedBox(height: 20),
+                if (task.deadline != null) const SizedBox(height: 20),
                 if (task.deadline != null)
                   InfoTile(
                       icon: AppIcon(
@@ -117,11 +122,11 @@ class TasksOverviewScreen extends StatelessWidget {
                 InfoTile(
                     icon: AppIcon(
                         icon: SvgIcons.priority,
-                        color: const Color(0xffff7793)),
+                        color: const Color(0xff707070)),
                     caption: 'Priority:',
-                    subtitle: 'High'),
-                const SizedBox(height: 20),
-                if (task.responsible != null || task.responsibles.length >= 2)
+                    subtitle: task.priority == 1 ? 'High' : 'Normal'),
+                if (task.responsibles != null) const SizedBox(height: 20),
+                if (task.responsibles != null && task.responsibles.isNotEmpty)
                   InfoTile(
                       icon: AppIcon(
                           icon: SvgIcons.person,
@@ -129,7 +134,15 @@ class TasksOverviewScreen extends StatelessWidget {
                       caption: 'Assigned to:',
                       subtitle: task.responsibles.length >= 2
                           ? '${task.responsibles.length} responsibles'
-                          : task.responsible.id),
+                          : task.responsible.id,
+                      suffix: IconButton(
+                          icon: Icon(Icons.arrow_forward_ios_rounded,
+                              size: 20,
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .onSurface
+                                  .withOpacity(0.6)),
+                          onPressed: () {})),
                 const SizedBox(height: 20),
                 InfoTile(
                     caption: 'Created by:',

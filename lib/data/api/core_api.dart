@@ -63,6 +63,9 @@ class CoreApi {
   Future<String> allGroups() async =>
       '${await getPortalURI()}/api/$version/group';
 
+  Future<String> addTaskUrl({projectId}) async =>
+      '${await getPortalURI()}/api/$version/project/$projectId/task';
+
   Future<String> allProfiles() async =>
       '${await getPortalURI()}/api/$version/people';
 
