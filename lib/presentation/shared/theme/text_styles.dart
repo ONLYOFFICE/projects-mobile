@@ -94,15 +94,7 @@ class TextStyleHelper {
       height: 1.25,
       letterSpacing: 0.15);
 
-  static TextStyle projectStatus = TextStyle(
-      fontFamily: 'Roboto',
-      color: Get.theme.customColors().links,
-      fontWeight: FontWeight.w500,
-      fontSize: 12,
-      height: 1.33,
-      letterSpacing: 0.5);
-
-  static TextStyle taskStatus(Color color) {
+  static TextStyle status({Color color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         color: color,
