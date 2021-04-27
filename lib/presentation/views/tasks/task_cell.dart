@@ -218,32 +218,35 @@ class ThirdColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     var _now = DateTime.now();
 
-    return Expanded(
-      flex: 1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          if (task.deadline != null)
-            Text(formatedDate(now: _now, stringDate: task.deadline),
-                style: TextStyleHelper.caption(
-                    color: Theme.of(context).customColors().onSurface)),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
-              const SizedBox(width: 5),
-              Text(task.subtasks.length.toString(),
-                  style: TextStyleHelper.body2(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6))),
-            ],
-          ),
-        ],
-      ),
+    DateTime _deadline;
+    if (task.deadline != null) _deadline = DateTime.parse(task.deadline);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        if (_deadline != null)
+          Text(formatedDate(now: _now, stringDate: task.deadline),
+              style: _deadline.isBefore(_now)
+                  ? TextStyleHelper.caption(
+                      color: Theme.of(context).customColors().error)
+                  : TextStyleHelper.caption(
+                      color: Theme.of(context).customColors().onSurface)),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
+            const SizedBox(width: 5),
+            Text(task.subtasks.length.toString(),
+                style: TextStyleHelper.body2(
+                    color: Theme.of(context)
+                        .customColors()
+                        .onSurface
+                        .withOpacity(0.6))),
+          ],
+        ),
+      ],
     );
   }
 }
