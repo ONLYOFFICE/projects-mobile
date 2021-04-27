@@ -226,6 +226,8 @@ class NewTaskController extends GetxController {
         // ignore: unawaited_futures
         tasksController.loadTasks();
         Get.back();
+        // ignore: unawaited_futures
+        tasksController.raiseFAB();
         ScaffoldMessenger.of(context)
             .showSnackBar(_snackBar(context, createdTask));
       }
