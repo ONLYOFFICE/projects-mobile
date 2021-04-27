@@ -105,56 +105,57 @@ class ProjectIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(width: 16),
-        Container(
-          width: 48,
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onBackground
-                      .withOpacity(0.05),
-                  shape: BoxShape.circle,
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 20,
-                  height: 20,
+        Obx(() {
+          var color = itemController.canEdit.isTrue
+              ? Theme.of(context).customColors().primary
+              : Theme.of(context).customColors().onBackground;
+
+          return Container(
+            width: 48,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: Theme.of(context)
-                          .customColors()
-                          .primary
-                          .withOpacity(0.1),
-                    ),
-                    color: Colors.white,
+                    color: color.withOpacity(0.05),
                     shape: BoxShape.circle,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: AppIcon(
-                      icon: SvgIcons.project_icon,
-                      color: const Color(0xff666666),
-                      width: 12,
-                      height: 12,
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Theme.of(context)
+                            .customColors()
+                            .primary
+                            .withOpacity(0.1),
+                      ),
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: AppIcon(
+                        icon: SvgIcons.project_icon,
+                        color: const Color(0xff666666),
+                        width: 12,
+                        height: 12,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              AppIcon(
-                  icon: itemController.statusImage,
-                  color: const Color(0xff666666)),
-            ],
-          ),
-        ),
+                AppIcon(icon: itemController.statusImage, color: color),
+              ],
+            ),
+          );
+        }),
         const SizedBox(width: 16),
       ],
     );
@@ -182,14 +183,39 @@ class SecondColumn extends StatelessWidget {
         children: <Widget>[
           Wrap(
             children: [
-              Text(
-                item.title.replaceAll(' ', '\u00A0'),
-                maxLines: 2,
-                softWrap: true,
-                style: TextStyleHelper.projectTitle,
-                overflow: TextOverflow.ellipsis,
+              Obx(
+                () {
+                  var style;
+                  if (itemController.status.value == 1) {
+                    style = TextStyleHelper.projectTitle.copyWith(
+                        decoration: TextDecoration.lineThrough,
+                        color: Theme.of(context)
+                            .customColors()
+                            .onSurface
+                            .withOpacity(0.6));
+                  } else if (itemController.status.value == 2) {
+                    style = TextStyleHelper.projectTitle.copyWith(
+                        color: Theme.of(context)
+                            .customColors()
+                            .onSurface
+                            .withOpacity(0.6));
+                  } else {
+                    style = TextStyleHelper.projectTitle;
+                  }
+                  return Text(
+                    item.title.replaceAll(' ', '\u00A0'),
+                    maxLines: 2,
+                    softWrap: true,
+                    style: style,
+                    overflow: TextOverflow.ellipsis,
+                  );
+                },
               ),
-              // AppIcon(icon: SvgIcons.lock),
+              Obx(
+                () => itemController.isPrivate.isTrue
+                    ? AppIcon(icon: SvgIcons.lock)
+                    : const SizedBox(),
+              ),
             ],
           ),
           Row(
@@ -198,6 +224,8 @@ class SecondColumn extends StatelessWidget {
             children: [
               Text(
                 itemController.statusName,
+                style: TextStyleHelper.status(
+                    color: Theme.of(context).customColors().primary),
               ),
               Text(' • ',
                   style: TextStyleHelper.caption(

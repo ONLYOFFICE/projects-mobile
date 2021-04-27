@@ -30,65 +30,57 @@
  *
  */
 
-import 'dart:convert';
-
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectDetailsController extends GetxController {
+class ProjectTeamDataSource extends GetxController {
   final _api = locator<ProjectService>();
+  var usersList = [].obs;
+  var loaded = true.obs;
+
+  var _startIndex = 0;
 
   RefreshController refreshController = RefreshController();
-  var loaded = false.obs;
 
-  final statuses = [].obs;
+  var totalProfiles;
 
-  var projectTitleText = ''.obs;
-  var descriptionText = ''.obs;
-  var managerText = ''.obs;
-  var teamMembers = [].obs;
-  var creationDateText = ''.obs;
-  var tags = [].obs;
-  var statusText = ''.obs;
-  var tasksCount = ''.obs;
-  var tagsText = ''.obs;
+  ProjectDetailed projectDetailed;
 
-  ProjectDetailsController(ProjectDetailed project) {
-    _project = project;
-  }
+  bool get pullUpEnabled => usersList.length != totalProfiles;
 
-  ProjectDetailed _project;
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
-  }
-
-  Future<void> setup() async {
-    loaded.value = false;
-
-    tasksCount.value = _project.taskCount.toString();
-
-    if (teamMembers.isEmpty) {
-      var team = await _api.getProjectTeam(_project.id.toString());
-      teamMembers.addAll(team);
+  void onLoading() async {
+    _startIndex += 25;
+    if (_startIndex >= totalProfiles) {
+      refreshController.loadComplete();
+      _startIndex -= 25;
+      return;
     }
-    var tag = await _api.getProjectTags();
-    tags.addAll(tag);
+    _loadTeam();
+    refreshController.loadComplete();
+  }
 
-    statusText.value = 'Project ${ProjectStatus.toName(_project.status)}';
+  void _loadTeam({bool needToClear = false}) async {
+    var result = await _api.getProjectTeam(projectDetailed.id.toString());
 
-    projectTitleText.value = _project.title;
-    descriptionText.value = _project.description;
-    managerText.value = _project.responsible.displayName;
+    totalProfiles = result.length;
 
-    final formatter = DateFormat('dd MMM yyyy');
-    creationDateText.value = formatter.format(DateTime.parse(_project.created));
+    if (needToClear) usersList.clear();
 
+    for (var element in result) {
+      var portalUser = PortalUserItemController(portalUser: element);
+      portalUser.multipleSelectionEnabled.value = false;
+      usersList.add(portalUser);
+    }
+  }
+
+  Future getTeam() async {
+    loaded.value = false;
+    _loadTeam(needToClear: true);
     loaded.value = true;
   }
 }

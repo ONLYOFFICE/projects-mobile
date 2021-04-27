@@ -44,11 +44,18 @@ class ProjectCellController extends GetxController {
 
   ProjectCellController(ProjectDetailed project) {
     _project = project;
+    isPrivate.value = project.isPrivate;
+    status.value = project.status;
+    canEdit.value = project.canEdit;
   }
 
   var _project;
 
-  dynamic get projectData => _project;
+  ProjectDetailed get projectData => _project;
+
+  var isPrivate = false.obs;
+  var canEdit = false.obs;
+  var status = (-1).obs;
 
   RxString statusImageString = ''.obs;
 
