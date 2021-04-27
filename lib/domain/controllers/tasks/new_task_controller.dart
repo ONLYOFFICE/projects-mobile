@@ -216,6 +216,9 @@ class NewTaskController extends GetxController {
       startDateText.value =
           formatedDate(now: DateTime.now(), stringDate: newDate.toString());
       Get.back();
+    } else {
+      _startDate = null;
+      startDateText.value = '';
     }
   }
 
@@ -225,6 +228,9 @@ class NewTaskController extends GetxController {
       dueDateText.value =
           formatedDate(now: DateTime.now(), stringDate: newDate.toString());
       Get.back();
+    } else {
+      _dueDate = null;
+      dueDateText.value = '';
     }
   }
 
