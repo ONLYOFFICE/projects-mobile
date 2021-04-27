@@ -31,11 +31,9 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   void initState() {
     super.initState();
     controller = Get.arguments['controller'];
+    controller.firstReload.value = true;
     controller.reloadTask();
-    _tabController = TabController(
-      vsync: this,
-      length: 4,
-    );
+    _tabController = TabController(vsync: this, length: 4);
   }
 
   @override
@@ -58,9 +56,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
         appBar: StyledAppBar(
           actions: [
             IconButton(
-              icon: const Icon(Icons.edit_outlined),
-              onPressed: () => print('da'),
-            ),
+                icon: const Icon(Icons.edit_outlined),
+                onPressed: () => print('da')),
             _AppBarMenu(controller: controller)
           ],
           bottom: Padding(
@@ -90,7 +87,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                     CustomTab(
                         title: 'Comments',
                         currentTab: _activeIndex == 3,
-                        count: controller.task.value?.comments?.length),
+                        count: controller.task.value?.comments?.length)
                   ]),
             ),
           ),
@@ -122,8 +119,8 @@ class CustomTab extends StatelessWidget {
     return Row(
       children: [
         Text(title),
-        if (count != null) const SizedBox(width: 8),
-        if (count != null)
+        if (count != null && count >= 0) const SizedBox(width: 8),
+        if (count != null && count >= 0)
           Container(
             height: 20,
             padding: const EdgeInsets.symmetric(horizontal: 6),

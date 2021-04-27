@@ -25,7 +25,6 @@ import 'package:projects/data/services/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
-import 'package:projects/domain/controllers/files/files_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
@@ -70,7 +69,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => DownloadService());
 
   Get.lazyPut(() => CommentsController(), fenix: true);
-  Get.lazyPut(() => FilesController(), fenix: true);
+  // Get.lazyPut(() => FilesController(), fenix: true);
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
   Get.lazyPut(() => NewTaskController(), fenix: true);
