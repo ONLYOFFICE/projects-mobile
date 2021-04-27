@@ -43,15 +43,6 @@ class FiltersHeader extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.close_rounded,
-                            size: 26,
-                            color: Theme.of(context).customColors().primary,
-                          ),
-                          onPressed: () => Get.back,
-                        ),
-                        const SizedBox(width: 10),
                         Text('Filter',
                             style: TextStyleHelper.h6(
                                 color:

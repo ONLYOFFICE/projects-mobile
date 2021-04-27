@@ -10,6 +10,10 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectDetailsController extends GetxController {
   final _api = locator<ProjectService>();
+
+  RefreshController refreshController = RefreshController();
+  var loaded = false.obs;
+
   final statuses = [].obs;
 
   var projectTitleText = ''.obs;
@@ -18,19 +22,9 @@ class ProjectDetailsController extends GetxController {
   var teamMembers = [].obs;
   var creationDateText = ''.obs;
   var tags = [].obs;
-
   var statusText = ''.obs;
   var tasksCount = ''.obs;
-
-  RefreshController refreshController = RefreshController();
-
-  var loaded = false.obs;
-
   var tagsText = ''.obs;
-
-  var currentTab = ''.obs;
-
-  var tabController;
 
   ProjectDetailsController(ProjectDetailed project) {
     _project = project;

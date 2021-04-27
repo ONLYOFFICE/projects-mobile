@@ -7,6 +7,9 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
+import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class ProjectDetailedView extends StatefulWidget {
@@ -51,10 +54,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     return Scaffold(
       appBar: StyledAppBar(
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit_outlined),
-            onPressed: () => print('da'),
-          ),
+          // IconButton(
+          //   icon: const Icon(Icons.edit_outlined),
+          //   onPressed: () => print('da'),
+          // ),
         ],
         bottom: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -74,10 +77,22 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                       title: 'Tasks',
                       currentTab: _activeIndex == 1,
                       count: projectDetailed.taskCount),
-                  const Tab(text: 'Milestones'),
-                  const Tab(text: 'Discussions'),
-                  const Tab(text: 'Documents'),
-                  const Tab(text: 'Team'),
+                  CustomTab(
+                      title: 'Milestones',
+                      currentTab: _activeIndex == 2,
+                      count: projectDetailed.milestoneCount),
+                  CustomTab(
+                      title: 'Discussions',
+                      currentTab: _activeIndex == 3,
+                      count: projectDetailed.discussionCount),
+                  CustomTab(
+                      title: 'Documents',
+                      currentTab: _activeIndex == 4,
+                      count: projectDetailed.documentsCount),
+                  CustomTab(
+                      title: 'Team',
+                      currentTab: _activeIndex == 5,
+                      count: projectDetailed.participantCount),
                 ]),
           ),
         ),
@@ -85,10 +100,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       body: TabBarView(controller: _tabController, children: [
         ProjectOverview(projectDetailed: projectDetailed),
         ProjectTaskScreen(projectDetailed: projectDetailed),
-        for (var i = 0; i < 4; i++)
-          ProjectOverview(
-            projectDetailed: projectDetailed,
-          )
+        for (var i = 0; i < 3; i++)
+          ProjectOverview(projectDetailed: projectDetailed),
+        ProjectTeamView(projectDetailed: projectDetailed),
       ]),
     );
   }
