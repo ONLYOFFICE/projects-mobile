@@ -33,7 +33,7 @@
 import 'package:get/get.dart';
 
 abstract class BaseFilterController extends GetxController {
-  RxInt suitableTasksCount;
+  RxInt suitableResultCount;
 
   String filtersTitle;
 

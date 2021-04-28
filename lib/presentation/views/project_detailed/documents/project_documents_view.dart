@@ -32,52 +32,58 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/documents/project_doc_datasource.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class DocumentsView extends StatelessWidget {
-  final TaskItemController controller;
-  const DocumentsView({Key key, @required this.controller}) : super(key: key);
+class ProjectDocumentsView extends StatelessWidget {
+  final ProjectDetailed projectDetailed;
+  const ProjectDocumentsView({
+    Key key,
+    @required this.projectDetailed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _now = DateTime.now();
-    var _files = controller.task.value.files;
+    var projectDocsDataSource = Get.put(DocsDataSource());
+    projectDocsDataSource.projectDetailed = projectDetailed;
+    projectDocsDataSource.getDocs();
+
     return Obx(
       () {
-        if (controller.loaded.isTrue) {
+        if (projectDocsDataSource.loaded.isTrue) {
           return SmartRefresher(
-            controller: controller.refreshController,
-            onRefresh: () async => await controller.reloadTask(),
+            controller: projectDocsDataSource.refreshController,
+            onRefresh: () async => await projectDocsDataSource.reload(),
             child: ListView.separated(
-              itemCount: _files.length,
+              itemCount: projectDocsDataSource.docsList.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const SizedBox(height: 10);
               },
               itemBuilder: (BuildContext context, int index) {
+                var element = projectDocsDataSource.docsList[index];
                 return Container(
                   child: Row(
                     children: [
                       SizedBox(
-                          width: 72,
-                          child: Center(
-                              child: Text(_files[index].fileType.toString()))),
+                        width: 72,
+                        child: Center(
+                          child: Text(projectDocsDataSource
+                              .docsList[index].fileType
+                              .toString()),
+                        ),
+                      ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(_files[index].title),
+                            Text(element.title),
                             Text(
-                                // ignore: prefer_interpolation_to_compose_strings
-                                formatedDateFromString(
-                                        now: _now,
-                                        stringDate:
-                                            '${_files[index].updated}') +
-                                    ''' • ${_files[index].contentLength} • ${_files[index].updatedBy.displayName}''',
+                                '${formatedDate(element.updated)} • ${element.contentLength} • ${element.updatedBy.displayName}',
                                 style: TextStyleHelper.caption(
                                     color: Theme.of(context)
                                         .customColors()
