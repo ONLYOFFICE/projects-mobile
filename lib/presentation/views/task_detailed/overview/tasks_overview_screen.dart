@@ -56,7 +56,8 @@ class TasksOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (taskController.loaded.isTrue) {
+        if (taskController.loaded.isTrue || taskController.firstReload.isTrue) {
+          taskController.firstReload.value = false;
           var task = taskController.task.value;
           return SmartRefresher(
             controller: taskController.refreshController,
@@ -125,7 +126,8 @@ class TasksOverviewScreen extends StatelessWidget {
                         color: const Color(0xff707070)),
                     caption: 'Priority:',
                     subtitle: task.priority == 1 ? 'High' : 'Normal'),
-                if (task.responsibles != null) const SizedBox(height: 20),
+                if (task.responsibles != null && task.responsibles.isNotEmpty)
+                  const SizedBox(height: 20),
                 if (task.responsibles != null && task.responsibles.isNotEmpty)
                   InfoTile(
                       icon: AppIcon(
@@ -134,7 +136,7 @@ class TasksOverviewScreen extends StatelessWidget {
                       caption: 'Assigned to:',
                       subtitle: task.responsibles.length >= 2
                           ? '${task.responsibles.length} responsibles'
-                          : task.responsible?.id,
+                          : task.responsibles[0].displayName,
                       suffix: IconButton(
                           icon: Icon(Icons.arrow_forward_ios_rounded,
                               size: 20,

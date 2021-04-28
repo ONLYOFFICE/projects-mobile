@@ -50,6 +50,8 @@ class TaskItemController extends GetxController {
   var refreshController = RefreshController();
 
   RxString statusImageString = ''.obs;
+  // to show overview screen without loading
+  RxBool firstReload = true.obs;
 
   TaskItemController(PortalTask task) {
     this.task.value = task;
