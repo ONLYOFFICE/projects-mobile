@@ -58,6 +58,7 @@ class _CommentAuthor extends StatelessWidget {
           width: 40,
           height: 40,
           child: CircleAvatar(
+              //TODO fix avatars path
               backgroundImage: NetworkImage(portalUri + comment.userAvatarPath,
                   headers: headers),
               backgroundColor: Colors.transparent),

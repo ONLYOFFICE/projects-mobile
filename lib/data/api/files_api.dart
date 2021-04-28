@@ -31,4 +31,27 @@ class FilesApi {
 
     return result;
   }
+
+  Future<ApiDTO<List<PortalFile>>> getProjectFiles({String projectId}) async {
+    var url = await coreApi.getProjectFilesUrl(projectId: projectId);
+
+    var result = ApiDTO<List<PortalFile>>();
+
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response']['files'] as List)
+            .map((i) => PortalFile.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
 }

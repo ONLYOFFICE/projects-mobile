@@ -181,8 +181,8 @@ class NewTaskController extends GetxController {
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
       _startDate = newDate;
-      startDateText.value =
-          formatedDate(now: DateTime.now(), stringDate: newDate.toString());
+      startDateText.value = formatedDateFromString(
+          now: DateTime.now(), stringDate: newDate.toString());
       Get.back();
     } else {
       _startDate = null;
@@ -193,8 +193,8 @@ class NewTaskController extends GetxController {
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
       _dueDate = newDate;
-      dueDateText.value =
-          formatedDate(now: DateTime.now(), stringDate: newDate.toString());
+      dueDateText.value = formatedDateFromString(
+          now: DateTime.now(), stringDate: newDate.toString());
       Get.back();
     } else {
       _dueDate = null;

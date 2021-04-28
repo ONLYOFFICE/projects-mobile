@@ -84,7 +84,7 @@ class TasksOverviewScreen extends StatelessWidget {
                           icon: SvgIcons.due_date,
                           color: const Color(0xff707070)),
                       caption: 'Due date:',
-                      subtitle: formatedDate(
+                      subtitle: formatedDateFromString(
                           now: DateTime.now(), stringDate: task.deadline)),
                 const SizedBox(height: 20),
                 InfoTile(
@@ -102,7 +102,7 @@ class TasksOverviewScreen extends StatelessWidget {
                       caption: 'Assigned to:',
                       subtitle: task.responsibles.length >= 2
                           ? '${task.responsibles.length} responsibles'
-                          : task.responsible.id,
+                          : task.responsible?.id,
                       suffix: IconButton(
                           icon: Icon(Icons.arrow_forward_ios_rounded,
                               size: 20,
@@ -118,7 +118,7 @@ class TasksOverviewScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 InfoTile(
                     caption: 'Creation date:',
-                    subtitle: formatedDate(
+                    subtitle: formatedDateFromString(
                         now: DateTime.now(), stringDate: task.created)),
                 const SizedBox(height: 110)
               ],

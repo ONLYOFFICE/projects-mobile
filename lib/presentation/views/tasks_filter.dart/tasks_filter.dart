@@ -44,7 +44,7 @@ void showFilters(context) async {
                 const _Creator(),
                 const _Project(),
                 const _Milestone(),
-                if (filterController.suitableTasksCount.value != -1)
+                if (filterController.suitableResultCount.value != -1)
                   ConfirmFiltersButton(filterController: filterController),
               ],
             ),

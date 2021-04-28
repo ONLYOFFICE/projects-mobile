@@ -41,7 +41,7 @@ class ProjectsFilterController extends BaseFilterController {
 
   ProjectsFilterController() {
     filtersTitle = 'PROJECTS';
-    suitableTasksCount = (-1).obs;
+    suitableResultCount = (-1).obs;
   }
 
   Future<void> changeProjectManager(String filter, [newValue = '']) async {
@@ -145,7 +145,7 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   void getSuitableTasksCount() async {
-    suitableTasksCount.value = -1;
+    suitableResultCount.value = -1;
 
     var result = await _api.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
@@ -156,7 +156,7 @@ class ProjectsFilterController extends BaseFilterController {
       statusFilter: statusFilter,
     );
 
-    suitableTasksCount.value = result.response.length;
+    suitableResultCount.value = result.response.length;
   }
 
   @override
@@ -166,7 +166,7 @@ class ProjectsFilterController extends BaseFilterController {
     other = {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
     status = {'active': false, 'paused': false, 'closed': false}.obs;
 
-    suitableTasksCount.value = -1;
+    suitableResultCount.value = -1;
 
     _projectManagerFilter = '';
     _teamMemberFilter = '';

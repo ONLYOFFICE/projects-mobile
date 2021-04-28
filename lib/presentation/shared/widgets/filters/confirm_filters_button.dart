@@ -38,7 +38,7 @@ class ConfirmFiltersButton extends StatelessWidget {
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)))),
           child: Text(
-              'SHOW ${filterController.suitableTasksCount.value} ${filterController.filtersTitle}',
+              'SHOW ${filterController.suitableResultCount.value} ${filterController.filtersTitle}',
               style: TextStyleHelper.button(
                   color: Theme.of(context).customColors().onPrimary)),
         ),
