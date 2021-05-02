@@ -7,7 +7,7 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/tasks/task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
@@ -139,8 +139,7 @@ class TaskEditingController extends GetxController
   @override
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
-      startDateText.value =
-          formatedDate(now: DateTime.now(), stringDate: newDate.toString());
+      startDateText.value = formatedDate(newDate);
       _newStartDate = newDate;
       Get.back();
     } else {
@@ -153,8 +152,7 @@ class TaskEditingController extends GetxController
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
       _newDueDate = newDate;
-      dueDateText.value =
-          formatedDate(now: DateTime.now(), stringDate: newDate.toString());
+      dueDateText.value = formatedDate(newDate);
       Get.back();
     } else {
       dueDateText.value = '';

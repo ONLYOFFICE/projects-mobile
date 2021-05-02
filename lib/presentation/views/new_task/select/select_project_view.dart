@@ -89,7 +89,7 @@ class ProjectsList extends StatelessWidget {
                           projects[index].title,
                           style: TextStyleHelper.projectTitle,
                         ),
-                        Text(projects[index].milestoneResponsible.displayName,
+                        Text(projects[index].responsible.displayName,
                             style: TextStyleHelper.caption(
                                     color: Theme.of(context)
                                         .customColors()

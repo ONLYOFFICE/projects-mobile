@@ -7,7 +7,7 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/tasks/task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -51,9 +51,12 @@ class NewTaskController extends GetxController
   TextEditingController get titleController => _titleController;
 
   // for readable format
+  @override
   RxString startDateText = ''.obs;
+  @override
   RxString dueDateText = ''.obs;
 
+  @override
   RxList responsibles = [].obs;
   // to track changes
   List _previusSelectedResponsibles = [];
@@ -101,6 +104,7 @@ class NewTaskController extends GetxController
     selectedMilestoneTitle.value = '';
   }
 
+  @override
   void changePriority(bool value) => highPriority.value = value;
 
   void changeNotifyResponsiblesValue(bool value) {
@@ -200,8 +204,7 @@ class NewTaskController extends GetxController
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
       _startDate = newDate;
-      startDateText.value = formatedDateFromString(
-          now: DateTime.now(), stringDate: newDate.toString());
+      startDateText.value = formatedDate(newDate);
       Get.back();
     } else {
       _startDate = null;
@@ -213,8 +216,7 @@ class NewTaskController extends GetxController
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
       _dueDate = newDate;
-      dueDateText.value = formatedDateFromString(
-          now: DateTime.now(), stringDate: newDate.toString());
+      dueDateText.value = formatedDate(newDate);
       Get.back();
     } else {
       _dueDate = null;
