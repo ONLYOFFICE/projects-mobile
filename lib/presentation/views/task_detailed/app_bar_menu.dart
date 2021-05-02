@@ -66,6 +66,10 @@ void _onSelected(value, TaskItemController controller) async {
           'https://alexanderyuzhin.teamlab.info/Products/Projects/Tasks.aspx?prjID=$prjId&id=$taskId#';
       await Clipboard.setData(ClipboardData(text: link));
       break;
+    case 'Edit task':
+      await Get.toNamed('TaskEditingView',
+          arguments: {'task': controller.task.value});
+      break;
     case 'Follow task':
       var result = await controller.subscribeToTask(taskId: task.id);
       if (result != null) await controller.reloadTask();

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
-import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -20,7 +19,7 @@ class SelectMilestoneView extends StatelessWidget {
 
     _milestoneController.getMilestonesByFilter();
 
-    var controller = Get.find<NewTaskController>();
+    var controller = Get.arguments['controller'];
 
     return Scaffold(
       appBar: StyledAppBar(titleText: 'Select milestone', actions: [

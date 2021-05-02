@@ -99,12 +99,16 @@ class PortalUserItem extends StatelessWidget {
             Obx(() {
               if (userController.multipleSelectionEnabled.isTrue) {
                 if (userController.isSelected.isTrue) {
-                  return const SizedBox(
-                      width: 72, child: Icon(Icons.check_box));
+                  return SizedBox(
+                      width: 72,
+                      child: Icon(Icons.check_box,
+                          color: Theme.of(context).customColors().primary));
                 } else {
                   return const SizedBox(
                       width: 72,
-                      child: Icon(Icons.check_box_outline_blank_outlined));
+                      child: Icon(
+                        Icons.check_box_outline_blank_outlined,
+                      ));
                 }
               } else {
                 if (userController.isSelected.isTrue) {

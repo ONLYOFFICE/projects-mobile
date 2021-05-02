@@ -57,7 +57,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           actions: [
             IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () => print('da')),
+                onPressed: () => Get.toNamed('TaskEditingView',
+                    arguments: {'task': controller.task.value})),
             _AppBarMenu(controller: controller)
           ],
           bottom: Padding(

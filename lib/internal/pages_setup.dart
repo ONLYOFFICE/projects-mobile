@@ -19,6 +19,7 @@ import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/', page: () => NavigationView()),
@@ -28,6 +29,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'HomeView', page: () => const ProjectsView()),
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
+      GetPage(name: 'TaskEditingView', page: () => const TaskEditingView()),
       GetPage(name: 'NewTaskView', page: () => const NewTaskView()),
       GetPage(
           name: 'NewTaskDescription', page: () => const NewTaskDescription()),

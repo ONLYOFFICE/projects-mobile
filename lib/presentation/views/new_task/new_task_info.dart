@@ -1,5 +1,6 @@
 part of 'new_task_view.dart';
 
+// TODO rename and relocate
 class NewTaskInfo extends StatelessWidget {
   final int maxLines;
   final bool isSelected;
@@ -12,6 +13,7 @@ class NewTaskInfo extends StatelessWidget {
   final Color textColor;
   final Widget suffix;
   final EdgeInsetsGeometry suffixPadding;
+  final TextOverflow textOverflow;
 
   const NewTaskInfo({
     Key key,
@@ -23,6 +25,7 @@ class NewTaskInfo extends StatelessWidget {
     this.onTap,
     this.suffix,
     this.suffixPadding = const EdgeInsets.symmetric(horizontal: 25),
+    this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,
     @required this.text,
@@ -64,7 +67,7 @@ class NewTaskInfo extends StatelessWidget {
                                     .withOpacity(0.75))),
                       Text(text,
                           maxLines: maxLines,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: textOverflow,
                           style: textStyle ??
                               TextStyleHelper.subtitle1(
                                   // ignore: prefer_if_null_operators

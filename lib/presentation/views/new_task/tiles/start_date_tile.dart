@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/tasks/task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
 class StartDateTile extends StatelessWidget {
-  final controller;
+  final TaskActionsController controller;
   const StartDateTile({
     Key key,
     @required this.controller,

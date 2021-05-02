@@ -44,9 +44,9 @@ class NewTaskView extends StatelessWidget {
               const SizedBox(height: 16),
               TaskTitle(controller: controller),
               ProjectTile(controller: controller),
-              if (controller.slectedProjectTitle.value.isNotEmpty)
+              if (controller.selectedProjectTitle.value.isNotEmpty)
                 MilestoneTile(controller: controller),
-              if (controller.slectedProjectTitle.value.isNotEmpty)
+              if (controller.selectedProjectTitle.value.isNotEmpty)
                 ResponsibleTile(controller: controller),
               if (controller.responsibles.isNotEmpty)
                 NotifyResponsiblesTile(controller: controller),
