@@ -40,8 +40,6 @@ import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
-import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
-import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class ProjectDetailedView extends StatefulWidget {

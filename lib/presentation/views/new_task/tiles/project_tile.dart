@@ -32,12 +32,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/tasks/task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
 class ProjectTile extends StatelessWidget {
-  final controller;
+  final TaskActionsController controller;
   const ProjectTile({
     Key key,
     @required this.controller,
@@ -47,10 +49,10 @@ class ProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
+        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
         return NewTaskInfo(
             text: _isSelected
-                ? controller.slectedProjectTitle.value
+                ? controller.selectedProjectTitle.value
                 : 'Select project',
             icon: SvgIcons.project,
             textColor: controller.selectProjectError.isTrue

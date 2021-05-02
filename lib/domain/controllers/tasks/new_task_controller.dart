@@ -39,6 +39,7 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/tasks/task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -48,7 +49,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 
-class NewTaskController extends GetxController {
+class NewTaskController extends GetxController
+    implements TaskActionsController {
   final _api = locator<TaskService>();
   var _selectedProjectId;
   var _selectedMilestoneId;
@@ -65,12 +67,21 @@ class NewTaskController extends GetxController {
   final _usersDataSource = Get.find<UsersDataSource>();
   PortalUserItemController selfUserItem;
 
+  @override
   RxString title = ''.obs;
-  RxString slectedProjectTitle = ''.obs;
-  RxString slectedMilestoneTitle = ''.obs;
+  @override
+  var selectedProjectTitle = ''.obs; //RxString
+  @override
+  RxString selectedMilestoneTitle = ''.obs;
 
+  @override
   RxString descriptionText = ''.obs;
   var descriptionController = TextEditingController().obs;
+  final TextEditingController _titleController = TextEditingController();
+
+  @override
+  TextEditingController get titleController => _titleController;
+
   // for readable format
   RxString startDateText = ''.obs;
   RxString dueDateText = ''.obs;
@@ -78,17 +89,21 @@ class NewTaskController extends GetxController {
   RxList responsibles = [].obs;
   // to track changes
   List _previusSelectedResponsibles = [];
+  @override
   RxBool highPriority = false.obs;
   RxBool notifyResponsibles = false.obs;
 
-  RxBool selectProjectError = false.obs;
+  @override
+  var selectProjectError = false.obs; //RxBool
+  @override
   RxBool setTitleError = false.obs;
 
+  @override
   void changeTitle(String newText) => title.value = newText;
 
   void changeProjectSelection({var id, String title}) {
     if (id != null && title != null) {
-      slectedProjectTitle.value = title;
+      selectedProjectTitle.value = title;
       _selectedProjectId = id;
       selectProjectError.value = false;
     } else {
@@ -99,12 +114,13 @@ class NewTaskController extends GetxController {
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    slectedProjectTitle.value = '';
+    selectedProjectTitle.value = '';
   }
 
+  @override
   void changeMilestoneSelection({var id, String title}) {
     if (id != null && title != null) {
-      slectedMilestoneTitle.value = title;
+      selectedMilestoneTitle.value = title;
       _selectedMilestoneId = id;
     } else {
       removeMilestoneSelection();
@@ -114,7 +130,7 @@ class NewTaskController extends GetxController {
 
   void removeMilestoneSelection() {
     _selectedMilestoneId = null;
-    slectedMilestoneTitle.value = '';
+    selectedMilestoneTitle.value = '';
   }
 
   void changePriority(bool value) => highPriority.value = value;
@@ -123,11 +139,13 @@ class NewTaskController extends GetxController {
     notifyResponsibles.value = value;
   }
 
+  @override
   void confirmDescription(String newText) {
     descriptionText.value = newText;
     Get.back();
   }
 
+  @override
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
       Get.back();
@@ -210,6 +228,7 @@ class NewTaskController extends GetxController {
     }
   }
 
+  @override
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
       _startDate = newDate;
@@ -222,6 +241,7 @@ class NewTaskController extends GetxController {
     }
   }
 
+  @override
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
       _dueDate = newDate;
@@ -256,9 +276,7 @@ class NewTaskController extends GetxController {
           title: title.value,
           milestoneid: _selectedMilestoneId);
 
-      print(newTask.toJson());
       var createdTask = await _api.addTask(newTask: newTask);
-      print('createdTask $createdTask');
       if (createdTask != null) {
         var tasksController = Get.find<TasksController>();
         // ignore: unawaited_futures

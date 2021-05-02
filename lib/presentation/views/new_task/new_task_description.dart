@@ -32,17 +32,17 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
+// TODO rename and relocate
 class NewTaskDescription extends StatelessWidget {
   const NewTaskDescription({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewTaskController>();
+    var controller = Get.arguments['controller'];
     return Scaffold(
       appBar: StyledAppBar(
         titleText: 'Description',
@@ -61,6 +61,7 @@ class NewTaskDescription extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: TextField(
           controller: controller.descriptionController.value,
+          autofocus: true,
           maxLines: null,
           style: TextStyleHelper.subtitle1(
               color: Theme.of(context).customColors().onSurface),

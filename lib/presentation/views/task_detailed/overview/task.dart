@@ -52,7 +52,7 @@ class Task extends StatelessWidget {
                       color: Theme.of(context).customColors().onSurface)),
               const SizedBox(height: 22),
               OutlinedButton(
-                onPressed: () => bottom_sheet.showsStatusesBS(
+                onPressed: () => showsStatusesBS(
                     context: context, taskItemController: taskController),
                 style: ButtonStyle(
                   backgroundColor:

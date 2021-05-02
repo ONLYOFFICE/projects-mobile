@@ -41,9 +41,7 @@ class PortalUserItemController extends GetxController {
 
   var userTitle = ''.obs;
 
-  PortalUserItemController({
-    this.portalUser,
-  }) {
+  PortalUserItemController({this.portalUser}) {
     setupUser();
   }
   final PortalUser portalUser;
@@ -56,13 +54,20 @@ class PortalUserItemController extends GetxController {
   String get id => portalUser.id;
 
   Future<void> loadAvatar() async {
-    var avatarBytes =
-        await _downloadService.downloadImage(portalUser.avatarMedium);
+    try {
+      var avatarBytes =
+          await _downloadService.downloadImage(portalUser.avatarMedium);
+      if (avatarBytes == null) return;
 
-    if (avatarBytes == null) return;
-
-    var image = Image.memory(avatarBytes);
-    avatarImage.value = image;
+      var image = Image.memory(avatarBytes);
+      avatarImage.value = image;
+    } catch (e) {
+      // TODO if no user.avatarMedium case
+      // only prints error now
+      // test: "3 resp" task
+      print(e);
+      return;
+    }
   }
 
   void setupUser() {

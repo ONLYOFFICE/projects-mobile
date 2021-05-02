@@ -34,6 +34,7 @@ class NewTaskDTO {
   NewTaskDTO({
     this.description,
     this.deadline,
+    this.id,
     this.priority,
     this.projectId,
     this.title,
@@ -46,6 +47,7 @@ class NewTaskDTO {
   final String description;
   final String priority;
   final String title;
+  final int id;
   final int milestoneid;
   final int projectId;
   final List<String> responsibles;
@@ -59,6 +61,7 @@ class NewTaskDTO {
         description: json['description'],
         deadline:
             json['deadline'] != null ? DateTime.parse(json['deadline']) : null,
+        id: json['id'],
         priority: json['priority'],
         title: json['title'],
         milestoneid: json['milestoneid'],
@@ -73,11 +76,14 @@ class NewTaskDTO {
   Map<String, dynamic> toJson() => {
         'description': description,
         'deadline': deadline != null ? deadline.toIso8601String() : null,
+        'id': id,
         'priority': priority,
         'title': title,
         'milestoneid': milestoneid,
         'projectid': projectId,
-        'responsibles': List<dynamic>.from(responsibles.map((x) => x)),
+        'responsibles': responsibles != null
+            ? List<dynamic>.from(responsibles.map((x) => x))
+            : null,
         'notify': notify,
         'startDate': startDate != null ? startDate.toIso8601String() : null
       };

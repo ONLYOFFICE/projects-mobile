@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/internal/locator.dart';
@@ -110,6 +111,9 @@ class CoreApi {
 
   Future<String> subscribeTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
+
+  Future<String> updateTask({@required int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId';
 
   Future<String> updateTaskStatusUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/status';
