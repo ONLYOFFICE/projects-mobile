@@ -57,7 +57,7 @@ class DocumentCell extends StatelessWidget {
                 Text(file.title),
                 Text(
                     // ignore: prefer_interpolation_to_compose_strings
-                    formatedDate(
+                    formatedDateFromString(
                             now: DateTime.now(),
                             stringDate: '${file.updated}') +
                         ''' • ${file.contentLength} • ${file.updatedBy.displayName}''',

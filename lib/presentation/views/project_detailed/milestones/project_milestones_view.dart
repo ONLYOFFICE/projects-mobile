@@ -32,37 +32,31 @@
 
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/views/tasks/task_cell.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 
-class ProjectTaskScreen extends StatelessWidget {
+class ProjectMilestonesScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
-
-  const ProjectTaskScreen({Key key, @required this.projectDetailed})
-      : super(
-          key: key,
-        );
+  const ProjectMilestonesScreen({
+    Key key,
+    @required this.projectDetailed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var taskStatusesController = Get.find<TaskStatusesController>();
-    taskStatusesController.getStatuses();
-
-    var controller = Get.find<ProjectTasksController>();
+    var controller = Get.find<MilestonesDataSource>();
     controller.setup(projectDetailed.id);
 
     return Obx(
@@ -76,8 +70,8 @@ class ProjectTaskScreen extends StatelessWidget {
               child: PaginationListView(
                 paginationController: controller.paginationController,
                 child: ListView.builder(
-                  itemBuilder: (c, i) =>
-                      TaskCell(task: controller.paginationController.data[i]),
+                  itemBuilder: (c, i) => MilestoneCell(
+                      milestone: controller.paginationController.data[i]),
                   itemExtent: 72.0,
                   itemCount: controller.paginationController.data.length,
                 ),
@@ -95,8 +89,8 @@ class Header extends StatelessWidget {
   }) : super(key: key);
 
   final controller = Get.find<ProjectTasksController>();
-  final sortController = Get.find<TasksSortController>();
-  final filterController = Get.find<TaskFilterController>();
+  final sortController = Get.find<MilestonesSortController>();
+  final filterController = Get.find<MilestonesFilterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -105,11 +99,8 @@ class Header extends StatelessWidget {
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
         SortTile(sortParameter: 'deadline', sortController: sortController),
-        SortTile(sortParameter: 'priority', sortController: sortController),
         SortTile(sortParameter: 'create_on', sortController: sortController),
-        SortTile(sortParameter: 'start_date', sortController: sortController),
         SortTile(sortParameter: 'title', sortController: sortController),
-        SortTile(sortParameter: 'sort_order', sortController: sortController),
         const SizedBox(height: 20)
       ],
     );

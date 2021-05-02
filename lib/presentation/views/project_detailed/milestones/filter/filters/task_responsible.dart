@@ -30,40 +30,39 @@
  *
  */
 
-import 'package:projects/data/api/milestone_api.dart';
-import 'package:projects/data/models/from_api/milestone.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+part of '../milestones_filter.dart';
 
-class MilestoneService {
-  final MilestoneApi _api = locator<MilestoneApi>();
+class _TaskResponsible extends StatelessWidget {
+  const _TaskResponsible({Key key}) : super(key: key);
 
-  Future<List<Milestone>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-  }) async {
-    var milestones = await _api.milestonesByFilter(
-      startIndex: startIndex,
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      projectId: projectId,
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
-      taskResponsibleFilter: taskResponsibleFilter,
-      statusFilter: statusFilter,
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<MilestonesFilterController>();
+    return Obx(
+      () => FiltersRow(
+        title: 'Tasks',
+        options: <Widget>[
+          FilterElement(
+              title: 'My tasks',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.taskResponsible['me'],
+              onTap: () => filterController.changeTasksResponsible('me')),
+          FilterElement(
+            title: filterController.taskResponsible['other'].isEmpty
+                ? 'Other user'
+                : filterController.taskResponsible['other'],
+            isSelected: filterController.taskResponsible['other'].isNotEmpty,
+            cancelButtonEnabled:
+                filterController.taskResponsible['other'].isNotEmpty,
+            onTap: () async {
+              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              await filterController.changeTasksResponsible('Other', newUser);
+            },
+            onCancelTap: () =>
+                filterController.changeTasksResponsible('other', null),
+          ),
+        ],
+      ),
     );
-
-    var success = milestones.response != null;
-
-    if (success) {
-      return milestones.response;
-    } else {
-      ErrorDialog.show(milestones.error);
-      return null;
-    }
   }
 }

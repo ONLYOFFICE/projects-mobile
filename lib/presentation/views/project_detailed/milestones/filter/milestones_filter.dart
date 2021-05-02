@@ -33,6 +33,7 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -45,11 +46,11 @@ import 'package:projects/presentation/shared/widgets/filters/filter_element_widg
 
 part 'filters/status.dart';
 part 'filters/other.dart';
-part 'filters/team_member.dart';
-part 'filters/project_manager.dart';
+part 'filters/task_responsible.dart';
+part 'filters/milestone_responsible.dart';
 
 void showFilters(context) async {
-  var filterController = Get.find<ProjectsFilterController>();
+  var filterController = Get.find<MilestonesFilterController>();
 
   await showStickyFlexibleBottomSheet(
     context: context,
@@ -70,9 +71,10 @@ void showFilters(context) async {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const _Status(),
-                const _ProjectManager(),
-                const _TeamMember(),
-                const _Other(),
+                const _MilestoneResponsible(),
+                const _TaskResponsible(),
+                //TODO: add due date filter
+                // const _Other(),
                 if (filterController.suitableResultCount.value != -1)
                   ConfirmFiltersButton(filterController: filterController),
               ],

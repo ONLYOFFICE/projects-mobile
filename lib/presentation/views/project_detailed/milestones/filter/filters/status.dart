@@ -30,40 +30,35 @@
  *
  */
 
-import 'package:projects/data/api/milestone_api.dart';
-import 'package:projects/data/models/from_api/milestone.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+part of '../milestones_filter.dart';
 
-class MilestoneService {
-  final MilestoneApi _api = locator<MilestoneApi>();
+class _Status extends StatelessWidget {
+  const _Status({Key key}) : super(key: key);
 
-  Future<List<Milestone>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-  }) async {
-    var milestones = await _api.milestonesByFilter(
-      startIndex: startIndex,
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      projectId: projectId,
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
-      taskResponsibleFilter: taskResponsibleFilter,
-      statusFilter: statusFilter,
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<MilestonesFilterController>();
+    return Obx(
+      () => FiltersRow(
+        title: 'Status',
+        options: <Widget>[
+          FilterElement(
+              title: 'Active',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['active'],
+              onTap: () => filterController.changeStatus('active')),
+          FilterElement(
+              title: 'Paused',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['paused'],
+              onTap: () => filterController.changeStatus('paused')),
+          FilterElement(
+              title: 'Closed',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.status['closed'],
+              onTap: () => filterController.changeStatus('closed')),
+        ],
+      ),
     );
-
-    var success = milestones.response != null;
-
-    if (success) {
-      return milestones.response;
-    } else {
-      ErrorDialog.show(milestones.error);
-      return null;
-    }
   }
 }

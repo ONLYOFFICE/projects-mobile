@@ -59,6 +59,9 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
@@ -120,4 +123,8 @@ void setupLocator() {
 
   Get.lazyPut(() => ProjectTasksController(), fenix: true);
   Get.lazyPut(() => ProjectsFilterController(), fenix: true);
+  Get.lazyPut(() => MilestonesDataSource(), fenix: true);
+
+  Get.lazyPut(() => MilestonesSortController(), fenix: true);
+  Get.lazyPut(() => MilestonesFilterController(), fenix: true);
 }

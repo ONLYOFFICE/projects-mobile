@@ -30,40 +30,42 @@
  *
  */
 
-import 'package:projects/data/api/milestone_api.dart';
-import 'package:projects/data/models/from_api/milestone.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+part of '../milestones_filter.dart';
 
-class MilestoneService {
-  final MilestoneApi _api = locator<MilestoneApi>();
+class _Other extends StatelessWidget {
+  const _Other({Key key}) : super(key: key);
 
-  Future<List<Milestone>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-  }) async {
-    var milestones = await _api.milestonesByFilter(
-      startIndex: startIndex,
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      projectId: projectId,
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
-      taskResponsibleFilter: taskResponsibleFilter,
-      statusFilter: statusFilter,
+  @override
+  Widget build(BuildContext context) {
+    var filterController = Get.find<ProjectsFilterController>();
+    return Obx(
+      () => FiltersRow(
+        title: 'Other',
+        options: <Widget>[
+          FilterElement(
+              title: 'Followed',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.other['followed'],
+              onTap: () => filterController.changeOther('followed')),
+          FilterElement(
+              title: filterController.other['withTag'].isEmpty
+                  ? 'With Tag'
+                  : filterController.other['withTag'],
+              isSelected: filterController.other['withTag'].isNotEmpty,
+              cancelButtonEnabled: filterController.other['withTag'].isNotEmpty,
+              onTap: () async {
+                var selectedTag =
+                    await Get.bottomSheet(const TagsBottomSheet());
+                filterController.changeOther('withTag', selectedTag);
+              },
+              onCancelTap: () => filterController.changeOther('withTag', null)),
+          FilterElement(
+              title: 'Without Tag',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.other['withoutTag'],
+              onTap: () => filterController.changeOther('withoutTag')),
+        ],
+      ),
     );
-
-    var success = milestones.response != null;
-
-    if (success) {
-      return milestones.response;
-    } else {
-      ErrorDialog.show(milestones.error);
-      return null;
-    }
   }
 }

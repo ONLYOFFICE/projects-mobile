@@ -30,40 +30,27 @@
  *
  */
 
-import 'package:projects/data/api/milestone_api.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class MilestoneService {
-  final MilestoneApi _api = locator<MilestoneApi>();
+class MilestoneCellController extends GetxController {
+  var milestone = Milestone().obs;
+  var status = Status().obs;
 
-  Future<List<Milestone>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-  }) async {
-    var milestones = await _api.milestonesByFilter(
-      startIndex: startIndex,
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      projectId: projectId,
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
-      taskResponsibleFilter: taskResponsibleFilter,
-      statusFilter: statusFilter,
-    );
+  var loaded = true.obs;
+  var refreshController = RefreshController();
 
-    var success = milestones.response != null;
+  MilestoneCellController(Milestone milestone) {
+    this.milestone.value = milestone;
+    initMilestoneStatus(milestone);
+  }
 
-    if (success) {
-      return milestones.response;
-    } else {
-      ErrorDialog.show(milestones.error);
-      return null;
-    }
+  void initMilestoneStatus(Milestone task) {
+    // var statusesController = Get.find<TaskStatusesController>();
+    // status.value = statusesController.getTaskStatus(task);
+    // statusImageString.value =
+    //     statusesController.decodeImageString(status.value.image);
   }
 }

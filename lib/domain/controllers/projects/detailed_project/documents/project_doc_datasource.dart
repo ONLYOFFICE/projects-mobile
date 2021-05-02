@@ -30,72 +30,107 @@
  *
  */
 
-import 'dart:convert';
-
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/files_service.dart';
-import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectDetailsController extends GetxController {
-  final _api = locator<ProjectService>();
-  final _docApi = locator<FilesService>();
+class DocsDataSource extends GetxController {
+  final _api = locator<FilesService>();
+  var docsList = [].obs;
+  var loaded = false.obs;
+  var searchInputController = TextEditingController();
+
+  var nothingFound = false.obs;
+  var _startIndex = 0;
+  // var _query = '';
+  var multipleSelectionEnabled = false;
+
+  var isSearchResult = false.obs;
 
   RefreshController refreshController = RefreshController();
-  var loaded = false.obs;
 
-  final statuses = [].obs;
+  var total;
 
-  var projectTitleText = ''.obs;
-  var descriptionText = ''.obs;
-  var managerText = ''.obs;
-  var teamMembers = [].obs;
-  var creationDateText = ''.obs;
-  var tags = [].obs;
-  var statusText = ''.obs;
-  var tasksCount = ''.obs;
-  var docsCount = (-1).obs;
-  var tagsText = ''.obs;
-
-  ProjectDetailsController(this.projectDetailed);
+  Future<void> Function() applyUsersSelection;
 
   ProjectDetailed projectDetailed;
 
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+  bool get pullUpEnabled => docsList.length != total;
+
+  void onLoading() async {
+    _startIndex += 25;
+    if (_startIndex >= total) {
+      refreshController.loadComplete();
+      _startIndex -= 25;
+      return;
+    }
+    _loadUsers();
+    refreshController.loadComplete();
   }
 
-  Future<void> setup() async {
+  void searchUsers(query) {
     loaded.value = false;
-
-    tasksCount.value = projectDetailed.taskCount.toString();
-
-    var docs =
-        await _docApi.getProjectFiles(projectId: projectDetailed.id.toString());
-    docsCount.value = docs.length;
-
-    if (teamMembers.isEmpty) {
-      var team = await _api.getProjectTeam(projectDetailed.id.toString());
-      teamMembers.addAll(team);
-    }
-    var tag = await _api.getProjectTags();
-    tags.addAll(tag);
-
-    statusText.value =
-        'Project ${ProjectStatus.toName(projectDetailed.status)}';
-
-    projectTitleText.value = projectDetailed.title;
-    descriptionText.value = projectDetailed.description;
-    managerText.value = projectDetailed.responsible.displayName;
-
-    final formatter = DateFormat('dd MMM yyyy');
-    creationDateText.value =
-        formatter.format(DateTime.parse(projectDetailed.created));
-
+    // _query = query;
+    _startIndex = 0;
+    _loadUsers(needToClear: true);
     loaded.value = true;
   }
+
+  void _loadUsers({bool needToClear = false}) async {
+    nothingFound.value = false;
+
+    if (needToClear) docsList.clear();
+
+    var result =
+        await _api.getProjectFiles(projectId: projectDetailed.id.toString());
+
+    isSearchResult.value = true;
+
+    // total = result.le;
+    if (result.isEmpty) {
+      nothingFound.value = true;
+    } else {
+      docsList.addAll(result);
+    }
+
+    if (applyUsersSelection != null) {
+      await applyUsersSelection();
+    }
+  }
+
+  void clearSearch() {
+    _clear();
+    _loadUsers(needToClear: true);
+  }
+
+  void _clear() {
+    _startIndex = 0;
+    // _query = '';
+    docsList.clear();
+    searchInputController.clear();
+    nothingFound.value = false;
+  }
+
+  Future getProfiles({bool needToClear}) async {
+    _clear();
+    loaded.value = false;
+    _loadUsers(needToClear: true);
+    loaded.value = true;
+  }
+
+  Future<void> updateUsers() async {
+    _clear();
+    _loadUsers();
+  }
+
+  Future getDocs() async {
+    loaded.value = false;
+    _loadUsers(needToClear: true);
+    loaded.value = true;
+  }
+
+  reload() {}
 }
