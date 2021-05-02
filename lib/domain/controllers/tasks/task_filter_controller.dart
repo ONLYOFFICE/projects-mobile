@@ -46,7 +46,7 @@ class TaskFilterController extends BaseFilterController {
 
   TaskFilterController() {
     filtersTitle = 'TASKS';
-    suitableTasksCount = (-1).obs;
+    suitableResultCount = (-1).obs;
   }
 
   set projectId(String value) => _projectId = value;
@@ -195,7 +195,7 @@ class TaskFilterController extends BaseFilterController {
   }
 
   void getSuitableTasksCount() async {
-    suitableTasksCount.value = -1;
+    suitableResultCount.value = -1;
 
     var result = await _api.getTasksByParams(
       sortBy: _sortController.currentSortfilter,
@@ -207,7 +207,7 @@ class TaskFilterController extends BaseFilterController {
       projectId: _projectId,
     );
 
-    suitableTasksCount.value = result.response.length;
+    suitableResultCount.value = result.response.length;
   }
 
   @override
@@ -222,7 +222,7 @@ class TaskFilterController extends BaseFilterController {
     };
     milestone.value = {'My': false, 'No': false, 'Other': ''};
     acceptedFilters.value = '';
-    suitableTasksCount.value = -1;
+    suitableResultCount.value = -1;
 
     _responsibleFilter = '';
     _creatorFilter = '';

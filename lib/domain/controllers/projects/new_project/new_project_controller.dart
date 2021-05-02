@@ -63,8 +63,8 @@ class NewProjectController extends GetxController {
     if (needToFillTitle.isTrue || needToFillManager.isTrue) return;
 
     var participants = <Participant>[];
-// TODO: https://dart.dev/guides/language/effective-dart/usage#avoid-using-iterableforeach-with-a-function-literal
-    selectedTeamMembers.forEach((element) {
+
+    for (var element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -74,7 +74,7 @@ class NewProjectController extends GetxController {
             canReadContacts: true,
             canReadMilestones: true),
       );
-    });
+    }
 
     var newProject = NewProjectDTO(
         title: titleController.text,
@@ -133,10 +133,10 @@ class NewProjectController extends GetxController {
       managerName.value = selectedProjectManager.displayName;
       isPMSelected.value = true;
 
-      usersDataSourse.usersList.forEach((element) {
+      for (var element in usersDataSourse.usersList) {
         element.isSelected.value =
             element.portalUser.id == selectedProjectManager.id;
-      });
+      }
       selfUserItem.isSelected.value =
           selfUserItem.portalUser.id == selectedProjectManager.id;
 
@@ -151,9 +151,9 @@ class NewProjectController extends GetxController {
     selectedProjectManager = null;
     isPMSelected.value = false;
 
-    usersDataSourse.usersList.forEach((element) {
+    for (var element in usersDataSourse.usersList) {
       element.isSelected.value = false;
-    });
+    }
     selfUserItem.isSelected.value = false;
   }
 
@@ -178,29 +178,29 @@ class NewProjectController extends GetxController {
   }
 
   Future<void> setupTeamMembers() async {
-    usersDataSourse.usersList.forEach((element) {
+    for (var element in usersDataSourse.usersList) {
       element.isSelected.value = false;
       element.multipleSelectionEnabled.value = multipleSelectionEnabled;
-    });
+    }
 
-    selectedTeamMembers.forEach((selectedMember) {
-      usersDataSourse.usersList.forEach((user) {
+    for (var selectedMember in selectedTeamMembers) {
+      for (var user in usersDataSourse.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
-      });
+      }
       if (selfUserItem.portalUser.id == selectedMember.portalUser.id) {
         selfUserItem.isSelected.value = selectedMember.isSelected.value;
       }
-    });
+    }
   }
 
   Future<void> setupPMSelection() async {
-    usersDataSourse.usersList.forEach((element) {
+    for (var element in usersDataSourse.usersList) {
       element.isSelected.value =
           element.portalUser.id == selectedProjectManager?.id;
       element.multipleSelectionEnabled.value = multipleSelectionEnabled;
-    });
+    }
 
     if (selfUserItem?.portalUser?.id == selectedProjectManager?.id) {
       selfUserItem.isSelected.value = true;
@@ -241,18 +241,18 @@ class NewProjectController extends GetxController {
   }
 
   void confirmGroupSelection() async {
-    selectedGroups.forEach((group) async {
+    for (var group in selectedGroups) {
       var groupMembers = await _userService.getProfilesByExtendedFilter(
           groupId: group.portalGroup.id);
 
       if (groupMembers.response.isNotEmpty) {
-        groupMembers.response.forEach((element) {
+        for (var element in groupMembers.response) {
           var user = PortalUserItemController(portalUser: element);
           user.isSelected.value = true;
           selectedTeamMembers.add(user);
-        });
+        }
       }
-    });
+    }
 
     selectedTeamMembers.value =
         selectedTeamMembers.distinct((d) => d.portalUser.id).toList();

@@ -196,7 +196,7 @@ class ThirdColumn extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         if (_deadline != null)
-          Text(formatedDate(now: _now, stringDate: task.deadline),
+          Text(formatedDateFromString(now: _now, stringDate: task.deadline),
               style: _deadline.isBefore(_now)
                   ? TextStyleHelper.caption(
                       color: Theme.of(context).customColors().error)

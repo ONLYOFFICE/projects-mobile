@@ -75,7 +75,7 @@ class ProjectsBottomSheet extends StatelessWidget {
                                           _projectsController
                                               .paginationController
                                               .data[index]
-                                              .responsible
+                                              .milestoneResponsible
                                               .displayName,
                                           style: TextStyleHelper.caption(
                                                   color: Theme.of(context)

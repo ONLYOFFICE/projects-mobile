@@ -12,8 +12,20 @@ extension CustomList<T> on List<T> {
 }
 
 // TODO: форматированная дата
-String formatedDate({DateTime now, String stringDate}) {
+String formatedDateFromString({DateTime now, String stringDate}) {
   var date = DateTime.parse(stringDate);
+
+  if (now.year == date.year) {
+    final formatter = DateFormat('d MMM');
+    return formatter.format(date);
+  } else {
+    final formatter = DateFormat('d MMM yyy');
+    return formatter.format(date);
+  }
+}
+
+String formatedDate(DateTime date) {
+  var now = DateTime.now();
 
   if (now.year == date.year) {
     final formatter = DateFormat('d MMM');
