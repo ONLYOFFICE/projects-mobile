@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/task_actions_controller.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
@@ -48,6 +48,7 @@ class StartDateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
+        // ignore: omit_local_variable_types
         bool _isSelected = controller.startDateText.value.isNotEmpty;
         return NewTaskInfo(
             icon: SvgIcons.start_date,
