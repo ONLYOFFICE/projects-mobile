@@ -93,7 +93,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (_isSelected)
-                                Text('Descriprion:',
+                                Text('Description:',
                                     style: TextStyleHelper.caption(
                                         color: Theme.of(context)
                                             .customColors()

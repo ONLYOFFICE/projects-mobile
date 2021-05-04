@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -24,6 +25,13 @@ class TaskItemController extends GetxController {
   TaskItemController(PortalTask task) {
     this.task.value = task;
     initTaskStatus(task);
+  }
+
+  void copyLink({@required taskId, @required projectId}) async {
+    // ignore: omit_local_variable_types
+    String link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
+    print(link);
+    await Clipboard.setData(ClipboardData(text: link));
   }
 
   void initTaskStatus(PortalTask task) {

@@ -60,11 +60,7 @@ void _onSelected(value, TaskItemController controller) async {
       ));
       break;
     case 'Copy link':
-      var taskId = task.id;
-      var prjId = task.projectOwner.id;
-      var link =
-          'https://alexanderyuzhin.teamlab.info/Products/Projects/Tasks.aspx?prjID=$prjId&id=$taskId#';
-      await Clipboard.setData(ClipboardData(text: link));
+      controller.copyLink(taskId: task.id, projectId: task.projectOwner.id);
       break;
     case 'Edit task':
       await Get.toNamed('TaskEditingView',

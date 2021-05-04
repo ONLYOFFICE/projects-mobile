@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:projects/data/services/storage.dart';
@@ -52,6 +54,9 @@ class CoreApi {
 
   Future<String> milestonesByFilter() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
+
+  Future<String> getTaskLink({@required taskId, @required projectId}) async =>
+      '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#';
 
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/$version/authentication/$code';
@@ -118,7 +123,7 @@ class CoreApi {
     var request = client.put(
       Uri.parse(url),
       headers: headers,
-      body: body.isEmpty ? null : body.toString(),
+      body: body.isEmpty ? null : jsonEncode(body),
     );
     final response = await request;
     return response;

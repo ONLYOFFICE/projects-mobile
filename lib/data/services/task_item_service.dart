@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -34,6 +35,10 @@ class TaskItemService {
       ErrorDialog.show(task.error);
       return null;
     }
+  }
+
+  Future<String> getTaskLink({@required taskId, @required projectId}) async {
+    return await _api.getTaskLink(taskId: taskId, projectId: projectId);
   }
 
   Future deleteTask({int taskId}) async {
