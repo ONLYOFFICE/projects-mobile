@@ -308,7 +308,6 @@ class TaskEditingController extends GetxController
       List<String> responsibleIds = [];
 
       for (var item in responsibles) responsibleIds.add(item.id);
-
       var newTask = NewTaskDTO(
         description: descriptionText.value,
         deadline: _newDueDate,
@@ -320,6 +319,8 @@ class TaskEditingController extends GetxController
         projectId: task.projectOwner.id,
         responsibles: responsibleIds,
       );
+
+      print(newTask.toJson());
 
       var updatedTask = await _api.updateTask(newTask: newTask);
 

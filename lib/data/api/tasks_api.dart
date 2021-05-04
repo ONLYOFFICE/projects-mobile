@@ -32,7 +32,7 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -82,6 +82,10 @@ class TaskApi {
     }
 
     return result;
+  }
+
+  Future<String> getTaskLink({@required taskId, @required projectId}) async {
+    return await coreApi.getTaskLink(taskId: taskId, projectId: projectId);
   }
 
   Future<ApiDTO<List<Status>>> getStatuses() async {
@@ -242,7 +246,8 @@ class TaskApi {
       var response = await coreApi.putRequest(url, body: newTask.toJson());
       final Map responseJson = json.decode(response.body);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
+        print(PortalTask.fromJson(responseJson['response']));
         result.response = PortalTask.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);

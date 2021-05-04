@@ -117,7 +117,7 @@ class TaskService {
   }
 
   Future updateTask({@required NewTaskDTO newTask}) async {
-    var task = await _api.addTask(newTask: newTask);
+    var task = await _api.updateTask(newTask: newTask);
 
     var success = task.response != null;
 
