@@ -54,23 +54,23 @@ class TaskCell extends StatelessWidget {
     TaskItemController itemController =
         Get.put(TaskItemController(task), tag: task.id.toString());
 
-    return Container(
-      height: 72,
-      padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(
-              onTap: () async {
-                bottom_sheet.showsStatusesBS(
-                    context: context, taskItemController: itemController);
-              },
-              child: TaskStatus(itemController: itemController)),
-          const SizedBox(width: 16),
-          Expanded(
-            child: InkWell(
-              onTap: () => Get.toNamed('TaskDetailedView',
-                  arguments: {'controller': itemController}),
+    return InkWell(
+      onTap: () => Get.toNamed('TaskDetailedView',
+          arguments: {'controller': itemController}),
+      child: Container(
+        height: 72,
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(
+                onTap: () async {
+                  bottom_sheet.showsStatusesBS(
+                      context: context, taskItemController: itemController);
+                },
+                child: TaskStatus(itemController: itemController)),
+            const SizedBox(width: 16),
+            Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -93,8 +93,8 @@ class TaskCell extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
