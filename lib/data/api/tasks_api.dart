@@ -32,6 +32,26 @@ class TaskApi {
     return result;
   }
 
+  Future<ApiDTO> copyTask(
+      {@required int copyFrom, @required NewTaskDTO task}) async {
+    var url = await coreApi.copyTask(copyFrom: copyFrom);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.postRequest(url, jsonEncode(task.toJson()));
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 201) {
+        result.response = PortalTask.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+    return result;
+  }
+
   Future<ApiDTO> getTaskByID({int id}) async {
     var url = await coreApi.taskByIdUrl(id);
     var result = ApiDTO();

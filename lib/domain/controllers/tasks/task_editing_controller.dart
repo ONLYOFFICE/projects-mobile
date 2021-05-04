@@ -288,8 +288,6 @@ class TaskEditingController extends GetxController
         responsibles: responsibleIds,
       );
 
-      print(newTask.toJson());
-
       var updatedTask = await _api.updateTask(newTask: newTask);
 
       if (updatedTask != null) {

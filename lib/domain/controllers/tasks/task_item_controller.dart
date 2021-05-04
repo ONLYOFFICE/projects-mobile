@@ -3,9 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_item_service.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -32,6 +35,48 @@ class TaskItemController extends GetxController {
     String link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
     print(link);
     await Clipboard.setData(ClipboardData(text: link));
+  }
+
+  Future copyTask({PortalTask taskk}) async {
+    // ignore: omit_local_variable_types
+    List<String> responsibleIds = [];
+
+    // ignore: omit_local_variable_types
+    PortalTask taskFrom = taskk ?? task.value;
+
+    for (var item in taskFrom.responsibles) responsibleIds.add(item.id);
+
+    var newTask = NewTaskDTO(
+      deadline:
+          taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline) : null,
+      startDate: taskFrom.startDate != null
+          ? DateTime.parse(taskFrom.startDate)
+          : null,
+      description: taskFrom.description,
+      milestoneid: taskFrom.milestoneId,
+      priority: taskFrom.priority == 1 ? 'High' : 'Normal',
+      projectId: taskFrom.projectOwner.id,
+      responsibles: responsibleIds,
+      title: taskFrom.title,
+      copyFiles: true,
+      copySubtasks: true,
+    );
+
+    var copiedTask =
+        await _api.copyTask(copyFrom: task.value.id, newTask: newTask);
+
+    // ignore: unawaited_futures
+    Get.find<TasksController>().loadTasks();
+
+    var newTaskController =
+        Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
+
+    // doesnt work
+    // await Get.toNamed('TaskDetailedView',
+    //     arguments: {'controller': newTaskController});
+    await Get.to(() => TaskDetailedView(),
+        arguments: {'controller': newTaskController});
+    // return copiedTask;
   }
 
   void initTaskStatus(PortalTask task) {

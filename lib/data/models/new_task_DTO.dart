@@ -1,15 +1,18 @@
 class NewTaskDTO {
   NewTaskDTO({
-    this.description,
+    this.copyFiles,
+    this.copySubtasks,
     this.deadline,
+    this.description,
     this.id,
+    this.milestoneid,
+    this.notify,
     this.priority,
     this.projectId,
-    this.title,
-    this.milestoneid,
+    this.removeOld,
     this.responsibles,
-    this.notify,
     this.startDate,
+    this.title,
   });
 
   final String description;
@@ -23,7 +26,13 @@ class NewTaskDTO {
   final DateTime deadline;
   // DateTime here but Iso8601String when sends to api
   final DateTime startDate;
+  // currently this is only used when copying
+  final bool copyFiles;
+  // currently this is only used when copying
+  final bool copySubtasks;
   final bool notify;
+  // currently this is only used when copying
+  final bool removeOld;
 
   factory NewTaskDTO.fromJson(Map<String, dynamic> json) => NewTaskDTO(
         description: json['description'],
@@ -39,6 +48,9 @@ class NewTaskDTO {
         startDate: json['startDate'] != null
             ? DateTime.parse(json['startDate'])
             : null,
+        copyFiles: json['copyFiles'],
+        copySubtasks: json['copySubtasks'],
+        removeOld: json['removeOld'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,6 +65,9 @@ class NewTaskDTO {
             ? List<dynamic>.from(responsibles.map((x) => x))
             : null,
         'notify': notify,
-        'startDate': startDate != null ? startDate.toIso8601String() : null
+        'startDate': startDate != null ? startDate.toIso8601String() : null,
+        'copyFiles': copyFiles,
+        'copySubtasks': copySubtasks,
+        'removeOld': removeOld,
       };
 }
