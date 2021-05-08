@@ -30,37 +30,27 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/services/subtasks_service.dart';
+import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/internal/locator.dart';
 
-class ProjectTile extends StatelessWidget {
-  final TaskActionsController controller;
-  const ProjectTile({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+class SubtaskController extends GetxController {
+  final SubtasksService _api = locator<SubtasksService>();
+  Rx<Subtask> subtask;
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
-        return NewTaskInfo(
-            text: _isSelected
-                ? controller.selectedProjectTitle.value
-                : 'Select project',
-            icon: SvgIcons.project,
-            textColor: controller.selectProjectError == true
-                ? Theme.of(context).customColors().error
-                : null,
-            isSelected: _isSelected,
-            caption: _isSelected ? 'Project:' : null,
-            onTap: () => Get.toNamed('SelectProjectView'));
-      },
-    );
+  SubtaskController({Subtask subtask}) {
+    this.subtask = subtask.obs;
+  }
+
+  void deleteSubtask({@required int taskId, @required int subtaskId}) async {
+    var result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
+    if (result != null) {
+      var taskItemController =
+          Get.find<TaskItemController>(tag: taskId.toString());
+      await taskItemController.reloadTask();
+    }
   }
 }

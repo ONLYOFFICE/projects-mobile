@@ -52,29 +52,28 @@ class SelectResponsiblesView extends StatelessWidget {
     usersDataSource.multipleSelectionEnabled = true;
     return Scaffold(
       appBar: StyledAppBar(
-          title: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Select responsibles'),
-                if (controller.responsibles.isNotEmpty)
-                  Text('${controller.responsibles.length} users selected',
-                      style: TextStyleHelper.caption())
-              ],
-            ),
+        title: Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Select responsibles'),
+              if (controller.responsibles.isNotEmpty)
+                Text('${controller.responsibles.length} users selected',
+                    style: TextStyleHelper.caption())
+            ],
           ),
-          bottom: SearchField(
-            hintText: 'Search for users',
-            onSubmitted: (value) => usersDataSource.searchUsers(value),
-          ),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirmResponsiblesSelection())
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => controller.leaveResponsiblesSelectionView())),
+        ),
+        bottom: SearchField(
+          hintText: 'Search for users',
+          onSubmitted: (value) => usersDataSource.searchUsers(value),
+        ),
+        onLeadingPressed: controller.leaveResponsiblesSelectionView,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: () => controller.confirmResponsiblesSelection())
+        ],
+      ),
       body: Obx(
         () {
           if (usersDataSource.loaded.isTrue &&

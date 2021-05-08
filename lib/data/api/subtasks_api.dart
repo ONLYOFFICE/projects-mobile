@@ -30,52 +30,53 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
-import 'package:projects/data/services/download_service.dart';
+import 'dart:convert';
+
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/internal/locator.dart';
 
-class PortalUserItemController extends GetxController {
-  final _downloadService = locator<DownloadService>();
+class SubtasksApi {
+  final CoreApi _coreApi = locator<CoreApi>();
 
-  var userTitle = ''.obs;
+  Future<ApiDTO> deleteSubTask({int taskId, int subtaskId}) async {
+    var url =
+        await _coreApi.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
+    var result = ApiDTO();
 
-  PortalUserItemController({this.portalUser}) {
-    setupUser();
-  }
-  final PortalUser portalUser;
-  var isSelected = false.obs;
-  var multipleSelectionEnabled = false.obs;
-
-  // TODO после обновления GETX здесь ошибка
-  // Rx<Image> avatarImage = Rx<Image>();
-  Rx<Image> avatarImage = null.obs;
-
-  String get displayName => portalUser.displayName;
-  String get id => portalUser.id;
-
-  Future<void> loadAvatar() async {
     try {
-      var avatarBytes =
-          await _downloadService.downloadImage(portalUser.avatarMedium);
-      if (avatarBytes == null) return;
+      var response = await _coreApi.deleteRequest(url);
+      final Map responseJson = json.decode(response.body);
 
-      var image = Image.memory(avatarBytes);
-      avatarImage = image.obs;
+      if (response.statusCode == 200) {
+        result.response = Subtask.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
     } catch (e) {
-      // TODO if no user.avatarMedium case
-      // only prints error now
-      // test: "3 resp" task
-      print(e);
-      return;
+      result.error = CustomError(message: 'Ошибка');
     }
+    return result;
   }
 
-  void setupUser() {
-    if (portalUser?.title != null) {
-      userTitle.value = portalUser.title;
+  Future<ApiDTO> createSubTask({int taskId, Map data}) async {
+    var url = await _coreApi.createSubtaskUrl(taskId: taskId);
+    var result = ApiDTO();
+
+    try {
+      var response = await _coreApi.postRequest(url, jsonEncode(data));
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = Subtask.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
     }
-    loadAvatar();
+    return result;
   }
 }

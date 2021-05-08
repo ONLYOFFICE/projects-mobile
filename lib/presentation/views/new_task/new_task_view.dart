@@ -60,15 +60,14 @@ class NewTaskView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
       appBar: StyledAppBar(
-          titleText: 'New task',
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirm(context))
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: () => controller.discardTask())),
+        titleText: 'New task',
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: () => controller.confirm(context))
+        ],
+        onLeadingPressed: controller.discardTask,
+      ),
       body: SingleChildScrollView(
         child: Obx(
           () => Column(

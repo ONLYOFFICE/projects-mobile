@@ -78,8 +78,17 @@ class CoreApi {
   Future<String> copyTask({@required int copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
 
+  Future<String> createSubtaskUrl({@required int taskId}) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$taskId';
+
   Future<String> deleteTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
+
+  Future<String> deleteSubtask({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
   Future<String> getTaskFiles({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
@@ -143,6 +152,7 @@ class CoreApi {
   }
 
   Future<http.Response> postRequest(String url, String body) async {
+    debugPrint(url);
     var headers = await getHeaders();
     var request = client.post(
       Uri.parse(url),
@@ -165,6 +175,7 @@ class CoreApi {
   }
 
   Future<http.Response> deleteRequest(String url) async {
+    print(url);
     var headers = await getHeaders();
     var request = client.delete(
       Uri.parse(url),

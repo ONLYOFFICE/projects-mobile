@@ -30,37 +30,35 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/data/api/subtasks_api.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-class ProjectTile extends StatelessWidget {
-  final TaskActionsController controller;
-  const ProjectTile({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+class SubtasksService {
+  final SubtasksApi _api = locator<SubtasksApi>();
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
-        return NewTaskInfo(
-            text: _isSelected
-                ? controller.selectedProjectTitle.value
-                : 'Select project',
-            icon: SvgIcons.project,
-            textColor: controller.selectProjectError == true
-                ? Theme.of(context).customColors().error
-                : null,
-            isSelected: _isSelected,
-            caption: _isSelected ? 'Project:' : null,
-            onTap: () => Get.toNamed('SelectProjectView'));
-      },
-    );
+  Future deleteSubtask({int taskId, int subtaskId}) async {
+    var response =
+        await _api.deleteSubTask(taskId: taskId, subtaskId: subtaskId);
+    var success = response.response != null;
+
+    if (success) {
+      return response.response;
+    } else {
+      ErrorDialog.show(response.error);
+      return null;
+    }
+  }
+
+  Future createSubtask({int taskId, Map data}) async {
+    var response = await _api.createSubTask(taskId: taskId, data: data);
+    var success = response.response != null;
+
+    if (success) {
+      return response.response;
+    } else {
+      ErrorDialog.show(response.error);
+      return null;
+    }
   }
 }

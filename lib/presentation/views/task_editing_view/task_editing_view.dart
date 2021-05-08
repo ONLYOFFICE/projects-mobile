@@ -57,10 +57,7 @@ class TaskEditingView extends StatelessWidget {
     return Scaffold(
       appBar: StyledAppBar(
         titleText: 'Edit task',
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_outlined),
-          onPressed: () => controller.discardChanges(),
-        ),
+        onLeadingPressed: controller.discardChanges,
         actions: [
           IconButton(
               icon: const Icon(Icons.done_rounded),
