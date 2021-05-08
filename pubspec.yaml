@@ -24,7 +24,7 @@ dependencies:
   flutter_localizations: 
     sdk: flutter
   intl: ^0.17.0 
-  get: ^4.0.0-nullsafety.2
+  get: ^4.1.4
   get_storage: ^2.0.1
   http: ^0.13.0
   flutter_svg: ^0.20.0-nullsafety.3

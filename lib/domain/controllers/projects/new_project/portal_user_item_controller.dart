@@ -16,7 +16,9 @@ class PortalUserItemController extends GetxController {
   var isSelected = false.obs;
   var multipleSelectionEnabled = false.obs;
 
-  Rx<Image> avatarImage = Rx<Image>();
+  // TODO после обновления GETX здесь ошибка
+  // Rx<Image> avatarImage = Rx<Image>();
+  Rx<Image> avatarImage = null.obs;
 
   String get displayName => portalUser.displayName;
   String get id => portalUser.id;
@@ -28,7 +30,7 @@ class PortalUserItemController extends GetxController {
       if (avatarBytes == null) return;
 
       var image = Image.memory(avatarBytes);
-      avatarImage.value = image;
+      avatarImage = image.obs;
     } catch (e) {
       // TODO if no user.avatarMedium case
       // only prints error now
@@ -39,7 +41,7 @@ class PortalUserItemController extends GetxController {
   }
 
   void setupUser() {
-    if (portalUser.title != null) {
+    if (portalUser?.title != null) {
       userTitle.value = portalUser.title;
     }
     loadAvatar();

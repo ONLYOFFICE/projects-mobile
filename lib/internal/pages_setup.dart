@@ -18,6 +18,8 @@ import 'package:projects/presentation/views/projects_view/new_project/team_selec
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/new_subtask_view.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
@@ -31,6 +33,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(name: 'TaskEditingView', page: () => const TaskEditingView()),
       GetPage(name: 'NewTaskView', page: () => const NewTaskView()),
+      GetPage(name: 'NewSubtaskView', page: () => const NewSubtaskView()),
       GetPage(
           name: 'NewTaskDescription', page: () => const NewTaskDescription()),
       GetPage(name: 'SelectDateView', page: () => const SelectDateView()),
@@ -40,6 +43,8 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'SelectResponsiblesView',
           page: () => const SelectResponsiblesView()),
+      GetPage(
+          name: 'SubtaskDetailedView', page: () => const SubtaskDetailedView()),
       GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
       GetPage(name: 'NewProject', page: () => const NewProject()),
       GetPage(

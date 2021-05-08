@@ -29,29 +29,33 @@ class PortalUserItem extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Obx(
-              () => userController.avatarImage.value == null
-                  ? SizedBox(
-                      width: 72,
-                      child: AppIcon(
-                          width: 40,
+              () {
+                // TODO
+                // все фотки кроме своей черные
+                return userController.avatarImage.value == null
+                    ? SizedBox(
+                        width: 72,
+                        child: AppIcon(
+                            width: 40,
+                            height: 40,
+                            icon: SvgIcons.avatar,
+                            color: Theme.of(context).customColors().onSurface),
+                      )
+                    : SizedBox(
+                        width: 72,
+                        child: SizedBox(
                           height: 40,
-                          icon: SvgIcons.avatar,
-                          color: Theme.of(context).customColors().onSurface),
-                    )
-                  : SizedBox(
-                      width: 72,
-                      child: SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: CircleAvatar(
-                          radius: 40.0,
-                          backgroundColor: Colors.white,
-                          child: ClipOval(
-                            child: userController.avatarImage.value,
+                          width: 40,
+                          child: CircleAvatar(
+                            radius: 40.0,
+                            backgroundColor: Colors.white,
+                            child: ClipOval(
+                              child: userController.avatarImage.value,
+                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      );
+              },
             ),
             Expanded(
               child: Column(
