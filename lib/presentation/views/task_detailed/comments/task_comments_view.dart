@@ -27,7 +27,8 @@ class TaskCommentsView extends StatelessWidget {
               if (controller.loaded.isTrue) {
                 return SmartRefresher(
                   controller: controller.refreshController,
-                  onRefresh: () async => await controller.reloadTask(),
+                  onRefresh: () async =>
+                      await controller.reloadTask(showLoading: true),
                   child: ListView.separated(
                     itemCount: _comments.length,
                     padding: const EdgeInsets.symmetric(vertical: 32),

@@ -1,6 +1,5 @@
 part of 'new_task_view.dart';
 
-// TODO rename and relocate
 class NewTaskInfo extends StatelessWidget {
   final int maxLines;
   final bool isSelected;

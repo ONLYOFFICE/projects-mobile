@@ -39,7 +39,7 @@ class SelectResponsiblesView extends StatelessWidget {
         actions: [
           IconButton(
               icon: const Icon(Icons.check_rounded),
-              onPressed: () => controller.confirmResponsiblesSelection())
+              onPressed: controller.confirmResponsiblesSelection)
         ],
       ),
       body: Obx(

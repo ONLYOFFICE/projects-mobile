@@ -12,11 +12,10 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class NewSubtaskController extends GetxController
+class SubtaskEditingController extends GetxController
     implements SubtaskActionController {
-  Subtask subtask;
+  Subtask _subtask;
 
   final _api = locator<SubtasksService>();
 
@@ -28,14 +27,29 @@ class NewSubtaskController extends GetxController
   var status = 1.obs;
   @override
   RxBool setTiltleError = false.obs;
-
+  // title befor editing
+  String _previousTitle;
+  // responsible id before editing
+  String _previousResponsibleId;
   List _previusSelectedResponsible = [];
   final _userController = Get.find<UserController>();
   final _usersDataSource = Get.find<UsersDataSource>();
   PortalUserItemController selfUserItem;
 
   @override
-  void init({Subtask subtask}) => setupResponsiblesSelection();
+  void init({Subtask subtask}) {
+    _subtask = subtask;
+    _previousTitle = subtask.title;
+    _previousResponsibleId = subtask.responsible?.id;
+    _titleController.text = subtask.title;
+    if (_subtask.responsible != null) {
+      _previusSelectedResponsible
+          .add(PortalUserItemController(portalUser: _subtask.responsible));
+      responsibles
+          .add(PortalUserItemController(portalUser: _subtask.responsible));
+    }
+    setupResponsiblesSelection();
+  }
 
   void setupResponsiblesSelection() async {
     await _userController.getUserInfo();
@@ -114,7 +128,14 @@ class NewSubtaskController extends GetxController
 
   @override
   void leavePage() {
-    if (responsibles.isNotEmpty || _titleController.text.isNotEmpty) {
+    var responsible;
+    if (responsibles.isNotEmpty)
+      responsible = responsibles[0]?.id;
+    else
+      responsible = null;
+
+    if (responsible != _previousResponsibleId ||
+        _titleController.text != _previousTitle) {
       Get.dialog(StyledAlertDialog(
         titleText: 'Discard changes?',
         contentText: 'If you leave, all changes will be lost.',
@@ -131,7 +152,7 @@ class NewSubtaskController extends GetxController
   }
 
   @override
-  Future<void> confirm({context, @required int taskId}) async {
+  Future<void> confirm({context, int taskId}) async {
     if (titleController.text.isEmpty)
       setTiltleError.value = true;
     else {
@@ -139,24 +160,24 @@ class NewSubtaskController extends GetxController
           responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
 
       var data = {'responsible': responsible, 'title': _titleController.text};
-      var newSubtask = await _api.createSubtask(taskId: taskId, data: data);
-      if (newSubtask != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
+
+      var editedSubtask = await _api.updateSubtask(
+        taskId: _subtask.taskId,
+        subtaskId: _subtask.id,
+        data: data,
+      );
+      if (editedSubtask != null) {
+        _subtask = editedSubtask;
+
+        var subtaskController =
+            Get.find<SubtaskController>(tag: editedSubtask.id.toString());
+        subtaskController.subtask.value = editedSubtask;
 
         // ignore: unawaited_futures
-        taskController.reloadTask();
+        Get.find<TaskItemController>(tag: editedSubtask.taskId.toString())
+            .reloadTask();
+
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Subtask had been created',
-            buttonText: 'OPEN',
-            buttonOnTap: () {
-              var controller = Get.put(SubtaskController(subtask: newSubtask),
-                  tag: newSubtask.id.toString());
-              return Get.toNamed('SubtaskDetailedView',
-                  arguments: {'controller': controller});
-            }));
       }
     }
   }

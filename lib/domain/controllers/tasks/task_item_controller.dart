@@ -86,11 +86,11 @@ class TaskItemController extends GetxController {
         statusesController.decodeImageString(status.value.image);
   }
 
-  Future reloadTask() async {
-    loaded.value = false;
+  Future reloadTask({bool showLoading = false}) async {
+    if (showLoading) loaded.value = false;
     var t = await _api.getTaskByID(id: task.value.id);
     task.value = t;
-    loaded.value = true;
+    if (showLoading) loaded.value = true;
   }
 
   Future updateTaskStatus({int id, int newStatusId, int newStatusType}) async {
