@@ -36,9 +36,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-// TODO rename and relocate
-class NewTaskDescription extends StatelessWidget {
-  const NewTaskDescription({Key key}) : super(key: key);
+class TaskDescription extends StatelessWidget {
+  const TaskDescription({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

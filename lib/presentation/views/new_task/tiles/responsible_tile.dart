@@ -36,7 +36,6 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
-// TODO make it shared
 class ResponsibleTile extends StatelessWidget {
   final controller;
   final bool enableUnderline;

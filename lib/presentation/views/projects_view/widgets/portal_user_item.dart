@@ -62,7 +62,7 @@ class PortalUserItem extends StatelessWidget {
           children: [
             Obx(
               () {
-                // TODO
+                // TODO FIXME
                 // все фотки кроме своей черные
                 return userController.avatarImage.value == null
                     ? SizedBox(

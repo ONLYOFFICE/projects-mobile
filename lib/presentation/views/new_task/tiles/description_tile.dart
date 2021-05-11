@@ -97,7 +97,7 @@ class _DescriptionTileState extends State<DescriptionTile>
         // ignore: omit_local_variable_types
         bool _isSelected = widget.controller.descriptionText.value.isNotEmpty;
         return InkWell(
-          onTap: () => Get.toNamed('NewTaskDescription',
+          onTap: () => Get.toNamed('TaskDescription',
               arguments: {'controller': widget.controller}),
           child: Column(
             children: [

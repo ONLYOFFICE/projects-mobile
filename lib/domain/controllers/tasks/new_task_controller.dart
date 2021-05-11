@@ -34,7 +34,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -45,9 +44,8 @@ import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
 class NewTaskController extends GetxController
     implements TaskActionsController {
@@ -286,8 +284,16 @@ class NewTaskController extends GetxController
         Get.back();
         // ignore: unawaited_futures
         tasksController.raiseFAB();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(_snackBar(context, createdTask));
+        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+            context: context,
+            text: 'Task had been created',
+            buttonText: 'OPEN',
+            buttonOnTap: () {
+              var itemController = Get.put(TaskItemController(createdTask),
+                  tag: createdTask.id.toString());
+              return Get.toNamed('TaskDetailedView',
+                  arguments: {'controller': itemController});
+            }));
       }
     }
   }
@@ -313,43 +319,4 @@ class NewTaskController extends GetxController
       Get.back();
     }
   }
-}
-
-// TODO: make it shared
-SnackBar _snackBar(context, PortalTask createdTask) {
-  return SnackBar(
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('Task had been created'),
-        GestureDetector(
-          onTap: () {
-            var itemController = Get.put(TaskItemController(createdTask),
-                tag: createdTask.id.toString());
-            return Get.toNamed('TaskDetailedView',
-                arguments: {'controller': itemController});
-          },
-          child: SizedBox(
-            height: 16,
-            width: 65,
-            child: Center(
-              child: Text(
-                'OPEN',
-                style: TextStyleHelper.button(
-                        color: Theme.of(context)
-                            .customColors()
-                            .primary
-                            .withOpacity(0.5))
-                    .copyWith(height: 1),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-    backgroundColor: Theme.of(context).customColors().snackBarColor,
-    padding: const EdgeInsets.only(top: 2, bottom: 2, left: 16, right: 10),
-    margin: const EdgeInsets.only(left: 8, right: 8, bottom: 9),
-    behavior: SnackBarBehavior.floating,
-  );
 }

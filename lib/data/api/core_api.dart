@@ -78,6 +78,12 @@ class CoreApi {
   Future<String> copyTask({@required int copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
 
+  Future<String> copySubtask({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$taskId/$subtaskId/copy';
+
   Future<String> createSubtaskUrl({@required int taskId}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$taskId';
 
@@ -132,6 +138,18 @@ class CoreApi {
   Future<String> subscribeTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
 
+  Future<String> updateSubtask({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
+
+  Future<String> updateSubtaskStatus({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
+
   Future<String> updateTask({@required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
@@ -164,6 +182,7 @@ class CoreApi {
   }
 
   Future<http.Response> putRequest(String url, {Map body = const {}}) async {
+    print(url);
     var headers = await getHeaders();
     var request = client.put(
       Uri.parse(url),

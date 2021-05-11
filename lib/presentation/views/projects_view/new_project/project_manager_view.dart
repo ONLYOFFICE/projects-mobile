@@ -130,7 +130,6 @@ class UsersSearchResult extends StatelessWidget {
   }
 }
 
-// TODO: make it shared
 class NothingFound extends StatelessWidget {
   const NothingFound({
     Key key,

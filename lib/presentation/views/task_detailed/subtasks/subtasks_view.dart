@@ -56,14 +56,11 @@ class SubtasksView extends StatelessWidget {
             children: [
               SmartRefresher(
                 controller: controller.refreshController,
-                onRefresh: controller.reloadTask,
-                child: ListView.separated(
+                onRefresh: () => controller.reloadTask(showLoading: true),
+                child: ListView.builder(
                   itemCount: _task.subtasks.length,
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  separatorBuilder: (_, int index) {
-                    return const Divider(indent: 56, thickness: 1);
-                  },
-                  itemBuilder: (_, int index) {
+                  padding: const EdgeInsets.only(top: 6, bottom: 50),
+                  itemBuilder: (BuildContext context, int index) {
                     return SubtaskCell(subtask: _task.subtasks[index]);
                   },
                 ),
@@ -73,8 +70,11 @@ class SubtasksView extends StatelessWidget {
                     right: 16,
                     bottom: 24,
                     child: StyledFloatingActionButton(
-                      onPressed: () => Get.toNamed('NewSubtaskView',
-                          arguments: {'taskId': _task.id}),
+                      onPressed: () =>
+                          Get.toNamed('NewSubtaskView', arguments: {
+                        'taskId': _task.id,
+                        'forEditing': false,
+                      }),
                       child: const Icon(Icons.add_rounded, size: 34),
                     )),
             ],
