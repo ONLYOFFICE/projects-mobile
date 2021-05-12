@@ -21,7 +21,7 @@ class TaskEditingView extends StatelessWidget {
     PortalTask task = Get.arguments['task'];
 
     var controller = Get.put(TaskEditingController(task: task));
-    controller.initTaskEditing();
+    controller.init();
     return Scaffold(
       appBar: StyledAppBar(
         titleText: 'Edit task',
@@ -37,7 +37,8 @@ class TaskEditingView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 16),
-            TaskTitle(controller: controller, showCaption: true),
+            TaskTitle(
+                controller: controller, showCaption: true, focusOnTitle: false),
             const SizedBox(height: 22),
             Padding(
               padding: const EdgeInsets.only(left: 56, right: 16),

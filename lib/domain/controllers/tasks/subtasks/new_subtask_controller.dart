@@ -21,9 +21,12 @@ class NewSubtaskController extends GetxController
   final _api = locator<SubtasksService>();
 
   final _titleController = TextEditingController();
+  final FocusNode _titleFocus = FocusNode();
 
   @override
   TextEditingController get titleController => _titleController;
+  @override
+  FocusNode get titleFocus => _titleFocus;
   RxList responsibles = [].obs;
   var status = 1.obs;
   @override
@@ -35,7 +38,10 @@ class NewSubtaskController extends GetxController
   PortalUserItemController selfUserItem;
 
   @override
-  void init({Subtask subtask}) => setupResponsiblesSelection();
+  void init({Subtask subtask}) {
+    _titleFocus.requestFocus();
+    setupResponsiblesSelection();
+  }
 
   void setupResponsiblesSelection() async {
     await _userController.getUserInfo();

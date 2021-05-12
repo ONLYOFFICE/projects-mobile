@@ -61,7 +61,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                           child: Obx(() => TextField(
                                 controller: controller.titleController,
                                 maxLines: null,
-                                autofocus: true,
+                                // focusNode = null if subtaskEditingController
+                                focusNode: controller.titleFocus,
                                 style: TextStyleHelper.subtitle1(
                                     color: Theme.of(context)
                                         .customColors()
@@ -89,17 +90,26 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                 const StyledDivider(leftPadding: 56)
               ],
             ),
-            ResponsibleTile(
-              controller: controller,
-              enableUnderline: false,
-              suffixIcon: IconButton(
-                icon: Icon(Icons.clear_rounded,
-                    size: 20,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6)),
-                onPressed: controller.deleteResponsible,
+            Listener(
+              onPointerDown: (_) {
+                if (!forEditing) {
+                  if (controller.titleController.text.isNotEmpty &&
+                      controller.titleFocus.hasFocus)
+                    controller.titleFocus.unfocus();
+                }
+              },
+              child: ResponsibleTile(
+                controller: controller,
+                enableUnderline: false,
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.clear_rounded,
+                      size: 20,
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.6)),
+                  onPressed: controller.deleteResponsible,
+                ),
               ),
             ),
           ],
