@@ -76,9 +76,12 @@ class NewTaskController extends GetxController
   RxString descriptionText = ''.obs;
   var descriptionController = TextEditingController().obs;
   final TextEditingController _titleController = TextEditingController();
+  final FocusNode _titleFocus = FocusNode();
 
   @override
   TextEditingController get titleController => _titleController;
+  @override
+  FocusNode get titleFocus => _titleFocus;
 
   // for readable format
   @override
@@ -98,6 +101,9 @@ class NewTaskController extends GetxController
   var selectProjectError = false.obs; //RxBool
   @override
   RxBool setTitleError = false.obs;
+
+  @override
+  void init() => _titleFocus.requestFocus();
 
   @override
   void changeTitle(String newText) => title.value = newText;

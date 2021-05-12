@@ -55,6 +55,8 @@ class SubtaskEditingController extends GetxController
 
   @override
   TextEditingController get titleController => _titleController;
+  @override
+  FocusNode get titleFocus => null;
   RxList responsibles = [].obs;
   var status = 1.obs;
   @override

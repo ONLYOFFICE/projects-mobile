@@ -59,7 +59,7 @@ class ResponsibleTile extends StatelessWidget {
           enableBorder: enableUnderline,
           text: _isSelected
               ? controller.responsibles.length == 1
-                  ? controller.responsibles[0].displayName
+                  ? controller.responsibles[0]?.displayName
                   : '${controller.responsibles.length} responsibles'
               : 'Add responsible',
           suffix: _isSelected

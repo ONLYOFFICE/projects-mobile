@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 abstract class SubtaskActionController extends GetxController {
   final TextEditingController _titleController = TextEditingController();
   TextEditingController get titleController => _titleController;
+  FocusNode get titleFocus;
   RxBool setTiltleError;
 
   void init({Subtask subtask});

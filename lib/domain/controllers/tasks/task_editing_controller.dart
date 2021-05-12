@@ -58,6 +58,7 @@ class TaskEditingController extends GetxController
   Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   final TextEditingController _titleController = TextEditingController();
+
   TaskItemController _taskItemController;
 
   @override
@@ -95,8 +96,11 @@ class TaskEditingController extends GetxController
 
   @override
   TextEditingController get titleController => _titleController;
+  @override
+  FocusNode get titleFocus => null;
 
-  void initTaskEditing() {
+  @override
+  void init() {
     title = task.title.obs;
     _titleController.text = task.title;
     _taskItemController = Get.find<TaskItemController>(tag: task.id.toString());
@@ -119,11 +123,7 @@ class TaskEditingController extends GetxController
   }
 
   @override
-  void changeTitle(String newText) {
-    // if (newText.isNotEmpty) setTitleError.value = false;
-    title.value = newText;
-  }
-
+  void changeTitle(String newText) => title.value = newText;
   void changeStatus(Status status) => newStatus.value = status;
 
   @override

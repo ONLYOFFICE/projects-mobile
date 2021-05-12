@@ -56,7 +56,7 @@ class NewTaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<NewTaskController>();
-
+    controller.init();
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
       appBar: StyledAppBar(
@@ -74,18 +74,31 @@ class NewTaskView extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               TaskTitle(controller: controller),
-              ProjectTile(controller: controller),
-              if (controller.selectedProjectTitle.value.isNotEmpty)
-                MilestoneTile(controller: controller),
-              if (controller.selectedProjectTitle.value.isNotEmpty)
-                ResponsibleTile(controller: controller),
-              if (controller.responsibles.isNotEmpty)
-                NotifyResponsiblesTile(controller: controller),
-              DescriptionTile(controller: controller),
-              StartDateTile(controller: controller),
-              DueDateTile(controller: controller),
-              const SizedBox(height: 5),
-              PriorityTile(controller: controller)
+              // unfocus title
+              Listener(
+                onPointerDown: (_) {
+                  if (controller.title.isNotEmpty &&
+                      controller.titleFocus.hasFocus)
+                    controller.titleFocus.unfocus();
+                },
+                child: Column(
+                  children: [
+                    ProjectTile(controller: controller),
+                    if (controller.selectedProjectTitle.value.isNotEmpty)
+                      MilestoneTile(controller: controller),
+                    if (controller.selectedProjectTitle.value.isNotEmpty)
+                      ResponsibleTile(controller: controller),
+                    if (controller.responsibles.isNotEmpty)
+                      NotifyResponsiblesTile(controller: controller),
+                    DescriptionTile(controller: controller),
+                    GestureDetector(
+                        child: StartDateTile(controller: controller)),
+                    DueDateTile(controller: controller),
+                    const SizedBox(height: 5),
+                    PriorityTile(controller: controller)
+                  ],
+                ),
+              ),
             ],
           ),
         ),

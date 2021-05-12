@@ -39,10 +39,12 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class TaskTitle extends StatelessWidget {
   final TaskActionsController controller;
   final bool showCaption;
+  final bool focusOnTitle;
   const TaskTitle({
     Key key,
     @required this.controller,
     this.showCaption = false,
+    this.focusOnTitle = true,
   }) : super(key: key);
 
   @override
@@ -62,8 +64,8 @@ class TaskTitle extends StatelessWidget {
                             .onBackground
                             .withOpacity(0.75))),
               TextField(
-                  autofocus: controller.title.isEmpty,
-                  maxLines: 2,
+                  focusNode: focusOnTitle ? controller.titleFocus : null,
+                  maxLines: null,
                   controller: controller.titleController,
                   onChanged: controller.changeTitle,
                   style: TextStyleHelper.headline6(
@@ -83,6 +85,7 @@ class TaskTitle extends StatelessWidget {
                                   .onSurface
                                   .withOpacity(0.5)),
                       border: InputBorder.none)),
+              const SizedBox(height: 10)
             ],
           ),
         );

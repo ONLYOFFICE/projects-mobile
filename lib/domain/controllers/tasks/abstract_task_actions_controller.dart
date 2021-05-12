@@ -46,10 +46,12 @@ abstract class TaskActionsController extends GetxController {
 
   TextEditingController _titleController;
   TextEditingController get titleController => _titleController;
+  FocusNode get titleFocus;
 
   RxBool setTitleError;
   var selectProjectError;
 
+  void init();
   void changeMilestoneSelection();
   void leaveDescriptionView(String typedText);
 
