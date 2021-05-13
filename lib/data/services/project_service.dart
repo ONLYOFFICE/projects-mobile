@@ -57,6 +57,19 @@ class ProjectService {
     }
   }
 
+  Future<ProjectDetailed> getProjectById({int projectId}) async {
+    var projects = await _api.getProjectById(projectId: projectId);
+
+    var success = projects.response != null;
+
+    if (success) {
+      return projects.response;
+    } else {
+      ErrorDialog.show(projects.error);
+      return null;
+    }
+  }
+
   Future<List<ProjectTag>> getProjectTags() async {
     var tags = await _api.getProjectTags();
 

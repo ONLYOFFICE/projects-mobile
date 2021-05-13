@@ -72,10 +72,10 @@ class ProjectsController extends BaseController {
       otherFilter: _filterController.otherFilter,
       statusFilter: _filterController.statusFilter,
     );
-    paginationController.total = result.total;
-
     if (needToClear) paginationController.data.clear();
+    if (result == null) return;
 
+    paginationController.total = result.total;
     paginationController.data.addAll(result.response);
   }
 

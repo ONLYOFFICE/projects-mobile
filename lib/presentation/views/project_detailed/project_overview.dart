@@ -11,8 +11,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectOverview extends StatelessWidget {
   final ProjectDetailed projectDetailed;
+  final TabController tabController;
 
-  const ProjectOverview({Key key, @required this.projectDetailed})
+  const ProjectOverview(
+      {Key key, @required this.projectDetailed, this.tabController})
       : super(
           key: key,
         );
@@ -65,10 +67,13 @@ class ProjectOverview extends StatelessWidget {
                 () => InfoTileWithButton(
                   icon: AppIcon(
                       icon: SvgIcons.users, color: const Color(0xff707070)),
-                  onTapFunction: () {},
+                  onTapFunction: () {
+                    tabController.animateTo(5);
+                  },
                   caption: 'Team',
                   iconData: Icons.navigate_next,
-                  subtitle: '${projectController.teamMembers.length} members',
+                  subtitle:
+                      '${projectController.teamMembersCount.value} members',
                   subtitleStyle: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().onSurface),
                 ),

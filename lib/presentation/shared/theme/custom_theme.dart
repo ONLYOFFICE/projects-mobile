@@ -55,8 +55,9 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   backgroundColor: const Color(0xffffffff),
   appBarTheme: AppBarTheme(
     iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-    backgroundColor: lightColors.onPrimarySurface,
-    titleTextStyle: TextStyleHelper.headline6(color: lightColors.onSurface),
+    backgroundColor: Colors.blue, //lightColors.onPrimarySurface,
+    titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
+    // lightColors.onSurface),
     // text
   ),
   navigationRailTheme:

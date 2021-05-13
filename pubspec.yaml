@@ -43,7 +43,8 @@ dependencies:
   readmore: ^2.0.0
   bottom_sheet: ^0.0.1-dev.8
   darq: ^1.1.1
-  # simple_vertical_calendar: ^1.1.0
+  syncfusion_flutter_datepicker: ^19.1.59-beta
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0

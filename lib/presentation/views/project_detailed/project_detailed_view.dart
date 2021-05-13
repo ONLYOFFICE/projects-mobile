@@ -4,7 +4,9 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/project_detailed/documents/project_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/project_milestones_view.dart';
@@ -24,7 +26,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   int _activeIndex = 0;
+
   ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
+
   var projectController =
       Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
 
@@ -53,6 +57,22 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       }
     });
     return Scaffold(
+      floatingActionButton: Visibility(
+        visible: _activeIndex == 2 || _activeIndex == 1,
+        child: StyledFloatingActionButton(
+          onPressed: () {
+            if (_activeIndex == 2) projectController.createNewMilestone();
+            if (_activeIndex == 1) projectController.createTask();
+          },
+          child: _activeIndex == 2
+              ? AppIcon(
+                  icon: SvgIcons.add_milestone,
+                  width: 32,
+                  height: 32,
+                )
+              : const Icon(Icons.add_rounded),
+        ),
+      ),
       appBar: StyledAppBar(
         actions: [
           // IconButton(
@@ -102,7 +122,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         ),
       ),
       body: TabBarView(controller: _tabController, children: [
-        ProjectOverview(projectDetailed: projectDetailed),
+        ProjectOverview(
+            projectDetailed: projectDetailed, tabController: _tabController),
         ProjectTaskScreen(projectDetailed: projectDetailed),
         ProjectMilestonesScreen(projectDetailed: projectDetailed),
         ProjectDiscussionsScreen(projectDetailed: projectDetailed),
@@ -112,3 +133,28 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     );
   }
 }
+
+// StyledFloatingActionButton getWidget(_activeIndex, projectController) {
+//   if (_activeIndex == 2)
+//     return StyledFloatingActionButton(
+//       onPressed: () {
+//         projectController.createNewMilestone();
+//       },
+//       child: AppIcon(
+//         icon: SvgIcons.add_milestone,
+//         width: 32,
+//         height: 32,
+//       ),
+//     );
+//   // if (_activeIndex == 1)
+//   return StyledFloatingActionButton(
+//     onPressed: () {
+//       projectController.createTask();
+//     },
+//     child: AppIcon(
+//       icon: SvgIcons.add_button,
+//       width: 32,
+//       height: 32,
+//     ),
+//   );
+// }

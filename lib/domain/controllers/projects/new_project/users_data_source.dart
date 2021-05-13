@@ -18,6 +18,9 @@ class UsersDataSource extends GetxController {
 
   var isSearchResult = false.obs;
 
+  var withoutSelf = false;
+  PortalUserItemController selfUserItem;
+
   RefreshController refreshController = RefreshController();
 
   var totalProfiles;
@@ -70,6 +73,17 @@ class UsersDataSource extends GetxController {
           usersList.add(portalUser);
         },
       );
+    }
+
+    if (withoutSelf) {
+      var toDelete;
+      for (var element in usersList) {
+        if (selfUserItem.portalUser.id == element.id) {
+          toDelete = element;
+        }
+      }
+
+      usersList.remove(toDelete);
     }
 
     if (applyUsersSelection != null) {
