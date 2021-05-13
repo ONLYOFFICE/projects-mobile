@@ -84,7 +84,6 @@ class PortalGroupItem extends StatelessWidget {
               ),
             ),
             Obx(() {
-              // if (groupController.multipleSelectionEnabled.isTrue) {
               if (groupController.isSelected.isTrue) {
                 return const SizedBox(width: 72, child: Icon(Icons.check_box));
               } else {

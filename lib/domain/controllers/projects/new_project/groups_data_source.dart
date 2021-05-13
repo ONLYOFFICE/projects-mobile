@@ -10,7 +10,7 @@ class GroupsDataSource extends GetxController {
   var groupsList = [].obs;
   var loaded = true.obs;
 
-  var multipleSelectionEnabled = false;
+  // var multipleSelectionEnabled = false;
   RefreshController refreshController = RefreshController();
 
   void onLoading() async {

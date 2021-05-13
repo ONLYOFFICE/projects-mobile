@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -107,7 +108,8 @@ class NewMilestoneController extends GetxController {
 
     var selfUser = _userController.user;
     selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.multipleSelectionEnabled.value = false;
+
+    selfUserItem.selectionMode.value = UserSelectionMode.Single;
     _usersDataSource.applyUsersSelection = _applyUsersSelection;
 
     _usersDataSource.withoutSelf = true;
@@ -119,7 +121,7 @@ class NewMilestoneController extends GetxController {
   Future<void> _applyUsersSelection() async {
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = false;
+      element.selectionMode.value = UserSelectionMode.Single;
     }
 
     if (responsible != null) {
