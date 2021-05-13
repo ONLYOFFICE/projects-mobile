@@ -30,60 +30,47 @@
  *
  */
 
-import 'dart:convert';
-
-import 'package:projects/data/models/apiDTO.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
+import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class CommentsApi {
-  var coreApi = locator<CoreApi>();
+class NewCommentController extends GetxController {
+  final _api = locator<CommentsService>();
+  final int taskId;
+  final int parentId;
 
-  Future<ApiDTO<List<PortalComment>>> getTaskComments({int taskId}) async {
-    var url = await coreApi.taskComments(taskId: taskId);
+  NewCommentController({
+    this.parentId,
+    this.taskId,
+  });
 
-    var result = ApiDTO<List<PortalComment>>();
+  RxBool setTitleError = false.obs;
 
-    try {
-      var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
+  final TextEditingController _textController = TextEditingController();
 
-      if (response.statusCode == 200) {
-        result.response = (responseJson['response'] as List)
-            .map((i) => PortalComment.fromJson(i))
-            .toList();
-      } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+  TextEditingController get textController => _textController;
+
+  Future addTaskComment(context) async {
+    if (_textController.text.isEmpty)
+      setTitleError.value = true;
+    else {
+      setTitleError.value = false;
+      PortalComment newComment = await _api.addTaskComment(
+          content: _textController.text, taskId: taskId);
+      if (newComment != null) {
+        var taskController =
+            Get.find<TaskItemController>(tag: taskId.toString());
+        // ignore: unawaited_futures
+        taskController.reloadTask(showLoading: true);
+        Get.back();
+        ScaffoldMessenger.of(context).showSnackBar(
+            styledSnackBar(context: context, text: 'Comment had been created'));
       }
-    } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
     }
-
-    return result;
-  }
-
-  Future<ApiDTO<PortalComment>> addTaskComment(
-      {int taskId, String content}) async {
-    var url = await coreApi.addTaskConmmentUrl(taskId: taskId);
-
-    var result = ApiDTO<PortalComment>();
-
-    try {
-      var body = {'content': content};
-      var response = await coreApi.postRequest(url, jsonEncode(body));
-      final Map responseJson = json.decode(response.body);
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        result.response = PortalComment.fromJson(responseJson);
-      } else {
-        result.error = CustomError.fromJson(responseJson['error']);
-      }
-    } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
-    }
-
-    return result;
   }
 }

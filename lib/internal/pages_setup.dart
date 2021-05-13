@@ -50,6 +50,7 @@ import 'package:projects/presentation/views/projects_view/new_project/team_selec
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -65,6 +66,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(name: 'TaskEditingView', page: () => const TaskEditingView()),
       GetPage(name: 'NewTaskView', page: () => const NewTaskView()),
+      GetPage(name: 'NewCommentView', page: () => const NewCommentView()),
       GetPage(
           name: 'NewSubtaskView',
           page: () => const CreatingAndEditingSubtaskView()),

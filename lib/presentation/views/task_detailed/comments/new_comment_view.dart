@@ -30,34 +30,48 @@
  *
  */
 
-import 'package:projects/data/api/comments_api.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/comments/new_comment_controller.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-class CommentsService {
-  final CommentsApi _api = locator<CommentsApi>();
+class NewCommentView extends StatelessWidget {
+  final int taskId;
+  final int parentId;
 
-  Future getTaskComments({int taskId}) async {
-    var files = await _api.getTaskComments(taskId: taskId);
-    var success = files.response != null;
+  const NewCommentView({
+    Key key,
+    this.parentId,
+    this.taskId,
+  }) : super(key: key);
 
-    if (success) {
-      return files.response;
-    } else {
-      ErrorDialog.show(files.error);
-      return null;
-    }
-  }
+  @override
+  Widget build(BuildContext context) {
+    int taskId = Get.arguments['taskId'];
+    var controller = Get.put(NewCommentController(taskId: taskId));
 
-  Future addTaskComment({int taskId, String content}) async {
-    var result = await _api.addTaskComment(taskId: taskId, content: content);
-    var success = result.response != null;
-
-    if (success) {
-      return result.response;
-    } else {
-      ErrorDialog.show(result.error);
-      return null;
-    }
+    return Scaffold(
+      appBar: StyledAppBar(
+        titleText: 'New comment',
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.done_rounded),
+            onPressed: () => controller.addTaskComment(context),
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
+        child: TextField(
+          maxLines: null,
+          autofocus: true,
+          controller: controller.textController,
+          scrollPadding: const EdgeInsets.all(10),
+          decoration: const InputDecoration.collapsed(
+            hintText: 'Reply text',
+          ),
+        ),
+      ),
+    );
   }
 }
