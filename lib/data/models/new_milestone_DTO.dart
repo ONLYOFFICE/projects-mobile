@@ -30,59 +30,49 @@
  *
  */
 
-import 'package:projects/data/api/milestone_api.dart';
-import 'package:projects/data/models/from_api/milestone.dart';
-import 'package:projects/data/models/new_milestone_DTO.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:intl/intl.dart';
 
-class MilestoneService {
-  final MilestoneApi _api = locator<MilestoneApi>();
+class NewMilestoneDTO {
+  String title;
+  DateTime deadline;
+  bool isKey;
+  bool isNotify;
+  String description;
+  String responsible;
+  bool notifyResponsible;
 
-  Future<List<Milestone>> milestonesByFilter(
-      {int startIndex,
-      String sortBy,
-      String sortOrder,
-      String projectId,
-      String milestoneResponsibleFilter,
-      String taskResponsibleFilter,
-      String statusFilter,
-      String deadlineFilter}) async {
-    var milestones = await _api.milestonesByFilter(
-      startIndex: startIndex,
-      sortBy: sortBy,
-      sortOrder: sortOrder,
-      projectId: projectId,
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
-      taskResponsibleFilter: taskResponsibleFilter,
-      statusFilter: statusFilter,
-      deadlineFilter: deadlineFilter,
-    );
+  NewMilestoneDTO(
+      {this.title,
+      this.deadline,
+      this.isKey,
+      this.isNotify,
+      this.description,
+      this.responsible,
+      this.notifyResponsible});
 
-    var success = milestones.response != null;
-
-    if (success) {
-      return milestones.response;
-    } else {
-      ErrorDialog.show(milestones.error);
-      return null;
-    }
+  NewMilestoneDTO.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    deadline = json['deadline'];
+    isKey = json['isKey'];
+    isNotify = json['isNotify'];
+    description = json['description'];
+    responsible = json['responsible'];
+    notifyResponsible = json['notifyResponsible'];
   }
 
-  Future<bool> createMilestone(
-      {int projectId, NewMilestoneDTO milestone}) async {
-    var result = await _api.createMilestone(
-      projectId: projectId,
-      milestone: milestone,
-    );
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['title'] = title;
 
-    var success = result.response != null;
+    final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
+    var duedate = formatter.format(deadline);
+    data['deadline'] = duedate;
 
-    if (success) {
-      return success;
-    } else {
-      ErrorDialog.show(result.error);
-      return false;
-    }
+    data['isKey'] = isKey;
+    data['isNotify'] = isNotify;
+    data['description'] = description;
+    data['responsible'] = responsible;
+    data['notifyResponsible'] = notifyResponsible;
+    return data;
   }
 }

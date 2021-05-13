@@ -39,6 +39,7 @@ import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 
 class ProjectCell extends StatelessWidget {
   final ProjectDetailed item;
@@ -68,12 +69,12 @@ class ProjectCell extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SecondColumn(
+                        _SecondColumn(
                           item: item,
                           itemController: itemController,
                         ),
                         const SizedBox(width: 8),
-                        ThirdColumn(
+                        _ThirdColumn(
                           item: item,
                           controller: itemController,
                         ),
@@ -109,7 +110,6 @@ class ProjectIcon extends StatelessWidget {
           var color = itemController.canEdit.isTrue
               ? Theme.of(context).customColors().primary
               : Theme.of(context).customColors().onBackground;
-
           return Container(
             width: 48,
             child: Stack(
@@ -162,11 +162,11 @@ class ProjectIcon extends StatelessWidget {
   }
 }
 
-class SecondColumn extends StatelessWidget {
+class _SecondColumn extends StatelessWidget {
   final ProjectDetailed item;
   final ProjectCellController itemController;
 
-  const SecondColumn({
+  const _SecondColumn({
     Key key,
     @required this.item,
     @required this.itemController,
@@ -181,52 +181,46 @@ class SecondColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Wrap(
-            children: [
-              Obx(
-                () {
-                  var style;
-                  if (itemController.status.value == 1) {
-                    style = TextStyleHelper.projectTitle.copyWith(
-                        decoration: TextDecoration.lineThrough,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6));
-                  } else if (itemController.status.value == 2) {
-                    style = TextStyleHelper.projectTitle.copyWith(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6));
-                  } else {
-                    style = TextStyleHelper.projectTitle;
-                  }
-                  return Text(
-                    item.title.replaceAll(' ', '\u00A0'),
-                    maxLines: 2,
-                    softWrap: true,
-                    style: style,
-                    overflow: TextOverflow.ellipsis,
-                  );
-                },
-              ),
-              Obx(
-                () => itemController.isPrivate.isTrue
-                    ? AppIcon(icon: SvgIcons.lock)
-                    : const SizedBox(),
-              ),
-            ],
+          Obx(
+            () {
+              var style;
+              if (itemController.status.value == 1) {
+                style = TextStyleHelper.projectTitle.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    color: Theme.of(context)
+                        .customColors()
+                        .onSurface
+                        .withOpacity(0.6));
+              } else if (itemController.status.value == 2) {
+                style = TextStyleHelper.projectTitle.copyWith(
+                    color: Theme.of(context)
+                        .customColors()
+                        .onSurface
+                        .withOpacity(0.6));
+              } else {
+                style = TextStyleHelper.projectTitle;
+              }
+              return CellAtributedTitle(
+                text: item.title,
+                style: style,
+                atributeIcon: AppIcon(icon: SvgIcons.lock),
+                atributeIconVisible: itemController.isPrivate.isTrue,
+              );
+            },
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Text(
-                itemController.statusName,
-                style: TextStyleHelper.status(
-                    color: Theme.of(context).customColors().primary),
-              ),
+              Obx(() {
+                var color = itemController.canEdit.isTrue
+                    ? Theme.of(context).customColors().primary
+                    : Theme.of(context).customColors().onBackground;
+                return Text(
+                  itemController.statusName,
+                  style: TextStyleHelper.status(color: color),
+                );
+              }),
               Text(' • ',
                   style: TextStyleHelper.caption(
                       color: Theme.of(context)
@@ -252,8 +246,8 @@ class SecondColumn extends StatelessWidget {
   }
 }
 
-class ThirdColumn extends StatelessWidget {
-  const ThirdColumn({
+class _ThirdColumn extends StatelessWidget {
+  const _ThirdColumn({
     Key key,
     @required this.item,
     @required this.controller,
@@ -271,7 +265,8 @@ class ThirdColumn extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            SVG.createSized('lib/assets/images/icons/check_square.svg', 20, 20),
+            AppIcon(
+                icon: SvgIcons.check_square, color: const Color(0xff666666)),
             Text(
               item.taskCount.toString(),
               style: TextStyleHelper.projectCompleatedTasks,

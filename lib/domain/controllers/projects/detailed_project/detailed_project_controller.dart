@@ -46,7 +46,7 @@ class ProjectDetailsController extends GetxController {
   final _docApi = locator<FilesService>();
 
   RefreshController refreshController = RefreshController();
-  var loaded = false.obs;
+  var loaded = true.obs;
 
   final statuses = [].obs;
 
@@ -54,12 +54,16 @@ class ProjectDetailsController extends GetxController {
   var descriptionText = ''.obs;
   var managerText = ''.obs;
   var teamMembers = [].obs;
+  var teamMembersCount = 0.obs;
+
   var creationDateText = ''.obs;
   var tags = [].obs;
   var statusText = ''.obs;
   var tasksCount = ''.obs;
   var docsCount = (-1).obs;
   var tagsText = ''.obs;
+
+  var currentTab = -1.obs;
 
   ProjectDetailsController(this.projectDetailed);
 
@@ -70,21 +74,29 @@ class ProjectDetailsController extends GetxController {
   }
 
   Future<void> setup() async {
-    loaded.value = false;
+    // loaded.value = false;
+    // var project = await _api.getProjectById(projectId: projectDetailed.id);
 
-    tasksCount.value = projectDetailed.taskCount.toString();
+    // if (project != null) projectDetailed = project;
+    // if (project.tags != null) {
+    //   tags.addAll(project.tags);
+    //   tagsText.value = projectDetailed.tags.join(', ');
+    // }
 
-    var docs =
-        await _docApi.getProjectFiles(projectId: projectDetailed.id.toString());
-    docsCount.value = docs.length;
+    // docsCount.value = docs.length;
 
-    if (teamMembers.isEmpty) {
-      var team = await _api.getProjectTeam(projectDetailed.id.toString());
-      teamMembers.addAll(team);
-    }
-    var tag = await _api.getProjectTags();
-    tags.addAll(tag);
+    // await _docApi
+    //     .getProjectFiles(projectId: projectDetailed.id.toString())
+    //     .then((value) => {
+    //           docsCount.value = value.length,
+    //         });
 
+    // if (teamMembers.isEmpty) {
+    //   var team = await _api.getProjectTeam(projectDetailed.id.toString());
+    //   teamMembers.addAll(team);
+    // }
+
+    teamMembersCount.value = projectDetailed.participantCount;
     statusText.value =
         'Project ${ProjectStatus.toName(projectDetailed.status)}';
 
@@ -96,6 +108,26 @@ class ProjectDetailsController extends GetxController {
     creationDateText.value =
         formatter.format(DateTime.parse(projectDetailed.created));
 
-    loaded.value = true;
+    await _api.getProjectById(projectId: projectDetailed.id).then((value) => {
+          if (value.tags != null)
+            {
+              tags.addAll(value.tags),
+              tagsText.value = value.tags.join(', '),
+            }
+        });
+
+    tasksCount.value = projectDetailed.taskCount.toString();
+
+    await _docApi
+        .getProjectFiles(projectId: projectDetailed.id.toString())
+        .then((value) => docsCount.value = value.length);
+  }
+
+  void createNewMilestone() {
+    Get.toNamed('NewMilestoneView');
+  }
+
+  void createTask() {
+    Get.toNamed('NewTaskView');
   }
 }

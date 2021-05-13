@@ -56,6 +56,7 @@ class ProjectDetailed {
   String created;
   PortalUser createdBy;
   String updated;
+  List<String> tags;
 
   ProjectDetailed(
       {this.canEdit,
@@ -79,14 +80,15 @@ class ProjectDetailed {
       this.updatedBy,
       this.created,
       this.createdBy,
-      this.updated});
+      this.updated,
+      this.tags});
 
   ProjectDetailed.fromJson(Map<String, dynamic> json) {
     canEdit = json['canEdit'];
     canDelete = json['canDelete'];
     security = json['security'];
 
-    projectFolder = json['projectFolder'];
+    projectFolder = json['projectFolder'].toString();
     id = json['id'];
     title = json['title'];
     description = json['description'];
@@ -111,6 +113,7 @@ class ProjectDetailed {
         ? PortalUser.fromJson(json['createdBy'])
         : null;
     updated = json['updated'];
+    tags = json['tags'] != null ? json['tags'].cast<String>() : null;
   }
 
   String creationDate() {

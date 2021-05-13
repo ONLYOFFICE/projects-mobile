@@ -33,14 +33,15 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/status.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/data/models/project_status.dart';
 
 class MilestoneCellController extends GetxController {
   var milestone = Milestone().obs;
   var status = Status().obs;
 
-  var loaded = true.obs;
-  var refreshController = RefreshController();
+  String get statusImage => ProjectStatus.toImageString(milestone.value.status);
+
+  String get statusName => ProjectStatus.toName(milestone.value.status);
 
   MilestoneCellController(Milestone milestone) {
     this.milestone.value = milestone;

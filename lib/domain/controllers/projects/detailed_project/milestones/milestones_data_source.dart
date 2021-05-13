@@ -89,6 +89,7 @@ class MilestonesDataSource extends GetxController {
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
+      deadlineFilter: _filterController.deadlineFilter,
     );
 
     paginationController.total = result.length;
