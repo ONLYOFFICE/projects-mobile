@@ -63,4 +63,27 @@ class CommentsApi {
 
     return result;
   }
+
+  Future<ApiDTO<PortalComment>> addTaskComment(
+      {int taskId, String content}) async {
+    var url = await coreApi.addTaskConmmentUrl(taskId: taskId);
+
+    var result = ApiDTO<PortalComment>();
+
+    try {
+      var body = {'content': content};
+      var response = await coreApi.postRequest(url, jsonEncode(body));
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = PortalComment.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
 }

@@ -34,7 +34,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
@@ -47,36 +46,35 @@ class SelectResponsiblesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var usersDataSource = Get.find<UsersDataSource>();
-    var controller = Get.find<NewTaskController>();
+    var controller = Get.arguments['controller'];
 
     controller.setupResponsiblesSelection();
 
     usersDataSource.selectionMode = UserSelectionMode.Multiple;
     return Scaffold(
       appBar: StyledAppBar(
-          title: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text('Select responsibles'),
-                if (controller.responsibles.isNotEmpty)
-                  Text('${controller.responsibles.length} users selected',
-                      style: TextStyleHelper.caption())
-              ],
-            ),
+        title: Obx(
+          () => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text('Select responsibles'),
+              if (controller.responsibles.isNotEmpty)
+                Text('${controller.responsibles.length} users selected',
+                    style: TextStyleHelper.caption())
+            ],
           ),
-          bottom: SearchField(
-            hintText: 'Search for users',
-            onSubmitted: (value) => usersDataSource.searchUsers(value),
-          ),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirmResponsiblesSelection())
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: () => controller.leaveResponsiblesSelectionView())),
+        ),
+        bottom: SearchField(
+          hintText: 'Search for users',
+          onSubmitted: (value) => usersDataSource.searchUsers(value),
+        ),
+        onLeadingPressed: controller.leaveResponsiblesSelectionView,
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: controller.confirmResponsiblesSelection)
+        ],
+      ),
       body: Obx(
         () {
           if (usersDataSource.loaded.isTrue &&

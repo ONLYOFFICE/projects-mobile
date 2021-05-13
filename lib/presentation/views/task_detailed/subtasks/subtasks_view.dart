@@ -31,11 +31,12 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SubtasksView extends StatelessWidget {
@@ -51,69 +52,32 @@ class SubtasksView extends StatelessWidget {
     return Obx(
       () {
         if (controller.loaded.isTrue) {
-          return SmartRefresher(
-            controller: controller.refreshController,
-            onRefresh: controller.reloadTask,
-            child: ListView.separated(
-              itemCount: _task.subtasks.length,
-              padding: const EdgeInsets.symmetric(vertical: 6),
-              separatorBuilder: (BuildContext context, int index) {
-                return const Divider(indent: 56, thickness: 1);
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                  child: Row(
-                    children: [
-                      SizedBox(
-                          width: 52,
-                          child: Icon(
-                              _task.subtasks[index].status == 2
-                                  ? Icons.check_box
-                                  : Icons.check_box_outline_blank_rounded,
-                              color: const Color(0xFF666666))),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(_task.subtasks[index].title,
-                                style: _task.subtasks[index].status == 2
-                                    ? TextStyleHelper.subtitle1(
-                                            color: const Color(0xff9C9C9C))
-                                        .copyWith(
-                                            decoration:
-                                                TextDecoration.lineThrough)
-                                    : TextStyleHelper.subtitle1()),
-                            Text(
-                                _task.subtasks[index].responsible
-                                        ?.displayName ??
-                                    'Nobody',
-                                style: TextStyleHelper.caption(
-                                    color: _task.subtasks[index].status == 2
-                                        ? const Color(0xffc2c2c2)
-                                        : Theme.of(context)
-                                            .customColors()
-                                            .onBackground
-                                            .withOpacity(0.6))),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        width: 52,
-                        child: PopupMenuButton(
-                          itemBuilder: (context) {
-                            return [
-                              const PopupMenuItem(child: Text('Accept task')),
-                              const PopupMenuItem(child: Text('Copy task')),
-                              const PopupMenuItem(child: Text('Delete task')),
-                            ];
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+          return Stack(
+            children: [
+              SmartRefresher(
+                controller: controller.refreshController,
+                onRefresh: () => controller.reloadTask(showLoading: true),
+                child: ListView.builder(
+                  itemCount: _task.subtasks.length,
+                  padding: const EdgeInsets.only(top: 6, bottom: 50),
+                  itemBuilder: (BuildContext context, int index) {
+                    return SubtaskCell(subtask: _task.subtasks[index]);
+                  },
+                ),
+              ),
+              if (controller?.task?.value?.canCreateSubtask)
+                Positioned(
+                    right: 16,
+                    bottom: 24,
+                    child: StyledFloatingActionButton(
+                      onPressed: () =>
+                          Get.toNamed('NewSubtaskView', arguments: {
+                        'taskId': _task.id,
+                        'forEditing': false,
+                      }),
+                      child: const Icon(Icons.add_rounded, size: 34),
+                    )),
+            ],
           );
         } else {
           return const ListLoadingSkeleton();

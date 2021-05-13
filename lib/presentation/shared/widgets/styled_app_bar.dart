@@ -31,37 +31,38 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final Widget title;
-  final String titleText;
-  final bool centerTitle;
-  final bool showBackButton;
-  final double bottomHeight;
-  final List<Widget> actions;
-  final Widget bottom;
-  final double elevation;
-  final Widget leading;
   final double titleHeight;
+  final double elevation;
+  final double bottomHeight;
+  final bool showBackButton;
+  final bool centerTitle;
+  final Widget title;
+  final Widget leading;
+  final Widget bottom;
+  final String titleText;
+  final List<Widget> actions;
+  final Function() onLeadingPressed;
 
-  StyledAppBar(
-      {Key key,
-      this.actions,
-      this.elevation = 1,
-      this.title,
-      this.titleHeight = 56,
-      this.titleText,
-      this.centerTitle,
-      this.bottom,
-      this.bottomHeight = 44,
-      this.showBackButton = true,
-      this.leading})
-      : assert(titleText == null || title == null),
-        // assert((bottom != null || bottomHeight == null) ||
-        //     (bottom == null && bottomHeight == null)),
-        // assert((bottom != null || bottomHeight == null)),
+  StyledAppBar({
+    Key key,
+    this.actions,
+    this.bottom,
+    this.bottomHeight = 44,
+    this.centerTitle,
+    this.elevation = 1,
+    this.leading,
+    this.onLeadingPressed,
+    this.showBackButton = true,
+    this.title,
+    this.titleHeight = 56,
+    this.titleText,
+  })  : assert(titleText == null || title == null),
+        assert(leading == null || onLeadingPressed == null),
         preferredSize = Size.fromHeight(
             bottom != null ? titleHeight + bottomHeight : titleHeight),
         super(key: key);
@@ -77,7 +78,11 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: lightColors.onPrimarySurface,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
-      leading: leading,
+      leading: leading ??
+          IconButton(
+            icon: const Icon(Icons.arrow_back_rounded),
+            onPressed: onLeadingPressed ?? Get.back,
+          ),
       textTheme: TextTheme(
           headline6: TextStyleHelper.headline6(color: lightColors.onSurface)),
       actions: actions,

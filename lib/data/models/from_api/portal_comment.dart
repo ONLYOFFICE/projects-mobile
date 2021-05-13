@@ -75,8 +75,10 @@ class PortalComment {
         isEditPermissions: json['isEditPermissions'],
         isResponsePermissions: json['isResponsePermissions'],
         timeStampStr: json['timeStampStr'],
-        commentList: List<PortalComment>.from(
-            json['commentList'].map((x) => PortalComment.fromJson(x))),
+        commentList: (json['commentList'] != null)
+            ? List<PortalComment>.from(
+                json['commentList'].map((x) => PortalComment.fromJson(x)))
+            : null,
         attachments: json['attachments'],
       );
 

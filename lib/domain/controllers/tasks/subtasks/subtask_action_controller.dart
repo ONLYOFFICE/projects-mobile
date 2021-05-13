@@ -30,37 +30,22 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
-class ProjectTile extends StatelessWidget {
-  final TaskActionsController controller;
-  const ProjectTile({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+abstract class SubtaskActionController extends GetxController {
+  final TextEditingController _titleController = TextEditingController();
+  TextEditingController get titleController => _titleController;
+  FocusNode get titleFocus;
+  RxBool setTiltleError;
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
-        return NewTaskInfo(
-            text: _isSelected
-                ? controller.selectedProjectTitle.value
-                : 'Select project',
-            icon: SvgIcons.project,
-            textColor: controller.selectProjectError == true
-                ? Theme.of(context).customColors().error
-                : null,
-            isSelected: _isSelected,
-            caption: _isSelected ? 'Project:' : null,
-            onTap: () => Get.toNamed('SelectProjectView'));
-      },
-    );
-  }
+  void init({Subtask subtask});
+  void addResponsible(PortalUserItemController user);
+  Future<void> confirm({@required context, int taskId});
+  void confirmResponsiblesSelection();
+  void leaveResponsiblesSelectionView();
+  void deleteResponsible();
+  void leavePage();
 }

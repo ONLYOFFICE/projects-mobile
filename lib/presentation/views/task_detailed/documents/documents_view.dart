@@ -49,7 +49,8 @@ class DocumentsView extends StatelessWidget {
         if (controller.loaded.isTrue) {
           return SmartRefresher(
             controller: controller.refreshController,
-            onRefresh: () async => await controller.reloadTask(),
+            onRefresh: () async =>
+                await controller.reloadTask(showLoading: true),
             child: ListView.separated(
               itemCount: _files.length,
               separatorBuilder: (BuildContext context, int index) {

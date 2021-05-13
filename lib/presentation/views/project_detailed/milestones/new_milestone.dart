@@ -113,7 +113,7 @@ class MilestoneInput extends StatelessWidget {
               hintText: 'Milestone title',
               contentPadding: const EdgeInsets.symmetric(vertical: 0),
               hintStyle: TextStyleHelper.headline6(
-                  color: controller.setTitleError.isTrue
+                  color: controller.setTitleError.value
                       ? Theme.of(context).customColors().error
                       : Theme.of(context)
                           .customColors()
@@ -327,7 +327,7 @@ class ProjectTile extends StatelessWidget {
                 ? controller.slectedProjectTitle.value
                 : 'Select project',
             icon: SvgIcons.project,
-            textColor: controller.selectProjectError.isTrue
+            textColor: controller.selectProjectError.value
                 ? Theme.of(context).customColors().error
                 : null,
             isSelected: _isSelected,

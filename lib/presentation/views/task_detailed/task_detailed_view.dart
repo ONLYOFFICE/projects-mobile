@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
@@ -89,7 +88,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           actions: [
             IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () => print('da')),
+                onPressed: () => Get.toNamed('TaskEditingView',
+                    arguments: {'task': controller.task.value})),
             _AppBarMenu(controller: controller)
           ],
           bottom: Padding(

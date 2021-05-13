@@ -44,6 +44,7 @@ class NewTaskInfo extends StatelessWidget {
   final Color textColor;
   final Widget suffix;
   final EdgeInsetsGeometry suffixPadding;
+  final TextOverflow textOverflow;
 
   const NewTaskInfo({
     Key key,
@@ -55,6 +56,7 @@ class NewTaskInfo extends StatelessWidget {
     this.onTap,
     this.suffix,
     this.suffixPadding = const EdgeInsets.symmetric(horizontal: 25),
+    this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,
     @required this.text,
@@ -62,66 +64,69 @@ class NewTaskInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                width: 56,
-                child: icon != null
-                    ? AppIcon(
-                        icon: icon,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))
-                    : null,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical:
-                          caption != null && caption.isNotEmpty ? 10 : 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (caption != null && caption.isNotEmpty)
-                        Text(caption,
-                            style: TextStyleHelper.caption(
-                                color: Theme.of(context)
-                                    .customColors()
-                                    .onBackground
-                                    .withOpacity(0.75))),
-                      Text(text,
-                          maxLines: maxLines,
-                          overflow: TextOverflow.ellipsis,
-                          style: textStyle ??
-                              TextStyleHelper.subtitle1(
-                                  // ignore: prefer_if_null_operators
-                                  color: textColor != null
-                                      ? textColor
-                                      : isSelected
-                                          ? Theme.of(context)
-                                              .customColors()
-                                              .onBackground
-                                          : Theme.of(context)
-                                              .customColors()
-                                              .onSurface
-                                              .withOpacity(0.6))),
-                    ],
+    return ConstrainedBox(
+      constraints: const BoxConstraints(minHeight: 56),
+      child: InkWell(
+        onTap: onTap,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                SizedBox(
+                  width: 56,
+                  child: icon != null
+                      ? AppIcon(
+                          icon: icon,
+                          color: Theme.of(context)
+                              .customColors()
+                              .onSurface
+                              .withOpacity(0.6))
+                      : null,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical:
+                            caption != null && caption.isNotEmpty ? 10 : 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (caption != null && caption.isNotEmpty)
+                          Text(caption,
+                              style: TextStyleHelper.caption(
+                                  color: Theme.of(context)
+                                      .customColors()
+                                      .onBackground
+                                      .withOpacity(0.75))),
+                        Text(text,
+                            maxLines: maxLines,
+                            overflow: textOverflow,
+                            style: textStyle ??
+                                TextStyleHelper.subtitle1(
+                                    // ignore: prefer_if_null_operators
+                                    color: textColor != null
+                                        ? textColor
+                                        : isSelected
+                                            ? Theme.of(context)
+                                                .customColors()
+                                                .onBackground
+                                            : Theme.of(context)
+                                                .customColors()
+                                                .onSurface
+                                                .withOpacity(0.6))),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              if (suffix != null)
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(padding: suffixPadding, child: suffix)),
-            ],
-          ),
-          if (enableBorder) const StyledDivider(leftPadding: 56.5),
-        ],
+                if (suffix != null)
+                  Align(
+                      alignment: Alignment.centerRight,
+                      child: Padding(padding: suffixPadding, child: suffix)),
+              ],
+            ),
+            if (enableBorder) const StyledDivider(leftPadding: 56.5),
+          ],
+        ),
       ),
     );
   }

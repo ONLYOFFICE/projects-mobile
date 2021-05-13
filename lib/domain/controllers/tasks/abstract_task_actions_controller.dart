@@ -30,45 +30,34 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-class NewTaskDescription extends StatelessWidget {
-  const NewTaskDescription({Key key}) : super(key: key);
+abstract class TaskActionsController extends GetxController {
+  RxString title;
+  RxString descriptionText;
+  RxString selectedMilestoneTitle;
+  var selectedProjectTitle;
+  RxList responsibles;
+  RxString startDateText;
+  RxString dueDateText;
 
-  @override
-  Widget build(BuildContext context) {
-    var controller = Get.find<NewTaskController>();
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: 'Description',
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => controller.leaveDescriptionView(
-                controller.descriptionController.value.text)),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () => controller.confirmDescription(
-                  controller.descriptionController.value.text))
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
-        child: TextField(
-          controller: controller.descriptionController.value,
-          maxLines: null,
-          style: TextStyleHelper.subtitle1(
-              color: Theme.of(context).customColors().onSurface),
-          decoration: InputDecoration.collapsed(
-              hintText: 'Task description',
-              hintStyle: TextStyleHelper.subtitle1()),
-        ),
-      ),
-    );
-  }
+  RxBool highPriority;
+
+  TextEditingController _titleController;
+  TextEditingController get titleController => _titleController;
+  FocusNode get titleFocus;
+
+  RxBool setTitleError;
+  var selectProjectError;
+
+  void init();
+  void changeMilestoneSelection();
+  void leaveDescriptionView(String typedText);
+
+  void confirmDescription(String typedText);
+  void changeTitle(String newText);
+  void changeStartDate(DateTime newDate);
+  void changeDueDate(DateTime newDate);
+  void changePriority(bool value);
 }
