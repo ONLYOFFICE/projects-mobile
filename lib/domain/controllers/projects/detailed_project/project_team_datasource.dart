@@ -31,6 +31,7 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -73,7 +74,7 @@ class ProjectTeamDataSource extends GetxController {
 
     for (var element in result) {
       var portalUser = PortalUserItemController(portalUser: element);
-      portalUser.multipleSelectionEnabled.value = false;
+      portalUser.selectionMode.value = UserSelectionMode.None;
       usersList.add(portalUser);
     }
   }

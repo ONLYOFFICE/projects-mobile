@@ -33,6 +33,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:darq/darq.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
@@ -49,7 +50,7 @@ class NewProjectController extends GetxController {
   final _api = locator<ProjectService>();
   final _userService = locator<UserService>();
   var usersDataSourse = Get.find<UsersDataSource>();
-  var multipleSelectionEnabled = false;
+  var selectionMode = UserSelectionMode.Single;
 
   final _userController = Get.find<UserController>();
   var usersLoaded = false.obs;
@@ -76,7 +77,7 @@ class NewProjectController extends GetxController {
   PortalUserItemController selfUserItem;
 
   NewProjectController() {
-    multipleSelectionEnabled = false;
+    selectionMode = UserSelectionMode.Single;
     responsible = '';
   }
 
@@ -212,7 +213,6 @@ class NewProjectController extends GetxController {
   Future<void> setupTeamMembers() async {
     for (var element in usersDataSourse.usersList) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = multipleSelectionEnabled;
     }
 
     for (var selectedMember in selectedTeamMembers) {
@@ -231,7 +231,7 @@ class NewProjectController extends GetxController {
     for (var element in usersDataSourse.usersList) {
       element.isSelected.value =
           element.portalUser.id == selectedProjectManager?.id;
-      element.multipleSelectionEnabled.value = multipleSelectionEnabled;
+      element.selectionMode.value = selectionMode;
     }
 
     if (selfUserItem?.portalUser?.id == selectedProjectManager?.id) {
@@ -249,15 +249,20 @@ class NewProjectController extends GetxController {
     await _userController.getUserInfo();
     var selfUser = _userController.user;
     selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.multipleSelectionEnabled.value = multipleSelectionEnabled;
+    selfUserItem.selectionMode.value = selectionMode;
+    usersDataSourse.selectionMode = selectionMode;
 
-    if (multipleSelectionEnabled) {
+    if (selectionMode == UserSelectionMode.Multiple) {
+      usersDataSourse.selectionMode = UserSelectionMode.Multiple;
       usersDataSourse.applyUsersSelection = setupTeamMembers;
     } else {
       usersDataSourse.applyUsersSelection = setupPMSelection;
     }
 
     await usersDataSourse.getProfiles(needToClear: true);
+
+    usersDataSourse.withoutSelf = true;
+    usersDataSourse.selfUserItem = selfUserItem;
 
     usersLoaded.value = true;
   }

@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -52,7 +53,8 @@ class PortalUserItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        userController.isSelected.value = !userController.isSelected.value;
+        userController.onTap();
+
         onTapFunction(userController);
       },
       child: Container(
@@ -129,7 +131,8 @@ class PortalUserItem extends StatelessWidget {
               ),
             ),
             Obx(() {
-              if (userController.multipleSelectionEnabled.isTrue) {
+              if (userController.selectionMode.value ==
+                  UserSelectionMode.Multiple) {
                 if (userController.isSelected.isTrue) {
                   return const SizedBox(
                       width: 72, child: Icon(Icons.check_box));

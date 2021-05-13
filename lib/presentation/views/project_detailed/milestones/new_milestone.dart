@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
@@ -621,7 +622,7 @@ class SelectMilestoneResponsible extends StatelessWidget {
 
     controller.setupResponsibleSelection();
 
-    usersDataSource.multipleSelectionEnabled = true;
+    usersDataSource.selectionMode = UserSelectionMode.Single;
     return Scaffold(
       appBar: StyledAppBar(
           title: Column(

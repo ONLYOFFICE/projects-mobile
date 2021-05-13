@@ -34,6 +34,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
@@ -176,15 +177,19 @@ class NewTaskController extends GetxController {
     await _userController.getUserInfo();
     var selfUser = _userController.user;
     selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.multipleSelectionEnabled.value = true;
+    selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
+
     _usersDataSource.applyUsersSelection = _getSelectedResponsibles;
     await _usersDataSource.getProfiles(needToClear: true);
+    _usersDataSource.withoutSelf = true;
+    _usersDataSource.selfUserItem = selfUserItem;
   }
 
   Future<void> _getSelectedResponsibles() async {
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = true;
+      element.selectionMode = UserSelectionMode.Multiple;
+      // element.multipleSelectionEnabled.value = true;
     }
     for (var selectedMember in responsibles) {
       for (var user in _usersDataSource.usersList) {
