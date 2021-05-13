@@ -11,7 +11,6 @@ extension CustomList<T> on List<T> {
   }
 }
 
-// TODO: форматированная дата
 String formatedDateFromString({DateTime now, String stringDate}) {
   var date = DateTime.parse(stringDate);
 

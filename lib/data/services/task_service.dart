@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -79,6 +80,19 @@ class TaskService {
       return projects;
     } else {
       ErrorDialog.show(projects.error);
+      return null;
+    }
+  }
+
+  Future updateTask({@required NewTaskDTO newTask}) async {
+    var task = await _api.updateTask(newTask: newTask);
+
+    var success = task.response != null;
+
+    if (success) {
+      return task.response;
+    } else {
+      ErrorDialog.show(task.error);
       return null;
     }
   }

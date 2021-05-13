@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
 class DueDateTile extends StatelessWidget {
-  final controller;
+  final TaskActionsController controller;
   const DueDateTile({
     Key key,
     @required this.controller,
@@ -15,11 +16,12 @@ class DueDateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
+        // ignore: omit_local_variable_types
         bool _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewTaskInfo(
             icon: SvgIcons.due_date,
             text: _isSelected ? controller.dueDateText.value : 'Set due date',
-            caption: _isSelected ? 'Start date:' : null,
+            caption: _isSelected ? 'Due date:' : null,
             isSelected: _isSelected,
             suffix: _isSelected
                 ? IconButton(

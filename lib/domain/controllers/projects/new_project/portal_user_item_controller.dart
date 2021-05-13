@@ -10,32 +10,39 @@ class PortalUserItemController extends GetxController {
 
   var userTitle = ''.obs;
 
-  PortalUserItemController({
-    this.portalUser,
-  }) {
+  PortalUserItemController({this.portalUser}) {
     setupUser();
   }
   final PortalUser portalUser;
   var isSelected = false.obs;
   var selectionMode = UserSelectionMode.None.obs;
 
-  Rx<Image> avatarImage = Rx<Image>();
+  // TODO после обновления GETX здесь ошибка
+  // Rx<Image> avatarImage = Rx<Image>();
+  Rx<Image> avatarImage = null.obs;
 
   String get displayName => portalUser.displayName;
   String get id => portalUser.id;
 
   Future<void> loadAvatar() async {
-    var avatarBytes =
-        await _downloadService.downloadImage(portalUser.avatarMedium);
+    try {
+      var avatarBytes =
+          await _downloadService.downloadImage(portalUser.avatarMedium);
+      if (avatarBytes == null) return;
 
-    if (avatarBytes == null) return;
-
-    var image = Image.memory(avatarBytes);
-    avatarImage.value = image;
+      var image = Image.memory(avatarBytes);
+      avatarImage = image.obs;
+    } catch (e) {
+      // TODO if no user.avatarMedium case
+      // only prints error now
+      // test: "3 resp" task
+      print(e);
+      return;
+    }
   }
 
   void setupUser() {
-    if (portalUser.title != null) {
+    if (portalUser?.title != null) {
       userTitle.value = portalUser.title;
     }
     loadAvatar();

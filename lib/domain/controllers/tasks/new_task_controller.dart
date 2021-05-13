@@ -2,22 +2,23 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+
 import 'package:projects/data/enums/user_selection_mode.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class NewTaskController extends GetxController {
+class NewTaskController extends GetxController
+    implements TaskActionsController {
   final _api = locator<TaskService>();
   var _selectedProjectId;
   var _selectedMilestoneId;
@@ -34,30 +35,52 @@ class NewTaskController extends GetxController {
   final _usersDataSource = Get.find<UsersDataSource>();
   PortalUserItemController selfUserItem;
 
+  @override
   RxString title = ''.obs;
-  RxString slectedProjectTitle = ''.obs;
-  RxString slectedMilestoneTitle = ''.obs;
+  @override
+  var selectedProjectTitle = ''.obs; //RxString
+  @override
+  RxString selectedMilestoneTitle = ''.obs;
 
+  @override
   RxString descriptionText = ''.obs;
   var descriptionController = TextEditingController().obs;
+  final TextEditingController _titleController = TextEditingController();
+  final FocusNode _titleFocus = FocusNode();
+
+  @override
+  TextEditingController get titleController => _titleController;
+  @override
+  FocusNode get titleFocus => _titleFocus;
+
   // for readable format
+  @override
   RxString startDateText = ''.obs;
+  @override
   RxString dueDateText = ''.obs;
 
+  @override
   RxList responsibles = [].obs;
   // to track changes
   List _previusSelectedResponsibles = [];
+  @override
   RxBool highPriority = false.obs;
   RxBool notifyResponsibles = false.obs;
 
-  RxBool selectProjectError = false.obs;
+  @override
+  var selectProjectError = false.obs; //RxBool
+  @override
   RxBool setTitleError = false.obs;
 
+  @override
+  void init() => _titleFocus.requestFocus();
+
+  @override
   void changeTitle(String newText) => title.value = newText;
 
   void changeProjectSelection({var id, String title}) {
     if (id != null && title != null) {
-      slectedProjectTitle.value = title;
+      selectedProjectTitle.value = title;
       _selectedProjectId = id;
       selectProjectError.value = false;
     } else {
@@ -68,12 +91,13 @@ class NewTaskController extends GetxController {
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    slectedProjectTitle.value = '';
+    selectedProjectTitle.value = '';
   }
 
+  @override
   void changeMilestoneSelection({var id, String title}) {
     if (id != null && title != null) {
-      slectedMilestoneTitle.value = title;
+      selectedMilestoneTitle.value = title;
       _selectedMilestoneId = id;
     } else {
       removeMilestoneSelection();
@@ -83,20 +107,23 @@ class NewTaskController extends GetxController {
 
   void removeMilestoneSelection() {
     _selectedMilestoneId = null;
-    slectedMilestoneTitle.value = '';
+    selectedMilestoneTitle.value = '';
   }
 
+  @override
   void changePriority(bool value) => highPriority.value = value;
 
   void changeNotifyResponsiblesValue(bool value) {
     notifyResponsibles.value = value;
   }
 
+  @override
   void confirmDescription(String newText) {
     descriptionText.value = newText;
     Get.back();
   }
 
+  @override
   void leaveDescriptionView(String typedText) {
     if (typedText == descriptionText.value) {
       Get.back();
@@ -156,7 +183,7 @@ class NewTaskController extends GetxController {
   Future<void> _getSelectedResponsibles() async {
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
-      element.selectionMode = UserSelectionMode.Multiple;
+      element.selectionMode.value = UserSelectionMode.Multiple;
       // element.multipleSelectionEnabled.value = true;
     }
     for (var selectedMember in responsibles) {
@@ -183,11 +210,11 @@ class NewTaskController extends GetxController {
     }
   }
 
+  @override
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
       _startDate = newDate;
-      startDateText.value = formatedDateFromString(
-          now: DateTime.now(), stringDate: newDate.toString());
+      startDateText.value = formatedDate(newDate);
       Get.back();
     } else {
       _startDate = null;
@@ -195,11 +222,11 @@ class NewTaskController extends GetxController {
     }
   }
 
+  @override
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
       _dueDate = newDate;
-      dueDateText.value = formatedDateFromString(
-          now: DateTime.now(), stringDate: newDate.toString());
+      dueDateText.value = formatedDate(newDate);
       Get.back();
     } else {
       _dueDate = null;
@@ -229,9 +256,7 @@ class NewTaskController extends GetxController {
           title: title.value,
           milestoneid: _selectedMilestoneId);
 
-      print(newTask.toJson());
       var createdTask = await _api.addTask(newTask: newTask);
-      print('createdTask $createdTask');
       if (createdTask != null) {
         var tasksController = Get.find<TasksController>();
         // ignore: unawaited_futures
@@ -239,8 +264,16 @@ class NewTaskController extends GetxController {
         Get.back();
         // ignore: unawaited_futures
         tasksController.raiseFAB();
-        ScaffoldMessenger.of(context)
-            .showSnackBar(_snackBar(context, createdTask));
+        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+            context: context,
+            text: 'Task had been created',
+            buttonText: 'OPEN',
+            buttonOnTap: () {
+              var itemController = Get.put(TaskItemController(createdTask),
+                  tag: createdTask.id.toString());
+              return Get.toNamed('TaskDetailedView',
+                  arguments: {'controller': itemController});
+            }));
       }
     }
   }
@@ -266,43 +299,4 @@ class NewTaskController extends GetxController {
       Get.back();
     }
   }
-}
-
-// TODO: make it shared
-SnackBar _snackBar(context, PortalTask createdTask) {
-  return SnackBar(
-    content: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const Text('Task had been created'),
-        GestureDetector(
-          onTap: () {
-            var itemController = Get.put(TaskItemController(createdTask),
-                tag: createdTask.id.toString());
-            return Get.toNamed('TaskDetailedView',
-                arguments: {'controller': itemController});
-          },
-          child: SizedBox(
-            height: 16,
-            width: 65,
-            child: Center(
-              child: Text(
-                'OPEN',
-                style: TextStyleHelper.button(
-                        color: Theme.of(context)
-                            .customColors()
-                            .primary
-                            .withOpacity(0.5))
-                    .copyWith(height: 1),
-              ),
-            ),
-          ),
-        ),
-      ],
-    ),
-    backgroundColor: Theme.of(context).customColors().snackBarColor,
-    padding: const EdgeInsets.only(top: 2, bottom: 2, left: 16, right: 10),
-    margin: const EdgeInsets.only(left: 8, right: 8, bottom: 9),
-    behavior: SnackBarBehavior.floating,
-  );
 }

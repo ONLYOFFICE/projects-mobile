@@ -16,4 +16,16 @@ class CommentsService {
       return null;
     }
   }
+
+  Future addTaskComment({int taskId, String content}) async {
+    var result = await _api.addTaskComment(taskId: taskId, content: content);
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
+  }
 }

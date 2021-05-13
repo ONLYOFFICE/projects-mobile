@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/internal/locator.dart';
@@ -28,6 +31,9 @@ class CoreApi {
     return '$_portalName/api/$version/capabilities';
   }
 
+  Future<String> addTaskConmmentUrl({int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
+
   Future<String> allGroups() async =>
       '${await getPortalURI()}/api/$version/group';
 
@@ -40,8 +46,26 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication.json';
 
+  Future<String> copyTask({@required int copyFrom}) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
+
+  Future<String> copySubtask({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$taskId/$subtaskId/copy';
+
+  Future<String> createSubtaskUrl({@required int taskId}) async =>
+      '${await getPortalURI()}/api/2.0/project/task/$taskId';
+
   Future<String> deleteTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
+
+  Future<String> deleteSubtask({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
   Future<String> getTaskFiles({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
@@ -51,6 +75,9 @@ class CoreApi {
 
   Future<String> milestonesByFilter() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
+
+  Future<String> getTaskLink({@required taskId, @required projectId}) async =>
+      '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#';
 
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/$version/authentication/$code';
@@ -85,6 +112,21 @@ class CoreApi {
   Future<String> subscribeTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
 
+  Future<String> updateSubtask({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
+
+  Future<String> updateSubtaskStatus({
+    @required int taskId,
+    @required int subtaskId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
+
+  Future<String> updateTask({@required int taskId}) async =>
+      '${await getPortalURI()}/api/$version/project/task/$taskId';
+
   Future<String> updateTaskStatusUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/status';
 
@@ -106,6 +148,7 @@ class CoreApi {
   }
 
   Future<http.Response> postRequest(String url, String body) async {
+    debugPrint(url);
     var headers = await getHeaders();
     var request = client.post(
       Uri.parse(url),
@@ -117,17 +160,19 @@ class CoreApi {
   }
 
   Future<http.Response> putRequest(String url, {Map body = const {}}) async {
+    print(url);
     var headers = await getHeaders();
     var request = client.put(
       Uri.parse(url),
       headers: headers,
-      body: body.isEmpty ? null : body.toString(),
+      body: body.isEmpty ? null : jsonEncode(body),
     );
     final response = await request;
     return response;
   }
 
   Future<http.Response> deleteRequest(String url) async {
+    print(url);
     var headers = await getHeaders();
     var request = client.delete(
       Uri.parse(url),

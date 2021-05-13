@@ -19,7 +19,7 @@ class _AppBarMenu extends StatelessWidget {
           PopupMenuItem(
               value: 'Follow task',
               child: Text(task.isSubscribed ? 'Unfollow task' : 'Follow task')),
-          const PopupMenuItem(child: Text('Copy task')),
+          const PopupMenuItem(value: 'Copy task', child: Text('Copy task')),
           if (task.canDelete)
             PopupMenuItem(
               textStyle: Theme.of(context)
@@ -38,6 +38,24 @@ class _AppBarMenu extends StatelessWidget {
 void _onSelected(value, TaskItemController controller) async {
   var task = controller.task.value;
   switch (value) {
+    case 'Copy link':
+      controller.copyLink(taskId: task.id, projectId: task.projectOwner.id);
+      break;
+
+    case 'Edit task':
+      await Get.toNamed('TaskEditingView',
+          arguments: {'task': controller.task.value});
+      break;
+
+    case 'Follow task':
+      var result = await controller.subscribeToTask(taskId: task.id);
+      if (result != null) await controller.reloadTask();
+      break;
+
+    case 'Copy task':
+      await controller.copyTask();
+      break;
+
     case 'Delete task':
       await Get.dialog(StyledAlertDialog(
         titleText: 'Delete task',
@@ -58,17 +76,6 @@ void _onSelected(value, TaskItemController controller) async {
           }
         },
       ));
-      break;
-    case 'Copy link':
-      var taskId = task.id;
-      var prjId = task.projectOwner.id;
-      var link =
-          'https://alexanderyuzhin.teamlab.info/Products/Projects/Tasks.aspx?prjID=$prjId&id=$taskId#';
-      await Clipboard.setData(ClipboardData(text: link));
-      break;
-    case 'Follow task':
-      var result = await controller.subscribeToTask(taskId: task.id);
-      if (result != null) await controller.reloadTask();
       break;
     default:
   }
