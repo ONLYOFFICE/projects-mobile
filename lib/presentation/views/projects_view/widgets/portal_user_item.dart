@@ -34,7 +34,7 @@ class PortalUserItem extends StatelessWidget {
               () {
                 // TODO FIXME
                 // все фотки кроме своей черные
-                return userController.avatarImage.value == null
+                return userController.avatarData.value.isEmpty
                     ? SizedBox(
                         width: 72,
                         child: AppIcon(
@@ -52,7 +52,8 @@ class PortalUserItem extends StatelessWidget {
                             radius: 40.0,
                             backgroundColor: Colors.white,
                             child: ClipOval(
-                              child: userController.avatarImage.value,
+                              child:
+                                  Image.memory(userController.avatarData.value),
                             ),
                           ),
                         ),
