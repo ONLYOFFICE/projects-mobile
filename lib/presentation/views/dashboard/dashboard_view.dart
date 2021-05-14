@@ -5,12 +5,13 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
+
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({Key key}) : super(key: key);
@@ -90,7 +91,12 @@ class DashboardCardView extends StatelessWidget {
                     children: <Widget>[
                       Text(
                         overline.toUpperCase(),
-                        style: TextStyleHelper.overline,
+                        style: TextStyleHelper.overline(
+                          color: Theme.of(context)
+                              .customColors()
+                              .onSurface
+                              .withOpacity(0.6),
+                        ),
                       ),
                       Text(
                         title,
@@ -125,9 +131,29 @@ class DashboardCardView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Expanded(
-                    child: content,
-                  ),
+                  Obx(() {
+                    if (controller.paginationController.total.value == 0) {
+                      return Container(
+                          height: 100,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'There are no active ${overline.toLowerCase()}',
+                                style: TextStyleHelper.subtitle1(
+                                  color: Theme.of(context)
+                                      .customColors()
+                                      .onSurface
+                                      .withOpacity(0.6),
+                                ),
+                              ),
+                            ],
+                          ));
+                    }
+                    return Expanded(
+                      child: content,
+                    );
+                  }),
                 ],
               ),
             ),
@@ -198,6 +224,7 @@ class MyTasksContent extends StatelessWidget {
       ),
       tag: 'MyTasksContent',
     );
+    controller.loadTasks();
 
     return DashboardCardView(
       title: title,
@@ -236,7 +263,7 @@ class UpcommingContent extends StatelessWidget {
       ),
       tag: 'UpcommingContent',
     );
-
+    controller.loadTasks();
     return DashboardCardView(
       title: title,
       overline: overline,
@@ -274,7 +301,7 @@ class MyProjectsContent extends StatelessWidget {
       ),
       tag: 'myProjects',
     );
-
+    controller.loadProjects();
     return DashboardCardView(
       title: title,
       overline: overline,
@@ -308,7 +335,7 @@ class MyFollowedProjectsContent extends StatelessWidget {
           Get.put(PaginationController(), tag: 'myFollowedProjects'),
         ),
         tag: 'myFollowedProjects');
-
+    controller.loadProjects();
     return DashboardCardView(
       title: title,
       overline: overline,
@@ -342,7 +369,7 @@ class ActiveProjectsContent extends StatelessWidget {
           Get.put(PaginationController(), tag: 'active'),
         ),
         tag: 'active');
-
+    controller.loadProjects();
     return DashboardCardView(
       title: title,
       overline: overline,
@@ -365,7 +392,7 @@ class ProjectCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.loadProjects();
+    // controller.loadProjects();
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -400,7 +427,7 @@ class TaskCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    controller.loadTasks();
+    // controller.loadTasks();
 
     return Obx(
       () => Column(
