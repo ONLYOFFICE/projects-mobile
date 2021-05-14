@@ -268,4 +268,16 @@ class TaskFilterController extends BaseFilterController {
   void applyFilters() async {
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
+
+  Future<void> setupPreset(String preset) async {
+    _selfId ??= await Get.find<UserController>().getUserId();
+    switch (preset) {
+      case 'myTasks':
+        _responsibleFilter = '&participant=$_selfId';
+
+        break;
+      case 'upcomingTasks':
+        break;
+    }
+  }
 }
