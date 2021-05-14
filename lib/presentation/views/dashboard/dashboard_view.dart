@@ -28,23 +28,23 @@ class DashboardView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         children: <Widget>[
-          MyTasksContent(
+          const MyTasksCard(
             title: 'My Tasks',
             overline: 'Tasks',
           ),
-          UpcommingContent(
+          const UpcommingCard(
             title: 'Upcoming',
             overline: 'Tasks',
           ),
-          MyProjectsContent(
+          const MyProjectsCard(
             title: 'My Projects',
             overline: 'Projects',
           ),
-          MyFollowedProjectsContent(
+          const MyFollowedProjectsCard(
             title: 'Projects I Folow',
             overline: 'Projects',
           ),
-          ActiveProjectsContent(
+          const ActiveProjectsCard(
             title: 'Active Projects',
             overline: 'Projects',
           ),
@@ -55,7 +55,6 @@ class DashboardView extends StatelessWidget {
 }
 
 class DashboardCardView extends StatelessWidget {
-  final Widget content;
   final String overline;
   final String title;
   final controller;
@@ -64,7 +63,6 @@ class DashboardCardView extends StatelessWidget {
     Key key,
     this.title,
     this.overline,
-    this.content = const SizedBox(),
     this.controller,
   }) : super(key: key);
 
@@ -127,34 +125,52 @@ class DashboardCardView extends StatelessWidget {
               endIndent: 0,
             ),
             Container(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Obx(() {
-                    if (controller.paginationController.total.value == 0) {
-                      return Container(
-                          height: 100,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'There are no active ${overline.toLowerCase()}',
-                                style: TextStyleHelper.subtitle1(
-                                  color: Theme.of(context)
-                                      .customColors()
-                                      .onSurface
-                                      .withOpacity(0.6),
-                                ),
+              child: Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    if (!controller.loaded.value)
+                      Container(
+                        height: 100,
+                        child: const Center(child: CircularProgressIndicator()),
+                      ),
+                    if (controller.loaded.value &&
+                        controller.paginationController.total.value == 0)
+                      Container(
+                        height: 100,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'There are no active ${overline.toLowerCase()}',
+                              style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context)
+                                    .customColors()
+                                    .onSurface
+                                    .withOpacity(0.6),
                               ),
-                            ],
-                          ));
-                    }
-                    return Expanded(
-                      child: content,
-                    );
-                  }),
-                ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    if (controller is ProjectsController &&
+                        controller.loaded.value)
+                      Expanded(
+                        child: ProjectCardContent(
+                          controller: controller,
+                        ),
+                      ),
+                    if (controller is TasksController &&
+                        controller.loaded.value)
+                      Expanded(
+                        child: TaskCardContent(
+                          controller: controller,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -199,11 +215,11 @@ class DashboardHeader extends StatelessWidget {
 }
 
 //task card
-class MyTasksContent extends StatelessWidget {
+class MyTasksCard extends StatelessWidget {
   final String overline;
   final String title;
 
-  const MyTasksContent({
+  const MyTasksCard({
     Key key,
     this.title,
     this.overline,
@@ -215,7 +231,6 @@ class MyTasksContent extends StatelessWidget {
       TaskFilterController(),
       tag: 'MyTasksContent',
     );
-    _filterController.setupPreset('myTasks');
 
     var controller = Get.put(
       TasksController(
@@ -224,25 +239,24 @@ class MyTasksContent extends StatelessWidget {
       ),
       tag: 'MyTasksContent',
     );
-    controller.loadTasks();
+    _filterController
+        .setupPreset('myTasks')
+        .then((value) => controller.loadTasks());
 
     return DashboardCardView(
       title: title,
       overline: overline,
       controller: controller,
-      content: TaskCardContent(
-        controller: controller,
-      ),
     );
   }
 }
 
 //task card
-class UpcommingContent extends StatelessWidget {
+class UpcommingCard extends StatelessWidget {
   final String overline;
   final String title;
 
-  const UpcommingContent({
+  const UpcommingCard({
     Key key,
     this.title,
     this.overline,
@@ -254,7 +268,6 @@ class UpcommingContent extends StatelessWidget {
       TaskFilterController(),
       tag: 'UpcommingContent',
     );
-    _filterController.setupPreset('upcomming');
 
     var controller = Get.put(
       TasksController(
@@ -263,24 +276,23 @@ class UpcommingContent extends StatelessWidget {
       ),
       tag: 'UpcommingContent',
     );
-    controller.loadTasks();
+    _filterController
+        .setupPreset('upcomming')
+        .then((value) => controller.loadTasks());
     return DashboardCardView(
       title: title,
       overline: overline,
       controller: controller,
-      content: TaskCardContent(
-        controller: controller,
-      ),
     );
   }
 }
 
 //project card
-class MyProjectsContent extends StatelessWidget {
+class MyProjectsCard extends StatelessWidget {
   final String overline;
   final String title;
 
-  const MyProjectsContent({
+  const MyProjectsCard({
     Key key,
     this.title,
     this.overline,
@@ -292,7 +304,6 @@ class MyProjectsContent extends StatelessWidget {
       ProjectsFilterController(),
       tag: 'myProjects',
     );
-    _filterController.setupPreset('myProjects');
 
     var controller = Get.put(
       ProjectsController(
@@ -301,24 +312,25 @@ class MyProjectsContent extends StatelessWidget {
       ),
       tag: 'myProjects',
     );
-    controller.loadProjects();
+
+    _filterController
+        .setupPreset('myProjects')
+        .then((value) => controller.loadProjects());
+
     return DashboardCardView(
       title: title,
       overline: overline,
       controller: controller,
-      content: ProjectCardContent(
-        controller: controller,
-      ),
     );
   }
 }
 
 //project card
-class MyFollowedProjectsContent extends StatelessWidget {
+class MyFollowedProjectsCard extends StatelessWidget {
   final String overline;
   final String title;
 
-  const MyFollowedProjectsContent({
+  const MyFollowedProjectsCard({
     Key key,
     this.title,
     this.overline,
@@ -328,31 +340,31 @@ class MyFollowedProjectsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final _filterController =
         Get.put(ProjectsFilterController(), tag: 'myFollowedProjects');
-    _filterController.setupPreset('myFollowedProjects');
+
     var controller = Get.put(
         ProjectsController(
           _filterController,
           Get.put(PaginationController(), tag: 'myFollowedProjects'),
         ),
         tag: 'myFollowedProjects');
-    controller.loadProjects();
+    _filterController
+        .setupPreset('myFollowedProjects')
+        .then((value) => controller.loadProjects());
+
     return DashboardCardView(
       title: title,
       overline: overline,
       controller: controller,
-      content: ProjectCardContent(
-        controller: controller,
-      ),
     );
   }
 }
 
 //project card
-class ActiveProjectsContent extends StatelessWidget {
+class ActiveProjectsCard extends StatelessWidget {
   final String overline;
   final String title;
 
-  const ActiveProjectsContent({
+  const ActiveProjectsCard({
     Key key,
     this.title,
     this.overline,
@@ -362,21 +374,20 @@ class ActiveProjectsContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final _filterController =
         Get.put(ProjectsFilterController(), tag: 'active');
-    _filterController.setupPreset('active');
+
     var controller = Get.put(
         ProjectsController(
           _filterController,
           Get.put(PaginationController(), tag: 'active'),
         ),
         tag: 'active');
-    controller.loadProjects();
+    _filterController
+        .setupPreset('active')
+        .then((value) => controller.loadProjects());
     return DashboardCardView(
       title: title,
       overline: overline,
       controller: controller,
-      content: ProjectCardContent(
-        controller: controller,
-      ),
     );
   }
 }
@@ -392,11 +403,9 @@ class ProjectCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // controller.loadProjects();
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           if (controller.loaded.value)
             Column(children: [
@@ -427,8 +436,6 @@ class TaskCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // controller.loadTasks();
-
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
