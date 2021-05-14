@@ -60,7 +60,7 @@ class MilestonesDataSource extends GetxController {
       deadlineFilter: _filterController.deadlineFilter,
     );
 
-    paginationController.total = result.length;
+    paginationController.total.value = result.length;
 
     if (needToClear) paginationController.data.clear();
 

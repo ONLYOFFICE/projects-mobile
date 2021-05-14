@@ -6,13 +6,13 @@ class PaginationController extends GetxController {
   RxList data = [].obs;
   RefreshController refreshController = RefreshController();
   var startIndex = 0;
-  int total = 0;
+  var total = 0.obs;
 
   Function refreshDelegate;
   Function loadDelegate;
 
   var pullDownEnabled = false;
-  bool get pullUpEnabled => data.length != total;
+  bool get pullUpEnabled => data.length != total.value;
 
   void onRefresh() async {
     startIndex = 0;
@@ -22,7 +22,7 @@ class PaginationController extends GetxController {
 
   void onLoading() async {
     startIndex += 25;
-    if (startIndex >= total) {
+    if (startIndex >= total.value) {
       refreshController.loadComplete();
       startIndex -= 25;
       return;
@@ -32,6 +32,7 @@ class PaginationController extends GetxController {
   }
 
   void setup() {
+    total.value = 0;
     startIndex = 0;
   }
 }

@@ -15,21 +15,27 @@ class ProjectsController extends BaseController {
 
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
-  var paginationController =
-      Get.put(PaginationController(), tag: 'ProjectsController');
+  // var paginationController =
+  //     Get.put(PaginationController(), tag: 'ProjectsController');
+
+  PaginationController _paginationController;
+  PaginationController get paginationController => _paginationController;
 
   @override
   String get screenName => 'Projects';
 
   @override
-  RxList get itemList => paginationController.data;
+  RxList get itemList => _paginationController.data;
 
   final _sortController = Get.find<ProjectsSortController>();
-  final _filterController = Get.find<ProjectsFilterController>();
+  // final _filterController = Get.find<ProjectsFilterController>();
+  ProjectsFilterController _filterController;
 
-  ProjectsController() {
+  ProjectsController(ProjectsFilterController filterController,
+      PaginationController paginationController) {
+    _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
-
+    _filterController = filterController;
     _filterController.applyFiltersDelegate = () async {
       hasFilters.value = _filterController.hasFilters;
       await _getProjects(needToClear: true);
@@ -75,7 +81,7 @@ class ProjectsController extends BaseController {
     if (needToClear) paginationController.data.clear();
     if (result == null) return;
 
-    paginationController.total = result.total;
+    paginationController.total.value = result.total;
     paginationController.data.addAll(result.response);
   }
 
