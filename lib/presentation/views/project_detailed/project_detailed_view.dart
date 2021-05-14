@@ -165,28 +165,3 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     );
   }
 }
-
-// StyledFloatingActionButton getWidget(_activeIndex, projectController) {
-//   if (_activeIndex == 2)
-//     return StyledFloatingActionButton(
-//       onPressed: () {
-//         projectController.createNewMilestone();
-//       },
-//       child: AppIcon(
-//         icon: SvgIcons.add_milestone,
-//         width: 32,
-//         height: 32,
-//       ),
-//     );
-//   // if (_activeIndex == 1)
-//   return StyledFloatingActionButton(
-//     onPressed: () {
-//       projectController.createTask();
-//     },
-//     child: AppIcon(
-//       icon: SvgIcons.add_button,
-//       width: 32,
-//       height: 32,
-//     ),
-//   );
-// }

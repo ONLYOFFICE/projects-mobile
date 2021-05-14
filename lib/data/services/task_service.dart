@@ -93,6 +93,7 @@ class TaskService {
     String projectFilter,
     String milestoneFilter,
     String projectId,
+    String deadlineFilter,
   }) async {
     var projects = await _api.getTasksByParams(
       startIndex: startIndex,
@@ -103,6 +104,7 @@ class TaskService {
       creatorFilter: creatorFilter,
       projectFilter: projectFilter,
       milestoneFilter: milestoneFilter,
+      deadlineFilter: deadlineFilter,
       projectId: projectId,
     );
 

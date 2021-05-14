@@ -79,7 +79,6 @@ class ProjectsView extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            // ProjectHeader(),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(

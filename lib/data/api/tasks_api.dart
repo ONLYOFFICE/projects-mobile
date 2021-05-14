@@ -203,6 +203,7 @@ class TaskApi {
     String projectFilter,
     String milestoneFilter,
     String projectId,
+    String deadlineFilter,
   }) async {
     var url = await coreApi.tasksByParamsrUrl();
 
@@ -230,6 +231,10 @@ class TaskApi {
     }
     if (milestoneFilter != null) {
       url += milestoneFilter;
+    }
+
+    if (deadlineFilter != null) {
+      url += deadlineFilter;
     }
 
     if (projectId != null) {

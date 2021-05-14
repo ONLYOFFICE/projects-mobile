@@ -226,10 +226,10 @@ class MilestonesFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    milestoneResponsible = {'me': false, 'other': ''}.obs;
-    taskResponsible = {'me': false, 'other': ''}.obs;
-    status = {'active': false, 'paused': false, 'closed': false}.obs;
-    deadline = {
+    milestoneResponsible.value = {'me': false, 'other': ''};
+    taskResponsible.value = {'me': false, 'other': ''};
+    status.value = {'active': false, 'paused': false, 'closed': false};
+    deadline.value = {
       'overdue': false,
       'today': false,
       'upcoming': false,
@@ -238,7 +238,7 @@ class MilestonesFilterController extends BaseFilterController {
         'startDate': DateTime.now(),
         'stopDate': DateTime.now()
       }
-    }.obs;
+    };
 
     suitableResultCount.value = -1;
 

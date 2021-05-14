@@ -47,9 +47,6 @@ class ProjectsController extends BaseController {
 
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
-  // var paginationController =
-  //     Get.put(PaginationController(), tag: 'ProjectsController');
-
   PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
 
@@ -60,7 +57,7 @@ class ProjectsController extends BaseController {
   RxList get itemList => _paginationController.data;
 
   final _sortController = Get.find<ProjectsSortController>();
-  // final _filterController = Get.find<ProjectsFilterController>();
+
   ProjectsFilterController _filterController;
 
   ProjectsController(ProjectsFilterController filterController,

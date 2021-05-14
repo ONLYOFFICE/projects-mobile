@@ -46,7 +46,7 @@ class Task extends StatelessWidget {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('TASK', style: TextStyleHelper.overline),
+              Text('TASK', style: TextStyleHelper.overline()),
               Text(taskController.task.value.title,
                   style: TextStyleHelper.headline6(
                       color: Theme.of(context).customColors().onSurface)),

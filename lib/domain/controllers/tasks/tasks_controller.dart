@@ -42,16 +42,12 @@ import 'package:projects/data/services/task_service.dart';
 class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
-  // var paginationController =
-  //     Get.put(PaginationController(), tag: 'TasksController');
-
   PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
 
   var taskStatusesController = Get.find<TaskStatusesController>();
-
   final _sortController = Get.find<TasksSortController>();
-  // final _filterController = Get.find<TaskFilterController>();
+
   TaskFilterController _filterController;
 
   RxBool loaded = false.obs;
@@ -107,6 +103,7 @@ class TasksController extends BaseController {
       creatorFilter: _filterController.creatorFilter,
       projectFilter: _filterController.projectFilter,
       milestoneFilter: _filterController.milestoneFilter,
+      deadlineFilter: _filterController.deadlineFilter,
     );
     paginationController.total.value = result.total;
 
