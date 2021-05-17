@@ -13,7 +13,6 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_divider.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
-import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
 
 class NewMilestoneView extends StatelessWidget {
   const NewMilestoneView({Key key}) : super(key: key);
