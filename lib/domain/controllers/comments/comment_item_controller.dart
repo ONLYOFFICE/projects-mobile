@@ -36,23 +36,25 @@ class CommentItemController extends GetxController {
   }
 
   Future deleteComment(context) async {
-    StyledAlertDialog(
+    await Get.dialog(StyledAlertDialog(
       titleText: 'Delete comment',
       contentText: '''Are you sure you want to delete these comment?
 Note: this action cannot be undone.''',
+      acceptText: 'DELETE',
+      onCancelTap: Get.back,
       onAcceptTap: () async {
         var response =
             await _api.deleteComment(commentId: comment.value.commentId);
         if (response != null) {
-          print(response);
+          Get.back();
           // ignore: unawaited_futures
           Get.find<TaskItemController>(tag: taskId.toString()).reloadTask();
           ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
               context: context,
               text: 'Comment has been deleted',
-              buttonText: ''));
+              buttonText: 'CONFIRM'));
         }
       },
-    );
+    ));
   }
 }
