@@ -31,7 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
@@ -39,64 +39,41 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class NewCommentController extends GetxController {
+class CommentItemController extends GetxController {
   final _api = locator<CommentsService>();
+
+  final Rx<PortalComment> comment;
   final int taskId;
-  final String parentId;
+  CommentItemController({this.comment, this.taskId});
 
-  NewCommentController({
-    this.parentId,
-    this.taskId,
-  });
+  Future<void> copyLink(context) async {
+    var projectId = Get.find<TaskItemController>(tag: taskId.toString())
+        .task
+        .value
+        .projectOwner
+        .id;
 
-  RxBool setTitleError = false.obs;
+    var link = await _api.getCommentLink(
+      commentId: comment.value.commentId,
+      taskId: taskId,
+      projectId: projectId,
+    );
 
-  final TextEditingController _textController = TextEditingController();
-
-  TextEditingController get textController => _textController;
-
-  Future addTaskComment(context) async {
-    if (_textController.text.isEmpty)
-      setTitleError.value = true;
-    else {
-      setTitleError.value = false;
-      PortalComment newComment = await _api.addTaskComment(
-          content: _textController.text, taskId: taskId);
-      if (newComment != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
-        // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
-        Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Comment had been created',
-            buttonText: ''));
-      }
+    if (link != null) {
+      await Clipboard.setData(ClipboardData(text: link));
+      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+          context: context, text: 'Link has been copied to the clipboard'));
     }
   }
 
-  Future addReplyComment(context) async {
-    if (_textController.text.isEmpty)
-      setTitleError.value = true;
-    else {
-      setTitleError.value = false;
-      PortalComment newComment = await _api.addReplyComment(
-        content: _textController.text,
-        taskId: taskId,
-        parentId: parentId,
-      );
-      if (newComment != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
-        // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
-        Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Comment had been created',
-            buttonText: ''));
-      }
+  Future deleteComment(context) async {
+    var response = await _api.deleteComment(commentId: comment.value.commentId);
+    if (response != null) {
+      print(response);
+      // ignore: unawaited_futures
+      Get.find<TaskItemController>(tag: taskId.toString()).reloadTask();
+      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+          context: context, text: 'Comment has been deleted', buttonText: ''));
     }
   }
 }
