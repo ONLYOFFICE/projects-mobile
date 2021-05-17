@@ -47,39 +47,44 @@ SnackBar styledSnackBar({
       children: [
         Flexible(child: Text(text)),
         if (buttonText != null && buttonText.isNotEmpty)
-          GestureDetector(
-            onTap: buttonOnTap,
-            child: SizedBox(
-              height: 16,
-              width: 65,
-              child: Center(
-                child: Text(
-                  buttonText,
-                  style: TextStyleHelper.button(
-                          color: Theme.of(context)
-                              .customColors()
-                              .primary
-                              .withOpacity(0.5))
-                      .copyWith(height: 1),
-                ),
-              ),
-            ),
-          ),
-        if (buttonText == null)
-          GestureDetector(
-            onTap: () =>
-                ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar(),
-            child: SizedBox(
-              height: 16,
-              width: 65,
-              child: Center(
-                child: Text('OK',
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: GestureDetector(
+              onTap: buttonOnTap,
+              child: SizedBox(
+                height: 16,
+                child: Center(
+                  child: Text(
+                    buttonText,
                     style: TextStyleHelper.button(
                             color: Theme.of(context)
                                 .customColors()
                                 .primary
                                 .withOpacity(0.5))
-                        .copyWith(height: 1)),
+                        .copyWith(height: 1),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        if (buttonText == null)
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: GestureDetector(
+              onTap: () =>
+                  ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar(),
+              child: SizedBox(
+                height: 16,
+                width: 65,
+                child: Center(
+                  child: Text('OK',
+                      style: TextStyleHelper.button(
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .primary
+                                  .withOpacity(0.5))
+                          .copyWith(height: 1)),
+                ),
               ),
             ),
           ),
