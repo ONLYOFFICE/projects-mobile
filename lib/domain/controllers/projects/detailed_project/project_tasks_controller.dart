@@ -91,7 +91,7 @@ class ProjectTasksController extends GetxController {
         projectFilter: _filterController.projectFilter,
         milestoneFilter: _filterController.milestoneFilter,
         projectId: _projectId.toString());
-    paginationController.total = result.total;
+    paginationController.total.value = result.total;
 
     if (needToClear) paginationController.data.clear();
 

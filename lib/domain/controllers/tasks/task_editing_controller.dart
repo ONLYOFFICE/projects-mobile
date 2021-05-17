@@ -33,6 +33,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
@@ -224,7 +225,7 @@ class TaskEditingController extends GetxController
     await _userController.getUserInfo();
     var selfUser = _userController.user;
     selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.multipleSelectionEnabled.value = true;
+    selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
     _usersDataSource.applyUsersSelection = _getSelectedResponsibles;
     await _usersDataSource.getProfiles(needToClear: true);
   }

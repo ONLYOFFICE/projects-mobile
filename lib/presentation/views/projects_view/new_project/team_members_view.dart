@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -54,8 +55,9 @@ class TeamMembersSelectionView extends StatelessWidget {
     var controller = Get.find<NewProjectController>();
     var usersDataSource = Get.find<UsersDataSource>();
 
-    usersDataSource.multipleSelectionEnabled = true;
-    controller.multipleSelectionEnabled = true;
+    controller.selectionMode = UserSelectionMode.Multiple;
+    usersDataSource.selectionMode = UserSelectionMode.Multiple;
+
     controller.setupUsersSelection();
 
     return Scaffold(

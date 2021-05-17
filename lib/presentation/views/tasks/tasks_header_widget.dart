@@ -111,7 +111,7 @@ class TasksHeaderWidget extends StatelessWidget {
                   children: <Widget>[
                     Obx(
                       () => Text(
-                        'Total ${controller.itemList.length}',
+                        'Total ${controller.paginationController.total.value}',
                         style: TextStyleHelper.body2(
                           color: Theme.of(context)
                               .customColors()

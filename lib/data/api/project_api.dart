@@ -143,6 +143,28 @@ class ProjectApi {
     return result;
   }
 
+  Future<ApiDTO<ProjectDetailed>> getProjectById({int projectId}) async {
+    var url = await coreApi.projectByIdUrl(projectId);
+
+    var result = ApiDTO<ProjectDetailed>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        {
+          result.response = ProjectDetailed.fromJson(responseJson['response']);
+        }
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
   Future<ApiDTO<List<Status>>> getStatuses() async {
     var url = await coreApi.statusesUrl();
     var result = ApiDTO<List<Status>>();

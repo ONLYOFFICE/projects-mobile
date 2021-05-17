@@ -50,6 +50,7 @@ part 'filters/responsible.dart';
 part 'filters/creator.dart';
 part 'filters/project.dart';
 part 'filters/milestone.dart';
+part 'filters/duedate.dart';
 
 void showFilters(context) async {
   var filterController = Get.find<TaskFilterController>();
@@ -76,6 +77,7 @@ void showFilters(context) async {
                 const _Creator(),
                 const _Project(),
                 const _Milestone(),
+                const _DueDate(),
                 if (filterController.suitableResultCount.value != -1)
                   ConfirmFiltersButton(filterController: filterController),
               ],

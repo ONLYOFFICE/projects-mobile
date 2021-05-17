@@ -139,6 +139,9 @@ class CoreApi {
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/$version/project';
 
+  Future<String> projectByIdUrl(int projectId) async =>
+      '${await getPortalURI()}/api/$version/project/$projectId';
+
   Future<String> projectTags() async =>
       '${await getPortalURI()}/api/$version/project/tag';
 
@@ -178,6 +181,10 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project/withSecurity';
   Future<String> projectTeamUrl(String projectID) async =>
       '${await getPortalURI()}/api/$version/project/$projectID/team';
+
+  Future<String> createMilestoneUrl(String projectID) async =>
+      '${await getPortalURI()}/api/$version/project/$projectID/milestone';
+  //  api/2.0/project/1234/milestone
 
   Future<http.Response> getRequest(String url) async {
     print(url);

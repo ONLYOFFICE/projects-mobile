@@ -51,8 +51,6 @@ class TasksView extends StatelessWidget {
   const TasksView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var taskStatusesController = Get.find<TaskStatusesController>();
-    taskStatusesController.getStatuses();
     var controller = Get.find<TasksController>();
     controller.loadTasks();
 
@@ -69,6 +67,7 @@ class TasksView extends StatelessWidget {
         bottom: TasksHeader(),
         titleHeight: 0,
         bottomHeight: 100,
+        showBackButton: false,
       ),
       body: Obx(
         () {

@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -53,8 +54,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
     var controller = Get.find<NewProjectController>();
     var usersDataSource = Get.find<UsersDataSource>();
 
-    usersDataSource.multipleSelectionEnabled = false;
-    controller.multipleSelectionEnabled = false;
+    controller.selectionMode = UserSelectionMode.Single;
+    usersDataSource.selectionMode = UserSelectionMode.Single;
     controller.setupUsersSelection();
 
     return Scaffold(

@@ -41,6 +41,7 @@ import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
     as bottom_sheet;
 
@@ -156,18 +157,11 @@ class SecondColumn extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Wrap(
-                children: [
-                  Text(
-                    task.title,
-                    maxLines: 2,
-                    softWrap: true,
-                    style: TextStyleHelper.projectTitle,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  if (task.priority == 1) const SizedBox(width: 6),
-                  if (task.priority == 1) AppIcon(icon: SvgIcons.high_priority)
-                ],
+              CellAtributedTitle(
+                text: task.title,
+                style: TextStyleHelper.projectTitle,
+                atributeIcon: AppIcon(icon: SvgIcons.high_priority),
+                atributeIconVisible: task.priority == 1,
               ),
               Row(
                 children: [
