@@ -32,8 +32,10 @@ class CommentsApi {
     return result;
   }
 
-  Future<ApiDTO<PortalComment>> addTaskComment(
-      {int taskId, String content}) async {
+  Future<ApiDTO<PortalComment>> addTaskComment({
+    int taskId,
+    String content,
+  }) async {
     var url = await coreApi.addTaskConmmentUrl(taskId: taskId);
 
     var result = ApiDTO<PortalComment>();
@@ -45,6 +47,87 @@ class CommentsApi {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         result.response = PortalComment.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<PortalComment>> addReplyComment({
+    int taskId,
+    String content,
+    String parentId,
+  }) async {
+    var url = await coreApi.addTaskConmmentUrl(taskId: taskId);
+
+    var result = ApiDTO<PortalComment>();
+
+    try {
+      var body = {'content': content, 'parentId': parentId};
+      var response = await coreApi.postRequest(url, jsonEncode(body));
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = PortalComment.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> deleteComment({String commentId}) async {
+    var url = await coreApi.deleteCommentUrl(commentId: commentId);
+
+    var result = ApiDTO();
+
+    Map responseJson;
+
+    try {
+      var response = await coreApi.deleteRequest(url);
+      responseJson = json.decode(response.body);
+      if (response.statusCode == 200) {
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: 'Ошибка');
+    }
+    return result;
+  }
+
+  Future<String> getCommentLink({taskId, projectId, commentId}) async {
+    return await coreApi.getCommentLink(
+      taskId: taskId,
+      projectId: projectId,
+      commentId: commentId,
+    );
+  }
+
+  Future<ApiDTO> updateComment({
+    String commentId,
+    String content,
+  }) async {
+    var url = await coreApi.updateCommentUrl(commentId: commentId);
+
+    var result = ApiDTO();
+
+    try {
+      var body = {'content': content, 'commentid': commentId};
+      var response = await coreApi.putRequest(url, body: body);
+
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = responseJson['response'];
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

@@ -16,6 +16,7 @@ class SubtaskCell extends StatelessWidget {
   Widget build(BuildContext context) {
     var subtaskController = Get.put(SubtaskController(subtask: subtask),
         tag: subtask.id.toString());
+
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
       child: InkWell(
@@ -86,13 +87,14 @@ class SubtaskCell extends StatelessWidget {
                               value: 'Copy subtask',
                               child: Text('Copy subtask',
                                   style: TextStyleHelper.subtitle1())),
-                          PopupMenuItem(
-                              value: 'Delete',
-                              child: Text('Delete',
-                                  style: TextStyleHelper.subtitle1(
-                                      color: Theme.of(context)
-                                          .customColors()
-                                          .error))),
+                          if (subtask.canEdit)
+                            PopupMenuItem(
+                                value: 'Delete',
+                                child: Text('Delete',
+                                    style: TextStyleHelper.subtitle1(
+                                        color: Theme.of(context)
+                                            .customColors()
+                                            .error))),
                         ];
                       },
                     ),

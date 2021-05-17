@@ -10,7 +10,7 @@ import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 class NewCommentController extends GetxController {
   final _api = locator<CommentsService>();
   final int taskId;
-  final int parentId;
+  final String parentId;
 
   NewCommentController({
     this.parentId,
@@ -36,8 +36,34 @@ class NewCommentController extends GetxController {
         // ignore: unawaited_futures
         taskController.reloadTask(showLoading: true);
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: 'Comment had been created'));
+        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+            context: context,
+            text: 'Comment had been created',
+            buttonText: ''));
+      }
+    }
+  }
+
+  Future addReplyComment(context) async {
+    if (_textController.text.isEmpty)
+      setTitleError.value = true;
+    else {
+      setTitleError.value = false;
+      PortalComment newComment = await _api.addReplyComment(
+        content: _textController.text,
+        taskId: taskId,
+        parentId: parentId,
+      );
+      if (newComment != null) {
+        var taskController =
+            Get.find<TaskItemController>(tag: taskId.toString());
+        // ignore: unawaited_futures
+        taskController.reloadTask(showLoading: true);
+        Get.back();
+        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+            context: context,
+            text: 'Comment had been created',
+            buttonText: ''));
       }
     }
   }
