@@ -180,4 +180,21 @@ class ProjectsFilterController extends BaseFilterController {
   void applyFilters() async {
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
+
+  Future<void> setupPreset(String preset) async {
+    _selfId ??= await Get.find<UserController>().getUserId();
+    switch (preset) {
+      case 'myProjects':
+        _statusFilter = '&status=open';
+        _teamMemberFilter = '&participant=$_selfId';
+        break;
+      case 'myFollowedProjects':
+        _statusFilter = '&status=open';
+        _otherFilter = '&follow=true';
+        break;
+      case 'active':
+        _statusFilter = '&status=open';
+        break;
+    }
+  }
 }

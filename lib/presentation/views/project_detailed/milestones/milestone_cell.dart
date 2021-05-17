@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_cell_controller.dart';
-
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 
 class MilestoneCell extends StatelessWidget {
   final Milestone milestone;
@@ -24,17 +24,13 @@ class MilestoneCell extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          GestureDetector(
-              onTap: () async {
-                // bottom_sheet.showsStatusesBS(
-                //     context: context, taskItemController: itemController);
-              },
-              child: TaskStatus(itemController: itemController)),
+          _MilestoneIcon(
+            itemController: itemController,
+          ),
           const SizedBox(width: 16),
           Expanded(
             child: InkWell(
-              onTap: () => Get.toNamed('TaskDetailedView',
-                  arguments: {'controller': itemController}),
+              onTap: () => {},
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -42,12 +38,12 @@ class MilestoneCell extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SecondColumn(
+                        _SecondColumn(
                           milestone: milestone,
                           itemController: itemController,
                         ),
                         const SizedBox(width: 8),
-                        ThirdColumn(
+                        _ThirdColumn(
                           milestone: milestone,
                           controller: itemController,
                         ),
@@ -64,45 +60,11 @@ class MilestoneCell extends StatelessWidget {
   }
 }
 
-// refactor
-class TaskStatus extends StatelessWidget {
-  final MilestoneCellController itemController;
-
-  const TaskStatus({
-    Key key,
-    @required this.itemController,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration:
-          const BoxDecoration(shape: BoxShape.circle, color: Color(0xffD8D8D8)),
-      child: Container(
-        width: 40,
-        height: 40,
-        margin: const EdgeInsets.all(0.5),
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Theme.of(context).customColors().background),
-        // child: Center(
-        //   child: SVG.createSizedFromString(
-        //       itemController.statusImageString.value,
-        //       16,
-        //       16,
-        //       itemController.status.value.color),
-        // ),
-      ),
-    );
-  }
-}
-
-// refactor
-class SecondColumn extends StatelessWidget {
+class _SecondColumn extends StatelessWidget {
   final Milestone milestone;
   final MilestoneCellController itemController;
 
-  const SecondColumn({
+  const _SecondColumn({
     Key key,
     @required this.milestone,
     @required this.itemController,
@@ -117,30 +79,44 @@ class SecondColumn extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Wrap(
-            children: [
-              Text(
-                milestone.title,
-                maxLines: 2,
-                softWrap: true,
-                style: TextStyleHelper.projectTitle,
-                overflow: TextOverflow.ellipsis,
-              ),
-              // if (milestone.priority == 1) const SizedBox(width: 6),
-              // if (milestone.priority == 1) AppIcon(icon: SvgIcons.high_priority)
-            ],
-          ),
+          Obx(() {
+            var style;
+            if (itemController.milestone.value.status == 1) {
+              style = TextStyleHelper.projectTitle.copyWith(
+                  decoration: TextDecoration.lineThrough,
+                  color: Theme.of(context)
+                      .customColors()
+                      .onSurface
+                      .withOpacity(0.6));
+            } else if (itemController.milestone.value.status == 2) {
+              style = TextStyleHelper.projectTitle.copyWith(
+                  color: Theme.of(context)
+                      .customColors()
+                      .onSurface
+                      .withOpacity(0.6));
+            } else {
+              style = TextStyleHelper.projectTitle;
+            }
+            return CellAtributedTitle(
+              text: milestone.title,
+              style: style,
+              atributeIcon: AppIcon(icon: SvgIcons.atribute),
+              atributeIconVisible: itemController.milestone.value.isKey,
+            );
+          }),
           Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              // Flexible(
-              // child: Text(
-              //   itemController.status.value.title,
-              //   maxLines: 1,
-              //   overflow: TextOverflow.ellipsis,
-              //   style: TextStyleHelper.status(
-              //       color: itemController.status.value.color.toColor()),
-              // ),
-              // ),
+              Obx(() {
+                var color = itemController.milestone.value.canEdit
+                    ? Theme.of(context).customColors().primary
+                    : Theme.of(context).customColors().onBackground;
+                return Text(
+                  itemController.statusName,
+                  style: TextStyleHelper.status(color: color),
+                );
+              }),
               Text(' • ',
                   style: TextStyleHelper.caption(
                       color: Theme.of(context)
@@ -148,7 +124,8 @@ class SecondColumn extends StatelessWidget {
                           .onSurface
                           .withOpacity(0.6))),
               Flexible(
-                child: Text(milestone.createdBy.displayName,
+                child: Text(
+                    milestone.responsible.displayName.replaceAll(' ', '\u00A0'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
@@ -165,11 +142,11 @@ class SecondColumn extends StatelessWidget {
   }
 }
 
-class ThirdColumn extends StatelessWidget {
+class _ThirdColumn extends StatelessWidget {
   final Milestone milestone;
   final MilestoneCellController controller;
 
-  const ThirdColumn({
+  const _ThirdColumn({
     Key key,
     @required this.milestone,
     @required this.controller,
@@ -179,34 +156,107 @@ class ThirdColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     var _now = DateTime.now();
 
-    DateTime _deadline;
-    if (milestone.deadline != null) _deadline = milestone.deadline;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        if (_deadline != null)
-          Text(formatedDate(milestone.deadline),
-              style: _deadline.isBefore(_now)
-                  ? TextStyleHelper.caption(
-                      color: Theme.of(context).customColors().error)
-                  : TextStyleHelper.caption(
-                      color: Theme.of(context).customColors().onSurface)),
+        if (milestone.deadline != null)
+          Text(
+            formatedDate(milestone.deadline),
+            style: milestone.deadline.isBefore(_now)
+                ? TextStyleHelper.caption(
+                    color: Theme.of(context).customColors().error)
+                : TextStyleHelper.caption(
+                    color: Theme.of(context).customColors().onSurface),
+          ),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
-            const SizedBox(width: 5),
-            Text(milestone.activeTaskCount.toString(),
-                style: TextStyleHelper.body2(
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6))),
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            AppIcon(
+              icon: SvgIcons.check_square,
+              color: const Color(0xff666666),
+              width: 20,
+              height: 20,
+            ),
+            Text(
+              milestone.activeTaskCount.toString(),
+              style: TextStyleHelper.body2(
+                color:
+                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+              ),
+            ),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _MilestoneIcon extends StatelessWidget {
+  const _MilestoneIcon({
+    Key key,
+    @required this.itemController,
+  }) : super(key: key);
+
+  final MilestoneCellController itemController;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Obx(() {
+          var color = itemController.milestone.value.canEdit
+              ? Theme.of(context).customColors().primary
+              : Theme.of(context).customColors().onBackground;
+          return Container(
+            width: 48,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: color.withOpacity(0.05),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        width: 1,
+                        color: Theme.of(context)
+                            .customColors()
+                            .primary
+                            .withOpacity(0.1),
+                      ),
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(4),
+                      child: AppIcon(
+                        icon: SvgIcons.milestone,
+                        color: const Color(0xff666666),
+                        width: 16,
+                        height: 16,
+                      ),
+                    ),
+                  ),
+                ),
+                AppIcon(icon: itemController.statusImage, color: color),
+              ],
+            ),
+          );
+        }),
       ],
     );
   }

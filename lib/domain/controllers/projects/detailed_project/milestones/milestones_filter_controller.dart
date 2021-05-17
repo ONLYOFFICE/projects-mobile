@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
@@ -13,13 +14,14 @@ class MilestonesFilterController extends BaseFilterController {
 
   String _taskResponsibleFilter = '';
   String _milestoneResponsibleFilter = '';
-  // String _otherFilter = '';
+  String _deadlineFilter = '';
   String _statusFilter = '';
 
   String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
   String get taskResponsibleFilter => _taskResponsibleFilter;
-  // String get otherFilter => _otherFilter;
+
   String get statusFilter => _statusFilter;
+  String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
   String _projectId;
@@ -29,18 +31,21 @@ class MilestonesFilterController extends BaseFilterController {
   bool get hasFilters =>
       _milestoneResponsibleFilter.isNotEmpty ||
       _taskResponsibleFilter.isNotEmpty ||
-      // _otherFilter.isNotEmpty ||
+      _deadlineFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
-
-// &deadlineStart=2021-04-28T00%3A00%3A00
-// &deadlineStop=2021-05-05T00%3A00%3A00
 
   RxMap<String, dynamic> milestoneResponsible = {'me': false, 'other': ''}.obs;
   RxMap<String, dynamic> taskResponsible = {'me': false, 'other': ''}.obs;
-
-  // RxMap<String, dynamic> other =
-  //     {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
-
+  RxMap<String, dynamic> deadline = {
+    'overdue': false,
+    'today': false,
+    'upcoming': false,
+    'custom': {
+      'selected': false,
+      'startDate': DateTime.now(),
+      'stopDate': DateTime.now()
+    }
+  }.obs;
   RxMap<String, dynamic> status =
       {'active': false, 'paused': false, 'closed': false}.obs;
 
@@ -92,36 +97,55 @@ class MilestonesFilterController extends BaseFilterController {
     getSuitableTasksCount();
   }
 
-  // void changeOther(String filter, [newValue = '']) async {
-  //   _otherFilter = '';
-  //   switch (filter) {
-  //     case 'followed':
-  //       other['followed'] = !other['followed'];
-  //       other['withTag'] = '';
-  //       other['withoutTag'] = false;
+// deadlineStart=2021-05-05T16:12:19.852438&deadlineStop=2021-05-05T16:12:19.852438&projectid=397724
+  Future<void> changeDeadline(String filter,
+      {DateTime start, DateTime stop}) async {
+    _deadlineFilter = '';
+    final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
-  //       if (other['followed']) _otherFilter = '&follow=true';
-  //       break;
-  //     case 'withTag':
-  //       other['followed'] = false;
-  //       other['withoutTag'] = false;
-  //       if (newValue == null) {
-  //         other['withTag'] = '';
-  //       } else {
-  //         other['withTag'] = newValue['title'];
-  //         _otherFilter = '&tag=${newValue["id"]}';
-  //       }
-  //       break;
-  //     case 'withoutTag':
-  //       other['followed'] = false;
-  //       other['withTag'] = '';
-  //       other['withoutTag'] = !other['withoutTag'];
-  //       if (other['withoutTag']) _otherFilter = '&tag=-1';
-  //       break;
-  //     default:
-  //   }
-  //   getSuitableTasksCount();
-  // }
+    if (filter == 'overdue') {
+      deadline['upcoming'] = false;
+      deadline['today'] = false;
+      deadline['custom']['selected'] = false;
+      deadline['overdue'] = !deadline['overdue'];
+      var dueDate = formatter.format(DateTime.now());
+      if (deadline['overdue']) _deadlineFilter = '&deadlineStop=$dueDate';
+    }
+    if (filter == 'today') {
+      deadline['overdue'] = false;
+      deadline['upcoming'] = false;
+      deadline['custom']['selected'] = false;
+      deadline['today'] = !deadline['today'];
+      var dueDate = formatter.format(DateTime.now());
+      if (deadline['today'])
+        _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
+    }
+    if (filter == 'upcoming') {
+      deadline['overdue'] = false;
+      deadline['today'] = false;
+      deadline['custom']['selected'] = false;
+      deadline['upcoming'] = !deadline['upcoming'];
+      var startDate = formatter.format(DateTime.now());
+      var stopDate =
+          formatter.format(DateTime.now().add(const Duration(days: 7)));
+      if (deadline['upcoming'])
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+    }
+    if (filter == 'custom') {
+      deadline['overdue'] = false;
+      deadline['today'] = false;
+      deadline['upcoming'] = false;
+      deadline['custom']['selected'] = !deadline['custom']['selected'];
+      deadline['custom']['startDate'] = start;
+      deadline['custom']['stopDate'] = stop;
+      var startDate = formatter.format(start);
+      var stopDate = formatter.format(stop);
+      if (deadline['custom']['selected'])
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+    }
+
+    getSuitableTasksCount();
+  }
 
   void changeStatus(String filter, [newValue = '']) async {
     _statusFilter = '';
@@ -162,6 +186,7 @@ class MilestonesFilterController extends BaseFilterController {
       milestoneResponsibleFilter: milestoneResponsibleFilter,
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
+      deadlineFilter: deadlineFilter,
     );
 
     suitableResultCount.value = result.length;
@@ -169,17 +194,25 @@ class MilestonesFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    milestoneResponsible = {'me': false, 'other': ''}.obs;
-    taskResponsible = {'me': false, 'other': ''}.obs;
-
-    // other = {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
-    status = {'active': false, 'paused': false, 'closed': false}.obs;
+    milestoneResponsible.value = {'me': false, 'other': ''};
+    taskResponsible.value = {'me': false, 'other': ''};
+    status.value = {'active': false, 'paused': false, 'closed': false};
+    deadline.value = {
+      'overdue': false,
+      'today': false,
+      'upcoming': false,
+      'custom': {
+        'selected': false,
+        'startDate': DateTime.now(),
+        'stopDate': DateTime.now()
+      }
+    };
 
     suitableResultCount.value = -1;
 
     _milestoneResponsibleFilter = '';
     _taskResponsibleFilter = '';
-    // _otherFilter = '';
+    _deadlineFilter = '';
     _statusFilter = '';
 
     applyFilters();

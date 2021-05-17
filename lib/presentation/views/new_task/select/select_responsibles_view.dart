@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -17,7 +18,7 @@ class SelectResponsiblesView extends StatelessWidget {
 
     controller.setupResponsiblesSelection();
 
-    usersDataSource.multipleSelectionEnabled = true;
+    usersDataSource.selectionMode = UserSelectionMode.Multiple;
     return Scaffold(
       appBar: StyledAppBar(
         title: Obx(

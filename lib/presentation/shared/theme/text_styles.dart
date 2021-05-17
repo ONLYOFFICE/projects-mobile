@@ -78,14 +78,16 @@ class TextStyleHelper {
   static const headerStyle = TextStyle(
       fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);
 
-  static final overline = const TextStyle(
-    fontFamily: 'Roboto',
-    fontWeight: FontWeight.w500,
-    fontSize: 10,
-    height: 1.6,
-    letterSpacing: 1.5,
-    // color: AppColors.onSurface.withOpacity(0.6)
-  );
+  static TextStyle overline({Color color}) {
+    return TextStyle(
+      color: color,
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w500,
+      fontSize: 10,
+      height: 1.6,
+      letterSpacing: 1.5,
+    );
+  }
 
   static TextStyle projectTitle = const TextStyle(
       fontFamily: 'Roboto',

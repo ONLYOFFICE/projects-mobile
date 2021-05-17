@@ -3,24 +3,33 @@ import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task_service.dart';
 
 class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
-  var paginationController =
-      Get.put(PaginationController(), tag: 'TasksController');
+  PaginationController _paginationController;
+  PaginationController get paginationController => _paginationController;
 
+  var taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
-  final _filterController = Get.find<TaskFilterController>();
+
+  TaskFilterController _filterController;
 
   RxBool loaded = false.obs;
 
   // when snackbar appears
   RxBool fabIsRaised = false.obs;
 
-  TasksController() {
+  TasksController(TaskFilterController filterController,
+      PaginationController paginationController) {
+    taskStatusesController.getStatuses();
+
+    _paginationController = paginationController;
+    _filterController = filterController;
+
     _sortController.updateSortDelegate = () async {
       await loadTasks();
     };
@@ -62,8 +71,9 @@ class TasksController extends BaseController {
       creatorFilter: _filterController.creatorFilter,
       projectFilter: _filterController.projectFilter,
       milestoneFilter: _filterController.milestoneFilter,
+      deadlineFilter: _filterController.deadlineFilter,
     );
-    paginationController.total = result.total;
+    paginationController.total.value = result.total;
 
     if (needToClear) paginationController.data.clear();
 

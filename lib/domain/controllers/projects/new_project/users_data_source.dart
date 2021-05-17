@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -14,9 +15,13 @@ class UsersDataSource extends GetxController {
   var nothingFound = false.obs;
   var _startIndex = 0;
   var _query = '';
-  var multipleSelectionEnabled = false;
+
+  var selectionMode = UserSelectionMode.Single;
 
   var isSearchResult = false.obs;
+
+  var withoutSelf = false;
+  PortalUserItemController selfUserItem;
 
   RefreshController refreshController = RefreshController();
 
@@ -63,13 +68,23 @@ class UsersDataSource extends GetxController {
     if (result.response.isEmpty) {
       nothingFound.value = true;
     } else {
-      result.response.forEach(
-        (element) {
-          var portalUser = PortalUserItemController(portalUser: element);
-          portalUser.multipleSelectionEnabled.value = multipleSelectionEnabled;
-          usersList.add(portalUser);
-        },
-      );
+      for (var user in result.response) {
+        var portalUser = PortalUserItemController(portalUser: user);
+        portalUser.selectionMode.value = selectionMode;
+
+        usersList.add(portalUser);
+      }
+    }
+
+    if (withoutSelf) {
+      var toDelete;
+      for (var element in usersList) {
+        if (selfUserItem.portalUser.id == element.id) {
+          toDelete = element;
+        }
+      }
+
+      usersList.remove(toDelete);
     }
 
     if (applyUsersSelection != null) {

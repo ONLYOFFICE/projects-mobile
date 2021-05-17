@@ -8,6 +8,8 @@ import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_responsibles_view.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
@@ -68,4 +70,11 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'GroupMembersSelectionView',
           page: () => const GroupMembersSelectionView()),
+      GetPage(name: 'NewMilestoneView', page: () => const NewMilestoneView()),
+      GetPage(
+          name: 'NewMilestoneDescription',
+          page: () => const NewMilestoneDescription()),
+      GetPage(
+          name: 'SelectProjectForMilestone',
+          page: () => const SelectProjectForMilestone()),
     ];
