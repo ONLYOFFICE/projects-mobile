@@ -30,24 +30,18 @@
  *
  */
 
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/domain/controllers/comments/comment_item_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class NewCommentController extends GetxController {
+class CommentEditingController extends GetxController {
   final _api = locator<CommentsService>();
-  final int taskId;
-  final String parentId;
+  final String commentBody;
+  final String commentId;
 
-  NewCommentController({
-    this.parentId,
-    this.taskId,
-  });
+  CommentEditingController({this.commentBody, this.commentId});
 
   RxBool setTitleError = false.obs;
 
@@ -55,47 +49,23 @@ class NewCommentController extends GetxController {
 
   TextEditingController get textController => _textController;
 
-  Future addTaskComment(context) async {
-    if (_textController.text.isEmpty)
-      setTitleError.value = true;
-    else {
-      setTitleError.value = false;
-      PortalComment newComment = await _api.addTaskComment(
-          content: _textController.text, taskId: taskId);
-      if (newComment != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
-        // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
-        Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Comment had been created',
-            buttonText: ''));
-      }
-    }
-  }
+  void init() => _textController.text = commentBody;
 
-  Future addReplyComment(context) async {
-    if (_textController.text.isEmpty)
+  Future<void> confirm() async {
+    if (_textController.text.isEmpty) {
       setTitleError.value = true;
-    else {
-      setTitleError.value = false;
-      PortalComment newComment = await _api.addReplyComment(
+    } else {
+      var result = await _api.updateComment(
+        commentId: commentId,
         content: _textController.text,
-        taskId: taskId,
-        parentId: parentId,
       );
-      if (newComment != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
-        // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
+      if (result != null) {
+        var controller = Get.find<CommentItemController>(tag: commentId);
+        controller.comment.value.commentBody = result;
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Comment had been created',
-            buttonText: ''));
+      } else {
+        print('error');
+        print(result);
       }
     }
   }
