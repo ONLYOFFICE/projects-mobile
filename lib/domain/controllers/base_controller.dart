@@ -5,5 +5,8 @@ abstract class BaseController extends GetxController {
   RxList<dynamic> get itemList;
   var hasFilters = false.obs;
 
+  var showAll = false.obs;
+  var expandedCardView = false.obs;
+
   void showSearch() {}
 }
