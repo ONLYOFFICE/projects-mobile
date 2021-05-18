@@ -53,7 +53,7 @@ class NavigationView extends StatelessWidget {
     return GetBuilder<NavigationController>(
       builder: (controller) {
         var _pages = [
-          DashboardView(),
+          const DashboardView(),
           const TasksView(),
           const ProjectsView(),
           TaskView(),
