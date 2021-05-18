@@ -5,8 +5,8 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/comment.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TaskCommentsView extends StatelessWidget {
@@ -27,59 +27,46 @@ class TaskCommentsView extends StatelessWidget {
           return Obx(
             () {
               if (controller.loaded.isTrue) {
-                return Stack(
+                return Column(
                   children: [
-                    SmartRefresher(
-                      controller: controller.refreshController,
-                      onRefresh: () async =>
-                          await controller.reloadTask(showLoading: true),
-                      child: ListView.separated(
-                        itemCount: _comments.length,
-                        padding: const EdgeInsets.symmetric(vertical: 32),
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const SizedBox(height: 21);
-                        },
-                        itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 12),
-                                child: Comment(
-                                  comment: _comments[index],
-                                  portalUri: snapshot.data[0],
-                                  headers: snapshot.data[1],
-                                ),
-                              ),
-                              ListView.separated(
-                                itemCount: _comments[index].commentList.length,
-                                shrinkWrap: true,
-                                primary: false,
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 29),
-                                separatorBuilder: (context, index) {
-                                  return const SizedBox(height: 30);
-                                },
-                                itemBuilder: (context, i) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 20, right: 12),
-                                    child: Comment(
-                                      comment: _comments[index].commentList[i],
-                                      portalUri: snapshot.data[0],
-                                      headers: snapshot.data[1],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          );
-                        },
+                    Expanded(
+                      child: SmartRefresher(
+                        controller: controller.refreshController,
+                        onRefresh: () async =>
+                            await controller.reloadTask(showLoading: true),
+                        child: ListView.separated(
+                          itemCount: _comments.length,
+                          padding: const EdgeInsets.only(top: 32, bottom: 40),
+                          separatorBuilder: (BuildContext context, int index) {
+                            return const SizedBox(height: 21);
+                          },
+                          itemBuilder: (BuildContext context, int index) {
+                            return CommentsThread(
+                              comment: _comments[index],
+                              headers: snapshot.data[1],
+                              portalUri: snapshot.data[0],
+                              taskId: controller.task.value.id,
+                            );
+                          },
+                        ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Padding(
+                    if (controller?.task?.value?.canCreateComment == null ||
+                        controller?.task?.value?.canCreateComment == true)
+                      Container(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              blurRadius: 3,
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .onSurface
+                                  .withOpacity(0.1),
+                              offset: const Offset(0, 0.85),
+                            ),
+                          ],
+                          color: Theme.of(context).customColors().background,
+                        ),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),
                         child: SizedBox(
@@ -112,7 +99,6 @@ class TaskCommentsView extends StatelessWidget {
                           ),
                         ),
                       ),
-                    ),
                   ],
                 );
               } else {

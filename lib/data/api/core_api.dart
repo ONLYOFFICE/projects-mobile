@@ -58,6 +58,9 @@ class CoreApi {
   Future<String> createSubtaskUrl({@required int taskId}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$taskId';
 
+  Future<String> deleteCommentUrl({String commentId}) async =>
+      '${await getPortalURI()}/api/$version/project/comment/$commentId';
+
   Future<String> deleteTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
@@ -78,6 +81,13 @@ class CoreApi {
 
   Future<String> getTaskLink({@required taskId, @required projectId}) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#';
+
+  Future<String> getCommentLink({
+    @required taskId,
+    @required projectId,
+    @required commentId,
+  }) async =>
+      '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#comment_$commentId';
 
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/$version/authentication/$code';
@@ -111,6 +121,11 @@ class CoreApi {
 
   Future<String> subscribeTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
+
+  Future<String> updateCommentUrl({
+    @required String commentId,
+  }) async =>
+      '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
   Future<String> updateSubtask({
     @required int taskId,

@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
@@ -20,7 +19,9 @@ import 'package:projects/presentation/views/projects_view/new_project/team_selec
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
+import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -31,6 +32,8 @@ List<GetPage> getxPages() => [
       GetPage(name: 'PortalView', page: () => PortalView()),
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),
+      GetPage(
+          name: 'CommentEditingView', page: () => const CommentEditingView()),
       GetPage(name: 'HomeView', page: () => const ProjectsView()),
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
@@ -58,6 +61,8 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'ProjectManagerSelectionView',
           page: () => const ProjectManagerSelectionView()),
+      GetPage(name: 'ReplyCommentView', page: () => const ReplyCommentView()),
+      GetPage(name: 'ProjectDetailedView', page: () => ProjectDetailedView()),
       GetPage(
           name: 'TeamMembersSelectionView',
           page: () => const TeamMembersSelectionView()),
