@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -47,6 +48,8 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var userController = Get.find<UserController>();
     var portalInfoController = Get.find<PortalInfoController>();
+
+    var profileController = Get.put(ProfileController());
 
     return Scaffold(
       appBar: StyledAppBar(
@@ -100,10 +103,7 @@ class ProfileScreen extends StatelessWidget {
               icon: SvgIcons.logout,
               iconColor:
                   Theme.of(context).customColors().error.withOpacity(0.6),
-              onTap: () async {
-                await Get.put(LoginController()).logout();
-                await Get.offAndToNamed('LoginView');
-              },
+              onTap: () async => profileController.logout(context),
             ),
           ],
         ),

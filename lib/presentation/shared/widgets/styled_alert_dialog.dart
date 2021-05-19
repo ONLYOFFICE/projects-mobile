@@ -42,11 +42,13 @@ class StyledAlertDialog extends StatelessWidget {
   final String contentText;
   final String cancelText;
   final String acceptText;
+  final Color acceptColor;
   final Function() onCancelTap;
   final Function() onAcceptTap;
   const StyledAlertDialog({
     Key key,
     this.cancelText = 'CANCEL',
+    this.acceptColor,
     this.acceptText = 'ACCEPT',
     this.title,
     this.content,
@@ -63,21 +65,26 @@ class StyledAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      contentPadding: contentText != null || content != null
+          ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
+          : const EdgeInsets.symmetric(horizontal: 24),
       insetPadding: const EdgeInsets.all(0),
       actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       title: title ?? Text(titleText),
-      content: content ?? Text(contentText),
+      // ignore: unnecessary_null_in_if_null_operators
+      content: content ?? contentText != null ? Text(contentText) : null,
       actions: [
         TextButton(
-          onPressed: onCancelTap ?? () => Get.back,
+          onPressed: onCancelTap ?? Get.back,
           child: Text(cancelText, style: TextStyleHelper.button()),
         ),
         TextButton(
           onPressed: onAcceptTap,
-          child: Text(acceptText,
-              style: TextStyleHelper.button(
-                  color: Theme.of(context).customColors().error)),
+          child: Text(
+            acceptText,
+            style: TextStyleHelper.button(
+                color: acceptColor ?? Theme.of(context).customColors().error),
+          ),
         ),
       ],
     );
