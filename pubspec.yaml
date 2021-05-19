@@ -28,7 +28,7 @@ dependencies:
   get_storage: ^2.0.1
   http: ^0.13.0
   flutter_svg: ^0.20.0-nullsafety.3
-  flutter_secure_storage: 3.3.5 
+  flutter_secure_storage: ^4.2.0
   get_it: ^4.0.2
   json_serializable: ^3.5.1 
   json_annotation: ^3.1.1

@@ -56,15 +56,21 @@ class SvgIcons {
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
+  static const String cloud = 'lib/assets/images/icons/cloud.svg';
+  static const String discussions = 'lib/assets/images/icons/discussions.svg';
+  static const String documents = 'lib/assets/images/icons/documents.svg';
   static const String down_arrow = 'lib/assets/images/icons/down_arrow.svg';
   static const String high_priority =
       'lib/assets/images/icons/high_priority.svg';
   static const String lock = 'lib/assets/images/icons/lock.svg';
+  static const String logout = 'lib/assets/images/icons/logout.svg';
+  static const String message = 'lib/assets/images/icons/message.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
   static const String back_round = 'lib/assets/images/icons/back_round.svg';
 
   static const String search = 'lib/assets/images/icons/search.svg';
+  static const String settings = 'lib/assets/images/icons/settings.svg';
   static const String sorting_3_descend =
       'lib/assets/images/icons/sorting_3_descend.svg';
   static const String subtasks = 'lib/assets/images/icons/subtasks.svg';
