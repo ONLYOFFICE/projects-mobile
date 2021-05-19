@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
+import 'package:projects/domain/controllers/dashboard_controller.dart';
 
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -17,6 +15,8 @@ class DashboardView extends StatelessWidget {
   const DashboardView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    var dashboardController = Get.put(DashboardController());
+
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: StyledAppBar(
@@ -28,25 +28,30 @@ class DashboardView extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
         children: <Widget>[
-          const MyTasksCard(
+          DashboardCardView(
             title: 'My Tasks',
             overline: 'Tasks',
+            controller: dashboardController.myTaskController,
           ),
-          const UpcommingCard(
+          DashboardCardView(
             title: 'Upcoming',
             overline: 'Tasks',
+            controller: dashboardController.upcomingTaskscontroller,
           ),
-          const MyProjectsCard(
+          DashboardCardView(
             title: 'My Projects',
             overline: 'Projects',
+            controller: dashboardController.myProjectsController,
           ),
-          const MyFollowedProjectsCard(
+          DashboardCardView(
             title: 'Projects I Folow',
             overline: 'Projects',
+            controller: dashboardController.folowedProjectsController,
           ),
-          const ActiveProjectsCard(
+          DashboardCardView(
             title: 'Active Projects',
             overline: 'Projects',
+            controller: dashboardController.activeProjectsController,
           ),
         ],
       ),
@@ -73,107 +78,189 @@ class DashboardCardView extends StatelessWidget {
       width: double.maxFinite,
       child: Card(
         elevation: 5,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Container(
-              height: 60,
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        overline.toUpperCase(),
-                        style: TextStyleHelper.overline(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6),
-                        ),
-                      ),
-                      Text(
-                        title,
-                        style: TextStyleHelper.headline7(),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        child: Obx(
+          () => Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              InkWell(
+                onTap: () => {
+                  controller.expandedCardView.value =
+                      !controller.expandedCardView.value
+                },
+                child: Container(
+                  height: 60,
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Obx(
-                        () => Text(
-                          controller.paginationController.total.value
-                              .toString(),
-                          style: TextStyleHelper.subtitle2(),
-                        ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            overline.toUpperCase(),
+                            style: TextStyleHelper.overline(
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .onSurface
+                                  .withOpacity(0.6),
+                            ),
+                          ),
+                          Text(
+                            title,
+                            style: TextStyleHelper.headline7(),
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-                ],
-              ),
-            ),
-            const Divider(
-              height: 1,
-              thickness: 1,
-              indent: 0,
-              endIndent: 0,
-            ),
-            Container(
-              child: Obx(
-                () => Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    if (!controller.loaded.value)
-                      Container(
-                        height: 100,
-                        child: const Center(child: CircularProgressIndicator()),
-                      ),
-                    if (controller.loaded.value &&
-                        controller.paginationController.total.value == 0)
-                      Container(
-                        height: 100,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'There are no active ${overline.toLowerCase()}',
-                              style: TextStyleHelper.subtitle1(
-                                color: Theme.of(context)
-                                    .customColors()
-                                    .onSurface
-                                    .withOpacity(0.6),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Container(
+                            height: 28,
+                            padding: const EdgeInsets.symmetric(horizontal: 10),
+                            decoration: BoxDecoration(
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .bgDescription,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Center(
+                              child: Obx(
+                                () => Text(
+                                  controller.paginationController.total.value
+                                      .toString(),
+                                  style: TextStyleHelper.subtitle2(),
+                                ),
                               ),
                             ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              if (controller.expandedCardView.value)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    const Divider(
+                      height: 1,
+                      thickness: 1,
+                      indent: 0,
+                      endIndent: 0,
+                    ),
+                    Container(
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            if (controller is ProjectsController &&
+                                controller.loaded.value)
+                              Expanded(
+                                child: ProjectCardContent(
+                                  controller: controller,
+                                ),
+                              ),
+                            if (controller is TasksController &&
+                                controller.loaded.value)
+                              Expanded(
+                                child: TaskCardContent(
+                                  controller: controller,
+                                ),
+                              ),
+                            if (!controller.loaded.value)
+                              Container(
+                                height: 100,
+                                child: const Center(
+                                    child: CircularProgressIndicator()),
+                              ),
                           ],
                         ),
                       ),
-                    if (controller is ProjectsController &&
-                        controller.loaded.value)
-                      Expanded(
-                        child: ProjectCardContent(
-                          controller: controller,
+                    ),
+                    Container(
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            if (controller.loaded.value &&
+                                controller.paginationController.total.value ==
+                                    0)
+                              Container(
+                                height: 100,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'There are no active ${overline.toLowerCase()}',
+                                      style: TextStyleHelper.subtitle1(
+                                        color: Theme.of(context)
+                                            .customColors()
+                                            .onSurface
+                                            .withOpacity(0.6),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
                         ),
                       ),
-                    if (controller is TasksController &&
-                        controller.loaded.value)
-                      Expanded(
-                        child: TaskCardContent(
-                          controller: controller,
+                    ),
+                    Container(
+                      child: Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            if (controller.loaded.value &&
+                                controller.paginationController.total.value > 2)
+                              Container(
+                                height: 50,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    InkWell(
+                                      onTap: () => {
+                                        controller.showAll.value =
+                                            !controller.showAll.value
+                                      },
+                                      child: !controller.showAll.value
+                                          ? Text(
+                                              'view all'.toUpperCase(),
+                                              style: TextStyleHelper.button(
+                                                color: Theme.of(context)
+                                                    .customColors()
+                                                    .primary,
+                                              ),
+                                            )
+                                          : Text(
+                                              'view less'.toUpperCase(),
+                                              style: TextStyleHelper.button(
+                                                color: Theme.of(context)
+                                                    .customColors()
+                                                    .primary,
+                                              ),
+                                            ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                          ],
                         ),
                       ),
+                    ),
                   ],
                 ),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -214,184 +301,6 @@ class DashboardHeader extends StatelessWidget {
   }
 }
 
-//task card
-class MyTasksCard extends StatelessWidget {
-  final String overline;
-  final String title;
-
-  const MyTasksCard({
-    Key key,
-    this.title,
-    this.overline,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _filterController = Get.put(
-      TaskFilterController(),
-      tag: 'MyTasksContent',
-    );
-
-    var controller = Get.put(
-      TasksController(
-        _filterController,
-        Get.put(PaginationController(), tag: 'MyTasksContent'),
-      ),
-      tag: 'MyTasksContent',
-    );
-    _filterController
-        .setupPreset('myTasks')
-        .then((value) => controller.loadTasks());
-
-    return DashboardCardView(
-      title: title,
-      overline: overline,
-      controller: controller,
-    );
-  }
-}
-
-//task card
-class UpcommingCard extends StatelessWidget {
-  final String overline;
-  final String title;
-
-  const UpcommingCard({
-    Key key,
-    this.title,
-    this.overline,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _filterController = Get.put(
-      TaskFilterController(),
-      tag: 'UpcommingContent',
-    );
-
-    var controller = Get.put(
-      TasksController(
-        _filterController,
-        Get.put(PaginationController(), tag: 'UpcommingContent'),
-      ),
-      tag: 'UpcommingContent',
-    );
-    _filterController
-        .setupPreset('upcomming')
-        .then((value) => controller.loadTasks());
-    return DashboardCardView(
-      title: title,
-      overline: overline,
-      controller: controller,
-    );
-  }
-}
-
-//project card
-class MyProjectsCard extends StatelessWidget {
-  final String overline;
-  final String title;
-
-  const MyProjectsCard({
-    Key key,
-    this.title,
-    this.overline,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _filterController = Get.put(
-      ProjectsFilterController(),
-      tag: 'myProjects',
-    );
-
-    var controller = Get.put(
-      ProjectsController(
-        _filterController,
-        Get.put(PaginationController(), tag: 'myProjects'),
-      ),
-      tag: 'myProjects',
-    );
-
-    _filterController
-        .setupPreset('myProjects')
-        .then((value) => controller.loadProjects());
-
-    return DashboardCardView(
-      title: title,
-      overline: overline,
-      controller: controller,
-    );
-  }
-}
-
-//project card
-class MyFollowedProjectsCard extends StatelessWidget {
-  final String overline;
-  final String title;
-
-  const MyFollowedProjectsCard({
-    Key key,
-    this.title,
-    this.overline,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _filterController =
-        Get.put(ProjectsFilterController(), tag: 'myFollowedProjects');
-
-    var controller = Get.put(
-        ProjectsController(
-          _filterController,
-          Get.put(PaginationController(), tag: 'myFollowedProjects'),
-        ),
-        tag: 'myFollowedProjects');
-    _filterController
-        .setupPreset('myFollowedProjects')
-        .then((value) => controller.loadProjects());
-
-    return DashboardCardView(
-      title: title,
-      overline: overline,
-      controller: controller,
-    );
-  }
-}
-
-//project card
-class ActiveProjectsCard extends StatelessWidget {
-  final String overline;
-  final String title;
-
-  const ActiveProjectsCard({
-    Key key,
-    this.title,
-    this.overline,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _filterController =
-        Get.put(ProjectsFilterController(), tag: 'active');
-
-    var controller = Get.put(
-        ProjectsController(
-          _filterController,
-          Get.put(PaginationController(), tag: 'active'),
-        ),
-        tag: 'active');
-    _filterController
-        .setupPreset('active')
-        .then((value) => controller.loadProjects());
-    return DashboardCardView(
-      title: title,
-      overline: overline,
-      controller: controller,
-    );
-  }
-}
-
 //project content
 class ProjectCardContent extends StatelessWidget {
   final ProjectsController controller;
@@ -404,23 +313,41 @@ class ProjectCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          if (controller.loaded.value)
-            Column(children: [
-              ListView.builder(
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (c, i) => i < 2
-                    ? ProjectCell(item: controller.paginationController.data[i])
-                    : const SizedBox(),
-                // itemExtent: 72.0,
-                itemCount: controller.paginationController.data.length,
-              ),
-            ]),
-        ],
-      ),
+      () => controller.showAll.isTrue
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (controller.loaded.value)
+                  Column(children: [
+                    ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) => ProjectCell(
+                          item: controller.paginationController.data[i]),
+                      itemCount: controller.paginationController.data.length,
+                    ),
+                  ]),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (controller.loaded.value)
+                  Column(children: [
+                    ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) => i < 2
+                          ? ProjectCell(
+                              item: controller.paginationController.data[i])
+                          : const SizedBox(),
+                      itemCount: controller.paginationController.data.length,
+                    ),
+                  ]),
+              ],
+            ),
     );
   }
 }
@@ -437,24 +364,41 @@ class TaskCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          if (controller.loaded.value)
-            Column(children: [
-              ListView.builder(
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (c, i) => i < 2
-                    ? TaskCell(task: controller.paginationController.data[i])
-                    : const SizedBox(),
-                // itemExtent: 72.0,
-                itemCount: controller.paginationController.data.length,
-              ),
-            ]),
-        ],
-      ),
+      () => controller.showAll.isTrue
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (controller.loaded.value)
+                  Column(children: [
+                    ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) => TaskCell(
+                          task: controller.paginationController.data[i]),
+                      itemCount: controller.paginationController.data.length,
+                    ),
+                  ]),
+              ],
+            )
+          : Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                if (controller.loaded.value)
+                  Column(children: [
+                    ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) => i < 2
+                          ? TaskCell(
+                              task: controller.paginationController.data[i])
+                          : const SizedBox(),
+                      itemCount: controller.paginationController.data.length,
+                    ),
+                  ]),
+              ],
+            ),
     );
   }
 }
