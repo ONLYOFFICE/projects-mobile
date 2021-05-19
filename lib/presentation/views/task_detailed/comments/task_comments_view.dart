@@ -97,7 +97,8 @@ class TaskCommentsView extends StatelessWidget {
                               offset: const Offset(0, 0.85),
                             ),
                           ],
-                          color: Theme.of(context).customColors().background,
+                          color:
+                              Theme.of(context).customColors().backgroundColor,
                         ),
                         padding: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8),

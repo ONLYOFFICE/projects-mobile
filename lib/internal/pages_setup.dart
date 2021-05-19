@@ -58,6 +58,7 @@ import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
+import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/', page: () => NavigationView()),
@@ -109,4 +110,5 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'SelectProjectForMilestone',
           page: () => const SelectProjectForMilestone()),
+      GetPage(name: 'TasksSearchScreen', page: () => const TasksSearchScreen()),
     ];

@@ -35,6 +35,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class SearchField extends StatelessWidget {
+  final bool autofocus;
   final bool showClearIcon;
   final Color color;
   final double width;
@@ -43,17 +44,20 @@ class SearchField extends StatelessWidget {
   final Widget suffixIcon;
   final EdgeInsetsGeometry margin;
   final TextEditingController controller;
+  final Function(String value) onChanged;
   final Function(String value) onSubmitted;
   final Function() onSuffixTap;
   final Function() onClearPressed;
 
   const SearchField({
     Key key,
+    this.autofocus = false,
     this.color,
     this.controller,
     this.height = 32,
     this.hintText,
     this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 10),
+    this.onChanged,
     this.onClearPressed,
     this.onSubmitted,
     this.onSuffixTap,
@@ -71,6 +75,8 @@ class SearchField extends StatelessWidget {
       child: TextField(
         controller: controller,
         onSubmitted: onSubmitted,
+        onChanged: onChanged,
+        autofocus: autofocus,
         decoration: InputDecoration(
             hintText: hintText,
             filled: true,

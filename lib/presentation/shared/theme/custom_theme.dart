@@ -85,6 +85,7 @@ final AppColors darkColors = AppColors(
 final ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
   backgroundColor: const Color(0xffffffff),
+  scaffoldBackgroundColor: lightColors.backgroundColor,
   appBarTheme: AppBarTheme(
     iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
     backgroundColor: Colors.blue, //lightColors.onPrimarySurface,
