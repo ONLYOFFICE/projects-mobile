@@ -4,15 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
-import 'package:projects/presentation/views/tasks/tasks_header_widget.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
   const TasksView({Key key}) : super(key: key);
@@ -20,7 +22,6 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
     controller.loadTasks();
-
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: Obx(() => AnimatedPadding(
@@ -31,28 +32,62 @@ class TasksView extends StatelessWidget {
               onPressed: () => Get.toNamed('NewTaskView'),
               child: const Icon(Icons.add_rounded)))),
       appBar: StyledAppBar(
-        bottom: TasksHeader(),
-        titleHeight: 0,
-        bottomHeight: 100,
+        titleHeight: 101,
+        bottomHeight: 0,
         showBackButton: false,
+        titleText: 'Tasks',
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: AppIcon(
+              width: 24,
+              height: 24,
+              icon: SvgIcons.search,
+              color: Theme.of(context).customColors().primary,
+            ),
+            onPressed: () => controller.showSearch(),
+          ),
+          IconButton(
+            icon: FiltersButton(controler: controller),
+            onPressed: () async => showFilters(context),
+          ),
+          IconButton(
+            icon: AppIcon(
+              width: 24,
+              height: 24,
+              icon: SvgIcons.tasklist,
+              color: Theme.of(context).customColors().primary,
+            ),
+            onPressed: () => {},
+          ),
+          const SizedBox(width: 3),
+        ],
+        bottom: TasksHeader(),
       ),
-      body: Obx(
-        () {
-          if (controller.loaded.isFalse)
-            return const ListLoadingSkeleton();
-          else {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.builder(
-                itemCount: controller.paginationController.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return TaskCell(
-                      task: controller.paginationController.data[index]);
-                },
-              ),
-            );
-          }
-        },
+      body: Column(
+        children: [
+          // TasksHeader(),
+          Expanded(
+            child: Obx(
+              () {
+                if (controller.loaded.isFalse)
+                  return const ListLoadingSkeleton();
+                else {
+                  return PaginationListView(
+                    paginationController: controller.paginationController,
+                    child: ListView.builder(
+                      itemCount: controller.paginationController.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return TaskCell(
+                            task: controller.paginationController.data[index]);
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -81,45 +116,62 @@ class TasksHeader extends StatelessWidget {
         const SizedBox(height: 20)
       ],
     );
-
-    var sortButton = Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: () {
-          Get.bottomSheet(SortView(sortOptions: options),
-              isScrollControlled: true);
-        },
+    return SizedBox(
+      height: 44,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 16, 0),
         child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        width: 20,
-                        height: 20,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              padding: const EdgeInsets.only(right: 4),
+              child: TextButton(
+                onPressed: () => Get.bottomSheet(SortView(sortOptions: options),
+                    isScrollControlled: true),
+                child: Row(
+                  children: [
+                    Obx(
+                      () => Text(
+                        sortController.currentSortTitle.value,
+                        style: TextStyleHelper.projectsSorting,
                       ),
                     ),
+                    const SizedBox(width: 8),
+                    Obx(
+                      () => (sortController.currentSortOrder == 'ascending')
+                          ? AppIcon(
+                              icon: SvgIcons.sorting_4_ascend,
+                              width: 20,
+                              height: 20,
+                            )
+                          : Transform(
+                              alignment: Alignment.center,
+                              transform: Matrix4.rotationX(math.pi),
+                              child: AppIcon(
+                                icon: SvgIcons.sorting_4_ascend,
+                                width: 20,
+                                height: 20,
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Obx(
+              () => Text(
+                'Total ${controller.paginationController.total.value}',
+                style: TextStyleHelper.body2(
+                  color: Theme.of(context)
+                      .customColors()
+                      .onSurface
+                      .withOpacity(0.6),
+                ),
+              ),
             ),
           ],
         ),
       ),
     );
-
-    return TasksHeaderWidget(controller: controller, sortButton: sortButton);
   }
 }

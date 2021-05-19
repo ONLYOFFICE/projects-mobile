@@ -180,7 +180,8 @@ class TaskApi {
     }
 
     if (query != null) {
-      url += '&FilterValue=$query';
+      var parsedData = Uri.encodeComponent(query);
+      url += '&FilterValue=$parsedData';
     }
 
     if (sortBy != null &&

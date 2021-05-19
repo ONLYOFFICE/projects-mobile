@@ -72,6 +72,7 @@ class TasksController extends BaseController {
       projectFilter: _filterController.projectFilter,
       milestoneFilter: _filterController.milestoneFilter,
       deadlineFilter: _filterController.deadlineFilter,
+      // query: 'задача',
     );
     paginationController.total.value = result.total;
 
@@ -85,4 +86,7 @@ class TasksController extends BaseController {
     await Future.delayed(const Duration(milliseconds: 4600));
     fabIsRaised.value = false;
   }
+
+  @override
+  void showSearch() => Get.toNamed('TasksSearchScreen');
 }
