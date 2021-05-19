@@ -8,6 +8,7 @@ import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage.dart';
+import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
 
 class LoginController extends GetxController {
@@ -164,5 +165,10 @@ class LoginController extends GetxController {
     if (expiration.isBefore(DateTime.now())) return true;
 
     return false;
+  }
+
+  Future<void> logout() async {
+    await _secureStorage.deleteAll();
+    Get.find<PortalInfoController>().logout();
   }
 }
