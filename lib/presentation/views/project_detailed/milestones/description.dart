@@ -61,6 +61,7 @@ class NewMilestoneDescription extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: TextField(
           controller: controller.descriptionController.value,
+          autofocus: true,
           maxLines: null,
           style: TextStyleHelper.subtitle1(
               color: Theme.of(context).customColors().onSurface),

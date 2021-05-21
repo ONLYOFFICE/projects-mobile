@@ -37,7 +37,8 @@ class _ProjectManager extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<ProjectsFilterController>();
+    var filterController =
+        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
         title: 'Project manager',
@@ -56,7 +57,7 @@ class _ProjectManager extends StatelessWidget {
                 filterController.projectManager['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.bottomSheet(const UsersBottomSheet());
-              await filterController.changeProjectManager('Other', newUser);
+              await filterController.changeProjectManager('other', newUser);
             },
             onCancelTap: () =>
                 filterController.changeProjectManager('other', null),
