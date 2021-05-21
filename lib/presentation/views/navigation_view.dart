@@ -7,9 +7,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
+import 'package:projects/presentation/views/more/more_view.dart';
+import 'package:projects/presentation/views/profile/profile_screen.dart';
 
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
-import 'package:projects/presentation/views/task_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 class NavigationView extends StatelessWidget {
@@ -24,7 +25,8 @@ class NavigationView extends StatelessWidget {
           const DashboardView(),
           const TasksView(),
           const ProjectsView(),
-          TaskView(),
+          const MoreView(),
+          const ProfileScreen(),
         ];
 
         // The equivalent of the "smallestWidth" qualifier on Android.
@@ -37,47 +39,60 @@ class NavigationView extends StatelessWidget {
         if (useMobileLayout) {
           return Scaffold(
             body: SafeArea(child: _pages[controller.tabIndex]),
-            bottomNavigationBar: BottomNavigationBar(
-              unselectedItemColor:
-                  Theme.of(context).customColors().inactiveTabTitle,
-              selectedItemColor:
-                  Theme.of(context).customColors().activeTabTitle,
-              onTap: controller.changeTabIndex,
-              currentIndex: controller.tabIndex,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor:
-                  Theme.of(context).customColors().tabbarBackground,
-              elevation: 0,
-              items: [
-                BottomNavigationBarItem(
-                  icon: SVG
-                      .create('lib/assets/images/icons/tab_bar/dashboard.svg'),
-                  activeIcon: SVG.create(
-                      'lib/assets/images/icons/tab_bar/dashboard_active.svg'),
-                  label: 'Dashboard',
-                ),
-                BottomNavigationBarItem(
-                  icon: SVG.create('lib/assets/images/icons/tab_bar/tasks.svg'),
-                  activeIcon: SVG.create(
-                      'lib/assets/images/icons/tab_bar/tasks_active.svg'),
-                  label: 'Tasks',
-                ),
-                BottomNavigationBarItem(
-                  icon: SVG
-                      .create('lib/assets/images/icons/tab_bar/projects.svg'),
-                  activeIcon: SVG.create(
-                      'lib/assets/images/icons/tab_bar/projects_active.svg'),
-                  label: 'Projects',
-                ),
-                BottomNavigationBarItem(
-                  icon: SVG.create('lib/assets/images/icons/tab_bar/more.svg'),
-                  activeIcon: SVG.create(
-                      'lib/assets/images/icons/tab_bar/more_active.svg'),
-                  label: 'More',
-                ),
-              ],
+            bottomNavigationBar: SizedBox(
+              height: controller.onMoreView ? 300 : 56,
+              child: Column(
+                children: [
+                  if (controller.onMoreView) const Expanded(child: MoreView()),
+                  BottomNavigationBar(
+                    unselectedItemColor:
+                        Theme.of(context).customColors().inactiveTabTitle,
+                    selectedItemColor:
+                        Theme.of(context).customColors().activeTabTitle,
+                    onTap: controller.changeTabIndex,
+                    currentIndex:
+                        controller.onMoreView || controller.tabIndex > 3
+                            ? 3
+                            : controller.tabIndex,
+                    showSelectedLabels: true,
+                    showUnselectedLabels: true,
+                    type: BottomNavigationBarType.fixed,
+                    backgroundColor:
+                        Theme.of(context).customColors().primarySurface,
+                    elevation: 0,
+                    items: [
+                      BottomNavigationBarItem(
+                        icon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/dashboard.svg'),
+                        activeIcon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/dashboard_active.svg'),
+                        label: 'Dashboard',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/tasks.svg'),
+                        activeIcon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/tasks_active.svg'),
+                        label: 'Tasks',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/projects.svg'),
+                        activeIcon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/projects_active.svg'),
+                        label: 'Projects',
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SVG
+                            .create('lib/assets/images/icons/tab_bar/more.svg'),
+                        activeIcon: SVG.create(
+                            'lib/assets/images/icons/tab_bar/more_active.svg'),
+                        label: 'More',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         } else {

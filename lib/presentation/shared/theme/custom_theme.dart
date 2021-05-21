@@ -21,6 +21,7 @@ final AppColors lightColors = AppColors(
   lightSecondary: const Color(0xffED7309),
   links: const Color(0xff0C76D5),
   onBackground: const Color(0xff000000),
+  onNavBar: const Color(0xffffffff),
   onPrimary: const Color(0xffffffff),
   onPrimarySurface: const Color(0xffffffff),
   onSurface: const Color(0xff000000),
@@ -53,6 +54,7 @@ final AppColors darkColors = AppColors(
 final ThemeData lightTheme = ThemeData.light().copyWith(
   brightness: Brightness.light,
   backgroundColor: const Color(0xffffffff),
+  scaffoldBackgroundColor: lightColors.backgroundColor,
   appBarTheme: AppBarTheme(
     iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
     backgroundColor: Colors.blue, //lightColors.onPrimarySurface,

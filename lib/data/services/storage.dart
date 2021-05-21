@@ -11,7 +11,7 @@ class SecureStorage {
     await secureStorage.write(key: key, value: value);
   }
 
-  Future<void> delete(String key) async {
-    await secureStorage.delete(key: key);
-  }
+  Future<void> delete(String key) async => await secureStorage.delete(key: key);
+
+  Future<void> deleteAll() async => await secureStorage.deleteAll();
 }

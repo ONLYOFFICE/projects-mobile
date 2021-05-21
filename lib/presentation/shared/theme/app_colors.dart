@@ -11,6 +11,7 @@ class AppColors {
   final Color lightSecondary;
   final Color links;
   final Color onBackground;
+  final Color onNavBar;
   final Color onPrimary;
   final Color onPrimarySurface;
   final Color onSurface;
@@ -35,6 +36,7 @@ class AppColors {
     @required this.lightSecondary,
     @required this.links,
     @required this.onBackground,
+    @required this.onNavBar,
     @required this.onPrimary,
     @required this.onPrimarySurface,
     @required this.onSurface,
