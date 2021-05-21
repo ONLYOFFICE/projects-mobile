@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -15,7 +17,13 @@ class ProjectsBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _projectsController = Get.find<ProjectsController>();
+    var _projectsController = Get.put(
+      ProjectsController(
+        Get.put(ProjectsFilterController(), tag: 'ProjectsBottomSheet'),
+        Get.put(PaginationController(), tag: 'ProjectsBottomSheet'),
+      ),
+      tag: 'ProjectsBottomSheet',
+    );
 
     _projectsController.loadProjects();
 
@@ -71,18 +79,21 @@ class ProjectsBottomSheet extends StatelessWidget {
                                             .data[index].title,
                                         style: TextStyleHelper.projectTitle,
                                       ),
-                                      Text(
-                                          _projectsController
-                                              .paginationController
-                                              .data[index]
-                                              .milestoneResponsible
-                                              .displayName,
-                                          style: TextStyleHelper.caption(
-                                                  color: Theme.of(context)
-                                                      .customColors()
-                                                      .onSurface
-                                                      .withOpacity(0.6))
-                                              .copyWith(height: 1.667)),
+                                      // TODO milestoneResponsible отсутствует в ответе сервера.
+                                      // Разобраться нужен ли тут ответственный за веху
+
+                                      // Text(
+                                      //     _projectsController
+                                      //         .paginationController
+                                      //         .data[index]
+                                      //         .milestoneResponsible
+                                      //         .displayName,
+                                      //     style: TextStyleHelper.caption(
+                                      //             color: Theme.of(context)
+                                      //                 .customColors()
+                                      //                 .onSurface
+                                      //                 .withOpacity(0.6))
+                                      //         .copyWith(height: 1.667)),
                                     ],
                                   ),
                                 ),

@@ -102,12 +102,6 @@ void setupLocator() {
 
   Get.lazyPut(() => ProjectTasksController(), fenix: true);
   Get.lazyPut(() => ProjectsFilterController(), fenix: true);
-  Get.lazyPut(
-      () => ProjectsController(
-            Get.find<ProjectsFilterController>(),
-            Get.put(PaginationController(), tag: 'ProjectsController'),
-          ),
-      fenix: true);
   Get.lazyPut(() => MilestonesDataSource(), fenix: true);
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);

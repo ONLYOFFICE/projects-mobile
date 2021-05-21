@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -18,7 +20,13 @@ class ProjectsView extends StatelessWidget {
   const ProjectsView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ProjectsController>();
+    var controller = Get.put(
+        ProjectsController(
+          Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
+          Get.put(PaginationController(), tag: 'ProjectsView'),
+        ),
+        tag: 'ProjectsView');
+
     controller.loadProjects();
 
     return Scaffold(
@@ -67,7 +75,14 @@ class ProjectHeader extends StatelessWidget {
     Key key,
   }) : super(key: key);
 
-  final controller = Get.find<ProjectsController>();
+  final controller = Get.find<ProjectsController>(tag: 'ProjectsView');
+  //  final controller = Get.put(
+  //     ProjectsController(
+  //       Get.find<ProjectsFilterController>(),
+  //       Get.put(PaginationController(), tag: 'SelectProjectForMilestone'),
+  //     ),
+  //   );
+
   final sortController = Get.find<ProjectsSortController>();
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
@@ -16,7 +18,12 @@ class SelectProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _projectsController = Get.find<ProjectsController>();
+    var _projectsController = Get.put(
+        ProjectsController(
+          Get.find<ProjectsFilterController>(),
+          Get.put(PaginationController(), tag: 'SelectProjectView'),
+        ),
+        tag: 'SelectProjectView');
 
     _projectsController.loadProjects();
 
