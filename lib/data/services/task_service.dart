@@ -118,6 +118,41 @@ class TaskService {
     }
   }
 
+  Future<PageDTO<List<PortalTask>>> searchTasks({
+    int startIndex,
+    String query,
+    // String sortBy,
+    // String sortOrder,
+    // String responsibleFilter,
+    // String creatorFilter,
+    // String projectFilter,
+    // String milestoneFilter,
+    // String projectId,
+    // String deadlineFilter,
+  }) async {
+    var projects = await _api.getTasksByParams(
+      startIndex: startIndex,
+      query: query,
+      // sortBy: sortBy,
+      // sortOrder: sortOrder,
+      // responsibleFilter: responsibleFilter,
+      // creatorFilter: creatorFilter,
+      // projectFilter: projectFilter,
+      // milestoneFilter: milestoneFilter,
+      // deadlineFilter: deadlineFilter,
+      // projectId: projectId,
+    );
+
+    var success = projects.response != null;
+
+    if (success) {
+      return projects;
+    } else {
+      ErrorDialog.show(projects.error);
+      return null;
+    }
+  }
+
   Future updateTask({@required NewTaskDTO newTask}) async {
     var task = await _api.updateTask(newTask: newTask);
 

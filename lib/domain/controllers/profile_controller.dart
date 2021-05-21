@@ -30,20 +30,22 @@
  *
  */
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 
-class SecureStorage {
-  final secureStorage = const FlutterSecureStorage();
-
-  Future<String> getString(String key) async {
-    return await secureStorage.read(key: key);
+class ProfileController extends GetxController {
+  void logout(context) async {
+    await Get.dialog(StyledAlertDialog(
+      titleText: 'Log out from ONLYOFFICE Projects?',
+      acceptText: 'LOG OUT',
+      acceptColor: Theme.of(context).customColors().primary,
+      onAcceptTap: () async {
+        await Get.put(LoginController()).logout();
+        await Get.offAndToNamed('PortalView');
+      },
+    ));
   }
-
-  Future<void> putString(String key, String value) async {
-    await secureStorage.write(key: key, value: value);
-  }
-
-  Future<void> delete(String key) async => await secureStorage.delete(key: key);
-
-  Future<void> deleteAll() async => await secureStorage.deleteAll();
 }

@@ -30,20 +30,35 @@
  *
  */
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/internal/locator.dart';
 
-class SecureStorage {
-  final secureStorage = const FlutterSecureStorage();
+class PortalInfoController extends GetxController {
+  final _coreApi = locator<CoreApi>();
+  var loaded = false.obs;
 
-  Future<String> getString(String key) async {
-    return await secureStorage.read(key: key);
+  String _portalName;
+  String _portalUri;
+  Map _headers;
+
+  String get portalUri => _portalUri;
+  String get portalName => _portalName;
+  Map get headers => _headers;
+
+  Future<void> getPortalInfo() async {
+    loaded.value = false;
+    if (_portalName == null || _portalUri == null || _headers == null) {
+      _portalUri = await _coreApi.getPortalURI();
+      _headers = await _coreApi.getHeaders();
+      _portalName = _portalUri.replaceFirst('https://', '');
+    }
+    loaded.value = true;
   }
 
-  Future<void> putString(String key, String value) async {
-    await secureStorage.write(key: key, value: value);
+  void logout() {
+    _portalName = null;
+    _portalUri = null;
+    _headers = null;
   }
-
-  Future<void> delete(String key) async => await secureStorage.delete(key: key);
-
-  Future<void> deleteAll() async => await secureStorage.deleteAll();
 }
