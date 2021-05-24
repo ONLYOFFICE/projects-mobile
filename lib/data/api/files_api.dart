@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
@@ -50,6 +51,29 @@ class FilesApi {
       }
     } catch (e) {
       result.error = CustomError(message: 'Ошибка');
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<List<Folder>>> getFiles() async {
+    var url = await coreApi.getFilesUrl();
+
+    var result = ApiDTO<List<Folder>>();
+
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response']['folders'] as List)
+            .map((i) => Folder.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
     }
 
     return result;

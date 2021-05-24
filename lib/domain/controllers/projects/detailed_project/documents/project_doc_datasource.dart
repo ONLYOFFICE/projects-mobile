@@ -8,6 +8,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class DocsDataSource extends GetxController {
   final _api = locator<FilesService>();
   var docsList = [].obs;
+  var foldersList = [].obs;
   var loaded = false.obs;
   var searchInputController = TextEditingController();
 
@@ -35,7 +36,7 @@ class DocsDataSource extends GetxController {
       _startIndex -= 25;
       return;
     }
-    _loadUsers();
+    _loadDocs();
     refreshController.loadComplete();
   }
 
@@ -43,25 +44,36 @@ class DocsDataSource extends GetxController {
     loaded.value = false;
     // _query = query;
     _startIndex = 0;
-    _loadUsers(needToClear: true);
+    _loadDocs(needToClear: true);
     loaded.value = true;
   }
 
-  void _loadUsers({bool needToClear = false}) async {
+  void _loadDocs({bool needToClear = false}) async {
     nothingFound.value = false;
 
     if (needToClear) docsList.clear();
+    var result;
+    if (projectDetailed != null) {
+      result =
+          await _api.getProjectFiles(projectId: projectDetailed.id.toString());
 
-    var result =
-        await _api.getProjectFiles(projectId: projectDetailed.id.toString());
+      isSearchResult.value = true;
 
-    isSearchResult.value = true;
-
-    // total = result.le;
-    if (result.isEmpty) {
-      nothingFound.value = true;
+      if (result.isEmpty) {
+        nothingFound.value = true;
+      } else {
+        docsList.addAll(result);
+      }
     } else {
-      docsList.addAll(result);
+      result = await _api.getFiles();
+
+      isSearchResult.value = true;
+
+      if (result.isEmpty) {
+        nothingFound.value = true;
+      } else {
+        foldersList.addAll(result);
+      }
     }
 
     if (applyUsersSelection != null) {
@@ -71,7 +83,7 @@ class DocsDataSource extends GetxController {
 
   void clearSearch() {
     _clear();
-    _loadUsers(needToClear: true);
+    _loadDocs(needToClear: true);
   }
 
   void _clear() {
@@ -85,18 +97,18 @@ class DocsDataSource extends GetxController {
   Future getProfiles({bool needToClear}) async {
     _clear();
     loaded.value = false;
-    _loadUsers(needToClear: true);
+    _loadDocs(needToClear: true);
     loaded.value = true;
   }
 
   Future<void> updateUsers() async {
     _clear();
-    _loadUsers();
+    _loadDocs();
   }
 
   Future getDocs() async {
     loaded.value = false;
-    _loadUsers(needToClear: true);
+    _loadDocs(needToClear: true);
     loaded.value = true;
   }
 
