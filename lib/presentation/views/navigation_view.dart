@@ -39,6 +39,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
+import 'package:projects/presentation/views/discussions_view.dart';
+import 'package:projects/presentation/views/documents_view.dart';
 import 'package:projects/presentation/views/more/more_view.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 
@@ -59,6 +61,8 @@ class NavigationView extends StatelessWidget {
           const ProjectsView(),
           const MoreView(),
           const ProfileScreen(),
+          const PortalDiscussionsView(),
+          const PortalDocumentsView(),
         ];
 
         // The equivalent of the "smallestWidth" qualifier on Android.
