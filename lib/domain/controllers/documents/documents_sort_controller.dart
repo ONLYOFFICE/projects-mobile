@@ -2,7 +2,7 @@ import 'package:projects/domain/controllers/base_sort_controller.dart';
 
 class DocumentsSortController extends BaseSortController {
   DocumentsSortController() {
-    currentSortfilter = 'create_on';
+    currentSortfilter = 'title';
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
@@ -13,14 +13,10 @@ class DocumentsSortController extends BaseSortController {
 }
 
 const _filtersMapping = {
+  'dateandtime': 'Last modified date',
   'create_on': 'Creation date',
-  'deadline': 'Deadline',
   'title': 'Title',
+  'type': 'Type',
+  'size': 'Size',
+  'author': 'Author',
 };
-//TODO: add docs sorting
-// title="Дата изменения"
-//  title="Дата создания"
-//  title="Название"
-//  title="Тип"
-//   title="Размер"
-//    title="Автор"
