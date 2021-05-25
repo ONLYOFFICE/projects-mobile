@@ -63,8 +63,18 @@ class FilesService {
     }
   }
 
-  Future<List<Folder>> getFiles() async {
-    var files = await _api.getFiles();
+  Future<FoldersResponse> getFiles(
+      {int startIndex,
+      String query,
+      String sortBy,
+      String sortOrder,
+      String folderId}) async {
+    var files = await _api.getFiles(
+        startIndex: startIndex,
+        query: query,
+        sortBy: sortBy,
+        sortOrder: sortOrder,
+        folderId: folderId);
     var success = files.response != null;
 
     if (success) {

@@ -46,7 +46,7 @@ class HeaderWidget extends StatelessWidget {
     this.controller,
     this.sortButton,
   }) : super(key: key);
-  final ProjectsController controller;
+  final controller;
   final Widget sortButton;
 
   @override

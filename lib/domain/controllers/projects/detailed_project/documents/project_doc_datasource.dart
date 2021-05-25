@@ -40,7 +40,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class DocsDataSource extends GetxController {
   final _api = locator<FilesService>();
   var docsList = [].obs;
-  var foldersList = [].obs;
+
   var loaded = false.obs;
   var searchInputController = TextEditingController();
 
@@ -84,28 +84,16 @@ class DocsDataSource extends GetxController {
     nothingFound.value = false;
 
     if (needToClear) docsList.clear();
-    var result;
-    if (projectDetailed != null) {
-      result =
-          await _api.getProjectFiles(projectId: projectDetailed.id.toString());
 
-      isSearchResult.value = true;
+    var result =
+        await _api.getProjectFiles(projectId: projectDetailed.id.toString());
 
-      if (result.isEmpty) {
-        nothingFound.value = true;
-      } else {
-        docsList.addAll(result);
-      }
+    isSearchResult.value = true;
+
+    if (result.isEmpty) {
+      nothingFound.value = true;
     } else {
-      result = await _api.getFiles();
-
-      isSearchResult.value = true;
-
-      if (result.isEmpty) {
-        nothingFound.value = true;
-      } else {
-        foldersList.addAll(result);
-      }
+      docsList.addAll(result);
     }
 
     if (applyUsersSelection != null) {

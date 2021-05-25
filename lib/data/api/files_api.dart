@@ -88,19 +88,40 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<List<Folder>>> getFiles() async {
-    var url = await coreApi.getFilesUrl();
+  Future<ApiDTO<FoldersResponse>> getFiles(
+      {int startIndex,
+      String query,
+      String sortBy,
+      String sortOrder,
+      String folderId}) async {
+    var url = await coreApi.getFilesBaseUrl();
 
-    var result = ApiDTO<List<Folder>>();
+    if (folderId != null)
+      url += '$folderId?';
+    else
+      url += '@projects?';
+
+    if (startIndex != null) {
+      url += '&Count=25&StartIndex=$startIndex';
+    }
+
+    if (query != null) {
+      url += '&FilterValue=$query';
+    }
+
+    if (sortBy != null &&
+        sortBy.isNotEmpty &&
+        sortOrder != null &&
+        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+
+    var result = ApiDTO<FoldersResponse>();
 
     try {
       var response = await coreApi.getRequest(url);
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        result.response = (responseJson['response']['folders'] as List)
-            .map((i) => Folder.fromJson(i))
-            .toList();
+        result.response = FoldersResponse.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
