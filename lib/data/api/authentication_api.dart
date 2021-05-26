@@ -52,7 +52,8 @@ class AuthApi {
       var response = await coreApi.postRequest(url, body);
 
       if (response.statusCode == 500) {
-        result.error = CustomError(message: response.reasonPhrase);
+        var message = json.decode(response.body)['error']['message'];
+        result.error = CustomError(message: message);
         return result;
       }
       if (response.statusCode == 201) {

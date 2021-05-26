@@ -61,6 +61,7 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
@@ -145,6 +146,7 @@ void setupLocator() {
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);
   Get.lazyPut(() => MilestonesFilterController(), fenix: true);
+  Get.lazyPut(() => NavigationController(), fenix: true);
   Get.lazyPut(() => NewMilestoneController(), fenix: true);
   Get.lazyPut(() => PortalInfoController(), fenix: true);
 }

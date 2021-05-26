@@ -31,22 +31,46 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class ProfileController extends GetxController {
-  void logout(context) async {
-    await Get.dialog(StyledAlertDialog(
-      titleText: 'Log out from ONLYOFFICE Projects?',
-      acceptText: 'LOG OUT',
-      acceptColor: Theme.of(context).customColors().primary,
-      onAcceptTap: () async {
-        Get.back();
-        await Get.put(LoginController()).logout();
-        await Get.offAndToNamed('PortalView');
-      },
-    ));
+class AuthTextField extends StatelessWidget {
+  final bool obscureText;
+  final Function(String value) onChanged;
+  final String hintText;
+  final String autofillHint;
+  final TextEditingController controller;
+  const AuthTextField({
+    Key key,
+    @required this.controller,
+    @required this.hintText,
+    this.onChanged,
+    this.obscureText = false,
+    this.autofillHint,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      autofillHints: [autofillHint],
+      onChanged: onChanged,
+      obscureText: obscureText,
+      obscuringCharacter: '*',
+      decoration: InputDecoration(
+          contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
+          floatingLabelBehavior: FloatingLabelBehavior.auto,
+          labelText: hintText,
+          labelStyle: TextStyleHelper.caption(
+              color:
+                  Theme.of(context).customColors().onSurface.withOpacity(0.6)),
+          hintText: hintText,
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+                  color: Theme.of(context)
+                      .customColors()
+                      .onSurface
+                      .withOpacity(0.42)))),
+    );
   }
 }

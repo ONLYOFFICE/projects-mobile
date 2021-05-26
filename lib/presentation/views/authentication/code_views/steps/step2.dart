@@ -30,23 +30,38 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/login_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+part of '../get_code_views.dart';
 
-class ProfileController extends GetxController {
-  void logout(context) async {
-    await Get.dialog(StyledAlertDialog(
-      titleText: 'Log out from ONLYOFFICE Projects?',
-      acceptText: 'LOG OUT',
-      acceptColor: Theme.of(context).customColors().primary,
-      onAcceptTap: () async {
-        Get.back();
-        await Get.put(LoginController()).logout();
-        await Get.offAndToNamed('PortalView');
-      },
-    ));
+class _Step2 extends StatelessWidget {
+  const _Step2({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    const _setupText1 = 'Launch Google Authenticator application';
+    const _setupText2 = 'Run the application\nand tap the “new account” icon';
+
+    return Column(
+      children: [
+        const SizedBox(height: 12),
+        Text('Step 2 of 4', style: _stepStyle(context)),
+        const SizedBox(height: 16.5),
+        AppIcon(icon: PngIcons.authentificator_s2, isPng: true, height: 184.5),
+        const SizedBox(height: 23),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 43),
+          child: Text(_setupText1,
+              textAlign: TextAlign.center, style: _setup1Style(context)),
+        ),
+        const SizedBox(height: 34),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Text(
+            _setupText2,
+            textAlign: TextAlign.center,
+            style: _setup2Style(context),
+          ),
+        ),
+      ],
+    );
   }
 }

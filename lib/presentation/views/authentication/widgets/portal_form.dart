@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
+// TODO delete
 class PortalForm extends StatefulWidget {
   PortalForm({Key key}) : super(key: key);
 
@@ -73,7 +74,7 @@ class _PortalFormState extends State<PortalForm> {
     );
 
     var onContinuePressed = () async {
-      await controller.getPortalCapabilities(portalController.text);
+      await controller.getPortalCapabilities();
     };
     final continueButton = Material(
       elevation: 5.0,

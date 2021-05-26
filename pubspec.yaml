@@ -26,8 +26,11 @@ dependencies:
   intl: ^0.17.0 
   get: ^4.1.4
   get_storage: ^2.0.1
+  # for http requests
   http: ^0.13.0
+  # to use svg icons
   flutter_svg: ^0.20.0-nullsafety.3
+  # for storing important data
   flutter_secure_storage: ^4.2.0
   get_it: ^4.0.2
   json_serializable: ^3.5.1 
@@ -38,12 +41,19 @@ dependencies:
   google_sign_in: ^4.5.1
   pull_to_refresh: ^1.6.4
   visibility_detector: ^0.1.5
+  # shimmer for loading
   shimmer: ^1.1.2
   drop_cap_text: ^1.0.7
+  # read more button
   readmore: ^2.0.0
+  # bottom sheet with dynamic size
   bottom_sheet: ^0.0.1-dev.8
   darq: ^1.1.1
   syncfusion_flutter_datepicker: ^19.1.59-beta
+  # to open app in App Stores //need to replace
+  launch_review: ^3.0.1
+  # formatting input in textfields // надо поменять, тк он и сам текст форматирует
+  flutter_masked_text: ^0.8.0
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -66,7 +76,9 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/images/logo_new.svg
+    - lib/assets/images/logo_big.svg
     - lib/assets/images/icons/
+    - lib/assets/images/images/
     - lib/assets/images/icons/tab_bar/
     - lib/assets/images/icons/project_statuses/
     - lib/assets/images/icons/task_detailed/

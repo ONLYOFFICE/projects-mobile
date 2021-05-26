@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -49,11 +50,19 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
+  final TextEditingController _portalAdressController = TextEditingController();
+  TextEditingController get portalAdressController => _portalAdressController;
+
+  var portalFieldIsEmpty = true.obs;
+
   Capabilities capabilities;
   String _pass;
   String _email;
 
   bool _tokenExpired;
+
+  String get portalAdress =>
+      portalAdressController.text.replaceFirst('https://', '');
 
   @override
   void onInit() {
@@ -77,7 +86,6 @@ class LoginController extends GetxController {
       setState(ViewState.Idle);
       return;
     }
-
     if (result.response.token != null) {
       await saveToken(result);
       setState(ViewState.Idle);
@@ -99,6 +107,8 @@ class LoginController extends GetxController {
 
   Future<void> sendCode(String code) async {
     setState(ViewState.Busy);
+
+    code = code.removeAllWhitespace;
 
     var result = await _authService.confirmTFACode(_email, _pass, code);
 
@@ -145,10 +155,11 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> getPortalCapabilities(String portalName) async {
+  Future<void> getPortalCapabilities() async {
     setState(ViewState.Busy);
 
-    var _capabilities = await _portalService.portalCapabilities(portalName);
+    var _capabilities =
+        await _portalService.portalCapabilities(_portalAdressController.text);
 
     if (_capabilities != null) {
       capabilities = _capabilities;
@@ -202,7 +213,7 @@ class LoginController extends GetxController {
 
   Future<void> logout() async {
     await _secureStorage.deleteAll();
-    Get.find<NavigationController>().dispose();
     Get.find<PortalInfoController>().logout();
+    Get.find<NavigationController>().clearCurrentIndex();
   }
 }
