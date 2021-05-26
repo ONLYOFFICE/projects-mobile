@@ -25,4 +25,6 @@ class NavigationController extends GetxController {
       }
     }
   }
+
+  void clearCurrentIndex() => tabIndex = null;
 }

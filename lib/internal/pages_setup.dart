@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
+import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
@@ -19,6 +20,9 @@ import 'package:projects/presentation/views/projects_view/new_project/team_selec
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
+import 'package:projects/presentation/views/settings/passcode_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
@@ -33,6 +37,10 @@ List<GetPage> getxPages() => [
       GetPage(name: 'PortalView', page: () => PortalView()),
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),
+      GetPage(name: 'GetCodeViews', page: () => const GetCodeViews()),
+      GetPage(
+          name: 'ColorThemeSelectionScreen',
+          page: () => const ColorThemeSelectionScreen()),
       GetPage(
           name: 'CommentEditingView', page: () => const CommentEditingView()),
       GetPage(name: 'HomeView', page: () => const ProjectsView()),
@@ -75,8 +83,10 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'NewMilestoneDescription',
           page: () => const NewMilestoneDescription()),
+      GetPage(name: 'PasscodeScreen', page: () => const PasscodeScreen()),
       GetPage(
           name: 'SelectProjectForMilestone',
           page: () => const SelectProjectForMilestone()),
+      GetPage(name: 'SettingsScreen', page: () => const SettingsScreen()),
       GetPage(name: 'TasksSearchScreen', page: () => const TasksSearchScreen()),
     ];

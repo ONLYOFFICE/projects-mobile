@@ -26,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: AppIcon(icon: SvgIcons.settings),
-            onPressed: () {},
+            onPressed: () => Get.toNamed('SettingsScreen'),
           )
         ],
       ),

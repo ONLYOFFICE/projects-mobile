@@ -15,20 +15,19 @@ import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 class NavigationView extends StatelessWidget {
   NavigationView({Key key}) : super(key: key);
-  final NavigationController controller = Get.put(NavigationController());
+  final NavigationController controller = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
+    var _pages = [
+      const DashboardView(),
+      const TasksView(),
+      const ProjectsView(),
+      const MoreView(),
+      const ProfileScreen(),
+    ];
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        var _pages = [
-          const DashboardView(),
-          const TasksView(),
-          const ProjectsView(),
-          const MoreView(),
-          const ProfileScreen(),
-        ];
-
         // The equivalent of the "smallestWidth" qualifier on Android.
         var shortestSide = MediaQuery.of(context).size.shortestSide;
 

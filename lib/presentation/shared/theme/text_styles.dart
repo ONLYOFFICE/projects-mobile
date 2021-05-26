@@ -55,6 +55,24 @@ class TextStyleHelper {
         color: color);
   }
 
+  static TextStyle headline3({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w400,
+        fontSize: 48,
+        height: 1.333,
+        color: color);
+  }
+
+  static TextStyle headline5({Color color}) {
+    return TextStyle(
+        fontFamily: 'Roboto',
+        fontWeight: FontWeight.w400,
+        fontSize: 24,
+        height: 1.333,
+        color: color);
+  }
+
   static TextStyle headline6({Color color}) {
     return TextStyle(
         fontFamily: 'Roboto',

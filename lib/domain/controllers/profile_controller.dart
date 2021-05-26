@@ -11,6 +11,7 @@ class ProfileController extends GetxController {
       acceptText: 'LOG OUT',
       acceptColor: Theme.of(context).customColors().primary,
       onAcceptTap: () async {
+        Get.back();
         await Get.put(LoginController()).logout();
         await Get.offAndToNamed('PortalView');
       },

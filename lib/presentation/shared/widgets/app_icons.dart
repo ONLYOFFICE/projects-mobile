@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SvgIcons {
   SvgIcons._();
   static const String logo_new = 'lib/assets/images/logo_new.svg';
+  static const String logo_big = 'lib/assets/images/logo_big.svg';
 
   static const String tab_bar_dashboard =
       'lib/assets/images/icons/tab_bar/dashboard.svg';
@@ -21,13 +22,21 @@ class SvgIcons {
   static const String tab_bar_more_active =
       'lib/assets/images/icons/tab_bar/more_active.svg';
 
+  static const String about_app = 'lib/assets/images/icons/about_app.svg';
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
+  static const String back_round = 'lib/assets/images/icons/back_round.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
+  static const String clean = 'lib/assets/images/icons/clean.svg';
   static const String cloud = 'lib/assets/images/icons/cloud.svg';
+  static const String color_scheme = 'lib/assets/images/icons/color_scheme.svg';
+  static const String copy = 'lib/assets/images/icons/copy.svg';
+  static const String delete_number =
+      'lib/assets/images/icons/delete_number.svg';
   static const String discussions = 'lib/assets/images/icons/discussions.svg';
   static const String documents = 'lib/assets/images/icons/documents.svg';
   static const String down_arrow = 'lib/assets/images/icons/down_arrow.svg';
+  static const String feedback = 'lib/assets/images/icons/feedback.svg';
   static const String high_priority =
       'lib/assets/images/icons/high_priority.svg';
   static const String lock = 'lib/assets/images/icons/lock.svg';
@@ -35,8 +44,9 @@ class SvgIcons {
   static const String message = 'lib/assets/images/icons/message.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
-  static const String back_round = 'lib/assets/images/icons/back_round.svg';
+  static const String support = 'lib/assets/images/icons/support.svg';
 
+  static const String passcode = 'lib/assets/images/icons/passcode.svg';
   static const String search = 'lib/assets/images/icons/search.svg';
   static const String settings = 'lib/assets/images/icons/settings.svg';
   static const String sorting_3_descend =
@@ -81,6 +91,12 @@ class SvgIcons {
 
 class PngIcons {
   PngIcons._();
+  static const String authentificator_s2 =
+      'lib/assets/images/images/authentificator_s2.png';
+  static const String authentificator_s3 =
+      'lib/assets/images/images/authentificator_s3.png';
+  static const String code_light = 'lib/assets/images/images/code_light.png';
+  static const String download_GA = 'lib/assets/images/images/download_GA.png';
 }
 
 class AppIcon extends StatelessWidget {
