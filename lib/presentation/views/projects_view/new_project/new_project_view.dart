@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:readmore/readmore.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
@@ -60,38 +61,69 @@ class NewProject extends StatelessWidget {
               onPressed: () => controller.confirm)
         ],
       ),
-      body: ListView(
-        children: [
-          TitleInput(controller: controller),
-          InkWell(
-            onTap: () {
-              Get.toNamed('ProjectManagerSelectionView');
-            },
-            child: ProjectManager(
-              controller: controller,
+      body: Listener(
+        onPointerDown: (_) {
+          if (controller.titleController.text.isNotEmpty &&
+              controller.titleFocus.hasFocus) controller.titleFocus.unfocus();
+        },
+        child: ListView(
+          children: [
+            TitleInput(controller: controller),
+            InkWell(
+              onTap: () {
+                Get.toNamed('ProjectManagerSelectionView');
+              },
+              child: ProjectManager(
+                controller: controller,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Get.toNamed('TeamMembersSelectionView');
-            },
-            child: TeamMembers(
-              controller: controller,
+            InkWell(
+              onTap: () {
+                Get.toNamed('TeamMembersSelectionView');
+              },
+              child: TeamMembers(
+                controller: controller,
+              ),
             ),
-          ),
-          InkWell(
-            onTap: () {
-              Get.toNamed('NewProjectDescription');
-            },
-            child: Obx(
-              () => controller.descriptionText.isEmpty
-                  ? DescriptionButton(controller: controller)
-                  : DescriptionText(controller: controller),
-            ),
-          ),
-          AdvancedOptions(controller: controller),
-        ],
+            DescriptionTile(controller: controller),
+            AdvancedOptions(controller: controller),
+          ],
+        ),
       ),
+    );
+  }
+}
+
+class DescriptionTile extends StatelessWidget {
+  final controller;
+  const DescriptionTile({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () {
+        bool _isSletected = controller.descriptionText.value.isNotEmpty;
+        return NewMilestoneInfo(
+            text: _isSletected
+                ? controller.descriptionText.value
+                : 'Add description',
+            maxLines: 1,
+            icon: SvgIcons.description,
+            caption: _isSletected ? 'Description:' : null,
+            isSelected: _isSletected,
+            suffix: _isSletected
+                ? Icon(Icons.arrow_forward_ios_outlined,
+                    size: 20,
+                    color: Theme.of(context)
+                        .customColors()
+                        .onSurface
+                        .withOpacity(0.6))
+                : null,
+            onTap: () => Get.toNamed('NewProjectDescription'));
+      },
     );
   }
 }
@@ -124,6 +156,7 @@ class TitleInput extends StatelessWidget {
                         child: Obx(
                           () => TextFormField(
                             controller: controller.titleController,
+                            focusNode: controller.titleFocus,
                             obscureText: false,
                             style: TextStyleHelper.headline7(
                                 color:
@@ -412,6 +445,40 @@ class DescriptionButton extends StatelessWidget {
     );
   }
 }
+
+// class DescriptionTile extends StatelessWidget {
+//   final controller;
+//   const DescriptionTile({
+//     Key key,
+//     @required this.controller,
+//   }) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Obx(
+//       () {
+//         bool _isSletected = controller.descriptionText.value.isNotEmpty;
+//         return NewMilestoneInfo(
+//             text: _isSletected
+//                 ? controller.descriptionText.value
+//                 : 'Add description',
+//             maxLines: 1,
+//             icon: SvgIcons.description,
+//             caption: _isSletected ? 'Description:' : null,
+//             isSelected: _isSletected,
+//             suffix: _isSletected
+//                 ? Icon(Icons.arrow_forward_ios_outlined,
+//                     size: 20,
+//                     color: Theme.of(context)
+//                         .customColors()
+//                         .onSurface
+//                         .withOpacity(0.6))
+//                 : null,
+//             onTap: () => Get.toNamed('NewMilestoneDescription'));
+//       },
+//     );
+//   }
+// }
 
 class DescriptionText extends StatelessWidget {
   const DescriptionText({

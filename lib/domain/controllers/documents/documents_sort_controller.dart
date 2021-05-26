@@ -30,40 +30,25 @@
  *
  */
 
-part of '../projects_filter.dart';
+import 'package:projects/domain/controllers/base_sort_controller.dart';
 
-class _ProjectManager extends StatelessWidget {
-  const _ProjectManager({Key key}) : super(key: key);
+class DocumentsSortController extends BaseSortController {
+  DocumentsSortController() {
+    currentSortfilter = 'title';
+    currentSortTitle.value = getFilterLabel(currentSortfilter);
+  }
 
   @override
-  Widget build(BuildContext context) {
-    var filterController =
-        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
-    return Obx(
-      () => FiltersRow(
-        title: 'Project manager',
-        options: <Widget>[
-          FilterElement(
-              title: 'me',
-              titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.projectManager['me'],
-              onTap: () => filterController.changeProjectManager('me')),
-          FilterElement(
-            title: filterController.projectManager['other'].isEmpty
-                ? 'Other user'
-                : filterController.projectManager['other'],
-            isSelected: filterController.projectManager['other'].isNotEmpty,
-            cancelButtonEnabled:
-                filterController.projectManager['other'].isNotEmpty,
-            onTap: () async {
-              var newUser = await Get.bottomSheet(const UsersBottomSheet());
-              await filterController.changeProjectManager('other', newUser);
-            },
-            onCancelTap: () =>
-                filterController.changeProjectManager('other', null),
-          ),
-        ],
-      ),
-    );
+  String getFilterLabel(value) {
+    return _filtersMapping[value];
   }
 }
+
+const _filtersMapping = {
+  'dateandtime': 'Last modified date',
+  'create_on': 'Creation date',
+  'title': 'Title',
+  'type': 'Type',
+  'size': 'Size',
+  'author': 'Author',
+};

@@ -37,7 +37,8 @@ class _TeamMember extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<ProjectsFilterController>();
+    var filterController =
+        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
         title: 'Team member',
@@ -56,7 +57,7 @@ class _TeamMember extends StatelessWidget {
                 filterController.teamMember['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.bottomSheet(const UsersBottomSheet());
-              await filterController.changeTeamMember('Other', newUser);
+              await filterController.changeTeamMember('other', newUser);
             },
             onCancelTap: () => filterController.changeTeamMember('other', null),
           ),

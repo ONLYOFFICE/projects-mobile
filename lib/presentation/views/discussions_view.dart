@@ -30,29 +30,27 @@
  *
  */
 
-import 'package:projects/domain/controllers/base_sort_controller.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class DocumentsSortController extends BaseSortController {
-  DocumentsSortController() {
-    currentSortfilter = 'create_on';
-    currentSortTitle.value = getFilterLabel(currentSortfilter);
-  }
-
+class PortalDiscussionsView extends StatelessWidget {
+  const PortalDiscussionsView({Key key}) : super(key: key);
   @override
-  String getFilterLabel(value) {
-    return _filtersMapping[value];
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).backgroundColor,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Padding(
+            padding: EdgeInsets.only(left: 20.0),
+            child: Text(
+              'DiscussionsView placeholder',
+              style: TextStyleHelper.subHeaderStyle,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
-
-const _filtersMapping = {
-  'create_on': 'Creation date',
-  'deadline': 'Deadline',
-  'title': 'Title',
-};
-//TODO: add docs sorting
-// title="Дата изменения"
-//  title="Дата создания"
-//  title="Название"
-//  title="Тип"
-//   title="Размер"
-//    title="Автор"

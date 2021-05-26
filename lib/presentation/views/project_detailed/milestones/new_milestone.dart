@@ -33,8 +33,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -514,7 +516,12 @@ class SelectProjectForMilestone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _projectsController = Get.find<ProjectsController>();
+    var _projectsController = Get.put(
+        ProjectsController(
+          Get.put(ProjectsFilterController(), tag: 'SelectProjectForMilestone'),
+          Get.put(PaginationController(), tag: 'SelectProjectForMilestone'),
+        ),
+        tag: 'SelectProjectForMilestone');
 
     _projectsController.loadProjects();
 

@@ -38,8 +38,6 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
-import 'package:projects/presentation/views/authentication/widgets/login_sources_panel.dart';
-import 'package:projects/presentation/views/authentication/widgets/password_form.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class LoginView extends StatelessWidget {

@@ -37,7 +37,8 @@ class _Status extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<ProjectsFilterController>();
+    var filterController =
+        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
         title: 'Status',
