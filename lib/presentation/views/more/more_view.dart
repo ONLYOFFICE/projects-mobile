@@ -92,11 +92,11 @@ class MoreView extends StatelessWidget {
           _MoreTile(
               iconPath: SvgIcons.discussions,
               text: 'Discussions',
-              onTap: () => print('')),
+              onTap: () => Get.find<NavigationController>().changeTabIndex(5)),
           _MoreTile(
               iconPath: SvgIcons.documents,
               text: 'Documents',
-              onTap: () => print('')),
+              onTap: () => Get.find<NavigationController>().changeTabIndex(6)),
         ],
       ),
     );
@@ -118,9 +118,7 @@ class _MoreTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        print('object');
-      },
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.only(top: 12, bottom: 12),
         child: Row(

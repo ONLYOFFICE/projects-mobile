@@ -87,6 +87,8 @@ class SvgIcons {
   static const String calendar = 'lib/assets/images/icons/calendar.svg';
   static const String tag = 'lib/assets/images/icons/tag.svg';
   static const String atribute = 'lib/assets/images/icons/atribute.svg';
+
+  static const String folder = 'lib/assets/images/icons/folders/folder.svg';
 }
 
 class PngIcons {

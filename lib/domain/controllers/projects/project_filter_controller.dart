@@ -1,14 +1,14 @@
 import 'package:get/get.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
+import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectsFilterController extends BaseFilterController {
   final _api = locator<ProjectService>();
 
-  final _sortController = Get.find<TasksSortController>();
+  final _sortController = Get.find<ProjectsSortController>();
   Function applyFiltersDelegate;
 
   String _teamMemberFilter = '';

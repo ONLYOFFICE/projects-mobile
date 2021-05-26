@@ -13,6 +13,7 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 
 class NewProjectController extends GetxController {
   final _api = locator<ProjectService>();
@@ -44,8 +45,11 @@ class NewProjectController extends GetxController {
 
   PortalUserItemController selfUserItem;
 
+  final FocusNode titleFocus = FocusNode();
+
   NewProjectController() {
     selectionMode = UserSelectionMode.Single;
+    titleFocus.requestFocus();
     responsible = '';
   }
 
@@ -90,9 +94,27 @@ class NewProjectController extends GetxController {
     if (success) Get.back();
   }
 
-  void confirmDescription() {
+  void confirmDescription(String newText) {
     descriptionText.value = descriptionController.text;
     Get.back();
+  }
+
+  void leaveDescriptionView(String typedText) {
+    if (typedText == descriptionText.value) {
+      Get.back();
+    } else {
+      Get.dialog(StyledAlertDialog(
+        titleText: 'Discard changes?',
+        contentText: 'If you leave, all changes will be lost.',
+        acceptText: 'DELETE',
+        onAcceptTap: () {
+          descriptionController.text = descriptionText.value;
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    }
   }
 
   void folow(bool value) {

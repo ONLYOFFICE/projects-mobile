@@ -17,7 +17,8 @@ part 'filters/team_member.dart';
 part 'filters/project_manager.dart';
 
 void showFilters(context) async {
-  var filterController = Get.find<ProjectsFilterController>();
+  var filterController =
+      Get.find<ProjectsFilterController>(tag: 'ProjectsView');
 
   await showStickyFlexibleBottomSheet(
     context: context,
