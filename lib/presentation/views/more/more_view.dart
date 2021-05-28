@@ -50,6 +50,11 @@ class MoreView extends StatelessWidget {
     userController.getUserInfo();
     portalInfoController.getPortalInfo();
 
+    var imageAdress = _getImageAdress(
+      portalAdress: portalInfoController.portalUri,
+      imageAdress: userController.user?.avatarMedium,
+    );
+
     return Container(
       height: 312,
       decoration: BoxDecoration(
@@ -80,7 +85,7 @@ class MoreView extends StatelessWidget {
                               maxRadius: 20,
                               minRadius: 20,
                               backgroundImage: NetworkImage(
-                                '${portalInfoController.portalUri}${userController.user?.avatarMedium}',
+                                imageAdress,
                                 headers: portalInfoController.headers,
                               ),
                             ),
@@ -133,6 +138,12 @@ class MoreView extends StatelessWidget {
       ),
     );
   }
+}
+
+// TODO use shared
+String _getImageAdress({String portalAdress, String imageAdress}) {
+  if (imageAdress.startsWith('http')) return imageAdress;
+  return '$portalAdress$imageAdress';
 }
 
 class _MoreTile extends StatelessWidget {

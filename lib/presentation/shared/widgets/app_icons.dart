@@ -74,6 +74,8 @@ class SvgIcons {
   static const String lock = 'lib/assets/images/icons/lock.svg';
   static const String logout = 'lib/assets/images/icons/logout.svg';
   static const String message = 'lib/assets/images/icons/message.svg';
+  static const String password_recovery =
+      'lib/assets/images/icons/password_recovery.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
   static const String support = 'lib/assets/images/icons/support.svg';

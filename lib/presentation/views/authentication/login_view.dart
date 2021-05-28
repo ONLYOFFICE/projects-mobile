@@ -118,9 +118,10 @@ class LoginView extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       TextButton(
-                          onPressed: () async {},
+                          onPressed: () async =>
+                              Get.toNamed('PasswordRecoveryScreen'),
                           child: Text(
-                            'Forgot password or email?',
+                            'Forgot password?',
                             style: TextStyleHelper.subtitle2(
                                 color:
                                     Theme.of(context).customColors().primary),

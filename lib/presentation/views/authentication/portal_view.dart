@@ -51,7 +51,9 @@ class PortalView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Obx(
           () => controller.state.value == ViewState.Busy
-              ? const Center(child: CircularProgressIndicator())
+              ? SizedBox(
+                  height: Get.height,
+                  child: const Center(child: CircularProgressIndicator()))
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Column(

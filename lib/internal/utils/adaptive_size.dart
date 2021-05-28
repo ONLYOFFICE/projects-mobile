@@ -31,35 +31,17 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/internal/locator.dart';
 
-class PortalInfoController extends GetxController {
-  final _coreApi = locator<CoreApi>();
-  var loaded = false.obs;
+class AdaptiveSize {
+  static double screenHeight = Get.height;
+  static double screenWidth = Get.width;
 
-  String _portalName;
-  String _portalUri;
-  Map _headers;
+  static const double designHeight = 812;
+  static const double designWidth = 375;
 
-  String get portalUri => _portalUri;
-  String get portalName => _portalName;
-  Map get headers => _headers;
-
-  Future<void> getPortalInfo() async {
-    loaded.value = false;
-    if (_portalName == null || _portalUri == null || _headers == null) {
-      _portalUri = await _coreApi.getPortalURI();
-      _headers = await _coreApi.getHeaders();
-      _portalName = _portalUri.replaceFirst('https://', '');
-    }
-
-    loaded.value = true;
-  }
-
-  void logout() {
-    _portalName = null;
-    _portalUri = null;
-    _headers = null;
-  }
+  static double heightK = screenHeight / designHeight;
+  static double widthK = screenWidth / designWidth;
 }
+
+double h(num height) => height * AdaptiveSize.heightK;
+double w(num width) => width * AdaptiveSize.widthK;

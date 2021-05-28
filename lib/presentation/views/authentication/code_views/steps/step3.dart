@@ -77,7 +77,8 @@ class _Code extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var code = 'WWWW WWWW WWWW WWWW';
+    var controller = Get.find<LoginController>();
+    var code = _splitCode(controller.tfaKey);
 
     return SizedBox(
       width: 280,
@@ -103,7 +104,8 @@ class _Code extends StatelessWidget {
                       color: Theme.of(context).customColors().onSurface)),
               GestureDetector(
                 onTap: () {
-                  Clipboard.setData(ClipboardData(text: code));
+                  Clipboard.setData(
+                      ClipboardData(text: code.removeAllWhitespace));
                   ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
                       context: context, text: 'Key copied to clipboard.'));
                 },
@@ -114,10 +116,21 @@ class _Code extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 5),
           const StyledDivider()
         ],
       ),
     );
   }
+}
+
+String _splitCode(String code) {
+  var result = code[0];
+  for (var i = 1; i <= code.length - 1; i++) {
+    if (i % 4 == 0) {
+      result += ' ';
+    }
+    result += code[i];
+  }
+  return result;
 }

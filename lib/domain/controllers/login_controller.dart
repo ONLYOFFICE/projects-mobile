@@ -58,11 +58,13 @@ class LoginController extends GetxController {
   Capabilities capabilities;
   String _pass;
   String _email;
+  String _tfaKey;
 
   bool _tokenExpired;
 
   String get portalAdress =>
       portalAdressController.text.replaceFirst('https://', '');
+  String get tfaKey => _tfaKey;
 
   @override
   void onInit() {
@@ -93,9 +95,14 @@ class LoginController extends GetxController {
     } else if (result.response.tfa) {
       _email = email;
       _pass = password;
-
       setState(ViewState.Idle);
-      await Get.toNamed('CodeView');
+
+      if (result.response.tfaKey != null) {
+        _tfaKey = result.response.tfaKey;
+        await Get.toNamed('GetCodeViews');
+      } else {
+        await Get.toNamed('CodeView');
+      }
     }
     setState(ViewState.Idle);
   }
