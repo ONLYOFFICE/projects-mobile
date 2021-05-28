@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
+import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
@@ -84,6 +86,12 @@ List<GetPage> getxPages() => [
           name: 'NewMilestoneDescription',
           page: () => const NewMilestoneDescription()),
       GetPage(name: 'PasscodeScreen', page: () => const PasscodeScreen()),
+      GetPage(
+          name: 'PasswordRecoveryScreen',
+          page: () => const PasswordRecoveryScreen1()),
+      GetPage(
+          name: 'PasswordRecoveryScreen2',
+          page: () => const PasswordRecoveryScreen2()),
       GetPage(
           name: 'SelectProjectForMilestone',
           page: () => const SelectProjectForMilestone()),

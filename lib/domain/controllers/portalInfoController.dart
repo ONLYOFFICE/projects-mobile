@@ -21,6 +21,7 @@ class PortalInfoController extends GetxController {
       _headers = await _coreApi.getHeaders();
       _portalName = _portalUri.replaceFirst('https://', '');
     }
+
     loaded.value = true;
   }
 

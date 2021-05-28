@@ -43,7 +43,6 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_ta
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';

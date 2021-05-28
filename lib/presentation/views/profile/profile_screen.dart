@@ -18,6 +18,11 @@ class ProfileScreen extends StatelessWidget {
 
     var profileController = Get.put(ProfileController());
 
+    var imageAdress = _getImageAdress(
+      portalAdress: portalInfoController.portalUri,
+      imageAdress: userController.user?.avatarMedium,
+    );
+
     return Scaffold(
       appBar: StyledAppBar(
         showBackButton: false,
@@ -38,7 +43,7 @@ class ProfileScreen extends StatelessWidget {
                 minRadius: 60,
                 maxRadius: 60,
                 backgroundImage: NetworkImage(
-                  '${portalInfoController.portalUri}${userController.user?.avatar ?? userController.user?.avatarMedium}',
+                  imageAdress,
                   headers: portalInfoController.headers,
                 ),
               ),
@@ -77,6 +82,12 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+// TODO use shared
+String _getImageAdress({String portalAdress, String imageAdress}) {
+  if (imageAdress.startsWith('http')) return imageAdress;
+  return '$portalAdress$imageAdress';
 }
 
 // TODO instead crerate shared styledTile

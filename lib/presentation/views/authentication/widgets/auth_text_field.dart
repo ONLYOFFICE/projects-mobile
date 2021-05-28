@@ -8,13 +8,15 @@ class AuthTextField extends StatelessWidget {
   final String hintText;
   final String autofillHint;
   final TextEditingController controller;
+  final TextInputType keyboardType;
   const AuthTextField({
     Key key,
-    @required this.controller,
-    @required this.hintText,
-    this.onChanged,
-    this.obscureText = false,
     this.autofillHint,
+    this.controller,
+    this.hintText,
+    this.keyboardType,
+    this.obscureText = false,
+    this.onChanged,
   }) : super(key: key);
 
   @override
@@ -25,6 +27,9 @@ class AuthTextField extends StatelessWidget {
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',
+      keyboardType: keyboardType,
+      style: TextStyleHelper.subtitle1(
+          color: Theme.of(context).customColors().onSurface),
       decoration: InputDecoration(
           contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
           floatingLabelBehavior: FloatingLabelBehavior.auto,

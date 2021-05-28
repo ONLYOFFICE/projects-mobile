@@ -44,8 +44,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: lightColors.onPrimarySurface,
-
-      automaticallyImplyLeading: true,
+      automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       leading: leading == null && showBackButton
           ? IconButton(
