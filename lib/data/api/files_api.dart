@@ -59,7 +59,7 @@ class FilesApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
@@ -82,31 +82,40 @@ class FilesApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
   }
 
-  Future<ApiDTO<FoldersResponse>> getFiles(
+  Future<ApiDTO<FoldersResponse>> getFilesByParams(
       {int startIndex,
       String query,
       String sortBy,
       String sortOrder,
-      String folderId}) async {
+      int folderId,
+      String typeFilter,
+      String authorFilter}) async {
     var url = await coreApi.getFilesBaseUrl();
 
     if (folderId != null)
-      url += '$folderId?';
+      url += '${folderId.toString()}?';
     else
       url += '@projects?';
+
+    if (query != null) {
+      url += 'filterBy=title&filterOp=contains&filterValue=${query}';
+    }
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
     }
 
-    if (query != null) {
-      url += '&FilterValue=$query';
+    if (typeFilter != null) {
+      url += typeFilter;
+    }
+    if (authorFilter != null) {
+      url += authorFilter;
     }
 
     if (sortBy != null &&

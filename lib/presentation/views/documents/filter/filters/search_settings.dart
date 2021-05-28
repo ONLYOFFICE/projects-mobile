@@ -30,16 +30,33 @@
  *
  */
 
-import 'package:get/get.dart';
+part of '../documents_filter.dart';
 
-abstract class BaseFilterController extends GetxController {
-  RxInt suitableResultCount;
+class _SearchSettings extends StatelessWidget {
+  final filterController;
 
-  String filtersTitle;
+  const _SearchSettings({Key key, this.filterController}) : super(key: key);
 
-  bool get hasFilters;
-
-  void applyFilters();
-  void resetFilters();
-  void getSuitableResultCount();
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => FiltersRow(
+        title: 'Search settings',
+        options: <Widget>[
+          FilterElement(
+              title: 'In content',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.searchSettings['in_content'],
+              onTap: () =>
+                  filterController.changeSearchSettingsFilter('in_content')),
+          FilterElement(
+              title: 'Exclude subfolders',
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.searchSettings['exclude_subfolders'],
+              onTap: () => filterController
+                  .changeSearchSettingsFilter('exclude_subfolders')),
+        ],
+      ),
+    );
+  }
 }

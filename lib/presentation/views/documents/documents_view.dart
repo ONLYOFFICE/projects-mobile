@@ -41,10 +41,13 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key key}) : super(key: key);
@@ -57,7 +60,7 @@ class PortalDocumentsView extends StatelessWidget {
       controller: controller,
       appBar: StyledAppBar(
         title: Title(controller: controller),
-        bottom: DocumentsHeader(controller: controller),
+        bottom: Bottom(controller: controller),
         showBackButton: false,
         titleHeight: 50,
         bottomHeight: 50,
@@ -75,19 +78,38 @@ class FolderContentView extends StatelessWidget {
   Widget build(BuildContext context) {
     final String folderName = Get.arguments['folderName'];
     final int folderId = Get.arguments['folderId'];
-    controller.setupFolder(
-        folderName: folderName, folderId: folderId.toString());
+    controller.setupFolder(folderName: folderName, folderId: folderId);
 
     return DocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
         title: Title(controller: controller),
-        bottom: DocumentsHeader(
-          controller: controller,
-        ),
+        bottom: Bottom(controller: controller),
         showBackButton: true,
         titleHeight: 50,
         bottomHeight: 50,
+      ),
+    );
+  }
+}
+
+class DocumentsSearchView extends StatelessWidget {
+  DocumentsSearchView({Key key}) : super(key: key);
+
+  final controller = Get.find<DocumentsController>();
+
+  @override
+  Widget build(BuildContext context) {
+    final String folderName = Get.arguments['folderName'];
+    final int folderId = Get.arguments['folderId'];
+    controller.setupSearchMode(folderName: folderName, folderId: folderId);
+
+    return DocumentsScreen(
+      controller: controller,
+      appBar: StyledAppBar(
+        title: SearchHeader(controller: controller),
+        showBackButton: true,
+        titleHeight: 50,
       ),
     );
   }
@@ -111,6 +133,7 @@ class DocumentsScreen extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            if (controller.nothingFound.isTrue) const NothingFound(),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
@@ -144,8 +167,73 @@ class DocumentsScreen extends StatelessWidget {
   }
 }
 
-class DocumentsHeader extends StatelessWidget {
-  DocumentsHeader({Key key, this.controller}) : super(key: key);
+class Title extends StatelessWidget {
+  const Title({Key key, @required this.controller}) : super(key: key);
+
+  final DocumentsController controller;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Obx(
+              () => Text(
+                controller.screenName.value,
+                style: TextStyleHelper.headerStyle,
+              ),
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              InkWell(
+                onTap: () {
+                  // TODO fix search
+                  Get.to(DocumentsSearchView(),
+                      preventDuplicates: false,
+                      arguments: {
+                        'folderName': controller.screenName.value,
+                        'folderId': controller.folderId
+                      });
+                },
+                child: AppIcon(
+                  width: 24,
+                  height: 24,
+                  icon: SvgIcons.search,
+                  color: Theme.of(context).customColors().primary,
+                ),
+              ),
+              const SizedBox(width: 24),
+              InkWell(
+                onTap: () async =>
+                    showFilters(context, controller.filterController),
+                child: FiltersButton(controler: controller),
+              ),
+              const SizedBox(width: 24),
+              InkWell(
+                onTap: () {},
+                child: AppIcon(
+                  width: 24,
+                  height: 24,
+                  icon: SvgIcons.tasklist,
+                  color: Theme.of(context).customColors().primary,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Bottom extends StatelessWidget {
+  Bottom({Key key, this.controller}) : super(key: key);
   final DocumentsController controller;
   @override
   Widget build(BuildContext context) {
@@ -221,9 +309,42 @@ class DocumentsHeader extends StatelessWidget {
       ),
     );
 
-    return DocsHeaderWidget(
-      controller: controller,
-      sortButton: sortButton,
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              sortButton,
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Obx(
+                      () => Text(
+                        'Total ${controller.paginationController.total.value}',
+                        style: TextStyleHelper.body2(
+                          color: Theme.of(context)
+                              .customColors()
+                              .onSurface
+                              .withOpacity(0.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        const Divider(
+          height: 1,
+          thickness: 1,
+          indent: 0,
+          endIndent: 0,
+        ),
+      ],
     );
   }
 }
@@ -248,9 +369,47 @@ class FileContent extends StatelessWidget {
           SizedBox(
             width: 72,
             child: Center(
-              child: Text(paginationController.data[index].fileType.toString()),
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    width: 1,
+                    color: const Color(0xffD8D8D8),
+                  ),
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Obx(() {
+                    if (paginationController.data[index].fileType == 7)
+                      return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
+                    if (paginationController.data[index].fileType == 5)
+                      return AppIcon(
+                          width: 20, height: 20, icon: SvgIcons.table);
+                    if (paginationController.data[index].fileType == 4)
+                      return AppIcon(
+                          width: 20, height: 20, icon: SvgIcons.image);
+
+                    return AppIcon(
+                        width: 20,
+                        height: 20,
+                        icon: SvgIcons.documents,
+                        color: Theme.of(context)
+                            .customColors()
+                            .onSurface
+                            .withOpacity(0.6));
+                  }),
+                ),
+              ),
             ),
           ),
+          // SizedBox(
+          //   width: 72,
+          //   child: Center(
+          //     child: Text(paginationController.data[index].fileType.toString()),
+          //   ),
+          // ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,8 +468,6 @@ class FolderContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // controller.openFolder(element.id);
-
         Get.to(FolderContentView(),
             preventDuplicates: false,
             arguments: {'folderName': element.title, 'folderId': element.id});
@@ -321,10 +478,24 @@ class FolderContent extends StatelessWidget {
             SizedBox(
               width: 72,
               child: Center(
-                child: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.folder,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 1,
+                      color: const Color(0xffD8D8D8),
+                    ),
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: AppIcon(
+                      width: 20,
+                      height: 20,
+                      icon: SvgIcons.folder,
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -373,130 +544,43 @@ class FolderContent extends StatelessWidget {
   }
 }
 
-class DocsHeaderWidget extends StatelessWidget {
-  const DocsHeaderWidget({
-    Key key,
-    this.controller,
-    this.sortButton,
-  }) : super(key: key);
-  final controller;
-  final Widget sortButton;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Bottom(sortButton: sortButton, controller: controller),
-        const Divider(
-          height: 1,
-          thickness: 1,
-          indent: 0,
-          endIndent: 0,
-        ),
-      ],
-    );
-  }
-}
-
-class Bottom extends StatelessWidget {
-  const Bottom({
-    Key key,
-    @required this.sortButton,
-    @required this.controller,
-  }) : super(key: key);
-
-  final Widget sortButton;
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          sortButton,
-          Container(
-            child: Row(
-              children: <Widget>[
-                Obx(
-                  () => Text(
-                    'Total ${controller.paginationController.total.value}',
-                    style: TextStyleHelper.body2(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Title extends StatelessWidget {
-  const Title({
+class SearchHeader extends StatelessWidget {
+  const SearchHeader({
     Key key,
     @required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final DocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Obx(
-              () => Text(
-                controller.screenName.value,
-                style: TextStyleHelper.headerStyle,
-              ),
-            ),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
+    return SizedBox(
+      height: 50,
+      child: Container(
+        child: Material(
+          child: Row(
             children: <Widget>[
+              Expanded(
+                child: TextField(
+                  autofocus: true,
+                  textInputAction: TextInputAction.search,
+                  controller: controller.searchInputController,
+                  decoration: const InputDecoration.collapsed(
+                      hintText: 'Enter your query'),
+                  onSubmitted: (value) {
+                    controller.newSearch(value);
+                  },
+                ),
+              ),
               InkWell(
                 onTap: () {
-                  controller.showSearch();
+                  controller.clearSearch();
                 },
-                child: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Theme.of(context).customColors().primary,
-                ),
-              ),
-              const SizedBox(width: 24),
-              // InkWell(
-              //   onTap: () async => showFilters(context),
-              //   child: FiltersButton(controler: controller),
-              // ),
-              const SizedBox(width: 24),
-              InkWell(
-                onTap: () {},
-                child: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.tasklist,
-                  color: Theme.of(context).customColors().primary,
-                ),
-              ),
+                child: const Icon(Icons.close, color: Colors.blue),
+              )
             ],
           ),
-        ],
+        ),
       ),
     );
   }
