@@ -72,12 +72,21 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //     statusBarColor: Colors.yellow.withOpacity(0.1),
+    //     statusBarBrightness: Brightness.light));
+
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: lightColors.onPrimarySurface,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
+      // backwardsCompatibility: false,
+      // systemOverlayStyle: const SystemUiOverlayStyle(
+      //   statusBarColor: Colors.transparent,
+      //   statusBarIconBrightness: Brightness.dark,
+      // ),
       leading: leading == null && showBackButton
           ? IconButton(
               icon: const Icon(Icons.arrow_back_rounded),
