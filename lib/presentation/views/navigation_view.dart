@@ -41,7 +41,7 @@ class NavigationView extends StatelessWidget {
 
         if (useMobileLayout) {
           return Scaffold(
-            body: SafeArea(child: _pages[controller.tabIndex]),
+            body: _pages[controller.tabIndex],
             bottomNavigationBar: SizedBox(
               height: controller.onMoreView ? 300 : 56,
               child: Column(
