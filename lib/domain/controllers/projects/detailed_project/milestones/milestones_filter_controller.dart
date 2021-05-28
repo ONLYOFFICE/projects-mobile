@@ -72,7 +72,7 @@ class MilestonesFilterController extends BaseFilterController {
         _milestoneResponsibleFilter = '&milestoneResponsible=${newValue["id"]}';
       }
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
@@ -94,10 +94,9 @@ class MilestonesFilterController extends BaseFilterController {
       }
     }
 
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
-// deadlineStart=2021-05-05T16:12:19.852438&deadlineStop=2021-05-05T16:12:19.852438&projectid=397724
   Future<void> changeDeadline(String filter,
       {DateTime start, DateTime stop}) async {
     _deadlineFilter = '';
@@ -144,7 +143,7 @@ class MilestonesFilterController extends BaseFilterController {
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
 
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   void changeStatus(String filter, [newValue = '']) async {
@@ -173,10 +172,11 @@ class MilestonesFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
-  void getSuitableTasksCount() async {
+  @override
+  void getSuitableResultCount() async {
     suitableResultCount.value = -1;
 
     var result = await _api.milestonesByFilter(
