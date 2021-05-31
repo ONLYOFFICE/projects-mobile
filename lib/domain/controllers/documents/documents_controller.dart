@@ -32,9 +32,12 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/portalInfoController.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -42,6 +45,7 @@ import 'package:projects/data/models/from_api/project_tag.dart';
 
 class DocumentsController extends GetxController {
   final _api = locator<FilesService>();
+  var portalInfoController = Get.find<PortalInfoController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;
@@ -75,6 +79,7 @@ class DocumentsController extends GetxController {
       DocumentsFilterController filterController,
       PaginationController paginationController,
       DocumentsSortController sortController) {
+    // portalInfoController.getPortalInfo();
     _sortController = sortController;
     _paginationController = paginationController;
 
@@ -171,11 +176,6 @@ class DocumentsController extends GetxController {
 
   Future<void> setupSearchMode({String folderName, int folderId}) async {
     loaded.value = true;
-
-    // _clear();
-
-    // if (folderId != null) _filterController.folderId = _folderId;
-    // screenName.value = folderName;
   }
 
   void _performSearch() async {
@@ -189,5 +189,51 @@ class DocumentsController extends GetxController {
     }
 
     loaded.value = true;
+  }
+
+  void onFilePopupMenuSelected(value, PortalFile element) {}
+
+  Future<bool> renameFolder(Folder element, String newName) async {
+    var result = await _api.renameFolder(
+      folderId: element.id.toString(),
+      newTitle: newName,
+    );
+
+    return result != null;
+  }
+
+  void downloadFolder() {}
+
+  void moveFolder() {
+    //PUT api/2.0/files/fileops/move
+  }
+
+  void copyFolder() {
+    //PUT api/2.0/files/fileops/move
+  }
+
+  Future<bool> deleteFolder(Folder element) async {
+    var result = await _api.deleteFolder(
+      folderId: element.id.toString(),
+    );
+
+    return result != null;
+  }
+
+  Future<bool> deleteFile(PortalFile element) async {
+    var result = await _api.deleteFile(
+      fileId: element.id.toString(),
+    );
+
+    return result != null;
+  }
+
+  Future<bool> renameFile(PortalFile element, String newName) async {
+    var result = await _api.renameFile(
+      fileId: element.id.toString(),
+      newTitle: newName,
+    );
+
+    return result != null;
   }
 }

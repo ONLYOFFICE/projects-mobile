@@ -187,7 +187,12 @@ class CoreApi {
 
   Future<String> createMilestoneUrl(String projectID) async =>
       '${await getPortalURI()}/api/$version/project/$projectID/milestone';
-  //  api/2.0/project/1234/milestone
+
+  Future<String> getFolderByIdUrl({String folderId}) async =>
+      '${await getPortalURI()}/api/$version/files/folder/$folderId';
+
+  Future<String> getFileByIdUrl({String fileId}) async =>
+      '${await getPortalURI()}/api/$version/files/file/$fileId';
 
   Future<http.Response> getRequest(String url) async {
     print(url);
@@ -242,6 +247,7 @@ class CoreApi {
       await savePortalName();
     }
 
+    //TODO return Uri instead of string Uri.parse(_portalName)
     return _portalName;
   }
 
