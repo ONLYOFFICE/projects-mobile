@@ -30,13 +30,13 @@
  *
  */
 
-import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/users_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_header.dart';
@@ -51,10 +51,9 @@ part 'filters/milestone_responsible.dart';
 void showFilters(context) async {
   var filterController = Get.find<MilestonesFilterController>();
 
-  await showStickyFlexibleBottomSheet(
+  showCustomBottomSheet(
     context: context,
     headerHeight: 84,
-    isExpand: true,
     initHeight: 0.9,
     decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
