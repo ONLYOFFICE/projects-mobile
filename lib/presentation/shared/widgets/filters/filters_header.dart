@@ -15,52 +15,61 @@ class FiltersHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: SizedBox(
-                height: 4,
-                width: 40,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.2),
-                      borderRadius: BorderRadius.circular(2)),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).customColors().onPrimarySurface,
+        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      child: SizedBox(
+        height: 68,
+        child: Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: SizedBox(
+                  height: 4,
+                  width: 40,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .customColors()
+                            .onSurface
+                            .withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(2)),
+                  ),
                 ),
               ),
             ),
-          ),
-          Padding(
-              padding: const EdgeInsets.only(left: 15, right: 16, top: 6),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Text('Filter',
-                            style: TextStyleHelper.h6(
-                                color:
-                                    Theme.of(context).customColors().onSurface))
-                      ],
-                    ),
-                    TextButton(
-                        onPressed: () async {
-                          filterController.resetFilters();
-                          Get.back();
-                        },
-                        child: Text('RESET',
-                            style: TextStyleHelper.button(
-                                color: Theme.of(context)
-                                    .customColors()
-                                    .systemBlue)))
-                  ])),
-          const Divider(height: 18),
-        ]);
+            Positioned(
+                top: 18.5,
+                left: 16,
+                child: Text('Filter',
+                    style: TextStyleHelper.h6(
+                        color: Theme.of(context).customColors().onSurface))),
+            Positioned(
+                top: 5,
+                right: 5,
+                child: TextButton(
+                    onPressed: () async {
+                      filterController.resetFilters();
+                      Get.back();
+                    },
+                    child: Text('RESET',
+                        style: TextStyleHelper.button(
+                            color:
+                                Theme.of(context).customColors().systemBlue)))),
+            const Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 1,
+              child: Divider(),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

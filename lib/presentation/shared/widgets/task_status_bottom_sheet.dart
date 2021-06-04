@@ -1,4 +1,3 @@
-import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
@@ -6,13 +5,16 @@ import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
 
 void showsStatusesBS({context, TaskItemController taskItemController}) async {
-  await showStickyFlexibleBottomSheet(
+  var _statusesController = Get.find<TaskStatusesController>();
+  showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    // isExpand: true,
-    initHeight: 0.6,
+    initHeight:
+        _getInititalSize(statusCount: _statusesController.statuses.length),
+    // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
@@ -32,7 +34,6 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
       );
     },
     builder: (context, bottomSheetOffset) {
-      var _statusesController = Get.find<TaskStatusesController>();
       return SliverChildListDelegate(
         [
           Obx(
@@ -128,4 +129,9 @@ class StatusTile extends StatelessWidget {
       ),
     );
   }
+}
+
+double _getInititalSize({int statusCount}) {
+  var size = (statusCount * 75) / Get.height;
+  return size > 0.7 ? 0.7 : size;
 }

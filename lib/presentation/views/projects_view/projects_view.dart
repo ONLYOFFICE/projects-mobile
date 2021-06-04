@@ -32,9 +32,7 @@ class ProjectsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       floatingActionButton: StyledFloatingActionButton(
-        onPressed: () {
-          controller.createNewProject();
-        },
+        onPressed: () => controller.createNewProject(),
         child: AppIcon(
           icon: SvgIcons.add_project,
           width: 32,
