@@ -44,6 +44,7 @@ class _Responsible extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: 'Me',
+              titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.responsible['Me'],
               onTap: () => filterController.changeResponsible('Me')),
           FilterElement(

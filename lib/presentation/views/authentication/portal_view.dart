@@ -118,7 +118,7 @@ class PortalView extends StatelessWidget {
                       ),
                       SizedBox(height: Get.height * 0.222),
                       Text(
-                        decsription,
+                        _decsription,
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.body2(
                             color: Theme.of(context)
@@ -135,5 +135,5 @@ class PortalView extends StatelessWidget {
   }
 }
 
-String decsription =
+String _decsription =
     'ONLYOFFICE portal provide saving filesin cloud storage, share it with co-workersand co-editing in realtime';

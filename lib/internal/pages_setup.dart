@@ -51,6 +51,7 @@ import 'package:projects/presentation/views/projects_view/new_project/new_projec
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
+import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
@@ -65,6 +66,7 @@ import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detai
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
+import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/', page: () => NavigationView()),
@@ -81,6 +83,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(name: 'TaskEditingView', page: () => const TaskEditingView()),
+      GetPage(name: 'TasksFilterScreen', page: () => const TasksFilterScreen()),
       GetPage(name: 'NewTaskView', page: () => const NewTaskView()),
       GetPage(name: 'NewCommentView', page: () => const NewCommentView()),
       GetPage(
@@ -97,6 +100,9 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'SubtaskDetailedView', page: () => const SubtaskDetailedView()),
       GetPage(name: 'ProjectSearchView', page: () => ProjectSearchView()),
+      GetPage(
+          name: 'ProjectsFilterScreen',
+          page: () => const ProjectsFilterScreen()),
       GetPage(name: 'NewProject', page: () => const NewProject()),
       GetPage(
           name: 'NewProjectDescription',

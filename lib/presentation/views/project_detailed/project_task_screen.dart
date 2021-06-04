@@ -47,7 +47,6 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -165,7 +164,8 @@ class Header extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () async => showFilters(context),
+                      // onTap: () async => showFilters(context),
+                      onTap: () async => Get.toNamed('TasksFilterScreen'),
                       child: FiltersButton(controler: controller),
                     ),
                   ],

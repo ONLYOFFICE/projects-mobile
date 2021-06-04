@@ -30,7 +30,6 @@
  *
  */
 
-import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
@@ -38,6 +37,7 @@ import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 
 // here is a different function, because the task changes page has a
@@ -45,11 +45,12 @@ import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.da
 // update the status of the task immediately after clicking,
 // but you need to do it when saving changes
 void statusSelectionBS({context, TaskEditingController controller}) async {
-  await showStickyFlexibleBottomSheet(
+  var _statusesController = Get.find<TaskStatusesController>();
+  showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    // isExpand: true,
-    initHeight: 0.6,
+    initHeight:
+        _getInititalSize(statusCount: _statusesController.statuses.length),
     decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
@@ -69,7 +70,6 @@ void statusSelectionBS({context, TaskEditingController controller}) async {
       );
     },
     builder: (context, bottomSheetOffset) {
-      var _statusesController = Get.find<TaskStatusesController>();
       return SliverChildListDelegate(
         [
           Obx(
@@ -112,4 +112,9 @@ void statusSelectionBS({context, TaskEditingController controller}) async {
       );
     },
   );
+}
+
+double _getInititalSize({int statusCount}) {
+  var size = (statusCount * 75) / Get.height;
+  return size > 0.7 ? 0.7 : size;
 }

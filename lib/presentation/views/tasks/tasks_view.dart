@@ -46,7 +46,6 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
   const TasksView({Key key}) : super(key: key);
@@ -81,7 +80,8 @@ class TasksView extends StatelessWidget {
           ),
           IconButton(
             icon: FiltersButton(controler: controller),
-            onPressed: () async => showFilters(context),
+            // onPressed: () async => showFilters(context),
+            onPressed: () async => Get.toNamed('TasksFilterScreen'),
           ),
           IconButton(
             icon: AppIcon(

@@ -30,50 +30,40 @@
  *
  */
 
+import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/services/storage.dart';
 
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/internal/splash_view.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
+// TODO удали как увидишь. Я добавил эту функцию для bs, в ней определен
+// максимальный размер, чтобы не закрывался статус бар. Давай использовать ее.
+void showCustomBottomSheet({
+  @required context,
+  @required double headerHeight,
+  // ignore: use_function_type_syntax_for_parameters
+  @required Widget headerBuilder(context, bottomSheetOffset),
+  // ignore: use_function_type_syntax_for_parameters
+  @required SliverChildDelegate builder(context, bottomSheetOffset),
+  double initHeight,
+  double maxHeight,
+  BoxDecoration decoration,
+}) async {
+  var heightWithoutStatusBar = _getMaxHeight(context);
 
-class App extends StatelessWidget {
-  App({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getInitPage(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return GetMaterialApp(
-            initialRoute: snapshot.data,
-            getPages: getxPages(),
-            localizationsDelegates: localizationsDelegates(),
-            supportedLocales: supportedLocales(),
-            title: 'ONLYOFFICE',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeService().themeMode,
-          );
-        } else {
-          return const SplashView();
-        }
-      },
-    );
-  }
+  await showStickyFlexibleBottomSheet(
+    context: context,
+    headerBuilder: headerBuilder,
+    builder: builder,
+    headerHeight: headerHeight,
+    decoration: decoration,
+    initHeight: initHeight ?? heightWithoutStatusBar - 0.1,
+    maxHeight: maxHeight ?? heightWithoutStatusBar,
+  );
 }
 
-Future<String> _getInitPage() async {
-  var storage = locator<SecureStorage>();
-  var token = await storage.getString('token');
+double _getMaxHeight(context) {
+  var screenHeight = MediaQuery.of(context).size.height;
+  var statusBarHeight = MediaQuery.of(context).padding.top == 0
+      ? 32
+      : MediaQuery.of(context).padding.top;
 
-  if (token != null) {
-    return '/';
-  } else {
-    return 'PortalView';
-  }
+  return (screenHeight - statusBarHeight - 8) / screenHeight;
 }
