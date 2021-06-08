@@ -110,7 +110,10 @@ class MoreView extends StatelessWidget {
 
 // TODO use shared
 String _getImageAdress({String portalAdress, String imageAdress}) {
-  if (imageAdress.startsWith('http')) return imageAdress;
+  if (imageAdress?.startsWith('http') != null &&
+      imageAdress.startsWith('http')) {
+    return imageAdress;
+  }
   return '$portalAdress$imageAdress';
 }
 

@@ -1,7 +1,9 @@
 import 'package:get/get.dart';
+import 'package:projects/presentation/shared/widgets/passcode_screen_template.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:projects/presentation/views/authentication/passcode/passcode_screen.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
@@ -24,7 +26,10 @@ import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
-import 'package:projects/presentation/views/settings/passcode_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/current_passcode_check_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen1.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen2.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
@@ -47,6 +52,10 @@ List<GetPage> getxPages() => [
           page: () => const ColorThemeSelectionScreen()),
       GetPage(
           name: 'CommentEditingView', page: () => const CommentEditingView()),
+      GetPage(
+        name: 'CurrentPasscodeCheckScreen',
+        page: () => const CurrentPasscodeCheckScreen(),
+      ),
       GetPage(name: 'HomeView', page: () => const ProjectsView()),
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
@@ -91,6 +100,13 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'NewMilestoneDescription',
           page: () => const NewMilestoneDescription()),
+      GetPage(
+          name: 'NewPasscodeScreen1', page: () => const NewPasscodeScreen1()),
+      GetPage(
+          name: 'NewPasscodeScreen2', page: () => const NewPasscodeScreen2()),
+      GetPage(
+          name: 'PasscodeSettingsScreen',
+          page: () => const PasscodeSettingsScreen()),
       GetPage(name: 'PasscodeScreen', page: () => const PasscodeScreen()),
       GetPage(
           name: 'PasswordRecoveryScreen',
