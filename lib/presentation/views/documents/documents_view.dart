@@ -50,8 +50,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
-import 'package:projects/presentation/views/documents/move_document_view.dart';
+import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key key}) : super(key: key);
@@ -63,8 +62,8 @@ class PortalDocumentsView extends StatelessWidget {
     return DocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
-        title: Title(controller: controller),
-        bottom: Bottom(controller: controller),
+        title: DocsTitle(controller: controller),
+        bottom: DocsBottom(controller: controller),
         showBackButton: false,
         titleHeight: 50,
         bottomHeight: 50,
@@ -81,14 +80,14 @@ class FolderContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String folderName = Get.arguments['folderName'];
-    final int folderId = Get.arguments['folderId'];
-    controller.setupFolder(folderName: folderName, folderId: folderId);
+    final Folder folder = Get.arguments['folder'];
+    controller.setupFolder(folderName: folderName, folder: folder);
 
     return DocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
-        title: Title(controller: controller),
-        bottom: Bottom(controller: controller),
+        title: DocsTitle(controller: controller),
+        bottom: DocsBottom(controller: controller),
         showBackButton: true,
         titleHeight: 50,
         bottomHeight: 50,
@@ -105,8 +104,8 @@ class DocumentsSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String folderName = Get.arguments['folderName'];
-    final int folderId = Get.arguments['folderId'];
-    controller.setupSearchMode(folderName: folderName, folderId: folderId);
+    final Folder folder = Get.arguments['folder'];
+    controller.setupSearchMode(folderName: folderName, folder: folder);
 
     return DocumentsScreen(
       controller: controller,
@@ -199,7 +198,7 @@ class SearchHeader extends StatelessWidget {
                   },
                 ),
               ),
-              InkWell(
+              InkResponse(
                 onTap: () {
                   controller.clearSearch();
                 },
@@ -213,10 +212,9 @@ class SearchHeader extends StatelessWidget {
   }
 }
 
-class Title extends StatelessWidget {
-  const Title({Key key, @required this.controller}) : super(key: key);
-
-  final DocumentsController controller;
+class DocsTitle extends StatelessWidget {
+  const DocsTitle({Key key, @required this.controller}) : super(key: key);
+  final controller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -237,13 +235,13 @@ class Title extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              InkWell(
+              InkResponse(
                 onTap: () {
                   Get.to(DocumentsSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
-                        'folderId': controller.folderId
+                        'folder': controller.currentFolder
                       });
                 },
                 child: AppIcon(
@@ -254,23 +252,13 @@ class Title extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 24),
-              InkWell(
+              InkResponse(
                 onTap: () async => Get.toNamed('DocumentsFilterScreen',
                     preventDuplicates: false,
                     arguments: {
                       'filterController': controller.filterController
                     }),
                 child: FiltersButton(controler: controller),
-              ),
-              const SizedBox(width: 24),
-              InkWell(
-                onTap: () {},
-                child: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.tasklist,
-                  color: Theme.of(context).customColors().primary,
-                ),
               ),
             ],
           ),
@@ -280,9 +268,9 @@ class Title extends StatelessWidget {
   }
 }
 
-class Bottom extends StatelessWidget {
-  Bottom({Key key, this.controller}) : super(key: key);
-  final DocumentsController controller;
+class DocsBottom extends StatelessWidget {
+  DocsBottom({Key key, this.controller}) : super(key: key);
+  final controller;
   @override
   Widget build(BuildContext context) {
     var options = Column(
@@ -319,7 +307,7 @@ class Bottom extends StatelessWidget {
 
     var sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
+      child: InkResponse(
         onTap: () {
           Get.bottomSheet(
             SortView(sortOptions: options),
@@ -504,14 +492,14 @@ class FileContent extends StatelessWidget {
                     //   value: 'download',
                     //   child: Text('Download'),
                     // ),
-                    // const PopupMenuItem(
-                    //   value: 'copy',
-                    //   child: Text('Copy'),
-                    // ),
-                    //   const PopupMenuItem(
-                    //     value: 'move',
-                    //     child: Text('Move'),
-                    //   ),
+                    const PopupMenuItem(
+                      value: 'copy',
+                      child: Text('Copy'),
+                    ),
+                    const PopupMenuItem(
+                      value: 'move',
+                      child: Text('Move'),
+                    ),
                     const PopupMenuItem(
                       value: 'rename',
                       child: Text('Rename'),
@@ -543,11 +531,11 @@ class FolderContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkResponse(
       onTap: () {
         Get.to(FolderContentView(),
             preventDuplicates: false,
-            arguments: {'folderName': element.title, 'folderId': element.id});
+            arguments: {'folderName': element.title, 'folder': element});
       },
       child: Container(
         child: Row(
@@ -597,7 +585,11 @@ class FolderContent extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10),
                 child: PopupMenuButton(
                   onSelected: (value) => _onFolderPopupMenuSelected(
-                      value, element, context, controller),
+                    value,
+                    element,
+                    context,
+                    controller,
+                  ),
                   icon: Icon(Icons.more_vert,
                       color: Theme.of(context)
                           .customColors()
@@ -617,21 +609,21 @@ class FolderContent extends StatelessWidget {
                       //   value: 'download',
                       //   child: Text('Download'),
                       // ),
-                      // const PopupMenuItem(
-                      //   value: 'copy',
-                      //   child: Text('Copy'),
-                      // ),
-                      // if (element.parentId != 0)
-                      //   const PopupMenuItem(
-                      //     value: 'move',
-                      //     child: Text('Move'),
-                      //   ),
-                      if (element.parentId != 0)
+                      const PopupMenuItem(
+                        value: 'copy',
+                        child: Text('Copy'),
+                      ),
+                      if (_isRoot(element))
+                        const PopupMenuItem(
+                          value: 'move',
+                          child: Text('Move'),
+                        ),
+                      if (_isRoot(element))
                         const PopupMenuItem(
                           value: 'rename',
                           child: Text('Rename'),
                         ),
-                      if (element.parentId != 0)
+                      if (_isRoot(element))
                         const PopupMenuItem(
                           value: 'delete',
                           child: Text('Delete'),
@@ -648,13 +640,20 @@ class FolderContent extends StatelessWidget {
   }
 }
 
-void _onFolderPopupMenuSelected(value, Folder element, BuildContext context,
-    DocumentsController controller) async {
+bool _isRoot(element) => element.parentId != null && element.parentId != 0;
+
+void _onFolderPopupMenuSelected(
+  value,
+  Folder selectedFolder,
+  BuildContext context,
+  DocumentsController controller,
+) async {
   switch (value) {
     case 'copyLink':
       var portalDomain = controller.portalInfoController.portalUri;
 
-      var link = '${portalDomain}Products/Files/#${element.id.toString()}';
+      var link =
+          '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
@@ -663,26 +662,40 @@ void _onFolderPopupMenuSelected(value, Folder element, BuildContext context,
       }
       break;
     case 'open':
-      await Get.to(FolderContentView(),
-          preventDuplicates: false,
-          arguments: {'folderName': element.title, 'folderId': element.id});
+      await Get.to(FolderContentView(), preventDuplicates: false, arguments: {
+        'folderName': selectedFolder.title,
+        'folder': selectedFolder
+      });
       break;
     case 'download':
       controller.downloadFolder();
       break;
     case 'copy':
-      controller.copyFolder();
+      await Get.to(DocumentsMoveOrCopyView(),
+          preventDuplicates: false,
+          arguments: {
+            'mode': 'copyFolder',
+            'target': selectedFolder,
+            'initialFolder': controller.currentFolder,
+            'refreshCalback': controller.refreshContent
+          });
       break;
     case 'move':
-      await Get.to(MoveFolderView(),
-          preventDuplicates: false, arguments: {'element': element});
+      await Get.to(DocumentsMoveOrCopyView(),
+          preventDuplicates: false,
+          arguments: {
+            'mode': 'moveFolder',
+            'target': selectedFolder,
+            'initialFolder': controller.currentFolder,
+            'refreshCalback': controller.refreshContent
+          });
 
       break;
     case 'rename':
-      _renameFolder(controller, element, context);
+      _renameFolder(controller, selectedFolder, context);
       break;
     case 'delete':
-      var success = await controller.deleteFolder(element);
+      var success = await controller.deleteFolder(selectedFolder);
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -695,14 +708,18 @@ void _onFolderPopupMenuSelected(value, Folder element, BuildContext context,
   }
 }
 
-void _onFilePopupMenuSelected(value, PortalFile element, BuildContext context,
-    DocumentsController controller) async {
+void _onFilePopupMenuSelected(
+  value,
+  PortalFile selectedFile,
+  BuildContext context,
+  DocumentsController controller,
+) async {
   switch (value) {
     case 'copyLink':
       var portalDomain = controller.portalInfoController.portalUri;
 
       var link =
-          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${element.id.toString()}';
+          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
@@ -715,14 +732,31 @@ void _onFilePopupMenuSelected(value, PortalFile element, BuildContext context,
     case 'download':
       break;
     case 'copy':
+      await Get.to(DocumentsMoveOrCopyView(),
+          preventDuplicates: false,
+          arguments: {
+            'mode': 'copyFile',
+            'target': selectedFile,
+            'initialFolder': controller.currentFolder,
+            'refreshCalback': controller.refreshContent
+          });
       break;
     case 'move':
+      await Get.to(DocumentsMoveOrCopyView(),
+          preventDuplicates: false,
+          arguments: {
+            'mode': 'moveFile',
+            'target': selectedFile,
+            'initialFolder': controller.currentFolder,
+            'refreshCalback': controller.refreshContent
+          });
+
       break;
     case 'rename':
-      _renameFile(controller, element, context);
+      _renameFile(controller, selectedFile, context);
       break;
     case 'delete':
-      var success = await controller.deleteFile(element);
+      var success = await controller.deleteFile(selectedFile);
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(

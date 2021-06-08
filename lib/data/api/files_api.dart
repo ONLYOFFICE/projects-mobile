@@ -34,6 +34,7 @@ import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
@@ -166,7 +167,6 @@ class FilesApi {
 
   Future<ApiDTO<PortalFile>> renameFile(
       {String fileId, String newTitle}) async {
-    //  PUT api/2.0/files/file/{fileId}
     var url = await coreApi.getFileByIdUrl(fileId: fileId);
     var body = {'title': newTitle};
 
@@ -218,6 +218,84 @@ class FilesApi {
 
       if (response.statusCode == 200) {
         result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<MoveFolderResponse>> moveDocument({
+    String movingFolder,
+    String targetFolder,
+    String movingFile,
+  }) async {
+    var url = await coreApi.getMoveOpsUrl();
+
+    var folderIds = [];
+    if (movingFolder != null) folderIds.add(movingFolder.toString());
+    var fileIds = [];
+    if (movingFile != null) fileIds.add(movingFile.toString());
+
+    var body = {
+      'destFolderId': targetFolder,
+      'folderIds': folderIds,
+      'fileIds': fileIds,
+      'conflictResolveType': 'skip',
+      'deleteAfter': true
+    };
+
+    var result = ApiDTO<MoveFolderResponse>();
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response =
+            MoveFolderResponse.fromJson(responseJson['response'][0]);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<MoveFolderResponse>> copyDocument({
+    String copyingFolder,
+    String targetFolder,
+    String copyingFile,
+  }) async {
+    var url = await coreApi.getCopyOpsUrl();
+
+    var folderIds = [];
+    if (copyingFolder != null) folderIds.add(copyingFolder.toString());
+    var fileIds = [];
+    if (copyingFile != null) fileIds.add(copyingFile.toString());
+
+    var body = {
+      'destFolderId': targetFolder,
+      'folderIds': folderIds,
+      'fileIds': fileIds,
+      'conflictResolveType': 'skip',
+      'deleteAfter': true
+    };
+
+    var result = ApiDTO<MoveFolderResponse>();
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response =
+            MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
