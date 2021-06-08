@@ -156,7 +156,7 @@ class Header extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () async => showFilters(context),
+                      onTap: () async => Get.toNamed('MilestoneFilterScreen'),
                       child: FiltersButton(controler: controller),
                     ),
                   ],

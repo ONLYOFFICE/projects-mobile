@@ -51,6 +51,7 @@ import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/move_document_view.dart';
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key key}) : super(key: key);
@@ -254,8 +255,11 @@ class Title extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkWell(
-                onTap: () async =>
-                    showFilters(context, controller.filterController),
+                onTap: () async => Get.toNamed('DocumentsFilterScreen',
+                    preventDuplicates: false,
+                    arguments: {
+                      'filterController': controller.filterController
+                    }),
                 child: FiltersButton(controler: controller),
               ),
               const SizedBox(width: 24),
@@ -805,98 +809,4 @@ void _renameFile(
       onCancelTap: Get.back,
     ),
   );
-}
-
-class MoveFolderView extends StatelessWidget {
-  MoveFolderView({Key key}) : super(key: key);
-
-  final controller = Get.find<DocumentsController>();
-
-  @override
-  Widget build(BuildContext context) {
-    final Folder element = Get.arguments['element'];
-
-    controller.initialSetup();
-
-    return MoveDocumentsScreen(
-      controller: controller,
-      appBar: StyledAppBar(
-        title: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: Obx(
-                  () => Text(
-                    controller.screenName.value,
-                    style: TextStyleHelper.headerStyle,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        showBackButton: true,
-        titleHeight: 50,
-      ),
-    );
-  }
-}
-
-class MoveDocumentsScreen extends StatelessWidget {
-  const MoveDocumentsScreen({
-    Key key,
-    @required this.controller,
-    this.appBar,
-  }) : super(key: key);
-  final StyledAppBar appBar;
-  final DocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      appBar: appBar,
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (controller.nothingFound.isTrue) const NothingFound(),
-            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
-              Expanded(
-                child: PaginationListView(
-                  paginationController: controller.paginationController,
-                  child: ListView.separated(
-                    itemCount: controller.paginationController.data.length,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 10);
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      var element = controller.paginationController.data[index];
-                      return element is Folder
-                          ? FolderContent(
-                              element: element,
-                              controller: controller,
-                            )
-                          : FileContent(
-                              element: element,
-                              index: index,
-                              controller: controller,
-                            );
-                    },
-                  ),
-                ),
-              ),
-            TextButton(
-              onPressed: Get.back,
-              child: Text('Cancel', style: TextStyleHelper.button()),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
