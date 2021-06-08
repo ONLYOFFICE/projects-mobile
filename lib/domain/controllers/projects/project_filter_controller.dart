@@ -61,7 +61,7 @@ class ProjectsFilterController extends BaseFilterController {
         _projectManagerFilter = '&manager=${newValue["id"]}';
       }
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   Future<void> changeTeamMember(String filter, [newValue = '']) async {
@@ -81,7 +81,7 @@ class ProjectsFilterController extends BaseFilterController {
         _teamMemberFilter = '&participant=${newValue["id"]}';
       }
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   void changeOther(String filter, [newValue = '']) async {
@@ -112,7 +112,7 @@ class ProjectsFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   void changeStatus(String filter, [newValue = '']) async {
@@ -141,10 +141,11 @@ class ProjectsFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
-  void getSuitableTasksCount() async {
+  @override
+  void getSuitableResultCount() async {
     suitableResultCount.value = -1;
 
     var result = await _api.getProjectsByParams(

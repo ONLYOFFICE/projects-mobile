@@ -24,7 +24,7 @@ class DownloadApi {
         result.response = response.bodyBytes;
       } else {}
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;

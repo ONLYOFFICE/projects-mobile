@@ -7,7 +7,7 @@ abstract class BaseFilterController extends GetxController {
 
   bool get hasFilters;
 
-  void applyFilters() {}
-
-  void resetFilters() {}
+  void applyFilters();
+  void resetFilters();
+  void getSuitableResultCount();
 }

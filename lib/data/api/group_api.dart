@@ -25,7 +25,7 @@ class GroupApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -94,23 +95,6 @@ class UsersSearchResult extends StatelessWidget {
             ),
           ),
         )
-      ],
-    );
-  }
-}
-
-class NothingFound extends StatelessWidget {
-  const NothingFound({
-    Key key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(height: 50),
-        const Text('Not found', textAlign: TextAlign.center),
       ],
     );
   }

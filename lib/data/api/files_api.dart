@@ -27,7 +27,7 @@ class FilesApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
@@ -50,31 +50,40 @@ class FilesApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
   }
 
-  Future<ApiDTO<FoldersResponse>> getFiles(
+  Future<ApiDTO<FoldersResponse>> getFilesByParams(
       {int startIndex,
       String query,
       String sortBy,
       String sortOrder,
-      String folderId}) async {
+      int folderId,
+      String typeFilter,
+      String authorFilter}) async {
     var url = await coreApi.getFilesBaseUrl();
 
     if (folderId != null)
-      url += '$folderId?';
+      url += '${folderId.toString()}?';
     else
       url += '@projects?';
+
+    if (query != null) {
+      url += 'filterBy=title&filterOp=contains&filterValue=$query';
+    }
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
     }
 
-    if (query != null) {
-      url += '&FilterValue=$query';
+    if (typeFilter != null) {
+      url += typeFilter;
+    }
+    if (authorFilter != null) {
+      url += authorFilter;
     }
 
     if (sortBy != null &&
@@ -90,6 +99,93 @@ class FilesApi {
 
       if (response.statusCode == 200) {
         result.response = FoldersResponse.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<Folder>> renameFolder(
+      {String folderId, String newTitle}) async {
+    var url = await coreApi.getFolderByIdUrl(folderId: folderId);
+    var body = {'title': newTitle};
+
+    var result = ApiDTO<Folder>();
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = Folder.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<PortalFile>> renameFile(
+      {String fileId, String newTitle}) async {
+    //  PUT api/2.0/files/file/{fileId}
+    var url = await coreApi.getFileByIdUrl(fileId: fileId);
+    var body = {'title': newTitle};
+
+    var result = ApiDTO<PortalFile>();
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = PortalFile.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> deleteFolder({String folderId}) async {
+    var url = await coreApi.getFolderByIdUrl(folderId: folderId);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.deleteRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> deleteFile({String fileId}) async {
+    var url = await coreApi.getFileByIdUrl(fileId: fileId);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.deleteRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = responseJson['response'];
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
