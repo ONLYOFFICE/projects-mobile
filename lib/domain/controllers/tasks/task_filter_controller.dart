@@ -146,7 +146,7 @@ class TaskFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   Future<void> changeCreator(String filter, [newValue = '']) async {
@@ -166,7 +166,7 @@ class TaskFilterController extends BaseFilterController {
         _creatorFilter = '&creator=${newValue["id"]}';
       }
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   void changeProject(String filter, [newValue = '']) async {
@@ -210,7 +210,7 @@ class TaskFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   void changeMilestone(String filter, [newValue]) {
@@ -240,7 +240,7 @@ class TaskFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
   Future<void> changeDeadline(String filter,
@@ -288,10 +288,11 @@ class TaskFilterController extends BaseFilterController {
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
 
-    getSuitableTasksCount();
+    getSuitableResultCount();
   }
 
-  void getSuitableTasksCount() async {
+  @override
+  void getSuitableResultCount() async {
     suitableResultCount.value = -1;
 
     var result = await _api.getTasksByParams(

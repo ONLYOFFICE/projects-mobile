@@ -64,7 +64,7 @@ class AuthApi {
         result.error = CustomError.fromJson(json.decode(response.body));
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
@@ -94,7 +94,7 @@ class AuthApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
@@ -114,7 +114,7 @@ class AuthApi {
         result.error = CustomError.fromJson(responseJson['error']);
       }
     } catch (e) {
-      result.error = CustomError(message: 'Ошибка');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;

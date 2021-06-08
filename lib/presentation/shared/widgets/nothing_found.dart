@@ -30,16 +30,21 @@
  *
  */
 
-import 'package:get/get.dart';
+import 'package:flutter/widgets.dart';
 
-abstract class BaseFilterController extends GetxController {
-  RxInt suitableResultCount;
+class NothingFound extends StatelessWidget {
+  const NothingFound({
+    Key key,
+  }) : super(key: key);
 
-  String filtersTitle;
-
-  bool get hasFilters;
-
-  void applyFilters();
-  void resetFilters();
-  void getSuitableResultCount();
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 50),
+        const Text('Not found', textAlign: TextAlign.center),
+      ],
+    );
+  }
 }
