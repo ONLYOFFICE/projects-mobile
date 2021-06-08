@@ -10,7 +10,7 @@ import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsController extends GetxController {
+class DocumentsMoveOrCopyController extends GetxController {
   final _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
 
@@ -24,13 +24,24 @@ class DocumentsController extends GetxController {
 
   String _query;
 
+  Folder folderToMove;
+  Folder folderToCopy;
+  Folder initialFolder;
+  PortalFile fileToMove;
+  PortalFile fileToCopy;
+
+  int foldersCount = 0;
+  Function refreshCalback;
+
+  String mode;
+
   PaginationController get paginationController => _paginationController;
 
   String _screenName;
   Folder _currentFolder;
   Folder get currentFolder => _currentFolder;
 
-  var screenName = 'Documents'.obs;
+  var screenName = 'Choose section'.obs;
 
   RxList get itemList => _paginationController.data;
 
@@ -40,7 +51,7 @@ class DocumentsController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
-  DocumentsController(
+  DocumentsMoveOrCopyController(
       DocumentsFilterController filterController,
       PaginationController paginationController,
       DocumentsSortController sortController) {
@@ -157,39 +168,59 @@ class DocumentsController extends GetxController {
 
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
-  Future<bool> renameFolder(Folder element, String newName) async {
-    var result = await _api.renameFolder(
-      folderId: element.id.toString(),
-      newTitle: newName,
+  Future<bool> moveFolder() async {
+    var result = await _api.moveDocument(
+      movingFolder: folderToMove.id.toString(),
+      targetFolder: _currentFolder.id.toString(),
     );
 
     return result != null;
   }
 
-  void downloadFolder() {}
-
-  Future<bool> deleteFolder(Folder element) async {
-    var result = await _api.deleteFolder(
-      folderId: element.id.toString(),
+  Future<bool> copyFolder() async {
+    var result = await _api.copyDocument(
+      copyingFolder: folderToCopy.id.toString(),
+      targetFolder: _currentFolder.id.toString(),
     );
 
     return result != null;
   }
 
-  Future<bool> deleteFile(PortalFile element) async {
-    var result = await _api.deleteFile(
-      fileId: element.id.toString(),
+  Future<bool> moveFile() async {
+    var result = await _api.moveDocument(
+      movingFile: fileToMove.id.toString(),
+      targetFolder: _currentFolder.id.toString(),
     );
 
     return result != null;
   }
 
-  Future<bool> renameFile(PortalFile element, String newName) async {
-    var result = await _api.renameFile(
-      fileId: element.id.toString(),
-      newTitle: newName,
+  Future<bool> copyFile() async {
+    var result = await _api.copyDocument(
+      copyingFile: fileToCopy.id.toString(),
+      targetFolder: _currentFolder.id.toString(),
     );
 
     return result != null;
+  }
+
+  void setupMovingFolder(Folder target, Folder initial) {
+    folderToMove = target;
+    initialFolder = initial;
+  }
+
+  void setupCopyingFolder(Folder target, Folder initial) {
+    folderToCopy = target;
+    initialFolder = initial;
+  }
+
+  void setupMovingFile(PortalFile target, Folder initial) {
+    fileToMove = target;
+    initialFolder = initial;
+  }
+
+  void setupCopyingFile(PortalFile target, Folder initial) {
+    fileToCopy = target;
+    initialFolder = initial;
   }
 }
