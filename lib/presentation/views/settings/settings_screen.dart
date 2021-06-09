@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -11,42 +12,63 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: StyledAppBar(titleText: 'Settings'),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 10),
-            NewTaskInfo(
-              text: 'Passcode Lock',
-              loverText: 'Disabled',
-              icon: SvgIcons.passcode,
-              onTap: () => Get.toNamed('PasscodeScreen'),
-            ),
-            NewTaskInfo(
-              text: 'Color theme',
-              loverText: 'Same as System',
-              icon: SvgIcons.color_scheme,
-              onTap: () => Get.toNamed('ColorThemeSelectionScreen'),
-            ),
-            const NewTaskInfo(
-              text: 'Clear cache',
-              icon: SvgIcons.clean,
-            ),
-            const SizedBox(height: 70),
-            const NewTaskInfo(
-              text: 'Support',
-              icon: SvgIcons.support,
-            ),
-            const NewTaskInfo(
-              text: 'Feedback',
-              icon: SvgIcons.feedback,
-            ),
-            const NewTaskInfo(
-              text: 'About App',
-              icon: SvgIcons.about_app,
-            ),
-          ],
+    var controller = Get.put(SettingsController());
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leave();
+        return true;
+      },
+      child: Scaffold(
+        appBar: StyledAppBar(
+          titleText: 'Settings',
+          onLeadingPressed: controller.leave,
+        ),
+        body: Obx(
+          () {
+            if (controller.loaded.isTrue) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    NewTaskInfo(
+                      text: 'Passcode Lock',
+                      loverText: controller.isPasscodeEnable == true
+                          ? 'Enabled'
+                          : 'Disabled',
+                      icon: SvgIcons.passcode,
+                      // onTap: () => Get.toNamed('NewPasscodeScreen1'),
+                      onTap: () => Get.toNamed('PasscodeSettingsScreen'),
+                    ),
+                    NewTaskInfo(
+                      text: 'Color theme',
+                      loverText: 'Same as System',
+                      icon: SvgIcons.color_scheme,
+                      onTap: () => Get.toNamed('ColorThemeSelectionScreen'),
+                    ),
+                    const NewTaskInfo(
+                      text: 'Clear cache',
+                      icon: SvgIcons.clean,
+                    ),
+                    const SizedBox(height: 70),
+                    const NewTaskInfo(
+                      text: 'Support',
+                      icon: SvgIcons.support,
+                    ),
+                    const NewTaskInfo(
+                      text: 'Feedback',
+                      icon: SvgIcons.feedback,
+                    ),
+                    const NewTaskInfo(
+                      text: 'About App',
+                      icon: SvgIcons.about_app,
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              return Container();
+            }
+          },
         ),
       ),
     );

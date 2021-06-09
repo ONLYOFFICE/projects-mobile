@@ -38,6 +38,7 @@ class SvgIcons {
   static const String documents = 'lib/assets/images/icons/documents.svg';
   static const String down_arrow = 'lib/assets/images/icons/down_arrow.svg';
   static const String feedback = 'lib/assets/images/icons/feedback.svg';
+  static const String finger_print = 'lib/assets/images/icons/finger_print.svg';
   static const String high_priority =
       'lib/assets/images/icons/high_priority.svg';
   static const String lock = 'lib/assets/images/icons/lock.svg';

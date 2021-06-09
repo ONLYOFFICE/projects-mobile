@@ -38,8 +38,10 @@ class App extends StatelessWidget {
 Future<String> _getInitPage() async {
   var storage = locator<SecureStorage>();
   var token = await storage.getString('token');
+  var passcode = await storage.getString('passcode');
 
   if (token != null) {
+    if (passcode != null) return 'PasscodeScreen';
     return '/';
   } else {
     return 'PortalView';
