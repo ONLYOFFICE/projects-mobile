@@ -112,7 +112,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 6),
-                    if (controller.isFingerprintAvailable.value == true)
+                    if (controller.isFingerprintAvailable.value == true &&
+                        controller.isPasscodeEnable.value == true)
                       SwitchListTile(
                         value: controller.isFingerprintEnable.value,
                         onChanged: controller.toggleFingerprintStatus,
