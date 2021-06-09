@@ -5,6 +5,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class WideButton extends StatelessWidget {
   final Color color;
   final Color textColor;
+  final EdgeInsetsGeometry padding;
   final Function() onPressed;
   final String text;
   const WideButton({
@@ -12,6 +13,7 @@ class WideButton extends StatelessWidget {
     @required this.text,
     @required this.onPressed,
     this.color,
+    this.padding = const EdgeInsets.only(top: 10, bottom: 12),
     this.textColor,
   }) : super(key: key);
 
@@ -24,7 +26,7 @@ class WideButton extends StatelessWidget {
       minWidth: double.infinity,
       color: color ?? Theme.of(context).customColors().primary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      padding: const EdgeInsets.only(top: 10, bottom: 12),
+      padding: padding,
       child: Text(
         text,
         style: TextStyleHelper.button(

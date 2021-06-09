@@ -40,6 +40,10 @@ Future<String> _getInitPage() async {
   var token = await storage.getString('token');
   var passcode = await storage.getString('passcode');
 
+  // return 'TFASmsScreen';
+  // return 'SelectCountryScreen';
+  // return 'EnterSMSCodeScreen';
+
   if (token != null) {
     if (passcode != null) return 'PasscodeScreen';
     return '/';

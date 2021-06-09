@@ -28,7 +28,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.1"
+    version: "2.5.0"
   boolean_selector:
     dependency: transitive
     description:
@@ -183,6 +183,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.12"
+  devicelocale:
+    dependency: "direct main"
+    description:
+      name: devicelocale
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.1"
   drop_cap_text:
     dependency: "direct main"
     description:
@@ -265,6 +272,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_libphonenumber:
+    dependency: "direct main"
+    description:
+      name: flutter_libphonenumber
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.4"
   flutter_localizations:
     dependency: "direct main"
     description: flutter
@@ -669,7 +683,7 @@ packages:
       name: source_span
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.1"
+    version: "1.8.0"
   stack_trace:
     dependency: transitive
     description:
@@ -732,7 +746,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.2.19"
   timing:
     dependency: transitive
     description:

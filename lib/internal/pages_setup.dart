@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
-import 'package:projects/presentation/shared/widgets/passcode_screen_template.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
@@ -56,6 +58,8 @@ List<GetPage> getxPages() => [
         name: 'CurrentPasscodeCheckScreen',
         page: () => const CurrentPasscodeCheckScreen(),
       ),
+      GetPage(
+          name: 'EnterSMSCodeScreen', page: () => const EnterSMSCodeScreen()),
       GetPage(name: 'HomeView', page: () => const ProjectsView()),
       GetPage(name: 'NavigationView', page: () => NavigationView()),
       GetPage(name: 'TaskDetailedView', page: () => TaskDetailedView()),
@@ -115,8 +119,11 @@ List<GetPage> getxPages() => [
           name: 'PasswordRecoveryScreen2',
           page: () => const PasswordRecoveryScreen2()),
       GetPage(
+          name: 'SelectCountryScreen', page: () => const SelectCountryScreen()),
+      GetPage(
           name: 'SelectProjectForMilestone',
           page: () => const SelectProjectForMilestone()),
       GetPage(name: 'SettingsScreen', page: () => const SettingsScreen()),
       GetPage(name: 'TasksSearchScreen', page: () => const TasksSearchScreen()),
+      GetPage(name: 'TFASmsScreen', page: () => const TFASmsScreen()),
     ];

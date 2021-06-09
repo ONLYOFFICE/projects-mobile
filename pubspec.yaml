@@ -56,6 +56,10 @@ dependencies:
   flutter_masked_text: ^0.8.0
   # for biometric authentication
   local_auth: ^1.1.6
+  # to get device location country
+  devicelocale: ^0.4.1
+  # for sms 2FA
+  flutter_libphonenumber: ^1.0.4
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
