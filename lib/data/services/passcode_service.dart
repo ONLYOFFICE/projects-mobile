@@ -30,52 +30,46 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/storage.dart';
-
-import 'package:projects/internal/localization/localization_setup.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/internal/splash_view.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
 
-class App extends StatelessWidget {
-  App({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getInitPage(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return GetMaterialApp(
-            initialRoute: snapshot.data,
-            getPages: getxPages(),
-            localizationsDelegates: localizationsDelegates(),
-            supportedLocales: supportedLocales(),
-            title: 'ONLYOFFICE',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeService().themeMode,
-          );
-        } else {
-          return const SplashView();
-        }
-      },
-    );
+class PasscodeService {
+  final _storage = locator<SecureStorage>();
+  final _biometricService = locator<LocalAuthenticationService>();
+
+  Future<String> get getPasscode async => await _storage.getString('passcode');
+
+  Future<void> setPasscode(String code) async {
+    await deletePasscode();
+    await _storage.putString('passcode', code);
   }
-}
 
-Future<String> _getInitPage() async {
-  var storage = locator<SecureStorage>();
-  var token = await storage.getString('token');
-  var passcode = await storage.getString('passcode');
+  Future<void> deletePasscode() async => await _storage.delete('passcode');
 
-  if (token != null) {
-    if (passcode != null) return 'PasscodeScreen';
-    return '/';
-  } else {
-    return 'PortalView';
+  Future<void> setFingerprintStatus(bool isEnable) async {
+    var status = isEnable ? 'true' : 'false';
+    await _storage.delete('isFingerprintEnable');
+    await _storage.putString('isFingerprintEnable', status);
+  }
+
+  Future<bool> get isFingerprintEnable async {
+    var isFingerprintEnable =
+        await _storage.getString('isFingerprintEnable') ?? false;
+
+    return isFingerprintEnable == 'true' ? true : false;
+  }
+
+  Future<bool> get isFingerprintAvailable async {
+    var isFingerprintAvailable =
+        await _biometricService.isFingerprintAvailable ?? false;
+
+    return isFingerprintAvailable;
+  }
+
+  Future<bool> get isPasscodeEnable async {
+    var isPasscodeEnable = await _storage.getString('passcode') ?? false;
+    if (isPasscodeEnable != false) return true;
+    return false;
   }
 }

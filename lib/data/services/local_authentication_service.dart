@@ -30,52 +30,36 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/services/storage.dart';
+import 'package:local_auth/auth_strings.dart';
+import 'package:local_auth/local_auth.dart';
 
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/internal/splash_view.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
+class LocalAuthenticationService {
+  final _localAuth = LocalAuthentication();
 
-class App extends StatelessWidget {
-  App({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _getInitPage(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          return GetMaterialApp(
-            initialRoute: snapshot.data,
-            getPages: getxPages(),
-            localizationsDelegates: localizationsDelegates(),
-            supportedLocales: supportedLocales(),
-            title: 'ONLYOFFICE',
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeService().themeMode,
-          );
-        } else {
-          return const SplashView();
-        }
-      },
-    );
+  Future<List<BiometricType>> get availableBiometrics async =>
+      await _localAuth.getAvailableBiometrics();
+
+  Future<bool> get isFingerprintAvailable async {
+    var biometrics = await availableBiometrics;
+    return biometrics.contains(BiometricType.fingerprint);
   }
-}
 
-Future<String> _getInitPage() async {
-  var storage = locator<SecureStorage>();
-  var token = await storage.getString('token');
-  var passcode = await storage.getString('passcode');
-
-  if (token != null) {
-    if (passcode != null) return 'PasscodeScreen';
-    return '/';
-  } else {
-    return 'PortalView';
+  Future<bool> authenticate({String signInTitle}) async {
+    return await _localAuth.authenticate(
+      localizedReason: ' ',
+      androidAuthStrings: AndroidAuthMessages(
+        biometricHint: '',
+        biometricNotRecognized: '',
+        biometricRequiredTitle: '',
+        biometricSuccess: '',
+        deviceCredentialsRequiredTitle: '',
+        deviceCredentialsSetupDescription: '',
+        goToSettingsButton: '',
+        goToSettingsDescription: '',
+        signInTitle: signInTitle,
+      ),
+      stickyAuth: true,
+      biometricOnly: true,
+    );
   }
 }

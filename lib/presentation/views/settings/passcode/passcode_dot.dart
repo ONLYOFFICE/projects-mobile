@@ -30,23 +30,38 @@
  *
  */
 
-import 'package:get/get.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
-class PasscodeController extends GetxController {
-  String _passcode = '';
-  RxInt passcodeLen = 0.obs;
+class PasscodeDot extends StatelessWidget {
+  final int inputLenght;
+  final int position;
+  final bool passwordIsWrong;
 
-  void addNumberToPasscode(int number) {
-    if (_passcode.length < 4) {
-      _passcode += number.toString();
-      passcodeLen.value++;
-    }
-  }
+  const PasscodeDot({
+    Key key,
+    @required this.inputLenght,
+    @required this.position,
+    this.passwordIsWrong = false,
+  }) : super(key: key);
 
-  void deleteNumber() {
-    if (_passcode.isNotEmpty) {
-      _passcode = _passcode.substring(0, passcodeLen.value - 1);
-      passcodeLen.value--;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 16,
+      width: 16,
+      margin: position != 0 ? const EdgeInsets.only(left: 32) : null,
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: !passwordIsWrong
+              ? inputLenght >= position + 1
+                  // ? Theme.of(context).customColors().onBackground
+                  ? Theme.of(context).customColors().primary
+                  : Theme.of(context)
+                      .customColors()
+                      .onBackground
+                      .withOpacity(0.2)
+              : Theme.of(context).customColors().error),
+    );
   }
 }
