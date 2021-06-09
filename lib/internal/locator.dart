@@ -51,6 +51,7 @@ import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/group_service.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/data/services/numbers_service.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -105,6 +106,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => LocalAuthenticationService());
   locator.registerLazySingleton(() => MilestoneApi());
   locator.registerLazySingleton(() => MilestoneService());
+  locator.registerLazySingleton(() => NumbersService());
   locator.registerLazySingleton(() => PasscodeService());
   locator.registerLazySingleton(() => PortalApi());
   locator.registerLazySingleton(() => PortalService());

@@ -1,0 +1,160 @@
+/*
+ * (c) Copyright Ascensio System SIA 2010-2021
+ *
+ * This program is a free software product. You can redistribute it and/or
+ * modify it under the terms of the GNU Affero General Public License (AGPL)
+ * version 3 as published by the Free Software Foundation. In accordance with
+ * Section 7(a) of the GNU AGPL its Section 15 shall be amended to the effect
+ * that Ascensio System SIA expressly excludes the warranty of non-infringement
+ * of any third-party rights.
+ *
+ * This program is distributed WITHOUT ANY WARRANTY; without even the implied
+ * warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR  PURPOSE. For
+ * details, see the GNU AGPL at: http://www.gnu.org/licenses/agpl-3.0.html
+ *
+ * You can contact Ascensio System SIA at 20A-12 Ernesta Birznieka-Upisha
+ * street, Riga, Latvia, EU, LV-1050.
+ *
+ * The  interactive user interfaces in modified source and object code versions
+ * of the Program must display Appropriate Legal Notices, as required under
+ * Section 5 of the GNU AGPL version 3.
+ *
+ * Pursuant to Section 7(b) of the License you must retain the original Product
+ * logo when distributing the program. Pursuant to Section 7(e) we decline to
+ * grant you any rights under trademark law for use of our trademarks.
+ *
+ * All the Product's GUI elements, including illustrations and icon sets, as
+ * well as technical writing content are licensed under the terms of the
+ * Creative Commons Attribution-ShareAlike 4.0 International. See the License
+ * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
+ *
+ */
+
+import 'package:flutter/material.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/2fa_sms_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
+
+class SelectCountryScreen extends StatelessWidget {
+  const SelectCountryScreen({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = Get.find<TFASmsController>();
+
+    var previousContrysFirstLetter = '';
+
+    return Obx(
+      () => Scaffold(
+        appBar: StyledAppBar(
+          titleText: controller.searching.isTrue ? null : 'Select Country',
+          title: controller.searching.isTrue ? const _SarchField() : null,
+          actions: [
+            if (controller.searching.isFalse)
+              IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: controller.onSearchPressed,
+              )
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: controller.countriesToShow.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (controller.countriesToShow[index].countryName[0] !=
+                previousContrysFirstLetter) {
+              previousContrysFirstLetter =
+                  controller.countriesToShow[index].countryName[0];
+              return _CountryWithCodeTile(
+                showFirstLetter: true,
+                country: controller.countriesToShow[index],
+              );
+            }
+
+            return _CountryWithCodeTile(
+                country: controller.countriesToShow[index]);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _SarchField extends StatelessWidget {
+  const _SarchField({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = Get.find<TFASmsController>();
+
+    return TextField(
+      autofocus: true,
+      style: TextStyleHelper.headline6(),
+      decoration: InputDecoration.collapsed(
+        hintText: 'Search..',
+        hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
+      ),
+      onChanged: (value) => controller.onSearch(value),
+    );
+  }
+}
+
+class _CountryWithCodeTile extends StatelessWidget {
+  final CountryWithPhoneCode country;
+  final bool showFirstLetter;
+  const _CountryWithCodeTile({
+    Key key,
+    @required this.country,
+    this.showFirstLetter = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var controller = Get.find<TFASmsController>();
+    return InkWell(
+      onTap: () => controller.selectCountry(country),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            if (showFirstLetter)
+              const Divider(height: 2, thickness: 1, indent: 56),
+            SizedBox(height: showFirstLetter ? 7 : 14),
+            Row(
+              children: [
+                SizedBox(
+                  width: 56,
+                  child: showFirstLetter
+                      ? Text(country?.countryName[0],
+                          style: TextStyleHelper.headline5(
+                              color: Theme.of(context)
+                                  .customColors()
+                                  .onBackground
+                                  .withOpacity(0.6)))
+                      : null,
+                ),
+                Expanded(
+                  child: Text(
+                    country?.countryName,
+                    style: TextStyleHelper.body2(
+                        color: Theme.of(context).customColors().onBackground),
+                  ),
+                ),
+                Text(
+                  '+ ${country?.phoneCode}',
+                  style: TextStyleHelper.subtitle2(
+                      color: Theme.of(context).customColors().primarySurface),
+                ),
+              ],
+            ),
+            const SizedBox(height: 14),
+          ],
+        ),
+      ),
+    );
+  }
+}

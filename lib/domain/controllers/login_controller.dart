@@ -92,7 +92,7 @@ class LoginController extends GetxController {
       await saveToken(result);
       setState(ViewState.Idle);
       await Get.offNamed('NavigationView');
-    } else if (result.response.tfa) {
+    } else if (result.response.tfa == true) {
       _email = email;
       _pass = password;
       setState(ViewState.Idle);
@@ -103,6 +103,8 @@ class LoginController extends GetxController {
       } else {
         await Get.toNamed('CodeView');
       }
+    } else if (result.response.sms == true) {
+      await Get.toNamed('TFASmsScreen');
     }
     setState(ViewState.Idle);
   }

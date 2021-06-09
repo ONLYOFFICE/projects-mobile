@@ -30,40 +30,20 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:devicelocale/devicelocale.dart';
+import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 
-class WideButton extends StatelessWidget {
-  final Color color;
-  final Color textColor;
-  final EdgeInsetsGeometry padding;
-  final Function() onPressed;
-  final String text;
-  const WideButton({
-    Key key,
-    @required this.text,
-    @required this.onPressed,
-    this.color,
-    this.padding = const EdgeInsets.only(top: 10, bottom: 12),
-    this.textColor,
-  }) : super(key: key);
+class NumbersService {
+  final _numbers = FlutterLibphonenumber();
+  String _locale;
 
-  @override
-  Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
-    return FlatButton(
-      onPressed: onPressed,
-      disabledColor: Theme.of(context).customColors().surface,
-      minWidth: double.infinity,
-      color: color ?? Theme.of(context).customColors().primary,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-      padding: padding,
-      child: Text(
-        text,
-        style: TextStyleHelper.button(
-            color: textColor ?? Theme.of(context).customColors().onNavBar),
-      ),
-    );
+  Future<void> init() async {
+    await _numbers.init();
+    await CountryManager().loadCountries();
+    _locale = await Devicelocale.currentLocale;
   }
+
+  List get countries => CountryManager().countries;
+  String get localeCode =>
+      _locale.substring(_locale.indexOf('_') + 1 ?? 0, _locale.length);
 }
