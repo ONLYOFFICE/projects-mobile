@@ -162,6 +162,14 @@ class CoreApi {
   Future<String> getFileByIdUrl({String fileId}) async =>
       '${await getPortalURI()}/api/$version/files/file/$fileId';
 
+  Future<String> getMoveOpsUrl() async =>
+      '${await getPortalURI()}/api/$version/files/fileops/move';
+  Future<String> getCopyOpsUrl() async =>
+      '${await getPortalURI()}/api/$version/files/fileops/copy';
+
+  Future<String> getFileOperationsUrl() async =>
+      '${await getPortalURI()}/api/$version/files/fileops';
+
   Future<http.Response> getRequest(String url) async {
     print(url);
     var headers = await getHeaders();

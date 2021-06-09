@@ -116,4 +116,39 @@ class FilesService {
       return null;
     }
   }
+
+  Future moveDocument(
+      {String movingFolder, String movingFile, String targetFolder}) async {
+    var result = await _api.moveDocument(
+        movingFolder: movingFolder,
+        targetFolder: targetFolder,
+        movingFile: movingFile);
+
+    var success = result.response.error == null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
+  }
+
+  Future copyDocument(
+      {String copyingFolder, String copyingFile, String targetFolder}) async {
+    var result = await _api.copyDocument(
+      copyingFolder: copyingFolder,
+      targetFolder: targetFolder,
+      copyingFile: copyingFile,
+    );
+
+    var success = result.response.error == null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
+  }
 }

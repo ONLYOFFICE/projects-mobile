@@ -9,6 +9,7 @@ import 'package:projects/presentation/views/authentication/passcode/passcode_scr
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
@@ -16,6 +17,7 @@ import 'package:projects/presentation/views/new_task/select/select_milestone_vie
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_responsibles_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
@@ -84,6 +86,12 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'ProjectsFilterScreen',
           page: () => const ProjectsFilterScreen()),
+      GetPage(
+          name: 'MilestoneFilterScreen',
+          page: () => const MilestoneFilterScreen()),
+      GetPage(
+          name: 'DocumentsFilterScreen',
+          page: () => const DocumentsFilterScreen()),
       GetPage(name: 'NewProject', page: () => const NewProject()),
       GetPage(
           name: 'NewProjectDescription',
