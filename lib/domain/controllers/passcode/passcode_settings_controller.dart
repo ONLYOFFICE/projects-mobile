@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
@@ -151,7 +150,7 @@ class PasscodeSettingsController extends GetxController {
     }
   }
 
-  void toggleFingerprint(value) {
+  void toggleFingerprintStatus(value) {
     if (isFingerprintAvailable.value == true) {
       isFingerprintEnable.value = value;
       _service.setFingerprintStatus(value);
