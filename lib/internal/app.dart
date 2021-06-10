@@ -72,14 +72,11 @@ Future<String> _getInitPage() async {
   var passcode = await storage.getString('passcode');
   // await Get.find<LoginController>().logout();
 
-  return 'TFASmsScreen';
-  // return 'SelectCountryScreen';
-  // return 'EnterSMSCodeScreen';
   // TODO CHECK TOKEN (isTokenExpired)
-  // if (token != null) {
-  //   if (passcode != null) return 'PasscodeScreen';
-  //   return '/';
-  // } else {
-  //   return 'PortalView';
-  // }
+  if (token != null) {
+    if (passcode != null) return 'PasscodeScreen';
+    return '/';
+  } else {
+    return 'PortalView';
+  }
 }
