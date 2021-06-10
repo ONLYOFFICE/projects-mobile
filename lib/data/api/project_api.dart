@@ -212,7 +212,7 @@ class ProjectApi {
     var url = await coreApi.createProjectUrl();
 
     var result = ApiDTO<Map<String, dynamic>>();
-    var body = jsonEncode(project.toJson());
+    var body = project.toJson();
 
     try {
       var response = await coreApi.postRequest(url, body);

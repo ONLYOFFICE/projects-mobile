@@ -104,9 +104,20 @@ class LoginController extends GetxController {
         await Get.toNamed('CodeView');
       }
     } else if (result.response.sms == true) {
-      await Get.toNamed('TFASmsScreen');
+      _email = email;
+      _pass = password;
+      setState(ViewState.Idle);
+      if (result.response.phoneNoise != null) {
+        await Get.toNamed('EnterSMSCodeScreen', arguments: {
+          'phoneNoise': result.response.phoneNoise,
+          'login': _email,
+          'password': _pass
+        });
+      } else {
+        await Get.toNamed('TFASmsScreen',
+            arguments: {'login': _email, 'password': _pass});
+      }
     }
-    setState(ViewState.Idle);
   }
 
   Future saveToken(ApiDTO<AuthToken> result) async {
@@ -114,26 +125,32 @@ class LoginController extends GetxController {
     await _secureStorage.putString('expires', result.response.expires);
   }
 
-  Future<void> sendCode(String code) async {
+  Future<bool> sendCode(String code, {String userName, String password}) async {
     setState(ViewState.Busy);
 
     code = code.removeAllWhitespace;
+    _email ??= userName;
+    _pass ??= password;
 
     var result = await _authService.confirmTFACode(_email, _pass, code);
 
     if (result.response == null) {
       setState(ViewState.Idle);
-      return;
+      return false;
     }
 
     if (result.response.token != null) {
       await saveToken(result);
       setState(ViewState.Idle);
       await Get.offNamed('NavigationView');
+      return true;
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
       await Get.toNamed('CodeView');
+      return true;
     }
+
+    return false;
   }
 
   Future<void> loginByProvider(String provider) async {

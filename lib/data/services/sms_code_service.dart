@@ -30,41 +30,51 @@
  *
  */
 
-class AuthToken {
-  AuthToken({
-    this.expires,
-    this.phoneNoise,
-    this.sms,
-    this.tfa,
-    this.tfaKey,
-    this.token,
-  });
+import 'package:projects/data/api/authentication_api.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-  bool tfa;
-  bool sms;
-  String expires;
-  String phoneNoise;
-  String token;
-  String tfaKey;
+class SmsCodeService {
+  final _api = locator<AuthApi>();
 
-  AuthToken.fromJson(Map<String, dynamic> json) {
-    expires = json['expires'];
-    phoneNoise = json['phoneNoise'];
-    sms = json['sms'];
-    token = json['token'];
-    tfa = json['tfa'];
-    tfaKey = json['tfaKey'];
+  Future setPhone({
+    String userName,
+    String password,
+    String mobilePhone,
+  }) async {
+    var body = {
+      'userName': userName,
+      'password': password,
+      'mobilePhone': mobilePhone
+    };
+
+    var result = await _api.setPhone(body);
+
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
   }
 
-  Map<String, dynamic> toJson() {
-    final data = <String, dynamic>{};
-    data['token'] = token;
-    data['sms'] = sms;
-    data['expires'] = expires;
-    data['phoneNoise'] = phoneNoise;
-    data['tfa'] = tfa;
-    data['tfaKey'] = tfaKey;
+  Future sendSms({String userName, String password}) async {
+    var body = {
+      'userName': userName,
+      'password': password,
+    };
 
-    return data;
+    var result = await _api.sendSms(body);
+
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
   }
 }

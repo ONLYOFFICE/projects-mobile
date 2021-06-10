@@ -46,14 +46,20 @@ class EnterSMSCodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var text = 'Enter the 4-digit code we sent to ';
+    var text = 'Enter the 6-digit code we sent to ';
+    TFASmsController controller;
 
-    // var controller = Get.find<TFASmsController>();
-    var controller = Get.put(TFASmsController());
-    controller?.phoneNumberController?.text = 'dasda';
-    var number =
-        controller.deviceCountry.value.exampleNumberMobileInternational;
-    var codeController = MaskedTextController(mask: '** **');
+    try {
+      controller = Get.find<TFASmsController>();
+    } catch (e) {
+      controller = Get.put(TFASmsController());
+      String phoneNoise = Get.arguments['phoneNoise'];
+      var login = Get.arguments['login'];
+      var password = Get.arguments['password'];
+      controller.initLoginAndPass(login, password);
+      controller.setPhoneNoise(phoneNoise);
+    }
+    var codeController = MaskedTextController(mask: '*** ***');
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -69,27 +75,68 @@ class EnterSMSCodeScreen extends StatelessWidget {
               Text(text,
                   style: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().onSurface)),
-              Text(number,
+              Text(controller.phoneNoise,
                   style: TextStyleHelper.subtitle1(
                           color: Theme.of(context).customColors().onSurface)
                       .copyWith(fontWeight: FontWeight.w500)),
               SizedBox(height: h(100)),
-              TextField(
-                controller: codeController,
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                style: TextStyleHelper.subtitle1(),
-                obscureText: true,
-                obscuringCharacter: '*',
+              Obx(
+                () => TextField(
+                  controller: codeController,
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  style: TextStyleHelper.subtitle1(),
+                  obscureText: true,
+                  obscuringCharacter: '*',
+                  decoration: InputDecoration(
+                    enabledBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: controller.codeError.isTrue
+                            ? Theme.of(context).customColors().error
+                            : Theme.of(context)
+                                .customColors()
+                                .onSurface
+                                .withOpacity(0.3),
+                      ),
+                    ),
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: controller.codeError.isTrue
+                            ? Theme.of(context).customColors().error
+                            : Theme.of(context)
+                                .customColors()
+                                .onSurface
+                                .withOpacity(0.3),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              SizedBox(height: h(24)),
+              Obx(
+                () => SizedBox(
+                  height: h(24),
+                  child: controller.codeError.isTrue
+                      ? Align(
+                          alignment: Alignment.topLeft,
+                          child: Text(
+                            'Incorrect code, please try again.',
+                            style: TextStyleHelper.caption(
+                                color: Theme.of(context).customColors().error),
+                          ),
+                        )
+                      : null,
+                ),
+              ),
               WideButton(
                 text: 'CONFIRM',
                 padding: const EdgeInsets.symmetric(vertical: 12),
-                onPressed: () {},
+                onPressed: () {
+                  print(codeController.text);
+                  controller.onConfirmPressed(codeController.text);
+                },
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: controller.resendSms,
                 child: const Text('Request new code'),
               )
             ],

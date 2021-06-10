@@ -104,7 +104,7 @@ class MilestoneApi {
     var url = await coreApi.createMilestoneUrl(projectId.toString());
 
     var result = ApiDTO<Map<String, dynamic>>();
-    var body = jsonEncode(milestone.toJson());
+    var body = milestone.toJson();
 
     try {
       var response = await coreApi.postRequest(url, body);
