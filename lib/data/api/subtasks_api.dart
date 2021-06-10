@@ -54,7 +54,7 @@ class SubtasksApi {
     var result = ApiDTO();
 
     try {
-      var response = await _coreApi.postRequest(url, {}.toString());
+      var response = await _coreApi.postRequest(url, {});
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -73,7 +73,7 @@ class SubtasksApi {
     var result = ApiDTO();
 
     try {
-      var response = await _coreApi.postRequest(url, jsonEncode(data));
+      var response = await _coreApi.postRequest(url, data);
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {

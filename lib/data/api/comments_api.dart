@@ -42,7 +42,7 @@ class CommentsApi {
 
     try {
       var body = {'content': content};
-      var response = await coreApi.postRequest(url, jsonEncode(body));
+      var response = await coreApi.postRequest(url, body);
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
@@ -68,7 +68,7 @@ class CommentsApi {
 
     try {
       var body = {'content': content, 'parentId': parentId};
-      var response = await coreApi.postRequest(url, jsonEncode(body));
+      var response = await coreApi.postRequest(url, body);
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {

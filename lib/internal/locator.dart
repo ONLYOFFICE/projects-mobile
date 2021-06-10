@@ -24,6 +24,7 @@ import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/settings_service.dart';
+import 'package:projects/data/services/sms_code_service.dart';
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/data/services/subtasks_service.dart';
 import 'package:projects/data/services/task_item_service.dart';
@@ -85,6 +86,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => SubtasksApi());
   locator.registerLazySingleton(() => SubtasksService());
   locator.registerLazySingleton(() => SettingsService());
+  locator.registerLazySingleton(() => SmsCodeService());
   locator.registerLazySingleton(() => TaskApi());
   locator.registerLazySingleton(() => TaskItemService());
   locator.registerLazySingleton(() => TaskService());

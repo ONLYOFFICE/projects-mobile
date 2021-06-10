@@ -6,7 +6,6 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_divider.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class TFASmsScreen extends StatelessWidget {
@@ -14,11 +13,15 @@ class TFASmsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(TFASmsController());
-
     var title = 'Enter your phone number';
     var caption =
         'You will receive SMS-code to enable Two-factor authentification.';
+
+    var login = Get.arguments['login'];
+    var password = Get.arguments['password'];
+
+    var controller = Get.put(TFASmsController());
+    controller.initLoginAndPass(login, password);
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -123,6 +126,8 @@ class _CountrySelection extends StatelessWidget {
                         controller?.deviceCountry?.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
+                    onChanged: (value) =>
+                        print(controller.phoneNumberController.text),
                     decoration: InputDecoration(
                       hintText: controller.numberHint,
                       contentPadding: const EdgeInsets.only(
