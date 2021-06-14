@@ -96,12 +96,12 @@ class PasscodeSettingsController extends GetxController {
   void leavePasscodeSettingsScreen() {
     clear();
     Get.find<SettingsController>().onInit();
-    Get.offAndToNamed('SettingsScreen');
+    Get.offNamed('SettingsScreen');
   }
 
   void leave() {
     clear();
-    Get.offAndToNamed('PasscodeSettingsScreen');
+    Get.offNamed('PasscodeSettingsScreen');
   }
 
   void clear() {

@@ -30,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   children: [
                     const SizedBox(height: 10),
-                    NewTaskInfo(
+                    SettingTile(
                       text: 'Passcode Lock',
                       loverText: controller.isPasscodeEnable == true
                           ? 'Enabled'
@@ -39,26 +39,26 @@ class SettingsScreen extends StatelessWidget {
                       // onTap: () => Get.toNamed('NewPasscodeScreen1'),
                       onTap: () => Get.toNamed('PasscodeSettingsScreen'),
                     ),
-                    NewTaskInfo(
+                    SettingTile(
                       text: 'Color theme',
                       loverText: 'Same as System',
                       icon: SvgIcons.color_scheme,
                       onTap: () => Get.toNamed('ColorThemeSelectionScreen'),
                     ),
-                    const NewTaskInfo(
+                    const SettingTile(
                       text: 'Clear cache',
                       icon: SvgIcons.clean,
                     ),
                     const SizedBox(height: 70),
-                    const NewTaskInfo(
+                    const SettingTile(
                       text: 'Support',
                       icon: SvgIcons.support,
                     ),
-                    const NewTaskInfo(
+                    const SettingTile(
                       text: 'Feedback',
                       icon: SvgIcons.feedback,
                     ),
-                    const NewTaskInfo(
+                    const SettingTile(
                       text: 'About App',
                       icon: SvgIcons.about_app,
                     ),
@@ -75,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
   }
 }
 
-class NewTaskInfo extends StatelessWidget {
+class SettingTile extends StatelessWidget {
   final bool enableBorder;
   final TextStyle textStyle;
   final String text;
@@ -87,7 +87,7 @@ class NewTaskInfo extends StatelessWidget {
   final EdgeInsetsGeometry suffixPadding;
   final TextOverflow textOverflow;
 
-  const NewTaskInfo({
+  const SettingTile({
     Key key,
     this.enableBorder = true,
     this.icon,
