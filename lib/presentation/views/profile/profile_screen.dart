@@ -57,61 +57,64 @@ class ProfileScreen extends StatelessWidget {
           userController.user?.avatarSmall,
     );
 
-    return Scaffold(
-      appBar: StyledAppBar(
-        showBackButton: false,
-        titleText: 'Profile',
-        actions: [
-          IconButton(
-            icon: AppIcon(icon: SvgIcons.settings),
-            onPressed: () => Get.toNamed('SettingsScreen'),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 32),
-            Center(
-              child: CircleAvatar(
-                minRadius: 60,
-                maxRadius: 60,
-                backgroundImage: NetworkImage(
-                  imageAdress,
-                  headers: portalInfoController.headers,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                userController.user?.displayName,
-                style: TextStyleHelper.headline6(
-                  color: Theme.of(context).customColors().onSurface,
-                ),
-              ),
-            ),
-            const SizedBox(height: 68),
-            _ProfileInfoTile(
-              caption: 'Email:',
-              text: userController.user?.email ?? '',
-              icon: SvgIcons.message,
-            ),
-            _ProfileInfoTile(
-              caption: 'Portal adress:',
-              text: portalInfoController.portalName ?? '',
-              icon: SvgIcons.cloud,
-            ),
-            _ProfileInfoTile(
-              text: 'Log out',
-              textColor: Theme.of(context).customColors().error,
-              icon: SvgIcons.logout,
-              iconColor:
-                  Theme.of(context).customColors().error.withOpacity(0.6),
-              onTap: () async => profileController.logout(context),
-            ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: StyledAppBar(
+          showBackButton: false,
+          titleText: 'Profile',
+          actions: [
+            IconButton(
+              icon: AppIcon(icon: SvgIcons.settings),
+              onPressed: () => Get.toNamed('SettingsScreen'),
+            )
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 32),
+              Center(
+                child: CircleAvatar(
+                  minRadius: 60,
+                  maxRadius: 60,
+                  backgroundImage: NetworkImage(
+                    imageAdress,
+                    headers: portalInfoController.headers,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  userController.user?.displayName,
+                  style: TextStyleHelper.headline6(
+                    color: Theme.of(context).customColors().onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 68),
+              _ProfileInfoTile(
+                caption: 'Email:',
+                text: userController.user?.email ?? '',
+                icon: SvgIcons.message,
+              ),
+              _ProfileInfoTile(
+                caption: 'Portal adress:',
+                text: portalInfoController.portalName ?? '',
+                icon: SvgIcons.cloud,
+              ),
+              _ProfileInfoTile(
+                text: 'Log out',
+                textColor: Theme.of(context).customColors().error,
+                icon: SvgIcons.logout,
+                iconColor:
+                    Theme.of(context).customColors().error.withOpacity(0.6),
+                onTap: () async => profileController.logout(context),
+              ),
+            ],
+          ),
         ),
       ),
     );

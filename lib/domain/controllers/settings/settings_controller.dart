@@ -50,7 +50,5 @@ class SettingsController extends GetxController {
     super.onInit();
   }
 
-  void leave() {
-    Get.offAndToNamed('/');
-  }
+  void leave() => Get.offNamed('/');
 }

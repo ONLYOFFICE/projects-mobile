@@ -60,7 +60,7 @@ class PasscodeController extends GetxController {
 
   Future<void> useFingerprint() async {
     var didAuthenticate = await _authService.authenticate();
-    if (didAuthenticate) await Get.offAndToNamed('/');
+    if (didAuthenticate) await Get.offNamed('/');
   }
 
   void addNumberToPasscode(
@@ -82,7 +82,7 @@ class PasscodeController extends GetxController {
         if (onPass != null) {
           await onPass();
         } else {
-          await Get.offAndToNamed(nextPage, arguments: nextPageArguments);
+          await Get.offNamed(nextPage, arguments: nextPageArguments);
         }
       }
     }
