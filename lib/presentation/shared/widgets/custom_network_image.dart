@@ -30,32 +30,33 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/widgets.dart';
+import 'package:projects/domain/controllers/images_controller.dart';
 
-class App extends StatelessWidget {
-  final String initialPage;
+// TODO use this for images
+class CustomNetworkImage extends StatelessWidget {
+  final String image;
+  final BoxFit fit;
+  final double height;
+  final double width;
 
-  App({
+  const CustomNetworkImage({
     Key key,
-    this.initialPage,
+    @required this.image,
+    this.fit,
+    this.height,
+    this.width,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: initialPage,
-      getPages: getxPages(),
-      localizationsDelegates: localizationsDelegates(),
-      supportedLocales: supportedLocales(),
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
+    return CachedNetworkImage(
+      imageUrl: ImagesController.getImagePath(image),
+      httpHeaders: ImagesController.getHeaders(),
+      fit: fit,
+      height: height,
+      width: width,
     );
   }
 }

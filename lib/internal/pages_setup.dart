@@ -41,6 +41,7 @@ import 'package:projects/presentation/views/authentication/passcode/passcode_scr
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
+import 'package:projects/presentation/views/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
@@ -82,6 +83,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'PortalView', page: () => PortalView()),
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),
+      GetPage(name: 'DiscussionDetailed', page: () => DiscussionDetailed()),
       GetPage(name: 'GetCodeViews', page: () => const GetCodeViews()),
       GetPage(
           name: 'ColorThemeSelectionScreen',
