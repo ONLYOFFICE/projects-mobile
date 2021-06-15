@@ -63,6 +63,7 @@ class SvgIcons {
   static const String clean = 'lib/assets/images/icons/clean.svg';
   static const String cloud = 'lib/assets/images/icons/cloud.svg';
   static const String color_scheme = 'lib/assets/images/icons/color_scheme.svg';
+  static const String comments = 'lib/assets/images/icons/comments.svg';
   static const String copy = 'lib/assets/images/icons/copy.svg';
   static const String delete_number =
       'lib/assets/images/icons/delete_number.svg';

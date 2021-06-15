@@ -36,6 +36,7 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/new_comment_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_text_field.dart';
 
@@ -44,9 +45,6 @@ class ReplyCommentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String portalUri = Get.arguments['portalUri'];
-    var headers = Get.arguments['headers'];
-
     int taskId = Get.arguments['taskId'];
     PortalComment comment = Get.arguments['comment'];
 
@@ -74,12 +72,12 @@ class ReplyCommentView extends StatelessWidget {
                 SizedBox(
                   width: 40,
                   height: 40,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      '$portalUri${comment.userAvatarPath}',
-                      headers: headers,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: CustomNetworkImage(
+                      image: comment.userAvatarPath,
+                      fit: BoxFit.cover,
                     ),
-                    // backgroundColor: Colors.transparent,
                   ),
                 ),
                 const SizedBox(width: 16),

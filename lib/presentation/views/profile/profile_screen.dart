@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -50,81 +51,73 @@ class ProfileScreen extends StatelessWidget {
 
     var profileController = Get.put(ProfileController());
 
-    var imageAdress = _getImageAdress(
-      portalAdress: portalInfoController.portalUri,
-      imageAdress: userController.user?.avatar ??
-          userController.user?.avatarMedium ??
-          userController.user?.avatarSmall,
-    );
-
-    return Scaffold(
-      appBar: StyledAppBar(
-        showBackButton: false,
-        titleText: 'Profile',
-        actions: [
-          IconButton(
-            icon: AppIcon(icon: SvgIcons.settings),
-            onPressed: () => Get.toNamed('SettingsScreen'),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 32),
-            Center(
-              child: CircleAvatar(
-                minRadius: 60,
-                maxRadius: 60,
-                backgroundImage: NetworkImage(
-                  imageAdress,
-                  headers: portalInfoController.headers,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                userController.user?.displayName,
-                style: TextStyleHelper.headline6(
-                  color: Theme.of(context).customColors().onSurface,
-                ),
-              ),
-            ),
-            const SizedBox(height: 68),
-            _ProfileInfoTile(
-              caption: 'Email:',
-              text: userController.user?.email ?? '',
-              icon: SvgIcons.message,
-            ),
-            _ProfileInfoTile(
-              caption: 'Portal adress:',
-              text: portalInfoController.portalName ?? '',
-              icon: SvgIcons.cloud,
-            ),
-            _ProfileInfoTile(
-              text: 'Log out',
-              textColor: Theme.of(context).customColors().error,
-              icon: SvgIcons.logout,
-              iconColor:
-                  Theme.of(context).customColors().error.withOpacity(0.6),
-              onTap: () async => profileController.logout(context),
-            ),
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: StyledAppBar(
+          showBackButton: false,
+          titleText: 'Profile',
+          actions: [
+            IconButton(
+              icon: AppIcon(icon: SvgIcons.settings),
+              onPressed: () => Get.toNamed('SettingsScreen'),
+            )
           ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 32),
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.grey, shape: BoxShape.circle),
+                height: 120,
+                width: 120,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(80),
+                  child: CustomNetworkImage(
+                    image: userController.user?.avatar ??
+                        userController.user?.avatarMedium ??
+                        userController.user?.avatarSmall,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  userController.user?.displayName,
+                  style: TextStyleHelper.headline6(
+                    color: Theme.of(context).customColors().onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 68),
+              _ProfileInfoTile(
+                caption: 'Email:',
+                text: userController.user?.email ?? '',
+                icon: SvgIcons.message,
+              ),
+              _ProfileInfoTile(
+                caption: 'Portal adress:',
+                text: portalInfoController.portalName ?? '',
+                icon: SvgIcons.cloud,
+              ),
+              _ProfileInfoTile(
+                text: 'Log out',
+                textColor: Theme.of(context).customColors().error,
+                icon: SvgIcons.logout,
+                iconColor:
+                    Theme.of(context).customColors().error.withOpacity(0.6),
+                onTap: () async => profileController.logout(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-}
-
-// TODO use shared
-String _getImageAdress({String portalAdress, String imageAdress}) {
-  if (imageAdress?.startsWith('http') != null &&
-      imageAdress.startsWith('http')) {
-    return imageAdress;
-  }
-  return '$portalAdress$imageAdress';
 }
 
 // TODO instead crerate shared styledTile

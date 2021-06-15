@@ -49,8 +49,7 @@ class TaskApi {
     var result = ApiDTO();
 
     try {
-      var response =
-          await coreApi.postRequest(url, jsonEncode(newTask.toJson()));
+      var response = await coreApi.postRequest(url, newTask.toJson());
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
@@ -70,7 +69,7 @@ class TaskApi {
     var result = ApiDTO();
 
     try {
-      var response = await coreApi.postRequest(url, jsonEncode(task.toJson()));
+      var response = await coreApi.postRequest(url, task.toJson());
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {

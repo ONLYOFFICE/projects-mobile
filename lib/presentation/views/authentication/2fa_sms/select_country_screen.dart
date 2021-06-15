@@ -69,6 +69,7 @@ class SelectCountryScreen extends StatelessWidget {
                   controller.countriesToShow[index].countryName[0];
               return _CountryWithCodeTile(
                 showFirstLetter: true,
+                showBorder: index != 0 ? true : false,
                 country: controller.countriesToShow[index],
               );
             }
@@ -103,11 +104,13 @@ class _SarchField extends StatelessWidget {
 
 class _CountryWithCodeTile extends StatelessWidget {
   final CountryWithPhoneCode country;
+  final bool showBorder;
   final bool showFirstLetter;
   const _CountryWithCodeTile({
     Key key,
     @required this.country,
     this.showFirstLetter = false,
+    this.showBorder = false,
   }) : super(key: key);
 
   @override
@@ -119,8 +122,7 @@ class _CountryWithCodeTile extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Column(
           children: [
-            if (showFirstLetter)
-              const Divider(height: 2, thickness: 1, indent: 56),
+            if (showBorder) const Divider(height: 2, thickness: 1, indent: 56),
             SizedBox(height: showFirstLetter ? 7 : 14),
             Row(
               children: [

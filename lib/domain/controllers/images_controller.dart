@@ -30,27 +30,16 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/portalInfoController.dart';
 
-class PortalDiscussionsView extends StatelessWidget {
-  const PortalDiscussionsView({Key key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          const Padding(
-            padding: EdgeInsets.only(left: 20.0),
-            child: Text(
-              'DiscussionsView placeholder',
-              style: TextStyleHelper.subHeaderStyle,
-            ),
-          ),
-        ],
-      ),
-    );
+class ImagesController {
+  static final _portalInfo = Get.find<PortalInfoController>();
+
+  static String getImagePath(String image) {
+    if (image.toLowerCase().contains('http')) return image;
+    return _portalInfo.portalUri + image;
   }
+
+  static Map getHeaders() => _portalInfo.headers;
 }

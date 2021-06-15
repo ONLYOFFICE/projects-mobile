@@ -39,7 +39,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
-import 'package:projects/presentation/views/discussions_view.dart';
+import 'package:projects/presentation/views/discussions/discussions_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/more/more_view.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';

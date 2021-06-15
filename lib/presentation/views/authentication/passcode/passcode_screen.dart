@@ -121,10 +121,8 @@ class PasscodeScreen extends StatelessWidget {
                         ),
                       SizedBox(width: w(41.2)),
                       // const SizedBox(width: 17),
-                      const PasscodeNumber(
-                        number: 0,
-                        onPressed: print,
-                      ),
+                      PasscodeNumber(
+                          number: 0, onPressed: controller.addNumberToPasscode),
                       SizedBox(width: w(40)),
                       IconButton(
                         icon: AppIcon(icon: SvgIcons.delete_number),
