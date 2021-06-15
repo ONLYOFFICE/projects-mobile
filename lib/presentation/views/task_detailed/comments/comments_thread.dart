@@ -22,23 +22,13 @@ class CommentsThread extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 10, 23, 10),
       child: Column(
         children: [
-          Comment(
-            comment: comment,
-            portalUri: portalUri,
-            headers: headers,
-            taskId: taskId,
-          ),
+          Comment(comment: comment, taskId: taskId),
           for (var i = 0; i < comment.commentList.length; i++)
             Padding(
               padding: const EdgeInsets.fromLTRB(8, 15, 0, 10),
               child: Column(
                 children: [
-                  Comment(
-                    comment: comment.commentList[i],
-                    portalUri: portalUri,
-                    headers: headers,
-                    taskId: taskId,
-                  ),
+                  Comment(comment: comment.commentList[i], taskId: taskId),
                   for (var j = 0;
                       j < comment.commentList[i].commentList.length;
                       j++)
@@ -48,8 +38,6 @@ class CommentsThread extends StatelessWidget {
                         children: [
                           Comment(
                             comment: comment.commentList[i].commentList[j],
-                            portalUri: portalUri,
-                            headers: headers,
                             taskId: taskId,
                           ),
                           Builder(
@@ -68,13 +56,9 @@ class CommentsThread extends StatelessWidget {
                                 children: [
                                   for (var item in visited)
                                     Padding(
-                                      padding: const EdgeInsets.only(top: 15),
-                                      child: Comment(
-                                          comment: item,
-                                          portalUri: portalUri,
-                                          headers: headers,
-                                          taskId: taskId),
-                                    ),
+                                        padding: const EdgeInsets.only(top: 15),
+                                        child: Comment(
+                                            comment: item, taskId: taskId)),
                                 ],
                               );
                             },

@@ -3,6 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/api/comments_api.dart';
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/api/discussions_api.dart';
 import 'package:projects/data/api/download_api.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/api/group_api.dart';
@@ -13,6 +14,8 @@ import 'package:projects/data/api/subtasks_api.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/api/user_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/data/services/files_service.dart';
@@ -32,6 +35,8 @@ import 'package:projects/data/services/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
@@ -67,6 +72,9 @@ void setupLocator() {
   locator.registerLazySingleton(() => CommentsApi());
   locator.registerLazySingleton(() => CommentsService());
   locator.registerLazySingleton(() => CoreApi());
+  locator.registerLazySingleton(() => DiscussionsApi());
+  locator.registerLazySingleton(() => DiscussionItemService());
+  locator.registerLazySingleton(() => DiscussionsService());
   locator.registerLazySingleton(() => DownloadApi());
   locator.registerLazySingleton(() => DownloadService());
   locator.registerLazySingleton(() => FilesApi());
@@ -94,6 +102,12 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserService());
 
   Get.lazyPut(() => CommentsController(), fenix: true);
+  Get.lazyPut(() => DiscussionsSortController(), fenix: true);
+  Get.lazyPut(
+      () => DiscussionsController(
+            Get.put(PaginationController(), tag: 'ProjectsController'),
+          ),
+      fenix: true);
   // Get.lazyPut(() => FilesController(), fenix: true);
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);

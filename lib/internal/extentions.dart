@@ -23,8 +23,8 @@ String formatedDateFromString({DateTime now, String stringDate}) {
   }
 }
 
-String formatedDate(DateTime date) {
-  var now = DateTime.now();
+String formatedDate(DateTime date, {DateTime now}) {
+  now ??= DateTime.now();
 
   if (now.year == date.year) {
     final formatter = DateFormat('d MMM');

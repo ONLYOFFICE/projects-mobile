@@ -79,6 +79,12 @@ class CoreApi {
   Future<String> getFilesBaseUrl() async =>
       '${await getPortalURI()}/api/$version/files/';
 
+  Future<String> discussionsByParamsUrl() async =>
+      '${await getPortalURI()}/api/$version/project/message/filter?';
+
+  Future<String> discussionDetailedUrl({int messageId}) async =>
+      '${await getPortalURI()}/api/$version/project/message/$messageId';
+
   Future<String> milestonesByFilter() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
 
