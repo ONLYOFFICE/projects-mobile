@@ -51,13 +51,6 @@ class ProfileScreen extends StatelessWidget {
 
     var profileController = Get.put(ProfileController());
 
-    var imageAdress = _getImageAdress(
-      portalAdress: portalInfoController.portalUri,
-      imageAdress: userController.user?.avatar ??
-          userController.user?.avatarMedium ??
-          userController.user?.avatarSmall,
-    );
-
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -125,15 +118,6 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-// TODO use shared
-String _getImageAdress({String portalAdress, String imageAdress}) {
-  if (imageAdress?.startsWith('http') != null &&
-      imageAdress.startsWith('http')) {
-    return imageAdress;
-  }
-  return '$portalAdress$imageAdress';
 }
 
 // TODO instead crerate shared styledTile

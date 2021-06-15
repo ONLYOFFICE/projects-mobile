@@ -30,11 +30,9 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:projects/data/api/discussions_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 

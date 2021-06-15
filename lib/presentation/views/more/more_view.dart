@@ -139,15 +139,6 @@ class MoreView extends StatelessWidget {
   }
 }
 
-// TODO use shared
-String _getImageAdress({String portalAdress, String imageAdress}) {
-  if (imageAdress?.startsWith('http') != null &&
-      imageAdress.startsWith('http')) {
-    return imageAdress;
-  }
-  return '$portalAdress$imageAdress';
-}
-
 class _MoreTile extends StatelessWidget {
   final String iconPath;
   final String text;
