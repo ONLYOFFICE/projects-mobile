@@ -25,6 +25,7 @@ class ProjectsController extends BaseController {
   RxList get itemList => _paginationController.data;
 
   final _sortController = Get.find<ProjectsSortController>();
+  ProjectsSortController get sortController => _sortController;
 
   ProjectsFilterController _filterController;
 

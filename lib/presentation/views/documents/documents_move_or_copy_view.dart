@@ -25,22 +25,22 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final target = Get.arguments['target'];
-    final Folder initialFolder = Get.arguments['initialFolder'];
+    final int initialFolderId = Get.arguments['initialFolderId'];
     final refreshCalback = Get.arguments['refreshCalback'];
     final String mode = Get.arguments['mode'];
 
     controller.initialSetup();
     if (mode == 'moveFolder') {
-      controller.setupMovingFolder(target, initialFolder);
+      controller.setupMovingFolder(target, initialFolderId);
     }
     if (mode == 'copyFolder') {
-      controller.setupCopyingFolder(target, initialFolder);
+      controller.setupCopyingFolder(target, initialFolderId);
     }
     if (mode == 'moveFile') {
-      controller.setupMovingFile(target, initialFolder);
+      controller.setupMovingFile(target, initialFolderId);
     }
     if (mode == 'copyFile') {
-      controller.setupCopyingFile(target, initialFolder);
+      controller.setupCopyingFile(target, initialFolderId);
     }
     controller.foldersCount = 1;
     controller.refreshCalback = refreshCalback;
@@ -84,7 +84,7 @@ class _FolderContentView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Folder currentFolder = Get.arguments['currentFolder'];
     final target = Get.arguments['target'];
-    final Folder initialFolder = Get.arguments['initialFolder'];
+    final int initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
     final refreshCalback = Get.arguments['refreshCalback'];
     final String mode = Get.arguments['mode'];
@@ -93,16 +93,16 @@ class _FolderContentView extends StatelessWidget {
         folderName: currentFolder.title, folder: currentFolder);
 
     if (mode == 'moveFolder') {
-      controller.setupMovingFolder(target, initialFolder);
+      controller.setupMovingFolder(target, initialFolderId);
     }
     if (mode == 'copyFolder') {
-      controller.setupCopyingFolder(target, initialFolder);
+      controller.setupCopyingFolder(target, initialFolderId);
     }
     if (mode == 'moveFile') {
-      controller.setupMovingFile(target, initialFolder);
+      controller.setupMovingFile(target, initialFolderId);
     }
     if (mode == 'copyFile') {
-      controller.setupCopyingFile(target, initialFolder);
+      controller.setupCopyingFile(target, initialFolderId);
     }
 
     controller.foldersCount = foldersCount + 1;
@@ -131,7 +131,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Folder currentFolder = Get.arguments['currentFolder'];
     final target = Get.arguments['target'];
-    final Folder initialFolder = Get.arguments['initialFolder'];
+    final int initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
     final refreshCalback = Get.arguments['refreshCalback'];
     final String folderName = Get.arguments['folderName'];
@@ -140,16 +140,16 @@ class DocumentsMoveSearchView extends StatelessWidget {
     controller.setupSearchMode(folderName: folderName, folder: currentFolder);
 
     if (mode == 'moveFolder') {
-      controller.setupMovingFolder(target, initialFolder);
+      controller.setupMovingFolder(target, initialFolderId);
     }
     if (mode == 'copyFolder') {
-      controller.setupCopyingFolder(target, initialFolder);
+      controller.setupCopyingFolder(target, initialFolderId);
     }
     if (mode == 'moveFile') {
-      controller.setupMovingFile(target, initialFolder);
+      controller.setupMovingFile(target, initialFolderId);
     }
     if (mode == 'copyFile') {
-      controller.setupCopyingFile(target, initialFolder);
+      controller.setupCopyingFile(target, initialFolderId);
     }
 
     controller.foldersCount = foldersCount + 1;
@@ -298,7 +298,7 @@ class _Title extends StatelessWidget {
                         'folderName': controller.screenName.value,
                         'target': target,
                         'currentFolder': controller.currentFolder,
-                        'initialFolder': controller.initialFolder,
+                        'initialFolderId': controller.initialFolderId,
                         'foldersCount': controller.foldersCount,
                         'refreshCalback': controller.refreshCalback,
                       });
@@ -350,7 +350,7 @@ class _MoveFolderContent extends StatelessWidget {
           'mode': controller.mode,
           'target': target,
           'currentFolder': element,
-          'initialFolder': controller.initialFolder,
+          'initialFolderId': controller.initialFolderId,
           'foldersCount': controller.foldersCount,
           'refreshCalback': controller.refreshCalback,
         });

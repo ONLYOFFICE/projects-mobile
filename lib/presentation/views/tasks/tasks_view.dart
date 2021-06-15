@@ -48,25 +48,14 @@ class TasksView extends StatelessWidget {
           ),
           IconButton(
             icon: FiltersButton(controler: controller),
-            // onPressed: () async => showFilters(context),
             onPressed: () async => Get.toNamed('TasksFilterScreen'),
           ),
-          IconButton(
-            icon: AppIcon(
-              width: 24,
-              height: 24,
-              icon: SvgIcons.tasklist,
-              color: Theme.of(context).customColors().primary,
-            ),
-            onPressed: () => {},
-          ),
-          const SizedBox(width: 3),
+          const SizedBox(width: 4),
         ],
         bottom: TasksHeader(),
       ),
       body: Column(
         children: [
-          // TasksHeader(),
           Expanded(
             child: Obx(
               () {

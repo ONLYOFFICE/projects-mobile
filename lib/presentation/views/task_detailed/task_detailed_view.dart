@@ -6,8 +6,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
-import 'package:projects/presentation/views/task_detailed/documents/documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 
@@ -95,7 +95,11 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
         body: TabBarView(controller: _tabController, children: [
           TasksOverviewScreen(taskController: controller),
           SubtasksView(controller: controller),
-          DocumentsView(controller: controller),
+          EntityDocumentsView(
+            folderId: controller.task.value.id,
+            folderName: controller.task.value.title,
+            entityType: 'task',
+          ),
           TaskCommentsView(controller: controller)
         ]),
       ),

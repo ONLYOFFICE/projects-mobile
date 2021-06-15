@@ -36,9 +36,7 @@ dependencies:
   json_serializable: ^3.5.1 
   json_annotation: ^3.1.1
   source_gen: 0.9.10+2 
-  firebase_core: ^1.0.0
-  firebase_auth: ^1.0.0
-  google_sign_in: ^4.5.1
+  
   pull_to_refresh: ^1.6.4
   visibility_detector: ^0.1.5
   # shimmer for loading
@@ -49,7 +47,6 @@ dependencies:
   # bottom sheet with dynamic size
   bottom_sheet: ^0.0.1-dev.8
   darq: ^1.1.1
-  syncfusion_flutter_datepicker: ^19.1.59-beta
   # to open app in App Stores //need to replace
   launch_review: ^3.0.1
   # formatting input in textfields // надо поменять, тк он и сам текст форматирует

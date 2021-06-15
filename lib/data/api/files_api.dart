@@ -34,43 +34,27 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<List<PortalFile>>> getProjectFiles({String projectId}) async {
-    var url = await coreApi.getProjectFilesUrl(projectId: projectId);
-
-    var result = ApiDTO<List<PortalFile>>();
-
-    try {
-      var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        result.response = (responseJson['response']['files'] as List)
-            .map((i) => PortalFile.fromJson(i))
-            .toList();
-      } else {
-        result.error = CustomError.fromJson(responseJson['error']);
-      }
-    } catch (e) {
-      result.error = CustomError(message: e.toString());
-    }
-
-    return result;
-  }
-
-  Future<ApiDTO<FoldersResponse>> getFilesByParams(
-      {int startIndex,
-      String query,
-      String sortBy,
-      String sortOrder,
-      int folderId,
-      String typeFilter,
-      String authorFilter}) async {
+  Future<ApiDTO<FoldersResponse>> getFilesByParams({
+    int startIndex,
+    String query,
+    String sortBy,
+    String sortOrder,
+    int folderId,
+    String typeFilter,
+    String authorFilter,
+    String entityType,
+  }) async {
     var url = await coreApi.getFilesBaseUrl();
 
-    if (folderId != null)
-      url += '${folderId.toString()}?';
-    else
-      url += '@projects?';
+    if (entityType != null && entityType == 'task') {
+      url = await coreApi.getEntityFilesUrl(entityId: folderId.toString());
+      url += '?entityType=task';
+    } else {
+      if (folderId != null)
+        url += '${folderId.toString()}?';
+      else
+        url += '@projects?';
+    }
 
     if (query != null) {
       url += 'filterBy=title&filterOp=contains&filterValue=$query';
@@ -99,7 +83,15 @@ class FilesApi {
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
-        result.response = FoldersResponse.fromJson(responseJson['response']);
+        if (entityType != null && entityType == 'task') {
+          var taskFiles = (responseJson['response'] as List)
+              .map((i) => PortalFile.fromJson(i))
+              .toList();
+
+          result.response = FoldersResponse();
+          result.response.files = taskFiles;
+        } else
+          result.response = FoldersResponse.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

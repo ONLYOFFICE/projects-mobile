@@ -7,6 +7,7 @@ import 'package:projects/internal/locator.dart';
 class DocumentsFilterController extends BaseFilterController {
   final _api = locator<FilesService>();
   Function applyFiltersDelegate;
+  String entityType;
 
   String _typeFilter = '';
   String _authorFilter = '';
@@ -162,6 +163,7 @@ class DocumentsFilterController extends BaseFilterController {
       folderId: _folderId,
       typeFilter: typeFilter,
       authorFilter: authorFilter,
+      entityType: entityType,
     );
 
     suitableResultCount.value = result.count;

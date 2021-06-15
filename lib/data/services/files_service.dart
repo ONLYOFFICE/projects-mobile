@@ -19,18 +19,6 @@ class FilesService {
     }
   }
 
-  Future<List<PortalFile>> getProjectFiles({String projectId}) async {
-    var files = await _api.getProjectFiles(projectId: projectId);
-    var success = files.response != null;
-
-    if (success) {
-      return files.response;
-    } else {
-      ErrorDialog.show(files.error);
-      return null;
-    }
-  }
-
   Future<FoldersResponse> getFilesByParams({
     int startIndex,
     String query,
@@ -39,6 +27,7 @@ class FilesService {
     int folderId,
     String typeFilter,
     String authorFilter,
+    String entityType,
   }) async {
     var files = await _api.getFilesByParams(
       startIndex: startIndex,
@@ -48,6 +37,7 @@ class FilesService {
       folderId: folderId,
       typeFilter: typeFilter,
       authorFilter: authorFilter,
+      entityType: entityType,
     );
     var success = files.response != null;
 

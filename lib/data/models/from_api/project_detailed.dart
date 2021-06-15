@@ -5,7 +5,7 @@ class ProjectDetailed {
   bool canEdit;
   bool canDelete;
   Map<String, dynamic> security;
-  String projectFolder;
+  int projectFolder;
   int id;
   String title;
   String description;
@@ -56,7 +56,9 @@ class ProjectDetailed {
     canDelete = json['canDelete'];
     security = json['security'];
 
-    projectFolder = json['projectFolder'].toString();
+    projectFolder = json['projectFolder'] is int
+        ? json['projectFolder']
+        : int.parse(json['projectFolder']);
     id = json['id'];
     title = json['title'];
     description = json['description'];

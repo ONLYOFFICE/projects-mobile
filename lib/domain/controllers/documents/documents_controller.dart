@@ -24,11 +24,16 @@ class DocumentsController extends GetxController {
 
   String _query;
 
+  String _entityType;
+
+  set entityType(String value) =>
+      {_entityType = value, _filterController.entityType = value};
+
   PaginationController get paginationController => _paginationController;
 
   String _screenName;
-  Folder _currentFolder;
-  Folder get currentFolder => _currentFolder;
+  int _currentFolderId;
+  int get currentFolder => _currentFolderId;
 
   var screenName = 'Documents'.obs;
 
@@ -41,9 +46,10 @@ class DocumentsController extends GetxController {
   DocumentsFilterController get filterController => _filterController;
 
   DocumentsController(
-      DocumentsFilterController filterController,
-      PaginationController paginationController,
-      DocumentsSortController sortController) {
+    DocumentsFilterController filterController,
+    PaginationController paginationController,
+    DocumentsSortController sortController,
+  ) {
     _sortController = sortController;
     _paginationController = paginationController;
 
@@ -62,10 +68,11 @@ class DocumentsController extends GetxController {
   }
 
   Future<void> refreshContent() async {
-    if (_currentFolder == null) {
+    if (_currentFolderId == null) {
       await initialSetup();
     } else
-      await setupFolder(folder: _currentFolder, folderName: screenName.value);
+      await setupFolder(
+          folderId: _currentFolderId, folderName: screenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -76,12 +83,12 @@ class DocumentsController extends GetxController {
     loaded.value = true;
   }
 
-  Future<void> setupFolder({String folderName, Folder folder}) async {
+  Future<void> setupFolder({String folderName, int folderId}) async {
     loaded.value = false;
 
     _clear();
-    _currentFolder = folder;
-    _filterController.folderId = _currentFolder.id;
+    _currentFolderId = folderId;
+    _filterController.folderId = _currentFolderId;
     screenName.value = folderName;
     await _getDocuments();
 
@@ -90,7 +97,7 @@ class DocumentsController extends GetxController {
 
   void _clear() {
     _screenName = null;
-    _currentFolder = null;
+    _currentFolderId = null;
 
     _filterController.folderId = null;
     paginationController.startIndex = 0;
@@ -99,24 +106,26 @@ class DocumentsController extends GetxController {
 
   Future _getDocuments() async {
     var result = await _api.getFilesByParams(
-      folderId: _currentFolder == null ? null : _currentFolder.id,
+      folderId: _currentFolderId,
       query: _query,
       startIndex: paginationController.startIndex,
       sortBy: sortController.currentSortfilter,
       sortOrder: sortController.currentSortOrder,
       typeFilter: _filterController.typeFilter,
       authorFilter: _filterController.authorFilter,
+      entityType: _entityType,
     );
 
     if (result == null) return;
 
     paginationController.total.value = result.total;
 
-    if (_currentFolder != null && result.current != null)
+    if (_currentFolderId != null && result.current != null)
       _screenName = result.current.title;
 
-    paginationController.data.addAll(result.folders);
-    paginationController.data.addAll(result.files);
+    if (result.folders != null)
+      paginationController.data.addAll(result.folders);
+    if (result.files != null) paginationController.data.addAll(result.files);
 
     screenName.value = _screenName ?? 'Documents';
   }
@@ -138,7 +147,7 @@ class DocumentsController extends GetxController {
     _performSearch();
   }
 
-  Future<void> setupSearchMode({String folderName, Folder folder}) async {
+  Future<void> setupSearchMode({String folderName, int folderId}) async {
     loaded.value = true;
   }
 
