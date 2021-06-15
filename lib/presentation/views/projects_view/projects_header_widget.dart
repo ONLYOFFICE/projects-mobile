@@ -35,7 +35,7 @@ class HeaderWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  InkWell(
+                  InkResponse(
                     onTap: () {
                       controller.showSearch();
                     },
@@ -47,20 +47,9 @@ class HeaderWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 24),
-                  InkWell(
-                    // onTap: () async => showFilters(context),
+                  InkResponse(
                     onTap: () async => Get.toNamed('ProjectsFilterScreen'),
                     child: FiltersButton(controler: controller),
-                  ),
-                  const SizedBox(width: 24),
-                  InkWell(
-                    onTap: () {},
-                    child: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.tasklist,
-                      color: Theme.of(context).customColors().primary,
-                    ),
                   ),
                 ],
               ),

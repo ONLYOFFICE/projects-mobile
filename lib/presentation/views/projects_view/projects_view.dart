@@ -103,7 +103,7 @@ class ProjectHeader extends StatelessWidget {
 
     var sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
+      child: InkResponse(
         onTap: () {
           Get.bottomSheet(
             SortView(sortOptions: options),

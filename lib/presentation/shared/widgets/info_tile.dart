@@ -87,7 +87,7 @@ class InfoTileWithButton extends StatelessWidget {
               ],
             ),
           ),
-          InkWell(
+          InkResponse(
             onTap: onTapFunction,
             child: Icon(
               iconData,

@@ -40,7 +40,7 @@ class SelectMilestoneView extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return Material(
-                        child: InkWell(
+                        child: InkResponse(
                           onTap: () {
                             controller.changeMilestoneSelection(
                                 id: _milestoneController.milestones[index].id,

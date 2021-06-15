@@ -44,7 +44,7 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/people';
 
   Future<String> authUrl() async =>
-      '${await getPortalURI()}/api/$version/authentication.json';
+      '${await getPortalURI()}/api/$version/authentication';
 
   Future<String> copyTask({@required int copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';

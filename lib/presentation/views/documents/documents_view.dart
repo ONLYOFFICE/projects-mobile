@@ -254,7 +254,7 @@ class DocsBottom extends StatelessWidget {
           sortController: controller.sortController,
         ),
         SortTile(
-          sortParameter: 'title',
+          sortParameter: 'AZ',
           sortController: controller.sortController,
         ),
         SortTile(
