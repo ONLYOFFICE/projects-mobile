@@ -79,6 +79,12 @@ class CoreApi {
   Future<String> getFilesBaseUrl() async =>
       '${await getPortalURI()}/api/$version/files/';
 
+  Future<String> discussionsByParamsUrl() async =>
+      '${await getPortalURI()}/api/$version/project/message/filter?';
+
+  Future<String> discussionDetailedUrl({int messageId}) async =>
+      '${await getPortalURI()}/api/$version/project/message/$messageId';
+
   Future<String> milestonesByFilter() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
 
@@ -118,6 +124,12 @@ class CoreApi {
 
   Future<String> selfInfoUrl() async =>
       '${await getPortalURI()}/api/$version/people/@self';
+
+  Future<String> sendSmsUrl() async =>
+      '${await getPortalURI()}/api/$version/authentication/sendsms';
+
+  Future<String> setPhoneUrl() async =>
+      '${await getPortalURI()}/api/$version/authentication/setphone';
 
   Future<String> statusesUrl() async =>
       '${await getPortalURI()}/api/$version/project/status';
@@ -178,13 +190,13 @@ class CoreApi {
     return response;
   }
 
-  Future<http.Response> postRequest(String url, String body) async {
+  Future<http.Response> postRequest(String url, Map body) async {
     debugPrint(url);
     var headers = await getHeaders();
     var request = client.post(
       Uri.parse(url),
       headers: headers,
-      body: body,
+      body: jsonEncode(body),
     );
     final response = await request;
     return response;

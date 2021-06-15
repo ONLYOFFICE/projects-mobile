@@ -12,7 +12,6 @@ import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 
 class ProjectMilestonesScreen extends StatelessWidget {

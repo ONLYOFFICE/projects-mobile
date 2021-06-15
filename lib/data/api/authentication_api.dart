@@ -12,8 +12,7 @@ class AuthApi {
 
   Future<ApiDTO<AuthToken>> loginByUsername(String email, String pass) async {
     var url = await coreApi.authUrl();
-    var body =
-        jsonEncode(<String, String>{'userName': email, 'password': pass});
+    var body = {'userName': email, 'password': pass};
 
     var result = ApiDTO<AuthToken>();
     try {
@@ -44,12 +43,12 @@ class AuthApi {
     String code,
   ) async {
     var url = await coreApi.tfaUrl(code);
-    var body = jsonEncode(<String, String>{
+    var body = {
       'userName': email,
       'password': pass,
       'accessToken': '',
       'provider': ''
-    });
+    };
 
     var result = ApiDTO<AuthToken>();
     try {
@@ -78,6 +77,46 @@ class AuthApi {
 
       if (response.statusCode == 200) {
         result.response = PortalUser.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> setPhone(Map body) async {
+    var url = await coreApi.setPhoneUrl();
+
+    var result = ApiDTO();
+    try {
+      var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = AuthToken.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> sendSms(Map body) async {
+    var url = await coreApi.sendSmsUrl();
+
+    var result = ApiDTO();
+    try {
+      var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = AuthToken.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

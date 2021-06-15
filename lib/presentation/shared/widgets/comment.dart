@@ -4,18 +4,15 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/comment_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
 class Comment extends StatelessWidget {
   final PortalComment comment;
-  final String portalUri;
   final int taskId;
-  final headers;
   const Comment({
     Key key,
     @required this.comment,
-    @required this.portalUri,
-    @required this.headers,
     @required this.taskId,
   }) : super(key: key);
 
@@ -31,12 +28,7 @@ class Comment extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 4),
-            child: _CommentAuthor(
-              comment: comment,
-              headers: headers,
-              portalUri: portalUri,
-              controller: controller,
-            ),
+            child: _CommentAuthor(comment: comment, controller: controller),
           ),
           const SizedBox(height: 28),
           Obx(
@@ -56,8 +48,6 @@ class Comment extends StatelessWidget {
                   if (comment.isResponsePermissions)
                     GestureDetector(
                       onTap: () => Get.toNamed('ReplyCommentView', arguments: {
-                        'portalUri': portalUri,
-                        'headers': headers,
                         'comment': controller.comment.value,
                         'taskId': taskId,
                       }),
@@ -79,14 +69,10 @@ class Comment extends StatelessWidget {
 
 class _CommentAuthor extends StatelessWidget {
   final PortalComment comment;
-  final String portalUri;
   final controller;
-  final headers;
   const _CommentAuthor({
     Key key,
     @required this.comment,
-    @required this.portalUri,
-    @required this.headers,
     this.controller,
   }) : super(key: key);
 
@@ -99,11 +85,12 @@ class _CommentAuthor extends StatelessWidget {
           SizedBox(
             width: 40,
             height: 40,
-            child: CircleAvatar(
-              //TODO fix avatars path
-              backgroundImage: NetworkImage(portalUri + comment.userAvatarPath,
-                  headers: headers),
-              backgroundColor: Colors.transparent,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: CustomNetworkImage(
+                image: comment.userAvatarPath,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(width: 16),

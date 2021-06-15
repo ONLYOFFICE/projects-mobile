@@ -14,7 +14,8 @@ class PortalInfoController extends GetxController {
   String get portalName => _portalName;
   Map get headers => _headers;
 
-  Future<void> getPortalInfo() async {
+  @override
+  void onInit() async {
     loaded.value = false;
     if (_portalName == null || _portalUri == null || _headers == null) {
       _portalUri = await _coreApi.getPortalURI();
@@ -23,6 +24,7 @@ class PortalInfoController extends GetxController {
     }
 
     loaded.value = true;
+    super.onInit();
   }
 
   void logout() {

@@ -6,6 +6,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 
 class MoreView extends StatelessWidget {
   const MoreView({Key key}) : super(key: key);
@@ -16,12 +17,6 @@ class MoreView extends StatelessWidget {
     var portalInfoController = Get.find<PortalInfoController>();
 
     userController.getUserInfo();
-    portalInfoController.getPortalInfo();
-
-    var imageAdress = _getImageAdress(
-      portalAdress: portalInfoController.portalUri,
-      imageAdress: userController.user?.avatarMedium,
-    );
 
     return Container(
       height: 312,
@@ -49,12 +44,16 @@ class MoreView extends StatelessWidget {
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            CircleAvatar(
-                              maxRadius: 20,
-                              minRadius: 20,
-                              backgroundImage: NetworkImage(
-                                imageAdress,
-                                headers: portalInfoController.headers,
+                            SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(30),
+                                child: CustomNetworkImage(
+                                  image: userController.user?.avatar ??
+                                      userController.user?.avatarMedium ??
+                                      userController.user?.avatarSmall,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -106,15 +105,6 @@ class MoreView extends StatelessWidget {
       ),
     );
   }
-}
-
-// TODO use shared
-String _getImageAdress({String portalAdress, String imageAdress}) {
-  if (imageAdress?.startsWith('http') != null &&
-      imageAdress.startsWith('http')) {
-    return imageAdress;
-  }
-  return '$portalAdress$imageAdress';
 }
 
 class _MoreTile extends StatelessWidget {
