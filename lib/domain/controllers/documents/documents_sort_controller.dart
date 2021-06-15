@@ -34,7 +34,7 @@ import 'package:projects/domain/controllers/base_sort_controller.dart';
 
 class DocumentsSortController extends BaseSortController {
   DocumentsSortController() {
-    currentSortfilter = 'title';
+    currentSortfilter = 'AZ';
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
@@ -47,7 +47,7 @@ class DocumentsSortController extends BaseSortController {
 const _filtersMapping = {
   'dateandtime': 'Last modified date',
   'create_on': 'Creation date',
-  'title': 'Title',
+  'AZ': 'Title',
   'type': 'Type',
   'size': 'Size',
   'author': 'Author',

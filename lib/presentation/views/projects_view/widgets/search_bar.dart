@@ -72,7 +72,7 @@ class UsersSearchBar extends StatelessWidget {
               },
             ),
           ),
-          InkWell(
+          InkResponse(
             onTap: () {
               controller.clearSearch();
             },

@@ -73,7 +73,7 @@ class GroupsBottomSheet extends StatelessWidget {
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
-                      child: InkWell(
+                      child: InkResponse(
                         onTap: () => Get.back(result: {
                           'id': _groupsController.groups[index].id,
                           'name': _groupsController.groups[index].name

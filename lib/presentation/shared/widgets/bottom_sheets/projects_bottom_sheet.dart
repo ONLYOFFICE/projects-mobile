@@ -88,7 +88,7 @@ class ProjectsBottomSheet extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return Material(
-                        child: InkWell(
+                        child: InkResponse(
                           onTap: () => Get.back(result: {
                             'id': _projectsController
                                 .paginationController.data[index].id,

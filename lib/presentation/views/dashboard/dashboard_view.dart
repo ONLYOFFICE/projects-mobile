@@ -114,7 +114,7 @@ class DashboardCardView extends StatelessWidget {
           () => Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              InkWell(
+              InkResponse(
                 onTap: () => {
                   controller.expandedCardView.value =
                       !controller.expandedCardView.value
@@ -259,7 +259,7 @@ class DashboardCardView extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    InkWell(
+                                    InkResponse(
                                       onTap: () => {
                                         controller.showAll.value =
                                             !controller.showAll.value

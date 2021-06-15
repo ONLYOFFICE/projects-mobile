@@ -87,7 +87,7 @@ class DocumentsController extends GetxController {
     };
 
     sortController.updateSortDelegate = () async => await refreshContent();
-    paginationController.loadDelegate = () async => await refreshContent();
+    paginationController.loadDelegate = () async => await _getDocuments();
     paginationController.refreshDelegate = () async => await refreshContent();
 
     paginationController.pullDownEnabled = true;

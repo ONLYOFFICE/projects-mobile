@@ -50,7 +50,7 @@ class PortalGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkResponse(
       onTap: () {
         groupController.isSelected.value = !groupController.isSelected.value;
         onTapFunction(groupController);

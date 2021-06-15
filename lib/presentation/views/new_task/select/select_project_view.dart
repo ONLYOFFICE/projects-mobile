@@ -111,7 +111,7 @@ class ProjectsList extends StatelessWidget {
       },
       itemBuilder: (BuildContext context, int index) {
         return Material(
-          child: InkWell(
+          child: InkResponse(
             onTap: () {
               controller.changeProjectSelection(
                   id: projects[index].id, title: projects[index].title);

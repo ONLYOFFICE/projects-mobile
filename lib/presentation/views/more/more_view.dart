@@ -163,7 +163,7 @@ class _MoreTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkResponse(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.only(top: 12, bottom: 12),

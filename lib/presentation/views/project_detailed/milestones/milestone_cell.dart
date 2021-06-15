@@ -61,7 +61,7 @@ class MilestoneCell extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: InkWell(
+            child: InkResponse(
               onTap: () => {},
               child: Column(
                 mainAxisSize: MainAxisSize.min,

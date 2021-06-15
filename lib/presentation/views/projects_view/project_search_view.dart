@@ -105,7 +105,7 @@ class SearchHeader extends StatelessWidget {
                   },
                 ),
               ),
-              InkWell(
+              InkResponse(
                 onTap: () {
                   controller.clearSearch();
                 },

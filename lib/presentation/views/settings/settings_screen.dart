@@ -138,7 +138,7 @@ class NewTaskInfo extends StatelessWidget {
     return SizedBox(
       height: 61,
       // constraints: const BoxConstraints(minHeight: 56),
-      child: InkWell(
+      child: InkResponse(
         onTap: onTap,
         child: Column(
           children: [

@@ -160,7 +160,7 @@ class _ProfileInfoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
-      child: InkWell(
+      child: InkResponse(
         onTap: onTap,
         child: Column(
           children: [
