@@ -46,7 +46,9 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:projects/presentation/views/projects_view/projects_header_widget.dart';
+
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectsView extends StatelessWidget {
   const ProjectsView({Key key}) : super(key: key);
@@ -72,9 +74,11 @@ class ProjectsView extends StatelessWidget {
         ),
       ),
       appBar: StyledAppBar(
-        bottom: ProjectHeader(),
-        titleHeight: 0,
-        bottomHeight: 100,
+        title: _Title(controller: controller),
+        bottom: _Bottom(controller: controller),
+        showBackButton: false,
+        titleHeight: 50,
+        bottomHeight: 50,
       ),
       body: Obx(
         () => Column(
@@ -100,21 +104,54 @@ class ProjectsView extends StatelessWidget {
   }
 }
 
-class ProjectHeader extends StatelessWidget {
-  ProjectHeader({
-    Key key,
-  }) : super(key: key);
+class _Title extends StatelessWidget {
+  const _Title({Key key, @required this.controller}) : super(key: key);
+  final controller;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Text(
+              controller.screenName,
+              style: TextStyleHelper.headerStyle,
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              InkResponse(
+                onTap: () {
+                  controller.showSearch();
+                },
+                child: AppIcon(
+                  width: 24,
+                  height: 24,
+                  icon: SvgIcons.search,
+                  color: Theme.of(context).customColors().primary,
+                ),
+              ),
+              const SizedBox(width: 24),
+              InkResponse(
+                onTap: () async => Get.toNamed('ProjectsFilterScreen'),
+                child: FiltersButton(controler: controller),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-  final controller = Get.find<ProjectsController>(tag: 'ProjectsView');
-  //  final controller = Get.put(
-  //     ProjectsController(
-  //       Get.find<ProjectsFilterController>(),
-  //       Get.put(PaginationController(), tag: 'SelectProjectForMilestone'),
-  //     ),
-  //   );
-
-  final sortController = Get.find<ProjectsSortController>();
-
+class _Bottom extends StatelessWidget {
+  _Bottom({Key key, this.controller}) : super(key: key);
+  final controller;
   @override
   Widget build(BuildContext context) {
     var options = Column(
@@ -123,11 +160,11 @@ class ProjectHeader extends StatelessWidget {
         const Divider(height: 9, thickness: 1),
         SortTile(
           sortParameter: 'create_on',
-          sortController: sortController,
+          sortController: controller.sortController,
         ),
         SortTile(
           sortParameter: 'title',
-          sortController: sortController,
+          sortController: controller.sortController,
         ),
         const SizedBox(height: 20),
       ],
@@ -146,13 +183,13 @@ class ProjectHeader extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                sortController.currentSortTitle.value,
+                controller.sortController.currentSortTitle.value,
                 style: TextStyleHelper.projectsSorting,
               ),
             ),
             const SizedBox(width: 8),
             Obx(
-              () => (sortController.currentSortOrder == 'ascending')
+              () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
                       width: 20,
@@ -173,9 +210,32 @@ class ProjectHeader extends StatelessWidget {
       ),
     );
 
-    return HeaderWidget(
-      controller: controller,
-      sortButton: sortButton,
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          sortButton,
+          Container(
+            child: Row(
+              children: <Widget>[
+                Obx(
+                  () => Text(
+                    'Total ${controller.paginationController.total.value}',
+                    style: TextStyleHelper.body2(
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

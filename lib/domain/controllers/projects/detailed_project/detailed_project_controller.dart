@@ -109,7 +109,7 @@ class ProjectDetailsController extends GetxController {
         formatter.format(DateTime.parse(projectDetailed.created));
 
     await _api.getProjectById(projectId: projectDetailed.id).then((value) => {
-          if (value.tags != null)
+          if (value?.tags != null)
             {
               tags.addAll(value.tags),
               tagsText.value = value.tags.join(', '),
@@ -119,8 +119,8 @@ class ProjectDetailsController extends GetxController {
     tasksCount.value = projectDetailed.taskCount.toString();
 
     await _docApi
-        .getProjectFiles(projectId: projectDetailed.id.toString())
-        .then((value) => docsCount.value = value.length);
+        .getFilesByParams(folderId: projectDetailed.projectFolder)
+        .then((value) => docsCount.value = value.files.length);
   }
 
   void createNewMilestone() {

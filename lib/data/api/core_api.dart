@@ -105,8 +105,8 @@ class CoreApi {
   Future<String> getTaskFiles({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
 
-  Future<String> getProjectFilesUrl({String projectId}) async =>
-      '${await getPortalURI()}/api/$version/project/$projectId/files';
+  Future<String> getEntityFilesUrl({String entityId}) async =>
+      '${await getPortalURI()}/api/$version/project/$entityId/entityfiles';
 
   Future<String> getFilesBaseUrl() async =>
       '${await getPortalURI()}/api/$version/files/';

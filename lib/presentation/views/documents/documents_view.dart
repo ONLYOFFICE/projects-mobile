@@ -51,6 +51,7 @@ import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
+import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key key}) : super(key: key);
@@ -75,13 +76,12 @@ class PortalDocumentsView extends StatelessWidget {
 class FolderContentView extends StatelessWidget {
   FolderContentView({Key key}) : super(key: key);
 
-  final controller = Get.find<DocumentsController>();
-
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<DocumentsController>();
     final String folderName = Get.arguments['folderName'];
-    final Folder folder = Get.arguments['folder'];
-    controller.setupFolder(folderName: folderName, folder: folder);
+    final int folderId = Get.arguments['folderId'];
+    controller.setupFolder(folderName: folderName, folderId: folderId);
 
     return DocumentsScreen(
       controller: controller,
@@ -104,8 +104,8 @@ class DocumentsSearchView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String folderName = Get.arguments['folderName'];
-    final Folder folder = Get.arguments['folder'];
-    controller.setupSearchMode(folderName: folderName, folder: folder);
+    final int folderId = Get.arguments['folderId'];
+    controller.setupSearchMode(folderName: folderName, folderId: folderId);
 
     return DocumentsScreen(
       controller: controller,
@@ -241,7 +241,7 @@ class DocsTitle extends StatelessWidget {
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
-                        'folder': controller.currentFolder
+                        'folderId': controller.currentFolder
                       });
                 },
                 child: AppIcon(
@@ -273,44 +273,12 @@ class DocsBottom extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    var options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'dateandtime',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'AZ',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'type',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'size',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'author',
-          sortController: controller.sortController,
-        ),
-        const SizedBox(height: 20),
-      ],
-    );
-
     var sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
         onTap: () {
           Get.bottomSheet(
-            SortView(sortOptions: options),
+            SortView(sortOptions: DocumentsSortOption(controller: controller)),
             isScrollControlled: true,
           );
         },
@@ -444,12 +412,6 @@ class FileContent extends StatelessWidget {
               ),
             ),
           ),
-          // SizedBox(
-          //   width: 72,
-          //   child: Center(
-          //     child: Text(paginationController.data[index].fileType.toString()),
-          //   ),
-          // ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -535,7 +497,7 @@ class FolderContent extends StatelessWidget {
       onTap: () {
         Get.to(FolderContentView(),
             preventDuplicates: false,
-            arguments: {'folderName': element.title, 'folder': element});
+            arguments: {'folderName': element.title, 'folderId': element.id});
       },
       child: Container(
         child: Row(
@@ -664,7 +626,7 @@ void _onFolderPopupMenuSelected(
     case 'open':
       await Get.to(FolderContentView(), preventDuplicates: false, arguments: {
         'folderName': selectedFolder.title,
-        'folder': selectedFolder
+        'folderId': selectedFolder.id
       });
       break;
     case 'download':
@@ -676,7 +638,7 @@ void _onFolderPopupMenuSelected(
           arguments: {
             'mode': 'copyFolder',
             'target': selectedFolder,
-            'initialFolder': controller.currentFolder,
+            'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
       break;
@@ -686,7 +648,7 @@ void _onFolderPopupMenuSelected(
           arguments: {
             'mode': 'moveFolder',
             'target': selectedFolder,
-            'initialFolder': controller.currentFolder,
+            'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
 
@@ -737,7 +699,7 @@ void _onFilePopupMenuSelected(
           arguments: {
             'mode': 'copyFile',
             'target': selectedFile,
-            'initialFolder': controller.currentFolder,
+            'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
       break;
@@ -747,7 +709,7 @@ void _onFilePopupMenuSelected(
           arguments: {
             'mode': 'moveFile',
             'target': selectedFile,
-            'initialFolder': controller.currentFolder,
+            'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
 

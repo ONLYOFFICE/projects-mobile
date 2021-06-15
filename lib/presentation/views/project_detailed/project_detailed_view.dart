@@ -40,7 +40,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
-import 'package:projects/presentation/views/project_detailed/documents/project_documents_view.dart';
+import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/project_milestones_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
@@ -159,7 +159,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         ProjectTaskScreen(projectDetailed: projectDetailed),
         ProjectMilestonesScreen(projectDetailed: projectDetailed),
         ProjectDiscussionsScreen(projectDetailed: projectDetailed),
-        ProjectDocumentsView(projectDetailed: projectDetailed),
+        EntityDocumentsView(
+          folderId: projectDetailed.projectFolder,
+          folderName: projectDetailed.title,
+        ),
         ProjectTeamView(projectDetailed: projectDetailed),
       ]),
     );

@@ -31,40 +31,48 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/views/documents/document_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
-class DocumentsView extends StatelessWidget {
-  final TaskItemController controller;
-  const DocumentsView({Key key, @required this.controller}) : super(key: key);
+class DocumentsSortOption extends StatelessWidget {
+  const DocumentsSortOption({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final controller;
 
   @override
   Widget build(BuildContext context) {
-    var _files = controller.task.value.files;
-    return Obx(
-      () {
-        if (controller.loaded.isTrue) {
-          return SmartRefresher(
-            controller: controller.refreshController,
-            onRefresh: () async =>
-                await controller.reloadTask(showLoading: true),
-            child: ListView.separated(
-              itemCount: _files.length,
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 10);
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return DocumentCell(file: _files[index]);
-              },
-            ),
-          );
-        } else {
-          return const ListLoadingSkeleton();
-        }
-      },
+    return Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        SortTile(
+          sortParameter: 'dateandtime',
+          sortController: controller.sortController,
+        ),
+        SortTile(
+          sortParameter: 'create_on',
+          sortController: controller.sortController,
+        ),
+        SortTile(
+          sortParameter: 'AZ',
+          sortController: controller.sortController,
+        ),
+        SortTile(
+          sortParameter: 'type',
+          sortController: controller.sortController,
+        ),
+        SortTile(
+          sortParameter: 'size',
+          sortController: controller.sortController,
+        ),
+        SortTile(
+          sortParameter: 'author',
+          sortController: controller.sortController,
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }

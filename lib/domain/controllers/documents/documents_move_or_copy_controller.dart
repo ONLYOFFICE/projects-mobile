@@ -58,7 +58,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   Folder folderToMove;
   Folder folderToCopy;
-  Folder initialFolder;
+  int initialFolderId;
   PortalFile fileToMove;
   PortalFile fileToCopy;
 
@@ -84,9 +84,10 @@ class DocumentsMoveOrCopyController extends GetxController {
   DocumentsFilterController get filterController => _filterController;
 
   DocumentsMoveOrCopyController(
-      DocumentsFilterController filterController,
-      PaginationController paginationController,
-      DocumentsSortController sortController) {
+    DocumentsFilterController filterController,
+    PaginationController paginationController,
+    DocumentsSortController sortController,
+  ) {
     _sortController = sortController;
     _paginationController = paginationController;
 
@@ -236,23 +237,23 @@ class DocumentsMoveOrCopyController extends GetxController {
     return result != null;
   }
 
-  void setupMovingFolder(Folder target, Folder initial) {
+  void setupMovingFolder(Folder target, int initial) {
     folderToMove = target;
-    initialFolder = initial;
+    initialFolderId = initial;
   }
 
-  void setupCopyingFolder(Folder target, Folder initial) {
+  void setupCopyingFolder(Folder target, int initial) {
     folderToCopy = target;
-    initialFolder = initial;
+    initialFolderId = initial;
   }
 
-  void setupMovingFile(PortalFile target, Folder initial) {
+  void setupMovingFile(PortalFile target, int initial) {
     fileToMove = target;
-    initialFolder = initial;
+    initialFolderId = initial;
   }
 
-  void setupCopyingFile(PortalFile target, Folder initial) {
+  void setupCopyingFile(PortalFile target, int initial) {
     fileToCopy = target;
-    initialFolder = initial;
+    initialFolderId = initial;
   }
 }
