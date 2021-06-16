@@ -31,9 +31,13 @@
  */
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
@@ -232,5 +236,10 @@ class DocumentsController extends GetxController {
     );
 
     return result != null;
+  }
+
+  Future<void> downloadFile(String viewUrl) async {
+    final _downloadService = locator<DownloadService>();
+    await _downloadService.downloadDocument(viewUrl);
   }
 }
