@@ -29,4 +29,26 @@ class DownloadApi {
 
     return result;
   }
+
+  Future<ApiDTO<Uint8List>> downloadDocument(String docUrl) async {
+    var url = '';
+    if (docUrl.toLowerCase().contains('http')) {
+      url = docUrl;
+    } else {
+      url = await coreApi.getPortalURI() + docUrl;
+    }
+
+    var result = ApiDTO<Uint8List>();
+    try {
+      var response = await coreApi.getRequest(url);
+
+      if (response.statusCode == 200) {
+        result.response = response.bodyBytes;
+      } else {}
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

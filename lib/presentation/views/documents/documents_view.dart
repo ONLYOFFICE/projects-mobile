@@ -1,12 +1,18 @@
+import 'dart:isolate';
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/download_service.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -418,10 +424,10 @@ class FileContent extends StatelessWidget {
                       value: 'copyLink',
                       child: Text('Copy link'),
                     ),
-                    // const PopupMenuItem(
-                    //   value: 'download',
-                    //   child: Text('Download'),
-                    // ),
+                    const PopupMenuItem(
+                      value: 'download',
+                      child: Text('Download'),
+                    ),
                     const PopupMenuItem(
                       value: 'copy',
                       child: Text('Copy'),
@@ -660,6 +666,7 @@ void _onFilePopupMenuSelected(
     case 'open':
       break;
     case 'download':
+      await controller.downloadFile(selectedFile.viewUrl);
       break;
     case 'copy':
       await Get.to(DocumentsMoveOrCopyView(),

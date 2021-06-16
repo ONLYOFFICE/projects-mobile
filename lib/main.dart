@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/storage.dart';
 import 'package:projects/internal/app.dart';
@@ -17,6 +18,9 @@ void main() async {
 }
 
 Future<String> _getInitPage() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
+
   var storage = locator<SecureStorage>();
   var token = await storage.getString('token');
   var passcode = await storage.getString('passcode');
