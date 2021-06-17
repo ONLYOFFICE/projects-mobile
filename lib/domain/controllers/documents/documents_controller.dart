@@ -1,8 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/download_service.dart';
