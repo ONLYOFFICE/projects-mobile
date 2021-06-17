@@ -66,16 +66,15 @@ class DiscussionSubscribersView extends StatelessWidget {
                                         .customColors()
                                         .onSurface),
                               ),
-                              Text(
-                                discussion.subscribers[index]?.title,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.caption(
-                                    color: Theme.of(context)
-                                        .customColors()
-                                        .onSurface
-                                        .withOpacity(0.6)),
-                              ),
+                              if (discussion.subscribers[index]?.title != null)
+                                Text(discussion.subscribers[index]?.title,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyleHelper.caption(
+                                        color: Theme.of(context)
+                                            .customColors()
+                                            .onSurface
+                                            .withOpacity(0.6))),
                             ],
                           ),
                         )

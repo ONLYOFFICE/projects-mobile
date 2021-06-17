@@ -6,7 +6,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
-import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 // here is a different function, because the task changes page has a
 // slightly different algorithm than on the other pages: you do not need to

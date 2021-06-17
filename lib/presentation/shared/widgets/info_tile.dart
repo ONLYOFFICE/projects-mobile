@@ -26,7 +26,7 @@ class InfoTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(width: 56, child: icon),
+        SizedBox(width: 72, child: icon),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,7 +42,8 @@ class InfoTile extends StatelessWidget {
             ],
           ),
         ),
-        if (suffix != null) suffix
+        if (suffix != null) suffix,
+        if (suffix == null) const SizedBox(width: 16),
       ],
     );
   }
@@ -73,10 +74,7 @@ class InfoTileWithButton extends StatelessWidget {
     return Container(
       child: Row(
         children: [
-          SizedBox(
-            width: 56,
-            child: icon,
-          ),
+          SizedBox(width: 72, child: icon),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

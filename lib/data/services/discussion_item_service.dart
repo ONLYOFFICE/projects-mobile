@@ -9,7 +9,17 @@ class DiscussionItemService {
     var result = await _api.getMessageDetailed(id: id);
     var success = result.response != null;
 
-    print('result.response ${result.response}');
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
+  }
+
+  Future updateMessageStatus({int id, String newStatus}) async {
+    var result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
+    var success = result.response != null;
 
     if (success) {
       return result.response;

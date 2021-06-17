@@ -57,8 +57,9 @@ class PortalDiscussionsView extends StatelessWidget {
             paginationController: controller.paginationController,
             child: ListView.separated(
               itemCount: controller.paginationController.data.length,
+              padding: const EdgeInsets.only(bottom: 65),
               separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 14);
+                return const SizedBox(height: 12);
               },
               itemBuilder: (BuildContext context, int index) {
                 return DiscussionTile(
