@@ -58,7 +58,7 @@ class ProjectCell extends StatelessWidget {
             itemController: itemController,
           ),
           Expanded(
-            child: InkResponse(
+            child: InkWell(
               onTap: () => Get.toNamed('ProjectDetailedView',
                   arguments: {'projectDetailed': itemController.projectData}),
               child: Column(

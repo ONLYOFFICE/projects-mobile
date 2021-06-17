@@ -55,7 +55,7 @@ class TaskCell extends StatelessWidget {
     TaskItemController itemController =
         Get.put(TaskItemController(task), tag: task.id.toString());
 
-    return InkResponse(
+    return InkWell(
       onTap: () => Get.toNamed('TaskDetailedView',
           arguments: {'controller': itemController}),
       child: Container(

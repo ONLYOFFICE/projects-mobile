@@ -115,7 +115,7 @@ class Header extends StatelessWidget {
 
     var sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
-      child: InkResponse(
+      child: InkWell(
         onTap: () {
           Get.bottomSheet(SortView(sortOptions: options),
               isScrollControlled: true);
@@ -163,7 +163,7 @@ class Header extends StatelessWidget {
               Container(
                 child: Row(
                   children: <Widget>[
-                    InkResponse(
+                    InkWell(
                       // onTap: () async => showFilters(context),
                       onTap: () async => Get.toNamed('TasksFilterScreen'),
                       child: FiltersButton(controler: controller),

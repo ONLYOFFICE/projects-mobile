@@ -172,7 +172,7 @@ class _Bottom extends StatelessWidget {
 
     var sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
-      child: InkResponse(
+      child: InkWell(
         onTap: () {
           Get.bottomSheet(
             SortView(sortOptions: options),

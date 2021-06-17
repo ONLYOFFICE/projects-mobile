@@ -88,7 +88,7 @@ void statusSelectionBS({context, TaskEditingController controller}) async {
                 children: [
                   const SizedBox(height: 4),
                   for (var i = 0; i < _statusesController.statuses.length; i++)
-                    InkResponse(
+                    InkWell(
                       onTap: () async {
                         controller
                             .changeStatus(_statusesController.statuses[i]);

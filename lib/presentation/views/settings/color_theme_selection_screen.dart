@@ -71,7 +71,7 @@ class _ColorThemeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 14, 28, 14),

@@ -98,7 +98,7 @@ class SortTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(6));
     }
 
-    return InkResponse(
+    return InkWell(
       onTap: () {
         sortController.changeSort(sortParameter);
         Get.back();

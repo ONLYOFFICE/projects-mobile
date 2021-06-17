@@ -78,7 +78,7 @@ class MilestonesBottomSheet extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return Material(
-                        child: InkResponse(
+                        child: InkWell(
                           onTap: () => Get.back(result: {
                             'id': _milestoneController.milestones[index].id,
                             'title':

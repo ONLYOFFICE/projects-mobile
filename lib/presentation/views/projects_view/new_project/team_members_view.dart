@@ -152,7 +152,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
             Obx(
               () {
                 if (controller.selectedTeamMembers.isNotEmpty) {
-                  return InkResponse(
+                  return InkWell(
                     onTap: () {
                       controller.confirmTeamMembers();
                     },
@@ -190,7 +190,7 @@ class TeamMembersSearchBar extends StatelessWidget {
           Container(
             height: 24,
             width: 24,
-            child: InkResponse(
+            child: InkWell(
               onTap: () {
                 Get.toNamed('GroupMembersSelectionView');
               },

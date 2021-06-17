@@ -116,7 +116,7 @@ class _CountryWithCodeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<TFASmsController>();
-    return InkResponse(
+    return InkWell(
       onTap: () => controller.selectCountry(country),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

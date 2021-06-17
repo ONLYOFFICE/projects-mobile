@@ -83,7 +83,7 @@ class FilterElement extends StatelessWidget {
             if (cancelButtonEnabled)
               Padding(
                   padding: const EdgeInsets.only(left: 9),
-                  child: InkResponse(
+                  child: InkWell(
                       onTap: onCancelTap,
                       child: const Icon(Icons.cancel,
                           color: Colors.white, size: 18))),

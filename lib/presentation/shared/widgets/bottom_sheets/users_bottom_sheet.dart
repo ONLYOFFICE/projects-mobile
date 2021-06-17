@@ -71,7 +71,7 @@ class UsersBottomSheet extends StatelessWidget {
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
-                      child: InkResponse(
+                      child: InkWell(
                         onTap: () => Get.back(result: {
                           'id': _usersController.users[index].id,
                           'displayName':

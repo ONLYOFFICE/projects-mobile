@@ -447,7 +447,7 @@ class NewMilestoneInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: onTap,
       child: Column(
         children: [
@@ -579,7 +579,7 @@ class ProjectsList extends StatelessWidget {
       },
       itemBuilder: (BuildContext context, int index) {
         return Material(
-          child: InkResponse(
+          child: InkWell(
             onTap: () {
               controller.changeProjectSelection(
                   id: projects[index].id, title: projects[index].title);
