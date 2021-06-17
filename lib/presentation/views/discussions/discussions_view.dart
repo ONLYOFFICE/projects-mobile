@@ -95,6 +95,8 @@ class PortalDiscussionsView extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return DiscussionTile(
                   discussion: controller.paginationController.data[index],
+                  onTap: () => controller
+                      .toDetailed(controller.paginationController.data[index]),
                 );
               },
             ),

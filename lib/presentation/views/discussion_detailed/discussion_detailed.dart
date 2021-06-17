@@ -36,6 +36,9 @@ import 'package:projects/domain/controllers/discussions/discussion_item_controll
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/discussion_detailed/discussion_comments_view.dart';
+import 'package:projects/presentation/views/discussion_detailed/discussion_overview.dart';
+import 'package:projects/presentation/views/discussion_detailed/discussion_subscribers_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class DiscussionDetailed extends StatefulWidget {
@@ -49,13 +52,14 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   int _activeIndex = 0;
-  var controller;
+  DiscussionItemController controller;
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
     var discussion = Get.arguments['discussion'];
     controller = Get.put(DiscussionItemController(discussion));
+    controller.getDiscussionDetailed();
     super.initState();
   }
 
@@ -92,27 +96,29 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                       .withOpacity(0.6),
                   labelStyle: TextStyleHelper.subtitle2(),
                   tabs: [
-                    const Tab(text: 'Overview'),
-                    CustomTab(
-                        title: 'Subtasks',
-                        currentTab: _activeIndex == 1,
-                        count: 1),
-                    CustomTab(
-                        title: 'Documents',
-                        currentTab: _activeIndex == 2,
-                        count: 1),
                     CustomTab(
                         title: 'Comments',
-                        currentTab: _activeIndex == 3,
-                        count: 1)
+                        currentTab: _activeIndex == 1,
+                        count: controller.discussion.value.commentsCount),
+                    CustomTab(
+                        title: 'Subscribers',
+                        currentTab: _activeIndex == 2,
+                        count:
+                            controller?.discussion?.value?.subscribers?.length),
+                    // CustomTab(
+                    //     title: 'Overview',
+                    //     currentTab: _activeIndex == 3,
+                    //     count: 1),
+                    const Tab(text: 'Overview'),
+                    const Tab(text: 'Overview'),
                   ]),
             ),
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          Container(color: Colors.red),
-          Container(color: Colors.green),
-          Container(color: Colors.yellow),
+          DiscussionCommentsView(controller: controller),
+          DiscussionSubscribersView(controller: controller),
+          DiscussionOverview(controller: controller),
           Container(color: Colors.blue),
         ]),
       ),

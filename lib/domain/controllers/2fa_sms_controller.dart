@@ -159,6 +159,7 @@ class TFASmsController extends GetxController {
     );
 
     _phoneNoise = result.phoneNoise;
+    _phoneNumberController.clear();
 
     return result;
   }

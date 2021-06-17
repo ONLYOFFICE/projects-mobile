@@ -30,11 +30,20 @@
  *
  */
 
+import 'package:projects/data/models/from_api/portal_comment.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_owner.dart';
 
 class Discussion {
   Discussion({
+    this.canEditFiles,
+    this.canReadFiles,
+    this.subscribers,
+    this.files,
+    this.comments,
+    this.project,
     this.canCreateComment,
     this.canEdit,
     this.id,
@@ -59,6 +68,12 @@ class Discussion {
   final String title;
   final bool canCreateComment;
   final bool canEdit;
+  final bool canEditFiles;
+  final bool canReadFiles;
+  final List<PortalUser> subscribers;
+  final List<PortalFile> files;
+  final List<PortalComment> comments;
+  final Project project;
   final dynamic description;
   final int commentsCount;
   final int id;
@@ -66,6 +81,21 @@ class Discussion {
 
   factory Discussion.fromJson(Map<String, dynamic> json) => Discussion(
         canCreateComment: json['canCreateComment'],
+        canEditFiles: json['canEditFiles'],
+        canReadFiles: json['canReadFiles'],
+        subscribers: json['subscribers'] != null
+            ? List<PortalUser>.from(
+                json['subscribers'].map((x) => PortalUser.fromJson(x)))
+            : null,
+        files: json['files'] != null
+            ? List<PortalFile>.from(json['files'].map((x) => x))
+            : null,
+        comments: json['comments'] != null
+            ? List<PortalComment>.from(
+                json['comments'].map((x) => PortalComment.fromJson(x)))
+            : null,
+        project:
+            json['project'] != null ? Project.fromJson(json['project']) : null,
         canEdit: json['canEdit'],
         id: json['id'],
         title: json['title'],

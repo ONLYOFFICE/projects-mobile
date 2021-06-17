@@ -158,8 +158,6 @@ class _CountrySelection extends StatelessWidget {
                         controller?.deviceCountry?.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
-                    onChanged: (value) =>
-                        print(controller.phoneNumberController.text),
                     decoration: InputDecoration(
                       hintText: controller.numberHint,
                       contentPadding: const EdgeInsets.only(

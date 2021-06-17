@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -41,18 +40,17 @@ import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 
 class DiscussionTile extends StatelessWidget {
   final Discussion discussion;
+  final Function() onTap;
   const DiscussionTile({
     Key key,
     @required this.discussion,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    print(discussion.createdBy.avatarMedium);
-    print(discussion.createdBy.avatarSmall);
-    print(discussion.createdBy.avatar);
     return InkWell(
-      onTap: () => Get.toNamed('DiscussionDetailed'),
+      onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
         child: Row(
