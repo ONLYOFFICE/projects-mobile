@@ -89,7 +89,7 @@ class TaskItemController extends GetxController {
   Future reloadTask({bool showLoading = false}) async {
     if (showLoading) loaded.value = false;
     var t = await _api.getTaskByID(id: task.value.id);
-    task.value = t;
+    if (t != null) task.value = t;
     if (showLoading) loaded.value = true;
   }
 

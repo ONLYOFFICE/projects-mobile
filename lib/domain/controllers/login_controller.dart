@@ -50,7 +50,7 @@ class LoginController extends GetxController {
   Future<void> loginByPassword(String email, String password) async {
     setState(ViewState.Busy);
 
-    var result = await _authService.login(email, password);
+    var result = await _authService.login(email.removeAllWhitespace, password);
 
     if (result.response == null) {
       setState(ViewState.Idle);
@@ -152,8 +152,8 @@ class LoginController extends GetxController {
   Future<void> getPortalCapabilities() async {
     setState(ViewState.Busy);
 
-    var _capabilities =
-        await _portalService.portalCapabilities(_portalAdressController.text);
+    var _capabilities = await _portalService
+        .portalCapabilities(_portalAdressController.text.removeAllWhitespace);
 
     if (_capabilities != null) {
       capabilities = _capabilities;

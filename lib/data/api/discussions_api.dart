@@ -59,4 +59,24 @@ class DiscussionsApi {
 
     return result;
   }
+
+  Future<ApiDTO> getMessageDetailed({int id}) async {
+    var url = await coreApi.discussionDetailedUrl(messageId: id);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = Discussion.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

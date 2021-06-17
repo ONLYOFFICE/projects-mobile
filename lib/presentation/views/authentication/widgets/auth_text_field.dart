@@ -9,6 +9,8 @@ class AuthTextField extends StatelessWidget {
   final String autofillHint;
   final TextEditingController controller;
   final TextInputType keyboardType;
+  final validator;
+
   const AuthTextField({
     Key key,
     this.autofillHint,
@@ -17,17 +19,19 @@ class AuthTextField extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.onChanged,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: controller,
       autofillHints: [autofillHint],
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',
       keyboardType: keyboardType,
+      validator: validator,
       style: TextStyleHelper.subtitle1(
           color: Theme.of(context).customColors().onSurface),
       decoration: InputDecoration(

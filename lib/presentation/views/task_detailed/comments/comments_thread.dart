@@ -4,14 +4,10 @@ import 'package:projects/presentation/shared/widgets/comment.dart';
 
 class CommentsThread extends StatelessWidget {
   final PortalComment comment;
-  final String portalUri;
   final int taskId;
-  final headers;
   const CommentsThread({
     Key key,
     @required this.comment,
-    @required this.portalUri,
-    @required this.headers,
     @required this.taskId,
   }) : super(key: key);
 

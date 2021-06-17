@@ -37,6 +37,7 @@ class PortalView extends StatelessWidget {
                       AuthTextField(
                         controller: controller.portalAdressController,
                         hintText: 'Portal address',
+                        validator: controller.emailValidator,
                         autofillHint: AutofillHints.url,
                         onChanged: (value) {
                           if (value.isNotEmpty) {

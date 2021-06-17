@@ -5,6 +5,7 @@ import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -43,8 +44,6 @@ class TaskCommentsView extends StatelessWidget {
                           itemBuilder: (BuildContext context, int index) {
                             return CommentsThread(
                               comment: _comments[index],
-                              headers: snapshot.data[1],
-                              portalUri: snapshot.data[0],
                               taskId: controller.task.value.id,
                             );
                           },
@@ -53,51 +52,10 @@ class TaskCommentsView extends StatelessWidget {
                     ),
                     if (controller?.task?.value?.canCreateComment == null ||
                         controller?.task?.value?.canCreateComment == true)
-                      Container(
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              blurRadius: 3,
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .onSurface
-                                  .withOpacity(0.1),
-                              offset: const Offset(0, 0.85),
-                            ),
-                          ],
-                          color:
-                              Theme.of(context).customColors().backgroundColor,
-                        ),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        child: SizedBox(
-                          height: 32,
-                          // ignore: deprecated_member_use
-                          child: FlatButton(
-                            minWidth: double.infinity,
-                            padding: const EdgeInsets.only(left: 10),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                                side: BorderSide(
-                                    color: Theme.of(context)
-                                        .customColors()
-                                        .outline)),
-                            color:
-                                Theme.of(context).customColors().bgDescription,
-                            onPressed: () => Get.toNamed(
-                              'NewCommentView',
-                              arguments: {'taskId': controller.task.value.id},
-                            ),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text('Add comment...',
-                                  style: TextStyleHelper.body2(
-                                      color: Theme.of(context)
-                                          .customColors()
-                                          .onBackground
-                                          .withOpacity(0.4))),
-                            ),
-                          ),
+                      AddCommentButton(
+                        onPressed: () => Get.toNamed(
+                          'NewCommentView',
+                          arguments: {'taskId': controller.task.value.id},
                         ),
                       ),
                   ],

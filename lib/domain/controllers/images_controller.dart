@@ -6,8 +6,16 @@ class ImagesController {
 
   static String getImagePath(String image) {
     if (image.toLowerCase().contains('http')) return image;
+
+    if (_portalInfo.portalUri == null) _portalInfo.onInit();
     return _portalInfo.portalUri + image;
   }
 
-  static Map getHeaders() => _portalInfo.headers;
+  static Map getHeaders() {
+    if (_portalInfo.headers == null || _portalInfo.headers.isEmpty) {
+      _portalInfo.onInit();
+    }
+
+    return _portalInfo.headers;
+  }
 }

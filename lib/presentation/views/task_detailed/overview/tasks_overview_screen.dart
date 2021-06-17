@@ -34,23 +34,25 @@ class TasksOverviewScreen extends StatelessWidget {
                 Task(taskController: taskController),
                 if (task.description != null && task.description.isNotEmpty)
                   Padding(
-                      padding: const EdgeInsets.only(bottom: 21),
-                      child: InfoTile(
-                          caption: 'Description:',
-                          icon: AppIcon(
-                              icon: SvgIcons.description,
-                              color: const Color(0xff707070)),
-                          subtitleWidget: ReadMoreText(task.description,
-                              trimLines: 3,
-                              colorClickableText: Colors.pink,
-                              style: TextStyleHelper.body1,
-                              trimMode: TrimMode.Line,
-                              trimCollapsedText: 'Show more',
-                              trimExpandedText: 'Show less',
-                              moreStyle: TextStyleHelper.body2(
-                                  color: Theme.of(context)
-                                      .customColors()
-                                      .links)))),
+                    padding: const EdgeInsets.only(bottom: 21),
+                    child: InfoTile(
+                      caption: 'Description:',
+                      icon: AppIcon(
+                          icon: SvgIcons.description,
+                          color: const Color(0xff707070)),
+                      subtitleWidget: ReadMoreText(
+                        task.description,
+                        trimLines: 3,
+                        colorClickableText: Colors.pink,
+                        style: TextStyleHelper.body1,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: 'Show more',
+                        trimExpandedText: 'Show less',
+                        moreStyle: TextStyleHelper.body2(
+                            color: Theme.of(context).customColors().links),
+                      ),
+                    ),
+                  ),
                 InfoTile(
                   icon: AppIcon(
                       icon: SvgIcons.project, color: const Color(0xff707070)),
