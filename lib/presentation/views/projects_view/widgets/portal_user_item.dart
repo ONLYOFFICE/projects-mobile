@@ -19,7 +19,7 @@ class PortalUserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: () {
         userController.onTap();
 

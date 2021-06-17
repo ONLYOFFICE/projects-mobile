@@ -48,7 +48,7 @@ class TagsBottomSheet extends StatelessWidget {
                   },
                   itemBuilder: (BuildContext context, int index) {
                     return Material(
-                      child: InkResponse(
+                      child: InkWell(
                         onTap: () => Get.back(result: {
                           'id': _projectsController.tags[index].id,
                           'title': _projectsController.tags[index].title

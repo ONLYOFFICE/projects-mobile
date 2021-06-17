@@ -19,7 +19,7 @@ class SubtaskCell extends StatelessWidget {
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
-      child: InkResponse(
+      child: InkWell(
         onTap: () => Get.toNamed('SubtaskDetailedView',
             arguments: {'controller': subtaskController}),
         child: Column(

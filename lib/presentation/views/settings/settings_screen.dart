@@ -106,7 +106,7 @@ class SettingTile extends StatelessWidget {
     return SizedBox(
       height: 61,
       // constraints: const BoxConstraints(minHeight: 56),
-      child: InkResponse(
+      child: InkWell(
         onTap: onTap,
         child: Column(
           children: [

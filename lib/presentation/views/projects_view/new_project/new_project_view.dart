@@ -37,7 +37,7 @@ class NewProject extends StatelessWidget {
         child: ListView(
           children: [
             TitleInput(controller: controller),
-            InkResponse(
+            InkWell(
               onTap: () {
                 Get.toNamed('ProjectManagerSelectionView');
               },
@@ -45,7 +45,7 @@ class NewProject extends StatelessWidget {
                 controller: controller,
               ),
             ),
-            InkResponse(
+            InkWell(
               onTap: () {
                 Get.toNamed('TeamMembersSelectionView');
               },
@@ -203,7 +203,7 @@ class ProjectManager extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              InkResponse(
+                              InkWell(
                                 onTap: () {
                                   Get.toNamed('ProjectManagerSelectionView');
                                 },
@@ -271,7 +271,7 @@ class NewProjectTile extends StatelessWidget {
               ],
             ),
           ),
-          InkResponse(
+          InkWell(
             onTap: closeFunction,
             child: Icon(
               iconData,
@@ -325,7 +325,7 @@ class TeamMembers extends StatelessWidget {
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              InkResponse(
+                              InkWell(
                                 onTap: () {
                                   Get.toNamed('TeamMembersSelectionView');
                                 },

@@ -52,7 +52,7 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
                 children: [
                   const SizedBox(height: 4),
                   for (var i = 0; i < _statusesController.statuses.length; i++)
-                    InkResponse(
+                    InkWell(
                       onTap: () async {
                         await taskItemController.updateTaskStatus(
                             id: taskItemController.task.value.id,
