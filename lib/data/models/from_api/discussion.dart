@@ -77,7 +77,7 @@ class Discussion {
   final dynamic description;
   final int commentsCount;
   final int id;
-  final int status;
+  int status;
 
   factory Discussion.fromJson(Map<String, dynamic> json) => Discussion(
         canCreateComment: json['canCreateComment'],
@@ -133,4 +133,6 @@ class Discussion {
         'createdBy': createdBy?.toJson(),
         'updated': updated?.toIso8601String(),
       };
+
+  set setStatus(int newStatus) => status = newStatus;
 }

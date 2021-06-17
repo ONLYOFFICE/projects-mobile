@@ -30,34 +30,55 @@
  *
  */
 
-part of 'tasks_overview_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class _Task extends StatelessWidget {
-  final TaskItemController taskController;
+class StatusTile extends StatelessWidget {
+  final String title;
+  final Widget icon;
+  final bool selected;
 
-  const _Task({Key key, @required this.taskController}) : super(key: key);
+  const StatusTile({Key key, this.icon, this.title, this.selected = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(72, 20, 16, 16),
-      child: Obx(
-        () {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('TASK', style: TextStyleHelper.overline()),
-              Text(taskController.task.value.title,
-                  style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onSurface)),
-              const SizedBox(height: 22),
-              StatusButton(
-                  text: taskController.status.value.title,
-                  onPressed: () => showsStatusesBS(
-                      context: context, taskItemController: taskController)),
-            ],
-          );
-        },
+    BoxDecoration _selectedDecoration() {
+      return BoxDecoration(
+          color: Theme.of(context).customColors().bgDescription,
+          borderRadius: BorderRadius.circular(6));
+    }
+
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.only(left: 8, right: 8, bottom: 4),
+      decoration: selected ? _selectedDecoration() : null,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 48, child: icon),
+                Flexible(
+                    child: Text(title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyleHelper.body2())),
+              ],
+            ),
+          ),
+          if (selected)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Icon(
+                Icons.done_rounded,
+                color: Theme.of(context).customColors().primary,
+              ),
+            )
+        ],
       ),
     );
   }

@@ -32,25 +32,22 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
-// here is a different function, because the task changes page has a
-// slightly different algorithm than on the other pages: you do not need to
-// update the status of the task immediately after clicking,
-// but you need to do it when saving changes
-void statusSelectionBS({context, TaskEditingController controller}) async {
-  var _statusesController = Get.find<TaskStatusesController>();
+Future<void> showsDiscussionStatusesBS({
+  context,
+  DiscussionItemController controller,
+}) async {
+  var initSize = _getInititalSize();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight:
-        _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight: initSize,
+    maxHeight: initSize + 0.1,
     decoration: BoxDecoration(
         color: Theme.of(context).customColors().onPrimarySurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
@@ -72,49 +69,47 @@ void statusSelectionBS({context, TaskEditingController controller}) async {
     builder: (context, bottomSheetOffset) {
       return SliverChildListDelegate(
         [
-          Obx(
-            () => DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                      width: 1,
-                      color: Theme.of(context)
-                          .customColors()
-                          .outline
-                          .withOpacity(0.5)),
-                ),
+          // Obx(
+          //   () =>
+          DecoratedBox(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    width: 1,
+                    color: Theme.of(context)
+                        .customColors()
+                        .outline
+                        .withOpacity(0.5)),
               ),
-              child: Column(
+            ),
+            child: Obx(
+              () => Column(
                 children: [
                   const SizedBox(height: 4),
-                  for (var i = 0; i < _statusesController.statuses.length; i++)
-                    InkWell(
-                      onTap: () async {
-                        controller
-                            .changeStatus(_statusesController.statuses[i]);
-                        Get.back();
-                      },
-                      child: StatusTile(
-                          title: _statusesController.statuses[i].title,
-                          icon: SVG.createSizedFromString(
-                              _statusesController.statusImagesDecoded[i],
-                              16,
-                              16),
-                          selected: _statusesController.statuses[i].id ==
-                              controller.newStatus.value.id),
+                  InkWell(
+                    onTap: () async => controller.updateMessageStatus(0),
+                    child: StatusTile(
+                      title: 'Open',
+                      selected: controller.status.value == 0,
                     ),
+                  ),
+                  InkWell(
+                    onTap: () async => controller.updateMessageStatus(1),
+                    child: StatusTile(
+                      title: 'Archived',
+                      selected: controller.status.value == 1,
+                    ),
+                  ),
                   const SizedBox(height: 16),
                 ],
               ),
             ),
           ),
+          // ),
         ],
       );
     },
   );
 }
 
-double _getInititalSize({int statusCount}) {
-  var size = (statusCount * 75) / Get.height;
-  return size > 0.7 ? 0.7 : size;
-}
+double _getInititalSize() => 180 / Get.height;

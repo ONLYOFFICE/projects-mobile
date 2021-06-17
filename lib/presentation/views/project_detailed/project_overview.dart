@@ -158,7 +158,7 @@ class ProjectStatusButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 56),
+      padding: const EdgeInsets.only(left: 72),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -30,34 +30,41 @@
  *
  */
 
-part of 'tasks_overview_screen.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class _Task extends StatelessWidget {
-  final TaskItemController taskController;
-
-  const _Task({Key key, @required this.taskController}) : super(key: key);
+class StatusButton extends StatelessWidget {
+  final String text;
+  final Function() onPressed;
+  const StatusButton({
+    Key key,
+    @required this.text,
+    @required this.onPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(72, 20, 16, 16),
-      child: Obx(
-        () {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('TASK', style: TextStyleHelper.overline()),
-              Text(taskController.task.value.title,
-                  style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onSurface)),
-              const SizedBox(height: 22),
-              StatusButton(
-                  text: taskController.status.value.title,
-                  onPressed: () => showsStatusesBS(
-                      context: context, taskItemController: taskController)),
-            ],
-          );
-        },
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+          return const Color(0xff81C4FF).withOpacity(0.1);
+        }),
+        side: MaterialStateProperty.resolveWith((_) {
+          return const BorderSide(color: Color(0xff0C76D5), width: 1.5);
+        }),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8),
+              child: Text(text, style: TextStyleHelper.subtitle2()),
+            ),
+          ),
+          const Icon(Icons.arrow_drop_down_sharp)
+        ],
       ),
     );
   }

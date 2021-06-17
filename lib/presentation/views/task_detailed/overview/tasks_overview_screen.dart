@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/presentation/shared/status_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -63,7 +64,7 @@ class TasksOverviewScreen extends StatelessWidget {
             onRefresh: () => taskController.reloadTask(showLoading: true),
             child: ListView(
               children: [
-                Task(taskController: taskController),
+                _Task(taskController: taskController),
                 if (task.description != null && task.description.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 21),
