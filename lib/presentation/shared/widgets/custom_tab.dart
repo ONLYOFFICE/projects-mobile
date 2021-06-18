@@ -30,46 +30,50 @@
  *
  */
 
-import 'package:projects/data/api/discussions_api.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:flutter/material.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
-class DiscussionItemService {
-  final _api = locator<DiscussionsApi>();
+class CustomTab extends StatelessWidget {
+  final String title;
+  final int count;
+  final bool currentTab;
+  const CustomTab({
+    Key key,
+    this.title,
+    this.count,
+    this.currentTab,
+  }) : super(key: key);
 
-  Future getMessageDetailed({int id}) async {
-    var result = await _api.getMessageDetailed(id: id);
-    var success = result.response != null;
-
-    if (success) {
-      return result.response;
-    } else {
-      ErrorDialog.show(result.error);
-      return null;
-    }
-  }
-
-  Future updateMessageStatus({int id, String newStatus}) async {
-    var result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
-    var success = result.response != null;
-
-    if (success) {
-      return result.response;
-    } else {
-      ErrorDialog.show(result.error);
-      return null;
-    }
-  }
-
-  Future subscribeToMessage({int id}) async {
-    var result = await _api.subscribeToMessage(id: id);
-    var success = result.response != null;
-
-    if (success) {
-      return result.response;
-    } else {
-      ErrorDialog.show(result.error);
-      return null;
-    }
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40,
+      child: Row(
+        children: [
+          Text(title),
+          if (count != null && count >= 0) const SizedBox(width: 8),
+          if (count != null && count >= 0)
+            Container(
+              height: 20,
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              constraints: const BoxConstraints(minWidth: 20),
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: currentTab
+                      ? Theme.of(context).customColors().primary
+                      : Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.3)),
+              child: Center(
+                  child: Text(count.toString(),
+                      style: TextStyle(
+                          fontSize: 14,
+                          color: Theme.of(context).customColors().surface,
+                          letterSpacing: 0.1))),
+            ),
+        ],
+      ),
+    );
   }
 }
