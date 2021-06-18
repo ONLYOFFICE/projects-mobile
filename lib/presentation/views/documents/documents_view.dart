@@ -43,6 +43,7 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
@@ -111,7 +112,7 @@ class DocumentsSearchView extends StatelessWidget {
     return DocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
-        title: SearchHeader(controller: controller),
+        title: CustomSearchBar(controller: controller),
         showBackButton: true,
         titleHeight: 50,
       ),
@@ -165,48 +166,6 @@ class DocumentsScreen extends StatelessWidget {
                 ),
               ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class SearchHeader extends StatelessWidget {
-  const SearchHeader({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
-
-  final DocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Material(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  autofocus: true,
-                  textInputAction: TextInputAction.search,
-                  controller: controller.searchInputController,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Enter your query'),
-                  onSubmitted: (value) {
-                    controller.newSearch(value);
-                  },
-                ),
-              ),
-              InkResponse(
-                onTap: () {
-                  controller.clearSearch();
-                },
-                child: const Icon(Icons.close, color: Colors.blue),
-              )
-            ],
-          ),
         ),
       ),
     );
@@ -317,7 +276,7 @@ class DocsBottom extends StatelessWidget {
     return Column(
       children: <Widget>[
         Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -342,12 +301,6 @@ class DocsBottom extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        const Divider(
-          height: 1,
-          thickness: 1,
-          indent: 0,
-          endIndent: 0,
         ),
       ],
     );
@@ -638,7 +591,7 @@ void _onFolderPopupMenuSelected(
           preventDuplicates: false,
           arguments: {
             'mode': 'copyFolder',
-            'target': selectedFolder,
+            'target': selectedFolder.id,
             'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
@@ -648,7 +601,7 @@ void _onFolderPopupMenuSelected(
           preventDuplicates: false,
           arguments: {
             'mode': 'moveFolder',
-            'target': selectedFolder,
+            'target': selectedFolder.id,
             'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
@@ -700,7 +653,7 @@ void _onFilePopupMenuSelected(
           preventDuplicates: false,
           arguments: {
             'mode': 'copyFile',
-            'target': selectedFile,
+            'target': selectedFile.id,
             'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
@@ -710,7 +663,7 @@ void _onFilePopupMenuSelected(
           preventDuplicates: false,
           arguments: {
             'mode': 'moveFile',
-            'target': selectedFile,
+            'target': selectedFile.id,
             'initialFolderId': controller.currentFolder,
             'refreshCalback': controller.refreshContent
           });
