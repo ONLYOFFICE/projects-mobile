@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
