@@ -44,6 +44,7 @@ class ProjectsView extends StatelessWidget {
         title: _Title(controller: controller),
         bottom: _Bottom(controller: controller),
         showBackButton: false,
+        elevation: 0,
         titleHeight: 50,
         bottomHeight: 50,
       ),
@@ -59,7 +60,6 @@ class ProjectsView extends StatelessWidget {
                   child: ListView.builder(
                     itemBuilder: (c, i) => ProjectCell(
                         item: controller.paginationController.data[i]),
-                    itemExtent: 72.0,
                     itemCount: controller.paginationController.data.length,
                   ),
                 ),
@@ -178,7 +178,7 @@ class _Bottom extends StatelessWidget {
     );
 
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

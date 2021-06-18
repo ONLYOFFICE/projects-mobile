@@ -1,9 +1,9 @@
-import 'package:flutter/services.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
@@ -30,18 +30,9 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     final String mode = Get.arguments['mode'];
 
     controller.initialSetup();
-    if (mode == 'moveFolder') {
-      controller.setupMovingFolder(target, initialFolderId);
-    }
-    if (mode == 'copyFolder') {
-      controller.setupCopyingFolder(target, initialFolderId);
-    }
-    if (mode == 'moveFile') {
-      controller.setupMovingFile(target, initialFolderId);
-    }
-    if (mode == 'copyFile') {
-      controller.setupCopyingFile(target, initialFolderId);
-    }
+
+    controller.setupOptions(target, initialFolderId);
+
     controller.foldersCount = 1;
     controller.refreshCalback = refreshCalback;
     controller.mode = mode;
@@ -51,23 +42,6 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
       appBar: StyledAppBar(
         title: _Title(controller: controller),
         bottom: DocsBottom(controller: controller),
-        // title: Container(
-        //   padding: const EdgeInsets.symmetric(vertical: 16),
-        //   child: Row(
-        //     crossAxisAlignment: CrossAxisAlignment.center,
-        //     mainAxisAlignment: MainAxisAlignment.start,
-        //     children: <Widget>[
-        //       Expanded(
-        //         child: Obx(
-        //           () => Text(
-        //             controller.screenName.value,
-        //             style: TextStyleHelper.headerStyle,
-        //           ),
-        //         ),
-        //       ),
-        //     ],
-        //   ),
-        // ),
         showBackButton: true,
         titleHeight: 50,
       ),
@@ -92,18 +66,7 @@ class _FolderContentView extends StatelessWidget {
     controller.setupFolder(
         folderName: currentFolder.title, folder: currentFolder);
 
-    if (mode == 'moveFolder') {
-      controller.setupMovingFolder(target, initialFolderId);
-    }
-    if (mode == 'copyFolder') {
-      controller.setupCopyingFolder(target, initialFolderId);
-    }
-    if (mode == 'moveFile') {
-      controller.setupMovingFile(target, initialFolderId);
-    }
-    if (mode == 'copyFile') {
-      controller.setupCopyingFile(target, initialFolderId);
-    }
+    controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = foldersCount + 1;
     controller.refreshCalback = refreshCalback;
@@ -139,18 +102,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
 
     controller.setupSearchMode(folderName: folderName, folder: currentFolder);
 
-    if (mode == 'moveFolder') {
-      controller.setupMovingFolder(target, initialFolderId);
-    }
-    if (mode == 'copyFolder') {
-      controller.setupCopyingFolder(target, initialFolderId);
-    }
-    if (mode == 'moveFile') {
-      controller.setupMovingFile(target, initialFolderId);
-    }
-    if (mode == 'copyFile') {
-      controller.setupCopyingFile(target, initialFolderId);
-    }
+    controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = foldersCount + 1;
     controller.refreshCalback = refreshCalback;
@@ -159,7 +111,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
     return _DocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
-        title: _SearchHeader(controller: controller),
+        title: CustomSearchBar(controller: controller),
         showBackButton: true,
         titleHeight: 50,
       ),
@@ -213,48 +165,6 @@ class _DocumentsScreen extends StatelessWidget {
   }
 }
 
-class _SearchHeader extends StatelessWidget {
-  const _SearchHeader({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
-
-  final DocumentsMoveOrCopyController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Material(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  autofocus: true,
-                  textInputAction: TextInputAction.search,
-                  controller: controller.searchInputController,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Enter your query'),
-                  onSubmitted: (value) {
-                    controller.newSearch(value);
-                  },
-                ),
-              ),
-              InkResponse(
-                onTap: () {
-                  controller.clearSearch();
-                },
-                child: const Icon(Icons.close, color: Colors.blue),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _Title extends StatelessWidget {
   const _Title({Key key, @required this.controller}) : super(key: key);
 
@@ -282,14 +192,7 @@ class _Title extends StatelessWidget {
               InkResponse(
                 onTap: () {
                   var target;
-                  if (controller.mode == 'moveFolder')
-                    target = controller.folderToMove;
-                  if (controller.mode == 'copyFolder')
-                    target = controller.folderToCopy;
-                  if (controller.mode == 'moveFile')
-                    target = controller.fileToMove;
-                  if (controller.mode == 'copyFile')
-                    target = controller.fileToCopy;
+                  target = controller.target;
 
                   Get.to(DocumentsMoveSearchView(),
                       preventDuplicates: false,
@@ -341,11 +244,7 @@ class _MoveFolderContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () {
-        var target;
-        if (controller.mode == 'moveFolder') target = controller.folderToMove;
-        if (controller.mode == 'copyFolder') target = controller.folderToCopy;
-        if (controller.mode == 'moveFile') target = controller.fileToMove;
-        if (controller.mode == 'copyFile') target = controller.fileToCopy;
+        var target = controller.target;
         Get.to(_FolderContentView(), preventDuplicates: false, arguments: {
           'mode': controller.mode,
           'target': target,
@@ -453,25 +352,29 @@ class MoveDocumentsScreen extends StatelessWidget {
                   child: Text('cancel'.toUpperCase(),
                       style: TextStyleHelper.button()),
                 ),
-                if (controller.mode == 'moveFolder')
+                if (controller.mode == 'moveFolder' &&
+                    !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _moveFolder(controller, context),
                     child: Text('move folder here'.toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
-                if (controller.mode == 'copyFolder')
+                if (controller.mode == 'copyFolder' &&
+                    !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _copyFolder(controller, context),
                     child: Text('copy folder here'.toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
-                if (controller.mode == 'moveFile')
+                if (controller.mode == 'moveFile' &&
+                    !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _moveFile(controller, context),
                     child: Text('move file here'.toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
-                if (controller.mode == 'copyFile')
+                if (controller.mode == 'copyFile' &&
+                    !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _copyFile(controller, context),
                     child: Text('copy file here'.toUpperCase(),
@@ -549,4 +452,8 @@ Future _copyFile(
 Future _cancel(DocumentsMoveOrCopyController controller) async {
   Get.close(controller.foldersCount);
   if (controller.refreshCalback != null) controller.refreshCalback();
+}
+
+bool _isRoot(element) {
+  return element == null || (element.parentId != null && element.parentId != 0);
 }

@@ -24,16 +24,15 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   String _query;
 
-  Folder folderToMove;
-  Folder folderToCopy;
   int initialFolderId;
-  PortalFile fileToMove;
-  PortalFile fileToCopy;
 
   int foldersCount = 0;
   Function refreshCalback;
 
   String mode;
+
+  int _targetId;
+  int get target => _targetId;
 
   PaginationController get paginationController => _paginationController;
 
@@ -171,7 +170,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   Future<bool> moveFolder() async {
     var result = await _api.moveDocument(
-      movingFolder: folderToMove.id.toString(),
+      movingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
 
@@ -180,7 +179,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   Future<bool> copyFolder() async {
     var result = await _api.copyDocument(
-      copyingFolder: folderToCopy.id.toString(),
+      copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
 
@@ -189,7 +188,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   Future<bool> moveFile() async {
     var result = await _api.moveDocument(
-      movingFile: fileToMove.id.toString(),
+      movingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
 
@@ -198,30 +197,15 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   Future<bool> copyFile() async {
     var result = await _api.copyDocument(
-      copyingFile: fileToCopy.id.toString(),
+      copyingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
 
     return result != null;
   }
 
-  void setupMovingFolder(Folder target, int initial) {
-    folderToMove = target;
-    initialFolderId = initial;
-  }
-
-  void setupCopyingFolder(Folder target, int initial) {
-    folderToCopy = target;
-    initialFolderId = initial;
-  }
-
-  void setupMovingFile(PortalFile target, int initial) {
-    fileToMove = target;
-    initialFolderId = initial;
-  }
-
-  void setupCopyingFile(PortalFile target, int initial) {
-    fileToCopy = target;
+  void setupOptions(int targetId, int initial) {
+    _targetId = targetId;
     initialFolderId = initial;
   }
 }
