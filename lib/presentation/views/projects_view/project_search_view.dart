@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -48,7 +49,7 @@ class ProjectSearchView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: StyledAppBar(
-        title: SearchHeader(controller: controller),
+        title: CustomSearchBar(controller: controller),
       ),
       body: Obx(
         () => Column(
@@ -66,53 +67,11 @@ class ProjectSearchView extends StatelessWidget {
                   child: ListView.builder(
                     itemBuilder: (c, i) =>
                         ProjectCell(item: controller.searchResult[i]),
-                    itemExtent: 100.0,
                     itemCount: controller.searchResult.length,
                   ),
                 ),
               ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class SearchHeader extends StatelessWidget {
-  const SearchHeader({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
-
-  final ProjectSearchController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Material(
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: TextField(
-                  textInputAction: TextInputAction.search,
-                  controller: controller.searchInputController,
-                  decoration: const InputDecoration.collapsed(
-                      hintText: 'Enter your query'),
-                  onSubmitted: (value) {
-                    controller.newSearch(value);
-                  },
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  controller.clearSearch();
-                },
-                child: const Icon(Icons.close, color: Colors.blue),
-              )
-            ],
-          ),
         ),
       ),
     );
