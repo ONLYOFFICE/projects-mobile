@@ -28,4 +28,16 @@ class DiscussionItemService {
       return null;
     }
   }
+
+  Future subscribeToMessage({int id}) async {
+    var result = await _api.subscribeToMessage(id: id);
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
+  }
 }

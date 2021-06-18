@@ -111,7 +111,7 @@ class _CommentAuthor extends StatelessWidget {
           SizedBox(
             width: 60,
             child: Padding(
-              padding: const EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.only(left: 35),
               child: PopupMenuButton(
                 onSelected: (value) => _onSelected(value, context, controller),
                 icon: Icon(Icons.more_vert_rounded,

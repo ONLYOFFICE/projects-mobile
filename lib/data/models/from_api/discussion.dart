@@ -38,7 +38,7 @@ class Discussion {
   final bool canEdit;
   final bool canEditFiles;
   final bool canReadFiles;
-  final List<PortalUser> subscribers;
+  List<PortalUser> subscribers;
   final List<PortalFile> files;
   final List<PortalComment> comments;
   final Project project;
@@ -103,4 +103,5 @@ class Discussion {
       };
 
   set setStatus(int newStatus) => status = newStatus;
+  set setSubscribers(List<PortalUser> newS) => subscribers = newS;
 }

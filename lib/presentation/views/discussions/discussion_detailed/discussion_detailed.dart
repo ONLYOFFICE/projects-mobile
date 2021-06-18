@@ -3,11 +3,12 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_comments_view.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_overview.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_subscribers_view.dart';
-import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+import 'package:projects/presentation/views/discussions/widgets/app_bar_menu_button.dart';
 
 class DiscussionDetailed extends StatefulWidget {
   DiscussionDetailed({Key key}) : super(key: key);
@@ -49,6 +50,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
+          actions: [AppBarMenuButton(controller: controller)],
           bottom: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: SizedBox(
@@ -73,11 +75,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                         currentTab: _activeIndex == 2,
                         count:
                             controller?.discussion?.value?.subscribers?.length),
-                    // CustomTab(
-                    //     title: 'Overview',
-                    //     currentTab: _activeIndex == 3,
-                    //     count: 1),
-                    const Tab(text: 'Overview'),
+                    const Tab(text: 'Documents'),
                     const Tab(text: 'Overview'),
                   ]),
             ),
@@ -86,8 +84,8 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
         body: TabBarView(controller: _tabController, children: [
           DiscussionCommentsView(controller: controller),
           DiscussionSubscribersView(controller: controller),
-          DiscussionOverview(controller: controller),
           Container(color: Colors.blue),
+          DiscussionOverview(controller: controller),
         ]),
       ),
     );

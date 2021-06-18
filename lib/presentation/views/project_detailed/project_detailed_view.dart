@@ -5,6 +5,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/detailed_p
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
@@ -13,7 +14,6 @@ import 'package:projects/presentation/views/project_detailed/milestones/project_
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
-import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class ProjectDetailedView extends StatefulWidget {
   ProjectDetailedView({Key key}) : super(key: key);

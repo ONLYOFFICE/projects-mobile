@@ -137,6 +137,9 @@ class CoreApi {
   Future<String> subscribeTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
 
+  Future<String> subscribeToMessage({int messageId}) async =>
+      '${await getPortalURI()}/api/$version/project/message/$messageId/subscribe';
+
   Future<String> updateCommentUrl({
     @required String commentId,
   }) async =>

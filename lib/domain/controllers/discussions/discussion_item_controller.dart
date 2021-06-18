@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -13,6 +14,7 @@ class DiscussionItemController extends GetxController {
 
   var loaded = true.obs;
   var refreshController = RefreshController();
+  var selfId;
 
   RxString statusImageString = ''.obs;
   // to show overview screen without loading
@@ -21,6 +23,19 @@ class DiscussionItemController extends GetxController {
   DiscussionItemController(Discussion discussion) {
     this.discussion.value = discussion;
     status.value = discussion.status;
+  }
+
+  @override
+  void onInit() async {
+    selfId = await Get.find<UserController>().getUserId();
+    super.onInit();
+  }
+
+  bool get isSubscribed {
+    for (var item in discussion.value.subscribers) {
+      if (item.id == selfId) return true;
+    }
+    return false;
   }
 
   void onRefresh() async => await getDiscussionDetailed();
@@ -44,11 +59,21 @@ class DiscussionItemController extends GetxController {
     try {
       Discussion result = await _api.updateMessageStatus(
           id: discussion.value.id, newStatus: newStatusStr);
-      // if (result != null) discussion.value.setStatus = result.status;
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status;
         Get.back();
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  Future<void> subscribeToMessageAction() async {
+    try {
+      Discussion result =
+          await _api.subscribeToMessage(id: discussion.value.id);
+      if (result != null) {
+        discussion.value.setSubscribers = result.subscribers;
       }
       // ignore: empty_catches
     } catch (e) {}
