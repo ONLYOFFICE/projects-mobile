@@ -51,7 +51,7 @@ class DiscussionsApi {
     // String creatorFilter,
     // String projectFilter,
     // String milestoneFilter,
-    // String projectId,
+    String projectId,
     // String deadlineFilter,
   }) async {
     var url = await coreApi.discussionsByParamsUrl();
@@ -63,6 +63,10 @@ class DiscussionsApi {
     if (query != null) {
       var parsedData = Uri.encodeComponent(query);
       url += '&FilterValue=$parsedData';
+    }
+
+    if (projectId != null) {
+      url += '&projectId=$projectId';
     }
 
     if (sortBy != null &&

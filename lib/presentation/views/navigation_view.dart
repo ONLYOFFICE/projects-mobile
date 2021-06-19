@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -62,6 +63,7 @@ class NavigationView extends StatelessWidget {
       const PortalDiscussionsView(),
       const PortalDocumentsView(),
     ];
+
     return GetBuilder<NavigationController>(
       builder: (controller) {
         // The equivalent of the "smallestWidth" qualifier on Android.

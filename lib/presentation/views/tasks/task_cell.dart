@@ -65,10 +65,7 @@ class TaskCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: () async {
-                  bottom_sheet.showsStatusesBS(
-                      context: context, taskItemController: itemController);
-                },
+                onTap: () async => itemController.tryChangingStatus(context),
                 child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(

@@ -61,7 +61,7 @@ class DiscussionsService {
       // projectFilter: projectFilter,
       // milestoneFilter: milestoneFilter,
       // deadlineFilter: deadlineFilter,
-      // projectId: projectId,
+      projectId: projectId,
     );
 
     var success = projects.response != null;
@@ -73,40 +73,4 @@ class DiscussionsService {
       return null;
     }
   }
-
-  // Future<PageDTO<List<Discussion>>> searchTasks({
-  //   int startIndex,
-  //   String query,
-  //   // String sortBy,
-  //   // String sortOrder,
-  //   // String responsibleFilter,
-  //   // String creatorFilter,
-  //   // String projectFilter,
-  //   // String milestoneFilter,
-  //   // String projectId,
-  //   // String deadlineFilter,
-  // }) async {
-  //   var projects = await _api.getDiscussionsByParams(
-  //     startIndex: startIndex,
-  //     query: query,
-  //     // sortBy: sortBy,
-  //     // sortOrder: sortOrder,
-  //     // responsibleFilter: responsibleFilter,
-  //     // creatorFilter: creatorFilter,
-  //     // projectFilter: projectFilter,
-  //     // milestoneFilter: milestoneFilter,
-  //     // deadlineFilter: deadlineFilter,
-  //     // projectId: projectId,
-  //   );
-
-  //   var success = projects.response != null;
-
-  //   if (success) {
-  //     return projects;
-  //   } else {
-  //     ErrorDialog.show(projects.error);
-  //     return null;
-  //   }
-  // }
-
 }

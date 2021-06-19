@@ -33,26 +33,26 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class DiscussionsController extends BaseController {
+class ProjectDiscussionsController extends GetxController {
   final _api = locator<DiscussionsService>();
+  final projectId;
 
-  PaginationController _paginationController;
+  final _paginationController =
+      Get.put(PaginationController(), tag: 'ProjectDiscussionsController');
+
   PaginationController get paginationController => _paginationController;
 
   final _sortController = Get.find<DiscussionsSortController>();
 
   RxBool loaded = false.obs;
 
-  DiscussionsController(PaginationController paginationController) {
-    _paginationController = paginationController;
-
+  ProjectDiscussionsController(this.projectId) {
     _sortController.updateSortDelegate = () async {
-      await loadDiscussions();
+      await loadProjectDiscussions();
     };
 
     paginationController.loadDelegate = () async {
@@ -65,26 +65,22 @@ class DiscussionsController extends BaseController {
     paginationController.pullDownEnabled = true;
   }
 
-  @override
-  String get screenName => 'Discussions';
-
-  @override
   RxList get itemList => paginationController.data;
 
-  Future loadDiscussions() async {
+  Future loadProjectDiscussions() async {
     loaded.value = false;
     paginationController.startIndex = 0;
     await _getDiscussions(needToClear: true);
     loaded.value = true;
   }
 
-  // TODO проверить все параметры
-  Future _getDiscussions({needToClear = false, String projectId}) async {
+  Future _getDiscussions({needToClear = false}) async {
     var result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectId: projectId,
+      projectId: projectId.toString(),
+
       // responsibleFilter: _filterController.responsibleFilter,
       // creatorFilter: _filterController.creatorFilter,
       // projectFilter: _filterController.projectFilter,

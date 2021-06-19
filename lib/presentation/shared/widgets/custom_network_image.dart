@@ -51,12 +51,19 @@ class CustomNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImage(
-      imageUrl: ImagesController.getImagePath(image),
-      httpHeaders: ImagesController.getHeaders(),
-      fit: fit,
-      height: height,
-      width: width,
+    return FutureBuilder(
+      future: ImagesController.getHeaders(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting)
+          return const SizedBox();
+        return CachedNetworkImage(
+          imageUrl: ImagesController.getImagePath(image),
+          httpHeaders: snapshot.data,
+          fit: fit,
+          height: height,
+          width: width,
+        );
+      },
     );
   }
 }
