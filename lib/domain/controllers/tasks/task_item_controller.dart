@@ -8,6 +8,7 @@ import 'package:projects/data/services/task_item_service.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -93,13 +94,21 @@ class TaskItemController extends GetxController {
     if (showLoading) loaded.value = true;
   }
 
+  void tryChangingStatus(context) {
+    if (task.value.canEdit) {
+      showsStatusesBS(context: context, taskItemController: this);
+    }
+  }
+
   Future updateTaskStatus({int id, int newStatusId, int newStatusType}) async {
     loaded.value = false;
     var t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
-    var newTask = PortalTask.fromJson(t);
-    task.value = newTask;
-    initTaskStatus(newTask);
+    if (t != null) {
+      var newTask = PortalTask.fromJson(t);
+      task.value = newTask;
+      initTaskStatus(newTask);
+    }
     loaded.value = true;
   }
 

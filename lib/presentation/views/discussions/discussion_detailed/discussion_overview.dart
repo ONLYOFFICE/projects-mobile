@@ -58,12 +58,8 @@ class DiscussionOverview extends StatelessWidget {
                           text: controller.status.value == 1
                               ? 'Archived'
                               : 'Open',
-                          onPressed: () async {
-                            await showsDiscussionStatusesBS(
-                              context: context,
-                              controller: controller,
-                            );
-                          },
+                          onPressed: () async =>
+                              controller.tryChangingStatus(context),
                         ),
                       ),
                     )),
