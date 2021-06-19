@@ -10,8 +10,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
-import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
-    as bottom_sheet;
 
 class TaskCell extends StatelessWidget {
   final PortalTask task;
