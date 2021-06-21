@@ -30,6 +30,10 @@
  *
  */
 
+import 'dart:convert';
+
+import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -39,6 +43,7 @@ import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -238,5 +243,38 @@ class DocumentsController extends GetxController {
   Future<void> downloadFile(String viewUrl) async {
     final _downloadService = locator<DownloadService>();
     await _downloadService.downloadDocument(viewUrl);
+  }
+
+  Future openFile(PortalFile selectedFile) async {
+    var userController = Get.find<UserController>();
+    var portalInfoController = Get.find<PortalInfoController>();
+
+    await userController.getUserInfo();
+    var body = <String, dynamic>{
+      'portal': '${portalInfoController.portalName}',
+      'email': '${userController.user.email}',
+      'file': <String, int>{'id': selectedFile.id},
+      'folder': {
+        'id': selectedFile.folderId,
+        'parentId': null,
+        'rootFolderType': selectedFile.rootFolderType
+      }
+    };
+
+    var bodyString = jsonEncode(body);
+    var stringToBase64 = utf8.fuse(base64);
+    var encodedBody = stringToBase64.encode(bodyString);
+    var urlString = 'oodocuments://openfile?data=$encodedBody';
+
+    if (await canLaunch(urlString)) {
+      await launch(urlString);
+    } else {
+      await LaunchApp.openApp(
+        androidPackageName: 'com.onlyoffice.documents',
+        iosUrlScheme: urlString,
+        appStoreLink:
+            'https://apps.apple.com/app/onlyoffice-documents/id944896972',
+      );
+    }
   }
 }
