@@ -34,6 +34,7 @@ class EntityDocumentsView extends StatelessWidget {
         title: _DocsTitle(controller: controller),
         showBackButton: false,
         titleHeight: 50,
+        elevation: 0,
       ),
     );
   }
