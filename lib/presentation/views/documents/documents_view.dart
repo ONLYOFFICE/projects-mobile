@@ -353,6 +353,10 @@ class FileContent extends StatelessWidget {
                         4)
                       return AppIcon(
                           width: 20, height: 20, icon: SvgIcons.image);
+                    if (controller.paginationController.data[index].fileType ==
+                        6)
+                      return AppIcon(
+                          width: 20, height: 20, icon: SvgIcons.presentation);
 
                     return AppIcon(
                         width: 20,
