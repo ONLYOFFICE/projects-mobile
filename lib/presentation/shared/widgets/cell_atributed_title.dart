@@ -55,9 +55,8 @@ class CellAtributedTitle extends StatelessWidget {
           if (atributeIconVisible)
             WidgetSpan(
                 child: atributeIcon, alignment: PlaceholderAlignment.middle),
-          TextSpan(
-            text: text,
-          ),
+          if (atributeIconVisible) TextSpan(text: ' $text'),
+          if (!atributeIconVisible) TextSpan(text: text),
         ],
       ),
       overflow: TextOverflow.ellipsis,

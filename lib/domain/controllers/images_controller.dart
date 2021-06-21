@@ -43,7 +43,7 @@ class ImagesController {
     return _portalInfo.portalUri + image;
   }
 
-  static Map getHeaders() {
+  static Future<Map> getHeaders() async {
     if (_portalInfo.headers == null || _portalInfo.headers.isEmpty) {
       _portalInfo.onInit();
     }
