@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -31,10 +32,13 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   var projectController =
       Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
+  var discussionsController;
 
   @override
   void initState() {
     super.initState();
+    discussionsController =
+        Get.put(ProjectDiscussionsController(projectDetailed.id));
     _tabController = TabController(
       vsync: this,
       length: 6,
@@ -126,7 +130,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             projectDetailed: projectDetailed, tabController: _tabController),
         ProjectTaskScreen(projectDetailed: projectDetailed),
         ProjectMilestonesScreen(projectDetailed: projectDetailed),
-        ProjectDiscussionsScreen(projectDetailed: projectDetailed),
+        ProjectDiscussionsScreen(controller: discussionsController),
         EntityDocumentsView(
           folderId: projectDetailed.projectFolder,
           folderName: projectDetailed.title,

@@ -18,60 +18,74 @@ class PortalDiscussionsView extends StatelessWidget {
     controller.loadDiscussions();
 
     return Scaffold(
-      appBar: StyledAppBar(
-        titleHeight: 101,
-        bottomHeight: 0,
-        showBackButton: false,
-        titleText: 'Discussions',
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: AppIcon(
-              width: 24,
-              height: 24,
-              icon: SvgIcons.search,
-              color: Theme.of(context).customColors().primary,
+        appBar: StyledAppBar(
+          titleHeight: 101,
+          bottomHeight: 0,
+          showBackButton: false,
+          titleText: 'Discussions',
+          elevation: 0,
+          actions: [
+            IconButton(
+              icon: AppIcon(
+                width: 24,
+                height: 24,
+                icon: SvgIcons.search,
+                color: Theme.of(context).customColors().primary,
+              ),
+              onPressed: () {},
+              // onPressed: () => controller.showSearch(),
             ),
-            onPressed: () {},
-            // onPressed: () => controller.showSearch(),
+            IconButton(
+              icon: AppIcon(
+                width: 24,
+                height: 24,
+                icon: SvgIcons.tasklist,
+                color: Theme.of(context).customColors().primary,
+              ),
+              onPressed: () => {},
+            ),
+            const SizedBox(width: 3),
+          ],
+          // bottom: TasksHeader(),
+        ),
+        floatingActionButton: const StyledFloatingActionButton(),
+        body: DiscussionsList(controller: controller));
+  }
+}
+
+class DiscussionsList extends StatelessWidget {
+  final controller;
+  const DiscussionsList({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    // var controller = Get.find<DiscussionsController>();
+
+    return Obx(() {
+      if (controller.loaded == false) {
+        return const ListLoadingSkeleton();
+      } else {
+        return PaginationListView(
+          paginationController: controller.paginationController,
+          child: ListView.separated(
+            itemCount: controller.paginationController.data.length,
+            padding: const EdgeInsets.only(bottom: 65),
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(height: 12);
+            },
+            itemBuilder: (BuildContext context, int index) {
+              return DiscussionTile(
+                discussion: controller.paginationController.data[index],
+                onTap: () => controller
+                    .toDetailed(controller.paginationController.data[index]),
+              );
+            },
           ),
-          IconButton(
-            icon: AppIcon(
-              width: 24,
-              height: 24,
-              icon: SvgIcons.tasklist,
-              color: Theme.of(context).customColors().primary,
-            ),
-            onPressed: () => {},
-          ),
-          const SizedBox(width: 3),
-        ],
-        // bottom: TasksHeader(),
-      ),
-      floatingActionButton: const StyledFloatingActionButton(),
-      body: Obx(() {
-        if (controller.loaded.isFalse) {
-          return const ListLoadingSkeleton();
-        } else {
-          return PaginationListView(
-            paginationController: controller.paginationController,
-            child: ListView.separated(
-              itemCount: controller.paginationController.data.length,
-              padding: const EdgeInsets.only(bottom: 65),
-              separatorBuilder: (BuildContext context, int index) {
-                return const SizedBox(height: 12);
-              },
-              itemBuilder: (BuildContext context, int index) {
-                return DiscussionTile(
-                  discussion: controller.paginationController.data[index],
-                  onTap: () => controller
-                      .toDetailed(controller.paginationController.data[index]),
-                );
-              },
-            ),
-          );
-        }
-      }),
-    );
+        );
+      }
+    });
   }
 }

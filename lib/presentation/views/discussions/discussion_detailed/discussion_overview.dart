@@ -8,7 +8,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
@@ -58,12 +57,8 @@ class DiscussionOverview extends StatelessWidget {
                           text: controller.status.value == 1
                               ? 'Archived'
                               : 'Open',
-                          onPressed: () async {
-                            await showsDiscussionStatusesBS(
-                              context: context,
-                              controller: controller,
-                            );
-                          },
+                          onPressed: () async =>
+                              controller.tryChangingStatus(context),
                         ),
                       ),
                     )),

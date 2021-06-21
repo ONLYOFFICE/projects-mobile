@@ -20,9 +20,7 @@ class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
 
   const ProjectTaskScreen({Key key, @required this.projectDetailed})
-      : super(
-          key: key,
-        );
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

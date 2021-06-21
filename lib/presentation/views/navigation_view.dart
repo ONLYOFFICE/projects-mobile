@@ -30,6 +30,7 @@ class NavigationView extends StatelessWidget {
       const PortalDiscussionsView(),
       const PortalDocumentsView(),
     ];
+
     return GetBuilder<NavigationController>(
       builder: (controller) {
         // The equivalent of the "smallestWidth" qualifier on Android.

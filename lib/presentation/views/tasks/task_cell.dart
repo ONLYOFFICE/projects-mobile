@@ -10,8 +10,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
-import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart'
-    as bottom_sheet;
 
 class TaskCell extends StatelessWidget {
   final PortalTask task;
@@ -33,10 +31,7 @@ class TaskCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: () async {
-                  bottom_sheet.showsStatusesBS(
-                      context: context, taskItemController: itemController);
-                },
+                onTap: () async => itemController.tryChangingStatus(context),
                 child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(

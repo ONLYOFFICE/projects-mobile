@@ -3,6 +3,7 @@ import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -51,6 +52,12 @@ class DiscussionItemController extends GetxController {
       } catch (e) {}
     }
     if (showLoading) loaded.value = true;
+  }
+
+  void tryChangingStatus(context) async {
+    if (discussion.value.canEdit) {
+      await showsDiscussionStatusesBS(context: context, controller: this);
+    }
   }
 
   Future<void> updateMessageStatus(int newStatus) async {
