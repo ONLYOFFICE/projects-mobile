@@ -364,10 +364,10 @@ class FileContent extends StatelessWidget {
                         .withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
-                    // const PopupMenuItem(
-                    //   value: 'open',
-                    //   child: Text('Open'),
-                    // ),
+                    const PopupMenuItem(
+                      value: 'open',
+                      child: Text('Open'),
+                    ),
                     const PopupMenuItem(
                       value: 'copyLink',
                       child: Text('Copy link'),
@@ -612,6 +612,7 @@ void _onFilePopupMenuSelected(
       }
       break;
     case 'open':
+      await controller.openFile(selectedFile);
       break;
     case 'download':
       await controller.downloadFile(selectedFile.viewUrl);
