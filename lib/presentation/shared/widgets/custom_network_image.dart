@@ -21,7 +21,6 @@ class CustomNetworkImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PaintingBinding.instance.imageCache.clear();
     return FutureBuilder(
       future: ImagesController.getHeaders(),
       builder: (context, snapshot) {
