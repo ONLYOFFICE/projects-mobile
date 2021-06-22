@@ -32,14 +32,14 @@ class ResponsibleTile extends StatelessWidget {
               : 'Add responsible',
           suffix: _isSelected
               ? suffixIcon ??
-                  Icon(Icons.arrow_forward_ios_outlined,
+                  Icon(Icons.arrow_forward_ios_rounded,
                       size: 20,
                       color: Theme.of(context)
                           .customColors()
                           .onSurface
                           .withOpacity(0.6))
               : null,
-          suffixPadding: const EdgeInsets.only(right: 2),
+          suffixPadding: const EdgeInsets.only(right: 21),
           icon: SvgIcons.person,
           onTap: () => Get.toNamed('SelectResponsiblesView',
               arguments: {'controller': controller}),

@@ -64,6 +64,9 @@ class _DescriptionTileState extends State<DescriptionTile>
       () {
         // ignore: omit_local_variable_types
         bool _isSelected = widget.controller.descriptionText.value.isNotEmpty;
+        var text = widget.controller.descriptionText.value;
+        var textSize = _textSize(text, TextStyleHelper.subtitle1());
+
         return InkWell(
           onTap: () => Get.toNamed('TaskDescription',
               arguments: {'controller': widget.controller}),
@@ -101,10 +104,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                                             .withOpacity(0.75))),
                               Flexible(
                                 child: Text(
-                                    _isSelected
-                                        ? widget
-                                            .controller.descriptionText.value
-                                        : 'Add description',
+                                    _isSelected ? text : 'Add description',
                                     style: TextStyleHelper.subtitle1(
                                         color: _isSelected
                                             ? Theme.of(context)
@@ -119,21 +119,22 @@ class _DescriptionTileState extends State<DescriptionTile>
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 3),
-                        child: IconButton(
-                          icon: RotationTransition(
-                            turns: _iconTurns,
-                            child: Icon(Icons.arrow_forward_ios_rounded,
-                                size: 20,
-                                color: Theme.of(context)
-                                    .customColors()
-                                    .onSurface
-                                    .withOpacity(0.6)),
+                      if (_needToExpand(textSize.width))
+                        Padding(
+                          padding: const EdgeInsets.only(left: 5, right: 3),
+                          child: IconButton(
+                            icon: RotationTransition(
+                              turns: _iconTurns,
+                              child: Icon(Icons.arrow_forward_ios_rounded,
+                                  size: 20,
+                                  color: Theme.of(context)
+                                      .customColors()
+                                      .onSurface
+                                      .withOpacity(0.6)),
+                            ),
+                            onPressed: changeExpansion,
                           ),
-                          onPressed: changeExpansion,
                         ),
-                      ),
                     ],
                   ),
                 ),
@@ -145,4 +146,19 @@ class _DescriptionTileState extends State<DescriptionTile>
       },
     );
   }
+}
+
+Size _textSize(String text, TextStyle style) {
+  final textPainter = TextPainter(
+      text: TextSpan(text: text, style: style),
+      maxLines: 1,
+      textDirection: TextDirection.ltr)
+    ..layout(minWidth: 0, maxWidth: double.infinity);
+  return textPainter.size;
+}
+
+bool _needToExpand(double size) {
+  var freeSize = Get.width - 72 - 59;
+  if (freeSize > size) return false;
+  return true;
 }
