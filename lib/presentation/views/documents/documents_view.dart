@@ -291,6 +291,7 @@ class FileContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 72,
       child: Row(
         children: [
           SizedBox(
@@ -320,6 +321,10 @@ class FileContent extends StatelessWidget {
                         4)
                       return AppIcon(
                           width: 20, height: 20, icon: SvgIcons.image);
+                    if (controller.paginationController.data[index].fileType ==
+                        6)
+                      return AppIcon(
+                          width: 20, height: 20, icon: SvgIcons.presentation);
 
                     return AppIcon(
                         width: 20,
@@ -337,8 +342,15 @@ class FileContent extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(element.title),
+                Flexible(
+                  child: Text(element.title.replaceAll(' ', '\u00A0'),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyleHelper.projectTitle),
+                ),
+                // Text(element.title),
                 Text(
                     '${formatedDate(element.updated)} • ${element.contentLength} • ${element.updatedBy.displayName}',
                     style: TextStyleHelper.caption(
@@ -364,10 +376,10 @@ class FileContent extends StatelessWidget {
                         .withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
-                    // const PopupMenuItem(
-                    //   value: 'open',
-                    //   child: Text('Open'),
-                    // ),
+                    const PopupMenuItem(
+                      value: 'open',
+                      child: Text('Open'),
+                    ),
                     const PopupMenuItem(
                       value: 'copyLink',
                       child: Text('Copy link'),
@@ -422,6 +434,7 @@ class FolderContent extends StatelessWidget {
             arguments: {'folderName': element.title, 'folderId': element.id});
       },
       child: Container(
+        height: 72,
         child: Row(
           children: [
             SizedBox(
@@ -451,8 +464,15 @@ class FolderContent extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(element.title),
+                  Flexible(
+                    child: Text(element.title.replaceAll(' ', '\u00A0'),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyleHelper.projectTitle),
+                  ),
+                  // Text(element.title),
                   Text(
                       '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(
@@ -612,6 +632,7 @@ void _onFilePopupMenuSelected(
       }
       break;
     case 'open':
+      await controller.openFile(selectedFile);
       break;
     case 'download':
       await controller.downloadFile(selectedFile.viewUrl);
