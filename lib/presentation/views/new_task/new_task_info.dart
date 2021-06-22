@@ -152,19 +152,22 @@ class TileWithSwitch extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 72, top: 18, bottom: 18),
-              child: Text(title,
-                  style: TextStyleHelper.subtitle1(
-                      color: Theme.of(context).customColors().onSurface)),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 72, top: 18, bottom: 18),
+                child: Text(title,
+                    style: TextStyleHelper.subtitle1(
+                        color: Theme.of(context).customColors().onSurface)),
+              ),
             ),
             Switch(
               value: isSelected,
               onChanged: onChanged,
-            )
+            ),
+            const SizedBox(width: 3)
           ],
         ),
-        if (enableBorder) const StyledDivider(leftPadding: 56.5),
+        if (enableBorder) const StyledDivider(leftPadding: 72),
       ],
     );
   }
