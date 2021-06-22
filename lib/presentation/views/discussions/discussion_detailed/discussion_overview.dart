@@ -89,19 +89,15 @@ class DiscussionOverview extends StatelessWidget {
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)
                   InfoTile(
-                      icon: AppIcon(
-                          icon: SvgIcons.start_date,
-                          color: const Color(0xff707070)),
-                      caption: 'Creation date:',
-                      subtitle: formatedDate(discussion.created)),
+                    caption: 'Creation date:',
+                    subtitle: formatedDate(discussion.created),
+                  ),
                 if (discussion.createdBy != null) const SizedBox(height: 20),
                 if (discussion.createdBy != null)
                   InfoTile(
-                      icon: AppIcon(
-                          icon: SvgIcons.start_date,
-                          color: const Color(0xff707070)),
-                      caption: 'Created by:',
-                      subtitle: discussion.createdBy.displayName),
+                    caption: 'Created by:',
+                    subtitle: discussion.createdBy.displayName,
+                  ),
               ],
             ),
           );
