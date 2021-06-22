@@ -24,7 +24,7 @@ Future<String> _getInitPage() async {
   var storage = locator<SecureStorage>();
   var token = await storage.getString('token');
   var passcode = await storage.getString('passcode');
-  // await Get.find<LoginController>().logout();
+  // await Get.put(LoginController()).logout();
 
   // TODO CHECK TOKEN (isTokenExpired)
   if (token != null) {

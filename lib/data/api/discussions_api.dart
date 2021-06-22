@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
@@ -54,6 +55,26 @@ class DiscussionsApi {
               .map((i) => Discussion.fromJson(i))
               .toList();
         }
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> addMessage({int projectId, NewDiscussionDTO newDiss}) async {
+    var url = await coreApi.addMessageUrl(projectId: projectId);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.postRequest(url, newDiss.toJson());
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 201) {
+        result.response = Discussion.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

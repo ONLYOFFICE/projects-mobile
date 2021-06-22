@@ -77,7 +77,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                   child: Row(
                     children: [
                       SizedBox(
-                          width: 56,
+                          width: 72,
                           child: AppIcon(
                               icon: SvgIcons.description,
                               color: Theme.of(context)
@@ -113,7 +113,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                                             : Theme.of(context)
                                                 .customColors()
                                                 .onSurface
-                                                .withOpacity(0.6))),
+                                                .withOpacity(0.4))),
                               ),
                             ],
                           ),
@@ -138,7 +138,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                   ),
                 ),
               ),
-              const StyledDivider(leftPadding: 56),
+              const StyledDivider(leftPadding: 72),
             ],
           ),
         );

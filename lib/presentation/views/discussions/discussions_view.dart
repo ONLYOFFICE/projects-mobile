@@ -48,7 +48,10 @@ class PortalDiscussionsView extends StatelessWidget {
           ],
           // bottom: TasksHeader(),
         ),
-        floatingActionButton: const StyledFloatingActionButton(),
+        floatingActionButton: StyledFloatingActionButton(
+          onPressed: controller.toNewDiscussionScreen,
+          child: AppIcon(icon: SvgIcons.add_fab),
+        ),
         body: DiscussionsList(controller: controller));
   }
 }

@@ -25,6 +25,7 @@ class SvgIcons {
 
   static const String about_app = 'lib/assets/images/icons/about_app.svg';
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
+  static const String add_fab = 'lib/assets/images/icons/add_fab.svg';
   static const String back_round = 'lib/assets/images/icons/back_round.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
@@ -49,6 +50,7 @@ class SvgIcons {
       'lib/assets/images/icons/password_recovery.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
+  static const String subscribers = 'lib/assets/images/icons/subscribers.svg';
   static const String support = 'lib/assets/images/icons/support.svg';
 
   static const String passcode = 'lib/assets/images/icons/passcode.svg';

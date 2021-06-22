@@ -34,6 +34,9 @@ class CoreApi {
   Future<String> addTaskConmmentUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
+  Future<String> addMessageUrl({int projectId}) async =>
+      '${await getPortalURI()}/api/$version/project/$projectId/message';
+
   Future<String> allGroups() async =>
       '${await getPortalURI()}/api/$version/group';
 
