@@ -31,39 +31,44 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/discussions/new_discussion_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
-class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
-
-  final controller;
+class UsersFromGroups extends StatelessWidget {
+  const UsersFromGroups({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                autofocus: true,
-                textInputAction: TextInputAction.search,
-                controller: controller.searchInputController,
-                decoration: const InputDecoration.collapsed(
-                    hintText: 'Enter your query'),
-                onSubmitted: (value) => controller.newSearch(value),
-              ),
-            ),
-            InkResponse(
-              onTap: () => controller.clearSearch(),
-              child: const Icon(Icons.close, color: Colors.blue),
-            )
-          ],
-        ),
+    NewDiscussionController controller = Get.arguments['controller'];
+
+    var groupsDataSource = Get.find<GroupsDataSource>();
+    groupsDataSource.getGroups();
+
+    return Scaffold(
+      appBar: StyledAppBar(
+        titleText: 'Users from groups',
+        actions: [
+          IconButton(
+            onPressed: controller.confirmGroupSelection,
+            icon: const Icon(Icons.done),
+          )
+        ],
+      ),
+      body: Obx(
+        () {
+          if (groupsDataSource.loaded.isTrue &&
+              groupsDataSource.groupsList.isNotEmpty) {
+            return GroupsOverview(
+              groupsDataSource: groupsDataSource,
+              onTapFunction: controller.selectGroupMembers,
+            );
+          }
+          return const ListLoadingSkeleton();
+        },
       ),
     );
   }

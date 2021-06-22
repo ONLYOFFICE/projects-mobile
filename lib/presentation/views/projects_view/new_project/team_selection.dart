@@ -94,14 +94,19 @@ class GroupsOverview extends StatelessWidget {
       enablePullUp: false,
       controller: groupsDataSource.refreshController,
       onLoading: groupsDataSource.onLoading,
-      child: ListView.builder(
+      child: ListView.separated(
+        itemCount: groupsDataSource.groupsList.length,
         physics: const ScrollPhysics(),
         shrinkWrap: true,
-        itemBuilder: (c, i) => PortalGroupItem(
-            groupController: groupsDataSource.groupsList[i],
-            onTapFunction: onTapFunction),
-        itemExtent: 65.0,
-        itemCount: groupsDataSource.groupsList.length,
+        padding: const EdgeInsets.symmetric(vertical: 22),
+        separatorBuilder: (BuildContext c, int i) {
+          return const SizedBox(height: 25);
+        },
+        itemBuilder: (BuildContext c, int i) {
+          return PortalGroupItem(
+              groupController: groupsDataSource.groupsList[i],
+              onTapFunction: onTapFunction);
+        },
       ),
     );
   }

@@ -36,7 +36,6 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
-import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -50,6 +49,8 @@ class SelectProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.arguments['controller'];
+
     var _projectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
@@ -76,7 +77,10 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         if (_searchController.switchToSearchView.isTrue &&
             _searchController.searchResult.isNotEmpty) {
-          return ProjectsList(projects: _searchController.searchResult);
+          return ProjectsList(
+            projects: _searchController.searchResult,
+            controller: controller,
+          );
         }
         if (_searchController.switchToSearchView.isTrue &&
             _searchController.searchResult.isEmpty &&
@@ -86,7 +90,9 @@ class SelectProjectView extends StatelessWidget {
         if (_projectsController.loaded.isTrue &&
             _searchController.switchToSearchView.isFalse) {
           return ProjectsList(
-              projects: _projectsController.paginationController.data);
+            projects: _projectsController.paginationController.data,
+            controller: controller,
+          );
         }
         return const ListLoadingSkeleton();
       }),
@@ -96,14 +102,15 @@ class SelectProjectView extends StatelessWidget {
 
 class ProjectsList extends StatelessWidget {
   final List projects;
+  final controller;
   const ProjectsList({
     Key key,
     @required this.projects,
+    @required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewTaskController>();
     return ListView.separated(
       itemCount: projects.length,
       separatorBuilder: (BuildContext context, int index) {

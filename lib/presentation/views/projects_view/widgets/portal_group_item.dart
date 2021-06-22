@@ -50,93 +50,46 @@ class PortalGroupItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        groupController.isSelected.value = !groupController.isSelected.value;
-        onTapFunction(groupController);
-      },
-      child: Container(
-        height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Obx(
+      () => CheckboxListTile(
+        value: groupController.isSelected.isTrue,
+        onChanged: (value) {
+          groupController.isSelected.value = !groupController.isSelected.value;
+          onTapFunction(groupController);
+        },
+        title: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Obx(
-            // () => groupController.avatarImage.value == null
-            // ?
-            SizedBox(
-              width: 72,
-              child: AppIcon(
-                  width: 40,
-                  height: 40,
-                  icon: SvgIcons.users,
-                  color: Theme.of(context).customColors().onSurface),
-            ),
-            //       : SizedBox(
-            //           width: 72,
-            //           child: SizedBox(
-            //             height: 40,
-            //             width: 40,
-            //             child: CircleAvatar(
-            //               radius: 40.0,
-            //               backgroundColor: Colors.white,
-            //               child: ClipOval(
-            //                 child: groupController.avatarImage.value,
-            //               ),
-            //             ),
-            //           ),
-            //         ),
-            // ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                groupController.displayName,
-                                // .replaceAll(' ', '\u00A0'),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                style: TextStyleHelper.subtitle1(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Theme.of(context)
+                      .customColors()
+                      .onSurface
+                      .withOpacity(0.06)),
+              child: Center(
+                child: AppIcon(
+                  icon: SvgIcons.subscribers,
+                  color: Theme.of(context)
+                      .customColors()
+                      .onSurface
+                      .withOpacity(0.4),
+                  height: 22,
+                  width: 14,
+                ),
               ),
             ),
-            Obx(() {
-              if (groupController.isSelected.isTrue) {
-                return const SizedBox(width: 72, child: Icon(Icons.check_box));
-              } else {
-                return const SizedBox(
-                    width: 72,
-                    child: Icon(Icons.check_box_outline_blank_outlined));
-              }
-              // } else {
-              //   if (groupController.isSelected.isTrue) {
-              //     return SizedBox(
-              //       width: 72,
-              //       child: Icon(
-              //         Icons.check,
-              //         color: Theme.of(context).customColors().primary,
-              //       ),
-              //     );
-              //   } else {
-              //     return SizedBox(width: 72);
-              //   }
-              // }
-            }),
+            const SizedBox(width: 16),
+            Flexible(
+              child: Text(
+                groupController.displayName,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
+                style: TextStyleHelper.subtitle1(),
+              ),
+            )
           ],
         ),
       ),

@@ -31,39 +31,32 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
-class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({
+class NewDiscussionText extends StatelessWidget {
+  final DiscussionActionsController controller;
+  const NewDiscussionText({
     Key key,
-    @required this.controller,
+    this.controller,
   }) : super(key: key);
-
-  final controller;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                autofocus: true,
-                textInputAction: TextInputAction.search,
-                controller: controller.searchInputController,
-                decoration: const InputDecoration.collapsed(
-                    hintText: 'Enter your query'),
-                onSubmitted: (value) => controller.newSearch(value),
-              ),
-            ),
-            InkResponse(
-              onTap: () => controller.clearSearch(),
-              child: const Icon(Icons.close, color: Colors.blue),
-            )
-          ],
-        ),
+    return Obx(
+      () => NewTaskInfo(
+        text: controller.text?.value != null && controller.text.value.isNotEmpty
+            ? controller.text.value
+            : 'Text',
+        textColor: controller.setTextError == true
+            ? Theme.of(context).customColors().error
+            : null,
+        icon: SvgIcons.description,
+        onTap: () => Get.toNamed('NewDiscussionTextScreen',
+            arguments: {'controller': controller}),
       ),
     );
   }

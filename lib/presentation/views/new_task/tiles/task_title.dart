@@ -52,7 +52,7 @@ class TaskTitle extends StatelessWidget {
     return Obx(
       () {
         return Padding(
-          padding: const EdgeInsets.only(left: 56, right: 16),
+          padding: const EdgeInsets.only(left: 72, right: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

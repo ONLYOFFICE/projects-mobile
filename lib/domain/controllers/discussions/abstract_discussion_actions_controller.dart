@@ -30,41 +30,36 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
-class CustomSearchBar extends StatelessWidget {
-  const CustomSearchBar({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+abstract class DiscussionActionsController {
+  RxString text;
+  RxString title;
+  var selectedProjectTitle;
+  RxList subscribers;
 
-  final controller;
+  FocusNode get titleFocus => FocusNode();
+  TextEditingController _titleController;
+  TextEditingController _userSearchController;
+  TextEditingController get titleController => _titleController;
+  TextEditingController get userSearchController => _userSearchController;
+  Rx<TextEditingController> textController;
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Row(
-          children: <Widget>[
-            Expanded(
-              child: TextField(
-                autofocus: true,
-                textInputAction: TextInputAction.search,
-                controller: controller.searchInputController,
-                decoration: const InputDecoration.collapsed(
-                    hintText: 'Enter your query'),
-                onSubmitted: (value) => controller.newSearch(value),
-              ),
-            ),
-            InkResponse(
-              onTap: () => controller.clearSearch(),
-              child: const Icon(Icons.close, color: Colors.blue),
-            )
-          ],
-        ),
-      ),
-    );
-  }
+  var setTitleError;
+  var setTextError;
+  var selectProjectError;
+
+  void setupSubscribersSelection();
+  void addSubscriber(PortalUserItemController user);
+
+  void changeTitle(String newText);
+  void changeProjectSelection();
+
+  void clearUserSearch();
+  void confirmText();
+  void leaveTextView();
+  void confirmSubscribersSelection();
+  void leaveSubscribersSelectionView();
 }

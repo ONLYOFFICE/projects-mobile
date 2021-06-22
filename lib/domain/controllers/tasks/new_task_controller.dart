@@ -201,15 +201,19 @@ class NewTaskController extends GetxController
   }
 
   void setupResponsiblesSelection() async {
-    await _userController.getUserInfo();
-    var selfUser = _userController.user;
-    selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
+    if (_usersDataSource.usersList.isEmpty) {
+      await _userController.getUserInfo();
+      var selfUser = _userController.user;
+      selfUserItem = PortalUserItemController(portalUser: selfUser);
+      selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
 
-    _usersDataSource.applyUsersSelection = _getSelectedResponsibles;
-    await _usersDataSource.getProfiles(needToClear: true);
-    _usersDataSource.withoutSelf = true;
-    _usersDataSource.selfUserItem = selfUserItem;
+      _usersDataSource.applyUsersSelection = _getSelectedResponsibles;
+      await _usersDataSource.getProfiles(needToClear: true);
+      _usersDataSource.withoutSelf = true;
+      _usersDataSource.selfUserItem = selfUserItem;
+    } else {
+      await _getSelectedResponsibles();
+    }
   }
 
   Future<void> _getSelectedResponsibles() async {
