@@ -107,7 +107,10 @@ class NavigationView extends StatelessWidget {
                 SizedBox(
                   width: 80,
                   child: NavigationRail(
-                    selectedIndex: controller.tabIndex,
+                    selectedIndex:
+                        controller.onMoreView || controller.tabIndex > 3
+                            ? 3
+                            : controller.tabIndex,
                     onDestinationSelected: controller.changeTabIndex,
                     destinations: [
                       NavigationRailDestination(

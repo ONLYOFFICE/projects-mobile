@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
@@ -64,6 +65,26 @@ class DiscussionsApi {
     return result;
   }
 
+  Future<ApiDTO> addMessage({int projectId, NewDiscussionDTO newDiss}) async {
+    var url = await coreApi.addMessageUrl(projectId: projectId);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.postRequest(url, newDiss.toJson());
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 201) {
+        result.response = Discussion.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
   Future<ApiDTO> getMessageDetailed({int id}) async {
     var url = await coreApi.discussionDetailedUrl(messageId: id);
     var result = ApiDTO();
@@ -114,6 +135,26 @@ class DiscussionsApi {
       var body = {};
 
       var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = Discussion.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> deleteMessage({int id}) async {
+    var url = await coreApi.deleteMessageUrl(id: id);
+    var result = ApiDTO();
+
+    try {
+      var response = await coreApi.deleteRequest(url);
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {

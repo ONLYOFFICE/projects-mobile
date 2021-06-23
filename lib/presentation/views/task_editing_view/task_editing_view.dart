@@ -41,7 +41,7 @@ class TaskEditingView extends StatelessWidget {
                 controller: controller, showCaption: true, focusOnTitle: false),
             const SizedBox(height: 22),
             Padding(
-              padding: const EdgeInsets.only(left: 56, right: 16),
+              padding: const EdgeInsets.only(left: 72, right: 16),
               child: OutlinedButton(
                 onPressed: () =>
                     statusSelectionBS(context: context, controller: controller),

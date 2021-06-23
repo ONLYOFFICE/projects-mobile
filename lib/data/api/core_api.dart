@@ -34,6 +34,12 @@ class CoreApi {
   Future<String> addTaskConmmentUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
+  Future<String> addMessageUrl({int projectId}) async =>
+      '${await getPortalURI()}/api/$version/project/$projectId/message';
+
+  Future<String> addMessageCommentUrl({int messageId}) async =>
+      '${await getPortalURI()}/api/$version/project/message/$messageId/comment';
+
   Future<String> allGroups() async =>
       '${await getPortalURI()}/api/$version/group';
 
@@ -63,6 +69,9 @@ class CoreApi {
 
   Future<String> deleteTask({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
+
+  Future<String> deleteMessageUrl({int id}) async =>
+      '${await getPortalURI()}/api/$version/project/message/$id';
 
   Future<String> deleteSubtask({
     @required int taskId,

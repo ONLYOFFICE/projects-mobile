@@ -44,9 +44,7 @@ class DiscussionCommentsView extends StatelessWidget {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: AddCommentButton(
-                      onPressed: () {
-                        print('da');
-                      },
+                      onPressed: controller.toNewCommentView,
                     ),
                   )
               ],

@@ -41,14 +41,14 @@ class NewTaskInfo extends StatelessWidget {
             Row(
               children: [
                 SizedBox(
-                  width: 56,
+                  width: 72,
                   child: icon != null
                       ? AppIcon(
                           icon: icon,
                           color: Theme.of(context)
                               .customColors()
                               .onSurface
-                              .withOpacity(0.6))
+                              .withOpacity(0.4))
                       : null,
                 ),
                 Expanded(
@@ -81,7 +81,7 @@ class NewTaskInfo extends StatelessWidget {
                                             : Theme.of(context)
                                                 .customColors()
                                                 .onSurface
-                                                .withOpacity(0.6))),
+                                                .withOpacity(0.4))),
                       ],
                     ),
                   ),
@@ -92,7 +92,7 @@ class NewTaskInfo extends StatelessWidget {
                       child: Padding(padding: suffixPadding, child: suffix)),
               ],
             ),
-            if (enableBorder) const StyledDivider(leftPadding: 56.5),
+            if (enableBorder) const StyledDivider(leftPadding: 72.5),
           ],
         ),
       ),
@@ -120,19 +120,22 @@ class TileWithSwitch extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 56, top: 18, bottom: 18),
-              child: Text(title,
-                  style: TextStyleHelper.subtitle1(
-                      color: Theme.of(context).customColors().onSurface)),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 72, top: 18, bottom: 18),
+                child: Text(title,
+                    style: TextStyleHelper.subtitle1(
+                        color: Theme.of(context).customColors().onSurface)),
+              ),
             ),
             Switch(
               value: isSelected,
               onChanged: onChanged,
-            )
+            ),
+            const SizedBox(width: 3)
           ],
         ),
-        if (enableBorder) const StyledDivider(leftPadding: 56.5),
+        if (enableBorder) const StyledDivider(leftPadding: 72),
       ],
     );
   }

@@ -22,7 +22,6 @@ class TasksSearchScreen extends StatelessWidget {
         bottom: SearchField(
           autofocus: true,
           onChanged: (value) {
-            print(value);
             controller.searchTasks(query: value, needToClear: true);
           },
         ),
