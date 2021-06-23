@@ -44,7 +44,7 @@ class CommentsService {
     if (success) {
       return files.response;
     } else {
-      ErrorDialog.show(files.error);
+      await ErrorDialog.show(files.error);
       return null;
     }
   }
@@ -60,7 +60,7 @@ class CommentsService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -72,7 +72,7 @@ class CommentsService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -84,7 +84,7 @@ class CommentsService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -105,7 +105,7 @@ class CommentsService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }

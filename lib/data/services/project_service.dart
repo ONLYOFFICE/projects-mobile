@@ -34,6 +34,7 @@ import 'dart:async';
 
 import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -53,7 +54,7 @@ class ProjectService {
     if (success) {
       return projects.response;
     } else {
-      ErrorDialog.show(projects.error);
+      await ErrorDialog.show(projects.error);
       return null;
     }
   }
@@ -84,7 +85,7 @@ class ProjectService {
     if (success) {
       return projects;
     } else {
-      ErrorDialog.show(projects.error);
+      await ErrorDialog.show(projects.error);
       return null;
     }
   }
@@ -97,7 +98,7 @@ class ProjectService {
     if (success) {
       return projects.response;
     } else {
-      ErrorDialog.show(projects.error);
+      await ErrorDialog.show(projects.error);
       return null;
     }
   }
@@ -110,7 +111,7 @@ class ProjectService {
     if (success) {
       return tags.response;
     } else {
-      ErrorDialog.show(tags.error);
+      await ErrorDialog.show(tags.error);
       return null;
     }
   }
@@ -123,7 +124,7 @@ class ProjectService {
     if (success) {
       return team.response;
     } else {
-      ErrorDialog.show(team.error);
+      await ErrorDialog.show(team.error);
       return null;
     }
   }
@@ -136,7 +137,7 @@ class ProjectService {
     if (success) {
       return success;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return false;
     }
   }
@@ -149,7 +150,7 @@ class ProjectService {
     if (success) {
       return success;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return false;
     }
   }

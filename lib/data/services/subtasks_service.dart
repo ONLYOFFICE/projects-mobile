@@ -45,7 +45,7 @@ class SubtasksService {
     if (success) {
       return response.response;
     } else {
-      ErrorDialog.show(response.error);
+      await ErrorDialog.show(response.error);
       return null;
     }
   }
@@ -58,7 +58,7 @@ class SubtasksService {
     if (success) {
       return response.response;
     } else {
-      ErrorDialog.show(response.error);
+      await ErrorDialog.show(response.error);
       return null;
     }
   }
@@ -70,7 +70,7 @@ class SubtasksService {
     if (success) {
       return response.response;
     } else {
-      ErrorDialog.show(response.error);
+      await ErrorDialog.show(response.error);
       return null;
     }
   }
@@ -82,7 +82,7 @@ class SubtasksService {
     if (success) {
       return response.response;
     } else {
-      ErrorDialog.show(response.error);
+      await ErrorDialog.show(response.error);
       return null;
     }
   }
@@ -95,7 +95,7 @@ class SubtasksService {
     if (success) {
       return response.response;
     } else {
-      ErrorDialog.show(response.error);
+      await ErrorDialog.show(response.error);
       return null;
     }
   }
@@ -112,7 +112,7 @@ class SubtasksService {
     if (success) {
       return response.response;
     } else {
-      ErrorDialog.show(response.error);
+      await ErrorDialog.show(response.error);
       return null;
     }
   }

@@ -64,7 +64,7 @@ class MilestoneService {
     if (success) {
       return milestones.response;
     } else {
-      ErrorDialog.show(milestones.error);
+      await ErrorDialog.show(milestones.error);
       return null;
     }
   }
@@ -81,7 +81,7 @@ class MilestoneService {
     if (success) {
       return success;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return false;
     }
   }

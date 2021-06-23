@@ -45,7 +45,7 @@ class GroupService {
     if (success) {
       return groups.response;
     } else {
-      ErrorDialog.show(groups.error);
+      await ErrorDialog.show(groups.error);
       return null;
     }
   }

@@ -52,7 +52,7 @@ class TaskService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -65,7 +65,7 @@ class TaskService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -78,7 +78,7 @@ class TaskService {
     if (success) {
       return statuses.response;
     } else {
-      ErrorDialog.show(statuses.error);
+      await ErrorDialog.show(statuses.error);
       return null;
     }
   }
@@ -113,7 +113,7 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      ErrorDialog.show(projects.error);
+      await ErrorDialog.show(projects.error);
       return null;
     }
   }
@@ -148,7 +148,7 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      ErrorDialog.show(projects.error);
+      await ErrorDialog.show(projects.error);
       return null;
     }
   }
@@ -161,7 +161,7 @@ class TaskService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }

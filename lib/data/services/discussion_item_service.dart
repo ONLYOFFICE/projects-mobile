@@ -44,7 +44,7 @@ class DiscussionItemService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -56,7 +56,7 @@ class DiscussionItemService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -68,7 +68,7 @@ class DiscussionItemService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }

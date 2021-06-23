@@ -48,7 +48,7 @@ class PortalService {
     if (success) {
       return capabilities.response;
     } else {
-      ErrorDialog.show(capabilities.error);
+      await ErrorDialog.show(capabilities.error);
       return null;
     }
   }

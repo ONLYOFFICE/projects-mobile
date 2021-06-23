@@ -69,7 +69,7 @@ class DiscussionsService {
     if (success) {
       return projects;
     } else {
-      ErrorDialog.show(projects.error);
+      await ErrorDialog.show(projects.error);
       return null;
     }
   }

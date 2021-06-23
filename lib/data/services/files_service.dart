@@ -46,7 +46,7 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      ErrorDialog.show(files.error);
+      await ErrorDialog.show(files.error);
       return null;
     }
   }
@@ -76,7 +76,7 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      ErrorDialog.show(files.error);
+      await ErrorDialog.show(files.error);
       return null;
     }
   }
@@ -91,7 +91,7 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      ErrorDialog.show(files.error);
+      await ErrorDialog.show(files.error);
       return null;
     }
   }
@@ -105,7 +105,7 @@ class FilesService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -120,7 +120,7 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      ErrorDialog.show(files.error);
+      await ErrorDialog.show(files.error);
       return null;
     }
   }
@@ -134,7 +134,7 @@ class FilesService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -151,7 +151,7 @@ class FilesService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }
@@ -169,7 +169,7 @@ class FilesService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }

@@ -51,7 +51,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -63,7 +63,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -78,7 +78,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -94,7 +94,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
@@ -106,7 +106,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.error);
       return null;
     }
   }
