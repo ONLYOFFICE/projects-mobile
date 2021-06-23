@@ -45,6 +45,7 @@ class ProjectTasksController extends GetxController {
 
   final _sortController = Get.find<TasksSortController>();
   final _filterController = Get.find<TaskFilterController>();
+  TaskFilterController get filterController => _filterController;
 
   RxBool loaded = false.obs;
 
