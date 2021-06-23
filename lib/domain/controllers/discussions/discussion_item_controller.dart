@@ -30,9 +30,13 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
@@ -101,6 +105,8 @@ class DiscussionItemController extends GetxController {
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status;
+        // ignore: unawaited_futures
+        getDiscussionDetailed(showLoading: true);
         Get.back();
       }
       // ignore: empty_catches
@@ -118,7 +124,32 @@ class DiscussionItemController extends GetxController {
     } catch (e) {}
   }
 
+  Future<void> deleteMessage() async {
+    try {
+      Discussion result = await _api.deleteMessage(id: discussion.value.id);
+      if (result != null) {
+        Get.back();
+        await Get.find<DiscussionsController>().loadDiscussions();
+        try {
+          // ignore: unawaited_futures
+          Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
+        } catch (e) {
+          debugPrint(e);
+        }
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
   void handleVisibilityChanged(VisibilityInfo info) {
     if (info.visibleFraction == 1) update();
+  }
+
+  void toNewCommentView() {
+    Get.toNamed('NewCommentView', arguments: {
+      'controller': Get.put(
+        NewDiscussionCommentController(idFrom: discussion.value.id),
+      )
+    });
   }
 }

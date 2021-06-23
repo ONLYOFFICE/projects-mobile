@@ -93,4 +93,6 @@ class DiscussionsController extends BaseController {
 
   void toDetailed(Discussion discussion) =>
       Get.toNamed('DiscussionDetailed', arguments: {'discussion': discussion});
+
+  void toNewDiscussionScreen() => Get.toNamed('NewDiscussionScreen');
 }

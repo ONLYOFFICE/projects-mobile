@@ -42,6 +42,10 @@ import 'package:projects/presentation/views/authentication/password_recovery/pas
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
+import 'package:projects/presentation/views/discussions/new_discussion/new_discussion_screen.dart';
+import 'package:projects/presentation/views/discussions/new_discussion/select/new_diss_text_screen.dart';
+import 'package:projects/presentation/views/discussions/new_discussion/select/select_diss_subscribers.dart';
+import 'package:projects/presentation/views/discussions/new_discussion/select/users_from_groups.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
@@ -107,6 +111,9 @@ List<GetPage> getxPages() => [
           name: 'NewSubtaskView',
           page: () => const CreatingAndEditingSubtaskView()),
       GetPage(name: 'TaskDescription', page: () => const TaskDescription()),
+      GetPage(
+          name: 'SelectDiscussionSubscribers',
+          page: () => const SelectDiscussionSubscribers()),
       GetPage(name: 'SelectDateView', page: () => const SelectDateView()),
       GetPage(
           name: 'SelectMilestoneView', page: () => const SelectMilestoneView()),
@@ -142,6 +149,11 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'GroupMembersSelectionView',
           page: () => const GroupMembersSelectionView()),
+      GetPage(
+          name: 'NewDiscussionScreen', page: () => const NewDiscussionScreen()),
+      GetPage(
+          name: 'NewDiscussionTextScreen',
+          page: () => const NewDiscussionTextScreen()),
       GetPage(name: 'NewMilestoneView', page: () => const NewMilestoneView()),
       GetPage(
           name: 'NewMilestoneDescription',
@@ -168,4 +180,5 @@ List<GetPage> getxPages() => [
       GetPage(name: 'SettingsScreen', page: () => const SettingsScreen()),
       GetPage(name: 'TasksSearchScreen', page: () => const TasksSearchScreen()),
       GetPage(name: 'TFASmsScreen', page: () => const TFASmsScreen()),
+      GetPage(name: 'UsersFromGroups', page: () => const UsersFromGroups()),
     ];

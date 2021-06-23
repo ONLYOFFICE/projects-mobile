@@ -55,15 +55,11 @@ class CustomSearchBar extends StatelessWidget {
                 controller: controller.searchInputController,
                 decoration: const InputDecoration.collapsed(
                     hintText: 'Enter your query'),
-                onSubmitted: (value) {
-                  controller.newSearch(value);
-                },
+                onSubmitted: (value) => controller.newSearch(value),
               ),
             ),
             InkResponse(
-              onTap: () {
-                controller.clearSearch();
-              },
+              onTap: () => controller.clearSearch(),
               child: const Icon(Icons.close, color: Colors.blue),
             )
           ],

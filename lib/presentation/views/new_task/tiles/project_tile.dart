@@ -59,7 +59,8 @@ class ProjectTile extends StatelessWidget {
                 : null,
             isSelected: _isSelected,
             caption: _isSelected ? 'Project:' : null,
-            onTap: () => Get.toNamed('SelectProjectView'));
+            onTap: () => Get.toNamed('SelectProjectView',
+                arguments: {'controller': controller}));
       },
     );
   }

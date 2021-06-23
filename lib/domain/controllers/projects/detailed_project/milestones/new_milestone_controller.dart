@@ -236,7 +236,7 @@ class NewMilestoneController extends GetxController {
   void enableRemindBeforeDueDate(value) => remindBeforeDueDate.value = value;
 
   void onProjectTilePressed() {
-    Get.toNamed('SelectProjectView');
+    Get.toNamed('SelectProjectView', arguments: {'controller': this});
   }
 
   void onDueDateTilePressed() {
