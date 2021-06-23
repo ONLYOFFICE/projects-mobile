@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 
 class ErrorDialog {
-  static void show(CustomError error) {
-    Get.defaultDialog(
-        title: '${error.message}',
-        textConfirm: 'ok',
-        onConfirm: Get.back,
-        barrierDismissible: false);
+  static Future<void> show(CustomError error) async {
+    await Get.dialog(StyledAlertDialog(
+      titleText: 'Error',
+      contentText: '${error.message}',
+      acceptText: 'OK',
+      onAcceptTap: Get.back,
+    ));
   }
 
   static void hide() {

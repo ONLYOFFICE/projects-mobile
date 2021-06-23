@@ -16,7 +16,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      ErrorDialog.show(authResponse.error);
+      await ErrorDialog.show(authResponse.error);
     }
     return authResponse;
   }
@@ -27,7 +27,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      ErrorDialog.show(authResponse.error);
+      await ErrorDialog.show(authResponse.error);
     }
     return authResponse;
   }
@@ -39,7 +39,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      ErrorDialog.show(authResponse.error);
+      await ErrorDialog.show(authResponse.error);
     }
     return authResponse;
   }

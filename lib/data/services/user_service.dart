@@ -19,7 +19,7 @@ class UserService {
     if (success) {
       return profiles.response;
     } else {
-      ErrorDialog.show(profiles.error);
+      await ErrorDialog.show(profiles.error);
       return null;
     }
   }
@@ -34,7 +34,7 @@ class UserService {
     if (success) {
       return profiles;
     } else {
-      ErrorDialog.show(profiles.error);
+      await ErrorDialog.show(profiles.error);
       return null;
     }
   }
