@@ -30,9 +30,12 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
@@ -113,6 +116,23 @@ class DiscussionItemController extends GetxController {
           await _api.subscribeToMessage(id: discussion.value.id);
       if (result != null) {
         discussion.value.setSubscribers = result.subscribers;
+      }
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+
+  Future<void> deleteMessage() async {
+    try {
+      Discussion result = await _api.deleteMessage(id: discussion.value.id);
+      if (result != null) {
+        Get.back();
+        await Get.find<DiscussionsController>().loadDiscussions();
+        try {
+          // ignore: unawaited_futures
+          Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
+        } catch (e) {
+          debugPrint(e);
+        }
       }
       // ignore: empty_catches
     } catch (e) {}
