@@ -90,7 +90,7 @@ class PortalUser {
       this.profileUrl});
 
   PortalUser.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    id = json['id'].toString();
     userName = json['userName'];
     isVisitor = json['isVisitor'];
     firstName = json['firstName'];

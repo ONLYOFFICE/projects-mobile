@@ -57,8 +57,11 @@ class NewProject extends StatelessWidget {
         elevation: 2,
         actions: [
           IconButton(
-              icon: const Icon(Icons.check_outlined),
-              onPressed: () => controller.confirm)
+            icon: const Icon(Icons.check_outlined),
+            onPressed: () => {
+              controller.confirm(),
+            },
+          )
         ],
       ),
       body: Listener(

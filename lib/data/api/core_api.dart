@@ -200,6 +200,13 @@ class CoreApi {
 
   Future<String> createProjectUrl() async =>
       '${await getPortalURI()}/api/$version/project/withSecurity';
+
+  Future<String> deleteProjectUrl(int projecId) async =>
+      '${await getPortalURI()}/api/$version/project/$projecId';
+
+  Future<String> updateProjectStatusUrl(int projecId) async =>
+      '${await getPortalURI()}/api/$version/project/$projecId/status';
+
   Future<String> projectTeamUrl(String projectID) async =>
       '${await getPortalURI()}/api/$version/project/$projectID/team';
 
