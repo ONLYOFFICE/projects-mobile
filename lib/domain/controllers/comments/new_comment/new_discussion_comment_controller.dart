@@ -3,38 +3,45 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class NewCommentController extends GetxController {
+class NewDiscussionCommentController extends GetxController
+    implements NewCommentController {
   final _api = locator<CommentsService>();
-  final int taskId;
+
+  @override
+  final int idFrom;
   final String parentId;
 
-  NewCommentController({
+  NewDiscussionCommentController({
     this.parentId,
-    this.taskId,
+    this.idFrom,
   });
 
+  @override
   RxBool setTitleError = false.obs;
 
   final TextEditingController _textController = TextEditingController();
 
+  @override
   TextEditingController get textController => _textController;
 
-  Future addTaskComment(context) async {
+  @override
+  Future addComment(context) async {
     if (_textController.text.isEmpty)
       setTitleError.value = true;
     else {
       setTitleError.value = false;
-      PortalComment newComment = await _api.addTaskComment(
-          content: _textController.text, taskId: taskId);
+      PortalComment newComment = await _api.addMessageComment(
+          content: _textController.text, messageId: idFrom);
       if (newComment != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
+        var taskController = Get.find<DiscussionItemController>();
         // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
+        taskController.onRefresh();
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context,
@@ -44,6 +51,7 @@ class NewCommentController extends GetxController {
     }
   }
 
+  @override
   Future addReplyComment(context) async {
     if (_textController.text.isEmpty)
       setTitleError.value = true;
@@ -51,12 +59,12 @@ class NewCommentController extends GetxController {
       setTitleError.value = false;
       PortalComment newComment = await _api.addReplyComment(
         content: _textController.text,
-        taskId: taskId,
+        taskId: idFrom,
         parentId: parentId,
       );
       if (newComment != null) {
         var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
+            Get.find<TaskItemController>(tag: idFrom.toString());
         // ignore: unawaited_futures
         taskController.reloadTask(showLoading: true);
         Get.back();

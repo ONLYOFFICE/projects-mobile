@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -72,6 +73,8 @@ class DiscussionItemController extends GetxController {
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status;
+        // ignore: unawaited_futures
+        getDiscussionDetailed(showLoading: true);
         Get.back();
       }
       // ignore: empty_catches
@@ -108,5 +111,13 @@ class DiscussionItemController extends GetxController {
 
   void handleVisibilityChanged(VisibilityInfo info) {
     if (info.visibleFraction == 1) update();
+  }
+
+  void toNewCommentView() {
+    Get.toNamed('NewCommentView', arguments: {
+      'controller': Get.put(
+        NewDiscussionCommentController(idFrom: discussion.value.id),
+      )
+    });
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/domain/controllers/comments/new_comment/new_task_comment_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
@@ -53,7 +54,12 @@ class TaskCommentsView extends StatelessWidget {
                       AddCommentButton(
                         onPressed: () => Get.toNamed(
                           'NewCommentView',
-                          arguments: {'taskId': controller.task.value.id},
+                          arguments: {
+                            'controller': Get.put(
+                              NewTaskCommentController(
+                                  idFrom: controller.task.value.id),
+                            )
+                          },
                         ),
                       ),
                   ],
