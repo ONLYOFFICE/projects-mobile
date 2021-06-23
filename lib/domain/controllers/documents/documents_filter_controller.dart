@@ -74,8 +74,7 @@ class DocumentsFilterController extends BaseFilterController {
   int _folderId;
   set folderId(int value) => _folderId = value;
 
-  @override
-  bool get hasFilters => _typeFilter.isNotEmpty || _authorFilter.isNotEmpty;
+  bool get _hasFilters => _typeFilter.isNotEmpty || _authorFilter.isNotEmpty;
 
   DocumentsFilterController() {
     filtersTitle = 'DOCUMENTS';
@@ -190,6 +189,7 @@ class DocumentsFilterController extends BaseFilterController {
   @override
   void getSuitableResultCount() async {
     suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
 
     var result = await _api.getFilesByParams(
       folderId: _folderId,
@@ -203,23 +203,22 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    contentTypes.value = {
-      'folders': false,
-      'documents': false,
-      'presentations': false,
-      'spreadsheets': false,
-      'images': false,
-      'media': false,
-      'archives': false,
-      'allFiles': false,
-    };
-    searchSettings.value = {'in_content': false, 'exclude_subfolders': false};
-    author.value = {
-      'me': false,
-      'users': '',
-      'groups': '',
-      'no': false,
-    };
+    contentTypes['folders'] = false;
+    contentTypes['documents'] = false;
+    contentTypes['presentations'] = false;
+    contentTypes['spreadsheets'] = false;
+    contentTypes['images'] = false;
+    contentTypes['media'] = false;
+    contentTypes['archives'] = false;
+    contentTypes['allFiles'] = false;
+
+    searchSettings['in_content'] = false;
+    searchSettings['exclude_subfolders'] = false;
+
+    author['me'] = false;
+    author['users'] = '';
+    author['groups'] = '';
+    author['no'] = false;
 
     suitableResultCount.value = -1;
 
@@ -227,11 +226,12 @@ class DocumentsFilterController extends BaseFilterController {
     _authorFilter = '';
     _searchSettingsFilter = '';
 
-    applyFilters();
+    getSuitableResultCount();
   }
 
   @override
   void applyFilters() async {
+    hasFilters.value = _hasFilters;
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 }

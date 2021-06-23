@@ -53,22 +53,11 @@ class ProjectTasksController extends GetxController {
   int _projectId;
 
   ProjectTasksController() {
-    _sortController.updateSortDelegate = () async {
-      await loadTasks();
-    };
-
-    _filterController.applyFiltersDelegate = () {
-      hasFilters.value = _filterController.hasFilters;
-      loadTasks();
-    };
-
-    paginationController.loadDelegate = () async {
-      await _getTasks();
-    };
-    paginationController.refreshDelegate = () async {
-      await _getTasks(needToClear: true);
-    };
-
+    _sortController.updateSortDelegate = () async => await loadTasks();
+    _filterController.applyFiltersDelegate = () async => loadTasks();
+    paginationController.loadDelegate = () async => await _getTasks();
+    paginationController.refreshDelegate =
+        () async => await _getTasks(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 

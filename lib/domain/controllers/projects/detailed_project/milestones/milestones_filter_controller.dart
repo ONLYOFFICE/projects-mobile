@@ -59,8 +59,7 @@ class MilestonesFilterController extends BaseFilterController {
   String _projectId;
   set projectId(String value) => _projectId = value;
 
-  @override
-  bool get hasFilters =>
+  bool get _hasFilters =>
       _milestoneResponsibleFilter.isNotEmpty ||
       _taskResponsibleFilter.isNotEmpty ||
       _deadlineFilter.isNotEmpty ||
@@ -210,6 +209,7 @@ class MilestonesFilterController extends BaseFilterController {
   @override
   void getSuitableResultCount() async {
     suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
 
     var result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
@@ -226,18 +226,23 @@ class MilestonesFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    milestoneResponsible.value = {'me': false, 'other': ''};
-    taskResponsible.value = {'me': false, 'other': ''};
-    status.value = {'active': false, 'paused': false, 'closed': false};
-    deadline.value = {
-      'overdue': false,
-      'today': false,
-      'upcoming': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+    milestoneResponsible['me'] = false;
+    milestoneResponsible['other'] = '';
+
+    taskResponsible['me'] = false;
+    taskResponsible['other'] = '';
+
+    status['active'] = false;
+    status['paused'] = false;
+    status['closed'] = false;
+
+    deadline['overdue'] = false;
+    deadline['today'] = false;
+    deadline['upcoming'] = false;
+    deadline['custom'] = {
+      'selected': false,
+      'startDate': DateTime.now(),
+      'stopDate': DateTime.now()
     };
 
     suitableResultCount.value = -1;
@@ -247,11 +252,12 @@ class MilestonesFilterController extends BaseFilterController {
     _deadlineFilter = '';
     _statusFilter = '';
 
-    applyFilters();
+    getSuitableResultCount();
   }
 
   @override
   void applyFilters() async {
+    hasFilters.value = _hasFilters;
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 }

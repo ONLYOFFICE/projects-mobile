@@ -49,6 +49,7 @@ class TasksController extends BaseController {
   final _sortController = Get.find<TasksSortController>();
 
   TaskFilterController _filterController;
+  TaskFilterController get filterController => _filterController;
 
   RxBool loaded = false.obs;
 
@@ -61,23 +62,11 @@ class TasksController extends BaseController {
 
     _paginationController = paginationController;
     _filterController = filterController;
-
-    _sortController.updateSortDelegate = () async {
-      await loadTasks();
-    };
-
-    _filterController.applyFiltersDelegate = () {
-      hasFilters.value = _filterController.hasFilters;
-      loadTasks();
-    };
-
-    paginationController.loadDelegate = () async {
-      await _getTasks();
-    };
-    paginationController.refreshDelegate = () async {
-      await _getTasks(needToClear: true);
-    };
-
+    _sortController.updateSortDelegate = () async => await loadTasks();
+    _filterController.applyFiltersDelegate = () async => loadTasks();
+    paginationController.loadDelegate = () async => await _getTasks();
+    paginationController.refreshDelegate =
+        () async => await _getTasks(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 

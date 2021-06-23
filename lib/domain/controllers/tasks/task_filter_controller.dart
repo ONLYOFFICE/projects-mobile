@@ -63,8 +63,7 @@ class TaskFilterController extends BaseFilterController {
   var _selfId;
   String _projectId;
 
-  @override
-  bool get hasFilters =>
+  bool get _hasFilters =>
       _responsibleFilter.isNotEmpty ||
       _creatorFilter.isNotEmpty ||
       _projectFilter.isNotEmpty ||
@@ -294,6 +293,7 @@ class TaskFilterController extends BaseFilterController {
   @override
   void getSuitableResultCount() async {
     suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
 
     var result = await _api.getTasksByParams(
       sortBy: _sortController.currentSortfilter,
@@ -311,25 +311,30 @@ class TaskFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    responsible.value = {'Me': false, 'Other': '', 'Groups': '', 'No': false};
-    creator.value = {'Me': false, 'Other': ''};
-    project.value = {
-      'My': false,
-      'Other': '',
-      'With tag': '',
-      'Without tag': false
-    };
-    milestone.value = {'My': false, 'No': false, 'Other': ''};
+    responsible['Me'] = false;
+    responsible['Other'] = '';
+    responsible['Groups'] = '';
+    responsible['No'] = false;
 
-    deadline.value = {
-      'overdue': false,
-      'today': false,
-      'upcoming': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+    creator['Me'] = false;
+    creator['Other'] = '';
+
+    project['My'] = false;
+    project['Other'] = '';
+    project['With tag'] = '';
+    project['Without tag'] = false;
+
+    milestone['My'] = false;
+    milestone['No'] = false;
+    milestone['Other'] = '';
+
+    deadline['overdue'] = false;
+    deadline['today'] = false;
+    deadline['upcoming'] = false;
+    deadline['custom'] = {
+      'selected': false,
+      'startDate': DateTime.now(),
+      'stopDate': DateTime.now()
     };
 
     acceptedFilters.value = '';
@@ -341,11 +346,12 @@ class TaskFilterController extends BaseFilterController {
     _milestoneFilter = '';
     _deadlineFilter = '';
 
-    applyFilters();
+    getSuitableResultCount();
   }
 
   @override
   void applyFilters() async {
+    hasFilters.value = _hasFilters;
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
