@@ -219,4 +219,48 @@ class ProjectApi {
 
     return result;
   }
+
+  Future<ApiDTO<PortalUser>> deleteProject({int projectId}) async {
+    var url = await coreApi.deleteProjectUrl(projectId);
+
+    var result = ApiDTO<PortalUser>();
+
+    try {
+      var response = await coreApi.deleteRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = PortalUser.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<ProjectDetailed>> updateProjectStatus(
+      {int projectId, String newStatus}) async {
+    var url = await coreApi.updateProjectStatusUrl(projectId);
+
+    var result = ApiDTO<ProjectDetailed>();
+    var body = {'status': newStatus};
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = ProjectDetailed.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

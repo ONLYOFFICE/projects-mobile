@@ -108,4 +108,32 @@ class ProjectService {
       return false;
     }
   }
+
+  Future<bool> deleteProject({int projectId}) async {
+    var result = await _api.deleteProject(projectId: projectId);
+
+    var success = result.response != null;
+
+    if (success) {
+      return success;
+    } else {
+      ErrorDialog.show(result.error);
+      return false;
+    }
+  }
+
+  Future<ProjectDetailed> updateProjectStatus(
+      {int projectId, String newStatus}) async {
+    var result = await _api.updateProjectStatus(
+        projectId: projectId, newStatus: newStatus);
+
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await ErrorDialog.show(result.error);
+      return null;
+    }
+  }
 }

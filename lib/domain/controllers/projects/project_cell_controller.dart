@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectCellController extends GetxController {
-  final statuses = [].obs;
+  final _projectService = locator<ProjectService>();
 
   RefreshController refreshController = RefreshController();
 
@@ -33,5 +35,15 @@ class ProjectCellController extends GetxController {
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
+  }
+
+  Future updateStatus({int newStatusId}) async {
+    var t = await _projectService.updateProjectStatus(
+        projectId: projectData.id,
+        newStatus: ProjectStatus.toName(newStatusId));
+
+    if (t != null) {
+      _project.status = t.status;
+    }
   }
 }

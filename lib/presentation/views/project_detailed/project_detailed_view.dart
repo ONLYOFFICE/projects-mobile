@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
+import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
@@ -80,9 +82,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       appBar: StyledAppBar(
         actions: [
           // IconButton(
-          //   icon: const Icon(Icons.edit_outlined),
-          //   onPressed: () => print('da'),
-          // ),
+          //     icon: const Icon(Icons.edit_outlined),
+          //     onPressed: () => Get.toNamed('ProjectEditingView',
+          //         arguments: {'projectDetailed': projectDetailed})),
+          _ProjectContextMenu(controller: projectController)
         ],
         bottom: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -138,5 +141,77 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         ProjectTeamView(projectDetailed: projectDetailed),
       ]),
     );
+  }
+}
+
+class _ProjectContextMenu extends StatelessWidget {
+  final controller;
+  const _ProjectContextMenu({Key key, @required this.controller})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      icon: const Icon(Icons.more_vert, size: 26),
+      offset: const Offset(0, 25),
+      onSelected: (value) => _onSelected(value, controller),
+      itemBuilder: (context) {
+        return [
+          // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
+          // if (controller.projectDetailed.canEdit)
+          //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
+          // const PopupMenuItem(
+          //     value: 'follow', child: Text('Follow / Unfollow project')),
+          if (controller.projectDetailed.canDelete)
+            PopupMenuItem(
+              textStyle: Theme.of(context)
+                  .popupMenuTheme
+                  .textStyle
+                  .copyWith(color: Theme.of(context).customColors().error),
+              value: 'delete',
+              child: const Text('Delete'),
+            )
+        ];
+      },
+    );
+  }
+}
+
+void _onSelected(value, controller) async {
+  switch (value) {
+    case 'copyLink':
+      controller.copyLink();
+      break;
+
+    case 'edit':
+      await Get.toNamed('ProjectEditingView',
+          arguments: {'projectDetailed': controller.projectDetailed});
+      break;
+
+    case 'follow':
+      break;
+
+    case 'delete':
+      await Get.dialog(StyledAlertDialog(
+        titleText: 'Delete project',
+        contentText:
+            // ignore: lines_longer_than_80_chars
+            'Are you sure you want to delete these project?\nNote: this action cannot be undone.',
+        acceptText: 'DELETE',
+        onCancelTap: () async => Get.back(),
+        onAcceptTap: () async {
+          var result = await controller.deleteProject();
+          if (result != null) {
+            // ignore: unawaited_futures
+            Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects();
+            Get.back();
+            Get.back();
+          } else {
+            print('ERROR');
+          }
+        },
+      ));
+      break;
+    default:
   }
 }

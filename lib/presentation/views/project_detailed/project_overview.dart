@@ -8,6 +8,8 @@ import 'package:projects/domain/controllers/projects/detailed_project/detailed_p
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/views/projects_view/projects_cell.dart';
+import 'package:readmore/readmore.dart';
 
 class ProjectOverview extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -39,21 +41,28 @@ class ProjectOverview extends StatelessWidget {
               const SizedBox(height: 20),
               ProjectStatusButton(projectController: projectController),
               const SizedBox(height: 20),
-              Obx(
-                () => projectController.descriptionText.isNotEmpty
-                    ? InfoTile(
-                        icon: AppIcon(
-                            icon: SvgIcons.description,
-                            color: const Color(0xff707070)),
-                        caption: 'Description',
-                        subtitle: projectController.descriptionText.value,
-                        subtitleStyle: TextStyleHelper.subtitle1(
-                            color:
-                                Theme.of(context).customColors().onBackground),
-                      )
-                    : const SizedBox(),
-              ),
-              const SizedBox(height: 20),
+              if (projectController.descriptionText != null &&
+                  projectController.descriptionText.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: InfoTile(
+                    caption: 'Description:',
+                    icon: AppIcon(
+                        icon: SvgIcons.description,
+                        color: const Color(0xff707070)),
+                    subtitleWidget: ReadMoreText(
+                      projectController.descriptionText.value,
+                      trimLines: 3,
+                      colorClickableText: Colors.pink,
+                      style: TextStyleHelper.body1,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: 'Show more',
+                      trimExpandedText: 'Show less',
+                      moreStyle: TextStyleHelper.body2(
+                          color: Theme.of(context).customColors().links),
+                    ),
+                  ),
+                ),
               Obx(() => InfoTile(
                     icon: AppIcon(
                         icon: SvgIcons.user, color: const Color(0xff707070)),
@@ -78,21 +87,6 @@ class ProjectOverview extends StatelessWidget {
                       color: Theme.of(context).customColors().onSurface),
                 ),
               ),
-              // Obx(() => Padding(
-              //       padding: const EdgeInsets.only(
-              //           left: 56, right: 32, top: 42, bottom: 42),
-              //       child: ReadMoreText(
-              //         projectController.projectTitleText.value,
-              //         trimLines: 3,
-              //         colorClickableText: Colors.pink,
-              //         style: TextStyleHelper.body1,
-              //         trimMode: TrimMode.Line,
-              //         trimCollapsedText: 'Show more',
-              //         trimExpandedText: 'Show less',
-              //         moreStyle: TextStyleHelper.body2(
-              //             color: Theme.of(context).customColors().links),
-              //       ),
-              //     )),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
                   icon: AppIcon(
@@ -131,7 +125,10 @@ class ProjectStatusButton extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           OutlinedButton(
-            onPressed: () => {},
+            onPressed: () => {
+              showsStatusesBS(
+                  context: context, itemController: projectController),
+            },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
                 return const Color(0xff81C4FF).withOpacity(0.1);

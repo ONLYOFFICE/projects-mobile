@@ -56,6 +56,7 @@ import 'package:projects/domain/controllers/projects/new_project/groups_data_sou
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -115,6 +116,7 @@ void setupLocator() {
 
   Get.lazyPut(() => TaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
+
   Get.lazyPut(
       () => TasksController(
             Get.find<TaskFilterController>(),
@@ -128,8 +130,8 @@ void setupLocator() {
 
   Get.lazyPut(() => UsersDataSource(), fenix: true);
   Get.lazyPut(() => GroupsDataSource(), fenix: true);
-  // Get.lazyPut(() => ProjectsSortController(), fenix: true);
 
+  Get.lazyPut(() => ProjectStatusesController(), fenix: true);
   Get.lazyPut(() => ProjectTasksController(), fenix: true);
   Get.lazyPut(() => ProjectsFilterController(), fenix: true);
   Get.lazyPut(() => MilestonesDataSource(), fenix: true);
