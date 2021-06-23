@@ -21,22 +21,11 @@ class MilestonesDataSource extends GetxController {
   int _projectId;
 
   MilestonesDataSource() {
-    _sortController.updateSortDelegate = () async {
-      await loadMilestones();
-    };
-
-    _filterController.applyFiltersDelegate = () {
-      hasFilters.value = _filterController.hasFilters;
-      loadMilestones();
-    };
-
-    paginationController.loadDelegate = () async {
-      await _getMilestones();
-    };
-    paginationController.refreshDelegate = () async {
-      await _getMilestones(needToClear: true);
-    };
-
+    _sortController.updateSortDelegate = () async => await loadMilestones();
+    _filterController.applyFiltersDelegate = () async => loadMilestones();
+    paginationController.loadDelegate = () async => await _getMilestones();
+    paginationController.refreshDelegate =
+        () async => await _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 

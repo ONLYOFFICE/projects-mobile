@@ -23,8 +23,7 @@ class ProjectsFilterController extends BaseFilterController {
 
   var _selfId;
 
-  @override
-  bool get hasFilters =>
+  bool get _hasFilters =>
       _projectManagerFilter.isNotEmpty ||
       _teamMemberFilter.isNotEmpty ||
       _otherFilter.isNotEmpty ||
@@ -147,6 +146,7 @@ class ProjectsFilterController extends BaseFilterController {
   @override
   void getSuitableResultCount() async {
     suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
 
     var result = await _api.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
@@ -162,10 +162,19 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    projectManager = {'me': false, 'other': ''}.obs;
-    teamMember = {'me': false, 'other': ''}.obs;
-    other = {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
-    status = {'active': false, 'paused': false, 'closed': false}.obs;
+    projectManager['me'] = false;
+    projectManager['other'] = '';
+
+    teamMember['me'] = false;
+    teamMember['other'] = '';
+
+    other['followed'] = false;
+    other['withTag'] = '';
+    other['withoutTag'] = false;
+
+    status['active'] = false;
+    status['paused'] = false;
+    status['closed'] = false;
 
     suitableResultCount.value = -1;
 
@@ -174,11 +183,12 @@ class ProjectsFilterController extends BaseFilterController {
     _otherFilter = '';
     _statusFilter = '';
 
-    applyFilters();
+    getSuitableResultCount();
   }
 
   @override
   void applyFilters() async {
+    hasFilters.value = _hasFilters;
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 

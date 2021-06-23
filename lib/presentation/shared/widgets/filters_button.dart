@@ -27,7 +27,7 @@ class FiltersButton extends StatelessWidget {
               top: 0,
               right: 0,
               child: Obx(
-                () => controler.hasFilters == true
+                () => controler.filterController.hasFilters == true
                     ? Container(
                         width: 12,
                         height: 12,

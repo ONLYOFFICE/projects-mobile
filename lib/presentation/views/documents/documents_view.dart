@@ -120,11 +120,11 @@ class DocumentsScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       var element = controller.paginationController.data[index];
                       return element is Folder
-                          ? FolderContent(
+                          ? FolderCell(
                               element: element,
                               controller: controller,
                             )
-                          : FileContent(
+                          : FileCell(
                               element: element,
                               index: index,
                               controller: controller,
@@ -275,13 +275,13 @@ class DocsBottom extends StatelessWidget {
   }
 }
 
-class FileContent extends StatelessWidget {
+class FileCell extends StatelessWidget {
   final int index;
 
   final PortalFile element;
   final DocumentsController controller;
 
-  const FileContent({
+  const FileCell({
     Key key,
     @required this.element,
     @required this.index,
@@ -346,11 +346,10 @@ class FileContent extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(element.title.replaceAll(' ', '\u00A0'),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyleHelper.projectTitle),
                 ),
-                // Text(element.title),
                 Text(
                     '${formatedDate(element.updated)} • ${element.contentLength} • ${element.updatedBy.displayName}',
                     style: TextStyleHelper.caption(
@@ -415,8 +414,8 @@ class FileContent extends StatelessWidget {
   }
 }
 
-class FolderContent extends StatelessWidget {
-  const FolderContent({
+class FolderCell extends StatelessWidget {
+  const FolderCell({
     Key key,
     @required this.element,
     @required this.controller,
@@ -468,11 +467,10 @@ class FolderContent extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(element.title.replaceAll(' ', '\u00A0'),
-                        maxLines: 1,
+                        maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.projectTitle),
                   ),
-                  // Text(element.title),
                   Text(
                       '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(

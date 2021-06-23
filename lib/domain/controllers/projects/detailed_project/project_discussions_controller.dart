@@ -19,17 +19,12 @@ class ProjectDiscussionsController extends GetxController {
   RxBool loaded = false.obs;
 
   ProjectDiscussionsController(this.projectId) {
-    _sortController.updateSortDelegate = () async {
-      await loadProjectDiscussions();
-    };
+    _sortController.updateSortDelegate =
+        () async => await loadProjectDiscussions();
 
-    paginationController.loadDelegate = () async {
-      await _getDiscussions();
-    };
-    paginationController.refreshDelegate = () async {
-      await _getDiscussions(needToClear: true);
-    };
-
+    paginationController.loadDelegate = () async => await _getDiscussions();
+    paginationController.refreshDelegate =
+        () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 

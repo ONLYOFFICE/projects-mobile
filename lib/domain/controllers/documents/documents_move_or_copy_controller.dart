@@ -59,11 +59,7 @@ class DocumentsMoveOrCopyController extends GetxController {
     _paginationController = paginationController;
 
     _filterController = filterController;
-
-    _filterController.applyFiltersDelegate = () async {
-      hasFilters.value = _filterController.hasFilters;
-      await refreshContent();
-    };
+    _filterController.applyFiltersDelegate = () async => await refreshContent();
 
     sortController.updateSortDelegate = () async => await refreshContent();
     paginationController.loadDelegate = () async => await _getDocuments();

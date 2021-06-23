@@ -18,18 +18,10 @@ class DiscussionsController extends BaseController {
 
   DiscussionsController(PaginationController paginationController) {
     _paginationController = paginationController;
-
-    _sortController.updateSortDelegate = () async {
-      await loadDiscussions();
-    };
-
-    paginationController.loadDelegate = () async {
-      await _getDiscussions();
-    };
-    paginationController.refreshDelegate = () async {
-      await _getDiscussions(needToClear: true);
-    };
-
+    _sortController.updateSortDelegate = () async => await loadDiscussions();
+    paginationController.loadDelegate = () async => await _getDiscussions();
+    paginationController.refreshDelegate =
+        () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 

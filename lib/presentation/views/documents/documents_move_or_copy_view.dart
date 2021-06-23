@@ -150,7 +150,7 @@ class _DocumentsScreen extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       var element = controller.paginationController.data[index];
-                      return _MoveFolderContent(
+                      return _MoveFolderCell(
                         element: element,
                         controller: controller,
                       );
@@ -230,8 +230,8 @@ class _Title extends StatelessWidget {
   }
 }
 
-class _MoveFolderContent extends StatelessWidget {
-  const _MoveFolderContent({
+class _MoveFolderCell extends StatelessWidget {
+  const _MoveFolderCell({
     Key key,
     @required this.element,
     @required this.controller,
@@ -285,7 +285,12 @@ class _MoveFolderContent extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(element.title),
+                  Flexible(
+                    child: Text(element.title.replaceAll(' ', '\u00A0'),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyleHelper.projectTitle),
+                  ),
                   Text(
                       '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(
@@ -335,7 +340,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       var element = controller.paginationController.data[index];
                       return element is Folder
-                          ? _MoveFolderContent(
+                          ? _MoveFolderCell(
                               element: element,
                               controller: controller,
                             )

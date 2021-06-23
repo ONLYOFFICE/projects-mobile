@@ -28,25 +28,21 @@ class ProjectsController extends BaseController {
   ProjectsSortController get sortController => _sortController;
 
   ProjectsFilterController _filterController;
+  ProjectsFilterController get filterController => _filterController;
 
-  ProjectsController(ProjectsFilterController filterController,
-      PaginationController paginationController) {
+  ProjectsController(
+    ProjectsFilterController filterController,
+    PaginationController paginationController,
+  ) {
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;
-    _filterController.applyFiltersDelegate = () async {
-      hasFilters.value = _filterController.hasFilters;
-      await _getProjects(needToClear: true);
-    };
+    _filterController.applyFiltersDelegate =
+        () async => await _getProjects(needToClear: true);
 
-    paginationController.loadDelegate = () async {
-      await _getProjects();
-    };
-    {
-      paginationController.refreshDelegate = () async {
-        await _getProjects(needToClear: true);
-      };
-    }
+    paginationController.loadDelegate = () async => await _getProjects();
+    paginationController.refreshDelegate =
+        () async => await _getProjects(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 
