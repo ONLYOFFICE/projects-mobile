@@ -77,6 +77,19 @@ class CommentsService {
     }
   }
 
+  Future addMessageComment({int messageId, String content}) async {
+    var result =
+        await _api.addMessageComment(messageId: messageId, content: content);
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      ErrorDialog.show(result.error);
+      return null;
+    }
+  }
+
   Future deleteComment({String commentId}) async {
     var task = await _api.deleteComment(commentId: commentId);
     var success = task.response != null;

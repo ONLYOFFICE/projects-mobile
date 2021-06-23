@@ -89,6 +89,31 @@ class CommentsApi {
     return result;
   }
 
+  Future<ApiDTO<PortalComment>> addMessageComment({
+    int messageId,
+    String content,
+  }) async {
+    var url = await coreApi.addMessageCommentUrl(messageId: messageId);
+
+    var result = ApiDTO<PortalComment>();
+
+    try {
+      var body = {'content': content};
+      var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = PortalComment.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
   Future<ApiDTO<PortalComment>> addReplyComment({
     int taskId,
     String content,
