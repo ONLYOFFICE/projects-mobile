@@ -84,12 +84,15 @@ class ProjectsView extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            if (controller.needToShowDevider.value == true)
+              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
               Expanded(
                 child: PaginationListView(
                   paginationController: controller.paginationController,
                   child: ListView.builder(
+                    controller: controller.scrollController,
                     itemBuilder: (c, i) => ProjectCell(
                         item: controller.paginationController.data[i]),
                     itemCount: controller.paginationController.data.length,

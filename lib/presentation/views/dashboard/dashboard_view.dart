@@ -64,11 +64,7 @@ class DashboardView extends StatelessWidget {
           Obx(
             () => dashboardController.needToShowDevider.value == true
                 ? const Divider(
-                    height: 1,
-                    thickness: 1,
-                    indent: 0,
-                    endIndent: 0,
-                  )
+                    height: 1, thickness: 1, indent: 0, endIndent: 0)
                 : const SizedBox(),
           ),
           Expanded(

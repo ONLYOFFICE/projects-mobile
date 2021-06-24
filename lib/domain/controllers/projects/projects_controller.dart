@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/internal/locator.dart';
@@ -62,6 +63,9 @@ class ProjectsController extends BaseController {
   ProjectsFilterController _filterController;
   ProjectsFilterController get filterController => _filterController;
 
+  var scrollController = ScrollController();
+  var needToShowDevider = false.obs;
+
   ProjectsController(
     ProjectsFilterController filterController,
     PaginationController paginationController,
@@ -76,6 +80,9 @@ class ProjectsController extends BaseController {
     paginationController.refreshDelegate =
         () async => await _getProjects(needToClear: true);
     paginationController.pullDownEnabled = true;
+
+    scrollController.addListener(
+        () => needToShowDevider.value = scrollController.offset > 2);
   }
 
   @override
