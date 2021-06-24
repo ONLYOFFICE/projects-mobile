@@ -38,7 +38,7 @@ abstract class BaseController extends GetxController {
   var hasFilters = false.obs;
 
   var showAll = false.obs;
-  var expandedCardView = false.obs;
+  var expandedCardView = true.obs;
 
   void showSearch() {}
 }

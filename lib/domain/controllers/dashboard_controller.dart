@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
@@ -38,12 +39,16 @@ import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
 class DashboardController extends GetxController {
+  var screenName = 'Dashboard'.obs;
   TasksController _myTaskController;
   TasksController _upcomingTaskscontroller;
 
   ProjectsController _myProjectsController;
   ProjectsController _folowedProjectsController;
   ProjectsController _activeProjectsController;
+  var scrollController = ScrollController();
+
+  var needToShowDelimiter = false.obs;
 
   DashboardController() {
     setupMyTask();
@@ -52,6 +57,8 @@ class DashboardController extends GetxController {
     setupMyProjects();
     setupMyFolowedProjects();
     setupActiveProjects();
+
+    scrollController.addListener(showDelimiter);
   }
 
   TasksController get myTaskController => _myTaskController;
@@ -146,5 +153,9 @@ class DashboardController extends GetxController {
     _filterController
         .setupPreset('active')
         .then((value) => _activeProjectsController.loadProjects());
+  }
+
+  void showDelimiter() {
+    needToShowDelimiter.value = scrollController.offset > 2;
   }
 }

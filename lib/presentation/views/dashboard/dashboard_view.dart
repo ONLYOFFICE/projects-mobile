@@ -50,40 +50,59 @@ class DashboardView extends StatelessWidget {
     var dashboardController = Get.put(DashboardController());
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).customColors().bgDescription,
       appBar: StyledAppBar(
-        bottom: const DashboardHeader(),
-        titleHeight: 0,
-        bottomHeight: 100,
+        bgColor: Theme.of(context).customColors().bgDescription,
+        title: Title(controller: dashboardController),
+        // titleHeight: 50,
+        elevation: 0,
         showBackButton: false,
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          DashboardCardView(
-            title: 'My Tasks',
-            overline: 'Tasks',
-            controller: dashboardController.myTaskController,
+          Obx(
+            () => dashboardController.needToShowDelimiter.value == true
+                ? const Divider(
+                    height: 1,
+                    thickness: 1,
+                    indent: 0,
+                    endIndent: 0,
+                  )
+                : const SizedBox(),
           ),
-          DashboardCardView(
-            title: 'Upcoming',
-            overline: 'Tasks',
-            controller: dashboardController.upcomingTaskscontroller,
-          ),
-          DashboardCardView(
-            title: 'My Projects',
-            overline: 'Projects',
-            controller: dashboardController.myProjectsController,
-          ),
-          DashboardCardView(
-            title: 'Projects I Folow',
-            overline: 'Projects',
-            controller: dashboardController.folowedProjectsController,
-          ),
-          DashboardCardView(
-            title: 'Active Projects',
-            overline: 'Projects',
-            controller: dashboardController.activeProjectsController,
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+              controller: dashboardController.scrollController,
+              children: <Widget>[
+                DashboardCardView(
+                  title: 'My Tasks',
+                  overline: 'Tasks',
+                  controller: dashboardController.myTaskController,
+                ),
+                DashboardCardView(
+                  title: 'Upcoming',
+                  overline: 'Tasks',
+                  controller: dashboardController.upcomingTaskscontroller,
+                ),
+                DashboardCardView(
+                  title: 'My Projects',
+                  overline: 'Projects',
+                  controller: dashboardController.myProjectsController,
+                ),
+                DashboardCardView(
+                  title: 'Projects I Folow',
+                  overline: 'Projects',
+                  controller: dashboardController.folowedProjectsController,
+                ),
+                DashboardCardView(
+                  title: 'Active Projects',
+                  overline: 'Projects',
+                  controller: dashboardController.activeProjectsController,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -109,7 +128,7 @@ class DashboardCardView extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       width: double.maxFinite,
       child: Card(
-        elevation: 5,
+        elevation: 1,
         child: Obx(
           () => Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -121,7 +140,7 @@ class DashboardCardView extends StatelessWidget {
                 },
                 child: Container(
                   height: 60,
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,6 +182,7 @@ class DashboardCardView extends StatelessWidget {
                                 () => Text(
                                   controller.paginationController.total.value
                                       .toString(),
+                                  textAlign: TextAlign.center,
                                   style: TextStyleHelper.subtitle2(),
                                 ),
                               ),
@@ -299,36 +319,34 @@ class DashboardCardView extends StatelessWidget {
   }
 }
 
-class DashboardHeader extends StatelessWidget {
-  const DashboardHeader({
-    Key key,
-  }) : super(key: key);
-
+class Title extends StatelessWidget {
+  const Title({Key key, @required this.controller}) : super(key: key);
+  final controller;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 38),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                'Dashboard',
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: Obx(
+              () => Text(
+                controller.screenName.value,
                 style: TextStyleHelper.headerStyle,
               ),
+            ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              const SizedBox(width: 24),
             ],
           ),
-        ),
-        const Divider(
-          height: 1,
-          thickness: 1,
-          indent: 0,
-          endIndent: 0,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
