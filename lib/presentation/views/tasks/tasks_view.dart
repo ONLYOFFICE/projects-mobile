@@ -41,6 +41,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -80,7 +81,9 @@ class TasksView extends StatelessWidget {
           ),
           IconButton(
             icon: FiltersButton(controler: controller),
-            onPressed: () async => Get.toNamed('TasksFilterScreen'),
+            onPressed: () async => Get.toNamed('TasksFilterScreen',
+                preventDuplicates: false,
+                arguments: {'filterController': controller.filterController}),
           ),
           const SizedBox(width: 4),
         ],
@@ -91,7 +94,28 @@ class TasksView extends StatelessWidget {
           if (controller.needToShowDevider.value == true)
             const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
           if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-          if (controller.loaded.isTrue)
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isEmpty &&
+              !controller.filterController.hasFilters.value)
+            Expanded(
+              child: Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.task_not_created),
+                    text: 'No tasks had been created yet'),
+              ),
+            ),
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isEmpty &&
+              controller.filterController.hasFilters.value)
+            Expanded(
+              child: Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.not_found),
+                    text: 'There are no tasks matching these filters'),
+              ),
+            ),
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isNotEmpty)
             Expanded(
               child: PaginationListView(
                 paginationController: controller.paginationController,
@@ -117,7 +141,6 @@ class TasksHeader extends StatelessWidget {
   }) : super(key: key);
 
   final controller = Get.find<TasksController>();
-  final sortController = Get.find<TasksSortController>();
 
   @override
   Widget build(BuildContext context) {
@@ -125,12 +148,23 @@ class TasksHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(sortParameter: 'deadline', sortController: sortController),
-        SortTile(sortParameter: 'priority', sortController: sortController),
-        SortTile(sortParameter: 'create_on', sortController: sortController),
-        SortTile(sortParameter: 'start_date', sortController: sortController),
-        SortTile(sortParameter: 'title', sortController: sortController),
-        SortTile(sortParameter: 'sort_order', sortController: sortController),
+        SortTile(
+            sortParameter: 'deadline',
+            sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'priority',
+            sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'create_on',
+            sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'start_date',
+            sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'title', sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'sort_order',
+            sortController: controller.sortController),
         const SizedBox(height: 20)
       ],
     );
@@ -150,13 +184,14 @@ class TasksHeader extends StatelessWidget {
                   children: [
                     Obx(
                       () => Text(
-                        sortController.currentSortTitle.value,
+                        controller.sortController.currentSortTitle.value,
                         style: TextStyleHelper.projectsSorting,
                       ),
                     ),
                     const SizedBox(width: 8),
                     Obx(
-                      () => (sortController.currentSortOrder == 'ascending')
+                      () => (controller.sortController.currentSortOrder ==
+                              'ascending')
                           ? AppIcon(
                               icon: SvgIcons.sorting_4_ascend,
                               width: 20,

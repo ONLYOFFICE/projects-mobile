@@ -33,11 +33,11 @@
 part of '../tasks_filter.dart';
 
 class _Creator extends StatelessWidget {
-  const _Creator({Key key}) : super(key: key);
+  final TaskFilterController filterController;
+  const _Creator({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<TaskFilterController>();
     return Obx(
       () => FiltersRow(
         title: 'Creator',

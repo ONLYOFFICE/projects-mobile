@@ -94,6 +94,7 @@ flutter:
     - lib/assets/images/icons/project_statuses/
     - lib/assets/images/icons/task_detailed/
     - lib/assets/images/icons/folders/
+    - lib/assets/images/icons/empty_state/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

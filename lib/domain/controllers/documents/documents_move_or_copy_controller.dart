@@ -49,6 +49,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   var hasFilters = false.obs;
   var loaded = false.obs;
   var nothingFound = false.obs;
+  var searchMode = false.obs;
 
   var searchInputController = TextEditingController();
 
@@ -82,6 +83,9 @@ class DocumentsMoveOrCopyController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
+  var scrollController = ScrollController();
+  var needToShowDevider = false.obs;
+
   DocumentsMoveOrCopyController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -98,6 +102,9 @@ class DocumentsMoveOrCopyController extends GetxController {
     paginationController.refreshDelegate = () async => await refreshContent();
 
     paginationController.pullDownEnabled = true;
+
+    scrollController.addListener(
+        () => needToShowDevider.value = scrollController.offset > 2);
   }
 
   Future<void> refreshContent() async {
