@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -24,6 +25,9 @@ class TasksController extends BaseController {
   // when snackbar appears
   RxBool fabIsRaised = false.obs;
 
+  var scrollController = ScrollController();
+  var needToShowDevider = false.obs;
+
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
     taskStatusesController.getStatuses();
@@ -36,6 +40,9 @@ class TasksController extends BaseController {
     paginationController.refreshDelegate =
         () async => await _getTasks(needToClear: true);
     paginationController.pullDownEnabled = true;
+
+    scrollController.addListener(
+        () => needToShowDevider.value = scrollController.offset > 2);
   }
 
   @override

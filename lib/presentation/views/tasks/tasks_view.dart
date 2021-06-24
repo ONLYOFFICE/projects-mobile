@@ -54,29 +54,26 @@ class TasksView extends StatelessWidget {
         ],
         bottom: TasksHeader(),
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Obx(
-              () {
-                if (controller.loaded.isFalse)
-                  return const ListLoadingSkeleton();
-                else {
-                  return PaginationListView(
-                    paginationController: controller.paginationController,
-                    child: ListView.builder(
-                      itemCount: controller.paginationController.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return TaskCell(
-                            task: controller.paginationController.data[index]);
-                      },
-                    ),
-                  );
-                }
-              },
+      body: Obx(
+        () => Column(children: [
+          if (controller.needToShowDevider.value == true)
+            const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
+          if (controller.loaded.isFalse) const ListLoadingSkeleton(),
+          if (controller.loaded.isTrue)
+            Expanded(
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: ListView.builder(
+                  controller: controller.scrollController,
+                  itemCount: controller.paginationController.data.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return TaskCell(
+                        task: controller.paginationController.data[index]);
+                  },
+                ),
+              ),
             ),
-          ),
-        ],
+        ]),
       ),
     );
   }
