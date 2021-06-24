@@ -138,6 +138,13 @@ class DocumentsScreen extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            if (controller.needToShowDevider.value == true)
+              const Divider(
+                height: 1,
+                thickness: 1,
+                indent: 0,
+                endIndent: 0,
+              ),
             if (controller.nothingFound.isTrue) const NothingFound(),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)
@@ -145,6 +152,7 @@ class DocumentsScreen extends StatelessWidget {
                 child: PaginationListView(
                   paginationController: controller.paginationController,
                   child: ListView.separated(
+                    controller: controller.scrollController,
                     itemCount: controller.paginationController.data.length,
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 10);

@@ -55,7 +55,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
     this.bottomHeight = 44,
     this.centerTitle,
-    this.elevation = 1,
+    this.elevation = 0,
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
