@@ -30,7 +30,7 @@ class DashboardView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Obx(
-            () => dashboardController.needToShowDelimiter.value == true
+            () => dashboardController.needToShowDevider.value == true
                 ? const Divider(
                     height: 1,
                     thickness: 1,

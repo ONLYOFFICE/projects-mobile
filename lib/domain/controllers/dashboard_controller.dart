@@ -16,7 +16,7 @@ class DashboardController extends GetxController {
   ProjectsController _activeProjectsController;
   var scrollController = ScrollController();
 
-  var needToShowDelimiter = false.obs;
+  var needToShowDevider = false.obs;
 
   DashboardController() {
     setupMyTask();
@@ -26,7 +26,7 @@ class DashboardController extends GetxController {
     setupMyFolowedProjects();
     setupActiveProjects();
 
-    scrollController.addListener(showDelimiter);
+    scrollController.addListener(showDevider);
   }
 
   TasksController get myTaskController => _myTaskController;
@@ -123,7 +123,7 @@ class DashboardController extends GetxController {
         .then((value) => _activeProjectsController.loadProjects());
   }
 
-  void showDelimiter() {
-    needToShowDelimiter.value = scrollController.offset > 2;
+  void showDevider() {
+    needToShowDevider.value = scrollController.offset > 2;
   }
 }
