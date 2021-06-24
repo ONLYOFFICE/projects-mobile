@@ -69,11 +69,8 @@ class DocumentsController extends GetxController {
 
     paginationController.pullDownEnabled = true;
 
-    scrollController.addListener(showDevider);
-  }
-
-  void showDevider() {
-    needToShowDevider.value = scrollController.offset > 2;
+    scrollController.addListener(
+        () => needToShowDevider.value = scrollController.offset > 2);
   }
 
   Future<void> refreshContent() async {

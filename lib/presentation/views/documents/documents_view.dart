@@ -107,12 +107,7 @@ class DocumentsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             if (controller.needToShowDevider.value == true)
-              const Divider(
-                height: 1,
-                thickness: 1,
-                indent: 0,
-                endIndent: 0,
-              ),
+              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
             if (controller.nothingFound.isTrue) const NothingFound(),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue)

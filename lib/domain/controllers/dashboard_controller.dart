@@ -26,7 +26,8 @@ class DashboardController extends GetxController {
     setupMyFolowedProjects();
     setupActiveProjects();
 
-    scrollController.addListener(showDevider);
+    scrollController.addListener(
+        () => needToShowDevider.value = scrollController.offset > 2);
   }
 
   TasksController get myTaskController => _myTaskController;
@@ -121,9 +122,5 @@ class DashboardController extends GetxController {
     _filterController
         .setupPreset('active')
         .then((value) => _activeProjectsController.loadProjects());
-  }
-
-  void showDevider() {
-    needToShowDevider.value = scrollController.offset > 2;
   }
 }
