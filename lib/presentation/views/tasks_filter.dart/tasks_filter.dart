@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/base_filter_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -25,7 +26,8 @@ class TasksFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<TaskFilterController>();
+    final BaseFilterController filterController =
+        Get.arguments['filterController'];
 
     return Scaffold(
       appBar: StyledAppBar(
@@ -48,11 +50,11 @@ class TasksFilterScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12.5),
-                  const _Responsible(),
-                  const _Creator(),
-                  const _Project(),
-                  const _Milestone(),
-                  const _DueDate(),
+                  _Responsible(filterController: filterController),
+                  _Creator(filterController: filterController),
+                  _Project(filterController: filterController),
+                  _Milestone(filterController: filterController),
+                  _DueDate(filterController: filterController),
                   const SizedBox(height: 60),
                 ],
               ),
