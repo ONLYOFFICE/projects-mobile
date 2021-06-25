@@ -83,34 +83,29 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [AppBarMenuButton(controller: controller)],
-          bottom: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SizedBox(
-              height: 40,
-              child: TabBar(
-                  isScrollable: true,
-                  controller: _tabController,
-                  indicatorColor: Theme.of(context).customColors().primary,
-                  labelColor: Theme.of(context).customColors().onSurface,
-                  unselectedLabelColor: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6),
-                  labelStyle: TextStyleHelper.subtitle2(),
-                  tabs: [
-                    CustomTab(
-                        title: 'Comments',
-                        currentTab: _activeIndex == 1,
-                        count: controller.discussion.value.commentsCount),
-                    CustomTab(
-                        title: 'Subscribers',
-                        currentTab: _activeIndex == 2,
-                        count:
-                            controller?.discussion?.value?.subscribers?.length),
-                    const Tab(text: 'Documents'),
-                    const Tab(text: 'Overview'),
-                  ]),
-            ),
+          bottom: SizedBox(
+            height: 40,
+            child: TabBar(
+                isScrollable: true,
+                controller: _tabController,
+                indicatorColor: Theme.of(context).customColors().primary,
+                labelColor: Theme.of(context).customColors().onSurface,
+                unselectedLabelColor:
+                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+                labelStyle: TextStyleHelper.subtitle2(),
+                tabs: [
+                  CustomTab(
+                      title: 'Comments',
+                      currentTab: _activeIndex == 1,
+                      count: controller.discussion.value.commentsCount),
+                  CustomTab(
+                      title: 'Subscribers',
+                      currentTab: _activeIndex == 2,
+                      count:
+                          controller?.discussion?.value?.subscribers?.length),
+                  const Tab(text: 'Documents'),
+                  const Tab(text: 'Overview'),
+                ]),
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
