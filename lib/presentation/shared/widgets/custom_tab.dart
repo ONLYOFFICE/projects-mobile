@@ -39,6 +39,7 @@ class CustomTab extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 6, right: 6),
                 child: Text(
                   count.toString(),
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14,
                       color: Theme.of(context).customColors().surface,

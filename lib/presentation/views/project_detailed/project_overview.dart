@@ -25,7 +25,6 @@ class ProjectOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     var projectController = Get.find<ProjectDetailsController>();
 
-    projectController.setup();
     return Obx(
       () {
         if (projectController.loaded.isTrue) {
