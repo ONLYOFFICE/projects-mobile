@@ -22,23 +22,29 @@ class CustomTab extends StatelessWidget {
           if (count != null && count >= 0) const SizedBox(width: 8),
           if (count != null && count >= 0)
             Container(
-              height: 20,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
-              constraints: const BoxConstraints(minWidth: 20),
+              height: 21,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: currentTab
-                      ? Theme.of(context).customColors().primary
-                      : Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.3)),
-              child: Center(
-                  child: Text(count.toString(),
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).customColors().surface,
-                          letterSpacing: 0.1))),
+                borderRadius: BorderRadius.circular(12),
+                color:
+                    Theme.of(context).customColors().onSurface.withOpacity(0.3),
+                // TODO change active tabs color
+                // color: currentTab
+                //     ? Theme.of(context).customColors().primary
+                //     : Theme.of(context)
+                //         .customColors()
+                //         .onSurface
+                //         .withOpacity(0.3),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 6, right: 6),
+                child: Text(
+                  count.toString(),
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).customColors().surface,
+                      letterSpacing: 0.1),
+                ),
+              ),
             ),
         ],
       ),

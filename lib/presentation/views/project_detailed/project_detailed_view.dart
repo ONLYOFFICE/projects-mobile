@@ -87,45 +87,41 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           //         arguments: {'projectDetailed': projectDetailed})),
           _ProjectContextMenu(controller: projectController)
         ],
-        bottom: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            height: 40,
-            child: TabBar(
-                isScrollable: true,
-                controller: _tabController,
-                indicatorColor: Theme.of(context).customColors().primary,
-                labelColor: Theme.of(context).customColors().onSurface,
-                unselectedLabelColor:
-                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
-                labelStyle: TextStyleHelper.subtitle2(),
-                tabs: [
-                  const Tab(text: 'Overview'),
-                  CustomTab(
-                      title: 'Tasks',
-                      currentTab: _activeIndex == 1,
-                      count: projectController.projectDetailed.taskCountTotal),
-                  CustomTab(
-                      title: 'Milestones',
-                      currentTab: _activeIndex == 2,
-                      count: projectController.projectDetailed.milestoneCount),
-                  CustomTab(
-                      title: 'Discussions',
-                      currentTab: _activeIndex == 3,
-                      count: projectController.projectDetailed.discussionCount),
-                  Obx(
-                    () => CustomTab(
-                        title: 'Documents',
-                        currentTab: _activeIndex == 4,
-                        count: projectController.docsCount.value),
-                  ),
-                  CustomTab(
-                      title: 'Team',
-                      currentTab: _activeIndex == 5,
-                      count:
-                          projectController.projectDetailed.participantCount),
-                ]),
-          ),
+        bottom: SizedBox(
+          height: 40,
+          child: TabBar(
+              isScrollable: true,
+              controller: _tabController,
+              indicatorColor: Theme.of(context).customColors().primary,
+              labelColor: Theme.of(context).customColors().onSurface,
+              unselectedLabelColor:
+                  Theme.of(context).customColors().onSurface.withOpacity(0.6),
+              labelStyle: TextStyleHelper.subtitle2(),
+              tabs: [
+                const Tab(text: 'Overview'),
+                CustomTab(
+                    title: 'Tasks',
+                    currentTab: _activeIndex == 1,
+                    count: projectController.projectDetailed.taskCountTotal),
+                CustomTab(
+                    title: 'Milestones',
+                    currentTab: _activeIndex == 2,
+                    count: projectController.projectDetailed.milestoneCount),
+                CustomTab(
+                    title: 'Discussions',
+                    currentTab: _activeIndex == 3,
+                    count: projectController.projectDetailed.discussionCount),
+                Obx(
+                  () => CustomTab(
+                      title: 'Documents',
+                      currentTab: _activeIndex == 4,
+                      count: projectController.docsCount.value),
+                ),
+                CustomTab(
+                    title: 'Team',
+                    currentTab: _activeIndex == 5,
+                    count: projectController.projectDetailed.participantCount),
+              ]),
         ),
       ),
       body: TabBarView(controller: _tabController, children: [

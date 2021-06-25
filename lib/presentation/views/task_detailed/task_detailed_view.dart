@@ -61,36 +61,31 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                     arguments: {'task': controller.task.value})),
             _AppBarMenu(controller: controller)
           ],
-          bottom: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SizedBox(
-              height: 40,
-              child: TabBar(
-                  isScrollable: true,
-                  controller: _tabController,
-                  indicatorColor: Theme.of(context).customColors().primary,
-                  labelColor: Theme.of(context).customColors().onSurface,
-                  unselectedLabelColor: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6),
-                  labelStyle: TextStyleHelper.subtitle2(),
-                  tabs: [
-                    const Tab(text: 'Overview'),
-                    CustomTab(
-                        title: 'Subtasks',
-                        currentTab: _activeIndex == 1,
-                        count: controller.task.value?.subtasks?.length),
-                    CustomTab(
-                        title: 'Documents',
-                        currentTab: _activeIndex == 2,
-                        count: controller.task.value?.files?.length),
-                    CustomTab(
-                        title: 'Comments',
-                        currentTab: _activeIndex == 3,
-                        count: controller.task.value?.comments?.length)
-                  ]),
-            ),
+          bottom: SizedBox(
+            height: 40,
+            child: TabBar(
+                isScrollable: true,
+                controller: _tabController,
+                indicatorColor: Theme.of(context).customColors().primary,
+                labelColor: Theme.of(context).customColors().onSurface,
+                unselectedLabelColor:
+                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+                labelStyle: TextStyleHelper.subtitle2(),
+                tabs: [
+                  const Tab(text: 'Overview'),
+                  CustomTab(
+                      title: 'Subtasks',
+                      currentTab: _activeIndex == 1,
+                      count: controller.task.value?.subtasks?.length),
+                  CustomTab(
+                      title: 'Documents',
+                      currentTab: _activeIndex == 2,
+                      count: controller.task.value?.files?.length),
+                  CustomTab(
+                      title: 'Comments',
+                      currentTab: _activeIndex == 3,
+                      count: controller.task.value?.comments?.length)
+                ]),
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
