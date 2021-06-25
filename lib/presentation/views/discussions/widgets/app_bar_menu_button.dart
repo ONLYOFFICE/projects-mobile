@@ -69,8 +69,8 @@ class AppBarMenuButton extends StatelessWidget {
 
 void _onSelected(DiscussionItemController controller, String value) async {
   var actions = {
-    'Subscribe': controller.subscribeToMessageAction(),
-    'Delete': controller.deleteMessage(),
+    'Subscribe': controller.subscribeToMessageAction,
+    'Delete': controller.deleteMessage,
   };
-  await actions[value];
+  await actions[value]();
 }
