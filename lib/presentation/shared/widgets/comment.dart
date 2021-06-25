@@ -8,62 +8,72 @@ import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
 class Comment extends StatelessWidget {
-  final PortalComment comment;
   final int taskId;
+  final int discussionId;
+  final PortalComment comment;
   const Comment({
     Key key,
     @required this.comment,
-    @required this.taskId,
-  }) : super(key: key);
+    this.taskId,
+    this.discussionId,
+  })  : assert(discussionId == null || taskId == null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(
-        CommentItemController(taskId: taskId, comment: comment.obs),
-        tag: comment.commentId);
+    if (!comment.inactive) {
+      var controller = Get.put(
+          CommentItemController(taskId: taskId, comment: comment.obs),
+          tag: comment.commentId);
 
-    return Container(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 4),
-            child: _CommentAuthor(comment: comment, controller: controller),
-          ),
-          const SizedBox(height: 28),
-          Obx(
-            () {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4),
-                    child: HTML.toRichText(
-                      context,
-                      controller.comment.value.commentBody,
-                      defaultTextStyle: TextStyleHelper.body2(),
-                    ),
-                  ),
-                  if (comment.isResponsePermissions) const SizedBox(height: 5),
-                  if (comment.isResponsePermissions)
-                    GestureDetector(
-                      onTap: () => Get.toNamed('ReplyCommentView', arguments: {
-                        'comment': controller.comment.value,
-                        'taskId': taskId,
-                      }),
-                      child: Text(
-                        'Ответить',
-                        style: TextStyleHelper.caption(
-                            color: Theme.of(context).customColors().primary),
+      return Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: _CommentAuthor(comment: comment, controller: controller),
+            ),
+            const SizedBox(height: 28),
+            Obx(
+              () {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: HTML.toRichText(
+                        context,
+                        controller.comment.value.commentBody,
+                        defaultTextStyle: TextStyleHelper.body2(),
                       ),
                     ),
-                ],
-              );
-            },
-          ),
-        ],
-      ),
-    );
+                    if (comment.isResponsePermissions)
+                      const SizedBox(height: 5),
+                    if (comment.isResponsePermissions)
+                      GestureDetector(
+                        onTap: () {
+                          return Get.toNamed('ReplyCommentView', arguments: {
+                            'comment': controller.comment.value,
+                            'discussionId': discussionId,
+                            'taskId': taskId,
+                          });
+                        },
+                        child: Text(
+                          'Ответить',
+                          style: TextStyleHelper.caption(
+                              color: Theme.of(context).customColors().primary),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+    return const _DeletedComment();
   }
 }
 
@@ -81,7 +91,6 @@ class _CommentAuthor extends StatelessWidget {
     return Container(
       child: Row(
         children: [
-          const SizedBox(width: 4),
           SizedBox(
             width: 40,
             height: 40,
@@ -135,6 +144,21 @@ class _CommentAuthor extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _DeletedComment extends StatelessWidget {
+  const _DeletedComment({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        child: Text('Comment deleted', style: TextStyleHelper.body2()),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
+import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
+import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_task_comment_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -13,11 +15,25 @@ class ReplyCommentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int taskId = Get.arguments['taskId'];
     PortalComment comment = Get.arguments['comment'];
+    NewCommentController controller;
 
-    var controller = Get.put(
-        NewTaskCommentController(parentId: comment.commentId, idFrom: taskId));
+    if (Get.arguments['taskId'] != null) {
+      controller = Get.put(
+        NewTaskCommentController(
+          idFrom: Get.arguments['taskId'],
+          parentId: comment.commentId,
+        ),
+      );
+    }
+    if (Get.arguments['discussionId'] != null) {
+      controller = Get.put(
+        NewDiscussionCommentController(
+          idFrom: Get.arguments['discussionId'],
+          parentId: comment.commentId,
+        ),
+      );
+    }
 
     return Scaffold(
       appBar: StyledAppBar(

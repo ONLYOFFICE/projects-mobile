@@ -76,6 +76,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.0.0
   very_good_analysis: ^2.0.3
+  flutter_native_splash: ^1.2.0
   # pedantic: ^1.11.0
 # following page: https://dart.dev/tools/pub/pubspec
 

@@ -98,6 +98,7 @@ class DiscussionOverview extends StatelessWidget {
                     caption: 'Created by:',
                     subtitle: discussion.createdBy.displayName,
                   ),
+                const SizedBox(height: 100),
               ],
             ),
           );
