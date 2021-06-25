@@ -56,7 +56,7 @@ class TaskDetailedView extends StatefulWidget {
 class _TaskDetailedViewState extends State<TaskDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int _activeIndex = 0;
+  var _activeIndex = 0.obs;
   TaskItemController controller;
 
   @override
@@ -77,11 +77,9 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   @override
   Widget build(BuildContext context) {
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        setState(() {
-          _activeIndex = _tabController.index;
-        });
-      }
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
     });
     return Obx(
       () => Scaffold(
@@ -93,36 +91,31 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                     arguments: {'task': controller.task.value})),
             _AppBarMenu(controller: controller)
           ],
-          bottom: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SizedBox(
-              height: 40,
-              child: TabBar(
-                  isScrollable: true,
-                  controller: _tabController,
-                  indicatorColor: Theme.of(context).customColors().primary,
-                  labelColor: Theme.of(context).customColors().onSurface,
-                  unselectedLabelColor: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6),
-                  labelStyle: TextStyleHelper.subtitle2(),
-                  tabs: [
-                    const Tab(text: 'Overview'),
-                    CustomTab(
-                        title: 'Subtasks',
-                        currentTab: _activeIndex == 1,
-                        count: controller.task.value?.subtasks?.length),
-                    CustomTab(
-                        title: 'Documents',
-                        currentTab: _activeIndex == 2,
-                        count: controller.task.value?.files?.length),
-                    CustomTab(
-                        title: 'Comments',
-                        currentTab: _activeIndex == 3,
-                        count: controller.task.value?.comments?.length)
-                  ]),
-            ),
+          bottom: SizedBox(
+            height: 40,
+            child: TabBar(
+                isScrollable: true,
+                controller: _tabController,
+                indicatorColor: Theme.of(context).customColors().primary,
+                labelColor: Theme.of(context).customColors().onSurface,
+                unselectedLabelColor:
+                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+                labelStyle: TextStyleHelper.subtitle2(),
+                tabs: [
+                  const Tab(text: 'Overview'),
+                  CustomTab(
+                      title: 'Subtasks',
+                      currentTab: _activeIndex.value == 1,
+                      count: controller.task.value?.subtasks?.length),
+                  CustomTab(
+                      title: 'Documents',
+                      currentTab: _activeIndex.value == 2,
+                      count: controller.task.value?.files?.length),
+                  CustomTab(
+                      title: 'Comments',
+                      currentTab: _activeIndex.value == 3,
+                      count: controller.task.value?.comments?.length)
+                ]),
           ),
         ),
         body: TabBarView(controller: _tabController, children: [

@@ -54,23 +54,28 @@ class CustomTab extends StatelessWidget {
           if (count != null && count >= 0) const SizedBox(width: 8),
           if (count != null && count >= 0)
             Container(
-              height: 20,
-              padding: const EdgeInsets.symmetric(horizontal: 6),
+              height: 21,
               constraints: const BoxConstraints(minWidth: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: currentTab
-                      ? Theme.of(context).customColors().primary
-                      : Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.3)),
-              child: Center(
-                  child: Text(count.toString(),
-                      style: TextStyle(
-                          fontSize: 14,
-                          color: Theme.of(context).customColors().surface,
-                          letterSpacing: 0.1))),
+                borderRadius: BorderRadius.circular(12),
+                color: currentTab
+                    ? Theme.of(context).customColors().primary
+                    : Theme.of(context)
+                        .customColors()
+                        .onSurface
+                        .withOpacity(0.3),
+              ),
+              child: Container(
+                child: Text(
+                  count.toString(),
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Theme.of(context).customColors().surface,
+                      letterSpacing: 0.1),
+                ),
+              ),
             ),
         ],
       ),
