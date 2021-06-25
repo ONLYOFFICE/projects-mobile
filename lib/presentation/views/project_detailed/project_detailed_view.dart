@@ -28,7 +28,7 @@ class ProjectDetailedView extends StatefulWidget {
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int _activeIndex = 0;
+  RxInt _activeIndex = 0.obs;
 
   ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
 
@@ -56,21 +56,20 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   @override
   Widget build(BuildContext context) {
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        setState(() {
-          _activeIndex = _tabController.index;
-        });
-      }
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
     });
+
     return Scaffold(
       floatingActionButton: Visibility(
-        visible: _activeIndex == 2 || _activeIndex == 1,
+        visible: _activeIndex.value == 2 || _activeIndex.value == 1,
         child: StyledFloatingActionButton(
           onPressed: () {
-            if (_activeIndex == 2) projectController.createNewMilestone();
-            if (_activeIndex == 1) projectController.createTask();
+            if (_activeIndex.value == 2) projectController.createNewMilestone();
+            if (_activeIndex.value == 1) projectController.createTask();
           },
-          child: _activeIndex == 2
+          child: _activeIndex.value == 2
               ? AppIcon(
                   icon: SvgIcons.add_milestone,
                   width: 32,
@@ -87,11 +86,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           //         arguments: {'projectDetailed': projectDetailed})),
           _ProjectContextMenu(controller: projectController)
         ],
-        bottom: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: SizedBox(
-            height: 40,
-            child: TabBar(
+        bottom: SizedBox(
+          height: 40,
+          child: Obx(
+            () => TabBar(
                 isScrollable: true,
                 controller: _tabController,
                 indicatorColor: Theme.of(context).customColors().primary,
@@ -103,25 +101,23 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   const Tab(text: 'Overview'),
                   CustomTab(
                       title: 'Tasks',
-                      currentTab: _activeIndex == 1,
+                      currentTab: _activeIndex.value == 1,
                       count: projectController.projectDetailed.taskCountTotal),
                   CustomTab(
                       title: 'Milestones',
-                      currentTab: _activeIndex == 2,
+                      currentTab: _activeIndex.value == 2,
                       count: projectController.projectDetailed.milestoneCount),
                   CustomTab(
                       title: 'Discussions',
-                      currentTab: _activeIndex == 3,
+                      currentTab: _activeIndex.value == 3,
                       count: projectController.projectDetailed.discussionCount),
-                  Obx(
-                    () => CustomTab(
-                        title: 'Documents',
-                        currentTab: _activeIndex == 4,
-                        count: projectController.docsCount.value),
-                  ),
+                  CustomTab(
+                      title: 'Documents',
+                      currentTab: _activeIndex.value == 4,
+                      count: projectController.docsCount.value),
                   CustomTab(
                       title: 'Team',
-                      currentTab: _activeIndex == 5,
+                      currentTab: _activeIndex.value == 5,
                       count:
                           projectController.projectDetailed.participantCount),
                 ]),
