@@ -15,7 +15,9 @@ class TasksController extends BaseController {
   PaginationController get paginationController => _paginationController;
 
   var taskStatusesController = Get.find<TaskStatusesController>();
+
   final _sortController = Get.find<TasksSortController>();
+  TasksSortController get sortController => _sortController;
 
   TaskFilterController _filterController;
   TaskFilterController get filterController => _filterController;

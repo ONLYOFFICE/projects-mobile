@@ -1,11 +1,11 @@
 part of '../tasks_filter.dart';
 
 class _Milestone extends StatelessWidget {
-  const _Milestone({Key key}) : super(key: key);
+  final TaskFilterController filterController;
+  const _Milestone({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<TaskFilterController>();
     return Obx(
       () => FiltersRow(
         title: 'Milestone',

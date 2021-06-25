@@ -10,6 +10,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
@@ -32,7 +33,28 @@ class ProjectMilestonesScreen extends StatelessWidget {
         children: <Widget>[
           Header(),
           if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-          if (controller.loaded.isTrue)
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isEmpty &&
+              !controller.filterController.hasFilters.value)
+            Expanded(
+              child: Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.milestone_not_created),
+                    text: 'There are no milestones has been created yet'),
+              ),
+            ),
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isEmpty &&
+              controller.filterController.hasFilters.value)
+            Expanded(
+              child: Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.not_found),
+                    text: 'There are no milestones matching these filters'),
+              ),
+            ),
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isNotEmpty)
             Expanded(
               child: PaginationListView(
                 paginationController: controller.paginationController,
@@ -54,10 +76,10 @@ class Header extends StatelessWidget {
   Header({
     Key key,
   }) : super(key: key);
-
-  final controller = Get.find<ProjectTasksController>();
-  final sortController = Get.find<MilestonesSortController>();
-  final filterController = Get.find<MilestonesFilterController>();
+  final controller = Get.find<MilestonesDataSource>();
+  // final controller = Get.find<ProjectTasksController>();
+  // final sortController = Get.find<MilestonesSortController>();
+  // final filterController = Get.find<MilestonesFilterController>();
 
   @override
   Widget build(BuildContext context) {
@@ -65,9 +87,14 @@ class Header extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(sortParameter: 'deadline', sortController: sortController),
-        SortTile(sortParameter: 'create_on', sortController: sortController),
-        SortTile(sortParameter: 'title', sortController: sortController),
+        SortTile(
+            sortParameter: 'deadline',
+            sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'create_on',
+            sortController: controller.sortController),
+        SortTile(
+            sortParameter: 'title', sortController: controller.sortController),
         const SizedBox(height: 20)
       ],
     );
@@ -83,13 +110,13 @@ class Header extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                sortController.currentSortTitle.value,
+                controller.sortController.currentSortTitle.value,
                 style: TextStyleHelper.projectsSorting,
               ),
             ),
             const SizedBox(width: 8),
             Obx(
-              () => (sortController.currentSortOrder == 'ascending')
+              () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
                       width: 20,

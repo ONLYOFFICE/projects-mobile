@@ -1,11 +1,11 @@
 part of '../tasks_filter.dart';
 
 class _Responsible extends StatelessWidget {
-  const _Responsible({Key key}) : super(key: key);
+  final TaskFilterController filterController;
+  const _Responsible({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<TaskFilterController>();
     return Obx(
       () => FiltersRow(
         title: 'Responsible',

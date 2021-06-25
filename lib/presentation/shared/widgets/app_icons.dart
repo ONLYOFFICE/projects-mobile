@@ -101,6 +101,19 @@ class SvgIcons {
   static const String table = 'lib/assets/images/icons/folders/table.svg';
   static const String presentation =
       'lib/assets/images/icons/folders/presentation.svg';
+
+  static const String comments_not_created =
+      'lib/assets/images/icons/empty_state/comments_not_created.svg';
+  static const String documents_not_created =
+      'lib/assets/images/icons/empty_state/documents_not_created.svg';
+  static const String milestone_not_created =
+      'lib/assets/images/icons/empty_state/milestone_not_created.svg';
+  static const String task_not_created =
+      'lib/assets/images/icons/empty_state/task_not_created.svg';
+  static const String project_not_created =
+      'lib/assets/images/icons/empty_state/project_not_created.svg';
+  static const String not_found =
+      'lib/assets/images/icons/empty_state/not_found.svg';
 }
 
 class PngIcons {
