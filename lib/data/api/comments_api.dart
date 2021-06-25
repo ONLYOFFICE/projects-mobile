@@ -68,7 +68,7 @@ class CommentsApi {
     int taskId,
     String content,
   }) async {
-    var url = await coreApi.addTaskConmmentUrl(taskId: taskId);
+    var url = await coreApi.addTaskCommentUrl(taskId: taskId);
 
     var result = ApiDTO<PortalComment>();
 
@@ -114,12 +114,38 @@ class CommentsApi {
     return result;
   }
 
-  Future<ApiDTO<PortalComment>> addReplyComment({
+  Future<ApiDTO<PortalComment>> addTaskReplyComment({
     int taskId,
     String content,
     String parentId,
   }) async {
-    var url = await coreApi.addTaskConmmentUrl(taskId: taskId);
+    var url = await coreApi.addTaskCommentUrl(taskId: taskId);
+
+    var result = ApiDTO<PortalComment>();
+
+    try {
+      var body = {'content': content, 'parentId': parentId};
+      var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = PortalComment.fromJson(responseJson);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<PortalComment>> addMessageReplyComment({
+    int messageId,
+    String content,
+    String parentId,
+  }) async {
+    var url = await coreApi.addMessageCommentUrl(messageId: messageId);
 
     var result = ApiDTO<PortalComment>();
 

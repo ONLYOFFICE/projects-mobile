@@ -49,10 +49,34 @@ class CommentsService {
     }
   }
 
-  Future addReplyComment({int taskId, String parentId, String content}) async {
-    var result = await _api.addReplyComment(
+  Future addTaskReplyComment({
+    int taskId,
+    String content,
+    String parentId,
+  }) async {
+    var result = await _api.addTaskReplyComment(
       taskId: taskId,
       content: content,
+      parentId: parentId,
+    );
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await ErrorDialog.show(result.error);
+      return null;
+    }
+  }
+
+  Future addMessageReplyComment({
+    int messageId,
+    String content,
+    String parentId,
+  }) async {
+    var result = await _api.addMessageReplyComment(
+      content: content,
+      messageId: messageId,
       parentId: parentId,
     );
     var success = result.response != null;
@@ -85,7 +109,7 @@ class CommentsService {
     if (success) {
       return result.response;
     } else {
-      ErrorDialog.show(result.error);
+      await ErrorDialog.show(result.error);
       return null;
     }
   }

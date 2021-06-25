@@ -89,7 +89,7 @@ class NewTaskCommentController extends GetxController
       setTitleError.value = true;
     else {
       setTitleError.value = false;
-      PortalComment newComment = await _api.addReplyComment(
+      PortalComment newComment = await _api.addTaskReplyComment(
         content: _textController.text,
         taskId: idFrom,
         parentId: parentId,

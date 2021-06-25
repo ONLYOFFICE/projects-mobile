@@ -138,8 +138,7 @@ void setupLocator() {
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(
       () => DiscussionsController(
-            Get.put(PaginationController(), tag: 'ProjectsController'),
-          ),
+          Get.put(PaginationController(), tag: 'DiscussionsController')),
       fenix: true);
   // Get.lazyPut(() => FilesController(), fenix: true);
   Get.lazyPut(() => GroupsController(), fenix: true);
@@ -152,7 +151,7 @@ void setupLocator() {
   Get.lazyPut(
       () => TasksController(
             Get.find<TaskFilterController>(),
-            Get.put(PaginationController(), tag: 'ProjectsController'),
+            Get.put(PaginationController(), tag: 'TasksController'),
           ),
       fenix: true);
 
