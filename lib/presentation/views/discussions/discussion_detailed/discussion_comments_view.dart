@@ -28,14 +28,14 @@ class DiscussionCommentsView extends StatelessWidget {
                   onRefresh: controller.onRefresh,
                   child: ListView.separated(
                     itemCount: controller.discussion.value.comments.length,
-                    padding: const EdgeInsets.only(top: 32, bottom: 40),
+                    padding: const EdgeInsets.only(top: 32, bottom: 70),
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 21);
                     },
                     itemBuilder: (BuildContext context, int index) {
                       return CommentsThread(
                         comment: controller.discussion.value.comments[index],
-                        taskId: 23213,
+                        discussionId: controller.discussion.value.id,
                       );
                     },
                   ),
