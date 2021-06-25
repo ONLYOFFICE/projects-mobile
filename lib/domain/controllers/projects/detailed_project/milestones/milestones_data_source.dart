@@ -91,9 +91,9 @@ class MilestonesDataSource extends GetxController {
     paginationController.data.addAll(result);
   }
 
-  void setup(int projectId) {
+  Future<void> setup(int projectId) async {
     _projectId = projectId;
     _filterController.projectId = _projectId.toString();
-    loadMilestones();
+    await loadMilestones();
   }
 }

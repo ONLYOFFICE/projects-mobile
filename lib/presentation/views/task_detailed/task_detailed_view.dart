@@ -56,6 +56,7 @@ class TaskDetailedView extends StatefulWidget {
 class _TaskDetailedViewState extends State<TaskDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  // ignore: prefer_final_fields
   var _activeIndex = 0.obs;
   TaskItemController controller;
 

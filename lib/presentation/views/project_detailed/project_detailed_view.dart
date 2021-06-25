@@ -60,12 +60,12 @@ class ProjectDetailedView extends StatefulWidget {
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  // ignore: prefer_final_fields
   RxInt _activeIndex = 0.obs;
 
   ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
 
-  var projectController =
-      Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
+  var projectController;
   var discussionsController;
 
   @override
@@ -73,6 +73,12 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     super.initState();
     discussionsController =
         Get.put(ProjectDiscussionsController(projectDetailed.id));
+
+    projectController =
+        Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
+
+    projectController.setup();
+
     _tabController = TabController(
       vsync: this,
       length: 6,
@@ -93,35 +99,36 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       _activeIndex.value = _tabController.index;
     });
 
-    return Scaffold(
-      floatingActionButton: Visibility(
-        visible: _activeIndex.value == 2 || _activeIndex.value == 1,
-        child: StyledFloatingActionButton(
-          onPressed: () {
-            if (_activeIndex.value == 2) projectController.createNewMilestone();
-            if (_activeIndex.value == 1) projectController.createTask();
-          },
-          child: _activeIndex.value == 2
-              ? AppIcon(
-                  icon: SvgIcons.add_milestone,
-                  width: 32,
-                  height: 32,
-                )
-              : const Icon(Icons.add_rounded),
+    return Obx(
+      () => Scaffold(
+        floatingActionButton: Visibility(
+          visible: _activeIndex.value == 2 || _activeIndex.value == 1,
+          child: StyledFloatingActionButton(
+            onPressed: () {
+              if (_activeIndex.value == 2)
+                projectController.createNewMilestone();
+              if (_activeIndex.value == 1) projectController.createTask();
+            },
+            child: _activeIndex.value == 2
+                ? AppIcon(
+                    icon: SvgIcons.add_milestone,
+                    width: 32,
+                    height: 32,
+                  )
+                : const Icon(Icons.add_rounded),
+          ),
         ),
-      ),
-      appBar: StyledAppBar(
-        actions: [
-          // IconButton(
-          //     icon: const Icon(Icons.edit_outlined),
-          //     onPressed: () => Get.toNamed('ProjectEditingView',
-          //         arguments: {'projectDetailed': projectDetailed})),
-          _ProjectContextMenu(controller: projectController)
-        ],
-        bottom: SizedBox(
-          height: 40,
-          child: Obx(
-            () => TabBar(
+        appBar: StyledAppBar(
+          actions: [
+            // IconButton(
+            //     icon: const Icon(Icons.edit_outlined),
+            //     onPressed: () => Get.toNamed('ProjectEditingView',
+            //         arguments: {'projectDetailed': projectDetailed})),
+            _ProjectContextMenu(controller: projectController)
+          ],
+          bottom: SizedBox(
+            height: 40,
+            child: TabBar(
                 isScrollable: true,
                 controller: _tabController,
                 indicatorColor: Theme.of(context).customColors().primary,
@@ -138,7 +145,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: 'Milestones',
                       currentTab: _activeIndex.value == 2,
-                      count: projectController.projectDetailed.milestoneCount),
+                      count: projectController.milestoneCount.value),
                   CustomTab(
                       title: 'Discussions',
                       currentTab: _activeIndex.value == 3,
@@ -155,19 +162,19 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                 ]),
           ),
         ),
+        body: TabBarView(controller: _tabController, children: [
+          ProjectOverview(
+              projectDetailed: projectDetailed, tabController: _tabController),
+          ProjectTaskScreen(projectDetailed: projectDetailed),
+          ProjectMilestonesScreen(projectDetailed: projectDetailed),
+          ProjectDiscussionsScreen(controller: discussionsController),
+          EntityDocumentsView(
+            folderId: projectDetailed.projectFolder,
+            folderName: projectDetailed.title,
+          ),
+          ProjectTeamView(projectDetailed: projectDetailed),
+        ]),
       ),
-      body: TabBarView(controller: _tabController, children: [
-        ProjectOverview(
-            projectDetailed: projectDetailed, tabController: _tabController),
-        ProjectTaskScreen(projectDetailed: projectDetailed),
-        ProjectMilestonesScreen(projectDetailed: projectDetailed),
-        ProjectDiscussionsScreen(controller: discussionsController),
-        EntityDocumentsView(
-          folderId: projectDetailed.projectFolder,
-          folderName: projectDetailed.title,
-        ),
-        ProjectTeamView(projectDetailed: projectDetailed),
-      ]),
     );
   }
 }
