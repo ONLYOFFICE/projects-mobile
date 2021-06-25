@@ -56,7 +56,8 @@ class TaskDetailedView extends StatefulWidget {
 class _TaskDetailedViewState extends State<TaskDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  int _activeIndex = 0;
+  // ignore: prefer_final_fields
+  var _activeIndex = 0.obs;
   TaskItemController controller;
 
   @override
@@ -77,11 +78,9 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   @override
   Widget build(BuildContext context) {
     _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
-        setState(() {
-          _activeIndex = _tabController.index;
-        });
-      }
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
     });
     return Obx(
       () => Scaffold(
@@ -107,15 +106,15 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                   const Tab(text: 'Overview'),
                   CustomTab(
                       title: 'Subtasks',
-                      currentTab: _activeIndex == 1,
+                      currentTab: _activeIndex.value == 1,
                       count: controller.task.value?.subtasks?.length),
                   CustomTab(
                       title: 'Documents',
-                      currentTab: _activeIndex == 2,
+                      currentTab: _activeIndex.value == 2,
                       count: controller.task.value?.files?.length),
                   CustomTab(
                       title: 'Comments',
-                      currentTab: _activeIndex == 3,
+                      currentTab: _activeIndex.value == 3,
                       count: controller.task.value?.comments?.length)
                 ]),
           ),

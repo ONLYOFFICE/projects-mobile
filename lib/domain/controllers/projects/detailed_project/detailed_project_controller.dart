@@ -37,6 +37,7 @@ import 'package:intl/intl.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/files_service.dart';
+import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -62,7 +63,7 @@ class ProjectDetailsController extends GetxController {
   var tasksCount = ''.obs;
   var docsCount = (-1).obs;
   var tagsText = ''.obs;
-
+  var milestoneCount = (-1).obs;
   var currentTab = -1.obs;
 
   ProjectDetailsController(this.projectDetailed);
@@ -82,6 +83,16 @@ class ProjectDetailsController extends GetxController {
     projectTitleText.value = projectDetailed.title;
     descriptionText.value = projectDetailed.description;
     managerText.value = projectDetailed.responsible.displayName;
+
+    milestoneCount.value = projectDetailed.milestoneCount;
+
+    await locator<MilestoneService>()
+        .milestonesByFilter(
+          projectId: projectDetailed.id.toString(),
+        )
+        .then((value) => {
+              if (value != null) {milestoneCount.value = value.length}
+            });
 
     final formatter = DateFormat('dd MMM yyyy');
     creationDateText.value =
