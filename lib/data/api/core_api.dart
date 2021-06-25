@@ -63,7 +63,7 @@ class CoreApi {
     return '$_portalName/api/$version/capabilities';
   }
 
-  Future<String> addTaskConmmentUrl({int taskId}) async =>
+  Future<String> addTaskCommentUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
   Future<String> addMessageUrl({int projectId}) async =>

@@ -37,7 +37,6 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
@@ -71,9 +70,9 @@ class NewDiscussionCommentController extends GetxController
       PortalComment newComment = await _api.addMessageComment(
           content: _textController.text, messageId: idFrom);
       if (newComment != null) {
-        var taskController = Get.find<DiscussionItemController>();
+        var discussionController = Get.find<DiscussionItemController>();
         // ignore: unawaited_futures
-        taskController.onRefresh();
+        discussionController.onRefresh();
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context,
@@ -89,16 +88,15 @@ class NewDiscussionCommentController extends GetxController
       setTitleError.value = true;
     else {
       setTitleError.value = false;
-      PortalComment newComment = await _api.addReplyComment(
+      PortalComment newComment = await _api.addMessageReplyComment(
         content: _textController.text,
-        taskId: idFrom,
+        messageId: idFrom,
         parentId: parentId,
       );
       if (newComment != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: idFrom.toString());
+        var discussionController = Get.find<DiscussionItemController>();
         // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
+        discussionController.onRefresh();
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context,

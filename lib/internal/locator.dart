@@ -138,8 +138,7 @@ void setupLocator() {
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(
       () => DiscussionsController(
-            Get.put(PaginationController(), tag: 'DiscussionsController'),
-          ),
+          Get.put(PaginationController(), tag: 'DiscussionsController')),
       fenix: true);
 
   Get.lazyPut(() => GroupsController(), fenix: true);
