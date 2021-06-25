@@ -55,6 +55,7 @@ class DocumentsController extends GetxController {
   var hasFilters = false.obs;
   var loaded = false.obs;
   var nothingFound = false.obs;
+  var searchMode = false.obs;
 
   var searchInputController = TextEditingController();
 
@@ -187,6 +188,7 @@ class DocumentsController extends GetxController {
 
   Future<void> setupSearchMode({String folderName, int folderId}) async {
     loaded.value = true;
+    searchMode.value = true;
   }
 
   void _performSearch() async {

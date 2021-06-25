@@ -76,6 +76,7 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.0.0
   very_good_analysis: ^2.0.3
+  flutter_native_splash: ^1.2.0
   # pedantic: ^1.11.0
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -94,6 +95,7 @@ flutter:
     - lib/assets/images/icons/project_statuses/
     - lib/assets/images/icons/task_detailed/
     - lib/assets/images/icons/folders/
+    - lib/assets/images/icons/empty_state/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

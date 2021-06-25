@@ -169,9 +169,41 @@ class _DocumentsScreen extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (controller.nothingFound.isTrue) const NothingFound(),
+            if (controller.needToShowDevider.value == true)
+              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
+            if (controller.loaded.isTrue && controller.nothingFound.isTrue)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.not_found),
+                      text: 'Not found'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                !controller.filterController.hasFilters.value &&
+                controller.searchMode.isFalse)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.documents_not_created),
+                      text: 'No documents had been created yet'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                controller.filterController.hasFilters.value &&
+                controller.searchMode.isFalse)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.not_found),
+                      text: 'There are no documents matching these filters'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isNotEmpty)
               Expanded(
                 child: PaginationListView(
                   paginationController: controller.paginationController,
@@ -358,9 +390,41 @@ class MoveDocumentsScreen extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (controller.nothingFound.isTrue) const NothingFound(),
+            if (controller.needToShowDevider.value == true)
+              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
+            if (controller.loaded.isTrue && controller.nothingFound.isTrue)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.not_found),
+                      text: 'Not found'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                !controller.filterController.hasFilters.value &&
+                controller.searchMode.isFalse)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.documents_not_created),
+                      text: 'No documents had been created yet'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                controller.filterController.hasFilters.value &&
+                controller.searchMode.isFalse)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.not_found),
+                      text: 'There are no documents matching these filters'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isNotEmpty)
               Expanded(
                 child: PaginationListView(
                   paginationController: controller.paginationController,

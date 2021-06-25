@@ -140,7 +140,7 @@ void setupLocator() {
       () => DiscussionsController(
           Get.put(PaginationController(), tag: 'DiscussionsController')),
       fenix: true);
-  // Get.lazyPut(() => FilesController(), fenix: true);
+
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
   Get.lazyPut(() => NewTaskController(), fenix: true);

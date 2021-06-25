@@ -46,6 +46,9 @@ class MilestonesDataSource extends GetxController {
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
 
+  MilestonesSortController get sortController => _sortController;
+  MilestonesFilterController get filterController => _filterController;
+
   RxBool loaded = false.obs;
 
   var hasFilters = false.obs;

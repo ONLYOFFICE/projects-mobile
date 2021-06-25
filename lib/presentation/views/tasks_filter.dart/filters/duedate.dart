@@ -33,11 +33,11 @@
 part of '../tasks_filter.dart';
 
 class _DueDate extends StatelessWidget {
-  const _DueDate({Key key}) : super(key: key);
+  final TaskFilterController filterController;
+  const _DueDate({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<TaskFilterController>();
     return Obx(
       () => FiltersRow(
         title: 'Due date',

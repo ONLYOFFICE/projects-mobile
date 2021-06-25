@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -87,7 +88,28 @@ class ProjectsView extends StatelessWidget {
             if (controller.needToShowDevider.value == true)
               const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue)
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                !controller.filterController.hasFilters.value)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.project_not_created),
+                      text: 'No projects had been created yet'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                controller.filterController.hasFilters.value)
+              Expanded(
+                child: Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.not_found),
+                      text: 'There are no projects matching these filters'),
+                ),
+              ),
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isNotEmpty)
               Expanded(
                 child: PaginationListView(
                   paginationController: controller.paginationController,

@@ -43,9 +43,14 @@ class ProjectTasksController extends GetxController {
   final paginationController =
       Get.put(PaginationController(), tag: 'ProjectTasksController');
 
-  final _sortController = Get.find<TasksSortController>();
-  final _filterController = Get.find<TaskFilterController>();
+  final _sortController =
+      Get.put(TasksSortController(), tag: 'ProjectTasksController');
+
+  final _filterController =
+      Get.put(TaskFilterController(), tag: 'ProjectTasksController');
+
   TaskFilterController get filterController => _filterController;
+  TasksSortController get sortController => _sortController;
 
   RxBool loaded = false.obs;
 
@@ -80,6 +85,7 @@ class ProjectTasksController extends GetxController {
         creatorFilter: _filterController.creatorFilter,
         projectFilter: _filterController.projectFilter,
         milestoneFilter: _filterController.milestoneFilter,
+        deadlineFilter: _filterController.deadlineFilter,
         projectId: _projectId.toString());
     paginationController.total.value = result.total;
 
