@@ -10,4 +10,5 @@ abstract class NewCommentController {
 
   void addComment(context);
   void addReplyComment(context);
+  void leavePage();
 }
