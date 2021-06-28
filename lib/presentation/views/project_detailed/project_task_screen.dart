@@ -31,6 +31,7 @@
  */
 
 import 'dart:math' as math;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -73,8 +74,12 @@ class ProjectTaskScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.task_not_created),
-                    text: 'No tasks had been created yet'),
+                  icon: AppIcon(icon: SvgIcons.task_not_created),
+                  text: tr(
+                    'noEntityCreated',
+                    args: [tr('tasks').toLowerCase()],
+                  ),
+                ),
               ),
             ),
           if (controller.loaded.isTrue &&

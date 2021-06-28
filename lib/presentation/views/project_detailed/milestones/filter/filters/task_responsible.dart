@@ -40,7 +40,7 @@ class _TaskResponsible extends StatelessWidget {
     var filterController = Get.find<MilestonesFilterController>();
     return Obx(
       () => FiltersRow(
-        title: 'Tasks',
+        title: tr('tasks'),
         options: <Widget>[
           FilterElement(
               title: 'My tasks',

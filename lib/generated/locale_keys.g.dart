@@ -30,32 +30,28 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/internal/localization/localization_setup.dart';
-import 'package:projects/internal/pages_setup.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/theme_service.dart';
+// DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-class App extends StatelessWidget {
-  final String initialPage;
+abstract class  LocaleKeys {
+  static const emailAddress = 'emailAddress';
+  static const password = 'password';
+  static const portalName = 'portalName';
+  static const continueButton = 'continueButton';
+  static const reset = 'reset';
+  static const filter = 'filter';
+  static const dashboard = 'dashboard';
+  static const projects = 'projects';
+  static const more = 'more';
+  static const tasks = 'tasks';
+  static const myTasks = 'myTasks';
+  static const upcomingTasks = 'upcomingTasks';
+  static const myProjects = 'myProjects';
+  static const projectsIFolow = 'projectsIFolow';
+  static const activeProjects = 'activeProjects';
+  static const dashboardNoActive = 'dashboardNoActive';
+  static const viewAll = 'viewAll';
+  static const viewLess = 'viewLess';
+  static const noEntityCreated = 'noEntityCreated';
+  static const error = 'error';
 
-  App({
-    Key key,
-    this.initialPage,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      initialRoute: initialPage,
-      getPages: getxPages(),
-      localizationsDelegates: localizationsDelegates(),
-      supportedLocales: supportedLocales(),
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
-    );
-  }
 }
