@@ -43,13 +43,13 @@ class _TaskResponsible extends StatelessWidget {
         title: tr('tasks'),
         options: <Widget>[
           FilterElement(
-              title: 'My tasks',
+              title: tr('myTasks'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.taskResponsible['me'],
               onTap: () => filterController.changeTasksResponsible('me')),
           FilterElement(
             title: filterController.taskResponsible['other'].isEmpty
-                ? 'Other user'
+                ? tr('otherUser')
                 : filterController.taskResponsible['other'],
             isSelected: filterController.taskResponsible['other'].isNotEmpty,
             cancelButtonEnabled:

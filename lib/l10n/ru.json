@@ -5,5 +5,8 @@
     "portalName":  "Адрес портала",
     "continueButton": "Продолжить",
     "reset": "СБРОС",
-    "projects": "Проекты"
+    "projects": "Проекты",
+    "changePasscode": "Сменить код доступа",
+    "enablePasscode":"Включить код доступа"
+    
 }

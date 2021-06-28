@@ -138,25 +138,25 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                     Theme.of(context).customColors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
-                  const Tab(text: 'Overview'),
+                  Tab(text: tr('overview')),
                   CustomTab(
                       title: tr('tasks'),
                       currentTab: _activeIndex.value == 1,
                       count: projectController.projectDetailed.taskCountTotal),
                   CustomTab(
-                      title: 'Milestones',
+                      title: tr('milestones'),
                       currentTab: _activeIndex.value == 2,
                       count: projectController.milestoneCount.value),
                   CustomTab(
-                      title: 'Discussions',
+                      title: tr('discussions'),
                       currentTab: _activeIndex.value == 3,
                       count: projectController.projectDetailed.discussionCount),
                   CustomTab(
-                      title: 'Documents',
+                      title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
                       count: projectController.docsCount.value),
                   CustomTab(
-                      title: 'Team',
+                      title: tr('team'),
                       currentTab: _activeIndex.value == 5,
                       count:
                           projectController.projectDetailed.participantCount),
@@ -205,7 +205,7 @@ class _ProjectContextMenu extends StatelessWidget {
                   .textStyle
                   .copyWith(color: Theme.of(context).customColors().error),
               value: 'delete',
-              child: const Text('Delete'),
+              child: Text(tr('delete')),
             )
         ];
       },
@@ -229,11 +229,10 @@ void _onSelected(value, controller) async {
 
     case 'delete':
       await Get.dialog(StyledAlertDialog(
-        titleText: 'Delete project',
-        contentText:
-            // ignore: lines_longer_than_80_chars
-            'Are you sure you want to delete these project?\nNote: this action cannot be undone.',
-        acceptText: 'DELETE',
+        titleText: tr('deleteProject'),
+        contentText: tr('deleteProjectAlert'),
+        // 'Are you sure you want to delete these project?\nNote: this action cannot be undone.',
+        acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           var result = await controller.deleteProject();

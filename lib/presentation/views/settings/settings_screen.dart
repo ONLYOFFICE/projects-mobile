@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
@@ -52,7 +53,7 @@ class SettingsScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: StyledAppBar(
-          titleText: 'Settings',
+          titleText: tr('settings'),
           onLeadingPressed: controller.leave,
         ),
         body: Obx(
@@ -63,35 +64,35 @@ class SettingsScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 10),
                     SettingTile(
-                      text: 'Passcode Lock',
+                      text: tr('passcodeLock'),
                       loverText: controller.isPasscodeEnable == true
-                          ? 'Enabled'
-                          : 'Disabled',
+                          ? tr('enabled')
+                          : tr('disabled'),
                       icon: SvgIcons.passcode,
                       // onTap: () => Get.toNamed('NewPasscodeScreen1'),
                       onTap: () => Get.toNamed('PasscodeSettingsScreen'),
                     ),
                     SettingTile(
-                      text: 'Color theme',
-                      loverText: 'Same as System',
+                      text: tr('colorTheme'),
+                      loverText: tr('sameAsSystem'),
                       icon: SvgIcons.color_scheme,
                       onTap: () => Get.toNamed('ColorThemeSelectionScreen'),
                     ),
-                    const SettingTile(
-                      text: 'Clear cache',
+                    SettingTile(
+                      text: tr('clearCache'),
                       icon: SvgIcons.clean,
                     ),
                     const SizedBox(height: 70),
-                    const SettingTile(
-                      text: 'Support',
+                    SettingTile(
+                      text: tr('support'),
                       icon: SvgIcons.support,
                     ),
-                    const SettingTile(
-                      text: 'Feedback',
+                    SettingTile(
+                      text: tr('feedback'),
                       icon: SvgIcons.feedback,
                     ),
-                    const SettingTile(
-                      text: 'About App',
+                    SettingTile(
+                      text: tr('aboutApp'),
                       icon: SvgIcons.about_app,
                     ),
                   ],

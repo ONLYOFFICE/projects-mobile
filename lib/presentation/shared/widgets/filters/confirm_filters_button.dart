@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
@@ -70,7 +71,10 @@ class ConfirmFiltersButton extends StatelessWidget {
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)))),
           child: Text(
-              'SHOW ${filterController.suitableResultCount.value} ${filterController.filtersTitle}',
+              tr('filterConfirmButton', args: [
+                filterController.suitableResultCount.value.toString(),
+                filterController.filtersTitle
+              ]),
               style: TextStyleHelper.button(
                   color: Theme.of(context).customColors().onPrimary)),
         ),

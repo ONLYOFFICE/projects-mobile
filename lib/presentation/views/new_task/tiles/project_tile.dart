@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -52,13 +53,13 @@ class ProjectTile extends StatelessWidget {
         return NewTaskInfo(
             text: _isSelected
                 ? controller.selectedProjectTitle.value
-                : 'Select project',
+                : tr('selectProject'),
             icon: SvgIcons.project,
             textColor: controller.selectProjectError == true
                 ? Theme.of(context).customColors().error
                 : null,
             isSelected: _isSelected,
-            caption: _isSelected ? 'Project:' : null,
+            caption: _isSelected ? '${tr('project')}:' : null,
             onTap: () => Get.toNamed('SelectProjectView',
                 arguments: {'controller': controller}));
       },

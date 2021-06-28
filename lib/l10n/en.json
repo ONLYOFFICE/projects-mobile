@@ -1,41 +1,371 @@
 {
-  "emailAddress": "Email Address",
- 
-  "password": "Password",
- 
-  "portalName": "Portal Address",
- 
-  "continueButton": "Continue",
- 
-  "reset": "RESET",
+  "appName": "ONLYOFFICE\nProjects",
+	"appDescription": "ONLYOFFICE portal provide saving filesin cloud storage, share it with co-workersand co-editing in realtime",
 
-  "filter": "Filter",
+	"emailAddress": "Email Address",
+	"password": "Password",
+	"portalName": "Portal Address",
+	"continueButton": "Continue",
+	"portalAdress": "Portal adress",
+	"logOut": "Log out",
+	
+  "profile": "Profile",
+	"email": "Email",
+  "forgotPassword": "Forgot password?",
 
-  "dashboard": "Dashboard",
+	"reset": "RESET",
+	"filter": "Filter",
 
-  "projects": "Projects",
+	"dashboard": "Dashboard",
 
-  "more": "More",
+	"projects": "Projects",
+	"project": "Project",
 
-  "tasks": "Tasks",
+	"documents": "Documents",
+	"document": "Document",
 
-  "myTasks": "My Tasks",
- 
-  "upcomingTasks": "Upcoming",
+	"milestones": "Milestones",
+	"milestone": "Milestone",
+
+	"more": "More",
+	"settings": "Settings",
+
+
+	"tasks": "Tasks",
+	"task": "Task",
+
+	"discussions": "Discussions",
+	"discussion": "Discussion",
+
+	"subtasks": "Subtasks",
+	"subtask": "Subtask",
+
+	"comments": "Comments",
+	"comment": "Comment",
+
+	"selectStatus": "Select status",
+	"usersSearch": "Search for users...",
+
+	"myTasks": "My Tasks",
+	"upcomingTasks": "Upcoming",
+	"myProjects": "My Projects",
+	"otherProjects": "Other projects",
+
+	"projectsIFolow": "Projects I Folow",
+	"activeProjects": "Active Projects",
+
+	"dashboardNoActive": "There are no active {}",
+
+	"viewAll": "view all",
+	"viewLess": "view less",
+
+	"noEntityCreated": "No {} has been created yet",
+	"noEntityMatching": "There are no {} matching these filters",
+
+	"total": "Total {}",
+	"notFound": "Not found",
+
+	"open": "Open",
+	"copyLink": "Copy link",
+	"download": "Download",
+	"copy": "Copy",
+	"move": "Move",
+	"rename": "Rename",
+
+	"delete": "Delete",
+	
+	"edit": "Edit",
+
+
+	"documentsCaption": "{} • documents:{} • subfolders:{}",
+
+	"confirm": "CONFIRM",
+	"cancel": "CANCEL",
+  "accept": "ACCEPT",
+	"ok": "OK",
+	"save": "SAVE",
+  "next": "NEXT",
+  "back": "BACK",
   
-  "myProjects": "My Projects",
 
-  "projectsIFolow": "Projects I Folow",
-  "activeProjects":"Active Projects",
+	"linkCopied": "Link has been copied to the clipboard",
 
-  "dashboardNoActive":"There are no active {}",
+	"renameFile": "Rename file",
+	"enterFileName": "Enter file name",
+	"fileRenamed": "File has been renamed",
+
+	"renameFolder": "Rename folder",
+	"enterFolderName": "Enter folder name",
+	"folderRenamed": "Folder has been renamed",
+
+	"moveFolderHere": "Move folder here",
+	"copyFolderHere": "copy folder here",
+	"moveFileHere": "move file here",
+	"copyFileHere": "copy file here",
+
+	"folderMoved": "Folder has been moved",
+	"folderCopied": "Folder has been copied",
+	"folderDeleted": "Folder has been deleted",
+
+	"fileMoved": "File has been moved",
+	"fileCopied": "File has been copied",
+	"fileDeleted": "File has been deleted",
+
+	"author": "Author",
+	"me": "Me",
+	"users": "Users",
+	"groups": "Groups",
+
+	"searchSettings": "Search settings",
+	"inContent": "In content",
+	"excludeSubfolders": "Exclude subfolders",
+
+	"type": "Type",
+	"folders": "folders",
+
+	"presentations": "Presentations",
+	"spreadsheets": "Spreadsheets",
+	"images": "Images",
+	"media": "Media",
+	"archives": "Archives",
+	"allFiles": "All files",
+
+	"other": "Other",
+	"followed": "Followed",
+	"withTag": "With Tag",
+	"withoutTag": "Without Tag",
+	"projectManager": "Project manager",
+
+	"otherUser": "Other user",
+	"status": "Status",
+	"active": "Active",
+	"paused": "Paused",
+	"closed": "Closed",
+	"teamMember": "Team member",
+
+	"dueDate": "Due date",
+	"overdue": "Overdue",
+	"today": "Today",
+	"upcoming": "Upcoming",
+	"customPeriod": "Custom period",
+
+	"creator": "Creator",
+
+	"selectDateRange": "Select Date Range",
+	"invalidFormat": "Invalid format.",
+	"outOfRange": "Out of range.",
+	"invalidRange": "Invalid range.",
+	"startDate": "Start date",
+	"endDate": "End Date",
+
+	"description": "Description",
+	"milestoneDescription": "Milestone description",
+
+	"enterText": "Enter your text here",
+	"addDescription": "Add description",
+	"projectTitle": "Project Title",
+	"choosePM": "Choose project manager",
+	"team": "Team",
+	"addTeamMembers": "Add team members",
+
+	"showMore": "Show more",
+	"showLess": "Show less",
+
+	"advancedOptions": "Advanced options",
+	"notifyPM": "Notify Project Manager by email",
+	"privateProject": "Save this project as private",
+	"followProject": "Follow this project",
+	"selectPM": "Select project manager",
+
+	"person": {
+		"zero": "{} persons",
+		"one": "{} person",
+		"two": "{} persons",
+		"few": "{} persons",
+		"many": "{} persons",
+		"other": "{} person"
+	},
+
+	"member": {
+		"zero": "{} members",
+		"one": "{} member",
+		"two": "{} members",
+		"few": "{} members",
+		"many": "{} members",
+		"other": "{} members"
+	},
+
+	"responsible": "Responsible",
+	"responsibles": {
+		"zero": "{} responsible",
+		"one": "{} responsible",
+		"two": "{} responsible",
+		"few": "{} responsible",
+		"many": "{} responsible",
+		"other": "{} responsible"
+	},
+
+	"usersSelected": {
+		"zero": "{} users selected",
+		"one": "{} user selected",
+		"two": "{} users selected",
+		"few": "{} users selected",
+		"many": "{} users selected",
+		"other": "{} users selected"
+	},
+
+	"addMembersOf": "Add members of",
+	"creationDate": "Creation date",
+	"createdBy": "Created by",
+	"tags": "Tags",
+	"tag": "Tag",
+
+	"overview": "Overview",
+	"deleteProject": "Delete project",
+	"deleteProjectAlert": "Are you sure you want to delete these project?\nNote: this action cannot be undone.",
+	"deleteTaskAlert": "Are you sure you want to delete these task?\nNote: this action cannot be undone.",
+
+	"newMilestone": "New milestone",
+	"milestoneTitle": "Milestone title",
+	"keyMilestone": "Key milestone",
+	"remindBeforeDue": "Remind me 48 hours before the due date",
+	"selectProject": "Select project",
+	"assignedTo": "Assigned to",
+
+	"addResponsible": "Add responsible",
+
+	"noResponsible": "No responsible",
+
+	"setDueDate": "Set due date",
+
+	"searchProjects": "Search for projects...",
+	"selectResponsible": "Select responsible",
+
+	"tasksSearch": "Tasks search",
+
+	"editTask": "Edit task",
+	"followTask": "Follow task",
+	"unfollowTask": "Unfollow task",
+	"copyTask": "Copy task",
+	"deleteTask": "Delete task",
+
+	"nobody": "Nobody",
+	"acceptSubtask": "Accept subtask",
+	"copySubtask": "Copy subtask",
+
+
+	"editSubtask": "Edit subtask",
+	"addSubtask": "Add subtask",
+	"describeSubtask": "Describe subtask...",
+
+	"priority": "Priority",
+
+	"high": "High",
+	"normal": "Normal",
+
+	
+
+	"passcodeLock": "Passcode Lock",
+	"enabled": "Enabled",
+	"disabled": "Disabled",
+	"colorTheme": "Color theme",
+	"sameAsSystem": "Same as System",
+	"clearCache": "Clear cache",
+	"support": "Support",
+	"feedback": "Feedback",
+	"aboutApp": "About App",
+	"LightTheme": "Light theme",
+	"DarkTheme": "Dark theme",
+
+	"changePasscode": "change Passcode",
+	"enablePasscode": "Enable Passcode",
+	"fingerprint": "Use Fingerprint to unlock",
+	"passcodeLockDescription": "- это код, который запрашивается, при запуске приложения.\n\nОбратите внимание, если вы забудете код доступа, вам понадобится удалить или переустановить приложение.",
+	"enterPasscode": "Enter passcode",
+
+
+
+	"PasscodesNotMatch": "Passcodes didn’t match",
+	"ReEnterPasscode": "Enter passcode one more time",
+
+	"choosePasscode": "Choose passcode to unlock app",
+
+	"enterCurrentPasscode": "Enter your current passcode",
+	"incorrectPIN": "Incorrect PIN entered",
+	"enterNewPasscode": "Enter new passcode",
+
+
+	"taskDescription": "Task description",
+	"newTask": "New task",
+
+	"taskTitle": "Task title",
+	"setStartDate": "Set start date",
+
+	"highPriority": "High priority",
+
+	"notifyResponsible": "Notify responsibles",
+	"none": "None",
+	"selectResponsibles": "Select responsibles",
+
+	"searchUsers": "Search for users",
+
+	"selectMilestone": "Select milestone",
+
+	"selectDueDate": "Select due date",
+	"selectStartDate": "Select start date",
+
+  "tfaTitle": "Двухфакторная\nаутентификация",
+  "tfaGAcodeDescription": "Copy the code generated by Google Authenticator application and insert it to the input field",
+  "tfaCode": "Код",
+  "send": "Send",
+  "login": "Login",
+  "passwordRecovery": "Password recovery",
+  "emailDescription": "Please enter the email address you provided when registering on the portal.",
+  "authAppCodeDescription": "Enter the 6-digit code generated by the authentificator app.\nIf you don't have access to your phone, you can use backup codes.",
+  "code": "Code",
+
+
+  "proceed": "PROCEED",
+  "needHelp": "Need help?",
+  "passcodeToUnlock": "Enter passcode to unlock App",
+
+  "install": "Install",
+  "step1": "Step 1 of 4",
+  "step2": "Step 2 of 4",
+  "step3": "Step 3 of 4",
+  "step4": "Step 4 of 4",
+
+  "step1SetupText1": "Set up an application to generate the authentication codes",
+  "step1SetupText2": "Please set up an application to generate the codes for the portal access (e.g. Google Authenticator) to continue the work at the portal",
   
-  "viewAll":"view all",
-  "viewLess":"view less",
+  "step2SetupText1": "Launch Google Authenticator application",
+  "step2SetupText2": "Run the application\nand tap the “new account” icon",
+  "step3SetupText1": "Add a secret key",
+  "step3SetupText2": "Copy the key and paste it to the Google Authenticator application",
+  "step4SetupText1": "Copy the code and paste below",
+  "step4SetupText2": "Copy the code generated by Google Authenticator application and insert it to the input field",
+
+  "keyCopied": "Key copied to clipboard.",
+
+  "tfaSMSTitle": "Enter your phone number",
+  "tfaSMSCaption": "You will receive SMS-code to enable Two-factor authentification.",
+  "sendCode": "SEND CODE",
+  "chooseCountry": "Choose country",
+
+  "enterSendedCode": "Enter the 6-digit code we sent to ",
+  "incorrectCode": "Incorrect code, please try again.",
+  "requestNewCode": "Request new code",
+  "selectCountry": "Select Country",
+  "search": "Search..",
  
-  "noEntityCreated":"No {} had been created yet",
-  
-  
+  "sortBy": "Sort by",
+  "enterQuery": "Enter your query",
+  "filterConfirmButton": "SHOW {} {}",
 
-  "error":"error"
+  "selectGroup": "Select group",
+  
+  "selectTag": "Select tag",
+  "selectUser": "Select user",
+  
+  "error": "Error"
 }

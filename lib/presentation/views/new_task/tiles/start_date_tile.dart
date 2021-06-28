@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -52,9 +53,10 @@ class StartDateTile extends StatelessWidget {
         bool _isSelected = controller.startDateText.value.isNotEmpty;
         return NewTaskInfo(
             icon: SvgIcons.start_date,
-            text:
-                _isSelected ? controller.startDateText.value : 'Set start date',
-            caption: _isSelected ? 'Start date:' : null,
+            text: _isSelected
+                ? controller.startDateText.value
+                : tr('setStartDate'),
+            caption: _isSelected ? '${tr('startDate')}:' : null,
             isSelected: _isSelected,
             suffix: _isSelected
                 ? IconButton(

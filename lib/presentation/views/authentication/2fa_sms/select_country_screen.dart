@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libphonenumber/flutter_libphonenumber.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,7 @@ class SelectCountryScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
-          titleText: controller.searching.isTrue ? null : 'Select Country',
+          titleText: controller.searching.isTrue ? null : tr('selectCountry'),
           title: controller.searching.isTrue ? const _SarchField() : null,
           actions: [
             if (controller.searching.isFalse)
@@ -94,7 +95,7 @@ class _SarchField extends StatelessWidget {
       autofocus: true,
       style: TextStyleHelper.headline6(),
       decoration: InputDecoration.collapsed(
-        hintText: 'Search..',
+        hintText: tr('search'),
         hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
       ),
       onChanged: (value) => controller.onSearch(value),

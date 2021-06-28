@@ -41,16 +41,16 @@ class _Author extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Author',
+        title: tr('author'),
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: tr('me'),
               isSelected: filterController.author['me'],
               titleColor: Theme.of(context).customColors().onSurface,
               onTap: () => filterController.changeAuthorFilter('me')),
           FilterElement(
               title: filterController.author['users'].isEmpty
-                  ? 'Users'
+                  ? tr('users')
                   : filterController.author['users'],
               isSelected: filterController.author['users'].isNotEmpty,
               cancelButtonEnabled: filterController.author['users'].isNotEmpty,
@@ -62,7 +62,7 @@ class _Author extends StatelessWidget {
                   filterController.changeAuthorFilter('users', null)),
           FilterElement(
               title: filterController.author['groups'].isEmpty
-                  ? 'Groups'
+                  ? tr('groups')
                   : filterController.author['groups'],
               isSelected: filterController.author['groups'].isNotEmpty,
               cancelButtonEnabled: filterController.author['groups'].isNotEmpty,

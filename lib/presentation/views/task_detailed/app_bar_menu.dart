@@ -45,21 +45,32 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
-          const PopupMenuItem(value: 'Copy link', child: Text('Copy link')),
-          if (task.canEdit)
-            const PopupMenuItem(value: 'Edit task', child: Text('Edit task')),
           PopupMenuItem(
-              value: 'Follow task',
-              child: Text(task.isSubscribed ? 'Unfollow task' : 'Follow task')),
-          const PopupMenuItem(value: 'Copy task', child: Text('Copy task')),
+            value: 'copyLink',
+            child: Text(tr('copyLink')),
+          ),
+          if (task.canEdit)
+            PopupMenuItem(
+              value: 'editTask',
+              child: Text(tr('editTask')),
+            ),
+          PopupMenuItem(
+            value: 'followTask',
+            child:
+                Text(task.isSubscribed ? tr('unfollowTask') : tr('followTask')),
+          ),
+          PopupMenuItem(
+            value: 'copyTask',
+            child: Text(tr('copyTask')),
+          ),
           if (task.canDelete)
             PopupMenuItem(
               textStyle: Theme.of(context)
                   .popupMenuTheme
                   .textStyle
                   .copyWith(color: Theme.of(context).customColors().error),
-              value: 'Delete task',
-              child: const Text('Delete task'),
+              value: 'deleteTask',
+              child: Text(tr('deleteTask')),
             )
         ];
       },
@@ -70,31 +81,29 @@ class _AppBarMenu extends StatelessWidget {
 void _onSelected(value, TaskItemController controller) async {
   var task = controller.task.value;
   switch (value) {
-    case 'Copy link':
+    case 'copyLink':
       controller.copyLink(taskId: task.id, projectId: task.projectOwner.id);
       break;
 
-    case 'Edit task':
+    case 'editTask':
       await Get.toNamed('TaskEditingView',
           arguments: {'task': controller.task.value});
       break;
 
-    case 'Follow task':
+    case 'followTask':
       var result = await controller.subscribeToTask(taskId: task.id);
       if (result != null) await controller.reloadTask();
       break;
 
-    case 'Copy task':
+    case 'copyTask':
       await controller.copyTask();
       break;
 
-    case 'Delete task':
+    case 'deleteTask':
       await Get.dialog(StyledAlertDialog(
-        titleText: 'Delete task',
-        contentText:
-            // ignore: lines_longer_than_80_chars
-            'Are you sure you want to delete these task?\nNote: this action cannot be undone.',
-        acceptText: 'DELETE',
+        titleText: 'deleteTask',
+        contentText: tr('deleteTaskAlert'),
+        acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           var result = await controller.deleteTask(taskId: task.id);

@@ -41,16 +41,16 @@ class _ProjectManager extends StatelessWidget {
         Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
-        title: 'Project manager',
+        title: tr('projectManager'),
         options: <Widget>[
           FilterElement(
-              title: 'me',
+              title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.projectManager['me'],
               onTap: () => filterController.changeProjectManager('me')),
           FilterElement(
             title: filterController.projectManager['other'].isEmpty
-                ? 'Other user'
+                ? tr('otherUser')
                 : filterController.projectManager['other'],
             isSelected: filterController.projectManager['other'].isNotEmpty,
             cancelButtonEnabled:

@@ -41,49 +41,49 @@ class _Type extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Type',
+        title: tr('type'),
         options: <Widget>[
           FilterElement(
-              title: 'folders',
+              title: tr('folders'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['folders'],
               onTap: () => filterController.changeContentTypeFilter('folders')),
           FilterElement(
-              title: 'Documents',
+              title: tr('documents'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['documents'],
               onTap: () =>
                   filterController.changeContentTypeFilter('documents')),
           FilterElement(
-              title: 'Presentations',
+              title: tr('presentations'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['presentations'],
               onTap: () =>
                   filterController.changeContentTypeFilter('presentations')),
           FilterElement(
-              title: 'Spreadsheets',
+              title: tr('spreadsheets'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['spreadsheets'],
               onTap: () =>
                   filterController.changeContentTypeFilter('spreadsheets')),
           FilterElement(
-              title: 'Images',
+              title: tr('images'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['images'],
               onTap: () => filterController.changeContentTypeFilter('images')),
           FilterElement(
-              title: 'Media',
+              title: tr('media'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['media'],
               onTap: () => filterController.changeContentTypeFilter('media')),
           FilterElement(
-              title: 'Archives',
+              title: tr('archives'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['archives'],
               onTap: () =>
                   filterController.changeContentTypeFilter('archives')),
           FilterElement(
-              title: 'All files',
+              title: tr('allFiles'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.contentTypes['allFiles'],
               onTap: () =>

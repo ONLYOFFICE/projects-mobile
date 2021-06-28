@@ -41,20 +41,20 @@ class _Status extends StatelessWidget {
         Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
-        title: 'Status',
+        title: tr('status'),
         options: <Widget>[
           FilterElement(
-              title: 'Active',
+              title: tr('active'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.status['active'],
               onTap: () => filterController.changeStatus('active')),
           FilterElement(
-              title: 'Paused',
+              title: tr('paused'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.status['paused'],
               onTap: () => filterController.changeStatus('paused')),
           FilterElement(
-              title: 'Closed',
+              title: tr('closed'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.status['closed'],
               onTap: () => filterController.changeStatus('closed')),

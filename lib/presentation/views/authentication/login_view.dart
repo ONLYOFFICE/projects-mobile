@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -52,7 +53,7 @@ class LoginView extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(height: Get.height * 0.094),
-            Text('Portal address:',
+            Text('${tr('portalAdress')}:',
                 style: TextStyleHelper.body2(
                     color: Theme.of(context).customColors().onSurface)),
             Text(controller.portalAdress,
@@ -71,7 +72,7 @@ class LoginView extends StatelessWidget {
                           child: Column(
                             children: [
                               AuthTextField(
-                                hintText: 'Email',
+                                hintText: tr('email'),
                                 controller: controller.emailController,
                                 validator: controller.emailValidator,
                                 autofillHint: AutofillHints.email,
@@ -79,7 +80,7 @@ class LoginView extends StatelessWidget {
                               ),
                               SizedBox(height: Get.height * 0.0444),
                               AuthTextField(
-                                hintText: 'Password',
+                                hintText: tr('password'),
                                 controller: controller.passwordController,
                                 haveError: controller.passwordFieldError.isTrue,
                                 validator: controller.passValidator,
@@ -109,7 +110,7 @@ class LoginView extends StatelessWidget {
                                   .withOpacity(0.04)),
                         ]),
                         child: WideButton(
-                          text: 'NEXT',
+                          text: tr('next'),
                           onPressed: () async =>
                               await controller.loginByPassword(),
                         ),
@@ -119,7 +120,7 @@ class LoginView extends StatelessWidget {
                           onPressed: () async =>
                               Get.toNamed('PasswordRecoveryScreen'),
                           child: Text(
-                            'Forgot password?',
+                            tr('forgotPassword'),
                             style: TextStyleHelper.subtitle2(
                                 color:
                                     Theme.of(context).customColors().primary),

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -45,7 +46,7 @@ class SelectDateView extends StatelessWidget {
     bool startDate = Get.arguments['startDate'];
     return Scaffold(
       appBar: StyledAppBar(
-          titleText: startDate ? 'Select start date' : 'Select due date'),
+          titleText: startDate ? tr('selectStartDate') : tr('selectDueDate')),
       body: CalendarDatePicker(
           initialDate: DateTime.now(),
           currentDate: DateTime.now(),

@@ -98,7 +98,7 @@ class _PasswordFormState extends State<PasswordForm> {
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
-        child: Text('Login',
+        child: Text(tr('login'),
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
                 color: Theme.of(context).backgroundColor,

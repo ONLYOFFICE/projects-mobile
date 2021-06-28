@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -42,16 +43,16 @@ class ColorThemeSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: StyledAppBar(titleText: 'Color theme'),
+      appBar: StyledAppBar(titleText: tr('colorTheme')),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 10),
-          const _ColorThemeTile(text: 'Same as system', isSelected: false),
+          _ColorThemeTile(text: tr('sameAsSystem'), isSelected: false),
           const StyledDivider(leftPadding: 16, rightPadding: 16),
-          const _ColorThemeTile(text: 'Light theme', isSelected: true),
+          _ColorThemeTile(text: tr('LightTheme'), isSelected: true),
           const StyledDivider(leftPadding: 16, rightPadding: 16),
-          const _ColorThemeTile(text: 'Dark theme', isSelected: false),
+          _ColorThemeTile(text: tr('DarkTheme'), isSelected: false),
         ],
       ),
     );

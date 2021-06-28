@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
@@ -51,11 +52,11 @@ class NewPasscodeScreen1 extends StatelessWidget {
     var caption;
 
     if (arguments != null) {
-      title = arguments['title'] ?? 'Enter passcode';
-      caption = arguments['caption'] ?? 'Choose passcode to unlock app';
+      title = arguments['title'] ?? tr('enterPasscode');
+      caption = arguments['caption'] ?? tr('choosePasscode');
     }
-    title = title ?? 'Enter passcode';
-    caption = caption ?? 'Choose passcode to unlock app';
+    title = title ?? tr('enterPasscode');
+    caption = caption ?? tr('choosePasscode');
 
     return WillPopScope(
       onWillPop: () async {
@@ -111,7 +112,7 @@ class NewPasscodeScreen1 extends StatelessWidget {
                   TextButton(
                     onPressed: controller.cancelEnablingPasscode,
                     child: Text(
-                      'CANCEL',
+                      tr('cancel'),
                       style: TextStyleHelper.button(
                           color: Theme.of(context).customColors().primary),
                     ),

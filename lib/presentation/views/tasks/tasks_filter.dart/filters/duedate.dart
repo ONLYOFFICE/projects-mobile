@@ -32,54 +32,65 @@
 
 part of '../tasks_filter.dart';
 
-class _Responsible extends StatelessWidget {
+class _DueDate extends StatelessWidget {
   final TaskFilterController filterController;
-  const _Responsible({Key key, this.filterController}) : super(key: key);
+  const _DueDate({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Responsible',
+        title: tr('dueDate'),
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: tr('overdue'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.responsible['Me'],
-              onTap: () => filterController.changeResponsible('Me')),
+              isSelected: filterController.deadline['overdue'],
+              onTap: () => filterController.changeDeadline('overdue')),
           FilterElement(
-              title: filterController.responsible['Other'].isEmpty
-                  ? 'Other user'
-                  : filterController.responsible['Other'],
-              isSelected: filterController.responsible['Other'].isNotEmpty,
-              cancelButtonEnabled:
-                  filterController.responsible['Other'].isNotEmpty,
-              onTap: () async {
-                var newUser = await Get.bottomSheet(const UsersBottomSheet());
-                filterController.changeResponsible('Other', newUser);
-              },
-              onCancelTap: () =>
-                  filterController.changeResponsible('Other', null)),
-          FilterElement(
-              title: filterController.responsible['Groups'].isEmpty
-                  ? 'Groups'
-                  : filterController.responsible['Groups'],
-              isSelected: filterController.responsible['Groups'].isNotEmpty,
-              cancelButtonEnabled:
-                  filterController.responsible['Groups'].isNotEmpty,
-              onTap: () async {
-                var newGroup = await Get.bottomSheet(const GroupsBottomSheet());
-                filterController.changeResponsible('Groups', newGroup);
-              },
-              onCancelTap: () =>
-                  filterController.changeResponsible('Groups', null)),
-          FilterElement(
-              title: 'No responsible',
+              title: tr('today'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.responsible['No'],
-              onTap: () => filterController.changeResponsible('No'))
+              isSelected: filterController.deadline['today'],
+              onTap: () => filterController.changeDeadline('today')),
+          FilterElement(
+              title: tr('upcoming'),
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.deadline['upcoming'],
+              onTap: () => filterController.changeDeadline('upcoming')),
+          FilterElement(
+              title: tr('customPeriod'),
+              titleColor: Theme.of(context).customColors().onSurface,
+              isSelected: filterController.deadline['custom']['selected'],
+              onTap: () =>
+                  selectDateRange(context, filterController: filterController)),
         ],
       ),
     );
+  }
+}
+
+Future selectDateRange(BuildContext context,
+    {TaskFilterController filterController}) async {
+  var pickedRange = await showDateRangePicker(
+    context: context,
+    initialDateRange: DateTimeRange(
+      start: filterController.deadline['custom']['startDate'],
+      end: filterController.deadline['custom']['stopDate'],
+    ),
+    firstDate: DateTime.now(),
+    lastDate: DateTime(DateTime.now().year + 2),
+    helpText: tr('selectDateRange'),
+    cancelText: tr('cancel'),
+    confirmText: tr('ok'),
+    saveText: tr('save'),
+    errorFormatText: tr('invalidFormat'),
+    errorInvalidText: tr('outOfRange'),
+    errorInvalidRangeText: tr('invalidRange'),
+    fieldStartHintText: tr('startDate'),
+    fieldEndLabelText: tr('endDate'),
+  );
+  if (pickedRange != null) {
+    await filterController.changeDeadline('custom',
+        start: pickedRange.start, stop: pickedRange.end);
   }
 }

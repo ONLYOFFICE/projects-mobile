@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -62,7 +63,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: StyledAppBar(
-        titleText: 'Select project manager',
+        titleText: tr('selectPM'),
         bottom: Container(
           height: 40,
           margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
@@ -154,7 +155,7 @@ class UsersDefault extends StatelessWidget {
         children: <Widget>[
           Container(
             padding: const EdgeInsets.only(left: 16),
-            child: Text('Me', style: TextStyleHelper.body2()),
+            child: Text(tr('me'), style: TextStyleHelper.body2()),
           ),
           const SizedBox(height: 26),
           PortalUserItem(
@@ -164,7 +165,7 @@ class UsersDefault extends StatelessWidget {
           const SizedBox(height: 26),
           Container(
             padding: const EdgeInsets.only(left: 16),
-            child: Text('Users', style: TextStyleHelper.body2()),
+            child: Text(tr('users'), style: TextStyleHelper.body2()),
           ),
           const SizedBox(height: 26),
           Column(children: [

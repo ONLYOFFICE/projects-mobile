@@ -32,6 +32,7 @@
 
 import 'dart:math' as math;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -95,7 +96,8 @@ class ProjectsView extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.project_not_created),
-                      text: 'No projects had been created yet'),
+                      text: tr('noEntityCreated',
+                          args: [tr('projects').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -105,7 +107,8 @@ class ProjectsView extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'There are no projects matching these filters'),
+                      text: tr('noEntityMatching',
+                          args: [tr('projects').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -246,7 +249,9 @@ class _Bottom extends StatelessWidget {
               children: <Widget>[
                 Obx(
                   () => Text(
-                    'Total ${controller.paginationController.total.value}',
+                    tr('total', args: [
+                      controller.paginationController.total.value.toString()
+                    ]),
                     style: TextStyleHelper.body2(
                       color: Theme.of(context)
                           .customColors()

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
@@ -58,7 +59,7 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
           const SizedBox(height: 18.5),
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text('Select status',
+            child: Text(tr('selectStatus'),
                 style: TextStyleHelper.h6(
                     color: Theme.of(context).customColors().onSurface)),
           ),

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -50,12 +51,13 @@ class MilestoneTile extends StatelessWidget {
         // ignore: omit_local_variable_types
         bool _isSelected = controller.selectedMilestoneTitle.value.isNotEmpty;
         return NewTaskInfo(
-            text:
-                _isSelected ? controller.selectedMilestoneTitle.value : 'None',
+            text: _isSelected
+                ? controller.selectedMilestoneTitle.value
+                : tr('none'),
             icon: SvgIcons.milestone,
             // because color is always black
             isSelected: true,
-            caption: 'Milestone:',
+            caption: '${tr('milestone')}:',
             onTap: () => Get.toNamed('SelectMilestoneView',
                 arguments: {'controller': controller}));
       },

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/tasks_search_controller.dart';
@@ -50,7 +51,7 @@ class TasksSearchScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Tasks search',
+        titleText: tr('tasksSearch'),
         bottom: SearchField(
           autofocus: true,
           onChanged: (value) {

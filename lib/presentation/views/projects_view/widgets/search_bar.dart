@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -65,8 +66,8 @@ class UsersSearchBar extends StatelessWidget {
             child: TextField(
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController,
-              decoration: const InputDecoration.collapsed(
-                  hintText: 'Search for users...'),
+              decoration:
+                  InputDecoration.collapsed(hintText: tr('usersSearch')),
               onSubmitted: (value) {
                 controller.searchUsers(value);
               },

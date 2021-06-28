@@ -79,8 +79,8 @@ import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
+import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
-import 'package:projects/presentation/views/tasks_filter.dart/tasks_filter.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/', page: () => NavigationView()),

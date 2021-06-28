@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -127,11 +128,11 @@ class MoreView extends StatelessWidget {
           ),
           _MoreTile(
               iconPath: SvgIcons.discussions,
-              text: 'Discussions',
+              text: tr('discussions'),
               onTap: () => Get.find<NavigationController>().changeTabIndex(5)),
           _MoreTile(
               iconPath: SvgIcons.documents,
-              text: 'Documents',
+              text: tr('documents'),
               onTap: () => Get.find<NavigationController>().changeTabIndex(6)),
         ],
       ),

@@ -40,16 +40,16 @@ class _Creator extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Creator',
+        title: tr('creator'),
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.creator['Me'],
               onTap: () => filterController.changeCreator('Me')),
           FilterElement(
             title: filterController.creator['Other'].isEmpty
-                ? 'Other user'
+                ? tr('otherUser')
                 : filterController.creator['Other'],
             isSelected: filterController.creator['Other'].isNotEmpty,
             cancelButtonEnabled: filterController.creator['Other'].isNotEmpty,

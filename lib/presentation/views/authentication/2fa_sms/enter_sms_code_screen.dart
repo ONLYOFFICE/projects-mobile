@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:get/get.dart';
@@ -46,7 +47,6 @@ class EnterSMSCodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var text = 'Enter the 6-digit code we sent to ';
     TFASmsController controller;
 
     try {
@@ -72,7 +72,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
               SizedBox(height: h(24.71)),
               AppIcon(icon: SvgIcons.password_recovery),
               SizedBox(height: h(20.74)),
-              Text(text,
+              Text(tr('enterSendedCode'),
                   style: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().onSurface)),
               Text(controller.phoneNoise,
@@ -119,7 +119,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       ? Align(
                           alignment: Alignment.topLeft,
                           child: Text(
-                            'Incorrect code, please try again.',
+                            tr('incorrectCode'),
                             style: TextStyleHelper.caption(
                                 color: Theme.of(context).customColors().error),
                           ),
@@ -128,7 +128,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                 ),
               ),
               WideButton(
-                text: 'CONFIRM',
+                text: tr('confirm'),
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 onPressed: () {
                   print(codeController.text);
@@ -137,7 +137,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
               ),
               TextButton(
                 onPressed: controller.resendSms,
-                child: const Text('Request new code'),
+                child: Text(tr('requestNewCode')),
               )
             ],
           ),

@@ -41,16 +41,16 @@ class _TeamMember extends StatelessWidget {
         Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
-        title: 'Team member',
+        title: tr('teamMember'),
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.teamMember['me'],
               onTap: () => filterController.changeTeamMember('me')),
           FilterElement(
             title: filterController.teamMember['other'].isEmpty
-                ? 'Other user'
+                ? tr('otherUser')
                 : filterController.teamMember['other'],
             isSelected: filterController.teamMember['other'].isNotEmpty,
             cancelButtonEnabled:

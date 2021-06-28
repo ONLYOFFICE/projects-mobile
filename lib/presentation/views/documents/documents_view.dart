@@ -33,6 +33,7 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -146,7 +147,7 @@ class DocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'Not found'),
+                      text: tr('notFound')),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -157,7 +158,8 @@ class DocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.documents_not_created),
-                      text: 'No documents had been created yet'),
+                      text: tr('noEntityCreated',
+                          args: [tr('documents').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -168,7 +170,8 @@ class DocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'There are no documents matching these filters'),
+                      text: tr('noEntityMatching',
+                          args: [tr('documents').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -320,7 +323,9 @@ class DocsBottom extends StatelessWidget {
                   children: <Widget>[
                     Obx(
                       () => Text(
-                        'Total ${controller.paginationController.total.value}',
+                        tr('total', args: [
+                          controller.paginationController.total.value.toString()
+                        ]),
                         style: TextStyleHelper.body2(
                           color: Theme.of(context)
                               .customColors()
@@ -440,33 +445,33 @@ class FileCell extends StatelessWidget {
                         .withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'open',
-                      child: Text('Open'),
+                      child: Text(tr('open')),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'copyLink',
-                      child: Text('Copy link'),
+                      child: Text(tr('copyLink')),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'download',
-                      child: Text('Download'),
+                      child: Text(tr('download')),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'copy',
-                      child: Text('Copy'),
+                      child: Text(tr('copy')),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'move',
-                      child: Text('Move'),
+                      child: Text(tr('move')),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'rename',
-                      child: Text('Rename'),
+                      child: Text(tr('rename')),
                     ),
-                    const PopupMenuItem(
+                    PopupMenuItem(
                       value: 'delete',
-                      child: Text('Delete'),
+                      child: Text(tr('delete')),
                     ),
                   ];
                 },
@@ -537,7 +542,12 @@ class FolderCell extends StatelessWidget {
                         style: TextStyleHelper.projectTitle),
                   ),
                   Text(
-                      '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
+                      tr('documentsCaption', args: [
+                        formatedDate(element.updated),
+                        element.filesCount.toString(),
+                        element.foldersCount.toString()
+                      ]),
+                      // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(
                           color: Theme.of(context)
                               .customColors()
@@ -564,36 +574,36 @@ class FolderCell extends StatelessWidget {
                           .withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'open',
-                        child: Text('Open'),
+                        child: Text(tr('open')),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'copyLink',
-                        child: Text('Copy link'),
+                        child: Text(tr('copyLink')),
                       ),
                       // const PopupMenuItem(
                       //   value: 'download',
                       //   child: Text('Download'),
                       // ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'copy',
-                        child: Text('Copy'),
+                        child: Text(tr('copy')),
                       ),
                       if (_isRoot(element))
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'move',
-                          child: Text('Move'),
+                          child: Text(tr('move')),
                         ),
                       if (_isRoot(element))
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'rename',
-                          child: Text('Rename'),
+                          child: Text(tr('rename')),
                         ),
                       if (_isRoot(element))
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'delete',
-                          child: Text('Delete'),
+                          child: Text(tr('delete')),
                         ),
                     ];
                   },
@@ -624,8 +634,8 @@ void _onFolderPopupMenuSelected(
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context, text: 'Link has been copied to the clipboard'));
+        ScaffoldMessenger.of(context).showSnackBar(
+            styledSnackBar(context: context, text: tr('linkCopied')));
       }
       break;
     case 'open':
@@ -666,7 +676,7 @@ void _onFolderPopupMenuSelected(
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: 'File had been deleted'));
+            styledSnackBar(context: context, text: tr('folderDeleted')));
         Future.delayed(const Duration(milliseconds: 500),
             () => controller.refreshContent());
       }
@@ -690,8 +700,8 @@ void _onFilePopupMenuSelected(
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context, text: 'Link has been copied to the clipboard'));
+        ScaffoldMessenger.of(context).showSnackBar(
+            styledSnackBar(context: context, text: tr('linkCopied')));
       }
       break;
     case 'open':
@@ -729,7 +739,7 @@ void _onFilePopupMenuSelected(
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: 'File had been deleted'));
+            styledSnackBar(context: context, text: tr('fileDeleted')));
         Future.delayed(const Duration(milliseconds: 500),
             () => controller.refreshContent());
       }
@@ -745,26 +755,29 @@ void _renameFolder(
 
   Get.dialog(
     StyledAlertDialog(
-      titleText: 'Rename folder',
+      titleText: tr('renameFolder'),
       content: TextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,
-        decoration:
-            const InputDecoration.collapsed(hintText: 'Enter folder name'),
+        decoration: InputDecoration.collapsed(
+          hintText: tr('enterFolderName'),
+        ),
         onSubmitted: (value) {
           controller.newSearch(value);
         },
       ),
-      acceptText: 'CONFIRM',
-      cancelText: 'CANCEL',
+      acceptText: tr('confirm'),
+      cancelText: tr('cancel'),
       onAcceptTap: () async {
         if (inputController.text != element.title) {
           var success =
               await controller.renameFolder(element, inputController.text);
           if (success) {
             ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-                context: context, text: 'Folder had been renamed'));
+              context: context,
+              text: tr('folderRenamed'),
+            ));
             Get.back();
             await controller.refreshContent();
           }
@@ -783,26 +796,25 @@ void _renameFile(
 
   Get.dialog(
     StyledAlertDialog(
-      titleText: 'Rename file',
+      titleText: tr('renameFile'),
       content: TextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,
-        decoration:
-            const InputDecoration.collapsed(hintText: 'Enter file name'),
+        decoration: InputDecoration.collapsed(hintText: tr('enterFileName')),
         onSubmitted: (value) {
           controller.newSearch(value);
         },
       ),
-      acceptText: 'CONFIRM',
-      cancelText: 'CANCEL',
+      acceptText: tr('confirm'),
+      cancelText: tr('cancel'),
       onAcceptTap: () async {
         if (inputController.text != element.title) {
           var success =
               await controller.renameFile(element, inputController.text);
           if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-                context: context, text: 'File had been renamed'));
+            ScaffoldMessenger.of(context).showSnackBar(
+                styledSnackBar(context: context, text: tr('fileRenamed')));
             Get.back();
             await controller.refreshContent();
           }

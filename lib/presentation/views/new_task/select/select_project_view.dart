@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -64,10 +65,10 @@ class SelectProjectView extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Select project',
+        titleText: tr('selectProject'),
         bottomHeight: 44,
         bottom: SearchField(
-          hintText: 'Search for projects...',
+          hintText: tr('searchProjects'),
           controller: _searchController.searchInputController,
           showClearIcon: true,
           onSubmitted: (value) => _searchController.newSearch(value),

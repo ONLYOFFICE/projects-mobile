@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -45,7 +46,7 @@ class PriorityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() => TileWithSwitch(
-        title: 'High priority',
+        title: tr('highPriority'),
         isSelected: controller.highPriority.value,
         onChanged: controller.changePriority));
   }

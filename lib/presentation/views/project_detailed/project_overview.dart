@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -64,7 +65,7 @@ class ProjectOverview extends StatelessWidget {
             children: [
               const SizedBox(height: 26),
               Obx(() => InfoTile(
-                    caption: 'PROJECT',
+                    caption: tr('project').toUpperCase(),
                     subtitle: projectController.projectTitleText.value,
                     subtitleStyle: TextStyleHelper.headline7(
                         color: Theme.of(context).customColors().onBackground),
@@ -77,7 +78,7 @@ class ProjectOverview extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: InfoTile(
-                    caption: 'Description:',
+                    caption: tr('description'),
                     icon: AppIcon(
                         icon: SvgIcons.description,
                         color: const Color(0xff707070)),
@@ -87,8 +88,8 @@ class ProjectOverview extends StatelessWidget {
                       colorClickableText: Colors.pink,
                       style: TextStyleHelper.body1,
                       trimMode: TrimMode.Line,
-                      trimCollapsedText: 'Show more',
-                      trimExpandedText: 'Show less',
+                      trimCollapsedText: tr('showMore'),
+                      trimExpandedText: tr('showLess'),
                       moreStyle: TextStyleHelper.body2(
                           color: Theme.of(context).customColors().links),
                     ),
@@ -97,7 +98,7 @@ class ProjectOverview extends StatelessWidget {
               Obx(() => InfoTile(
                     icon: AppIcon(
                         icon: SvgIcons.user, color: const Color(0xff707070)),
-                    caption: 'Project manager',
+                    caption: tr('projectManager'),
                     subtitle: projectController.managerText.value,
                     subtitleStyle: TextStyleHelper.subtitle1(
                         color: Theme.of(context).customColors().onSurface),
@@ -110,10 +111,10 @@ class ProjectOverview extends StatelessWidget {
                   onTapFunction: () {
                     tabController.animateTo(5);
                   },
-                  caption: 'Team',
+                  caption: tr('team'),
                   iconData: Icons.navigate_next,
-                  subtitle:
-                      '${projectController.teamMembersCount.value} members',
+                  subtitle: plural(
+                      'member', projectController.teamMembersCount.value),
                   subtitleStyle: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().onSurface),
                 ),
@@ -122,19 +123,15 @@ class ProjectOverview extends StatelessWidget {
               Obx(() => InfoTile(
                   icon: AppIcon(
                       icon: SvgIcons.calendar, color: const Color(0xff707070)),
-                  caption: 'Creation date',
+                  caption: tr('creationDate'),
                   subtitle: projectController.creationDateText.value)),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
                   icon: AppIcon(
                       icon: SvgIcons.tag, color: const Color(0xff707070)),
-                  caption: 'Tags',
+                  caption: tr('tags'),
                   subtitle: projectController.tagsText.value)),
             ],
-          );
-        } else {
-          return const Material(
-            child: Center(child: Text('LOADING')),
           );
         }
       },

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -177,7 +178,7 @@ class _DocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'Not found'),
+                      text: tr('notFound')),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -188,7 +189,8 @@ class _DocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.documents_not_created),
-                      text: 'No documents had been created yet'),
+                      text: tr('noEntityCreated',
+                          args: [tr('documents').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -199,7 +201,8 @@ class _DocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'There are no documents matching these filters'),
+                      text: tr('noEntityMatching',
+                          args: [tr('documents').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -358,7 +361,12 @@ class _MoveFolderCell extends StatelessWidget {
                         style: TextStyleHelper.projectTitle),
                   ),
                   Text(
-                      '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
+                      tr('documentsCaption', args: [
+                        formatedDate(element.updated),
+                        element.filesCount.toString(),
+                        element.foldersCount.toString()
+                      ]),
+                      // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(
                           color: Theme.of(context)
                               .customColors()
@@ -396,11 +404,9 @@ class MoveDocumentsScreen extends StatelessWidget {
               const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
             if (controller.loaded.isFalse) const ListLoadingSkeleton(),
             if (controller.loaded.isTrue && controller.nothingFound.isTrue)
-              Expanded(
+              const Expanded(
                 child: Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'Not found'),
+                  child: NothingFound(),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -411,7 +417,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.documents_not_created),
-                      text: 'No documents had been created yet'),
+                      text: tr('noEntityCreated',
+                          args: [tr('documents').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -422,7 +429,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: 'There are no documents matching these filters'),
+                      text: tr('noEntityMatching',
+                          args: [tr('documents').toLowerCase()])),
                 ),
               ),
             if (controller.loaded.isTrue &&
@@ -452,35 +460,35 @@ class MoveDocumentsScreen extends StatelessWidget {
               children: <Widget>[
                 TextButton(
                   onPressed: () => _cancel(controller),
-                  child: Text('cancel'.toUpperCase(),
+                  child: Text(tr('cancel').toUpperCase(),
                       style: TextStyleHelper.button()),
                 ),
                 if (controller.mode == 'moveFolder' &&
                     !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _moveFolder(controller, context),
-                    child: Text('move folder here'.toUpperCase(),
+                    child: Text(tr('moveFolderHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFolder' &&
                     !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _copyFolder(controller, context),
-                    child: Text('copy folder here'.toUpperCase(),
+                    child: Text(tr('copyFolderHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'moveFile' &&
                     !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _moveFile(controller, context),
-                    child: Text('move file here'.toUpperCase(),
+                    child: Text(tr('moveFileHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFile' &&
                     !_isRoot(controller.currentFolder))
                   TextButton(
                     onPressed: () => _copyFile(controller, context),
-                    child: Text('copy file here'.toUpperCase(),
+                    child: Text(tr('copyFileHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
               ],
@@ -503,7 +511,7 @@ Future _moveFolder(
     if (controller.refreshCalback != null) controller.refreshCalback();
 
     ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: 'Folder had been moved'));
+        styledSnackBar(context: context, text: tr('folderMoved')));
   }
 }
 
@@ -518,7 +526,7 @@ Future _copyFolder(
     if (controller.refreshCalback != null) controller.refreshCalback();
 
     ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: 'Folder had been copied'));
+        styledSnackBar(context: context, text: tr('folderCopied')));
   }
 }
 
@@ -532,8 +540,8 @@ Future _moveFile(
     Get.close(controller.foldersCount);
     if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: 'File had been moved'));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(styledSnackBar(context: context, text: tr('fileMoved')));
   }
 }
 
@@ -547,8 +555,8 @@ Future _copyFile(
     Get.close(controller.foldersCount);
     if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: 'File had been copied'));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(styledSnackBar(context: context, text: tr('fileCopied')));
   }
 }
 

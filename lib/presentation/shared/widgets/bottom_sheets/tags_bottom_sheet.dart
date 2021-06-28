@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -61,7 +62,7 @@ class TagsBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select tag', style: TextStyleHelper.h6()),
+                Text(tr('selectTag'), style: TextStyleHelper.h6()),
                 IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () => print(''),

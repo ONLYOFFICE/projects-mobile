@@ -30,6 +30,9 @@
  *
  */
 
+import 'dart:ui' as UI;
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -128,7 +131,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (_isSelected)
-                                Text('Description:',
+                                Text('${tr('description')}:',
                                     style: TextStyleHelper.caption(
                                         color: Theme.of(context)
                                             .customColors()
@@ -136,7 +139,7 @@ class _DescriptionTileState extends State<DescriptionTile>
                                             .withOpacity(0.75))),
                               Flexible(
                                 child: Text(
-                                    _isSelected ? text : 'Add description',
+                                    _isSelected ? text : tr('addDescription'),
                                     style: TextStyleHelper.subtitle1(
                                         color: _isSelected
                                             ? Theme.of(context)
@@ -184,7 +187,7 @@ Size _textSize(String text, TextStyle style) {
   final textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
       maxLines: 1,
-      textDirection: TextDirection.ltr)
+      textDirection: UI.TextDirection.ltr)
     ..layout(minWidth: 0, maxWidth: double.infinity);
   return textPainter.size;
 }

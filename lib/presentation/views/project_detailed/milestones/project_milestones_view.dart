@@ -31,6 +31,7 @@
  */
 
 import 'dart:math' as math;
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -69,7 +70,8 @@ class ProjectMilestonesScreen extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.milestone_not_created),
-                    text: 'There are no milestones has been created yet'),
+                    text: tr('noEntityCreated',
+                        args: [tr('milestones').toLowerCase()])),
               ),
             ),
           if (controller.loaded.isTrue &&
@@ -79,7 +81,8 @@ class ProjectMilestonesScreen extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: 'There are no milestones matching these filters'),
+                    text: tr('noEntityMatching',
+                        args: [tr('milestones').toLowerCase()])),
               ),
             ),
           if (controller.loaded.isTrue &&
@@ -106,9 +109,6 @@ class Header extends StatelessWidget {
     Key key,
   }) : super(key: key);
   final controller = Get.find<MilestonesDataSource>();
-  // final controller = Get.find<ProjectTasksController>();
-  // final sortController = Get.find<MilestonesSortController>();
-  // final filterController = Get.find<MilestonesFilterController>();
 
   @override
   Widget build(BuildContext context) {

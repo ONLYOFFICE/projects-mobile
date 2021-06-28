@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
@@ -67,7 +68,7 @@ class PortalView extends StatelessWidget {
                       SizedBox(height: Get.height * 0.165),
                       AppIcon(icon: SvgIcons.logo_big),
                       SizedBox(height: Get.height * 0.044),
-                      Text('ONLYOFFICE\nProjects',
+                      Text(tr('appName'),
                           textAlign: TextAlign.center,
                           style: TextStyleHelper.headline6()),
                       SizedBox(height: Get.height * 0.111),
@@ -75,7 +76,7 @@ class PortalView extends StatelessWidget {
                         () => AuthTextField(
                           controller: controller.portalAdressController,
                           autofillHint: AutofillHints.url,
-                          hintText: 'Portal address',
+                          hintText: tr('portalAdress'),
                           validator: controller.emailValidator,
                           haveError: controller.portalFieldError.isTrue,
                         ),
@@ -99,14 +100,14 @@ class PortalView extends StatelessWidget {
                                   .withOpacity(0.04)),
                         ]),
                         child: WideButton(
-                          text: 'NEXT',
+                          text: tr('next'),
                           onPressed: () async =>
                               await controller.getPortalCapabilities(),
                         ),
                       ),
                       SizedBox(height: Get.height * 0.222),
                       Text(
-                        _decsription,
+                        tr('appDescription'),
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.body2(
                             color: Theme.of(context)
@@ -122,6 +123,3 @@ class PortalView extends StatelessWidget {
     );
   }
 }
-
-String _decsription =
-    'ONLYOFFICE portal provide saving filesin cloud storage, share it with co-workersand co-editing in realtime';

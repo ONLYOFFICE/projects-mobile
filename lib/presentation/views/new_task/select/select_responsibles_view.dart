@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -58,15 +59,16 @@ class SelectResponsiblesView extends StatelessWidget {
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Select responsibles'),
+              Text(tr('selectResponsibles')),
               if (controller.responsibles.isNotEmpty)
-                Text('${controller.responsibles.length} users selected',
+                Text(plural('usersSelected', controller.responsibles.length),
+                    // '${controller.responsibles.length} users selected',
                     style: TextStyleHelper.caption())
             ],
           ),
         ),
         bottom: SearchField(
-          hintText: 'Search for users',
+          hintText: tr('searchUsers'),
           onSubmitted: (value) => usersDataSource.searchUsers(value),
         ),
         onLeadingPressed: controller.leaveResponsiblesSelectionView,

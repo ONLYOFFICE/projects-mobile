@@ -43,20 +43,20 @@ class _Step2 extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 12),
-        Text('Step 2 of 4', style: _stepStyle(context)),
+        Text(tr('step2'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
         AppIcon(icon: PngIcons.authentificator_s2, isPng: true, height: 184.5),
         const SizedBox(height: 23),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),
-          child: Text(_setupText1,
+          child: Text(tr('step2SetupText1'),
               textAlign: TextAlign.center, style: _setup1Style(context)),
         ),
         const SizedBox(height: 34),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            _setupText2,
+            tr('step2SetupText2'),
             textAlign: TextAlign.center,
             style: _setup2Style(context),
           ),
