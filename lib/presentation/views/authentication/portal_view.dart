@@ -45,6 +45,11 @@ class PortalView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    try {
+      Get.find<LoginController>().onClose();
+    } catch (e) {
+      debugPrint(e);
+    }
     var controller = Get.put(LoginController());
 
     return Scaffold(
@@ -66,18 +71,14 @@ class PortalView extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyleHelper.headline6()),
                       SizedBox(height: Get.height * 0.111),
-                      AuthTextField(
-                        controller: controller.portalAdressController,
-                        hintText: 'Portal address',
-                        validator: controller.emailValidator,
-                        autofillHint: AutofillHints.url,
-                        onChanged: (value) {
-                          if (value.isNotEmpty) {
-                            controller.portalFieldIsEmpty.value = false;
-                          } else {
-                            controller.portalFieldIsEmpty.value = true;
-                          }
-                        },
+                      Obx(
+                        () => AuthTextField(
+                          controller: controller.portalAdressController,
+                          autofillHint: AutofillHints.url,
+                          hintText: 'Portal address',
+                          validator: controller.emailValidator,
+                          haveError: controller.portalFieldError.isTrue,
+                        ),
                       ),
                       SizedBox(height: Get.height * 0.033),
                       DecoratedBox(
@@ -97,24 +98,10 @@ class PortalView extends StatelessWidget {
                                   .onBackground
                                   .withOpacity(0.04)),
                         ]),
-                        child: Obx(
-                          // ignore: deprecated_member_use
-                          () => WideButton(
-                            text: 'LOG IN',
-                            onPressed: controller.portalFieldIsEmpty.isTrue
-                                ? null
-                                : () async =>
-                                    await controller.getPortalCapabilities(),
-                            color: controller.portalFieldIsEmpty.isFalse
-                                ? Theme.of(context).customColors().primary
-                                : Theme.of(context).customColors().surface,
-                            textColor: controller.portalFieldIsEmpty.isFalse
-                                ? Theme.of(context).customColors().onNavBar
-                                : Theme.of(context)
-                                    .customColors()
-                                    .onSurface
-                                    .withOpacity(0.4),
-                          ),
+                        child: WideButton(
+                          text: 'NEXT',
+                          onPressed: () async =>
+                              await controller.getPortalCapabilities(),
                         ),
                       ),
                       SizedBox(height: Get.height * 0.222),

@@ -36,6 +36,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class SvgIcons {
   SvgIcons._();
   static const String logo_new = 'lib/assets/images/logo_new.svg';
+  static const String logo_new2 = 'lib/assets/images/logo_new2.svg';
   static const String logo_big = 'lib/assets/images/logo_big.svg';
   static const String title = 'lib/assets/images/icons/title.svg';
 

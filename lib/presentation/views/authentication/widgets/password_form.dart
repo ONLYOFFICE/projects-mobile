@@ -88,8 +88,7 @@ class _PasswordFormState extends State<PasswordForm> {
     );
 
     var onLoginPressed = () async {
-      await controller.loginByPassword(
-          emailController.text, passController.text);
+      await controller.loginByPassword();
     };
     final loginButon = Material(
       elevation: 5.0,
