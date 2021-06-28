@@ -38,6 +38,7 @@ import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
 class NewDiscussionCommentController extends GetxController
@@ -70,6 +71,7 @@ class NewDiscussionCommentController extends GetxController
       PortalComment newComment = await _api.addMessageComment(
           content: _textController.text, messageId: idFrom);
       if (newComment != null) {
+        _textController.clear();
         var discussionController = Get.find<DiscussionItemController>();
         // ignore: unawaited_futures
         discussionController.onRefresh();
@@ -94,6 +96,7 @@ class NewDiscussionCommentController extends GetxController
         parentId: parentId,
       );
       if (newComment != null) {
+        _textController.clear();
         var discussionController = Get.find<DiscussionItemController>();
         // ignore: unawaited_futures
         discussionController.onRefresh();
@@ -103,6 +106,25 @@ class NewDiscussionCommentController extends GetxController
             text: 'Comment had been created',
             buttonText: ''));
       }
+    }
+  }
+
+  @override
+  void leavePage() {
+    if (_textController.text.isNotEmpty) {
+      Get.dialog(StyledAlertDialog(
+        titleText: 'Discard changes?',
+        contentText: 'If you leave, all changes will be lost.',
+        acceptText: 'DELETE',
+        onAcceptTap: () {
+          _textController.clear();
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    } else {
+      Get.back();
     }
   }
 }
