@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
@@ -41,28 +42,28 @@ class DashboardView extends StatelessWidget {
               controller: dashboardController.scrollController,
               children: <Widget>[
                 DashboardCardView(
-                  title: 'My Tasks',
-                  overline: 'Tasks',
+                  title: tr('myTasks'),
+                  overline: tr('tasks'),
                   controller: dashboardController.myTaskController,
                 ),
                 DashboardCardView(
-                  title: 'Upcoming',
-                  overline: 'Tasks',
+                  title: tr('upcomingTasks'),
+                  overline: tr('tasks'),
                   controller: dashboardController.upcomingTaskscontroller,
                 ),
                 DashboardCardView(
-                  title: 'My Projects',
-                  overline: 'Projects',
+                  title: tr('myProjects'),
+                  overline: tr('projects'),
                   controller: dashboardController.myProjectsController,
                 ),
                 DashboardCardView(
-                  title: 'Projects I Folow',
-                  overline: 'Projects',
+                  title: tr('projectsIFolow'),
+                  overline: tr('projects'),
                   controller: dashboardController.folowedProjectsController,
                 ),
                 DashboardCardView(
-                  title: 'Active Projects',
-                  overline: 'Projects',
+                  title: tr('activeProjects'),
+                  overline: tr('projects'),
                   controller: dashboardController.activeProjectsController,
                 ),
               ],
@@ -214,7 +215,8 @@ class DashboardCardView extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Text(
-                                      'There are no active ${overline.toLowerCase()}',
+                                      tr('dashboardNoActive',
+                                          args: [overline.toLowerCase()]),
                                       style: TextStyleHelper.subtitle1(
                                         color: Theme.of(context)
                                             .customColors()
@@ -250,7 +252,7 @@ class DashboardCardView extends StatelessWidget {
                                       },
                                       child: !controller.showAll.value
                                           ? Text(
-                                              'view all'.toUpperCase(),
+                                              tr('viewAll').toUpperCase(),
                                               style: TextStyleHelper.button(
                                                 color: Theme.of(context)
                                                     .customColors()
@@ -258,7 +260,7 @@ class DashboardCardView extends StatelessWidget {
                                               ),
                                             )
                                           : Text(
-                                              'view less'.toUpperCase(),
+                                              tr('viewLess').toUpperCase(),
                                               style: TextStyleHelper.button(
                                                 color: Theme.of(context)
                                                     .customColors()

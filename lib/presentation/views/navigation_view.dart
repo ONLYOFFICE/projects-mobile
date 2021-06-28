@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -70,21 +71,21 @@ class NavigationView extends StatelessWidget {
                             'lib/assets/images/icons/tab_bar/dashboard.svg'),
                         activeIcon: SVG.create(
                             'lib/assets/images/icons/tab_bar/dashboard_active.svg'),
-                        label: 'Dashboard',
+                        label: tr('dashboard'),
                       ),
                       BottomNavigationBarItem(
                         icon: SVG.create(
                             'lib/assets/images/icons/tab_bar/tasks.svg'),
                         activeIcon: SVG.create(
                             'lib/assets/images/icons/tab_bar/tasks_active.svg'),
-                        label: 'Tasks',
+                        label: tr('tasks'),
                       ),
                       BottomNavigationBarItem(
                         icon: SVG.create(
                             'lib/assets/images/icons/tab_bar/projects.svg'),
                         activeIcon: SVG.create(
                             'lib/assets/images/icons/tab_bar/projects_active.svg'),
-                        label: 'Projects',
+                        label: tr('projects'),
                       ),
                       BottomNavigationBarItem(
                         icon: SVG
@@ -120,14 +121,14 @@ class NavigationView extends StatelessWidget {
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_dashboard_active,
                               height: _iconSize),
-                          label: const Text('Dashboard')),
+                          label: Text(tr('dashboard'))),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_tasks, height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_tasks_active,
                               height: _iconSize),
-                          label: const Text('Tasks')),
+                          label: Text(tr('tasks'))),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_projects,
@@ -135,7 +136,7 @@ class NavigationView extends StatelessWidget {
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_projects_active,
                               height: _iconSize),
-                          label: const Text('Projects')),
+                          label: Text(tr('projects'))),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_more, height: _iconSize),

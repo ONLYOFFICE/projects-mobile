@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -107,7 +108,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                 tabs: [
                   const Tab(text: 'Overview'),
                   CustomTab(
-                      title: 'Tasks',
+                      title: tr('tasks'),
                       currentTab: _activeIndex.value == 1,
                       count: projectController.projectDetailed.taskCountTotal),
                   CustomTab(

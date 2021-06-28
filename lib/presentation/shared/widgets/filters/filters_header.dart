@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
@@ -45,7 +46,7 @@ class FiltersHeader extends StatelessWidget {
             Positioned(
                 top: 18.5,
                 left: 16,
-                child: Text('Filter',
+                child: Text(tr('filter'),
                     style: TextStyleHelper.h6(
                         color: Theme.of(context).customColors().onSurface))),
             Positioned(
@@ -56,7 +57,7 @@ class FiltersHeader extends StatelessWidget {
                       filterController.resetFilters();
                       Get.back();
                     },
-                    child: Text('RESET',
+                    child: Text(tr('reset'),
                         style: TextStyleHelper.button(
                             color:
                                 Theme.of(context).customColors().systemBlue)))),

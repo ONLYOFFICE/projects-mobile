@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
@@ -20,7 +21,7 @@ class ProjectsController extends BaseController {
   PaginationController get paginationController => _paginationController;
 
   @override
-  String get screenName => 'Projects';
+  String get screenName => tr('projects');
 
   @override
   RxList get itemList => _paginationController.data;
