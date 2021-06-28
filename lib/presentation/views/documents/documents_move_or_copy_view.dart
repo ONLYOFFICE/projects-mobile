@@ -287,6 +287,7 @@ class _MoveFolderCell extends StatelessWidget {
         });
       },
       child: Container(
+        height: 72,
         child: Row(
           children: [
             SizedBox(
@@ -316,6 +317,7 @@ class _MoveFolderCell extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
                     child: Text(element.title.replaceAll(' ', '\u00A0'),
