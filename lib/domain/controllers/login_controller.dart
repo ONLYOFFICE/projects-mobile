@@ -18,10 +18,16 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  final TextEditingController _portalAdressController = TextEditingController();
+  TextEditingController _portalAdressController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   TextEditingController get portalAdressController => _portalAdressController;
+  TextEditingController get emailController => _emailController;
+  TextEditingController get passwordController => _passwordController;
 
-  var portalFieldIsEmpty = true.obs;
+  var portalFieldError = false.obs;
+  var emailFieldError = false.obs;
+  var passwordFieldError = false.obs;
 
   Capabilities capabilities;
   String _pass;
@@ -47,45 +53,74 @@ class LoginController extends GetxController {
     );
   }
 
-  Future<void> loginByPassword(String email, String password) async {
-    setState(ViewState.Busy);
+  Future<void> loginByPassword() async {
+    if (!_isEmailOrPassEmpty()) {
+      var email = _emailController.text;
+      var password = _passwordController.text;
 
-    var result = await _authService.login(email.removeAllWhitespace, password);
+      setState(ViewState.Busy);
 
-    if (result.response == null) {
-      setState(ViewState.Idle);
-      return;
-    }
-    if (result.response.token != null) {
-      await saveToken(result);
-      setState(ViewState.Idle);
-      await Get.offNamed('NavigationView');
-    } else if (result.response.tfa == true) {
-      _email = email;
-      _pass = password;
-      setState(ViewState.Idle);
+      var result =
+          await _authService.login(email.removeAllWhitespace, password);
 
-      if (result.response.tfaKey != null) {
-        _tfaKey = result.response.tfaKey;
-        await Get.toNamed('GetCodeViews');
-      } else {
-        await Get.toNamed('CodeView');
+      if (result.response == null) {
+        setState(ViewState.Idle);
+        return;
       }
-    } else if (result.response.sms == true) {
-      _email = email;
-      _pass = password;
-      setState(ViewState.Idle);
-      if (result.response.phoneNoise != null) {
-        await Get.toNamed('EnterSMSCodeScreen', arguments: {
-          'phoneNoise': result.response.phoneNoise,
-          'login': _email,
-          'password': _pass
-        });
-      } else {
-        await Get.toNamed('TFASmsScreen',
-            arguments: {'login': _email, 'password': _pass});
+      if (result.response.token != null) {
+        await saveToken(result);
+        setState(ViewState.Idle);
+        _clearInputFields();
+        await Get.offNamed('NavigationView');
+      } else if (result.response.tfa == true) {
+        _email = email;
+        _pass = password;
+        setState(ViewState.Idle);
+
+        if (result.response.tfaKey != null) {
+          _tfaKey = result.response.tfaKey;
+          _clearInputFields();
+          await Get.toNamed('GetCodeViews');
+        } else {
+          _clearInputFields();
+          await Get.toNamed('CodeView');
+        }
+      } else if (result.response.sms == true) {
+        _email = email;
+        _pass = password;
+        setState(ViewState.Idle);
+        if (result.response.phoneNoise != null) {
+          _clearInputFields();
+          await Get.toNamed('EnterSMSCodeScreen', arguments: {
+            'phoneNoise': result.response.phoneNoise,
+            'login': _email,
+            'password': _pass
+          });
+        } else {
+          _clearInputFields();
+          await Get.toNamed('TFASmsScreen',
+              arguments: {'login': _email, 'password': _pass});
+        }
       }
     }
+  }
+
+  bool _isEmailOrPassEmpty() {
+    var result;
+    if (_emailController.text.isEmpty) {
+      result = true;
+      emailFieldError.value = true;
+    }
+    if (_passwordController.text.isEmpty) {
+      result = true;
+      passwordFieldError.value = true;
+    }
+    return result ?? false;
+  }
+
+  void _clearInputFields() {
+    _emailController.clear();
+    _passwordController.clear();
   }
 
   Future saveToken(ApiDTO<AuthToken> result) async {
@@ -150,18 +185,26 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
-    setState(ViewState.Busy);
+    if (_portalAdressController.text.isEmpty) {
+      portalFieldError.value = true;
+    } else {
+      setState(ViewState.Busy);
 
-    var _capabilities = await _portalService
-        .portalCapabilities(_portalAdressController.text.removeAllWhitespace);
+      var _capabilities = await _portalService
+          .portalCapabilities(_portalAdressController.text.removeAllWhitespace);
 
-    if (_capabilities != null) {
-      capabilities = _capabilities;
+      if (_capabilities != null) {
+        capabilities = _capabilities;
+        setState(ViewState.Idle);
+        await Get.toNamed('LoginView');
+      } else {
+        // to prevent socket exception
+        _portalAdressController.dispose();
+        _portalAdressController = TextEditingController();
+      }
+
       setState(ViewState.Idle);
-      await Get.toNamed('LoginView');
     }
-
-    setState(ViewState.Idle);
   }
 
   String emailValidator(value) {
@@ -209,5 +252,11 @@ class LoginController extends GetxController {
     await _secureStorage.deleteAll();
     Get.find<PortalInfoController>().logout();
     Get.find<NavigationController>().clearCurrentIndex();
+  }
+
+  @override
+  void onClose() {
+    _clearInputFields();
+    super.onClose();
   }
 }

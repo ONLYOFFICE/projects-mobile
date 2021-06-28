@@ -17,10 +17,11 @@ class AppBarMenuButton extends StatelessWidget {
       onSelected: (value) => _onSelected(controller, value),
       itemBuilder: (context) {
         return [
-          if (controller.discussion.value.canEdit)
-            const PopupMenuItem(value: 'Edit', child: Text('Edit discussion')),
-          const PopupMenuItem(
-              value: 'Create task', child: Text('Create task on discussion')),
+          // TODO realize
+          // if (controller.discussion.value.canEdit)
+          //   const PopupMenuItem(value: 'Edit', child: Text('Edit discussion')),
+          // const PopupMenuItem(
+          //     value: 'Create task', child: Text('Create task on discussion')),
           PopupMenuItem(
               value: 'Subscribe',
               child: Text(controller.isSubscribed

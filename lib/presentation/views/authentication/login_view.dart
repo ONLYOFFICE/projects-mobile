@@ -14,9 +14,6 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<LoginController>();
 
-    var emailController = TextEditingController();
-    var passController = TextEditingController();
-
     return Scaffold(
       appBar: StyledAppBar(),
       body: SingleChildScrollView(
@@ -37,24 +34,28 @@ class LoginView extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Form(
-                        child: Column(
-                          children: [
-                            AuthTextField(
-                              controller: emailController,
-                              hintText: 'Email',
-                              validator: controller.emailValidator,
-                              autofillHint: AutofillHints.email,
-                            ),
-                            SizedBox(height: Get.height * 0.0444),
-                            AuthTextField(
-                              controller: passController,
-                              hintText: 'Password',
-                              validator: controller.passValidator,
-                              autofillHint: AutofillHints.password,
-                              obscureText: true,
-                            ),
-                          ],
+                      Obx(
+                        () => Form(
+                          child: Column(
+                            children: [
+                              AuthTextField(
+                                hintText: 'Email',
+                                controller: controller.emailController,
+                                validator: controller.emailValidator,
+                                autofillHint: AutofillHints.email,
+                                haveError: controller.emailFieldError.isTrue,
+                              ),
+                              SizedBox(height: Get.height * 0.0444),
+                              AuthTextField(
+                                hintText: 'Password',
+                                controller: controller.passwordController,
+                                haveError: controller.passwordFieldError.isTrue,
+                                validator: controller.passValidator,
+                                autofillHint: AutofillHints.password,
+                                obscureText: true,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: Get.height * 0.0333),
@@ -75,15 +76,10 @@ class LoginView extends StatelessWidget {
                                   .onBackground
                                   .withOpacity(0.04)),
                         ]),
-                        child: Obx(
-                          // ignore: deprecated_member_use
-                          () => WideButton(
-                            text: 'NEXT',
-                            onPressed: controller.portalFieldIsEmpty.isTrue
-                                ? null
-                                : () async => await controller.loginByPassword(
-                                    emailController.text, passController.text),
-                          ),
+                        child: WideButton(
+                          text: 'NEXT',
+                          onPressed: () async =>
+                              await controller.loginByPassword(),
                         ),
                       ),
                       const SizedBox(height: 4),
