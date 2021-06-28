@@ -1,0 +1,41 @@
+{
+  "emailAddress": "Email Address",
+ 
+  "password": "Password",
+ 
+  "portalName": "Portal Address",
+ 
+  "continueButton": "Continue",
+ 
+  "reset": "RESET",
+
+  "filter": "Filter",
+
+  "dashboard": "Dashboard",
+
+  "projects": "Projects",
+
+  "more": "More",
+
+  "tasks": "Tasks",
+
+  "myTasks": "My Tasks",
+ 
+  "upcomingTasks": "Upcoming",
+  
+  "myProjects": "My Projects",
+
+  "projectsIFolow": "Projects I Folow",
+  "activeProjects":"Active Projects",
+
+  "dashboardNoActive":"There are no active {}",
+  
+  "viewAll":"view all",
+  "viewLess":"view less",
+ 
+  "noEntityCreated":"No {} had been created yet",
+  
+  
+
+  "error":"error"
+}

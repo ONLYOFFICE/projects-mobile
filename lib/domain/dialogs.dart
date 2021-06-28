@@ -5,7 +5,7 @@ import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 
 class ErrorDialog {
   static Future<void> show(CustomError error) async {
-    await Get.dialog(StyledAlertDialog(
+    await Get.dialog(SingleButtonDialog(
       titleText: 'Error',
       contentText: '${error.message}',
       acceptText: 'OK',
