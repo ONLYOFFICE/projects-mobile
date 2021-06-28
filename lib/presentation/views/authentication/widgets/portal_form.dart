@@ -30,8 +30,8 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/login_controller.dart';
@@ -57,7 +57,6 @@ class _PortalFormState extends State<PortalForm> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AppLocalizations.of(context);
     var controller = Get.put(LoginController());
 
     final portalField = TextFormField(
@@ -69,7 +68,7 @@ class _PortalFormState extends State<PortalForm> {
       decoration: InputDecoration(
         prefixIconConstraints: const BoxConstraints(minWidth: 0, minHeight: 0),
         contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: localization.portalName, //"Адрес портала",
+        hintText: tr('portalName'), //"Адрес портала",
       ),
     );
 
@@ -84,7 +83,7 @@ class _PortalFormState extends State<PortalForm> {
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onContinuePressed,
-        child: Text(localization.continueButton,
+        child: Text(tr('continueButton'),
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
                 color: Theme.of(context).backgroundColor,

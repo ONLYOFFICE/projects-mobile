@@ -3,5 +3,7 @@
     "emailAddress": "Регистрационный email",
     "password": "Пароль",
     "portalName":  "Адрес портала",
-    "continueButton": "Продолжить"
+    "continueButton": "Продолжить",
+    "reset": "СБРОС",
+    "projects": "Проекты"
 }

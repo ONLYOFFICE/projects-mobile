@@ -30,8 +30,8 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/enums/viewstate.dart';
@@ -57,7 +57,6 @@ class _PasswordFormState extends State<PasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    final localization = AppLocalizations.of(context);
     var controller = Get.find<LoginController>();
 
     final emailField = TextFormField(
@@ -69,7 +68,7 @@ class _PasswordFormState extends State<PasswordForm> {
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: localization.emailAddress,
+        hintText: tr('emailAddress'),
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
@@ -82,7 +81,7 @@ class _PasswordFormState extends State<PasswordForm> {
       style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: localization.password, //"Пароль",
+        hintText: tr('password'), //"Пароль",
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),

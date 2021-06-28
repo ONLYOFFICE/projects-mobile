@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -39,7 +40,7 @@ import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
 class DashboardController extends GetxController {
-  var screenName = 'Dashboard'.obs;
+  var screenName = tr('dashboard').obs;
   TasksController _myTaskController;
   TasksController _upcomingTaskscontroller;
 

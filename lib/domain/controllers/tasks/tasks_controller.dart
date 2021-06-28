@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
@@ -80,7 +81,7 @@ class TasksController extends BaseController {
   }
 
   @override
-  String get screenName => 'Tasks';
+  String get screenName => tr('tasks');
 
   @override
   RxList get itemList => paginationController.data;

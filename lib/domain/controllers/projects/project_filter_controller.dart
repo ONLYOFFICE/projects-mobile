@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
@@ -71,7 +72,7 @@ class ProjectsFilterController extends BaseFilterController {
       {'active': false, 'paused': false, 'closed': false}.obs;
 
   ProjectsFilterController() {
-    filtersTitle = 'PROJECTS';
+    filtersTitle = tr('projects').toUpperCase();
     suitableResultCount = (-1).obs;
   }
 

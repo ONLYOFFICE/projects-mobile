@@ -32,6 +32,7 @@
 
 import 'dart:math' as math;
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
@@ -66,7 +67,7 @@ class TasksView extends StatelessWidget {
         titleHeight: 101,
         bottomHeight: 0,
         showBackButton: false,
-        titleText: 'Tasks',
+        titleText: tr('tasks'),
         elevation: 0,
         actions: [
           IconButton(
@@ -100,7 +101,8 @@ class TasksView extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.task_not_created),
-                    text: 'No tasks had been created yet'),
+                    text: tr('noEntityCreated',
+                        args: [tr('tasks').toLowerCase()])),
               ),
             ),
           if (controller.loaded.isTrue &&

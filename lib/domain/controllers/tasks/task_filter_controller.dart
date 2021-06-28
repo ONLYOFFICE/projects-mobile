@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/task_service.dart';
@@ -93,7 +94,7 @@ class TaskFilterController extends BaseFilterController {
   }.obs;
 
   TaskFilterController() {
-    filtersTitle = 'TASKS';
+    filtersTitle = tr('tasks').toUpperCase();
     suitableResultCount = (-1).obs;
   }
 
