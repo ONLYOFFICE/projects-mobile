@@ -14,6 +14,7 @@ class NewCommentView extends StatelessWidget {
     return Scaffold(
       appBar: StyledAppBar(
         titleText: 'New comment',
+        onLeadingPressed: controller.leavePage,
         actions: [
           IconButton(
             icon: const Icon(Icons.done_rounded),
