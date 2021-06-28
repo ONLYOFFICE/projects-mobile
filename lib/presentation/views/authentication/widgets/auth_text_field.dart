@@ -4,6 +4,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class AuthTextField extends StatelessWidget {
   final bool obscureText;
+  final bool haveError;
   final Function(String value) onChanged;
   final String hintText;
   final String autofillHint;
@@ -20,6 +21,7 @@ class AuthTextField extends StatelessWidget {
     this.obscureText = false,
     this.onChanged,
     this.validator,
+    this.haveError = false,
   }) : super(key: key);
 
   @override
@@ -35,19 +37,24 @@ class AuthTextField extends StatelessWidget {
       style: TextStyleHelper.subtitle1(
           color: Theme.of(context).customColors().onSurface),
       decoration: InputDecoration(
-          contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
-          floatingLabelBehavior: FloatingLabelBehavior.auto,
-          labelText: hintText,
-          labelStyle: TextStyleHelper.caption(
-              color:
-                  Theme.of(context).customColors().onSurface.withOpacity(0.6)),
-          hintText: hintText,
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.42)))),
+        contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        labelText: hintText,
+        labelStyle: TextStyleHelper.caption(
+            color: Theme.of(context).customColors().onSurface.withOpacity(0.6)),
+        hintText: hintText,
+        hintStyle: TextStyleHelper.subtitle1(
+          color: !haveError
+              ? Theme.of(context).customColors().onSurface.withOpacity(0.6)
+              : Theme.of(context).customColors().error,
+        ),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: Theme.of(context)
+                    .customColors()
+                    .onSurface
+                    .withOpacity(0.42))),
+      ),
     );
   }
 }
