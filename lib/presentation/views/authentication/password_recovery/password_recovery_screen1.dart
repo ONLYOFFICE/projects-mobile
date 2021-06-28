@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -20,31 +21,31 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
             AppIcon(icon: SvgIcons.password_recovery),
             const SizedBox(height: 6.71),
             Text(
-              'Password recovery',
+              tr('passwordRecovery'),
               style: TextStyleHelper.headline6(),
             ),
             const SizedBox(height: 17.71),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Text(
-                _text,
+                tr('emailDescription'),
                 textAlign: TextAlign.center,
                 style: TextStyleHelper.subtitle1(),
               ),
             ),
             const SizedBox(height: 76),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 40),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 40),
               child: AuthTextField(
                 autofillHint: AutofillHints.email,
-                hintText: 'Email',
+                hintText: tr('email'),
               ),
             ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: WideButton(
-                  text: 'CONFIRM',
+                  text: tr('confirm'),
                   onPressed: () => Get.toNamed('PasswordRecoveryScreen2')),
             ),
           ],
@@ -53,6 +54,3 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
     );
   }
 }
-
-const String _text =
-    'Please enter the email address you provided when registering on the portal. ';

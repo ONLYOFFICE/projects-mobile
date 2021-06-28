@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -15,9 +16,9 @@ class StyledAlertDialog extends StatelessWidget {
   final Function() onAcceptTap;
   const StyledAlertDialog({
     Key key,
-    this.cancelText = 'CANCEL',
+    this.cancelText,
     this.acceptColor,
-    this.acceptText = 'ACCEPT',
+    this.acceptText,
     this.title,
     this.content,
     this.titleText,
@@ -48,12 +49,13 @@ class StyledAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: onCancelTap ?? Get.back,
-          child: Text(cancelText, style: TextStyleHelper.button()),
+          child:
+              Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
         ),
         TextButton(
           onPressed: onAcceptTap,
           child: Text(
-            acceptText,
+            acceptText ?? tr('accept'),
             style: TextStyleHelper.button(
                 color: acceptColor ?? Theme.of(context).customColors().error),
           ),
@@ -76,7 +78,7 @@ class SingleButtonDialog extends StatelessWidget {
   const SingleButtonDialog({
     Key key,
     this.acceptColor,
-    this.acceptText = 'ACCEPT',
+    this.acceptText,
     this.title,
     this.content,
     this.titleText,
@@ -106,7 +108,7 @@ class SingleButtonDialog extends StatelessWidget {
         TextButton(
           onPressed: onAcceptTap,
           child: Text(
-            acceptText,
+            acceptText ?? tr('accept'),
             style: TextStyleHelper.button(
                 color: acceptColor ?? Theme.of(context).customColors().error),
           ),

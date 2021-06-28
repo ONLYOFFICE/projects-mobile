@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
@@ -26,7 +27,7 @@ class PasscodeScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: h(170)),
                   Text(
-                    'Enter passcode to unlock App',
+                    tr('passcodeToUnlock'),
                     textAlign: TextAlign.center,
                     style: TextStyleHelper.headline6(
                       color: Theme.of(context).customColors().onBackground,
@@ -38,7 +39,7 @@ class PasscodeScreen extends StatelessWidget {
                       children: [
                         const Flexible(flex: 1, child: SizedBox(height: 16)),
                         if (controller.passcodeCheckFailed.isTrue)
-                          Text('Incorrect PIN entered',
+                          Text(tr('incorrectPIN'),
                               style: TextStyleHelper.subtitle1(
                                   color:
                                       Theme.of(context).customColors().error)),

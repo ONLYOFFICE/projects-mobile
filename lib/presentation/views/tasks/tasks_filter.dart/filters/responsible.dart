@@ -8,16 +8,16 @@ class _Responsible extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Responsible',
+        title: tr('responsible'),
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.responsible['Me'],
               onTap: () => filterController.changeResponsible('Me')),
           FilterElement(
               title: filterController.responsible['Other'].isEmpty
-                  ? 'Other user'
+                  ? tr('otherUser')
                   : filterController.responsible['Other'],
               isSelected: filterController.responsible['Other'].isNotEmpty,
               cancelButtonEnabled:
@@ -30,7 +30,7 @@ class _Responsible extends StatelessWidget {
                   filterController.changeResponsible('Other', null)),
           FilterElement(
               title: filterController.responsible['Groups'].isEmpty
-                  ? 'Groups'
+                  ? tr('groups')
                   : filterController.responsible['Groups'],
               isSelected: filterController.responsible['Groups'].isNotEmpty,
               cancelButtonEnabled:
@@ -42,7 +42,7 @@ class _Responsible extends StatelessWidget {
               onCancelTap: () =>
                   filterController.changeResponsible('Groups', null)),
           FilterElement(
-              title: 'No responsible',
+              title: tr('noResponsible'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.responsible['No'],
               onTap: () => filterController.changeResponsible('No'))

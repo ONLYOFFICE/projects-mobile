@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -34,7 +35,7 @@ class TeamMembersSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         title: TeamMembersSelectionHeader(
           controller: controller,
-          title: 'Add team membres',
+          title: tr('addTeamMembers'),
         ),
         bottom: TeamMembersSearchBar(controller: usersDataSource),
       ),
@@ -104,7 +105,8 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                       if (controller.selectedTeamMembers.isNotEmpty) {
                         return Expanded(
                           child: Text(
-                            '${controller.selectedTeamMembers.length} person',
+                            plural('person',
+                                controller.selectedTeamMembers.length),
                             style: TextStyleHelper.caption(
                                 color:
                                     Theme.of(context).customColors().onSurface),

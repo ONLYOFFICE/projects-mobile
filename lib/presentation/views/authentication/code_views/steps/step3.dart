@@ -12,14 +12,14 @@ class _Step3 extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 12),
-        Text('Step 3 of 4', style: _stepStyle(context)),
+        Text(tr('step3'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
         AppIcon(icon: PngIcons.authentificator_s3, isPng: true, height: 184.5),
         const SizedBox(height: 23),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),
           child: Text(
-            _setupText1,
+            tr('step3SetupText1'),
             textAlign: TextAlign.center,
             style: _setup1Style(context),
           ),
@@ -30,7 +30,7 @@ class _Step3 extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            _setupText2,
+            tr('step3SetupText2'),
             textAlign: TextAlign.center,
             style: _setup2Style(context),
           ),
@@ -56,7 +56,7 @@ class _Code extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 12),
             child: Text(
-              'Code',
+              tr('code'),
               style: TextStyleHelper.caption(
                   color: Theme.of(context)
                       .customColors()
@@ -74,8 +74,8 @@ class _Code extends StatelessWidget {
                 onTap: () {
                   Clipboard.setData(
                       ClipboardData(text: code.removeAllWhitespace));
-                  ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-                      context: context, text: 'Key copied to clipboard.'));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      styledSnackBar(context: context, text: tr('keyCopied')));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),

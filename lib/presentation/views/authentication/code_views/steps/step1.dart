@@ -13,14 +13,14 @@ class _Step1 extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 12),
-        Text('Step 1 of 4', style: _stepStyle(context)),
+        Text(tr('step1'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
         AppIcon(icon: PngIcons.download_GA, isPng: true, height: 184.5),
         const SizedBox(height: 23),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),
           child: Text(
-            _setupText1,
+            tr('step1SetupText1'),
             textAlign: TextAlign.center,
             style: _setup1Style(context),
           ),
@@ -29,7 +29,7 @@ class _Step1 extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            _setupText2,
+            tr('step1SetupText2'),
             textAlign: TextAlign.center,
             style: _setup2Style(context),
           ),
@@ -38,7 +38,7 @@ class _Step1 extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: WideButton(
-            text: 'Install',
+            text: tr('install'),
             onPressed: () {
               // TODO change the package
               LaunchReview.launch(

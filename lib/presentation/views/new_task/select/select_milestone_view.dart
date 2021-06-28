@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
@@ -22,7 +23,7 @@ class SelectMilestoneView extends StatelessWidget {
     var controller = Get.arguments['controller'];
 
     return Scaffold(
-      appBar: StyledAppBar(titleText: 'Select milestone', actions: [
+      appBar: StyledAppBar(titleText: tr('selectMilestone'), actions: [
         IconButton(
             icon: const Icon(Icons.check_rounded), onPressed: () => print('da'))
       ]),

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -21,8 +22,8 @@ class CustomSearchBar extends StatelessWidget {
                 autofocus: true,
                 textInputAction: TextInputAction.search,
                 controller: controller.searchInputController,
-                decoration: const InputDecoration.collapsed(
-                    hintText: 'Enter your query'),
+                decoration:
+                    InputDecoration.collapsed(hintText: tr('enterQuery')),
                 onSubmitted: (value) => controller.newSearch(value),
               ),
             ),

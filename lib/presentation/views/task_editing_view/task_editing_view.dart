@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -24,7 +25,7 @@ class TaskEditingView extends StatelessWidget {
     controller.init();
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Edit task',
+        titleText: tr('editTask'),
         onLeadingPressed: controller.discardChanges,
         actions: [
           IconButton(

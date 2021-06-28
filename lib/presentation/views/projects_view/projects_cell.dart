@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -278,7 +279,7 @@ void showsStatusesBS({context, itemController}) async {
           const SizedBox(height: 18.5),
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text('Select status',
+            child: Text(tr('selectStatus'),
                 style: TextStyleHelper.h6(
                     color: Theme.of(context).customColors().onSurface)),
           ),

@@ -15,14 +15,14 @@ class _Step4 extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 12),
-        Text('Step 4 of 4', style: _stepStyle(context)),
+        Text(tr('step4'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
         AppIcon(icon: PngIcons.code_light, isPng: true, height: 184.5),
         const SizedBox(height: 13),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),
           child: Text(
-            _setupText1,
+            tr('step4SetupText1'),
             textAlign: TextAlign.center,
             style: _setup1Style(context),
           ),
@@ -34,7 +34,7 @@ class _Step4 extends StatelessWidget {
             controller: codeController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-                labelText: 'Code',
+                labelText: tr('code'),
                 contentPadding:
                     const EdgeInsets.only(left: 12, bottom: 8, top: 2),
                 focusedBorder: UnderlineInputBorder(
@@ -57,7 +57,7 @@ class _Step4 extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
-            _setupText2,
+            tr('step4SetupText2'),
             textAlign: TextAlign.center,
             style: _setup2Style(context),
           ),
@@ -66,7 +66,7 @@ class _Step4 extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 40),
           child: WideButton(
-            text: 'CONFIRM',
+            text: tr('confirm'),
             onPressed: () async =>
                 await controller.sendCode(codeController.text),
           ),

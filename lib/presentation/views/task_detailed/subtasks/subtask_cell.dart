@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -59,7 +60,7 @@ class SubtaskCell extends StatelessWidget {
                         Text(
                             subtaskController
                                     .subtask.value.responsible?.displayName ??
-                                'Nobody',
+                                tr('nobody'),
                             style: TextStyleHelper.caption(
                                 color:
                                     subtaskController.subtask.value.status == 2
@@ -80,17 +81,17 @@ class SubtaskCell extends StatelessWidget {
                         return [
                           if (subtask.canEdit && subtask.responsible == null)
                             PopupMenuItem(
-                                value: 'Accept subtask',
-                                child: Text('Accept subtask',
+                                value: 'acceptSubtask',
+                                child: Text('acceptSubtask',
                                     style: TextStyleHelper.subtitle1())),
                           PopupMenuItem(
-                              value: 'Copy subtask',
-                              child: Text('Copy subtask',
+                              value: 'copySubtask',
+                              child: Text('copySubtask',
                                   style: TextStyleHelper.subtitle1())),
                           if (subtask.canEdit)
                             PopupMenuItem(
-                                value: 'Delete',
-                                child: Text('Delete',
+                                value: 'delete',
+                                child: Text('delete',
                                     style: TextStyleHelper.subtitle1(
                                         color: Theme.of(context)
                                             .customColors()
@@ -114,17 +115,17 @@ class SubtaskCell extends StatelessWidget {
 void _onSelected(context, value, SubtaskController controller) async {
   print(value);
   switch (value) {
-    case 'Accept subtask':
+    case 'acceptSubtask':
       controller.acceptSubtask(context,
           taskId: controller.subtask.value.taskId,
           subtaskId: controller.subtask.value.id);
       break;
-    case 'Copy subtask':
+    case 'copySubtask':
       controller.copySubtask(context,
           taskId: controller.subtask.value.taskId,
           subtaskId: controller.subtask.value.id);
       break;
-    case 'Delete':
+    case 'delete':
       controller.deleteSubtask(
           taskId: controller.subtask.value.taskId,
           subtaskId: controller.subtask.value.id);

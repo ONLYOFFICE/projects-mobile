@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
@@ -27,14 +28,24 @@ class SubtaskDetailedView extends StatelessWidget {
                 itemBuilder: (context) {
                   return [
                     if (_subtask.canEdit && _subtask.responsible == null)
-                      const PopupMenuItem(
-                          value: 'Accept', child: Text('Accept')),
+                      PopupMenuItem(
+                        value: 'accept',
+                        child: Text(tr('accept')),
+                      ),
                     if (_subtask.canEdit)
-                      const PopupMenuItem(value: 'Edit', child: Text('Edit')),
-                    const PopupMenuItem(value: 'Copy', child: Text('Copy')),
+                      PopupMenuItem(
+                        value: 'edit',
+                        child: Text(tr('edit')),
+                      ),
+                    PopupMenuItem(
+                      value: 'copy',
+                      child: Text(tr('copy')),
+                    ),
                     if (_subtask.canEdit)
-                      const PopupMenuItem(
-                          value: 'Delete', child: Text('Delete')),
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Text(tr('delete')),
+                      ),
                   ];
                 },
               )
@@ -95,7 +106,7 @@ class SubtaskDetailedView extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Assigned to:',
+                          Text(tr('assignedTo'),
                               style: TextStyleHelper.caption(
                                   color: Theme.of(context)
                                       .customColors()
@@ -103,7 +114,7 @@ class SubtaskDetailedView extends StatelessWidget {
                                       .withOpacity(0.75))),
                           Text(
                             _subtask?.responsible?.displayName ??
-                                'No responsible',
+                                tr('noResponsible'),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyleHelper.subtitle1(
@@ -136,28 +147,28 @@ class SubtaskDetailedView extends StatelessWidget {
 
 void _onSelected(context, value, SubtaskController controller) {
   switch (value) {
-    case 'Accept':
+    case 'accept':
       controller.acceptSubtask(
         context,
         taskId: controller.subtask.value.taskId,
         subtaskId: controller.subtask.value.id,
       );
       break;
-    case 'Edit':
+    case 'edit':
       Get.toNamed('NewSubtaskView', arguments: {
         'taskId': controller.subtask.value.taskId,
         'forEditing': true,
         'subtask': controller.subtask.value,
       });
       break;
-    case 'Copy':
+    case 'copy':
       controller.copySubtask(
         context,
         taskId: controller.subtask.value.taskId,
         subtaskId: controller.subtask.value.id,
       );
       break;
-    case 'Delete':
+    case 'delete':
       controller.deleteSubtask(
         taskId: controller.subtask.value.taskId,
         subtaskId: controller.subtask.value.id,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
@@ -21,7 +22,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
       },
       child: Scaffold(
         appBar: StyledAppBar(
-          titleText: 'Passcode Lock',
+          titleText: tr('passcodeLock'),
           onLeadingPressed: controller.leavePasscodeSettingsScreen,
           // onLeadingPressed: controller.leave,
         ),
@@ -40,7 +41,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                             controller.onPasscodeTilePressed(value),
                         // controller.tryEnablingPasscode(),
                         title: Text(
-                          'Включить код доступа',
+                          tr('enablePasscode'),
                           style: TextStyleHelper.projectTitle,
                         ),
                       ),
@@ -51,7 +52,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         child: TextButton(
                           onPressed: controller.tryChangingPasscode,
                           child: Text(
-                            'Сменить код доступа',
+                            tr('changePasscode'),
                             style: TextStyleHelper.projectTitle.copyWith(
                                 color:
                                     Theme.of(context).customColors().primary),
@@ -64,14 +65,14 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 16, right: 12),
                       child: RichText(
                         text: TextSpan(
-                          text: _boldText,
+                          text: tr('passcodeLock'),
                           style: TextStyleHelper.caption().copyWith(
                             color: Theme.of(context).customColors().onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                           children: [
                             TextSpan(
-                              text: _text,
+                              text: tr('passcodeLockDescription'),
                               style:
                                   const TextStyle(fontWeight: FontWeight.w400),
                             ),
@@ -86,7 +87,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         value: controller.isFingerprintEnable.value,
                         onChanged: controller.toggleFingerprintStatus,
                         title: Text(
-                          'Use Fingerprint to unlock',
+                          tr('fingerprint'),
                           style: TextStyleHelper.projectTitle,
                         ),
                       ),
@@ -102,9 +103,3 @@ class PasscodeSettingsScreen extends StatelessWidget {
     );
   }
 }
-
-String _boldText = 'Passсode Lock';
-
-String _text = ''' - это код, который запрашивается, при запуске приложения.
-
-Обратите внимание, если вы забудете код доступа, вам понадобится удалить или переустановить приложение.''';

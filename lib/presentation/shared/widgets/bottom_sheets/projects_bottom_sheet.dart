@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -34,7 +35,7 @@ class ProjectsBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select project', style: TextStyleHelper.h6()),
+                Text(tr('selectProject'), style: TextStyleHelper.h6()),
                 IconButton(
                   icon: const Icon(Icons.search),
                   onPressed: () => print(''),
@@ -78,25 +79,9 @@ class ProjectsBottomSheet extends StatelessWidget {
                                             .data[index].title,
                                         style: TextStyleHelper.projectTitle,
                                       ),
-                                      // TODO milestoneResponsible отсутствует в ответе сервера.
-                                      // Разобраться нужен ли тут ответственный за веху
-
-                                      // Text(
-                                      //     _projectsController
-                                      //         .paginationController
-                                      //         .data[index]
-                                      //         .milestoneResponsible
-                                      //         .displayName,
-                                      //     style: TextStyleHelper.caption(
-                                      //             color: Theme.of(context)
-                                      //                 .customColors()
-                                      //                 .onSurface
-                                      //                 .withOpacity(0.6))
-                                      //         .copyWith(height: 1.667)),
                                     ],
                                   ),
                                 ),
-                                // Icon(Icons.check_rounded)
                               ],
                             ),
                           ),

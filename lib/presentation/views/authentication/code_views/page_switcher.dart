@@ -58,7 +58,7 @@ class __PageSwitcherState extends State<_PageSwitcher> {
                             .previousPage(duration: _duration, curve: _curve);
                         setState(() => index--);
                       },
-                      child: Text('BACK', style: _buttonsStyle))),
+                      child: Text(tr('back'), style: _buttonsStyle))),
             if (index != 3)
               Positioned(
                 right: 8,
@@ -69,7 +69,7 @@ class __PageSwitcherState extends State<_PageSwitcher> {
                           .nextPage(duration: _duration, curve: _curve);
                       setState(() => index++);
                     },
-                    child: Text('NEXT', style: _buttonsStyle)),
+                    child: Text(tr('next'), style: _buttonsStyle)),
               ),
           ],
         ),

@@ -9,16 +9,16 @@ class _SearchSettings extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Search settings',
+        title: tr('searchSettings'),
         options: <Widget>[
           FilterElement(
-              title: 'In content',
+              title: tr('inContent'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.searchSettings['in_content'],
               onTap: () =>
                   filterController.changeSearchSettingsFilter('in_content')),
           FilterElement(
-              title: 'Exclude subfolders',
+              title: tr('excludeSubfolders'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.searchSettings['exclude_subfolders'],
               onTap: () => filterController

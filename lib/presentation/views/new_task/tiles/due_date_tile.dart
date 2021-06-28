@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -20,8 +21,8 @@ class DueDateTile extends StatelessWidget {
         bool _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewTaskInfo(
             icon: SvgIcons.due_date,
-            text: _isSelected ? controller.dueDateText.value : 'Set due date',
-            caption: _isSelected ? 'Due date:' : null,
+            text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
+            caption: _isSelected ? '${tr('dueDate')}:' : null,
             isSelected: _isSelected,
             suffix: _isSelected
                 ? IconButton(

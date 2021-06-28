@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -21,7 +22,7 @@ class NewProject extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: StyledAppBar(
-        titleText: 'Project',
+        titleText: tr('project'),
         elevation: 2,
         actions: [
           IconButton(
@@ -80,10 +81,10 @@ class DescriptionTile extends StatelessWidget {
         return NewMilestoneInfo(
             text: _isSletected
                 ? controller.descriptionText.value
-                : 'Add description',
+                : tr('addDescription'),
             maxLines: 1,
             icon: SvgIcons.description,
-            caption: _isSletected ? 'Description:' : null,
+            caption: _isSletected ? tr('description') : null,
             isSelected: _isSletected,
             suffix: _isSletected
                 ? Icon(Icons.arrow_forward_ios_outlined,
@@ -138,7 +139,7 @@ class TitleInput extends StatelessWidget {
                               enabledBorder: InputBorder.none,
                               errorBorder: InputBorder.none,
                               disabledBorder: InputBorder.none,
-                              hintText: 'Project Title',
+                              hintText: tr('projectTitle'),
                               hintStyle: TextStyleHelper.headline7(
                                   color: controller.needToFillTitle.isTrue
                                       ? Theme.of(context).customColors().error
@@ -199,7 +200,7 @@ class ProjectManager extends StatelessWidget {
                       ? NewProjectTile(
                           subtitle: controller.managerName.value,
                           closeFunction: controller.removeManager,
-                          title: 'Project manager:',
+                          title: tr('projectManager'),
                           iconData: Icons.close,
                         )
                       : Expanded(
@@ -212,7 +213,7 @@ class ProjectManager extends StatelessWidget {
                                 },
                                 child: Obx(
                                   () => Text(
-                                    'Choose project manager',
+                                    tr('choosePM'),
                                     style: TextStyleHelper.subtitle1(
                                       color: controller.needToFillManager.isTrue
                                           ? Theme.of(context)
@@ -319,7 +320,7 @@ class TeamMembers extends StatelessWidget {
                       ? NewProjectTile(
                           subtitle: controller.teamMembersTitle,
                           closeFunction: controller.editTeamMember,
-                          title: 'Team',
+                          title: tr('team'),
                           iconData: controller.selectedTeamMembers.length >= 2
                               ? Icons.navigate_next
                               : Icons.close,
@@ -333,7 +334,7 @@ class TeamMembers extends StatelessWidget {
                                   Get.toNamed('TeamMembersSelectionView');
                                 },
                                 child: Text(
-                                  'Add team members',
+                                  tr('addTeamMembers'),
                                   style: TextStyleHelper.subtitle1(
                                     color: Theme.of(context)
                                         .customColors()
@@ -389,7 +390,7 @@ class DescriptionButton extends StatelessWidget {
                     children: [
                       Flexible(
                         child: Text(
-                          'Add description',
+                          tr('addDescription'),
                           style: TextStyleHelper.subtitle1(
                               color: Theme.of(context)
                                   .customColors()
@@ -416,40 +417,6 @@ class DescriptionButton extends StatelessWidget {
     );
   }
 }
-
-// class DescriptionTile extends StatelessWidget {
-//   final controller;
-//   const DescriptionTile({
-//     Key key,
-//     @required this.controller,
-//   }) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Obx(
-//       () {
-//         bool _isSletected = controller.descriptionText.value.isNotEmpty;
-//         return NewMilestoneInfo(
-//             text: _isSletected
-//                 ? controller.descriptionText.value
-//                 : 'Add description',
-//             maxLines: 1,
-//             icon: SvgIcons.description,
-//             caption: _isSletected ? 'Description:' : null,
-//             isSelected: _isSletected,
-//             suffix: _isSletected
-//                 ? Icon(Icons.arrow_forward_ios_outlined,
-//                     size: 20,
-//                     color: Theme.of(context)
-//                         .customColors()
-//                         .onSurface
-//                         .withOpacity(0.6))
-//                 : null,
-//             onTap: () => Get.toNamed('NewMilestoneDescription'));
-//       },
-//     );
-//   }
-// }
 
 class DescriptionText extends StatelessWidget {
   const DescriptionText({
@@ -481,8 +448,8 @@ class DescriptionText extends StatelessWidget {
               colorClickableText: Colors.pink,
               style: TextStyleHelper.body1,
               trimMode: TrimMode.Line,
-              trimCollapsedText: 'Show more',
-              trimExpandedText: 'Show less',
+              trimCollapsedText: tr('showMore'),
+              trimExpandedText: tr('showLess'),
               moreStyle: TextStyleHelper.body2(
                   color: Theme.of(context).customColors().links),
             ),
@@ -534,7 +501,7 @@ class AdvancedOptions extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         Text(
-                          'Advanced options',
+                          tr('advancedOptions'),
                           style: TextStyleHelper.subtitle1(
                               color:
                                   Theme.of(context).customColors().onSurface),
@@ -543,21 +510,21 @@ class AdvancedOptions extends StatelessWidget {
                     ),
                     children: <Widget>[
                       OptionWithSwitch(
-                        title: 'Notify Project Manager by email',
+                        title: tr('notifyPM'),
                         switchValue: controller.notificationEnabled,
                         switchOnChanged: (value) {
                           controller.enableNotification(value);
                         },
                       ),
                       OptionWithSwitch(
-                        title: 'Save this project as private',
+                        title: tr('privateProject'),
                         switchValue: controller.isPrivate,
                         switchOnChanged: (value) {
                           controller.setPrivate(value);
                         },
                       ),
                       OptionWithSwitch(
-                        title: 'Follow this project',
+                        title: tr('followProject'),
                         switchValue: controller.isFolowed,
                         switchOnChanged: (value) {
                           controller.folow(value);

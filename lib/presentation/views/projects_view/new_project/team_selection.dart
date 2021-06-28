@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -22,7 +23,7 @@ class GroupMembersSelectionView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: StyledAppBar(
-        titleText: 'Add members of',
+        titleText: tr('addMembersOf'),
         elevation: 2,
         actions: [
           IconButton(

@@ -92,7 +92,7 @@ class NavigationView extends StatelessWidget {
                             .create('lib/assets/images/icons/tab_bar/more.svg'),
                         activeIcon: SVG.create(
                             'lib/assets/images/icons/tab_bar/more_active.svg'),
-                        label: 'More',
+                        label: tr('more'),
                       ),
                     ],
                   ),
@@ -143,7 +143,7 @@ class NavigationView extends StatelessWidget {
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_more_active,
                               height: _iconSize),
-                          label: const Text('More')),
+                          label: Text(tr('more'))),
                     ],
                   ),
                 ),

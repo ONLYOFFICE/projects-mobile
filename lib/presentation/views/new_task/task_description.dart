@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -12,7 +13,7 @@ class TaskDescription extends StatelessWidget {
     var controller = Get.arguments['controller'];
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Description',
+        titleText: tr('description'),
         onLeadingPressed: () => controller
             .leaveDescriptionView(controller.descriptionController.value.text),
         actions: [
@@ -31,7 +32,7 @@ class TaskDescription extends StatelessWidget {
           style: TextStyleHelper.subtitle1(
               color: Theme.of(context).customColors().onSurface),
           decoration: InputDecoration.collapsed(
-              hintText: 'Task description',
+              hintText: tr('taskDescription'),
               hintStyle: TextStyleHelper.subtitle1()),
         ),
       ),

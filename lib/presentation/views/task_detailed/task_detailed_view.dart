@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
@@ -71,17 +72,17 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                     Theme.of(context).customColors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
-                  const Tab(text: 'Overview'),
+                  Tab(text: tr('overview')),
                   CustomTab(
-                      title: 'Subtasks',
+                      title: tr('subtasks'),
                       currentTab: _activeIndex.value == 1,
                       count: controller.task.value?.subtasks?.length),
                   CustomTab(
-                      title: 'Documents',
+                      title: tr('documents'),
                       currentTab: _activeIndex.value == 2,
                       count: controller.task.value?.files?.length),
                   CustomTab(
-                      title: 'Comments',
+                      title: tr('comments'),
                       currentTab: _activeIndex.value == 3,
                       count: controller.task.value?.comments?.length)
                 ]),

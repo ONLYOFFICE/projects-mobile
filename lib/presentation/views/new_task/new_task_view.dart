@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
@@ -28,7 +29,7 @@ class NewTaskView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
       appBar: StyledAppBar(
-        titleText: 'New task',
+        titleText: tr('New task'),
         actions: [
           IconButton(
               icon: const Icon(Icons.check_rounded),

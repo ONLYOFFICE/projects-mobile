@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -15,7 +16,7 @@ class NothingFound extends StatelessWidget {
     return Expanded(
       child: Center(
         child: EmptyScreen(
-            icon: AppIcon(icon: SvgIcons.not_found), text: 'Not found'),
+            icon: AppIcon(icon: SvgIcons.not_found), text: tr('notFound')),
       ),
     );
   }

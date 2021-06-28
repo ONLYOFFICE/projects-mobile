@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
@@ -13,7 +14,7 @@ class NewProjectDescription extends StatelessWidget {
     var controller = Get.find<NewProjectController>();
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Description',
+        titleText: tr('description'),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => controller.leaveDescriptionView(
@@ -34,7 +35,7 @@ class NewProjectDescription extends StatelessWidget {
           style: TextStyleHelper.subtitle1(
               color: Theme.of(context).customColors().onSurface),
           decoration: InputDecoration.collapsed(
-              hintText: 'Enter your text here',
+              hintText: tr('enterText'),
               hintStyle: TextStyleHelper.subtitle1()),
         ),
       ),

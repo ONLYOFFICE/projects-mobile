@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -25,7 +26,7 @@ class TaskTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (showCaption)
-                Text('Task title:',
+                Text('${tr('taskTitle')}:',
                     style: TextStyleHelper.caption(
                         color: Theme.of(context)
                             .customColors()
@@ -43,7 +44,7 @@ class TaskTitle extends StatelessWidget {
                       .primary
                       .withOpacity(0.87),
                   decoration: InputDecoration(
-                      hintText: 'Task title',
+                      hintText: tr('taskTitle'),
                       contentPadding: const EdgeInsets.symmetric(vertical: 0),
                       hintStyle: TextStyleHelper.headline6(
                           color: controller.setTitleError.isTrue

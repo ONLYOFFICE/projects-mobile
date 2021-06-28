@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,9 +31,9 @@ class _CodeFormState extends State<CodeForm> {
       obscureText: false,
       keyboardType: TextInputType.number,
       style: TextStyleHelper.mainStyle,
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        hintText: 'Код',
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        hintText: tr('tfaCode'),
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
@@ -49,7 +50,7 @@ class _CodeFormState extends State<CodeForm> {
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
         onPressed: onLoginPressed,
-        child: Text('Send',
+        child: Text(tr('send'),
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
                 color: Theme.of(context).backgroundColor,

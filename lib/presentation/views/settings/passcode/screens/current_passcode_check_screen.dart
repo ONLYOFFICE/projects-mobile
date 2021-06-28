@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
@@ -36,7 +37,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(height: h(170)),
-              Text('Enter your current passcode',
+              Text(tr('enterCurrentPasscode'),
                   style: TextStyleHelper.headline6(
                       color: Theme.of(context).customColors().onBackground)),
               Obx(
@@ -46,7 +47,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                     children: [
                       const Flexible(flex: 1, child: SizedBox(height: 16)),
                       if (passcodeController.passcodeCheckFailed == true)
-                        Text('Incorrect PIN entered',
+                        Text(tr('incorrectPIN'),
                             style: TextStyleHelper.subtitle1(
                                 color: Theme.of(context).customColors().error)),
                       const Flexible(flex: 2, child: SizedBox(height: 32)),
@@ -75,7 +76,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                   number,
                   nextPage: 'NewPasscodeScreen1',
                   nextPageArguments: {
-                    'title': 'Enter new passcode',
+                    'title': tr('enterNewPasscode'),
                     'caption': '',
                   },
                   onPass: onPass,
@@ -105,7 +106,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                     onPressed:
                         passcodeSettingsController.cancelEnablingPasscode,
                     child: Text(
-                      'CANCEL',
+                      tr('cancel'),
                       style: TextStyleHelper.button(
                           color: Theme.of(context).customColors().primary),
                     ),

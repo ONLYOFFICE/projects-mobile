@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -32,7 +33,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: forEditing ? 'Edit subtask' : 'Add subtask',
+        titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
         onLeadingPressed: controller.leavePage,
         actions: [
           IconButton(
@@ -68,7 +69,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                                         .customColors()
                                         .onBackground),
                                 decoration: InputDecoration.collapsed(
-                                  hintText: 'Describe subtask...',
+                                  hintText: tr('describeSubtask'),
                                   hintStyle: TextStyleHelper.subtitle1(
                                       color: controller.setTiltleError.isTrue
                                           ? Theme.of(context)

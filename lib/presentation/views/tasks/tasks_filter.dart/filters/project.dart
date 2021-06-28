@@ -8,16 +8,16 @@ class _Project extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Project',
+        title: tr('project'),
         options: <Widget>[
           FilterElement(
-              title: 'My projects',
+              title: tr('myProjects'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.project['My'],
               onTap: () => filterController.changeProject('My')),
           FilterElement(
               title: filterController.project['Other'].isEmpty
-                  ? 'Other projects'
+                  ? tr('otherProjects')
                   : filterController.project['Other'],
               isSelected: filterController.project['Other'].isNotEmpty,
               cancelButtonEnabled: filterController.project['Other'].isNotEmpty,
@@ -29,7 +29,7 @@ class _Project extends StatelessWidget {
               onCancelTap: () => filterController.changeProject('Other', null)),
           FilterElement(
               title: filterController.project['With tag'].isEmpty
-                  ? 'With tag'
+                  ? tr('withTag')
                   : filterController.project['With tag'],
               isSelected: filterController.project['With tag'].isNotEmpty,
               cancelButtonEnabled:
@@ -42,7 +42,7 @@ class _Project extends StatelessWidget {
               onCancelTap: () =>
                   filterController.changeProject('With tag', null)),
           FilterElement(
-              title: 'Without tag',
+              title: tr('withoutTag'),
               isSelected: filterController.project['Without tag'],
               onTap: () => filterController.changeProject('Without tag')),
         ],

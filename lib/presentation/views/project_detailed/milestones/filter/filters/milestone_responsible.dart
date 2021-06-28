@@ -8,16 +8,16 @@ class _MilestoneResponsible extends StatelessWidget {
     var filterController = Get.find<MilestonesFilterController>();
     return Obx(
       () => FiltersRow(
-        title: 'Responsible',
+        title: tr('responsible'),
         options: <Widget>[
           FilterElement(
-              title: 'Me',
+              title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.milestoneResponsible['me'],
               onTap: () => filterController.changeResponsible('me')),
           FilterElement(
             title: filterController.milestoneResponsible['other'].isEmpty
-                ? 'Other user'
+                ? tr('otherUser')
                 : filterController.milestoneResponsible['other'],
             isSelected:
                 filterController.milestoneResponsible['other'].isNotEmpty,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -23,13 +24,13 @@ class ResponsibleTile extends StatelessWidget {
         bool _isSelected = controller.responsibles.isNotEmpty;
         return NewTaskInfo(
           isSelected: _isSelected,
-          caption: _isSelected ? 'Assigned to:' : null,
+          caption: _isSelected ? '${tr('assignedTo')}:' : null,
           enableBorder: enableUnderline,
           text: _isSelected
               ? controller.responsibles.length == 1
                   ? controller.responsibles[0]?.displayName
-                  : '${controller.responsibles.length} responsibles'
-              : 'Add responsible',
+                  : plural('responsibles', controller.responsibles.length)
+              : tr('addResponsible'),
           suffix: _isSelected
               ? suffixIcon ??
                   Icon(Icons.arrow_forward_ios_rounded,

@@ -57,7 +57,8 @@ class ProjectTaskScreen extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: 'There are no tasks matching these filters'),
+                    text: tr('noEntityMatching',
+                        args: [tr('tasks').toLowerCase()])),
               ),
             ),
           if (controller.loaded.isTrue &&

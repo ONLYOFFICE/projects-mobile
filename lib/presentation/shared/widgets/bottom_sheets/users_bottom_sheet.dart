@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
@@ -22,7 +23,7 @@ class UsersBottomSheet extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Select user', style: TextStyleHelper.h6()),
+                Text(tr('selectUser'), style: TextStyleHelper.h6()),
                 IconButton(
                     icon: const Icon(Icons.search), onPressed: () => print(''))
               ],

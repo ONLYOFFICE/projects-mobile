@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
@@ -24,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           showBackButton: false,
-          titleText: 'Profile',
+          titleText: tr('profile'),
           actions: [
             IconButton(
               icon: AppIcon(icon: SvgIcons.settings),
@@ -63,17 +64,17 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 68),
               _ProfileInfoTile(
-                caption: 'Email:',
+                caption: '${tr('email')}:',
                 text: userController.user?.email ?? '',
                 icon: SvgIcons.message,
               ),
               _ProfileInfoTile(
-                caption: 'Portal adress:',
+                caption: '${tr('portalAdress')}:',
                 text: portalInfoController.portalName ?? '',
                 icon: SvgIcons.cloud,
               ),
               _ProfileInfoTile(
-                text: 'Log out',
+                text: tr('logOut'),
                 textColor: Theme.of(context).customColors().error,
                 icon: SvgIcons.logout,
                 iconColor:

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -27,7 +28,7 @@ class NewMilestoneView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
       appBar: StyledAppBar(
-          titleText: 'New milestone',
+          titleText: tr('newMilestone'),
           actions: [
             IconButton(
                 icon: const Icon(Icons.check_rounded),
@@ -80,7 +81,7 @@ class MilestoneInput extends StatelessWidget {
           cursorColor:
               Theme.of(context).customColors().primary.withOpacity(0.87),
           decoration: InputDecoration(
-              hintText: 'Milestone title',
+              hintText: tr('milestoneTitle'),
               contentPadding: const EdgeInsets.symmetric(vertical: 0),
               hintStyle: TextStyleHelper.headline6(
                   color: controller.setTitleError.value
@@ -91,8 +92,6 @@ class MilestoneInput extends StatelessWidget {
                           .withOpacity(0.5)),
               border: InputBorder.none)),
     );
-    // },
-    // );
   }
 }
 
@@ -137,7 +136,7 @@ class AdvancedOptions extends StatelessWidget {
                         ),
                         const SizedBox(width: 16),
                         Text(
-                          'Advanced options',
+                          tr('advancedOptions'),
                           style: TextStyleHelper.subtitle1(
                               color:
                                   Theme.of(context).customColors().onSurface),
@@ -146,7 +145,7 @@ class AdvancedOptions extends StatelessWidget {
                     ),
                     children: <Widget>[
                       OptionWithSwitch(
-                        title: 'Key milestone',
+                        title: tr('keyMilestone'),
                         switchValue: controller.keyMilestone,
                         switchOnChanged: (value) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
@@ -156,7 +155,7 @@ class AdvancedOptions extends StatelessWidget {
                         },
                       ),
                       OptionWithSwitch(
-                        title: 'Remind me 48 hours before the due date',
+                        title: tr('remindBeforeDue'),
                         switchValue: controller.remindBeforeDueDate,
                         switchOnChanged: (value) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
@@ -261,10 +260,10 @@ class DescriptionTile extends StatelessWidget {
         return NewMilestoneInfo(
             text: _isSletected
                 ? controller.descriptionText.value
-                : 'Add description',
+                : tr('addDescription'),
             maxLines: 1,
             icon: SvgIcons.description,
-            caption: _isSletected ? 'Description:' : null,
+            caption: _isSletected ? tr('description') : null,
             isSelected: _isSletected,
             suffix: _isSletected
                 ? Icon(Icons.arrow_forward_ios_outlined,
@@ -295,13 +294,13 @@ class ProjectTile extends StatelessWidget {
         return NewMilestoneInfo(
             text: _isSelected
                 ? controller.slectedProjectTitle.value
-                : 'Select project',
+                : tr('selectProject'),
             icon: SvgIcons.project,
             textColor: controller.selectProjectError.value
                 ? Theme.of(context).customColors().error
                 : null,
             isSelected: _isSelected,
-            caption: _isSelected ? 'Project:' : null,
+            caption: _isSelected ? tr('project') : null,
             onTap: () => {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
@@ -324,8 +323,8 @@ class ResponsibleTile extends StatelessWidget {
     var _isSelected = controller.responsible != null;
     return NewMilestoneInfo(
       isSelected: _isSelected,
-      caption: _isSelected ? 'Assigned to:' : null,
-      text: _isSelected ? '${1} responsible' : 'Add responsible',
+      caption: _isSelected ? tr('assignedTo') : null,
+      text: _isSelected ? plural('responsibles', 1) : tr('addResponsible'),
       suffix: _isSelected
           ? Icon(Icons.arrow_forward_ios_outlined,
               size: 20,
@@ -339,8 +338,6 @@ class ResponsibleTile extends StatelessWidget {
         Get.to(const SelectMilestoneResponsible())
       },
     );
-    // },
-    // );
   }
 }
 
@@ -358,8 +355,8 @@ class DueDateTile extends StatelessWidget {
         bool _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewMilestoneInfo(
             icon: SvgIcons.due_date,
-            text: _isSelected ? controller.dueDateText.value : 'Set due date',
-            caption: _isSelected ? 'Start date:' : null,
+            text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
+            caption: _isSelected ? tr('startDate') : null,
             isSelected: _isSelected,
             suffix: _isSelected
                 ? IconButton(
@@ -499,10 +496,10 @@ class SelectProjectForMilestone extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Select project',
+        titleText: tr('selectProject'),
         bottomHeight: 44,
         bottom: SearchField(
-          hintText: 'Search for projects...',
+          hintText: tr('searchProjects'),
           controller: _searchController.searchInputController,
           showClearIcon: true,
           onSubmitted: (value) => _searchController.newSearch(value),
@@ -603,11 +600,11 @@ class SelectMilestoneResponsible extends StatelessWidget {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Select responsible'),
+              Text(tr('selectResponsible')),
             ],
           ),
           bottom: SearchField(
-            hintText: 'Search for users',
+            hintText: tr('usersSearch'),
             onSubmitted: (value) => usersDataSource.searchUsers(value),
           ),
           actions: [

@@ -8,16 +8,16 @@ class _Other extends StatelessWidget {
     var filterController = Get.find<ProjectsFilterController>();
     return Obx(
       () => FiltersRow(
-        title: 'Other',
+        title: tr('other'),
         options: <Widget>[
           FilterElement(
-              title: 'Followed',
+              title: tr('followed'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.other['followed'],
               onTap: () => filterController.changeOther('followed')),
           FilterElement(
               title: filterController.other['withTag'].isEmpty
-                  ? 'With Tag'
+                  ? tr('withTag')
                   : filterController.other['withTag'],
               isSelected: filterController.other['withTag'].isNotEmpty,
               cancelButtonEnabled: filterController.other['withTag'].isNotEmpty,
@@ -28,7 +28,7 @@ class _Other extends StatelessWidget {
               },
               onCancelTap: () => filterController.changeOther('withTag', null)),
           FilterElement(
-              title: 'Without Tag',
+              title: tr('withoutTag'),
               titleColor: Theme.of(context).customColors().onSurface,
               isSelected: filterController.other['withoutTag'],
               onTap: () => filterController.changeOther('withoutTag')),

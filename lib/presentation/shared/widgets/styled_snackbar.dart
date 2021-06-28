@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -45,7 +46,7 @@ SnackBar styledSnackBar({
                 height: 16,
                 width: 65,
                 child: Center(
-                  child: Text('OK',
+                  child: Text(tr('ok'),
                       style: TextStyleHelper.button(
                               color: Theme.of(context)
                                   .customColors()

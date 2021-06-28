@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/2fa_sms_controller.dart';
@@ -34,11 +35,11 @@ class TFASmsScreen extends StatelessWidget {
                   SizedBox(height: h(24.71)),
                   AppIcon(icon: SvgIcons.password_recovery),
                   SizedBox(height: h(11.54)),
-                  Text(title,
+                  Text(tr('tfaSMSTitle'),
                       style: TextStyleHelper.subtitle1(
                           color: Theme.of(context).customColors().onSurface)),
                   SizedBox(height: h(12.54)),
-                  Text(caption,
+                  Text(tr('tfaSMSCaption'),
                       textAlign: TextAlign.center,
                       style: TextStyleHelper.body2(
                           color: Theme.of(context)
@@ -51,7 +52,7 @@ class TFASmsScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: WideButton(
-                      text: 'SEND CODE',
+                      text: tr('sendCode'),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                       onPressed: controller.onSendCodePressed,
                     ),
@@ -86,7 +87,7 @@ class _CountrySelection extends StatelessWidget {
               child: Obx(
                 () => Text(
                   controller?.deviceCountry?.value?.countryName ??
-                      'Choose country',
+                      tr('chooseCountry'),
                   style: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().primary),
                 ),
