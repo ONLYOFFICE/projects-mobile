@@ -65,20 +65,24 @@ class DiscussionOverview extends StatelessWidget {
                     )),
                 const SizedBox(height: 16),
                 InfoTile(
-                    caption: '${tr('description')}:',
-                    icon: AppIcon(
-                        icon: SvgIcons.description,
-                        color: const Color(0xff707070)),
-                    subtitleWidget: ReadMoreText(discussion.text,
-                        trimLines: 3,
-                        colorClickableText: Colors.pink,
-                        style: TextStyleHelper.body1,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: tr('showMore'),
-                        trimExpandedText: tr('showLess'),
-                        moreStyle: TextStyleHelper.body2(
-                            color: Theme.of(context).customColors().links),
-                        lessStyle: TextStyleHelper.body2(color: Colors.pink))),
+                  caption: '${tr('description')}:',
+                  icon: AppIcon(
+                      icon: SvgIcons.description,
+                      color: const Color(0xff707070)),
+                  subtitleWidget: ReadMoreText(
+                    discussion.text,
+                    trimLines: 3,
+                    colorClickableText: Colors.pink,
+                    style: TextStyleHelper.body1,
+                    trimMode: TrimMode.Line,
+                    trimCollapsedText: tr('showMore'),
+                    trimExpandedText: tr('showLess'),
+                    moreStyle: TextStyleHelper.body2(
+                        color: Theme.of(context).customColors().links),
+                    lessStyle: TextStyleHelper.body2(
+                        color: Theme.of(context).customColors().links),
+                  ),
+                ),
                 const SizedBox(height: 21),
                 InfoTile(
                     icon: AppIcon(
