@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/internal/extentions.dart';
@@ -90,7 +91,7 @@ class _DiscussionInfo extends StatelessWidget {
               children: [
                 if (discussion.status == 1)
                   TextSpan(
-                      text: 'Archived • ',
+                      text: '${tr('archived')} • ',
                       style: TextStyleHelper.status(
                           color: Theme.of(context).customColors().onSurface)),
                 TextSpan(text: formatedDate(discussion.created)),

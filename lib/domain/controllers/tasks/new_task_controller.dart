@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -129,9 +130,9 @@ class NewTaskController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
@@ -154,9 +155,9 @@ class NewTaskController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           notifyResponsibles.value = false;
           responsibles.value = List.of(_previusSelectedResponsibles);
@@ -246,7 +247,7 @@ class NewTaskController extends GetxController
       // ignore: omit_local_variable_types
       List<String> responsibleIds = [];
 
-      if (highPriority.isTrue) priority = 'High';
+      if (highPriority.isTrue) priority = tr('high');
       for (var item in responsibles) responsibleIds.add(item.id);
 
       var newTask = NewTaskDTO(
@@ -270,8 +271,8 @@ class NewTaskController extends GetxController
         tasksController.raiseFAB();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context,
-            text: 'Task had been created',
-            buttonText: 'OPEN',
+            text: tr('taskCreated'),
+            buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
               var itemController = Get.put(TaskItemController(createdTask),
                   tag: createdTask.id.toString());
@@ -290,9 +291,9 @@ class NewTaskController extends GetxController
         _startDate != null ||
         _dueDate != null) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard task?',
-        contentText: 'Your changes will not be saved.',
-        acceptText: 'DISCARD',
+        titleText: tr('discardTask'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
         onAcceptTap: () {
           Get.back();
           Get.back();

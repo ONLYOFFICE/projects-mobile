@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
@@ -13,7 +14,7 @@ class NewCommentView extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'New comment',
+        titleText: tr('newComment'),
         onLeadingPressed: controller.leavePage,
         actions: [
           IconButton(

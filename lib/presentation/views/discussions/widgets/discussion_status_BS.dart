@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
@@ -26,7 +27,7 @@ Future<void> showsDiscussionStatusesBS({
           const SizedBox(height: 18.5),
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: Text('Select status',
+            child: Text(tr('selectStatus'),
                 style: TextStyleHelper.h6(
                     color: Theme.of(context).customColors().onSurface)),
           ),
@@ -57,14 +58,14 @@ Future<void> showsDiscussionStatusesBS({
                   InkWell(
                     onTap: () async => controller.updateMessageStatus(0),
                     child: StatusTile(
-                      title: 'Open',
+                      title: tr('open'),
                       selected: controller.status.value == 0,
                     ),
                   ),
                   InkWell(
                     onTap: () async => controller.updateMessageStatus(1),
                     child: StatusTile(
-                      title: 'Archived',
+                      title: tr('archived'),
                       selected: controller.status.value == 1,
                     ),
                   ),

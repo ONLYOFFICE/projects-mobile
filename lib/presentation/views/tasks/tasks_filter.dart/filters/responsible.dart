@@ -13,39 +13,39 @@ class _Responsible extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.responsible['Me'],
-              onTap: () => filterController.changeResponsible('Me')),
+              isSelected: filterController.responsible['me'],
+              onTap: () => filterController.changeResponsible('me')),
           FilterElement(
-              title: filterController.responsible['Other'].isEmpty
+              title: filterController.responsible['other'].isEmpty
                   ? tr('otherUser')
-                  : filterController.responsible['Other'],
-              isSelected: filterController.responsible['Other'].isNotEmpty,
+                  : filterController.responsible['other'],
+              isSelected: filterController.responsible['other'].isNotEmpty,
               cancelButtonEnabled:
-                  filterController.responsible['Other'].isNotEmpty,
+                  filterController.responsible['other'].isNotEmpty,
               onTap: () async {
                 var newUser = await Get.bottomSheet(const UsersBottomSheet());
-                filterController.changeResponsible('Other', newUser);
+                filterController.changeResponsible('other', newUser);
               },
               onCancelTap: () =>
-                  filterController.changeResponsible('Other', null)),
+                  filterController.changeResponsible('other', null)),
           FilterElement(
-              title: filterController.responsible['Groups'].isEmpty
+              title: filterController.responsible['groups'].isEmpty
                   ? tr('groups')
-                  : filterController.responsible['Groups'],
-              isSelected: filterController.responsible['Groups'].isNotEmpty,
+                  : filterController.responsible['groups'],
+              isSelected: filterController.responsible['groups'].isNotEmpty,
               cancelButtonEnabled:
-                  filterController.responsible['Groups'].isNotEmpty,
+                  filterController.responsible['groups'].isNotEmpty,
               onTap: () async {
                 var newGroup = await Get.bottomSheet(const GroupsBottomSheet());
-                filterController.changeResponsible('Groups', newGroup);
+                filterController.changeResponsible('groups', newGroup);
               },
               onCancelTap: () =>
-                  filterController.changeResponsible('Groups', null)),
+                  filterController.changeResponsible('groups', null)),
           FilterElement(
               title: tr('noResponsible'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.responsible['No'],
-              onTap: () => filterController.changeResponsible('No'))
+              isSelected: filterController.responsible['no'],
+              onTap: () => filterController.changeResponsible('no'))
         ],
       ),
     );

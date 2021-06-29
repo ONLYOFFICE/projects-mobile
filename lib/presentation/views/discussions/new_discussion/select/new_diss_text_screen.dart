@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
@@ -13,7 +14,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
     DiscussionActionsController controller = Get.arguments['controller'];
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Text',
+        titleText: tr('text'),
         onLeadingPressed: () => controller.leaveTextView(),
         actions: [
           IconButton(
@@ -30,7 +31,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
           style: TextStyleHelper.subtitle1(
               color: Theme.of(context).customColors().onSurface),
           decoration: InputDecoration.collapsed(
-              hintText: 'Discussion text',
+              hintText: tr('discussionText'),
               hintStyle: TextStyleHelper.subtitle1()),
         ),
       ),

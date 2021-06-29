@@ -14,10 +14,6 @@ class TFASmsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var title = 'Enter your phone number';
-    var caption =
-        'You will receive SMS-code to enable Two-factor authentification.';
-
     var login = Get.arguments['login'];
     var password = Get.arguments['password'];
 

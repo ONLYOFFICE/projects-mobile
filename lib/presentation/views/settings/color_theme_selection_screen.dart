@@ -18,9 +18,9 @@ class ColorThemeSelectionScreen extends StatelessWidget {
           const SizedBox(height: 10),
           _ColorThemeTile(text: tr('sameAsSystem'), isSelected: false),
           const StyledDivider(leftPadding: 16, rightPadding: 16),
-          _ColorThemeTile(text: tr('LightTheme'), isSelected: true),
+          _ColorThemeTile(text: tr('lightTheme'), isSelected: true),
           const StyledDivider(leftPadding: 16, rightPadding: 16),
-          _ColorThemeTile(text: tr('DarkTheme'), isSelected: false),
+          _ColorThemeTile(text: tr('darkTheme'), isSelected: false),
         ],
       ),
     );

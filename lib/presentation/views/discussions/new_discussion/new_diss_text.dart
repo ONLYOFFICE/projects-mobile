@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
@@ -18,7 +19,7 @@ class NewDiscussionText extends StatelessWidget {
       () => NewTaskInfo(
         text: controller.text?.value != null && controller.text.value.isNotEmpty
             ? controller.text.value
-            : 'Text',
+            : tr('text'),
         textColor: controller.setTextError == true
             ? Theme.of(context).customColors().error
             : null,

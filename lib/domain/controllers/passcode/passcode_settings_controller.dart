@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
@@ -115,7 +116,7 @@ class PasscodeSettingsController extends GetxController {
   void tryEnablingPasscode() async {
     isPasscodeEnable.value = true;
     await Get.toNamed('NewPasscodeScreen1',
-        arguments: {'title': 'Enter passcode'});
+        arguments: {'title': tr('enterPasscode')});
   }
 
   void tryDisablingPasscode() async {
@@ -123,7 +124,7 @@ class PasscodeSettingsController extends GetxController {
     await Get.toNamed(
       'CurrentPasscodeCheckScreen',
       arguments: {
-        'title': 'Enter your current passcode',
+        'title': tr('enterCurrentPasscode'),
         'caption': '',
         'onPass': disablePasscode
       },
@@ -134,10 +135,10 @@ class PasscodeSettingsController extends GetxController {
     await Get.toNamed(
       'CurrentPasscodeCheckScreen',
       arguments: {
-        'title': 'Enter your current passcode',
+        'title': tr('enterCurrentPasscode'),
         'caption': '',
         'onPass': () => Get.toNamed('NewPasscodeScreen1',
-            arguments: {'title': 'Enter new passcode', 'caption': ''})
+            arguments: {'title': tr('enterNewPasscode'), 'caption': ''})
       },
     );
   }

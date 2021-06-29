@@ -13,38 +13,38 @@ class _Project extends StatelessWidget {
           FilterElement(
               title: tr('myProjects'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.project['My'],
-              onTap: () => filterController.changeProject('My')),
+              isSelected: filterController.project['my'],
+              onTap: () => filterController.changeProject('my')),
           FilterElement(
-              title: filterController.project['Other'].isEmpty
+              title: filterController.project['other'].isEmpty
                   ? tr('otherProjects')
-                  : filterController.project['Other'],
-              isSelected: filterController.project['Other'].isNotEmpty,
-              cancelButtonEnabled: filterController.project['Other'].isNotEmpty,
+                  : filterController.project['other'],
+              isSelected: filterController.project['other'].isNotEmpty,
+              cancelButtonEnabled: filterController.project['other'].isNotEmpty,
               onTap: () async {
                 var selectedProject =
                     await Get.bottomSheet(const ProjectsBottomSheet());
-                filterController.changeProject('Other', selectedProject);
+                filterController.changeProject('other', selectedProject);
               },
-              onCancelTap: () => filterController.changeProject('Other', null)),
+              onCancelTap: () => filterController.changeProject('other', null)),
           FilterElement(
-              title: filterController.project['With tag'].isEmpty
+              title: filterController.project['withTag'].isEmpty
                   ? tr('withTag')
-                  : filterController.project['With tag'],
-              isSelected: filterController.project['With tag'].isNotEmpty,
+                  : filterController.project['withTag'],
+              isSelected: filterController.project['withTag'].isNotEmpty,
               cancelButtonEnabled:
-                  filterController.project['With tag'].isNotEmpty,
+                  filterController.project['withTag'].isNotEmpty,
               onTap: () async {
                 var selectedTag =
                     await Get.bottomSheet(const TagsBottomSheet());
-                filterController.changeProject('With tag', selectedTag);
+                filterController.changeProject('withTag', selectedTag);
               },
               onCancelTap: () =>
-                  filterController.changeProject('With tag', null)),
+                  filterController.changeProject('withTag', null)),
           FilterElement(
               title: tr('withoutTag'),
-              isSelected: filterController.project['Without tag'],
-              onTap: () => filterController.changeProject('Without tag')),
+              isSelected: filterController.project['withoutTag'],
+              onTap: () => filterController.changeProject('withoutTag')),
         ],
       ),
     );

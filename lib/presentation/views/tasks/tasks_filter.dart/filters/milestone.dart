@@ -8,32 +8,32 @@ class _Milestone extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => FiltersRow(
-        title: 'Milestone',
+        title: tr('milestone'),
         options: <Widget>[
           FilterElement(
-              title: 'Milestones with my tasks',
+              title: tr('milestonesWithMyTasks'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.milestone['My'],
-              onTap: () => filterController.changeMilestone('My')),
+              isSelected: filterController.milestone['my'],
+              onTap: () => filterController.changeMilestone('my')),
           FilterElement(
-              title: 'No milestone',
+              title: tr('noMilestone'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.milestone['No'],
-              onTap: () => filterController.changeMilestone('No')),
+              isSelected: filterController.milestone['no'],
+              onTap: () => filterController.changeMilestone('no')),
           FilterElement(
-              title: filterController.milestone['Other'].isEmpty
-                  ? 'Other milestones'
-                  : filterController.milestone['Other'],
-              isSelected: filterController.milestone['Other'].isNotEmpty,
+              title: filterController.milestone['other'].isEmpty
+                  ? tr('otherMilestones')
+                  : filterController.milestone['other'],
+              isSelected: filterController.milestone['other'].isNotEmpty,
               onTap: () async {
                 var milestone =
                     await Get.bottomSheet(const MilestonesBottomSheet());
-                filterController.changeMilestone('Other', milestone);
+                filterController.changeMilestone('other', milestone);
               },
               cancelButtonEnabled:
-                  filterController.milestone['Other'].isNotEmpty,
+                  filterController.milestone['other'].isNotEmpty,
               onCancelTap: () =>
-                  filterController.changeMilestone('Other', null)),
+                  filterController.changeMilestone('other', null)),
         ],
       ),
     );

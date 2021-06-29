@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:darq/darq.dart';
@@ -55,7 +56,8 @@ class NewProjectController extends GetxController {
 
   String get teamMembersTitle => selectedTeamMembers.length == 1
       ? selectedTeamMembers.first.displayName
-      : '${selectedTeamMembers.length} members';
+      : plural('members', selectedTeamMembers.length);
+  // '${selectedTeamMembers.length} members';
 
   Future<void> confirm() async {
     if (titleController.text.isEmpty) {
@@ -104,9 +106,9 @@ class NewProjectController extends GetxController {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           descriptionController.text = descriptionText.value;
           Get.back();
@@ -135,9 +137,9 @@ class NewProjectController extends GetxController {
     // } else {
     // ConfirmDialog.show(
     //   title: 'Discard description?',
-    //   message: 'Your changes will not be saved.',
+    //   message: tr('changesWillBeLost'),
     //   textCancel: 'CANCEL',
-    //   textConfirm: 'DELETE',
+    //   textConfirm: tr('delete').toUpperCase(),
     //   confirmFunction: () => Get.back(),
     //   cancelFunction: deleteDescription,
     // );

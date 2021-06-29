@@ -6,17 +6,17 @@ class DocumentsSortController extends BaseSortController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
-  @override
-  String getFilterLabel(value) {
-    return _filtersMapping[value];
-  }
+  // @override
+  // String getFilterLabel(value) {
+  //   return _filtersMapping[value];
+  // }
 }
 
-const _filtersMapping = {
-  'dateandtime': 'Last modified date',
-  'create_on': 'Creation date',
-  'AZ': 'Title',
-  'type': 'Type',
-  'size': 'Size',
-  'author': 'Author',
-};
+// const _filtersMapping = {
+//   'dateandtime': 'Last modified date',
+//   'create_on': 'Creation date',
+//   'AZ': 'Title',
+//   'type': 'Type',
+//   'size': 'Size',
+//   'author': 'Author',
+// };

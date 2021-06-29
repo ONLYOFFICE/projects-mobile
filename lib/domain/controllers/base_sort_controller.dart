@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
 abstract class BaseSortController extends GetxController {
@@ -24,5 +25,5 @@ abstract class BaseSortController extends GetxController {
   String get currentSortOrder =>
       isSortAscending.isTrue ? 'ascending' : 'descending';
 
-  String getFilterLabel(value);
+  String getFilterLabel(value) => tr(value);
 }

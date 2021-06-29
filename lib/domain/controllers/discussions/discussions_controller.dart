@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
@@ -26,7 +27,7 @@ class DiscussionsController extends BaseController {
   }
 
   @override
-  String get screenName => 'Discussions';
+  String get screenName => tr('discussions');
 
   @override
   RxList get itemList => paginationController.data;

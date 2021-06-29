@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
@@ -22,7 +23,7 @@ class PortalDiscussionsView extends StatelessWidget {
           titleHeight: 101,
           bottomHeight: 0,
           showBackButton: false,
-          titleText: 'Discussions',
+          titleText: tr('discussions'),
           elevation: 0,
           actions: [
             IconButton(

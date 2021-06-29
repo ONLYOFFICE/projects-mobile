@@ -13,19 +13,19 @@ class _Creator extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Theme.of(context).customColors().onSurface,
-              isSelected: filterController.creator['Me'],
-              onTap: () => filterController.changeCreator('Me')),
+              isSelected: filterController.creator['me'],
+              onTap: () => filterController.changeCreator('me')),
           FilterElement(
-            title: filterController.creator['Other'].isEmpty
+            title: filterController.creator['other'].isEmpty
                 ? tr('otherUser')
-                : filterController.creator['Other'],
-            isSelected: filterController.creator['Other'].isNotEmpty,
-            cancelButtonEnabled: filterController.creator['Other'].isNotEmpty,
+                : filterController.creator['other'],
+            isSelected: filterController.creator['other'].isNotEmpty,
+            cancelButtonEnabled: filterController.creator['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.bottomSheet(const UsersBottomSheet());
-              await filterController.changeCreator('Other', newUser);
+              await filterController.changeCreator('other', newUser);
             },
-            onCancelTap: () => filterController.changeCreator('Other', null),
+            onCancelTap: () => filterController.changeCreator('other', null),
           ),
         ],
       ),
@@ -48,22 +48,22 @@ class _Creator extends StatelessWidget {
 //             padding: const EdgeInsets.symmetric(horizontal: 16),
 //             child: Wrap(runSpacing: 16, spacing: 16, children: [
 //               _FilterElement(
-//                   title: 'Me',
+//                   title: 'me',
 //                   titleColor: Theme.of(context).customColors().onSurface,
-//                   selected: filterController.creator['Me'],
-//                   onTap: () => filterController.changeCreator('Me')),
+//                   selected: filterController.creator['me'],
+//                   onTap: () => filterController.changeCreator('me')),
 //               _FilterElement(
-//                 title: filterController.creator['Other'].isEmpty
-//                     ? 'Other user'
-//                     : filterController.creator['Other'],
-//                 selected: filterController.creator['Other'].isNotEmpty,
-//                 cancelButton: filterController.creator['Other'].isNotEmpty,
+//                 title: filterController.creator['other'].isEmpty
+//                     ? 'other user'
+//                     : filterController.creator['other'],
+//                 selected: filterController.creator['other'].isNotEmpty,
+//                 cancelButton: filterController.creator['other'].isNotEmpty,
 //                 onTap: () async {
 //                   var newUser = await Get.bottomSheet(SelectUser());
-//                   filterController.changeCreator('Other', newUser);
+//                   filterController.changeCreator('other', newUser);
 //                 },
 //                 onCancelTap: () =>
-//                     filterController.changeCreator('Other', null),
+//                     filterController.changeCreator('other', null),
 //               ),
 //             ]),
 //           ),

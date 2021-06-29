@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -131,13 +132,12 @@ class _CommentAuthor extends StatelessWidget {
                         .withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
-                    const PopupMenuItem(
-                        value: 'Copy link', child: Text('Copy link')),
+                    PopupMenuItem(
+                        value: 'Copy link', child: Text(tr('copyLink'))),
                     if (comment.isEditPermissions)
-                      const PopupMenuItem(value: 'Edit', child: Text('Edit')),
+                      PopupMenuItem(value: 'Edit', child: Text(tr('edit'))),
                     if (comment.isEditPermissions)
-                      const PopupMenuItem(
-                          value: 'Delete', child: Text('Delete')),
+                      PopupMenuItem(value: 'Delete', child: Text(tr('delete'))),
                   ];
                 },
               ),
@@ -158,7 +158,7 @@ class _DeletedComment extends StatelessWidget {
       alignment: Alignment.centerLeft,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
-        child: Text('Comment deleted', style: TextStyleHelper.body2()),
+        child: Text(tr('commentDeleted'), style: TextStyleHelper.body2()),
       ),
     );
   }

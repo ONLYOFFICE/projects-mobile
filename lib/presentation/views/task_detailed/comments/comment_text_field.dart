@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -15,7 +16,7 @@ class CommentTextField extends StatelessWidget {
         controller: controller.textController,
         scrollPadding: const EdgeInsets.all(10),
         decoration: InputDecoration.collapsed(
-          hintText: 'Reply text',
+          hintText: tr('replyText'),
           hintStyle: TextStyle(
               color: controller.setTitleError == true
                   ? Theme.of(context).customColors().error

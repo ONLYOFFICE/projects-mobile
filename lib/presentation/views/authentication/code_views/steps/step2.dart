@@ -5,9 +5,6 @@ class _Step2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _setupText1 = 'Launch Google Authenticator application';
-    const _setupText2 = 'Run the application\nand tap the “new account” icon';
-
     return Column(
       children: [
         const SizedBox(height: 12),

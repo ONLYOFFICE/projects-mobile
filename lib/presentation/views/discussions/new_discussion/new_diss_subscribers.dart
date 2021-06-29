@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
@@ -17,8 +18,9 @@ class NewDiscussionSubscribers extends StatelessWidget {
       () => NewTaskInfo(
         icon: SvgIcons.subscribers,
         text: controller.subscribers.isEmpty
-            ? 'Add subscribers'
-            : '${controller.subscribers.length} subscribers',
+            ? tr('addSubscribers')
+            : plural('subscribersPlural', controller.subscribers.length),
+        // : '${controller.subscribers.length} subscribers',
         onTap: () => Get.toNamed('SelectDiscussionSubscribers',
             arguments: {'controller': controller}),
       ),

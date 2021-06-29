@@ -6,14 +6,14 @@ class MilestonesSortController extends BaseSortController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
-  @override
-  String getFilterLabel(value) {
-    return _filtersMapping[value];
-  }
+  // @override
+  // String getFilterLabel(value) {
+  //   return _filtersMapping[value];
+  // }
 }
 
-const _filtersMapping = {
-  'create_on': 'Creation date',
-  'deadline': 'Deadline',
-  'title': 'Title',
-};
+// const _filtersMapping = {
+//   'create_on': 'Creation date',
+//   'deadline': 'Deadline',
+//   'title': 'Title',
+// };

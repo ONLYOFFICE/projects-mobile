@@ -34,8 +34,8 @@ class NewPasscodeScreen2 extends StatelessWidget {
               Obx(() {
                 return Text(
                     controller.passcodeCheckFailed.isTrue
-                        ? 'PasscodesNotMatch'
-                        : 'ReEnterPasscode',
+                        ? tr('passcodesNotMatch')
+                        : tr('reEnterPasscode'),
                     style: TextStyleHelper.subtitle1(
                         color: controller.passcodeCheckFailed.isTrue
                             ? Theme.of(context).customColors().error
