@@ -93,8 +93,11 @@ class TaskFilterController extends BaseFilterController {
     }
   }.obs;
 
+  @override
+  String get filtersTitle =>
+      plural('tasksFilterConfirm', suitableResultCount.value);
+
   TaskFilterController() {
-    filtersTitle = tr('tasks').toUpperCase();
     suitableResultCount = (-1).obs;
   }
 

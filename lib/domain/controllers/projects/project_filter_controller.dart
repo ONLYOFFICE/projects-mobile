@@ -71,8 +71,11 @@ class ProjectsFilterController extends BaseFilterController {
   RxMap<String, dynamic> status =
       {'active': false, 'paused': false, 'closed': false}.obs;
 
+  @override
+  String get filtersTitle =>
+      plural('projectsFilterConfirm', suitableResultCount.value);
+
   ProjectsFilterController() {
-    filtersTitle = tr('projects').toUpperCase();
     suitableResultCount = (-1).obs;
   }
 

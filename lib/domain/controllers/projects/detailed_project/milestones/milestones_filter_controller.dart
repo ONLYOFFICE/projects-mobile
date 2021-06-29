@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/milestone_service.dart';
@@ -80,8 +81,11 @@ class MilestonesFilterController extends BaseFilterController {
   RxMap<String, dynamic> status =
       {'active': false, 'paused': false, 'closed': false}.obs;
 
+  @override
+  String get filtersTitle =>
+      plural('milestonesFilterConfirm', suitableResultCount.value);
+
   MilestonesFilterController() {
-    filtersTitle = 'MILESTONES';
     suitableResultCount = (-1).obs;
   }
 

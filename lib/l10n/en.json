@@ -181,7 +181,7 @@
 		"two": "{} persons",
 		"few": "{} persons",
 		"many": "{} persons",
-		"other": "{} person"
+		"other": "{} persons"
 	},
 
 	"members": {
@@ -221,6 +221,45 @@
 		"few": "{} subscribers",
 		"many": "{} subscribers",
 		"other": "{} subscribers"
+	},
+
+	"filterConfirmButton": "SHOW {} {}",
+	
+
+	"tasksFilterConfirm": {
+		"zero": "SHOW {} TASKS",
+		"one": "SHOW {} TASK",
+		"two": "SHOW {} TASKS",
+		"few": "SHOW {} TASKS",
+		"many": "SHOW {} TASKS",
+		"other": "SHOW {} TASKS"
+	},
+
+	"projectsFilterConfirm": {
+		"zero": "SHOW {} PROJECTS",
+		"one": "SHOW {} PROJECT",
+		"two": "SHOW {} PROJECTS",
+		"few": "SHOW {} PROJECTS",
+		"many": "SHOW {} PROJECTS",
+		"other": "SHOW {} PROJECTS"
+	},
+
+	"milestonesFilterConfirm": {
+		"zero": "SHOW {} MILESTONES",
+		"one": "SHOW {} MILESTONE",
+		"two": "SHOW {} MILESTONES",
+		"few": "SHOW {} MILESTONES",
+		"many": "SHOW {} MILESTONES",
+		"other": "SHOW {} MILESTONES"
+	},
+
+	"documentsFilterConfirm": {
+		"zero": "SHOW {} DOCUMENTS",
+		"one": "SHOW {} DOCUMENT",
+		"two": "SHOW {} DOCUMENTS",
+		"few": "SHOW {} DOCUMENTS",
+		"many": "SHOW {} DOCUMENTS",
+		"other": "SHOW {} DOCUMENTS"
 	},
 
 	"addMembersOf": "Add members of",
@@ -370,7 +409,7 @@
 
 	"sortBy": "Sort by",
 	"enterQuery": "Enter your query",
-	"filterConfirmButton": "SHOW {} {}",
+	
 
 	"selectGroup": "Select group",
 

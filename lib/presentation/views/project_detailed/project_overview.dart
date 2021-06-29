@@ -105,18 +105,23 @@ class ProjectOverview extends StatelessWidget {
                   )),
               const SizedBox(height: 20),
               Obx(
-                () => InfoTileWithButton(
-                  icon: AppIcon(
-                      icon: SvgIcons.users, color: const Color(0xff707070)),
-                  onTapFunction: () {
+                () => InkWell(
+                  onTap: () {
                     tabController.animateTo(5);
                   },
-                  caption: tr('team'),
-                  iconData: Icons.navigate_next,
-                  subtitle: plural(
-                      'members', projectController.teamMembersCount.value),
-                  subtitleStyle: TextStyleHelper.subtitle1(
-                      color: Theme.of(context).customColors().onSurface),
+                  child: InfoTileWithButton(
+                    icon: AppIcon(
+                        icon: SvgIcons.users, color: const Color(0xff707070)),
+                    onTapFunction: () {
+                      tabController.animateTo(5);
+                    },
+                    caption: tr('team'),
+                    iconData: Icons.navigate_next,
+                    subtitle: plural(
+                        'members', projectController.teamMembersCount.value),
+                    subtitleStyle: TextStyleHelper.subtitle1(
+                        color: Theme.of(context).customColors().onSurface),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

@@ -70,11 +70,11 @@ class ConfirmFiltersButton extends StatelessWidget {
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(6)))),
-          child: Text(
-              tr('filterConfirmButton', args: [
-                filterController.suitableResultCount.value.toString(),
-                filterController.filtersTitle
-              ]),
+          child: Text(filterController.filtersTitle,
+              // tr('filterConfirmButton', args: [
+              //   filterController.suitableResultCount.value.toString(),
+              //   filterController.filtersTitle
+              // ]),
               style: TextStyleHelper.button(
                   color: Theme.of(context).customColors().onPrimary)),
         ),
