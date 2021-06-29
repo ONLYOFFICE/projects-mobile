@@ -83,6 +83,8 @@ class TasksOverviewScreen extends StatelessWidget {
                         trimExpandedText: tr('showLess'),
                         moreStyle: TextStyleHelper.body2(
                             color: Theme.of(context).customColors().links),
+                        lessStyle: TextStyleHelper.body2(
+                            color: Theme.of(context).customColors().links),
                       ),
                     ),
                   ),
