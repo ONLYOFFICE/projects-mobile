@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
@@ -44,8 +45,11 @@ class DocumentsFilterController extends BaseFilterController {
 
   bool get _hasFilters => _typeFilter.isNotEmpty || _authorFilter.isNotEmpty;
 
+  @override
+  String get filtersTitle =>
+      plural('documentsFilterConfirm', suitableResultCount.value);
+
   DocumentsFilterController() {
-    filtersTitle = 'DOCUMENTS';
     suitableResultCount = (-1).obs;
   }
 
