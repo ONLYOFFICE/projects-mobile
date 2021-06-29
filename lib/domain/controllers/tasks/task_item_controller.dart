@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -87,7 +88,7 @@ class TaskItemController extends GetxController {
           : null,
       description: taskFrom.description,
       milestoneid: taskFrom.milestoneId,
-      priority: taskFrom.priority == 1 ? 'High' : 'Normal',
+      priority: taskFrom.priority == 1 ? tr('high') : tr('normal'),
       projectId: taskFrom.projectOwner.id,
       responsibles: responsibleIds,
       title: taskFrom.title,
@@ -146,12 +147,12 @@ class TaskItemController extends GetxController {
 
   Future deleteTask({@required int taskId}) async {
     var r = await _api.deleteTask(taskId: taskId);
-    if (r != null) return 'ok';
+    return r != null;
   }
 
   Future subscribeToTask({@required int taskId}) async {
     var r = await _api.subscribeToTask(taskId: taskId);
-    if (r != null) return 'ok';
+    return r != null;
   }
 
   void handleVisibilityChanged(VisibilityInfo info) {

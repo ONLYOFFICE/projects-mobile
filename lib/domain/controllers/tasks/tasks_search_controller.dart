@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
@@ -45,7 +46,7 @@ class TasksSearchController extends BaseController {
   PaginationController get paginationController => _paginationController;
 
   @override
-  String get screenName => 'Tasks search';
+  String get screenName => tr('tasksSearch');
 
   @override
   RxList get itemList => _paginationController.data;

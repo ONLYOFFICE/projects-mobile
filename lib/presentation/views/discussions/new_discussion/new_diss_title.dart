@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
@@ -58,7 +59,7 @@ class NewDiscussionTitle extends StatelessWidget {
             cursorColor:
                 Theme.of(context).customColors().primary.withOpacity(0.87),
             decoration: InputDecoration(
-                hintText: 'Discussion title',
+                hintText: tr('discussionTitle'),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 hintStyle: TextStyleHelper.headline6(
                   color: controller.setTitleError == true

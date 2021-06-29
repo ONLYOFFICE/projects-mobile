@@ -32,8 +32,10 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/files_service.dart';
@@ -77,8 +79,9 @@ class ProjectDetailsController extends GetxController {
 
   Future<void> setup() async {
     teamMembersCount.value = projectDetailed.participantCount;
-    statusText.value =
-        'Project ${ProjectStatus.toName(projectDetailed.status)}';
+    statusText.value = tr('projectStatus',
+        args: [ProjectStatus.toName(projectDetailed.status)]);
+    // 'Project ${ProjectStatus.toName(projectDetailed.status)}';
 
     projectTitleText.value = projectDetailed.title;
     descriptionText.value = projectDetailed.description;
@@ -94,7 +97,9 @@ class ProjectDetailsController extends GetxController {
               if (value != null) {milestoneCount.value = value.length}
             });
 
-    final formatter = DateFormat('dd MMM yyyy');
+//TODO example date format with locale
+    final formatter = DateFormat.yMMMd(Get.locale.languageCode);
+
     creationDateText.value =
         formatter.format(DateTime.parse(projectDetailed.created));
 

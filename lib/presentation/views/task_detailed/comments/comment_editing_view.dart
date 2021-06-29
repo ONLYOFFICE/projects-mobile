@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/comment_editing_controller.dart';
@@ -53,7 +54,7 @@ class CommentEditingView extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'Task editing',
+        titleText: tr('taskEditing'),
         actions: [
           IconButton(
             icon: const Icon(Icons.done_rounded),

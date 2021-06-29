@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -98,9 +99,9 @@ class NewMilestoneController extends GetxController {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
@@ -122,9 +123,9 @@ class NewMilestoneController extends GetxController {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           responsible.value = _previusSelectedResponsible;
           Get.back();
@@ -218,9 +219,9 @@ class NewMilestoneController extends GetxController {
         descriptionText.isNotEmpty ||
         _dueDate != null) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard milestone?',
-        contentText: 'Your changes will not be saved.',
-        acceptText: 'DISCARD',
+        titleText: tr('discardMilestone'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
         onAcceptTap: () {
           Get.back();
           Get.back();

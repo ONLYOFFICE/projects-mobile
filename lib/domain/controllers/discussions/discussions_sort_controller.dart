@@ -37,17 +37,17 @@ class DiscussionsSortController extends BaseSortController {
     currentSortfilter = 'deadline';
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
-  @override
-  String getFilterLabel(value) {
-    return _filtersMapping[value];
-  }
+  // @override
+  // String getFilterLabel(value) {
+  //   return _filtersMapping[value];
+  // }
 }
 
-const _filtersMapping = {
-  'deadline': 'Deadline',
-  'priority': 'Priority',
-  'create_on': 'Creation date',
-  'start_date': 'Start date',
-  'title': 'Title',
-  'sort_order': 'Order',
-};
+// const _filtersMapping = {
+//   'deadline': 'Deadline',
+//   'priority': 'Priority',
+//   'create_on': 'Creation date',
+//   'start_date': 'Start date',
+//   'title': 'Title',
+//   'sort_order': 'Order',
+// };

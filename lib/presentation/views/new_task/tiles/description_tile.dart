@@ -30,7 +30,7 @@
  *
  */
 
-import 'dart:ui' as UI;
+import 'dart:ui' as _ui;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -187,7 +187,7 @@ Size _textSize(String text, TextStyle style) {
   final textPainter = TextPainter(
       text: TextSpan(text: text, style: style),
       maxLines: 1,
-      textDirection: UI.TextDirection.ltr)
+      textDirection: _ui.TextDirection.ltr)
     ..layout(minWidth: 0, maxWidth: double.infinity);
   return textPainter.size;
 }

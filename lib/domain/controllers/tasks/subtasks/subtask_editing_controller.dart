@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -145,9 +146,9 @@ class SubtaskEditingController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           responsibles.value = [_previusSelectedResponsible];
           Get.back();
@@ -172,9 +173,9 @@ class SubtaskEditingController extends GetxController
     if (responsible != _previousResponsibleId ||
         _titleController.text != _previousTitle) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           Get.back();
           Get.back();

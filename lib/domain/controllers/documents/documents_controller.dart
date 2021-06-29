@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
@@ -74,7 +75,7 @@ class DocumentsController extends GetxController {
   int _currentFolderId;
   int get currentFolder => _currentFolderId;
 
-  var screenName = 'Documents'.obs;
+  var screenName = tr('documents').obs;
 
   RxList get itemList => _paginationController.data;
 
@@ -166,7 +167,7 @@ class DocumentsController extends GetxController {
       paginationController.data.addAll(result.folders);
     if (result.files != null) paginationController.data.addAll(result.files);
 
-    screenName.value = _screenName ?? 'Documents';
+    screenName.value = _screenName ?? tr('documents');
   }
 
   void clearSearch() {

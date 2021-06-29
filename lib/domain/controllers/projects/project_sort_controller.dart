@@ -38,13 +38,13 @@ class ProjectsSortController extends BaseSortController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
 
-  @override
-  String getFilterLabel(value) {
-    return _filtersMapping[value];
-  }
+  // @override
+  // String getFilterLabel(value) {
+  //   return tr(value);
+  // }
 }
 
-const _filtersMapping = {
-  'create_on': 'Creation date',
-  'title': 'Title',
-};
+// const _filtersMapping = {
+//   'create_on': 'Creation date',
+//   'title': 'Title',
+// };

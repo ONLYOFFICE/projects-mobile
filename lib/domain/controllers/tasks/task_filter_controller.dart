@@ -72,15 +72,15 @@ class TaskFilterController extends BaseFilterController {
       _milestoneFilter.isNotEmpty;
 
   RxMap<String, dynamic> responsible =
-      {'Me': false, 'Other': '', 'Groups': '', 'No': false}.obs;
+      {'me': false, 'other': '', 'groups': '', 'no': false}.obs;
 
-  RxMap<String, dynamic> creator = {'Me': false, 'Other': ''}.obs;
+  RxMap<String, dynamic> creator = {'me': false, 'other': ''}.obs;
 
   RxMap<String, dynamic> project =
-      {'My': false, 'Other': '', 'With tag': '', 'Without tag': false}.obs;
+      {'my': false, 'other': '', 'withTag': '', 'withoutTag': false}.obs;
 
   RxMap<String, dynamic> milestone =
-      {'My': false, 'No': false, 'Other': ''}.obs;
+      {'my': false, 'no': false, 'other': ''}.obs;
 
   RxMap<String, dynamic> deadline = {
     'overdue': false,
@@ -105,41 +105,41 @@ class TaskFilterController extends BaseFilterController {
     _responsibleFilter = '';
 
     switch (filter) {
-      case 'Me':
-        responsible['Other'] = '';
-        responsible['Groups'] = '';
-        responsible['No'] = false;
-        responsible['Me'] = !responsible['Me'];
-        if (responsible['Me']) _responsibleFilter = '&participant=$_selfId';
+      case 'me':
+        responsible['other'] = '';
+        responsible['groups'] = '';
+        responsible['no'] = false;
+        responsible['me'] = !responsible['me'];
+        if (responsible['me']) _responsibleFilter = '&participant=$_selfId';
         break;
-      case 'Other':
-        responsible['Me'] = false;
-        responsible['Groups'] = '';
-        responsible['No'] = false;
+      case 'other':
+        responsible['me'] = false;
+        responsible['groups'] = '';
+        responsible['no'] = false;
         if (newValue == null) {
-          responsible['Other'] = '';
+          responsible['other'] = '';
         } else {
-          responsible['Other'] = newValue['displayName'];
+          responsible['other'] = newValue['displayName'];
           _responsibleFilter = '&participant=${newValue["id"]}';
         }
         break;
-      case 'Groups':
-        responsible['Me'] = false;
-        responsible['Other'] = '';
-        responsible['No'] = false;
+      case 'groups':
+        responsible['me'] = false;
+        responsible['other'] = '';
+        responsible['no'] = false;
         if (newValue == null) {
-          responsible['Groups'] = '';
+          responsible['groups'] = '';
         } else {
-          responsible['Groups'] = newValue['name'];
+          responsible['groups'] = newValue['name'];
           _responsibleFilter = '&departament=${newValue["id"]}';
         }
         break;
-      case 'No':
-        responsible['Me'] = false;
-        responsible['Other'] = '';
-        responsible['Groups'] = '';
-        responsible['No'] = !responsible['No'];
-        if (responsible['No']) {
+      case 'no':
+        responsible['me'] = false;
+        responsible['other'] = '';
+        responsible['groups'] = '';
+        responsible['no'] = !responsible['no'];
+        if (responsible['no']) {
           _responsibleFilter =
               '&participant=00000000-0000-0000-0000-000000000000';
         }
@@ -152,17 +152,17 @@ class TaskFilterController extends BaseFilterController {
   Future<void> changeCreator(String filter, [newValue = '']) async {
     _selfId ??= await Get.find<UserController>().getUserId();
     _creatorFilter = '';
-    if (filter == 'Me') {
-      creator['Other'] = '';
-      creator['Me'] = !creator['Me'];
-      if (creator['Me']) _creatorFilter = '&creator=$_selfId';
+    if (filter == 'me') {
+      creator['other'] = '';
+      creator['me'] = !creator['me'];
+      if (creator['me']) _creatorFilter = '&creator=$_selfId';
     }
-    if (filter == 'Other') {
-      creator['Me'] = false;
+    if (filter == 'other') {
+      creator['me'] = false;
       if (newValue == null) {
-        creator['Other'] = '';
+        creator['other'] = '';
       } else {
-        creator['Other'] = newValue['displayName'];
+        creator['other'] = newValue['displayName'];
         _creatorFilter = '&creator=${newValue["id"]}';
       }
     }
@@ -172,41 +172,41 @@ class TaskFilterController extends BaseFilterController {
   void changeProject(String filter, [newValue = '']) async {
     _projectFilter = '';
     switch (filter) {
-      case 'My':
-        project['Other'] = '';
-        project['With tag'] = '';
-        project['Without tag'] = false;
-        project['My'] = !project['My'];
-        if (project['My']) _projectFilter = '&myprojects=true';
+      case 'my':
+        project['other'] = '';
+        project['withTag'] = '';
+        project['withoutTag'] = false;
+        project['my'] = !project['my'];
+        if (project['my']) _projectFilter = '&myprojects=true';
         break;
-      case 'Other':
-        project['My'] = false;
-        project['With tag'] = '';
-        project['Without tag'] = false;
+      case 'other':
+        project['my'] = false;
+        project['withTag'] = '';
+        project['withoutTag'] = false;
         if (newValue == null) {
-          project['Other'] = '';
+          project['other'] = '';
         } else {
-          project['Other'] = newValue['title'];
+          project['other'] = newValue['title'];
           _projectFilter = '&projectId=${newValue["id"]}';
         }
         break;
-      case 'With tag':
-        project['My'] = false;
-        project['Other'] = '';
-        project['Without tag'] = false;
+      case 'withTag':
+        project['my'] = false;
+        project['other'] = '';
+        project['withoutTag'] = false;
         if (newValue == null) {
-          project['With tag'] = '';
+          project['withTag'] = '';
         } else {
-          project['With tag'] = newValue['title'];
+          project['withTag'] = newValue['title'];
           _projectFilter = '&tag=${newValue["id"]}';
         }
         break;
-      case 'Without tag':
-        project['My'] = false;
-        project['Other'] = '';
-        project['With tag'] = '';
-        project['Without tag'] = !project['Without tag'];
-        if (project['Without tag']) _projectFilter = '&tag=-1';
+      case 'withoutTag':
+        project['my'] = false;
+        project['other'] = '';
+        project['withTag'] = '';
+        project['withoutTag'] = !project['withoutTag'];
+        if (project['withoutTag']) _projectFilter = '&tag=-1';
         break;
       default:
     }
@@ -216,25 +216,25 @@ class TaskFilterController extends BaseFilterController {
   void changeMilestone(String filter, [newValue]) {
     _milestoneFilter = '';
     switch (filter) {
-      case 'My':
-        milestone['No'] = false;
-        milestone['Other'] = '';
-        milestone['My'] = !milestone['My'];
-        if (milestone['My']) _milestoneFilter = '&mymilestones=true';
+      case 'my':
+        milestone['no'] = false;
+        milestone['other'] = '';
+        milestone['my'] = !milestone['my'];
+        if (milestone['my']) _milestoneFilter = '&mymilestones=true';
         break;
-      case 'No':
-        milestone['My'] = false;
-        milestone['Other'] = '';
-        milestone['No'] = !milestone['No'];
-        if (milestone['No']) _milestoneFilter = '&nomilestone=true';
+      case 'no':
+        milestone['my'] = false;
+        milestone['other'] = '';
+        milestone['no'] = !milestone['no'];
+        if (milestone['no']) _milestoneFilter = '&nomilestone=true';
         break;
-      case 'Other':
-        milestone['My'] = false;
-        milestone['No'] = false;
+      case 'other':
+        milestone['my'] = false;
+        milestone['no'] = false;
         if (newValue == null) {
-          milestone['Other'] = '';
+          milestone['other'] = '';
         } else {
-          milestone['Other'] = newValue['title'];
+          milestone['other'] = newValue['title'];
           _milestoneFilter = '&milestone=${newValue["id"]}';
         }
         break;
@@ -312,22 +312,22 @@ class TaskFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    responsible['Me'] = false;
-    responsible['Other'] = '';
-    responsible['Groups'] = '';
-    responsible['No'] = false;
+    responsible['me'] = false;
+    responsible['other'] = '';
+    responsible['groups'] = '';
+    responsible['no'] = false;
 
-    creator['Me'] = false;
-    creator['Other'] = '';
+    creator['me'] = false;
+    creator['other'] = '';
 
-    project['My'] = false;
-    project['Other'] = '';
-    project['With tag'] = '';
-    project['Without tag'] = false;
+    project['my'] = false;
+    project['other'] = '';
+    project['withTag'] = '';
+    project['withoutTag'] = false;
 
-    milestone['My'] = false;
-    milestone['No'] = false;
-    milestone['Other'] = '';
+    milestone['my'] = false;
+    milestone['no'] = false;
+    milestone['other'] = '';
 
     deadline['overdue'] = false;
     deadline['today'] = false;

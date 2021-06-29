@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -69,7 +70,7 @@ class ReplyCommentView extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'New comment',
+        titleText: tr('newComment'),
         actions: [
           IconButton(
             icon: const Icon(Icons.done_rounded),

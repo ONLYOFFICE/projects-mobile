@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -134,9 +135,9 @@ class NewSubtaskController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           responsibles.value = [_previusSelectedResponsible];
           Get.back();
@@ -154,9 +155,9 @@ class NewSubtaskController extends GetxController
   void leavePage() {
     if (responsibles.isNotEmpty || _titleController.text.isNotEmpty) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           Get.back();
           Get.back();
@@ -187,8 +188,8 @@ class NewSubtaskController extends GetxController
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context,
-            text: 'Subtask had been created',
-            buttonText: 'OPEN',
+            text: tr('subtaskCreated'),
+            buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
               var controller = Get.put(SubtaskController(subtask: newSubtask),
                   tag: newSubtask.id.toString());

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -97,7 +98,7 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> updateMessageStatus(int newStatus) async {
-    var newStatusStr = newStatus == 1 ? 'Archived' : 'Open';
+    var newStatusStr = newStatus == 1 ? tr('archived') : tr('open');
 
     try {
       Discussion result = await _api.updateMessageStatus(

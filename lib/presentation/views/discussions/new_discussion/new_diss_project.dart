@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
@@ -51,7 +52,7 @@ class NewDiscussionProject extends StatelessWidget {
         icon: SvgIcons.project,
         text: controller.selectedProjectTitle.value.isNotEmpty
             ? controller.selectedProjectTitle.value
-            : 'Choose project',
+            : tr('chooseProject'),
         textColor: controller.selectProjectError == true
             ? Theme.of(context).customColors().error
             : null,

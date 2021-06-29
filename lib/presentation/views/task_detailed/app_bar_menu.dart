@@ -92,7 +92,7 @@ void _onSelected(value, TaskItemController controller) async {
 
     case 'followTask':
       var result = await controller.subscribeToTask(taskId: task.id);
-      if (result != null) await controller.reloadTask();
+      if (result) await controller.reloadTask();
       break;
 
     case 'copyTask':
@@ -101,13 +101,13 @@ void _onSelected(value, TaskItemController controller) async {
 
     case 'deleteTask':
       await Get.dialog(StyledAlertDialog(
-        titleText: 'deleteTask',
+        titleText: tr('deleteTask'),
         contentText: tr('deleteTaskAlert'),
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           var result = await controller.deleteTask(taskId: task.id);
-          if (result != null) {
+          if (result) {
             // ignore: unawaited_futures
             Get.find<TasksController>().loadTasks();
             Get.back();

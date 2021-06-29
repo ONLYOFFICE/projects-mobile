@@ -37,17 +37,17 @@ class TasksSortController extends BaseSortController {
     currentSortfilter = 'deadline';
     currentSortTitle.value = getFilterLabel(currentSortfilter);
   }
-  @override
-  String getFilterLabel(value) {
-    return _filtersMapping[value];
-  }
+  // @override
+  // String getFilterLabel(value) {
+  //   return tr(value);
+  // }
 }
 
-const _filtersMapping = {
-  'deadline': 'Deadline',
-  'priority': 'Priority',
-  'create_on': 'Creation date',
-  'start_date': 'Start date',
-  'title': 'Title',
-  'sort_order': 'Order',
-};
+// const _filtersMapping = {
+//   'deadline': tr('deadline'),
+//   'priority': tr('priority'),
+//   'create_on': tr('create_on date'),
+//   'start_date': tr('start_date date'),
+//   'title': tr('title'),
+//   'sort_order': tr('sort_order'),
+// };

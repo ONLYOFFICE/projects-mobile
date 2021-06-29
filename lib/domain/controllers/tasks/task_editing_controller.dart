@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -109,7 +110,7 @@ class TaskEditingController extends GetxController
     newStatus = initialStatus.obs;
     descriptionText = task.description.obs;
     descriptionController.value.text = task.description;
-    selectedMilestoneTitle = task.milestone?.title?.obs ?? 'None'.obs;
+    selectedMilestoneTitle = task.milestone?.title?.obs ?? tr('none').obs;
     _newMilestoneId = task.milestoneId;
     _newStartDate =
         task.startDate != null ? DateTime.parse(task.startDate) : null;
@@ -140,9 +141,9 @@ class TaskEditingController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           descriptionController.value.text = task.description;
           Get.back();
@@ -166,7 +167,7 @@ class TaskEditingController extends GetxController
 
   void removeMilestoneSelection() {
     _newMilestoneId = null;
-    selectedMilestoneTitle.value = 'None';
+    selectedMilestoneTitle.value = tr('none');
   }
 
   @override
@@ -208,9 +209,9 @@ class TaskEditingController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           responsibles.value = List.of(_previusSelectedResponsibles);
           Get.back();
@@ -279,9 +280,9 @@ class TaskEditingController extends GetxController
     // warn the user if there have been changes
     if (taskEdited) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'Your changes will not be saved.',
-        acceptText: 'DISCARD',
+        titleText: tr('discardChanges'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
         onAcceptTap: () {
           Get.back();
           Get.back();
@@ -314,7 +315,7 @@ class TaskEditingController extends GetxController
         deadline: _newDueDate,
         id: task.id,
         startDate: _newStartDate,
-        priority: highPriority.isTrue ? 'High' : 'Normal',
+        priority: highPriority.isTrue ? tr('high') : tr('normal'),
         title: title.value,
         milestoneid: _newMilestoneId,
         projectId: task.projectOwner.id,

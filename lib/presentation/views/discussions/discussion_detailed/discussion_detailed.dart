@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
@@ -95,16 +96,16 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   CustomTab(
-                      title: 'Comments',
+                      title: tr('comments'),
                       currentTab: _activeIndex == 1,
                       count: controller.discussion.value.commentsCount),
                   CustomTab(
-                      title: 'Subscribers',
+                      title: tr('subscribers'),
                       currentTab: _activeIndex == 2,
                       count:
                           controller?.discussion?.value?.subscribers?.length),
-                  const Tab(text: 'Documents'),
-                  const Tab(text: 'Overview'),
+                  Tab(text: tr('documents')),
+                  Tab(text: tr('overview')),
                 ]),
           ),
         ),

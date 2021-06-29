@@ -37,11 +37,6 @@ class _Step1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _setupText1 =
-        'Set up an application to generate the authentication codes';
-    const _setupText2 =
-        'Please set up an application to generate the codes for the portal access (e.g. Google Authenticator) to continue the work at the portalx';
-
     return Column(
       children: [
         const SizedBox(height: 12),

@@ -37,10 +37,6 @@ class _Step3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const _setupText1 = 'Add a secret key';
-    const _setupText2 =
-        'Copy the key and paste it to the Google Authenticator application';
-
     return Column(
       children: [
         const SizedBox(height: 12),

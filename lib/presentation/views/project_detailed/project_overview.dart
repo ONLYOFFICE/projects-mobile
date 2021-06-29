@@ -114,7 +114,7 @@ class ProjectOverview extends StatelessWidget {
                   caption: tr('team'),
                   iconData: Icons.navigate_next,
                   subtitle: plural(
-                      'member', projectController.teamMembersCount.value),
+                      'members', projectController.teamMembersCount.value),
                   subtitleStyle: TextStyleHelper.subtitle1(
                       color: Theme.of(context).customColors().onSurface),
                 ),

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -78,9 +79,7 @@ class NewTaskCommentController extends GetxController
         taskController.reloadTask(showLoading: true);
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Comment had been created',
-            buttonText: ''));
+            context: context, text: tr('commentCreated'), buttonText: ''));
       }
     }
   }
@@ -104,9 +103,7 @@ class NewTaskCommentController extends GetxController
         taskController.reloadTask(showLoading: true);
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: 'Comment had been created',
-            buttonText: ''));
+            context: context, text: tr('commentCreated'), buttonText: ''));
       }
     }
   }
@@ -115,9 +112,9 @@ class NewTaskCommentController extends GetxController
   void leavePage() {
     if (_textController.text.isNotEmpty) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           _textController.clear();
           Get.back();

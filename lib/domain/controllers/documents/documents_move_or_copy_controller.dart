@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -73,7 +74,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   Folder _currentFolder;
   Folder get currentFolder => _currentFolder;
 
-  var screenName = 'Choose section'.obs;
+  var screenName = tr('chooseSection').obs;
 
   RxList get itemList => _paginationController.data;
 
@@ -164,7 +165,7 @@ class DocumentsMoveOrCopyController extends GetxController {
     paginationController.data.addAll(result.folders);
     paginationController.data.addAll(result.files);
 
-    screenName.value = _screenName ?? 'Documents';
+    screenName.value = _screenName ?? tr('documents');
   }
 
   void clearSearch() {

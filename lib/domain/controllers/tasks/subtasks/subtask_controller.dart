@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -65,8 +66,8 @@ class SubtaskController extends GetxController {
       subtask.value = result;
       ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
         context: context,
-        text: 'Subtask has been accepted by you',
-        buttonText: 'OK',
+        text: tr('subtaskAccepted'),
+        buttonText: tr('ok'),
         buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
       ));
     }
@@ -83,7 +84,7 @@ class SubtaskController extends GetxController {
           Get.find<TaskItemController>(tag: taskId.toString());
       ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
         context: context,
-        text: 'Subtask has been copied',
+        text: tr('subtaskCopied'),
       ));
       await taskItemController.reloadTask();
     }
@@ -125,7 +126,7 @@ class SubtaskController extends GetxController {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
         context: context,
-        text: 'You do not have permission to edit this subtask',
+        text: tr('cantEditSubtask'),
       ));
     }
   }

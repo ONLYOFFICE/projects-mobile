@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
@@ -66,7 +67,7 @@ class DiscussionOverview extends StatelessWidget {
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.only(left: 72),
-                  child: Text('DISCUSSION',
+                  child: Text(tr('discussion').toUpperCase(),
                       style: TextStyleHelper.overline(
                           color: Theme.of(context)
                               .customColors()
@@ -87,8 +88,8 @@ class DiscussionOverview extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 72, right: 16),
                         child: StatusButton(
                           text: controller.status.value == 1
-                              ? 'Archived'
-                              : 'Open',
+                              ? tr('archived')
+                              : tr('open'),
                           onPressed: () async =>
                               controller.tryChangingStatus(context),
                         ),
@@ -96,7 +97,7 @@ class DiscussionOverview extends StatelessWidget {
                     )),
                 const SizedBox(height: 16),
                 InfoTile(
-                    caption: 'Description:',
+                    caption: '${tr('description')}:',
                     icon: AppIcon(
                         icon: SvgIcons.description,
                         color: const Color(0xff707070)),
@@ -105,8 +106,8 @@ class DiscussionOverview extends StatelessWidget {
                         colorClickableText: Colors.pink,
                         style: TextStyleHelper.body1,
                         trimMode: TrimMode.Line,
-                        trimCollapsedText: 'Show more',
-                        trimExpandedText: 'Show less',
+                        trimCollapsedText: tr('showMore'),
+                        trimExpandedText: tr('showLess'),
                         moreStyle: TextStyleHelper.body2(
                             color: Theme.of(context).customColors().links),
                         lessStyle: TextStyleHelper.body2(color: Colors.pink))),
@@ -114,20 +115,20 @@ class DiscussionOverview extends StatelessWidget {
                 InfoTile(
                     icon: AppIcon(
                         icon: SvgIcons.project, color: const Color(0xff707070)),
-                    caption: 'Project:',
+                    caption: '${tr('project')}:',
                     subtitle: discussion.project.title,
                     subtitleStyle: TextStyleHelper.subtitle1(
                         color: Theme.of(context).customColors().links)),
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)
                   InfoTile(
-                    caption: 'Creation date:',
+                    caption: '${tr('creationDate')}:',
                     subtitle: formatedDate(discussion.created),
                   ),
                 if (discussion.createdBy != null) const SizedBox(height: 20),
                 if (discussion.createdBy != null)
                   InfoTile(
-                    caption: 'Created by:',
+                    caption: '${tr('createdBy')}:',
                     subtitle: discussion.createdBy.displayName,
                   ),
                 const SizedBox(height: 100),

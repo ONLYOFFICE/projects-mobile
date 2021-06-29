@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -62,17 +63,16 @@ class CommentItemController extends GetxController {
 
     if (link != null) {
       await Clipboard.setData(ClipboardData(text: link));
-      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-          context: context, text: 'Link has been copied to the clipboard'));
+      ScaffoldMessenger.of(context).showSnackBar(
+          styledSnackBar(context: context, text: tr('linkCopied')));
     }
   }
 
   Future deleteComment(context) async {
     await Get.dialog(StyledAlertDialog(
-      titleText: 'Delete comment',
-      contentText: '''Are you sure you want to delete these comment?
-Note: this action cannot be undone.''',
-      acceptText: 'DELETE',
+      titleText: tr('deleteComment'),
+      contentText: tr('deleteCommentWarning'),
+      acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
       onAcceptTap: () async {
         var response =
@@ -83,8 +83,8 @@ Note: this action cannot be undone.''',
           Get.find<TaskItemController>(tag: taskId.toString()).reloadTask();
           ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
               context: context,
-              text: 'Comment has been deleted',
-              buttonText: 'CONFIRM'));
+              text: tr('commentDeleted'),
+              buttonText: tr('confirm')));
         }
       },
     ));

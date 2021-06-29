@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -138,9 +139,9 @@ class NewDiscussionController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           textController.value.text = text.value;
           Get.back();
@@ -166,9 +167,9 @@ class NewDiscussionController extends GetxController
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard changes?',
-        contentText: 'If you leave, all changes will be lost.',
-        acceptText: 'DELETE',
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
           subscribers.value = List.of(_previusSelectedSubscribers);
           clearUserSearch();
@@ -277,8 +278,8 @@ class NewDiscussionController extends GetxController
         // ignore: unawaited_futures
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context,
-            text: 'Discussion had been created',
-            buttonText: 'OPEN',
+            text: tr('discussionCreated'),
+            buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
               return Get.toNamed('DiscussionDetailed',
                   arguments: {'discussion': createdDiss});
@@ -295,9 +296,9 @@ class NewDiscussionController extends GetxController
         _startDate != null ||
         _dueDate != null) {
       Get.dialog(StyledAlertDialog(
-        titleText: 'Discard discussion?',
-        contentText: 'Your changes will not be saved.',
-        acceptText: 'DISCARD',
+        titleText: tr('discardDiscussion'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
         onAcceptTap: () {
           Get.back();
           Get.back();

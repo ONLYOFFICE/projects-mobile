@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/new_discussion_controller.dart';
@@ -48,7 +49,7 @@ class NewDiscussionScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: 'New discussion',
+        titleText: tr('newDiscussion'),
         actions: [
           IconButton(
               onPressed: () => controller.confirm(context),
