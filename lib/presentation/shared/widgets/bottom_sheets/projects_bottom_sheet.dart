@@ -68,10 +68,10 @@ class ProjectsBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(tr('selectProject'), style: TextStyleHelper.h6()),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () => print(''),
-                )
+                // IconButton(
+                //   icon: const Icon(Icons.search),
+                //   onPressed: () => print(''),
+                // )
               ],
             ),
           ),
@@ -88,34 +88,31 @@ class ProjectsBottomSheet extends StatelessWidget {
                       return const Divider();
                     },
                     itemBuilder: (BuildContext context, int index) {
-                      return Material(
-                        child: InkWell(
-                          onTap: () => Get.back(result: {
-                            'id': _projectsController
-                                .paginationController.data[index].id,
-                            'title': _projectsController
-                                .paginationController.data[index].title
-                          }),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _projectsController.paginationController
-                                            .data[index].title,
-                                        style: TextStyleHelper.projectTitle,
-                                      ),
-                                    ],
-                                  ),
+                      return InkWell(
+                        onTap: () => Get.back(result: {
+                          'id': _projectsController
+                              .paginationController.data[index].id,
+                          'title': _projectsController
+                              .paginationController.data[index].title
+                        }),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _projectsController.paginationController
+                                          .data[index].title,
+                                      style: TextStyleHelper.projectTitle,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       );

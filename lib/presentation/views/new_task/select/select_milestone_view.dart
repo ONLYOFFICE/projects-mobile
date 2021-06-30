@@ -72,44 +72,41 @@ class SelectMilestoneView extends StatelessWidget {
                       return const Divider();
                     },
                     itemBuilder: (BuildContext context, int index) {
-                      return Material(
-                        child: InkWell(
-                          onTap: () {
-                            controller.changeMilestoneSelection(
-                                id: _milestoneController.milestones[index].id,
-                                title: _milestoneController
-                                    .milestones[index].title);
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            child: Row(
-                              children: [
-                                Flexible(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        _milestoneController
-                                            .milestones[index].title,
-                                        style: TextStyleHelper.projectTitle,
-                                      ),
-                                      Text(
-                                          _milestoneController.milestones[index]
-                                              .responsible.displayName,
-                                          style: TextStyleHelper.caption(
-                                                  color: Theme.of(context)
-                                                      .customColors()
-                                                      .onSurface
-                                                      .withOpacity(0.6))
-                                              .copyWith(height: 1.667)),
-                                    ],
-                                  ),
+                      return InkWell(
+                        onTap: () {
+                          controller.changeMilestoneSelection(
+                              id: _milestoneController.milestones[index].id,
+                              title:
+                                  _milestoneController.milestones[index].title);
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 8),
+                          child: Row(
+                            children: [
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      _milestoneController
+                                          .milestones[index].title,
+                                      style: TextStyleHelper.projectTitle,
+                                    ),
+                                    Text(
+                                        _milestoneController.milestones[index]
+                                            .responsible.displayName,
+                                        style: TextStyleHelper.caption(
+                                                color: Theme.of(context)
+                                                    .customColors()
+                                                    .onSurface
+                                                    .withOpacity(0.6))
+                                            .copyWith(height: 1.667)),
+                                  ],
                                 ),
-                                // Icon(Icons.check_rounded)
-                              ],
-                            ),
+                              ),
+                              // Icon(Icons.check_rounded)
+                            ],
                           ),
                         ),
                       );

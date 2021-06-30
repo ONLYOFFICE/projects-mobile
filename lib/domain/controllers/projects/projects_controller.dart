@@ -117,6 +117,7 @@ class ProjectsController extends BaseController {
 
     paginationController.total.value = result.total;
     paginationController.data.addAll(result.response);
+    expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
   Future getProjectTags() async {

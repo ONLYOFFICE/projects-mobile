@@ -56,8 +56,8 @@ class UsersBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(tr('selectUser'), style: TextStyleHelper.h6()),
-                IconButton(
-                    icon: const Icon(Icons.search), onPressed: () => print(''))
+                // IconButton(
+                //     icon: const Icon(Icons.search), onPressed: () => print(''))
               ],
             ),
           ),
@@ -71,31 +71,28 @@ class UsersBottomSheet extends StatelessWidget {
                     return const Divider();
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    return Material(
-                      child: InkWell(
-                        onTap: () => Get.back(result: {
-                          'id': _usersController.users[index].id,
-                          'displayName':
-                              _usersController.users[index].displayName
-                        }),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                      child: Text(
-                                          _usersController
-                                              .users[index].displayName,
-                                          style: TextStyleHelper.projectTitle)),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                    return InkWell(
+                      onTap: () => Get.back(result: {
+                        'id': _usersController.users[index].id,
+                        'displayName': _usersController.users[index].displayName
+                      }),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                    child: Text(
+                                        _usersController
+                                            .users[index].displayName,
+                                        style: TextStyleHelper.projectTitle)),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     );
                   },

@@ -130,3 +130,56 @@ class Participant {
     return data;
   }
 }
+
+class EditProjectDTO {
+  String title;
+  String description;
+  String responsibleId;
+  String tags;
+  List<Participant> participants;
+  bool private;
+  int status;
+  // bool notify;
+
+  EditProjectDTO({
+    this.title,
+    this.description,
+    this.responsibleId,
+    this.tags,
+    this.participants,
+    this.private,
+    this.status,
+    // this.notify,
+  });
+
+  EditProjectDTO.fromJson(Map<String, dynamic> json) {
+    title = json['title'];
+    description = json['description'];
+    responsibleId = json['responsibleId'];
+    tags = json['tags'];
+    if (json['participants'] != null) {
+      participants = <Participant>[];
+      json['participants'].forEach((v) {
+        participants.add(Participant.fromJson(v));
+      });
+    }
+    private = json['private'];
+    status = json['status'];
+    // notify = json['notify'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['title'] = title;
+    data['description'] = description;
+    data['responsibleId'] = responsibleId;
+    data['tags'] = tags;
+    if (participants != null) {
+      data['participants'] = participants.map((v) => v.iD).toList();
+    }
+    data['private'] = private;
+    data['status'] = status;
+    // data['notify'] = notify;
+    return data;
+  }
+}

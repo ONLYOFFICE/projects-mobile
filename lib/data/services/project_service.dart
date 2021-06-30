@@ -141,6 +141,19 @@ class ProjectService {
     }
   }
 
+  Future<bool> editProject({EditProjectDTO project, int projectId}) async {
+    var result = await _api.editProject(project: project, projectId: projectId);
+
+    var success = result.response != null;
+
+    if (success) {
+      return success;
+    } else {
+      await ErrorDialog.show(result.error);
+      return false;
+    }
+  }
+
   Future<bool> deleteProject({int projectId}) async {
     var result = await _api.deleteProject(projectId: projectId);
 

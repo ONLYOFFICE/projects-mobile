@@ -38,7 +38,6 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -53,7 +52,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+    var controller =
+        Get.arguments['controller']; // Get.find<NewProjectController>();
     var usersDataSource = Get.find<UsersDataSource>();
 
     controller.selectionMode = UserSelectionMode.Single;
@@ -72,9 +72,9 @@ class ProjectManagerSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.usersLoaded.isTrue &&
+          if (controller.usersLoaded.value &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isFalse) {
+              !usersDataSource.isSearchResult.value) {
             return UsersDefault(
               selfUserItem: controller.selfUserItem,
               usersDataSource: usersDataSource,

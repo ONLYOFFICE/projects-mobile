@@ -78,16 +78,7 @@ class ProjectDetailsController extends GetxController {
   }
 
   Future<void> setup() async {
-    teamMembersCount.value = projectDetailed.participantCount;
-    statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(projectDetailed.status)]);
-    // 'Project ${ProjectStatus.toName(projectDetailed.status)}';
-
-    projectTitleText.value = projectDetailed.title;
-    descriptionText.value = projectDetailed.description;
-    managerText.value = projectDetailed.responsible.displayName;
-
-    milestoneCount.value = projectDetailed.milestoneCount;
+    setupDetailedParams();
 
     await locator<MilestoneService>()
         .milestonesByFilter(
@@ -106,6 +97,8 @@ class ProjectDetailsController extends GetxController {
     await _projectService
         .getProjectById(projectId: projectDetailed.id)
         .then((value) => {
+              projectDetailed = value,
+              setupDetailedParams(),
               if (value?.tags != null)
                 {
                   tags.addAll(value.tags),
@@ -118,6 +111,24 @@ class ProjectDetailsController extends GetxController {
     await _docApi
         .getFilesByParams(folderId: projectDetailed.projectFolder)
         .then((value) => docsCount.value = value.files.length);
+  }
+
+  void setupDetailedParams() {
+    teamMembersCount.value = projectDetailed.participantCount;
+    statusText.value = tr('projectStatus',
+        args: [ProjectStatus.toName(projectDetailed.status)]);
+
+    projectTitleText.value = projectDetailed.title;
+    descriptionText.value = projectDetailed.description;
+    managerText.value = projectDetailed.responsible.displayName;
+
+    milestoneCount.value = projectDetailed.milestoneCount;
+  }
+
+  Future<void> reloadInfo() async {
+    projectDetailed =
+        await _projectService.getProjectById(projectId: projectDetailed.id);
+    await setup();
   }
 
   void createNewMilestone() {

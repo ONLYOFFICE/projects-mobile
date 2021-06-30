@@ -43,7 +43,8 @@ class NewProjectDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+    var controller =
+        Get.arguments['controller']; //Get.find<NewProjectController>();
     return Scaffold(
       appBar: StyledAppBar(
         titleText: tr('description'),

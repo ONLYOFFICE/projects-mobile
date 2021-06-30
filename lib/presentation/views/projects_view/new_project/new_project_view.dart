@@ -75,7 +75,8 @@ class NewProject extends StatelessWidget {
             TitleInput(controller: controller),
             InkWell(
               onTap: () {
-                Get.toNamed('ProjectManagerSelectionView');
+                Get.toNamed('ProjectManagerSelectionView',
+                    arguments: {'controller': controller});
               },
               child: ProjectManager(
                 controller: controller,
@@ -126,7 +127,8 @@ class DescriptionTile extends StatelessWidget {
                         .onSurface
                         .withOpacity(0.6))
                 : null,
-            onTap: () => Get.toNamed('NewProjectDescription'));
+            onTap: () => Get.toNamed('NewProjectDescription',
+                arguments: {'controller': controller}));
       },
     );
   }
@@ -207,7 +209,7 @@ class ProjectManager extends StatelessWidget {
     @required this.controller,
   }) : super(key: key);
 
-  final NewProjectController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -228,7 +230,7 @@ class ProjectManager extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 Obx(
-                  () => controller.isPMSelected.isTrue
+                  () => controller.isPMSelected.value
                       ? NewProjectTile(
                           subtitle: controller.managerName.value,
                           closeFunction: controller.removeManager,
@@ -241,13 +243,14 @@ class ProjectManager extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed('ProjectManagerSelectionView');
+                                  Get.toNamed('ProjectManagerSelectionView',
+                                      arguments: {'controller': controller});
                                 },
                                 child: Obx(
                                   () => Text(
                                     tr('choosePM'),
                                     style: TextStyleHelper.subtitle1(
-                                      color: controller.needToFillManager.isTrue
+                                      color: controller.needToFillManager.value
                                           ? Theme.of(context)
                                               .customColors()
                                               .error
@@ -327,7 +330,7 @@ class TeamMembers extends StatelessWidget {
     @required this.controller,
   }) : super(key: key);
 
-  final NewProjectController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -363,7 +366,8 @@ class TeamMembers extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed('TeamMembersSelectionView');
+                                  Get.toNamed('TeamMembersSelectionView',
+                                      arguments: {'controller': controller});
                                 },
                                 child: Text(
                                   tr('addTeamMembers'),
