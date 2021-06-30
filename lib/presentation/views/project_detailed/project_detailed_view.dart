@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -37,6 +38,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   var projectController;
   var discussionsController;
+  final documentsController = Get.find<DocumentsController>();
 
   @override
   void initState() {
@@ -48,6 +50,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
 
     projectController.setup();
+
+    documentsController.setupFolder(
+        folderName: projectDetailed.title,
+        folderId: projectDetailed.projectFolder);
 
     _tabController = TabController(
       vsync: this,
@@ -145,6 +151,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           EntityDocumentsView(
             folderId: projectDetailed.projectFolder,
             folderName: projectDetailed.title,
+            documentsController: documentsController,
           ),
           ProjectTeamView(projectDetailed: projectDetailed),
         ]),

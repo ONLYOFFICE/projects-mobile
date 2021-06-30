@@ -70,18 +70,21 @@ class FolderContentView extends StatelessWidget {
 class DocumentsSearchView extends StatelessWidget {
   DocumentsSearchView({Key key}) : super(key: key);
 
-  final controller = Get.find<DocumentsController>();
+  final documentsController = Get.find<DocumentsController>();
 
   @override
   Widget build(BuildContext context) {
     final String folderName = Get.arguments['folderName'];
     final int folderId = Get.arguments['folderId'];
-    controller.setupSearchMode(folderName: folderName, folderId: folderId);
+
+    documentsController.entityType = Get.arguments['entityType'];
+    documentsController.setupSearchMode(
+        folderName: folderName, folderId: folderId);
 
     return DocumentsScreen(
-      controller: controller,
+      controller: documentsController,
       appBar: StyledAppBar(
-        title: CustomSearchBar(controller: controller),
+        title: CustomSearchBar(controller: documentsController),
         showBackButton: true,
         titleHeight: 50,
       ),
@@ -205,7 +208,8 @@ class DocsTitle extends StatelessWidget {
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
-                        'folderId': controller.currentFolder
+                        'folderId': controller.currentFolder,
+                        'documentsController': controller,
                       });
                 },
                 child: AppIcon(

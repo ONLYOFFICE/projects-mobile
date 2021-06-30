@@ -12,7 +12,8 @@ class PaginationController extends GetxController {
   Function loadDelegate;
 
   var pullDownEnabled = false;
-  bool get pullUpEnabled => data.length != total.value;
+  bool get pullUpEnabled =>
+      total.value == null ? false : data.length != total.value;
 
   void onRefresh() async {
     startIndex = 0;

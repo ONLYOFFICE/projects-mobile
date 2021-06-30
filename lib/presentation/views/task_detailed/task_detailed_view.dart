@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -28,6 +29,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   // ignore: prefer_final_fields
   var _activeIndex = 0.obs;
   TaskItemController controller;
+  final documentsController = Get.find<DocumentsController>();
 
   @override
   void initState() {
@@ -36,6 +38,11 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
     controller.firstReload.value = true;
     controller.reloadTask();
     _tabController = TabController(vsync: this, length: 4);
+
+    documentsController.entityType = 'task';
+    documentsController.setupFolder(
+        folderId: controller.task.value.id,
+        folderName: controller.task.value.title);
   }
 
   @override
@@ -94,7 +101,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           EntityDocumentsView(
             folderId: controller.task.value.id,
             folderName: controller.task.value.title,
-            entityType: 'task',
+            documentsController: documentsController,
           ),
           TaskCommentsView(controller: controller)
         ]),
