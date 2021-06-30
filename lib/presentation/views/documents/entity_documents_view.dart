@@ -47,23 +47,18 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 class EntityDocumentsView extends StatelessWidget {
   final String folderName;
   final int folderId;
-  final String entityType;
+  final DocumentsController documentsController;
 
   EntityDocumentsView(
-      {Key key, this.folderName, this.folderId, this.entityType})
+      {Key key, this.folderName, this.folderId, this.documentsController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DocumentsController>();
-    controller.entityType = entityType;
-
-    controller.setupFolder(folderName: folderName, folderId: folderId);
-
     return DocumentsScreen(
-      controller: controller,
+      controller: documentsController,
       appBar: StyledAppBar(
-        title: _DocsTitle(controller: controller),
+        title: _DocsTitle(controller: documentsController),
         showBackButton: false,
         titleHeight: 50,
         elevation: 0,
@@ -136,7 +131,8 @@ class _DocsTitle extends StatelessWidget {
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
-                        'folderId': controller.currentFolder
+                        'folderId': controller.currentFolder,
+                        'entityType': controller.entityType,
                       });
                 },
                 child: AppIcon(

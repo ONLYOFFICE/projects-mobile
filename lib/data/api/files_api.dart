@@ -89,7 +89,7 @@ class FilesApi {
     }
 
     if (query != null) {
-      url += 'filterBy=title&filterOp=contains&filterValue=$query';
+      url += '&filterBy=title&filterOp=contains&filterValue=$query';
     }
 
     if (startIndex != null) {

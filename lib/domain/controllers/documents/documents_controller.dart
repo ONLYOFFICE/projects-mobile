@@ -66,6 +66,7 @@ class DocumentsController extends GetxController {
 
   String _entityType;
 
+  String get entityType => _entityType;
   set entityType(String value) =>
       {_entityType = value, _filterController.entityType = value};
 
@@ -190,6 +191,9 @@ class DocumentsController extends GetxController {
   Future<void> setupSearchMode({String folderName, int folderId}) async {
     loaded.value = true;
     searchMode.value = true;
+
+    _screenName = folderName;
+    _currentFolderId = folderId;
   }
 
   void _performSearch() async {
