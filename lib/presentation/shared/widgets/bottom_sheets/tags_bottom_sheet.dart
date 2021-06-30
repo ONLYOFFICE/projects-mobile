@@ -31,10 +31,10 @@ class TagsBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(tr('selectTag'), style: TextStyleHelper.h6()),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () => print(''),
-                )
+                // IconButton(
+                //   icon: const Icon(Icons.search),
+                //   onPressed: () => print(''),
+                // )
               ],
             ),
           ),
@@ -48,29 +48,27 @@ class TagsBottomSheet extends StatelessWidget {
                     return const Divider();
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    return Material(
-                      child: InkWell(
-                        onTap: () => Get.back(result: {
-                          'id': _projectsController.tags[index].id,
-                          'title': _projectsController.tags[index].title
-                        }),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                      child: Text(
-                                          _projectsController.tags[index].title,
-                                          style: TextStyleHelper.projectTitle)),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                    return InkWell(
+                      onTap: () => Get.back(result: {
+                        'id': _projectsController.tags[index].id,
+                        'title': _projectsController.tags[index].title
+                      }),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                    child: Text(
+                                        _projectsController.tags[index].title,
+                                        style: TextStyleHelper.projectTitle)),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     );
                   },

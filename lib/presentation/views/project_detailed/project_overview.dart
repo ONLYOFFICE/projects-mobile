@@ -113,7 +113,7 @@ class ProjectOverview extends StatelessWidget {
 }
 
 class ProjectStatusButton extends StatelessWidget {
-  final ProjectDetailsController projectController;
+  final projectController;
 
   const ProjectStatusButton({Key key, @required this.projectController})
       : super(key: key);

@@ -198,6 +198,29 @@ class ProjectApi {
     return result;
   }
 
+  Future<ApiDTO<Map<String, dynamic>>> editProject(
+      {EditProjectDTO project, int projectId}) async {
+    var url = await coreApi.projectByIdUrl(projectId);
+
+    var result = ApiDTO<Map<String, dynamic>>();
+    var body = project.toJson();
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
   Future<ApiDTO<List<PortalUser>>> getProjectTeam(String projectID) async {
     var url = await coreApi.projectTeamUrl(projectID);
 

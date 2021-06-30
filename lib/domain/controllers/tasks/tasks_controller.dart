@@ -78,6 +78,7 @@ class TasksController extends BaseController {
     if (needToClear) paginationController.data.clear();
 
     paginationController.data.addAll(result.response);
+    expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
   Future raiseFAB() async {

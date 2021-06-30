@@ -12,6 +12,7 @@ import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/project_milestones_view.dart';
@@ -88,11 +89,15 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ),
         ),
         appBar: StyledAppBar(
+          // onLeadingPressed: () =>
+          // Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects(),
           actions: [
-            // IconButton(
-            //     icon: const Icon(Icons.edit_outlined),
-            //     onPressed: () => Get.toNamed('ProjectEditingView',
-            //         arguments: {'projectDetailed': projectDetailed})),
+            projectDetailed.canEdit
+                ? IconButton(
+                    icon: const Icon(Icons.edit_outlined),
+                    onPressed: () => Get.to(EditProjectView(),
+                        arguments: {'projectDetailed': projectDetailed}))
+                : const SizedBox(),
             _ProjectContextMenu(controller: projectController)
           ],
           bottom: SizedBox(

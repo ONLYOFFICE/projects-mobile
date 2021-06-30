@@ -24,10 +24,10 @@ class GroupsBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(tr('selectGroup'), style: TextStyleHelper.h6()),
-                IconButton(
-                  icon: const Icon(Icons.search),
-                  onPressed: () => print(''),
-                )
+                // IconButton(
+                //   icon: const Icon(Icons.search),
+                //   onPressed: () => print(''),
+                // )
               ],
             ),
           ),
@@ -41,29 +41,27 @@ class GroupsBottomSheet extends StatelessWidget {
                     return const Divider();
                   },
                   itemBuilder: (BuildContext context, int index) {
-                    return Material(
-                      child: InkWell(
-                        onTap: () => Get.back(result: {
-                          'id': _groupsController.groups[index].id,
-                          'name': _groupsController.groups[index].name
-                        }),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 8),
-                              child: Row(
-                                children: [
-                                  Flexible(
-                                      child: Text(
-                                          _groupsController.groups[index].name,
-                                          style: TextStyleHelper.projectTitle)),
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
+                    return InkWell(
+                      onTap: () => Get.back(result: {
+                        'id': _groupsController.groups[index].id,
+                        'name': _groupsController.groups[index].name
+                      }),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            child: Row(
+                              children: [
+                                Flexible(
+                                    child: Text(
+                                        _groupsController.groups[index].name,
+                                        style: TextStyleHelper.projectTitle)),
+                              ],
+                            ),
+                          )
+                        ],
                       ),
                     );
                   },

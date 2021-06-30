@@ -22,7 +22,8 @@ class TeamMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+    var controller =
+        Get.arguments['controller']; // Get.find<NewProjectController>();
     var usersDataSource = Get.find<UsersDataSource>();
 
     controller.selectionMode = UserSelectionMode.Multiple;
@@ -76,7 +77,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
   }) : super(key: key);
 
   final String title;
-  final NewProjectController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {

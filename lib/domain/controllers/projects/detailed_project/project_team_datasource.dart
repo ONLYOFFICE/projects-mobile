@@ -29,11 +29,11 @@ class ProjectTeamDataSource extends GetxController {
       _startIndex -= 25;
       return;
     }
-    _loadTeam();
+    await _loadTeam();
     refreshController.loadComplete();
   }
 
-  void _loadTeam({bool needToClear = false}) async {
+  Future _loadTeam({bool needToClear = false}) async {
     var result = await _api.getProjectTeam(projectDetailed.id.toString());
 
     totalProfiles = result.length;
@@ -49,7 +49,7 @@ class ProjectTeamDataSource extends GetxController {
 
   Future getTeam() async {
     loaded.value = false;
-    _loadTeam(needToClear: true);
+    await _loadTeam(needToClear: true);
     loaded.value = true;
   }
 }
