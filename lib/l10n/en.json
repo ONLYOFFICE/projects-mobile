@@ -458,6 +458,7 @@
 	"replyText": "Reply text",
 	"taskEditing": "Task editing",
 	"discussionText": "Discussion text",
+	"editProject":"Edit Project",
 	
 	"error": "Error"
 }
