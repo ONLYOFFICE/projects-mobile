@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
@@ -84,11 +85,5 @@ class ProjectDetailed {
         : null;
     updated = json['updated'];
     tags = json['tags'] != null ? json['tags'].cast<String>() : null;
-  }
-
-  String creationDate() {
-    final date = DateTime.parse(created);
-    final formatter = DateFormat('d MMM.yyy');
-    return formatter.format(date);
   }
 }
