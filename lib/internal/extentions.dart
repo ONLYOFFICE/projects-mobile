@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 
@@ -47,10 +48,12 @@ String formatedDateFromString({DateTime now, String stringDate}) {
   var date = DateTime.parse(stringDate);
 
   if (now.year == date.year) {
-    final formatter = DateFormat('d MMM');
+    // final formatter = DateFormat('d MMM');
+    final formatter = DateFormat.MMMd(Get.locale.languageCode);
     return formatter.format(date);
   } else {
-    final formatter = DateFormat('d MMM yyy');
+    final formatter = DateFormat.yMMMd(Get.locale.languageCode);
+    // final formatter = DateFormat('d MMM yyy');
     return formatter.format(date);
   }
 }
@@ -59,10 +62,12 @@ String formatedDate(DateTime date, {DateTime now}) {
   now ??= DateTime.now();
 
   if (now.year == date.year) {
-    final formatter = DateFormat('d MMM');
+    final formatter = DateFormat.MMMd(Get.locale.languageCode);
+    // final formatter = DateFormat('d MMM');
     return formatter.format(date);
   } else {
-    final formatter = DateFormat('d MMM yyy');
+    final formatter = DateFormat.yMMMd(Get.locale.languageCode);
+    // final formatter = DateFormat('d MMM yyy');
     return formatter.format(date);
   }
 }
