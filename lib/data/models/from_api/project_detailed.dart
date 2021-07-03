@@ -1,5 +1,3 @@
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class ProjectDetailed {

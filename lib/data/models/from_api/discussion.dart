@@ -56,7 +56,8 @@ class Discussion {
                 json['subscribers'].map((x) => PortalUser.fromJson(x)))
             : null,
         files: json['files'] != null
-            ? List<PortalFile>.from(json['files'].map((x) => x))
+            ? List<PortalFile>.from(
+                json['files'].map((x) => PortalFile.fromJson(x)))
             : null,
         comments: json['comments'] != null
             ? List<PortalComment>.from(

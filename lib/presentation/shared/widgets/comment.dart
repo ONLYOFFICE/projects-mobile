@@ -118,28 +118,33 @@ class _CommentAuthor extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(
-            width: 60,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 35),
-              child: PopupMenuButton(
-                onSelected: (value) => _onSelected(value, context, controller),
-                icon: Icon(Icons.more_vert_rounded,
-                    size: 25,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.5)),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                        value: 'Copy link', child: Text(tr('copyLink'))),
-                    if (comment.isEditPermissions)
-                      PopupMenuItem(value: 'Edit', child: Text(tr('edit'))),
-                    if (comment.isEditPermissions)
-                      PopupMenuItem(value: 'Delete', child: Text(tr('delete'))),
-                  ];
-                },
+          Padding(
+            padding: const EdgeInsets.only(right: 7),
+            child: SizedBox(
+              width: 60,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 35),
+                child: PopupMenuButton(
+                  onSelected: (value) =>
+                      _onSelected(value, context, controller),
+                  icon: Icon(Icons.more_vert_rounded,
+                      size: 25,
+                      color: Theme.of(context)
+                          .customColors()
+                          .onSurface
+                          .withOpacity(0.5)),
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                          value: 'Copy link', child: Text(tr('copyLink'))),
+                      if (comment.isEditPermissions)
+                        PopupMenuItem(value: 'Edit', child: Text(tr('edit'))),
+                      if (comment.isEditPermissions)
+                        PopupMenuItem(
+                            value: 'Delete', child: Text(tr('delete'))),
+                    ];
+                  },
+                ),
               ),
             ),
           ),

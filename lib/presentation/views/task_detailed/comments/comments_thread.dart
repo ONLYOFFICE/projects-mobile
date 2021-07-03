@@ -16,88 +16,64 @@ class CommentsThread extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO fix comments list
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 10, 23, 10),
-      child: Column(
-        children: [
-          Comment(
-            comment: comment,
-            taskId: taskId,
-            discussionId: discussionId,
-          ),
-          for (var i = 0; i < comment.commentList.length; i++)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8, 15, 0, 10),
-              child: Column(
-                children: [
-                  Comment(
-                    comment: comment.commentList[i],
-                    taskId: taskId,
-                    discussionId: discussionId,
-                  ),
-                  for (var j = 0;
-                      j < comment.commentList[i].commentList.length;
-                      j++)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 15, 0, 10),
-                      child: Column(
-                        children: [
-                          Comment(
-                            comment: comment.commentList[i].commentList[j],
-                            taskId: taskId,
-                            discussionId: discussionId,
-                          ),
-                          Builder(
-                            builder: (context) {
-                              // ignore: omit_local_variable_types
-                              Set visited = {};
+    var padding = <int, EdgeInsetsGeometry>{
+      0: const EdgeInsets.fromLTRB(12, 0, 16, 0),
+      1: const EdgeInsets.fromLTRB(20, 29, 16, 0),
+      2: const EdgeInsets.fromLTRB(44, 29, 16, 0)
+    };
 
-                              List graph = comment
-                                  .commentList[i].commentList[j].commentList;
+    // ignore: omit_local_variable_types
+    List<_SortedComment> visited = sortComments(comment);
 
-                              for (PortalComment comment in graph) {
-                                dfs(visited, comment.commentList, graph);
-                              }
-
-                              return Column(
-                                children: [
-                                  for (var item in visited)
-                                    Padding(
-                                        padding: const EdgeInsets.only(top: 15),
-                                        child: Comment(
-                                          comment: item,
-                                          discussionId: discussionId,
-                                          taskId: taskId,
-                                        )),
-                                ],
-                              );
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+    return Column(
+      children: [
+        for (var i = 0; i < visited.length; i++)
+          Padding(
+            padding: padding[visited[i].paddingLevel],
+            child: Comment(
+              comment: visited[i].comment,
+              taskId: taskId,
+              discussionId: discussionId,
             ),
-        ],
-      ),
+          ),
+      ],
     );
   }
 }
 
-void dfs(Set visited, List<PortalComment> comments, List graph) {
-  if (!visited.contains(comments)) {
-    // ignore: omit_local_variable_types
-    for (PortalComment comment in comments) {
-      // visited.add(comment);
-      // dfs(visited, comment.commentList, graph);
+List<_SortedComment> sortComments(PortalComment initComment) {
+  var visited = <_SortedComment>[];
 
-      if (comment.commentList.isNotEmpty) {
-        // visited.add(comment);
-        dfs(visited, comment.commentList, graph);
-      } else
-        visited.add(comment);
+  visited.add(_SortedComment(initComment, 0));
+
+  void dfs(PortalComment comment, paddingLevel) {
+    var a = visited.firstWhere(
+      (element) {
+        return element.comment.commentId == comment.commentId;
+      },
+      orElse: () => null,
+    );
+
+    if (a == null) {
+      visited.add(_SortedComment(comment, paddingLevel));
+      for (var item in comment.commentList) {
+        dfs(item, 2);
+      }
     }
   }
+
+  for (var comment in initComment.commentList) {
+    dfs(comment, 1);
+  }
+  return visited;
+}
+
+class _SortedComment {
+  int paddingLevel;
+  PortalComment comment;
+
+  _SortedComment(
+    this.comment,
+    this.paddingLevel,
+  );
 }
