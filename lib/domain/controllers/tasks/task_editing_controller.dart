@@ -87,7 +87,7 @@ class TaskEditingController extends GetxController
   @override
   RxList responsibles;
   // to track changes
-  List _previusSelectedResponsibles = [];
+  List _previusSelectedResponsibles;
 
   Status initialStatus;
   Rx<Status> newStatus;
@@ -122,6 +122,8 @@ class TaskEditingController extends GetxController
     for (var user in task.responsibles) {
       responsibles.add(PortalUserItemController(portalUser: user));
     }
+    // ignore: invalid_use_of_protected_member
+    _previusSelectedResponsibles = List.from(responsibles.value);
   }
 
   @override
@@ -234,7 +236,7 @@ class TaskEditingController extends GetxController
   Future<void> _getSelectedResponsibles() async {
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = true;
+      element.selectionMode.value = UserSelectionMode.Multiple;
     }
     for (var selectedMember in responsibles) {
       for (var user in _usersDataSource.usersList) {
