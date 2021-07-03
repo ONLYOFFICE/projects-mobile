@@ -133,7 +133,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             projectDetailed.canEdit
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => Get.to(EditProjectView(),
+                    onPressed: () => Get.to(const EditProjectView(),
                         arguments: {'projectDetailed': projectDetailed}))
                 : const SizedBox(),
             _ProjectContextMenu(controller: projectController)

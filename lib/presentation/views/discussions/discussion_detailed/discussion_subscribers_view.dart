@@ -90,7 +90,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                discussion.subscribers[index].displayName * 10,
+                                discussion.subscribers[index].displayName,
                                 maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyleHelper.subtitle1(

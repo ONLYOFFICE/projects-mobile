@@ -37,7 +37,6 @@ import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
-import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_group_item.dart';
 
