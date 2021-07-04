@@ -33,7 +33,7 @@ class PortalDiscussionsView extends StatelessWidget {
                 icon: SvgIcons.search,
                 color: Theme.of(context).customColors().primary,
               ),
-              onPressed: () {},
+              onPressed: controller.showSearch,
               // onPressed: () => controller.showSearch(),
             ),
             IconButton(

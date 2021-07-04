@@ -64,4 +64,7 @@ class DiscussionsController extends BaseController {
       Get.toNamed('DiscussionDetailed', arguments: {'discussion': discussion});
 
   void toNewDiscussionScreen() => Get.toNamed('NewDiscussionScreen');
+
+  @override
+  void showSearch() => Get.toNamed('DiscussionsSearchScreen');
 }
