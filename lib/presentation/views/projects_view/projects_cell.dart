@@ -56,24 +56,24 @@ class ProjectCell extends StatelessWidget {
 
     return Container(
       height: 72,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          item.canEdit
-              ? InkWell(
-                  onTap: () async => showsStatusesBS(
-                      context: context, itemController: itemController),
-                  child: ProjectIcon(
+      child: InkWell(
+        onTap: () => Get.toNamed('ProjectDetailedView',
+            arguments: {'projectDetailed': itemController.projectData}),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            item.canEdit
+                ? InkWell(
+                    onTap: () async => showsStatusesBS(
+                        context: context, itemController: itemController),
+                    child: ProjectIcon(
+                      itemController: itemController,
+                    ),
+                  )
+                : ProjectIcon(
                     itemController: itemController,
                   ),
-                )
-              : ProjectIcon(
-                  itemController: itemController,
-                ),
-          Expanded(
-            child: InkWell(
-              onTap: () => Get.toNamed('ProjectDetailedView',
-                  arguments: {'projectDetailed': itemController.projectData}),
+            Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -96,8 +96,8 @@ class ProjectCell extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
