@@ -10,6 +10,7 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_overview.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_subscribers_view.dart';
 import 'package:projects/presentation/views/discussions/widgets/app_bar_menu_button.dart';
+import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 
 class DiscussionDetailed extends StatefulWidget {
   DiscussionDetailed({Key key}) : super(key: key);
@@ -72,7 +73,10 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                       currentTab: _activeIndex == 2,
                       count:
                           controller?.discussion?.value?.subscribers?.length),
-                  Tab(text: tr('documents')),
+                  CustomTab(
+                      title: tr('documents'),
+                      currentTab: _activeIndex == 3,
+                      count: controller?.discussion?.value?.files?.length),
                   Tab(text: tr('overview')),
                 ]),
           ),
@@ -80,7 +84,8 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
         body: TabBarView(controller: _tabController, children: [
           DiscussionCommentsView(controller: controller),
           DiscussionSubscribersView(controller: controller),
-          Container(color: Colors.blue),
+          // Container(color: Colors.blue),
+          DiscussionsDocumentsView(files: controller?.discussion?.value?.files),
           DiscussionOverview(controller: controller),
         ]),
       ),
