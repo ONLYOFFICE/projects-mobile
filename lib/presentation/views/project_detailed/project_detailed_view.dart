@@ -176,8 +176,10 @@ class _ProjectContextMenu extends StatelessWidget {
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           // if (controller.projectDetailed.canEdit)
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          // const PopupMenuItem(
-          //     value: 'follow', child: Text('Follow / Unfollow project')),
+          PopupMenuItem(
+            value: 'follow',
+            child: Text(tr('followUnfollowProject')),
+          ),
           if (controller.projectDetailed.canDelete)
             PopupMenuItem(
               textStyle: Theme.of(context)
@@ -209,6 +211,7 @@ void _onSelected(value, controller) async {
       break;
 
     case 'follow':
+      controller.followProject();
       break;
 
     case 'delete':
