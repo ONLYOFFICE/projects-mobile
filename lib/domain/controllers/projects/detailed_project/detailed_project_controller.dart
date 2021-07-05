@@ -80,15 +80,6 @@ class ProjectDetailsController extends GetxController {
   Future<void> setup() async {
     setupDetailedParams();
 
-    await locator<MilestoneService>()
-        .milestonesByFilter(
-          projectId: projectDetailed.id.toString(),
-        )
-        .then((value) => {
-              if (value != null) {milestoneCount.value = value.length}
-            });
-
-//TODO example date format with locale
     final formatter = DateFormat.yMMMd(Get.locale.languageCode);
 
     creationDateText.value =
@@ -111,6 +102,14 @@ class ProjectDetailsController extends GetxController {
     await _docApi
         .getFilesByParams(folderId: projectDetailed.projectFolder)
         .then((value) => docsCount.value = value.files.length);
+
+    await locator<MilestoneService>()
+        .milestonesByFilter(
+          projectId: projectDetailed.id.toString(),
+        )
+        .then((value) => {
+              if (value != null) {milestoneCount.value = value.length}
+            });
   }
 
   void setupDetailedParams() {
@@ -153,5 +152,9 @@ class ProjectDetailsController extends GetxController {
     if (t != null) {
       projectDetailed.status = t.status;
     }
+  }
+
+  Future followProject() async {
+    await _projectService.followProject(projectId: projectDetailed.id);
   }
 }

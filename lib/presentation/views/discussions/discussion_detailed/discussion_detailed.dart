@@ -116,7 +116,6 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
         body: TabBarView(controller: _tabController, children: [
           DiscussionCommentsView(controller: controller),
           DiscussionSubscribersView(controller: controller),
-          // Container(color: Colors.blue),
           DiscussionsDocumentsView(files: controller?.discussion?.value?.files),
           DiscussionOverview(controller: controller),
         ]),

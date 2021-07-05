@@ -72,7 +72,6 @@ class DiscussionsDocumentsController extends GetxController {
 
   PaginationController get paginationController => _paginationController;
 
-  String _screenName;
   int _currentFolderId;
   int get currentFolder => _currentFolderId;
 
@@ -116,107 +115,6 @@ class DiscussionsDocumentsController extends GetxController {
     paginationController.data.addAll(files);
     loaded.value = true;
   }
-
-  // Future<void> refreshContent() async {
-  //   if (_currentFolderId == null) {
-  //     await initialSetup();
-  //   } else
-  //     await setupFolder(
-  //         folderId: _currentFolderId, folderName: screenName.value);
-  // }
-
-  // Future<void> initialSetup() async {
-  //   // loaded.value = false;
-
-  //   // _clear();
-  //   // await _getDocuments();
-  //   // loaded.value = true;
-  // }
-
-  // Future<void> setupFolder({String folderName, int folderId}) async {
-  // loaded.value = false;
-
-  // _clear();
-  // _currentFolderId = folderId;
-  // _filterController.folderId = _currentFolderId;
-  // screenName.value = folderName;
-  // await _getDocuments();
-
-  // loaded.value = true;
-  // }
-
-  // void _clear() {
-  //   _screenName = null;
-  //   _currentFolderId = null;
-
-  //   _filterController.folderId = null;
-  //   paginationController.startIndex = 0;
-  //   paginationController.data.clear();
-  // }
-
-  // Future _getDocuments() async {
-  // var result = await _api.getFilesByParams(
-  //   folderId: _currentFolderId,
-  //   query: _query,
-  //   startIndex: paginationController.startIndex,
-  //   sortBy: sortController.currentSortfilter,
-  //   sortOrder: sortController.currentSortOrder,
-  //   typeFilter: _filterController.typeFilter,
-  //   authorFilter: _filterController.authorFilter,
-  //   entityType: _entityType,
-  // );
-
-  // if (result == null) return;
-
-  // paginationController.total.value = result.total;
-
-  // if (_currentFolderId != null && result.current != null)
-  //   _screenName = result.current.title;
-
-  // if (result.folders != null)
-  //   paginationController.data.addAll(result.folders);
-  // if (result.files != null) paginationController.data.addAll(result.files);
-
-  // screenName.value = _screenName ?? tr('documents');
-  // }
-
-  // void clearSearch() {
-  //   _query = '';
-
-  //   searchInputController.clear();
-  //   nothingFound.value = false;
-
-  //   paginationController.startIndex = 0;
-  //   paginationController.data.clear();
-  // }
-
-  // void newSearch(query) {
-  //   _query = query;
-  //   paginationController.startIndex = 0;
-  //   paginationController.data.clear();
-  //   _performSearch();
-  // }
-
-  // Future<void> setupSearchMode({String folderName, int folderId}) async {
-  //   loaded.value = true;
-  //   searchMode.value = true;
-
-  //   _screenName = folderName;
-  //   _currentFolderId = folderId;
-  // }
-
-  // void _performSearch() async {
-  //   loaded.value = false;
-  //   nothingFound.value = false;
-
-  //   await _getDocuments();
-
-  //   if (paginationController.data.isEmpty) {
-  //     nothingFound.value = true;
-  //   }
-
-  //   loaded.value = true;
-  // }
 
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
