@@ -54,6 +54,7 @@ import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_responsibles_view.dart';
+import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
@@ -185,4 +186,5 @@ List<GetPage> getxPages() => [
       GetPage(name: 'TasksSearchScreen', page: () => const TasksSearchScreen()),
       GetPage(name: 'TFASmsScreen', page: () => const TFASmsScreen()),
       GetPage(name: 'UsersFromGroups', page: () => const UsersFromGroups()),
+      GetPage(name: 'ProfileScreen', page: () => const ProfileScreen()),
     ];

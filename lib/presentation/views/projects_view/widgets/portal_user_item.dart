@@ -59,110 +59,115 @@ class PortalUserItem extends StatelessWidget {
       },
       child: Container(
         height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Obx(
-              () {
-                // TODO FIXME
-                // все фотки кроме своей черные
-                return userController.avatarData.value.isEmpty
-                    ? SizedBox(
-                        width: 72,
-                        child: AppIcon(
-                            width: 40,
+        child: InkWell(
+          onTap: () => Get.toNamed('ProfileScreen',
+              arguments: {'portalUser': userController.portalUser}),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Obx(
+                () {
+                  // TODO FIXME
+                  // все фотки кроме своей черные
+                  return userController.avatarData.value.isEmpty
+                      ? SizedBox(
+                          width: 72,
+                          child: AppIcon(
+                              width: 40,
+                              height: 40,
+                              icon: SvgIcons.avatar,
+                              color:
+                                  Theme.of(context).customColors().onSurface),
+                        )
+                      : SizedBox(
+                          width: 72,
+                          child: SizedBox(
                             height: 40,
-                            icon: SvgIcons.avatar,
-                            color: Theme.of(context).customColors().onSurface),
-                      )
-                    : SizedBox(
-                        width: 72,
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: CircleAvatar(
-                            radius: 40.0,
-                            backgroundColor: Colors.white,
-                            child: ClipOval(
-                              child:
-                                  Image.memory(userController.avatarData.value),
+                            width: 40,
+                            child: CircleAvatar(
+                              radius: 40.0,
+                              backgroundColor: Colors.white,
+                              child: ClipOval(
+                                child: Image.memory(
+                                    userController.avatarData.value),
+                              ),
                             ),
                           ),
-                        ),
-                      );
-              },
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                userController.portalUser.displayName
-                                    .replaceAll(' ', '\u00A0'),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(),
-                              ),
-                              Obx(
-                                () => userController.userTitle != null &&
-                                        userController.userTitle.isNotEmpty
-                                    ? Text(
-                                        userController.userTitle
-                                            .replaceAll(' ', '\u00A0'),
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyleHelper.body2(
-                                          color: Theme.of(context)
-                                              .customColors()
-                                              .onBackground,
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+                        );
+                },
               ),
-            ),
-            Obx(() {
-              if (userController.selectionMode.value ==
-                  UserSelectionMode.Multiple) {
-                if (userController.isSelected.isTrue) {
-                  return SizedBox(
-                      width: 72,
-                      child: Icon(Icons.check_box,
-                          color: Theme.of(context).customColors().primary));
-                } else {
-                  return const SizedBox(
-                      width: 72,
-                      child: Icon(Icons.check_box_outline_blank_outlined));
-                }
-              } else {
-                if (userController.isSelected.isTrue) {
-                  return SizedBox(
-                    width: 72,
-                    child: Icon(
-                      Icons.check,
-                      color: Theme.of(context).customColors().primary,
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  userController.portalUser.displayName
+                                      .replaceAll(' ', '\u00A0'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyleHelper.subtitle1(),
+                                ),
+                                Obx(
+                                  () => userController.userTitle != null &&
+                                          userController.userTitle.isNotEmpty
+                                      ? Text(
+                                          userController.userTitle
+                                              .replaceAll(' ', '\u00A0'),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyleHelper.body2(
+                                            color: Theme.of(context)
+                                                .customColors()
+                                                .onBackground,
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  );
+                  ],
+                ),
+              ),
+              Obx(() {
+                if (userController.selectionMode.value ==
+                    UserSelectionMode.Multiple) {
+                  if (userController.isSelected.isTrue) {
+                    return SizedBox(
+                        width: 72,
+                        child: Icon(Icons.check_box,
+                            color: Theme.of(context).customColors().primary));
+                  } else {
+                    return const SizedBox(
+                        width: 72,
+                        child: Icon(Icons.check_box_outline_blank_outlined));
+                  }
                 } else {
-                  return const SizedBox(width: 72);
+                  if (userController.isSelected.isTrue) {
+                    return SizedBox(
+                      width: 72,
+                      child: Icon(
+                        Icons.check,
+                        color: Theme.of(context).customColors().primary,
+                      ),
+                    );
+                  } else {
+                    return const SizedBox(width: 72);
+                  }
                 }
-              }
-            }),
-          ],
+              }),
+            ],
+          ),
         ),
       ),
     );
