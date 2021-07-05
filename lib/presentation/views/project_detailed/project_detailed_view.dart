@@ -217,7 +217,11 @@ class _ProjectContextMenu extends StatelessWidget {
                   .textStyle
                   .copyWith(color: Theme.of(context).customColors().error),
               value: 'delete',
-              child: Text(tr('delete')),
+              child: Text(
+                tr('delete'),
+                style: TextStyleHelper.subtitle1(
+                    color: Theme.of(context).customColors().error),
+              ),
             )
         ];
       },

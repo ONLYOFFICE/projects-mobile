@@ -34,7 +34,10 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -61,6 +64,25 @@ class EntityDocumentsView extends StatelessWidget {
         title: _DocsTitle(controller: documentsController),
         showBackButton: false,
         titleHeight: 50,
+        elevation: 0,
+      ),
+    );
+  }
+}
+
+class DiscussionsDocumentsView extends StatelessWidget {
+  final List<PortalFile> files;
+  DiscussionsDocumentsView({Key key, this.files}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final documentsController = Get.find<DiscussionsDocumentsController>();
+    documentsController.setupFiles(files);
+    return DocumentsScreen(
+      controller: documentsController,
+      appBar: StyledAppBar(
+        showBackButton: false,
+        titleHeight: 0,
         elevation: 0,
       ),
     );

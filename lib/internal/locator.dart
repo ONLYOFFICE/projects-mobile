@@ -73,6 +73,7 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -189,4 +190,11 @@ void setupLocator() {
         Get.find<PaginationController>(),
         Get.find<DocumentsSortController>(),
       ));
+
+  Get.create<DiscussionsDocumentsController>(
+      () => DiscussionsDocumentsController(
+            Get.find<DocumentsFilterController>(),
+            Get.find<PaginationController>(),
+            Get.find<DocumentsSortController>(),
+          ));
 }
