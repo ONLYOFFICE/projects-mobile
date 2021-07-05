@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -10,8 +11,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key key}) : super(key: key);
+class SelfProfileScreen extends StatelessWidget {
+  const SelfProfileScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +81,69 @@ class ProfileScreen extends StatelessWidget {
                 iconColor:
                     Theme.of(context).customColors().error.withOpacity(0.6),
                 onTap: () async => profileController.logout(context),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    PortalUser portalUser = Get.arguments['portalUser'];
+    var portalInfoController = Get.find<PortalInfoController>();
+
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        appBar: StyledAppBar(
+          showBackButton: true,
+          titleText: tr('profile'),
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 32),
+              Container(
+                decoration: const BoxDecoration(
+                    color: Colors.grey, shape: BoxShape.circle),
+                height: 120,
+                width: 120,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(80),
+                  child: CustomNetworkImage(
+                    image: portalUser?.avatar ??
+                        portalUser?.avatarMedium ??
+                        portalUser?.avatarSmall,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  portalUser?.displayName,
+                  style: TextStyleHelper.headline6(
+                    color: Theme.of(context).customColors().onSurface,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 68),
+              _ProfileInfoTile(
+                caption: '${tr('email')}:',
+                text: portalUser?.email ?? '',
+                icon: SvgIcons.message,
+              ),
+              _ProfileInfoTile(
+                caption: '${tr('portalAdress')}:',
+                text: portalInfoController.portalName ?? '',
+                icon: SvgIcons.cloud,
               ),
             ],
           ),

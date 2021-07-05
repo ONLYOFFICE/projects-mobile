@@ -27,7 +27,7 @@ class NavigationView extends StatelessWidget {
       const TasksView(),
       const ProjectsView(),
       const MoreView(),
-      const ProfileScreen(),
+      const SelfProfileScreen(),
       const PortalDiscussionsView(),
       const PortalDocumentsView(),
     ];

@@ -52,7 +52,8 @@ class NewProject extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.toNamed('TeamMembersSelectionView');
+                Get.toNamed('TeamMembersSelectionView',
+                    arguments: {'controller': controller});
               },
               child: TeamMembers(
                 controller: controller,
