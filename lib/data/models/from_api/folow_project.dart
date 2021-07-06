@@ -30,31 +30,49 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
-import 'package:projects/data/services/files_service.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 
-class FilesController extends GetxController {
-  final _api = locator<FilesService>();
+class FollowProject {
+  int id;
+  String title;
+  String description;
+  int status;
+  PortalUser responsible;
+  bool canEdit;
+  bool isPrivate;
 
-  var files = <PortalFile>[].obs;
+  FollowProject(
+      {this.id,
+      this.title,
+      this.description,
+      this.status,
+      this.responsible,
+      this.canEdit,
+      this.isPrivate});
 
-  var refreshController = RefreshController(initialRefresh: false);
-
-//for shimmer and progress indicator
-  RxBool loaded = false.obs;
-
-  void onRefresh({@required int taskId}) async {
-    await getTaskFiles(taskId: taskId);
-    refreshController.refreshCompleted();
+  FollowProject.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    title = json['title'];
+    description = json['description'];
+    status = json['status'];
+    responsible = json['responsible'] != null
+        ? PortalUser.fromJson(json['responsible'])
+        : null;
+    canEdit = json['canEdit'];
+    isPrivate = json['isPrivate'];
   }
 
-  Future getTaskFiles({int taskId}) async {
-    loaded.value = false;
-    files.value = await _api.getTaskFiles(taskId: taskId);
-    loaded.value = true;
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['title'] = title;
+    data['description'] = description;
+    data['status'] = status;
+    if (responsible != null) {
+      data['responsible'] = responsible.toJson();
+    }
+    data['canEdit'] = canEdit;
+    data['isPrivate'] = isPrivate;
+    return data;
   }
 }

@@ -208,8 +208,10 @@ class _ProjectContextMenu extends StatelessWidget {
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           // if (controller.projectDetailed.canEdit)
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          // const PopupMenuItem(
-          //     value: 'follow', child: Text('Follow / Unfollow project')),
+          PopupMenuItem(
+            value: 'follow',
+            child: Text(tr('followUnfollowProject')),
+          ),
           if (controller.projectDetailed.canDelete)
             PopupMenuItem(
               textStyle: Theme.of(context)
@@ -217,7 +219,11 @@ class _ProjectContextMenu extends StatelessWidget {
                   .textStyle
                   .copyWith(color: Theme.of(context).customColors().error),
               value: 'delete',
-              child: Text(tr('delete')),
+              child: Text(
+                tr('delete'),
+                style: TextStyleHelper.subtitle1(
+                    color: Theme.of(context).customColors().error),
+              ),
             )
         ];
       },
@@ -237,6 +243,7 @@ void _onSelected(value, controller) async {
       break;
 
     case 'follow':
+      controller.followProject();
       break;
 
     case 'delete':

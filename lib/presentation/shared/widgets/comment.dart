@@ -183,12 +183,23 @@ class _CommentAuthor extends StatelessWidget {
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
-                          value: 'Copy link', child: Text(tr('copyLink'))),
-                      if (comment.isEditPermissions)
-                        PopupMenuItem(value: 'Edit', child: Text(tr('edit'))),
+                        value: 'Copy link',
+                        child: Text(tr('copyLink')),
+                      ),
                       if (comment.isEditPermissions)
                         PopupMenuItem(
-                            value: 'Delete', child: Text(tr('delete'))),
+                          value: 'Edit',
+                          child: Text(tr('edit')),
+                        ),
+                      if (comment.isEditPermissions)
+                        PopupMenuItem(
+                          value: 'Delete',
+                          child: Text(
+                            tr('delete'),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).customColors().error),
+                          ),
+                        ),
                     ];
                   },
                 ),

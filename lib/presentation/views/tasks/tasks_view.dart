@@ -61,7 +61,8 @@ class TasksView extends StatelessWidget {
               EdgeInsets.only(bottom: controller.fabIsRaised.isTrue ? 48 : 0),
           duration: const Duration(milliseconds: 100),
           child: StyledFloatingActionButton(
-              onPressed: () => Get.toNamed('NewTaskView'),
+              onPressed: () => Get.toNamed('NewTaskView',
+                  arguments: {'projectDetailed': null}),
               child: const Icon(Icons.add_rounded)))),
       appBar: StyledAppBar(
         titleHeight: 101,

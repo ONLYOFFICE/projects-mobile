@@ -73,7 +73,7 @@ class TaskEditingController extends GetxController
   @override
   var selectedProjectTitle; //Unused
   @override
-  var selectProjectError = false;
+  var needToSelectProject = false;
   // to track changes.
   DateTime _newStartDate;
   @override

@@ -39,6 +39,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -131,7 +132,7 @@ class DocumentsScreen extends StatelessWidget {
     this.appBar,
   }) : super(key: key);
   final StyledAppBar appBar;
-  final DocumentsController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -144,8 +145,9 @@ class DocumentsScreen extends StatelessWidget {
           children: <Widget>[
             if (controller.needToShowDevider.value == true)
               const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue && controller.nothingFound.isTrue)
+            if (controller.loaded.value == false) const ListLoadingSkeleton(),
+            if (controller.loaded.value == true &&
+                controller.nothingFound.value == true)
               Expanded(
                 child: Center(
                   child: EmptyScreen(
@@ -153,10 +155,10 @@ class DocumentsScreen extends StatelessWidget {
                       text: tr('notFound')),
                 ),
               ),
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isEmpty &&
                 !controller.filterController.hasFilters.value &&
-                controller.searchMode.isFalse)
+                controller.searchMode.value == false)
               Expanded(
                 child: Center(
                   child: EmptyScreen(
@@ -165,10 +167,10 @@ class DocumentsScreen extends StatelessWidget {
                           args: [tr('documents').toLowerCase()])),
                 ),
               ),
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isEmpty &&
                 controller.filterController.hasFilters.value &&
-                controller.searchMode.isFalse)
+                controller.searchMode.value == false)
               Expanded(
                 child: Center(
                   child: EmptyScreen(
@@ -177,7 +179,7 @@ class DocumentsScreen extends StatelessWidget {
                           args: [tr('documents').toLowerCase()])),
                 ),
               ),
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isNotEmpty)
               Expanded(
                 child: PaginationListView(
@@ -353,7 +355,7 @@ class FileCell extends StatelessWidget {
   final int index;
 
   final PortalFile element;
-  final DocumentsController controller;
+  final controller;
 
   const FileCell({
     Key key,
@@ -461,21 +463,28 @@ class FileCell extends StatelessWidget {
                       value: 'download',
                       child: Text(tr('download')),
                     ),
-                    PopupMenuItem(
-                      value: 'copy',
-                      child: Text(tr('copy')),
-                    ),
-                    PopupMenuItem(
-                      value: 'move',
-                      child: Text(tr('move')),
-                    ),
-                    PopupMenuItem(
-                      value: 'rename',
-                      child: Text(tr('rename')),
-                    ),
+                    if (!(controller is DiscussionsDocumentsController))
+                      PopupMenuItem(
+                        value: 'copy',
+                        child: Text(tr('copy')),
+                      ),
+                    if (!(controller is DiscussionsDocumentsController))
+                      PopupMenuItem(
+                        value: 'move',
+                        child: Text(tr('move')),
+                      ),
+                    if (!(controller is DiscussionsDocumentsController))
+                      PopupMenuItem(
+                        value: 'rename',
+                        child: Text(tr('rename')),
+                      ),
                     PopupMenuItem(
                       value: 'delete',
-                      child: Text(tr('delete')),
+                      child: Text(
+                        tr('delete'),
+                        style: TextStyleHelper.subtitle1(
+                            color: Theme.of(context).customColors().error),
+                      ),
                     ),
                   ];
                 },
@@ -496,7 +505,7 @@ class FolderCell extends StatelessWidget {
   }) : super(key: key);
 
   final Folder element;
-  final DocumentsController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -590,11 +599,13 @@ class FolderCell extends StatelessWidget {
                       //   value: 'download',
                       //   child: Text('Download'),
                       // ),
-                      PopupMenuItem(
-                        value: 'copy',
-                        child: Text(tr('copy')),
-                      ),
-                      if (_isRoot(element))
+                      if (!(controller is DiscussionsDocumentsController))
+                        PopupMenuItem(
+                          value: 'copy',
+                          child: Text(tr('copy')),
+                        ),
+                      if (_isRoot(element) &&
+                          !(controller is DiscussionsDocumentsController))
                         PopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
@@ -607,7 +618,11 @@ class FolderCell extends StatelessWidget {
                       if (_isRoot(element))
                         PopupMenuItem(
                           value: 'delete',
-                          child: Text(tr('delete')),
+                          child: Text(
+                            tr('delete'),
+                            style: TextStyleHelper.subtitle1(
+                                color: Theme.of(context).customColors().error),
+                          ),
                         ),
                     ];
                   },
@@ -693,7 +708,7 @@ void _onFilePopupMenuSelected(
   value,
   PortalFile selectedFile,
   BuildContext context,
-  DocumentsController controller,
+  controller,
 ) async {
   switch (value) {
     case 'copyLink':
@@ -794,7 +809,10 @@ void _renameFolder(
 }
 
 void _renameFile(
-    DocumentsController controller, PortalFile element, BuildContext context) {
+  controller,
+  PortalFile element,
+  BuildContext context,
+) {
   var inputController = TextEditingController();
   inputController.text = element.title.replaceAll(element.fileExst, '');
 

@@ -181,4 +181,17 @@ class ProjectService {
       return null;
     }
   }
+
+  Future followProject({int projectId}) async {
+    var result = await _api.followProject(projectId: projectId);
+
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await ErrorDialog.show(result.error);
+      return null;
+    }
+  }
 }

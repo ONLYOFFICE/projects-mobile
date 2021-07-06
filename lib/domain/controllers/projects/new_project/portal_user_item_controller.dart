@@ -82,5 +82,7 @@ class PortalUserItemController extends GetxController {
     if (selectionMode.value == UserSelectionMode.Single ||
         selectionMode.value == UserSelectionMode.Multiple)
       isSelected.value = !isSelected.value;
+    else
+      Get.toNamed('ProfileScreen', arguments: {'portalUser': portalUser});
   }
 }
