@@ -49,7 +49,7 @@ abstract class TaskActionsController extends GetxController {
   FocusNode get titleFocus => FocusNode();
 
   RxBool setTitleError;
-  var selectProjectError;
+  var needToSelectProject;
 
   void init();
   void changeMilestoneSelection();

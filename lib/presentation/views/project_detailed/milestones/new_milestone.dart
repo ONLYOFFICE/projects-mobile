@@ -56,6 +56,8 @@ class NewMilestoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<NewMilestoneController>();
+    var projectDetailed = Get.arguments['projectDetailed'];
+    controller.setup(projectDetailed);
 
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
@@ -103,7 +105,8 @@ class MilestoneInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 56, right: 16),
-      child: TextField(
+      child: Obx(
+        () => TextField(
           // autofocus: controller.titleController.text.isEmpty,
           maxLines: 2,
           controller: controller.titleController,
@@ -116,13 +119,15 @@ class MilestoneInput extends StatelessWidget {
               hintText: tr('milestoneTitle'),
               contentPadding: const EdgeInsets.symmetric(vertical: 0),
               hintStyle: TextStyleHelper.headline6(
-                  color: controller.setTitleError.value
+                  color: controller.needToSetTitle.value
                       ? Theme.of(context).customColors().error
                       : Theme.of(context)
                           .customColors()
                           .onSurface
                           .withOpacity(0.5)),
-              border: InputBorder.none)),
+              border: InputBorder.none),
+        ),
+      ),
     );
   }
 }
@@ -328,7 +333,7 @@ class ProjectTile extends StatelessWidget {
                 ? controller.slectedProjectTitle.value
                 : tr('selectProject'),
             icon: SvgIcons.project,
-            textColor: controller.selectProjectError.value
+            textColor: controller.needToSelectProject.value
                 ? Theme.of(context).customColors().error
                 : null,
             isSelected: _isSelected,
@@ -353,22 +358,27 @@ class ResponsibleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _isSelected = controller.responsible != null;
-    return NewMilestoneInfo(
-      isSelected: _isSelected,
-      caption: _isSelected ? tr('assignedTo') : null,
-      text: _isSelected ? plural('responsibles', 1) : tr('addResponsible'),
-      suffix: _isSelected
-          ? Icon(Icons.arrow_forward_ios_outlined,
-              size: 20,
-              color:
-                  Theme.of(context).customColors().onSurface.withOpacity(0.6))
-          : null,
-      icon: SvgIcons.person,
-      onTap: () => {
-        if (!FocusScope.of(context).hasPrimaryFocus)
-          {FocusScope.of(context).unfocus()},
-        Get.to(const SelectMilestoneResponsible())
-      },
+    return Obx(
+      () => NewMilestoneInfo(
+        isSelected: _isSelected,
+        caption: _isSelected ? tr('assignedTo') : null,
+        text: _isSelected ? plural('responsibles', 1) : tr('addResponsible'),
+        textColor: controller.needToSelectResponsible.value
+            ? Theme.of(context).customColors().error
+            : null,
+        suffix: _isSelected
+            ? Icon(Icons.arrow_forward_ios_outlined,
+                size: 20,
+                color:
+                    Theme.of(context).customColors().onSurface.withOpacity(0.6))
+            : null,
+        icon: SvgIcons.person,
+        onTap: () => {
+          if (!FocusScope.of(context).hasPrimaryFocus)
+            {FocusScope.of(context).unfocus()},
+          Get.to(const SelectMilestoneResponsible())
+        },
+      ),
     );
   }
 }

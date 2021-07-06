@@ -131,11 +131,12 @@ class ProjectDetailsController extends GetxController {
   }
 
   void createNewMilestone() {
-    Get.toNamed('NewMilestoneView');
+    Get.toNamed('NewMilestoneView',
+        arguments: {'projectDetailed': projectDetailed});
   }
 
   void createTask() {
-    Get.toNamed('NewTaskView');
+    Get.toNamed('NewTaskView', arguments: {'projectDetailed': projectDetailed});
   }
 
   Future<void> copyLink() async {}
