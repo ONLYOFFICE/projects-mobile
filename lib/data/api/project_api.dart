@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/folow_project.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -244,7 +245,7 @@ class ProjectApi {
   }
 
   Future<ApiDTO<PortalUser>> deleteProject({int projectId}) async {
-    var url = await coreApi.deleteProjectUrl(projectId);
+    var url = await coreApi.projectByIDUrl(projectId);
 
     var result = ApiDTO<PortalUser>();
 
@@ -277,6 +278,27 @@ class ProjectApi {
 
       if (response.statusCode == 200) {
         result.response = ProjectDetailed.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<FollowProject>> followProject({int projectId}) async {
+    var url = await coreApi.followProjectUrl(projectId);
+
+    var result = ApiDTO<FollowProject>();
+
+    try {
+      var response = await coreApi.putRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = FollowProject.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }

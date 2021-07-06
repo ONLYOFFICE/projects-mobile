@@ -44,7 +44,11 @@ class SubtaskDetailedView extends StatelessWidget {
                     if (_subtask.canEdit)
                       PopupMenuItem(
                         value: 'delete',
-                        child: Text(tr('delete')),
+                        child: Text(
+                          tr('delete'),
+                          style: TextStyleHelper.subtitle1(
+                              color: Theme.of(context).customColors().error),
+                        ),
                       ),
                   ];
                 },

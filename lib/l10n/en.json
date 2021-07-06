@@ -460,6 +460,9 @@
 	"taskEditing": "Task editing",
 	"discussionText": "Discussion text",
 	"editProject":"Edit Project",
+	"followUnfollowProject":"Follow / Unfollow project",
+
+	
 	
 	"error": "Error"
 }

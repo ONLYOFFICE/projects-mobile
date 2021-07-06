@@ -14,6 +14,14 @@ class PaginationListView<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
+        footer: CustomFooter(
+          builder: (BuildContext context, LoadStatus mode) {
+            return Container(
+              height: 55.0,
+              child: const Center(child: CircularProgressIndicator()),
+            );
+          },
+        ),
         enablePullDown: paginationController.pullDownEnabled,
         enablePullUp: paginationController.pullUpEnabled,
         controller: paginationController.refreshController,

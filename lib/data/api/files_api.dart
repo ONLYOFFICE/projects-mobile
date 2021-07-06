@@ -102,6 +102,75 @@ class FilesApi {
     return result;
   }
 
+  //  Future<ApiDTO<FoldersResponse>> getMessageFiles({
+  //   int startIndex,
+  //   String query,
+  //   String sortBy,
+  //   String sortOrder,
+  //   int folderId,
+  //   String typeFilter,
+  //   String authorFilter,
+  //   String entityType,
+  // }) async {
+  //    // project/message/1234/files
+  //   var url = await coreApi.getFilesBaseUrl();
+
+  //   if (entityType != null && entityType == 'task') {
+  //     url = await coreApi.getEntityFilesUrl(entityId: folderId.toString());
+  //     url += '?entityType=task';
+  //   } else {
+  //     if (folderId != null)
+  //       url += '${folderId.toString()}?';
+  //     else
+  //       url += '@projects?';
+  //   }
+
+  //   if (query != null) {
+  //     url += '&filterBy=title&filterOp=contains&filterValue=$query';
+  //   }
+
+  //   if (startIndex != null) {
+  //     url += '&Count=25&StartIndex=$startIndex';
+  //   }
+
+  //   if (typeFilter != null) {
+  //     url += typeFilter;
+  //   }
+  //   if (authorFilter != null) {
+  //     url += authorFilter;
+  //   }
+
+  //   if (sortBy != null &&
+  //       sortBy.isNotEmpty &&
+  //       sortOrder != null &&
+  //       sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+
+  //   var result = ApiDTO<FoldersResponse>();
+
+  //   try {
+  //     var response = await coreApi.getRequest(url);
+  //     final Map responseJson = json.decode(response.body);
+
+  //     if (response.statusCode == 200) {
+  //       if (entityType != null && entityType == 'task') {
+  //         var taskFiles = (responseJson['response'] as List)
+  //             .map((i) => PortalFile.fromJson(i))
+  //             .toList();
+
+  //         result.response = FoldersResponse();
+  //         result.response.files = taskFiles;
+  //       } else
+  //         result.response = FoldersResponse.fromJson(responseJson['response']);
+  //     } else {
+  //       result.error = CustomError.fromJson(responseJson['error']);
+  //     }
+  //   } catch (e) {
+  //     result.error = CustomError(message: e.toString());
+  //   }
+
+  //   return result;
+  // }
+
   Future<ApiDTO<Folder>> renameFolder(
       {String folderId, String newTitle}) async {
     var url = await coreApi.getFolderByIdUrl(folderId: folderId);
