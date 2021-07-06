@@ -46,7 +46,7 @@ class TasksView extends StatelessWidget {
               icon: SvgIcons.search,
               color: Theme.of(context).customColors().primary,
             ),
-            onPressed: () => controller.showSearch(),
+            onPressed: controller.showSearch,
           ),
           IconButton(
             icon: FiltersButton(controler: controller),
