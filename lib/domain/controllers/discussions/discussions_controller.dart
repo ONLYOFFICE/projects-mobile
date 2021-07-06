@@ -71,7 +71,6 @@ class DiscussionsController extends BaseController {
     loaded.value = true;
   }
 
-  // TODO проверить все параметры
   Future _getDiscussions({needToClear = false, String projectId}) async {
     var result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,

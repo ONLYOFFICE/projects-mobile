@@ -36,28 +36,29 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class CommentItemController extends GetxController {
+class DiscussionCommentItemController extends GetxController
+    implements CommentItemController {
   final _api = locator<CommentsService>();
 
+  @override
   final Rx<PortalComment> comment;
-  final int taskId;
-  CommentItemController({this.comment, this.taskId});
+  final int discussionId;
+  DiscussionCommentItemController({this.comment, this.discussionId});
 
+  @override
   Future<void> copyLink(context) async {
-    var projectId = Get.find<TaskItemController>(tag: taskId.toString())
-        .task
-        .value
-        .projectOwner
-        .id;
+    var projectId =
+        Get.find<DiscussionItemController>().discussion.value.projectOwner.id;
 
-    var link = await _api.getCommentLink(
+    var link = await _api.getDiscussionCommentLink(
       commentId: comment.value.commentId,
-      taskId: taskId,
+      discussionId: discussionId,
       projectId: projectId,
     );
 
@@ -68,6 +69,7 @@ class CommentItemController extends GetxController {
     }
   }
 
+  @override
   Future deleteComment(context) async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteComment'),
@@ -78,9 +80,8 @@ class CommentItemController extends GetxController {
         var response =
             await _api.deleteComment(commentId: comment.value.commentId);
         if (response != null) {
+          Get.find<DiscussionItemController>().onRefresh();
           Get.back();
-          // ignore: unawaited_futures
-          Get.find<TaskItemController>(tag: taskId.toString()).reloadTask();
           ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
               context: context,
               text: tr('commentDeleted'),
@@ -88,5 +89,14 @@ class CommentItemController extends GetxController {
         }
       },
     ));
+  }
+
+  @override
+  void toCommentEditingView() {
+    Get.toNamed('CommentEditingView', arguments: {
+      'commentId': comment.value.commentId,
+      'commentBody': comment.value.commentBody,
+      'itemController': this,
+    });
   }
 }
