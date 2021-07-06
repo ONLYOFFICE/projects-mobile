@@ -271,6 +271,7 @@
 	"overview": "Overview",
 	"deleteProject": "Delete project",
 	"deleteProjectAlert": "Are you sure you want to delete these project?\nNote: this action cannot be undone.",
+	"deleteTaskTitle": "Delete task",
 	"deleteTaskAlert": "Are you sure you want to delete these task?\nNote: this action cannot be undone.",
 
 	"newMilestone": "New milestone",
@@ -296,7 +297,7 @@
 	"followTask": "Follow task",
 	"unfollowTask": "Unfollow task",
 	"copyTask": "Copy task",
-	"deleteTask": "Delete task",
+	"deleteTaskButton": "Delete task",
 
 	"nobody": "Nobody",
 	"acceptSubtask": "Accept subtask",
@@ -444,7 +445,8 @@
 	
 	"archived": "Archived",
 
-	"deleteComment": "Delete comment",
+	"deleteCommentTitle": "Delete comment",
+	
 	"deleteCommentWarning": "Are you sure you want to delete these comment?\nNote: this action cannot be undone.",
 	"commentDeleted": "Comment has been deleted",
 	"commentCreated": "Comment has been created",

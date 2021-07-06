@@ -38,7 +38,7 @@ class _AppBarMenu extends StatelessWidget {
                   .textStyle
                   .copyWith(color: Theme.of(context).customColors().error),
               value: 'deleteTask',
-              child: Text(tr('deleteTask')),
+              child: Text(tr('deleteTaskButton')),
             )
         ];
       },
@@ -69,7 +69,7 @@ void _onSelected(value, TaskItemController controller) async {
 
     case 'deleteTask':
       await Get.dialog(StyledAlertDialog(
-        titleText: tr('deleteTask'),
+        titleText: tr('deleteTaskTitle'),
         contentText: tr('deleteTaskAlert'),
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
