@@ -1,17 +1,17 @@
 {
 	"appName": "ONLYOFFICE\nProjects",
-	"appDescription": "ONLYOFFICE portal provide saving filesin cloud storage, share it with co-workersand co-editing in realtime",
+	"appDescription": "Work with your projects on mobile devices and manage your tasks on-the-go",
 
-	"emailAddress": "Email Address",
+	"emailAddress": "Email address",
 	"password": "Password",
-	"portalName": "Portal Address",
+	"portalName": "Portal address",
 	"continueButton": "Continue",
-	"portalAdress": "Portal adress",
+	"portalAdress": "Portal address",
 	"logOut": "Log out",
 
 	"profile": "Profile",
 	"email": "Email",
-	"forgotPassword": "Forgot password?",
+	"forgotPassword": "Forgot your password?",
 
 	"reset": "RESET",
 	"filter": "Filter",
@@ -45,20 +45,20 @@
 	"selectStatus": "Select status",
 	"usersSearch": "Search for users...",
 
-	"myTasks": "My Tasks",
+	"myTasks": "My tasks",
 	"upcomingTasks": "Upcoming",
-	"myProjects": "My Projects",
+	"myProjects": "My projects",
 	"otherProjects": "Other projects",
 
-	"projectsIFolow": "Projects I Folow",
-	"activeProjects": "Active Projects",
+	"projectsIFolow": "Projects I follow",
+	"activeProjects": "Active projects",
 
 	"dashboardNoActive": "There are no active {}",
 
-	"viewAll": "view all",
-	"viewLess": "view less",
+	"viewAll": "View all",
+	"viewLess": "View less",
 
-	"noEntityCreated": "No {} has been created yet",
+	"noEntityCreated": "No {} here yet",
 	"noEntityMatching": "There are no {} matching these filters",
 
 	"total": "Total {}",
@@ -97,9 +97,9 @@
 	"folderRenamed": "Folder has been renamed",
 
 	"moveFolderHere": "Move folder here",
-	"copyFolderHere": "copy folder here",
-	"moveFileHere": "move file here",
-	"copyFileHere": "copy file here",
+	"copyFolderHere": "Copy folder here",
+	"moveFileHere": "Move file here",
+	"copyFileHere": "Copy file here",
 
 	"folderMoved": "Folder has been moved",
 	"folderCopied": "Folder has been copied",
@@ -130,8 +130,8 @@
 
 	"other": "Other",
 	"followed": "Followed",
-	"withTag": "With Tag",
-	"withoutTag": "Without Tag",
+	"withTag": "With tag",
+	"withoutTag": "Without tag",
 	"projectManager": "Project manager",
 
 	"otherUser": "Other user",
@@ -149,19 +149,19 @@
 
 	"creator": "Creator",
 
-	"selectDateRange": "Select Date Range",
+	"selectDateRange": "Select date range",
 	"invalidFormat": "Invalid format.",
 	"outOfRange": "Out of range.",
 	"invalidRange": "Invalid range.",
 	"startDate": "Start date",
-	"endDate": "End Date",
+	"endDate": "End date",
 
 	"description": "Description",
 	"milestoneDescription": "Milestone description",
 
 	"enterText": "Enter your text here",
 	"addDescription": "Add description",
-	"projectTitle": "Project Title",
+	"projectTitle": "Project title",
 	"choosePM": "Choose project manager",
 	"team": "Team",
 	"addTeamMembers": "Add team members",
@@ -170,7 +170,7 @@
 	"showLess": "Show less",
 
 	"advancedOptions": "Advanced options",
-	"notifyPM": "Notify Project Manager by email",
+	"notifyPM": "Notify project manager by email",
 	"privateProject": "Save this project as private",
 	"followProject": "Follow this project",
 	"selectPM": "Select project manager",
@@ -269,10 +269,10 @@
 	"tag": "Tag",
 
 	"overview": "Overview",
-	"deleteProject": "Delete project",
-	"deleteProjectAlert": "Are you sure you want to delete these project?\nNote: this action cannot be undone.",
-	"deleteTaskTitle": "Delete task",
-	"deleteTaskAlert": "Are you sure you want to delete these task?\nNote: this action cannot be undone.",
+	"deleteProject": "Delete project permanently?",
+	"deleteProjectAlert": "You won't be able to restore it.",
+	"deleteTaskTitle": "Delete task permanently?",
+	"deleteTaskAlert": "You won't be able to restore it.",
 
 	"newMilestone": "New milestone",
 	"milestoneTitle": "Milestone title",
@@ -320,22 +320,22 @@
 	"high": "High",
 	"normal": "Normal",
 
-	"passcodeLock": "Passcode Lock",
+	"passcodeLock": "Passcode lock",
 	"enabled": "Enabled",
 	"disabled": "Disabled",
 	"colorTheme": "Color theme",
-	"sameAsSystem": "Same as System",
+	"sameAsSystem": "Same as system",
 	"clearCache": "Clear cache",
 	"support": "Support",
 	"feedback": "Feedback",
-	"aboutApp": "About App",
+	"aboutApp": "About the app",
 	"lightTheme": "Light theme",
 	"darkTheme": "Dark theme",
 
-	"changePasscode": "change Passcode",
-	"enablePasscode": "Enable Passcode",
-	"fingerprint": "Use Fingerprint to unlock",
-	"passcodeLockDescription": "- это код, который запрашивается, при запуске приложения.\n\nОбратите внимание, если вы забудете код доступа, вам понадобится удалить или переустановить приложение.",
+	"changePasscode": "Change passcode",
+	"enablePasscode": "Enable passcode",
+	"fingerprint": "Use fingerprint to unlock",
+	"passcodeLockDescription": "Code to enter when you start the app.\n\nIf you forget it, you'll have to delete and re-install the app.",
 	"enterPasscode": "Enter passcode",
 
 	"passcodesNotMatch": "Passcodes didn’t match",
@@ -355,9 +355,9 @@
 
 	"highPriority": "High priority",
 
-	"notifyResponsible": "Notify responsibles",
+	"notifyResponsible": "Notify responsible users",
 	"none": "None",
-	"selectResponsibles": "Select responsibles",
+	"selectResponsibles": "Select responsible users",
 
 	"searchUsers": "Search for users",
 
@@ -366,9 +366,9 @@
 	"selectDueDate": "Select due date",
 	"selectStartDate": "Select start date",
 
-	"tfaTitle": "Двухфакторная\nаутентификация",
-	"tfaGAcodeDescription": "Copy the code generated by Google Authenticator application and insert it to the input field",
-	"tfaCode": "Код",
+	"tfaTitle": "Two-factor\nauthentication",
+	"tfaGAcodeDescription": "Copy the code generated by Google Authenticator app and insert it to the input field",
+	"tfaCode": "Code",
 	"send": "Send",
 	"login": "Login",
 	"passwordRecovery": "Password recovery",
@@ -387,19 +387,19 @@
 	"step4": "Step 4 of 4",
 
 	"step1SetupText1": "Set up an application to generate the authentication codes",
-	"step1SetupText2": "Please set up an application to generate the codes for the portal access (e.g. Google Authenticator) to continue the work at the portal",
+	"step1SetupText2": "Please set up an application to generate the codes for the portal access (e.g. Google Authenticator).",
 
-	"step2SetupText1": "Launch Google Authenticator application",
-	"step2SetupText2": "Run the application\nand tap the “new account” icon",
+	"step2SetupText1": "Launch Google Authenticator app",
+	"step2SetupText2": "Run the application\nand tap the “New account” icon",
 	"step3SetupText1": "Add a secret key",
-	"step3SetupText2": "Copy the key and paste it to the Google Authenticator application",
+	"step3SetupText2": "Copy the key and paste it to the Google Authenticator",
 	"step4SetupText1": "Copy the code and paste below",
 	"step4SetupText2": "Copy the code generated by Google Authenticator application and insert it to the input field",
 
 	"keyCopied": "Key copied to clipboard.",
 
 	"tfaSMSTitle": "Enter your phone number",
-	"tfaSMSCaption": "You will receive SMS-code to enable Two-factor authentification.",
+	"tfaSMSCaption": "You will receive SMS-code to enable two-factor authentification.",
 	"sendCode": "SEND CODE",
 	"chooseCountry": "Choose country",
 
@@ -418,7 +418,7 @@
 	"selectTag": "Select tag",
 	"selectUser": "Select user",
 	
-	"logOutTitle": "Log out from ONLYOFFICE Projects?",
+	"logOutTitle": "Log out of ONLYOFFICE Projects?",
 
 	"milestonesWithMyTasks": "Milestones with my tasks",
 	"noMilestone": "No milestone",
@@ -429,25 +429,25 @@
 	
 	"lostOnLeaveWarning": "If you leave, all changes will be lost.",
 	
-	"taskCreated": "Task had been created",
+	"taskCreated": "Task has been created",
 	"discardTask": "Discard task?",
 	"subtaskAccepted": "Subtask has been accepted by you",
 	"subtaskCopied": "Subtask has been copied",
 	"cantEditSubtask": "You do not have permission to edit this subtask",
 	
 
-	"subtaskCreated": "Subtask had been created",
+	"subtaskCreated": "Subtask has been created",
 	"projectStatus": "Project {}",
 	"discardMilestone": "Discard milestone?",
 	"chooseSection": "Choose section",
-	"discussionCreated": "Discussion had been created",
+	"discussionCreated": "Discussion has been created",
 	"discardDiscussion": "Discard discussion?",
 	
 	"archived": "Archived",
 
-	"deleteCommentTitle": "Delete comment",
+	"deleteCommentTitle": "Delete comment permanetly?",
 	
-	"deleteCommentWarning": "Are you sure you want to delete these comment?\nNote: this action cannot be undone.",
+	"deleteCommentWarning": "You won't be able to restore it.",
 	"commentDeleted": "Comment has been deleted",
 	"commentCreated": "Comment has been created",
 
