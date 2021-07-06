@@ -70,7 +70,7 @@ class CommentItemController extends GetxController {
 
   Future deleteComment(context) async {
     await Get.dialog(StyledAlertDialog(
-      titleText: tr('deleteComment'),
+      titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
