@@ -126,8 +126,20 @@ class CommentsService {
     }
   }
 
-  Future<String> getCommentLink({taskId, projectId, commentId}) async {
-    return await _api.getCommentLink(
+  Future<String> getDiscussionCommentLink({
+    discussionId,
+    projectId,
+    commentId,
+  }) async {
+    return await _api.getDiscussionCommentLink(
+      discussionId: discussionId,
+      projectId: projectId,
+      commentId: commentId,
+    );
+  }
+
+  Future<String> getTaskCommentLink({taskId, projectId, commentId}) async {
+    return await _api.getTaskCommentLink(
       taskId: taskId,
       projectId: projectId,
       commentId: commentId,

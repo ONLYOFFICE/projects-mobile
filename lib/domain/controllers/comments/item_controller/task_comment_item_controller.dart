@@ -36,18 +36,22 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
-class CommentItemController extends GetxController {
+class TaskCommentItemController extends GetxController
+    implements CommentItemController {
   final _api = locator<CommentsService>();
 
+  @override
   final Rx<PortalComment> comment;
   final int taskId;
-  CommentItemController({this.comment, this.taskId});
+  TaskCommentItemController({this.comment, this.taskId});
 
+  @override
   Future<void> copyLink(context) async {
     var projectId = Get.find<TaskItemController>(tag: taskId.toString())
         .task
@@ -55,7 +59,7 @@ class CommentItemController extends GetxController {
         .projectOwner
         .id;
 
-    var link = await _api.getCommentLink(
+    var link = await _api.getTaskCommentLink(
       commentId: comment.value.commentId,
       taskId: taskId,
       projectId: projectId,
@@ -68,7 +72,8 @@ class CommentItemController extends GetxController {
     }
   }
 
-  Future deleteComment(context) async {
+  @override
+  Future<void> deleteComment(context) async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
@@ -88,5 +93,14 @@ class CommentItemController extends GetxController {
         }
       },
     ));
+  }
+
+  @override
+  void toCommentEditingView() {
+    Get.toNamed('CommentEditingView', arguments: {
+      'commentId': comment.value.commentId,
+      'commentBody': comment.value.commentBody,
+      'itemController': this,
+    });
   }
 }

@@ -34,7 +34,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
-import 'package:projects/domain/controllers/comments/comment_item_controller.dart';
+import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
+import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
+import 'package:projects/domain/controllers/comments/item_controller/task_comment_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
@@ -55,9 +57,22 @@ class Comment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (!comment.inactive) {
-      var controller = Get.put(
-          CommentItemController(taskId: taskId, comment: comment.obs),
-          tag: comment.commentId);
+      CommentItemController controller;
+
+      if (taskId != null) {
+        controller = Get.put(
+          TaskCommentItemController(taskId: taskId, comment: comment.obs),
+          tag: comment.commentId,
+        );
+      } else {
+        controller = Get.put(
+          DiscussionCommentItemController(
+            discussionId: discussionId,
+            comment: comment.obs,
+          ),
+          tag: comment.commentId,
+        );
+      }
 
       return Container(
         child: Column(
@@ -218,11 +233,7 @@ void _onSelected(value, context, CommentItemController controller) async {
       await controller.copyLink(context);
       break;
     case 'Edit':
-      await Get.toNamed('CommentEditingView', arguments: {
-        'commentId': controller.comment.value.commentId,
-        'commentBody': controller.comment.value.commentBody,
-        'taskId': controller.taskId,
-      });
+      controller.toCommentEditingView();
       break;
     case 'Delete':
       await controller.deleteComment(context);
