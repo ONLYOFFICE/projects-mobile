@@ -69,12 +69,20 @@ class NewTaskController extends GetxController
   RxBool notifyResponsibles = false.obs;
 
   @override
-  var selectProjectError = false.obs; //RxBool
+  var needToSelectProject = false.obs; //RxBool
   @override
   RxBool setTitleError = false.obs;
 
   @override
-  void init() => _titleFocus.requestFocus();
+  void init([projectDetailed]) {
+    _titleFocus.requestFocus();
+
+    if (projectDetailed != null) {
+      selectedProjectTitle.value = projectDetailed.title;
+      _selectedProjectId = projectDetailed.id;
+      needToSelectProject.value = false;
+    }
+  }
 
   @override
   void changeTitle(String newText) => title.value = newText;
@@ -83,7 +91,7 @@ class NewTaskController extends GetxController
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
-      selectProjectError.value = false;
+      needToSelectProject.value = false;
     } else {
       removeProjectSelection();
     }
@@ -240,46 +248,46 @@ class NewTaskController extends GetxController
   }
 
   void confirm(BuildContext context) async {
-    if (_selectedProjectId == null) selectProjectError.value = true;
+    if (_selectedProjectId == null) needToSelectProject.value = true;
     if (title.isEmpty) setTitleError.value = true;
-    if (_selectedProjectId != null && title.isNotEmpty) {
-      String priority;
-      // ignore: omit_local_variable_types
-      List<String> responsibleIds = [];
+    if (_selectedProjectId == null || title.isEmpty) return;
 
-      if (highPriority.isTrue) priority = tr('high');
-      for (var item in responsibles) responsibleIds.add(item.id);
+    String priority;
+    // ignore: omit_local_variable_types
+    List<String> responsibleIds = [];
 
-      var newTask = NewTaskDTO(
-          projectId: _selectedProjectId,
-          responsibles: responsibleIds,
-          startDate: _startDate,
-          deadline: _dueDate,
-          priority: priority,
-          notify: notifyResponsibles.value,
-          description: descriptionText.value,
-          title: title.value,
-          milestoneid: _selectedMilestoneId);
+    if (highPriority.isTrue) priority = tr('high');
+    for (var item in responsibles) responsibleIds.add(item.id);
 
-      var createdTask = await _api.addTask(newTask: newTask);
-      if (createdTask != null) {
-        var tasksController = Get.find<TasksController>();
-        // ignore: unawaited_futures
-        tasksController.loadTasks();
-        Get.back();
-        // ignore: unawaited_futures
-        tasksController.raiseFAB();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context,
-            text: tr('taskCreated'),
-            buttonText: tr('open').toUpperCase(),
-            buttonOnTap: () {
-              var itemController = Get.put(TaskItemController(createdTask),
-                  tag: createdTask.id.toString());
-              return Get.toNamed('TaskDetailedView',
-                  arguments: {'controller': itemController});
-            }));
-      }
+    var newTask = NewTaskDTO(
+        projectId: _selectedProjectId,
+        responsibles: responsibleIds,
+        startDate: _startDate,
+        deadline: _dueDate,
+        priority: priority,
+        notify: notifyResponsibles.value,
+        description: descriptionText.value,
+        title: title.value,
+        milestoneid: _selectedMilestoneId);
+
+    var createdTask = await _api.addTask(newTask: newTask);
+    if (createdTask != null) {
+      var tasksController = Get.find<TasksController>();
+      // ignore: unawaited_futures
+      tasksController.loadTasks();
+      Get.back();
+      // ignore: unawaited_futures
+      tasksController.raiseFAB();
+      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+          context: context,
+          text: tr('taskCreated'),
+          buttonText: tr('open').toUpperCase(),
+          buttonOnTap: () {
+            var itemController = Get.put(TaskItemController(createdTask),
+                tag: createdTask.id.toString());
+            return Get.toNamed('TaskDetailedView',
+                arguments: {'controller': itemController});
+          }));
     }
   }
 

@@ -25,7 +25,9 @@ class NewTaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<NewTaskController>();
-    controller.init();
+    var projectDetailed = Get.arguments['projectDetailed'];
+    controller.init(projectDetailed);
+
     return Scaffold(
       backgroundColor: Theme.of(context).customColors().backgroundColor,
       appBar: StyledAppBar(

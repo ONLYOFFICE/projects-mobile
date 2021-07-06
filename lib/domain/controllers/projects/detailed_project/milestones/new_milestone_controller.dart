@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -33,19 +34,28 @@ class NewMilestoneController extends GetxController {
   var descriptionController = TextEditingController().obs;
 
   RxString dueDateText = ''.obs;
-  RxBool selectProjectError = false.obs;
-  RxBool setTitleError = false.obs;
+  RxBool needToSelectProject = false.obs;
+  RxBool needToSetTitle = false.obs;
+  RxBool needToSelectResponsible = false.obs;
 
   var titleController = TextEditingController();
 
   PortalUserItemController _previusSelectedResponsible;
   Rx<PortalUserItemController> responsible;
 
+  void setup(ProjectDetailed projectDetailed) {
+    if (projectDetailed != null) {
+      slectedProjectTitle.value = projectDetailed.title;
+      _selectedProjectId = projectDetailed.id;
+      needToSelectProject.value = false;
+    }
+  }
+
   void changeProjectSelection({var id, String title}) {
     if (id != null && title != null) {
       slectedProjectTitle.value = title;
       _selectedProjectId = id;
-      selectProjectError.value = false;
+      needToSelectProject.value = false;
     } else {
       removeProjectSelection();
     }
@@ -162,8 +172,13 @@ class NewMilestoneController extends GetxController {
   }
 
   void confirm(BuildContext context) async {
-    if (_selectedProjectId == null) selectProjectError.value = true;
-    if (titleController.text.isEmpty) setTitleError.value = true;
+    if (_selectedProjectId == null) needToSelectProject.value = true;
+    if (titleController.text.isEmpty) needToSetTitle.value = true;
+    if (responsible?.value == null) needToSelectResponsible.value = true;
+
+    if (needToSelectProject.isFalse ||
+        needToSetTitle.isFalse ||
+        needToSelectResponsible.isFalse) return;
 
     var milestone = NewMilestoneDTO(
       title: titleController.text,

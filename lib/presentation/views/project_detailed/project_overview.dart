@@ -27,6 +27,7 @@ class ProjectOverview extends StatelessWidget {
     var projectController = Get.find<ProjectDetailsController>();
 
     return Obx(
+      // ignore: missing_return
       () {
         if (projectController.loaded.isTrue) {
           return ListView(
