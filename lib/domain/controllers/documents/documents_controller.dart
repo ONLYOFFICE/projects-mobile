@@ -55,7 +55,7 @@ class DocumentsController extends GetxController {
   DocumentsFilterController get filterController => _filterController;
 
   var scrollController = ScrollController();
-  var needToShowDevider = false.obs;
+  var needToShowDivider = false.obs;
 
   DocumentsController(
     DocumentsFilterController filterController,
@@ -73,7 +73,7 @@ class DocumentsController extends GetxController {
     paginationController.pullDownEnabled = true;
 
     scrollController.addListener(
-        () => needToShowDevider.value = scrollController.offset > 2);
+        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   Future<void> refreshContent() async {

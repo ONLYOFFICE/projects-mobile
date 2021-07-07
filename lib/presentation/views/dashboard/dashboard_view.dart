@@ -24,52 +24,56 @@ class DashboardView extends StatelessWidget {
         bgColor: Theme.of(context).customColors().bgDescription,
         title: Title(controller: dashboardController),
         // titleHeight: 50,
-        elevation: 0,
+        // elevation: 0,
         showBackButton: false,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Obx(
-            () => dashboardController.needToShowDevider.value == true
-                ? const Divider(
-                    height: 1, thickness: 1, indent: 0, endIndent: 0)
-                : const SizedBox(),
+      body: Obx(
+        () => DecoratedBox(
+          position: DecorationPosition.foreground,
+          decoration: BoxDecoration(
+            border: dashboardController.needToShowDivider.isTrue
+                ? Border(
+                    top: BorderSide(
+                        width: 0.5,
+                        color: Theme.of(context)
+                            .customColors()
+                            .onBackground
+                            .withOpacity(0.2)),
+                  )
+                : null,
           ),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-              controller: dashboardController.scrollController,
-              children: <Widget>[
-                DashboardCardView(
-                  title: tr('myTasks'),
-                  overline: tr('tasks'),
-                  controller: dashboardController.myTaskController,
-                ),
-                DashboardCardView(
-                  title: tr('upcomingTasks'),
-                  overline: tr('tasks'),
-                  controller: dashboardController.upcomingTaskscontroller,
-                ),
-                DashboardCardView(
-                  title: tr('myProjects'),
-                  overline: tr('projects'),
-                  controller: dashboardController.myProjectsController,
-                ),
-                DashboardCardView(
-                  title: tr('projectsIFolow'),
-                  overline: tr('projects'),
-                  controller: dashboardController.folowedProjectsController,
-                ),
-                DashboardCardView(
-                  title: tr('activeProjects'),
-                  overline: tr('projects'),
-                  controller: dashboardController.activeProjectsController,
-                ),
-              ],
-            ),
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+            controller: dashboardController.scrollController,
+            children: <Widget>[
+              DashboardCardView(
+                title: tr('myTasks'),
+                overline: tr('tasks'),
+                controller: dashboardController.myTaskController,
+              ),
+              DashboardCardView(
+                title: tr('upcomingTasks'),
+                overline: tr('tasks'),
+                controller: dashboardController.upcomingTaskscontroller,
+              ),
+              DashboardCardView(
+                title: tr('myProjects'),
+                overline: tr('projects'),
+                controller: dashboardController.myProjectsController,
+              ),
+              DashboardCardView(
+                title: tr('projectsIFolow'),
+                overline: tr('projects'),
+                controller: dashboardController.folowedProjectsController,
+              ),
+              DashboardCardView(
+                title: tr('activeProjects'),
+                overline: tr('projects'),
+                controller: dashboardController.activeProjectsController,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

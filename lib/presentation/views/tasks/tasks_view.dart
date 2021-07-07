@@ -22,85 +22,78 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
     controller.loadTasks();
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: Obx(() => AnimatedPadding(
-          padding:
-              EdgeInsets.only(bottom: controller.fabIsRaised.isTrue ? 48 : 0),
-          duration: const Duration(milliseconds: 100),
-          child: StyledFloatingActionButton(
-              onPressed: () => Get.toNamed('NewTaskView',
-                  arguments: {'projectDetailed': null}),
-              child: const Icon(Icons.add_rounded)))),
-      appBar: StyledAppBar(
-        titleHeight: 101,
-        bottomHeight: 0,
-        showBackButton: false,
-        titleText: tr('tasks'),
-        elevation: 0,
-        actions: [
-          IconButton(
-            icon: AppIcon(
-              width: 24,
-              height: 24,
-              icon: SvgIcons.search,
-              color: Theme.of(context).customColors().primary,
-            ),
-            onPressed: controller.showSearch,
-          ),
-          IconButton(
-            icon: FiltersButton(controler: controller),
-            onPressed: () async => Get.toNamed('TasksFilterScreen',
-                preventDuplicates: false,
-                arguments: {'filterController': controller.filterController}),
-          ),
-          const SizedBox(width: 4),
-        ],
-        bottom: TasksHeader(),
-      ),
-      body: Obx(
-        () => Column(children: [
-          if (controller.needToShowDevider.value == true)
-            const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-          if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-          if (controller.loaded.isTrue &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value)
-            Expanded(
-              child: Center(
-                child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.task_not_created),
-                    text: tr('noEntityCreated',
-                        args: [tr('tasks').toLowerCase()])),
+    return Obx(
+      () => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        floatingActionButton: Obx(() => AnimatedPadding(
+            padding:
+                EdgeInsets.only(bottom: controller.fabIsRaised.isTrue ? 48 : 0),
+            duration: const Duration(milliseconds: 100),
+            child: StyledFloatingActionButton(
+                onPressed: () => Get.toNamed('NewTaskView',
+                    arguments: {'projectDetailed': null}),
+                child: const Icon(Icons.add_rounded)))),
+        appBar: StyledAppBar(
+          titleHeight: 101,
+          bottomHeight: 0,
+          showBackButton: false,
+          titleText: tr('tasks'),
+          elevation: controller.needToShowDivider.isTrue ? 1 : 0,
+          actions: [
+            IconButton(
+              icon: AppIcon(
+                width: 24,
+                height: 24,
+                icon: SvgIcons.search,
+                color: Theme.of(context).customColors().primary,
               ),
+              onPressed: controller.showSearch,
             ),
-          if (controller.loaded.isTrue &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value)
-            Expanded(
-              child: Center(
+            IconButton(
+              icon: FiltersButton(controler: controller),
+              onPressed: () async => Get.toNamed('TasksFilterScreen',
+                  preventDuplicates: false,
+                  arguments: {'filterController': controller.filterController}),
+            ),
+            const SizedBox(width: 4),
+          ],
+          bottom: TasksHeader(),
+        ),
+        body: Obx(
+          () {
+            if (controller.loaded.isFalse) return const ListLoadingSkeleton();
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                !controller.filterController.hasFilters.value) {
+              return Center(
+                  child: EmptyScreen(
+                      icon: AppIcon(icon: SvgIcons.task_not_created),
+                      text: tr('noEntityCreated',
+                          args: [tr('tasks').toLowerCase()])));
+            }
+            if (controller.loaded.isTrue &&
+                controller.paginationController.data.isEmpty &&
+                controller.filterController.hasFilters.value) {
+              return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
                     text: tr('noEntityMatching',
                         args: [tr('tasks').toLowerCase()])),
+              );
+            }
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: ListView.builder(
+                controller: controller.scrollController,
+                itemCount: controller.paginationController.data.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return TaskCell(
+                      task: controller.paginationController.data[index]);
+                },
               ),
-            ),
-          if (controller.loaded.isTrue &&
-              controller.paginationController.data.isNotEmpty)
-            Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: ListView.builder(
-                  controller: controller.scrollController,
-                  itemCount: controller.paginationController.data.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return TaskCell(
-                        task: controller.paginationController.data[index]);
-                  },
-                ),
-              ),
-            ),
-        ]),
+            );
+          },
+        ),
       ),
     );
   }

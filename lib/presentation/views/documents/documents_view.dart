@@ -108,74 +108,75 @@ class DocumentsScreen extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: appBar,
       body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (controller.needToShowDevider.value == true)
-              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-            if (controller.loaded.value == false) const ListLoadingSkeleton(),
-            if (controller.loaded.value == true &&
-                controller.nothingFound.value == true)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.not_found),
-                      text: tr('notFound')),
-                ),
+        () {
+          if (controller.loaded.value == false)
+            return const ListLoadingSkeleton();
+          if (controller.loaded.value == true &&
+              controller.nothingFound.value == true) {
+            return Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.not_found),
+                    text: tr('notFound')));
+          }
+          if (controller.loaded.value == true &&
+              controller.paginationController.data.isEmpty &&
+              !controller.filterController.hasFilters.value &&
+              controller.searchMode.value == false) {
+            return Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.documents_not_created),
+                    text: tr('noEntityCreated',
+                        args: [tr('documents').toLowerCase()])));
+          }
+          if (controller.loaded.value == true &&
+              controller.paginationController.data.isEmpty &&
+              controller.filterController.hasFilters.value &&
+              controller.searchMode.value == false) {
+            return Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.not_found),
+                    text: tr('noEntityMatching',
+                        args: [tr('documents').toLowerCase()])));
+          }
+          return DecoratedBox(
+            decoration: BoxDecoration(
+              border: controller.needToShowDivider.value == true
+                  ? Border(
+                      top: BorderSide(
+                          width: 0.5,
+                          color: Theme.of(context)
+                              .customColors()
+                              .onBackground
+                              .withOpacity(0.2)),
+                    )
+                  : null,
+            ),
+            position: DecorationPosition.foreground,
+            child: PaginationListView(
+              paginationController: controller.paginationController,
+              child: ListView.separated(
+                controller: controller.scrollController,
+                itemCount: controller.paginationController.data.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 10);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  var element = controller.paginationController.data[index];
+                  return element is Folder
+                      ? FolderCell(
+                          element: element,
+                          controller: controller,
+                        )
+                      : FileCell(
+                          element: element,
+                          index: index,
+                          controller: controller,
+                        );
+                },
               ),
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value &&
-                controller.searchMode.value == false)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.documents_not_created),
-                      text: tr('noEntityCreated',
-                          args: [tr('documents').toLowerCase()])),
-                ),
-              ),
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value &&
-                controller.searchMode.value == false)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.not_found),
-                      text: tr('noEntityMatching',
-                          args: [tr('documents').toLowerCase()])),
-                ),
-              ),
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isNotEmpty)
-              Expanded(
-                child: PaginationListView(
-                  paginationController: controller.paginationController,
-                  child: ListView.separated(
-                    controller: controller.scrollController,
-                    itemCount: controller.paginationController.data.length,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 10);
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      var element = controller.paginationController.data[index];
-                      return element is Folder
-                          ? FolderCell(
-                              element: element,
-                              controller: controller,
-                            )
-                          : FileCell(
-                              element: element,
-                              index: index,
-                              controller: controller,
-                            );
-                    },
-                  ),
-                ),
-              ),
-          ],
-        ),
+            ),
+          );
+        },
       ),
     );
   }

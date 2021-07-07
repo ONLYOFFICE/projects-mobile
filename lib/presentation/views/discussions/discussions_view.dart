@@ -18,42 +18,44 @@ class PortalDiscussionsView extends StatelessWidget {
 
     controller.loadDiscussions();
 
-    return Scaffold(
-        appBar: StyledAppBar(
-          titleHeight: 101,
-          bottomHeight: 0,
-          showBackButton: false,
-          titleText: tr('discussions'),
-          elevation: 0,
-          actions: [
-            IconButton(
-              icon: AppIcon(
-                width: 24,
-                height: 24,
-                icon: SvgIcons.search,
-                color: Theme.of(context).customColors().primary,
+    return Obx(
+      () => Scaffold(
+          appBar: StyledAppBar(
+            titleHeight: 101,
+            bottomHeight: 0,
+            showBackButton: false,
+            titleText: tr('discussions'),
+            elevation: controller.needToShowDivider.isTrue ? 1 : 0,
+            actions: [
+              IconButton(
+                icon: AppIcon(
+                  width: 24,
+                  height: 24,
+                  icon: SvgIcons.search,
+                  color: Theme.of(context).customColors().primary,
+                ),
+                onPressed: controller.showSearch,
+                // onPressed: () => controller.showSearch(),
               ),
-              onPressed: controller.showSearch,
-              // onPressed: () => controller.showSearch(),
-            ),
-            IconButton(
-              icon: AppIcon(
-                width: 24,
-                height: 24,
-                icon: SvgIcons.tasklist,
-                color: Theme.of(context).customColors().primary,
+              IconButton(
+                icon: AppIcon(
+                  width: 24,
+                  height: 24,
+                  icon: SvgIcons.tasklist,
+                  color: Theme.of(context).customColors().primary,
+                ),
+                onPressed: () => {},
               ),
-              onPressed: () => {},
-            ),
-            const SizedBox(width: 3),
-          ],
-          // bottom: TasksHeader(),
-        ),
-        floatingActionButton: StyledFloatingActionButton(
-          onPressed: controller.toNewDiscussionScreen,
-          child: AppIcon(icon: SvgIcons.add_fab),
-        ),
-        body: DiscussionsList(controller: controller));
+              const SizedBox(width: 3),
+            ],
+            // bottom: TasksHeader(),
+          ),
+          floatingActionButton: StyledFloatingActionButton(
+            onPressed: controller.toNewDiscussionScreen,
+            child: AppIcon(icon: SvgIcons.add_fab),
+          ),
+          body: DiscussionsList(controller: controller)),
+    );
   }
 }
 
@@ -66,8 +68,6 @@ class DiscussionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var controller = Get.find<DiscussionsController>();
-
     return Obx(() {
       if (controller.loaded == false) {
         return const ListLoadingSkeleton();
@@ -77,6 +77,7 @@ class DiscussionsList extends StatelessWidget {
           child: ListView.separated(
             itemCount: controller.paginationController.data.length,
             padding: const EdgeInsets.only(bottom: 65),
+            controller: controller.scrollController,
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(height: 12);
             },
