@@ -61,7 +61,7 @@ class TasksController extends BaseController {
   RxBool fabIsRaised = false.obs;
 
   var scrollController = ScrollController();
-  var needToShowDevider = false.obs;
+  var needToShowDivider = false.obs;
 
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
@@ -77,7 +77,7 @@ class TasksController extends BaseController {
     paginationController.pullDownEnabled = true;
 
     scrollController.addListener(
-        () => needToShowDevider.value = scrollController.offset > 2);
+        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   @override

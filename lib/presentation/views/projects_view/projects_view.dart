@@ -64,67 +64,58 @@ class ProjectsView extends StatelessWidget {
 
     controller.loadProjects();
 
-    return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () => controller.createNewProject(),
-        child: AppIcon(
-          icon: SvgIcons.add_project,
-          width: 32,
-          height: 32,
+    return Obx(
+      () => Scaffold(
+        backgroundColor: Theme.of(context).backgroundColor,
+        floatingActionButton: StyledFloatingActionButton(
+          onPressed: () => controller.createNewProject(),
+          child: AppIcon(
+            icon: SvgIcons.add_project,
+            width: 32,
+            height: 32,
+          ),
         ),
-      ),
-      appBar: StyledAppBar(
-        title: _Title(controller: controller),
-        bottom: _Bottom(controller: controller),
-        showBackButton: false,
-        elevation: 0,
-        titleHeight: 50,
-        bottomHeight: 50,
-      ),
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (controller.needToShowDevider.value == true)
-              const Divider(height: 1, thickness: 1, indent: 0, endIndent: 0),
-            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
+        appBar: StyledAppBar(
+          title: _Title(controller: controller),
+          bottom: _Bottom(controller: controller),
+          showBackButton: false,
+          elevation: controller.needToShowDivider.value ? 1 : 0,
+          titleHeight: 50,
+          bottomHeight: 50,
+        ),
+        body: Obx(
+          () {
+            if (controller.loaded.isFalse) return const ListLoadingSkeleton();
             if (controller.loaded.isTrue &&
                 controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.project_not_created),
-                      text: tr('noEntityCreated',
-                          args: [tr('projects').toLowerCase()])),
-                ),
-              ),
+                !controller.filterController.hasFilters.value) {
+              return Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.project_not_created),
+                    text: tr('noEntityCreated',
+                        args: [tr('projects').toLowerCase()])),
+              );
+            }
             if (controller.loaded.isTrue &&
                 controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.not_found),
-                      text: tr('noEntityMatching',
-                          args: [tr('projects').toLowerCase()])),
-                ),
+                controller.filterController.hasFilters.value) {
+              return Center(
+                child: EmptyScreen(
+                    icon: AppIcon(icon: SvgIcons.not_found),
+                    text: tr('noEntityMatching',
+                        args: [tr('projects').toLowerCase()])),
+              );
+            }
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: ListView.builder(
+                controller: controller.scrollController,
+                itemBuilder: (c, i) =>
+                    ProjectCell(item: controller.paginationController.data[i]),
+                itemCount: controller.paginationController.data.length,
               ),
-            if (controller.loaded.isTrue &&
-                controller.paginationController.data.isNotEmpty)
-              Expanded(
-                child: PaginationListView(
-                  paginationController: controller.paginationController,
-                  child: ListView.builder(
-                    controller: controller.scrollController,
-                    itemBuilder: (c, i) => ProjectCell(
-                        item: controller.paginationController.data[i]),
-                    itemCount: controller.paginationController.data.length,
-                  ),
-                ),
-              ),
-          ],
+            );
+          },
         ),
       ),
     );

@@ -31,7 +31,9 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/discussions/discussions_view.dart';
 
@@ -48,7 +50,24 @@ class ProjectDiscussionsScreen extends StatelessWidget {
       controller.loadProjectDiscussions();
     return Stack(
       children: [
-        DiscussionsList(controller: controller),
+        Obx(
+          () => DecoratedBox(
+            decoration: BoxDecoration(
+              border: controller.needToShowDivider.value == true
+                  ? Border(
+                      top: BorderSide(
+                          width: 0.5,
+                          color: Theme.of(context)
+                              .customColors()
+                              .onBackground
+                              .withOpacity(0.2)),
+                    )
+                  : null,
+            ),
+            position: DecorationPosition.foreground,
+            child: DiscussionsList(controller: controller),
+          ),
+        ),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
