@@ -340,4 +340,27 @@ class ProjectApi {
 
     return result;
   }
+
+  Future<ApiDTO<ProjectTag>> createTag({String name}) async {
+    var url = await coreApi.createTagUrl();
+
+    var result = ApiDTO<ProjectTag>();
+
+    var body = {'data': name};
+
+    try {
+      var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 201) {
+        result.response = ProjectTag.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

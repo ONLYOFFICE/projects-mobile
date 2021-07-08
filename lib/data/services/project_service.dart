@@ -194,4 +194,17 @@ class ProjectService {
       return null;
     }
   }
+
+  Future createTag({String name}) async {
+    var result = await _api.createTag(name: name);
+
+    var success = result.response != null;
+
+    if (success) {
+      return result.response;
+    } else {
+      await ErrorDialog.show(result.error);
+      return null;
+    }
+  }
 }

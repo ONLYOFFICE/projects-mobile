@@ -217,6 +217,9 @@ class CoreApi {
   Future<String> createProjectUrl() async =>
       '${await getPortalURI()}/api/$version/project/withSecurity';
 
+  Future<String> createTagUrl() async =>
+      '${await getPortalURI()}/api/$version/project/tag';
+
   Future<String> projectByIDUrl(int projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 

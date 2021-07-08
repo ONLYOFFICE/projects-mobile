@@ -41,6 +41,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/detailed_p
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:readmore/readmore.dart';
 
@@ -59,7 +60,6 @@ class ProjectOverview extends StatelessWidget {
     var projectController = Get.find<ProjectDetailsController>();
 
     return Obx(
-      // ignore: missing_return
       () {
         if (projectController.loaded.isTrue) {
           return ListView(
@@ -139,6 +139,8 @@ class ProjectOverview extends StatelessWidget {
                   subtitle: projectController.tagsText.value)),
             ],
           );
+        } else {
+          return const ListLoadingSkeleton();
         }
       },
     );

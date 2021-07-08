@@ -465,6 +465,10 @@
 	"followUnfollowProject":"Follow / Unfollow project",
 
 	
+	"addTag": "Add tag",
+	"enterTag": "Enter new tag",
+
+	
 	
 	"error": "Error"
 }
