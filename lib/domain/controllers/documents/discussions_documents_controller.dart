@@ -86,7 +86,7 @@ class DiscussionsDocumentsController extends GetxController {
   DocumentsFilterController get filterController => _filterController;
 
   var scrollController = ScrollController();
-  var needToShowDevider = false.obs;
+  var needToShowDivider = false.obs;
 
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
@@ -106,8 +106,9 @@ class DiscussionsDocumentsController extends GetxController {
 
     paginationController.pullDownEnabled = true;
 
-    scrollController.addListener(
-        () => needToShowDevider.value = scrollController.offset > 2);
+    scrollController.addListener(() {
+      return needToShowDivider.value = scrollController.offset > 2;
+    });
   }
 
   void setupFiles(List<PortalFile> files) {

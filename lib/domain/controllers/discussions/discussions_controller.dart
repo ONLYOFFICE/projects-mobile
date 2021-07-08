@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
@@ -46,8 +47,12 @@ class DiscussionsController extends BaseController {
   PaginationController get paginationController => _paginationController;
 
   final _sortController = Get.find<DiscussionsSortController>();
+  final _scrollController = ScrollController();
+
+  ScrollController get scrollController => _scrollController;
 
   RxBool loaded = false.obs;
+  var needToShowDivider = false.obs;
 
   DiscussionsController(PaginationController paginationController) {
     _paginationController = paginationController;
@@ -56,6 +61,8 @@ class DiscussionsController extends BaseController {
     paginationController.refreshDelegate =
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
+    _scrollController.addListener(
+        () => needToShowDivider.value = _scrollController.offset > 2);
   }
 
   @override
