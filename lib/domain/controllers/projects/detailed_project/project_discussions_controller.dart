@@ -1,3 +1,4 @@
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
@@ -15,6 +16,10 @@ class ProjectDiscussionsController extends GetxController {
   PaginationController get paginationController => _paginationController;
 
   final _sortController = Get.find<DiscussionsSortController>();
+  final _scrollController = ScrollController();
+  var needToShowDivider = false.obs;
+
+  ScrollController get scrollController => _scrollController;
 
   RxBool loaded = false.obs;
 
@@ -26,6 +31,8 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
+    scrollController.addListener(
+        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   RxList get itemList => paginationController.data;

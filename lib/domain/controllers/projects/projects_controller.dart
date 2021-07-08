@@ -33,7 +33,7 @@ class ProjectsController extends BaseController {
   ProjectsFilterController get filterController => _filterController;
 
   var scrollController = ScrollController();
-  var needToShowDevider = false.obs;
+  var needToShowDivider = false.obs;
 
   ProjectsController(
     ProjectsFilterController filterController,
@@ -51,7 +51,7 @@ class ProjectsController extends BaseController {
     paginationController.pullDownEnabled = true;
 
     scrollController.addListener(
-        () => needToShowDevider.value = scrollController.offset > 2);
+        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   @override
