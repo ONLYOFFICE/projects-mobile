@@ -10,11 +10,14 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class ProjectEditController extends BaseProjectEditorController {
   final _projectService = locator<ProjectService>();
 
   var loaded = true.obs;
+  var isSearchResult = false.obs;
+  var nothingFound = false.obs;
 
   var projectTitleText = ''.obs;
 
@@ -23,12 +26,15 @@ class ProjectEditController extends BaseProjectEditorController {
 
   var tagsText = ''.obs;
 
+  var selectedTags;
+
   ProjectEditController(this.projectDetailed);
 
   ProjectDetailed projectDetailed;
   ProjectDetailed get projectData => projectDetailed;
 
   Future<void> setupEditor() async {
+    loaded.value = false;
     statusText.value = tr('projectStatus',
         args: [ProjectStatus.toName(projectDetailed.status)]);
 
@@ -36,15 +42,17 @@ class ProjectEditController extends BaseProjectEditorController {
     descriptionText.value = projectDetailed.description;
 
     isPrivate.value = projectDetailed.isPrivate;
-    await _projectService
-        .getProjectById(projectId: projectDetailed.id)
-        .then((value) => {
-              if (value?.tags != null)
-                {
-                  tags.addAll(value.tags),
-                  tagsText.value = value.tags.join(', '),
-                }
-            });
+
+    var projectById =
+        await _projectService.getProjectById(projectId: projectDetailed.id);
+    tags.clear();
+    if (projectById?.tags != null) {
+      for (var value in projectById?.tags) {
+        tags.add(value);
+      }
+    }
+
+    tagsText.value = tags.join(', ');
 
     titleController.text = projectDetailed.title;
     descriptionController.text = projectDetailed.description ?? '';
@@ -63,6 +71,7 @@ class ProjectEditController extends BaseProjectEditorController {
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
+    loaded.value = true;
   }
 
   Future updateStatus({int newStatusId}) async {
@@ -102,6 +111,7 @@ class ProjectEditController extends BaseProjectEditorController {
       participants: participants,
       private: isPrivate.value,
       status: projectDetailed.status,
+      tags: tagsText.value,
     );
 
     var success = await _projectService.editProject(
@@ -111,5 +121,9 @@ class ProjectEditController extends BaseProjectEditorController {
 
       Get.back();
     }
+  }
+
+  Future<void> showTags() async {
+    await Get.to(const TagsSelectionView(), arguments: {'controller': this});
   }
 }

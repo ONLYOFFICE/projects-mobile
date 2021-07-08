@@ -10,6 +10,7 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
@@ -32,7 +33,7 @@ class EditProjectView extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('editProject'),
-        elevation: 2,
+        elevation: 1,
         actions: [
           IconButton(
             icon: const Icon(Icons.check_outlined),
@@ -76,15 +77,19 @@ class EditProjectView extends StatelessWidget {
                     controller: editProjectController,
                   ),
                 ),
-                // TODO add tag edit screen
-                // Obx(() => InfoTile(
-                //     icon: AppIcon(
-                //         icon: SvgIcons.tag, color: const Color(0xff707070)),
-                //     caption: tr('tags'),
-                //     subtitle: editProjectController.tagsText.value)),
-                AdvancedEditOptions(controller: editProjectController),
+                InkWell(
+                  onTap: () {
+                    editProjectController.showTags();
+                  },
+                  child: _Tags(
+                    controller: editProjectController,
+                  ),
+                ),
+                _AdvancedEditOptions(controller: editProjectController),
               ],
             );
+          } else {
+            return const ListLoadingSkeleton();
           }
         },
       ),
@@ -92,8 +97,8 @@ class EditProjectView extends StatelessWidget {
   }
 }
 
-class AdvancedEditOptions extends StatelessWidget {
-  const AdvancedEditOptions({
+class _AdvancedEditOptions extends StatelessWidget {
+  const _AdvancedEditOptions({
     Key key,
     @required this.controller,
   }) : super(key: key);
@@ -155,6 +160,83 @@ class AdvancedEditOptions extends StatelessWidget {
                   height: 1,
                   thickness: 1,
                   indent: 56,
+                  endIndent: 0,
+                  color: Color(0xffD8D8D8),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Tags extends StatelessWidget {
+  const _Tags({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 60,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: 56,
+            child: AppIcon(
+                icon: SvgIcons.tag,
+                color: Theme.of(context).customColors().onSurface),
+          ),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                Obx(
+                  () => controller.tags.isNotEmpty
+                      ? NewProjectTile(
+                          subtitle: controller.tagsText.value,
+                          onTapFunction: () {
+                            controller.showTags();
+                            // Get.to(const TagsSelectionView(),
+                            //     arguments: {'controller': controller});
+                          },
+                          title: tr('tags'),
+                          iconData: Icons.navigate_next)
+                      : Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  controller.showTags();
+                                  // Get.to(const TagsSelectionView(),
+                                  //     arguments: {'controller': controller});
+                                },
+                                child: Text(
+                                  tr('addTag'),
+                                  style: TextStyleHelper.subtitle1(
+                                    color: Theme.of(context)
+                                        .customColors()
+                                        .onSurface
+                                        .withOpacity(0.4),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                ),
+                const Divider(
+                  height: 1,
+                  thickness: 1,
+                  indent: 0,
                   endIndent: 0,
                   color: Color(0xffD8D8D8),
                 ),

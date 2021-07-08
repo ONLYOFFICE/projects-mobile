@@ -202,7 +202,7 @@ class ProjectManager extends StatelessWidget {
                   () => controller.isPMSelected.value
                       ? NewProjectTile(
                           subtitle: controller.managerName.value,
-                          closeFunction: controller.removeManager,
+                          onTapFunction: controller.removeManager,
                           title: tr('projectManager'),
                           iconData: Icons.close,
                         )
@@ -256,14 +256,14 @@ class NewProjectTile extends StatelessWidget {
       {Key key,
       @required this.subtitle,
       @required this.title,
-      @required this.closeFunction,
+      @required this.onTapFunction,
       @required this.iconData})
       : super(key: key);
 
   final String subtitle;
   final String title;
   final IconData iconData;
-  final Function() closeFunction;
+  final Function() onTapFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +280,7 @@ class NewProjectTile extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: closeFunction,
+            onTap: onTapFunction,
             child: Icon(
               iconData,
               color: Colors.blue,
@@ -323,7 +323,7 @@ class TeamMembers extends StatelessWidget {
                   () => controller.selectedTeamMembers.isNotEmpty
                       ? NewProjectTile(
                           subtitle: controller.teamMembersTitle,
-                          closeFunction: controller.editTeamMember,
+                          onTapFunction: controller.editTeamMember,
                           title: tr('team'),
                           iconData: controller.selectedTeamMembers.length >= 2
                               ? Icons.navigate_next
