@@ -70,7 +70,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.milestone_not_created),
-                    text: tr('noEntityCreated',
+                    text: tr('noMilestonesCreated',
                         args: [tr('milestones').toLowerCase()])),
               ),
             ),
@@ -81,7 +81,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noEntityMatching',
+                    text: tr('noMilestonesMatching',
                         args: [tr('milestones').toLowerCase()])),
               ),
             ),

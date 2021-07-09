@@ -58,8 +58,6 @@
 	"viewAll": "View all",
 	"viewLess": "View less",
 
-	"noEntityCreated": "No {} here yet",
-	"noEntityMatching": "There are no {} matching these filters",
 
 	"total": "Total {}",
 	"notFound": "Not found",
@@ -468,7 +466,17 @@
 	"addTag": "Add tag",
 	"enterTag": "Enter new tag",
 
-	
+	"noTasksCreated": "No tasks here yet",
+	"noTasksMatching": "There are no tasks matching these filters",
+
+	"noProjectsCreated": "No projects here yet",
+	"noProjectsMatching": "There are no projects matching these filters",
+
+	"noMilestonesCreated": "No milestones here yet",
+	"noMilestonesMatching": "There are no milestones matching these filters",
+
+	"noDocumentsCreated": "No documents here yet",
+	"noDocumentsMatching": "There are no documents matching these filters",
 	
 	"error": "Error"
 }

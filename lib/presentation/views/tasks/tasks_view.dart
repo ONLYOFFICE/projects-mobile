@@ -100,7 +100,7 @@ class TasksView extends StatelessWidget {
               return Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.task_not_created),
-                      text: tr('noEntityCreated',
+                      text: tr('noTasksCreated',
                           args: [tr('tasks').toLowerCase()])));
             }
             if (controller.loaded.isTrue &&
@@ -109,7 +109,7 @@ class TasksView extends StatelessWidget {
               return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noEntityMatching',
+                    text: tr('noTasksMatching',
                         args: [tr('tasks').toLowerCase()])),
               );
             }

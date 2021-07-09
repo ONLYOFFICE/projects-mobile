@@ -182,7 +182,7 @@ class _DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.documents_not_created),
-                    text: tr('noEntityCreated',
+                    text: tr('noDocumentsCreated',
                         args: [tr('documents').toLowerCase()])));
           }
           if (controller.loaded.isTrue &&
@@ -192,7 +192,7 @@ class _DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noEntityMatching',
+                    text: tr('noDocumentsMatching',
                         args: [tr('documents').toLowerCase()])));
           }
           if (controller.loaded.isTrue &&
@@ -419,7 +419,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.documents_not_created),
-                      text: tr('noEntityCreated',
+                      text: tr('noDocumentsCreated',
                           args: [tr('documents').toLowerCase()])),
                 ),
               ),
@@ -431,7 +431,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: AppIcon(icon: SvgIcons.not_found),
-                      text: tr('noEntityMatching',
+                      text: tr('noDocumentsMatching',
                           args: [tr('documents').toLowerCase()])),
                 ),
               ),

@@ -76,7 +76,7 @@ class ProjectTaskScreen extends StatelessWidget {
                 child: EmptyScreen(
                   icon: AppIcon(icon: SvgIcons.task_not_created),
                   text: tr(
-                    'noEntityCreated',
+                    'noTasksCreated',
                     args: [tr('tasks').toLowerCase()],
                   ),
                 ),
@@ -89,7 +89,7 @@ class ProjectTaskScreen extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noEntityMatching',
+                    text: tr('noTasksMatching',
                         args: [tr('tasks').toLowerCase()])),
               ),
             ),

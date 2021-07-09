@@ -157,7 +157,7 @@ class DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.documents_not_created),
-                    text: tr('noEntityCreated',
+                    text: tr('noDocumentsCreated',
                         args: [tr('documents').toLowerCase()])));
           }
           if (controller.loaded.value == true &&
@@ -167,7 +167,7 @@ class DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noEntityMatching',
+                    text: tr('noDocumentsMatching',
                         args: [tr('documents').toLowerCase()])));
           }
           return DecoratedBox(
