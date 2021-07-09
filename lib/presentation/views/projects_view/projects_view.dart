@@ -60,7 +60,7 @@ class ProjectsView extends StatelessWidget {
               return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.project_not_created),
-                    text: tr('noEntityCreated',
+                    text: tr('noProjectsCreated',
                         args: [tr('projects').toLowerCase()])),
               );
             }
@@ -70,7 +70,7 @@ class ProjectsView extends StatelessWidget {
               return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noEntityMatching',
+                    text: tr('noProjectsMatching',
                         args: [tr('projects').toLowerCase()])),
               );
             }
