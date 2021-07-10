@@ -47,6 +47,8 @@ class DiscussionsController extends BaseController {
   PaginationController get paginationController => _paginationController;
 
   final _sortController = Get.find<DiscussionsSortController>();
+  DiscussionsSortController get sortController => _sortController;
+
   final _scrollController = ScrollController();
 
   ScrollController get scrollController => _scrollController;
