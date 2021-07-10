@@ -9,6 +9,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
+import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
   const PortalDiscussionsView({Key key}) : super(key: key);
@@ -48,7 +49,7 @@ class PortalDiscussionsView extends StatelessWidget {
               ),
               const SizedBox(width: 3),
             ],
-            // bottom: TasksHeader(),
+            bottom: DiscussionsHeader(),
           ),
           floatingActionButton: StyledFloatingActionButton(
             onPressed: controller.toNewDiscussionScreen,

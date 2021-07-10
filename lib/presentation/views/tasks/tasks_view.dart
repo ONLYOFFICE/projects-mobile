@@ -142,8 +142,10 @@ class TasksHeader extends StatelessWidget {
             Container(
               padding: const EdgeInsets.only(right: 4),
               child: TextButton(
-                onPressed: () => Get.bottomSheet(SortView(sortOptions: options),
-                    isScrollControlled: true),
+                onPressed: () => Get.bottomSheet(
+                  SortView(sortOptions: options),
+                  isScrollControlled: true,
+                ),
                 child: Row(
                   children: [
                     Obx(
