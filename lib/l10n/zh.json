@@ -1,0 +1,470 @@
+{
+	"appName": "ONLYOFFICE\n项目",
+	"appDescription": "在移动端随时随地处理你的项目、管理你的任务",
+
+	"emailAddress": "电子邮件地址",
+	"password": "密码",
+	"portalName": "邮政地址",
+	"continueButton": "继续",
+	"portalAdress": "邮政服务地址",
+	"logOut": "注销",
+
+	"profile": "个人资料",
+	"email": "电子邮件",
+	"forgotPassword": "你忘记了密码?",
+
+	"reset": "还原",
+	"filter": "过滤器",
+
+	"dashboard": "概览面板",
+
+	"projects": "项目",
+	"project": "项目",
+
+	"documents": "文档",
+	"document": "文档",
+
+	"milestones": "重要",
+	"milestone": "重要",
+
+	"more": "更多",
+	"settings": "设定",
+
+	"tasks": "任务",
+	"task": "任务",
+
+	"discussions": "讨论",
+	"discussion": "讨论",
+
+	"subtasks": "小任务",
+	"subtask": "小任务",
+
+	"comments": "评论",
+	"comment": "评论",
+
+	"selectStatus": "选择状态",
+	"usersSearch": "搜索用户...",
+
+	"myTasks": "我的任务",
+	"upcomingTasks": "接下来",
+	"myProjects": "我的项目",
+	"otherProjects": "其他项目",
+
+	"projectsIFolow": "我跟随的项目",
+	"activeProjects": "已启动的项目",
+
+	"dashboardNoActive": "当前没有已启动的 {}",
+
+	"viewAll": "查看所有",
+	"viewLess": "查看更少",
+
+	"noEntityCreated": "当前没有 {} ",
+	"noEntityMatching": "不存在满足过滤器要求的 {} ",
+
+	"total": "总 {}",
+	"notFound": "找不到",
+
+	"open": "打开",
+	"copyLink": "拷贝链接",
+	"download": "下载",
+	"copy": "下载",
+	"move": "移动",
+	"rename": "重命名",
+
+	"delete": "删除",
+
+	"edit": "编辑",
+
+
+	"documentsCaption": "{} · 文档:{} · 子文件夹:{}",
+
+	"confirm": "确定",
+	"cancel": "取消",
+	"accept": "接受",
+	"ok": "好",
+	"save": "保存",
+	"next": "下一步",
+	"back": "上一步",
+
+	"linkCopied": "链接已经被拷贝到剪贴板",
+
+	"renameFile": "重命名文件",
+	"enterFileName": "请输入文件名",
+	"fileRenamed": "文件已经被重新命名",
+
+	"renameFolder": "重命名文件夹",
+	"enterFolderName": "请输入文件夹名",
+	"folderRenamed": "文件夹已被重新命名",
+
+	"moveFolderHere": "移动文件夹到这里",
+	"copyFolderHere": "拷贝文件夹到这里",
+	"moveFileHere": "移动文件到这里",
+	"copyFileHere": "拷贝文件到这里",
+
+	"folderMoved": "文件夹已经被移动",
+	"folderCopied": "文件夹已经被拷贝",
+	"folderDeleted": "文件夹已经被删除",
+
+	"fileMoved": "文件已经被移动",
+	"fileCopied": "文件已经被拷贝",
+	"fileDeleted": "文件已经被删除",
+
+	"author": "作者",
+	"me": "我",
+	"users": "用户",
+	"groups": "用户组",
+
+	"searchSettings": "搜索设定",
+	"inContent": "在内容中",
+	"excludeSubfolders": "不考虑子文件夹",
+
+	"type": "种类",
+	"folders": "文件夹",
+
+	"presentations": "演示文档",
+	"spreadsheets": "工作表",
+	"images": "图片",
+	"media": "媒体",
+	"archives": "存档",
+	"allFiles": "全部文件",
+
+	"other": "其他",
+	"followed": "已关注",
+	"withTag": "已标记",
+	"withoutTag": "未标记",
+	"projectManager": "项目管理员",
+
+	"otherUser": "其他用户",
+	"status": "状态",
+	"active": "已启动",
+	"paused": "已暂停",
+	"closed": "已关闭",
+	"teamMember": "队友",
+
+	"dueDate": "截止日期",
+	"overdue": "已拖出截止日期",
+	"today": "今天",
+	"upcoming": "接下来",
+	"customPeriod": "自定义时段",
+
+	"creator": "创建者",
+
+	"selectDateRange": "选择日期区间",
+	"invalidFormat": "格式不正确。",
+	"outOfRange": "超出区间。",
+	"invalidRange": "区间不正确。",
+	"startDate": "开始日期",
+	"endDate": "结束日期",
+
+	"description": "描述",
+	"milestoneDescription": "重要内容描述",
+
+	"enterText": "在这里输入你的文本",
+	"addDescription": "添加描述",
+	"projectTitle": "项目标题",
+	"choosePM": "选择管理者",
+	"team": "队伍",
+	"addTeamMembers": "添加队友",
+
+	"showMore": "展开",
+	"showLess": "合上",
+
+	"advancedOptions": "进阶选项",
+	"notifyPM": "使用电子邮件通知项目管理者",
+	"privateProject": "保存该项目为个人私有项目",
+	"followProject": "关注这个项目",
+	"selectPM": "选择项目管理者",
+
+	"person": {
+		"zero": "{} 个用户",
+		"one": "{} 个用户",
+		"two": "{} 个用户",
+		"few": "{} 个用户",
+		"many": "{} 个用户",
+		"other": "{} 个用户"
+	},
+
+	"members": {
+		"zero": "{} 个成员",
+		"one": "{} 个成员",
+		"two": "{} 个成员",
+		"few": "{} 个成员",
+		"many": "{} 个成员",
+		"other": "{} 个成员"
+	},
+
+	"responsible": "负责人",
+	"responsibles": {
+		"zero": "{} 个负责人",
+		"one": "{} 个负责人",
+		"two": "{} 个负责人",
+		"few": "{} 个负责人",
+		"many": "{} 个负责人",
+		"other": "{} 个负责人"
+	},
+
+	"usersSelected": {
+		"zero": "{} 个用户已被选中",
+		"one": "{} 个用户已被选中",
+		"two": "{} 个用户已被选中",
+		"few": "{} 个用户已被选中",
+		"many": "{} 个用户已被选中",
+		"other": "{} 个用户已被选中"
+	},
+
+	"subscribers": "订阅者",
+	"subscriber": "订阅者",
+	"subscribersPlural": {
+		"zero": "{} 个订阅者",
+		"one": "{} 个订阅者",
+		"two": "{} 个订阅者",
+		"few": "{} 个订阅者",
+		"many": "{} 个订阅者",
+		"other": "{} 个订阅者"
+	},
+
+	"filterConfirmButton": "显示 {} {}",
+	
+
+	"tasksFilterConfirm": {
+		"zero": "显示 {} 个任务",
+		"one": "显示 {} 个任务",
+		"two": "显示 {} 个任务",
+		"few": "显示 {} 个任务",
+		"many": "显示 {} 个任务",
+		"other": "显示 {} 个任务"
+	},
+
+	"projectsFilterConfirm": {
+		"zero": "显示 {} 个项目",
+		"one": "显示 {} 个项目",
+		"two": "显示 {} 个项目",
+		"few": "显示 {} 个项目",
+		"many": "显示 {} 个项目",
+		"other": "显示 {} 个项目"
+	},
+
+	"milestonesFilterConfirm": {
+		"zero": "显示 {} 个重要项目",
+		"one": "显示 {} 个重要项目",
+		"two": "显示 {} 个重要项目",
+		"few": "显示 {} 个重要项目",
+		"many": "显示 {} 个重要项目",
+		"other": "显示 {} 个重要项目"
+	},
+
+	"documentsFilterConfirm": {
+		"zero": "显示 {} 个文档",
+		"one": "显示 {} 个文档",
+		"two": "显示 {} 个文档",
+		"few": "显示 {} 个文档",
+		"many": "显示 {} 个文档",
+		"other": "显示 {} 个文档"
+	},
+
+	"addMembersOf": "添加相关的成员",
+	"creationDate": "创建日期",
+	"createdBy": "创建人",
+	"tags": "标记",
+	"tag": "标记",
+
+	"overview": "总览",
+	"deleteProject": "要永久删除项目吗？",
+	"deleteProjectAlert": "你将不能复原被删除的项目。",
+	"deleteTaskTitle": "要永久删除任务吗？",
+	"deleteTaskAlert": "你将不能复原被删除的任务。",
+
+	"newMilestone": "新的重要项目",
+	"milestoneTitle": "重要项目标题",
+	"keyMilestone": "关键的重要项目",
+	"remindBeforeDue": "请在截止日期前48小时提醒我",
+	"selectProject": "选择项目",
+	"assignedTo": "分配给",
+
+	"addResponsible": "添加负责人",
+
+	"noResponsible": "没有负责人",
+
+	"setDueDate": "设定截止日期",
+
+	"searchProjects": "搜索项目...",
+	"selectResponsible": "选择负责人",
+
+	"tasksSearch": "任务搜索",
+	"discussionsSearch": "讨论搜索",
+
+	"editTask": "编辑任务",
+	"followTask": "关注任务",
+	"unfollowTask": "不再关注任务",
+	"copyTask": "拷贝任务",
+	"deleteTaskButton": "删除任务",
+
+	"nobody": "没有人",
+	"acceptSubtask": "接受小任务",
+	"copySubtask": "拷贝小任务",
+
+
+	"editSubtask": "编辑小任务",
+	"addSubtask": "添加小任务",
+	"describeSubtask": "描述小任务...",
+	"deadline": "截止日期",
+	"priority": "优先",
+	"create_on": "创建日期",
+	"start_date": "开始日期",
+	"title": "标题",
+	"sort_order": "次序",
+  	"dateandtime": "最后修改时间",
+  	"AZ": "标题",
+	"size": "大小",
+
+	"high": "高",
+	"normal": "中",
+
+	"passcodeLock": "密码锁定",
+	"enabled": "已启动",
+	"disabled": "已关闭",
+	"colorTheme": "色彩主题",
+	"sameAsSystem": "与系统相同",
+	"clearCache": "抹除缓存文件",
+	"support": "支持",
+	"feedback": "反馈",
+	"aboutApp": "关于该 App",
+	"lightTheme": "亮色主题",
+	"darkTheme": "暗色主题",
+
+	"changePasscode": "修改密码",
+	"enablePasscode": "启动密码",
+	"fingerprint": "使用指纹解锁",
+	"passcodeLockDescription": "下次启动该 App 时将需要键入密码。\n\n若你忘记了密码，你就只能删除该 App 再重新安装。",
+	"enterPasscode": "输入密码",
+
+	"passcodesNotMatch": "你输入的密码有误",
+	"reEnterPasscode": "请再输一次",
+
+	"choosePasscode": "选择密码来启动 App",
+
+	"enterCurrentPasscode": "输入你当前的密码",
+	"incorrectPIN": "你输入的 PIN 有误",
+	"enterNewPasscode": "输入新的密码",
+
+	"taskDescription": "任务描述",
+	"newTask": "新的任务",
+
+	"taskTitle": "任务标题",
+	"setStartDate": "设置开始日期",
+
+	"highPriority": "高优先度",
+
+	"notifyResponsible": "提醒负责人",
+	"none": "无",
+	"selectResponsibles": "选择负责用户",
+
+	"searchUsers": "搜索用户",
+
+	"selectMilestone": "选择重要项目",
+
+	"selectDueDate": "选择截止日期",
+	"selectStartDate": "选择开始日期",
+
+	"tfaTitle": "两步验证",
+	"tfaGAcodeDescription": "请拷贝 Google Authenticator app 生成的代码，将其插入到输入框中",
+	"tfaCode": "代码",
+	"send": "发送",
+	"login": "登录",
+	"passwordRecovery": "恢复密码",
+	"emailDescription": "请输入你在注册时预留的电子邮件地址。",
+	"authAppCodeDescription": "请输入验证器应用生成的六位代码.\n如果你暂时无法使用手机，你可以使用后备代码。",
+	"code": "代码",
+
+	"proceed": "进入",
+	"needHelp": "需要帮助吗？",
+	"passcodeToUnlock": "输入密码来启动 App",
+
+	"install": "安装",
+	"step1": "第1/4步",
+	"step2": "第2/4步",
+	"step3": "第3/4步",
+	"step4": "第4/4步",
+
+	"step1SetupText1": "设置生成授权代码的应用",
+	"step1SetupText2": "请设置能够生成用于访问项目管理器的授权代码的应用 (例如 Google Authenticator)。",
+
+	"step2SetupText1": "启动 Google Authenticator app",
+	"step2SetupText2": "运行应用\n并点按“新帐户”图案",
+	"step3SetupText1": "添加密钥",
+	"step3SetupText2": "拷贝该密钥，粘贴给 Google Authenticator",
+	"step4SetupText1": "拷贝密钥，在下面粘贴",
+	"step4SetupText2": "拷贝由 Google Authenticator 应用生成的代码，将其插入到下面的输入框中",
+
+	"keyCopied": "密钥已被拷贝到剪贴板",
+
+	"tfaSMSTitle": "输入电话号码",
+	"tfaSMSCaption": "你将会通过短信收到一个代码，可用来启动两步验证",
+	"sendCode": "发送代码",
+	"chooseCountry": "选择国家",
+
+	"enterSendedCode": "请输入六位代码。该代码已被发送到 ",
+	"incorrectCode": "代码有误，请重新输入",
+	"requestNewCode": "请求新的代码",
+	"selectCountry": "选择国家",
+	"search": "搜索...",
+
+	"sortBy": "排序依据",
+	"enterQuery": "输入字串",
+	
+
+	"selectGroup": "选择组",
+
+	"selectTag": "选择标记",
+	"selectUser": "选择用户",
+	
+	"logOutTitle": "要从 ONLYOFFICE 项目注销吗?",
+
+	"milestonesWithMyTasks": "该任务的重要项目",
+	"noMilestone": "无重要项目",
+	"otherMilestones": "其他重要项目",
+	"discardChanges": "要舍弃修改吗？",
+	"changesWillBeLost": "你的修改将不会被保存。",
+	"discard": "舍弃",
+	
+	"lostOnLeaveWarning": "若离开，所有修改都会丢失。",
+	
+	"taskCreated": "任务已创建",
+	"discardTask": "舍弃任务吗?",
+	"subtaskAccepted": "你接受了小任务",
+	"subtaskCopied": "小任务已经被拷贝",
+	"cantEditSubtask": "你没有修改子任务的权限",
+	
+
+	"subtaskCreated": "小任务已被创建",
+	"projectStatus": "项目状态 {}",
+	"discardMilestone": "要丢弃重要项目吗?",
+	"chooseSection": "选择小节",
+	"discussionCreated": "讨论被创建",
+	"discardDiscussion": "要舍弃讨论吗?",
+	
+	"archived": "已存档",
+
+	"deleteCommentTitle": "要永久删除评注吗?",
+	
+	"deleteCommentWarning": "这些内容将无法复原。",
+	"commentDeleted": "评注已删除",
+	"commentCreated": "评注已被创建",
+
+	
+	"newDiscussion": "新的讨论",
+	"chooseProject": "选择项目",
+	"addSubscribers": "添加订阅者",
+	"text": "文本",
+	"discussionTitle": "讨论标题",
+	"newComment": "新的评注",
+	"replyText": "回复文本",
+	"taskEditing": "任务编辑",
+	"discussionText": "讨论文本",
+	"editProject":"编辑项目",
+	"followUnfollowProject":"关注 / 不再关注项目",
+
+	
+	
+	"error": "错误"
+}
