@@ -61,7 +61,7 @@ class NewPasscodeScreen2 extends StatelessWidget {
               SizedBox(height: h(170)),
               Text(tr('enterPasscode'),
                   style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onBackground)),
+                      color: Get.theme.colors().onBackground)),
               SizedBox(height: h(16)),
               Obx(() {
                 return Text(
@@ -70,9 +70,9 @@ class NewPasscodeScreen2 extends StatelessWidget {
                         : tr('reEnterPasscode'),
                     style: TextStyleHelper.subtitle1(
                         color: controller.passcodeCheckFailed.isTrue
-                            ? Theme.of(context).customColors().error
-                            : Theme.of(context)
-                                .customColors()
+                            ? Get.theme.colors().colorError
+                            : Get.theme
+                                .colors()
                                 .onBackground
                                 .withOpacity(0.6)));
               }),
@@ -112,7 +112,7 @@ class NewPasscodeScreen2 extends StatelessWidget {
                     child: Text(
                       tr('cancel'),
                       style: TextStyleHelper.button(
-                          color: Theme.of(context).customColors().primary),
+                          color: Get.theme.colors().primary),
                     ),
                   ),
                   SizedBox(width: w(25.8)),

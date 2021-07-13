@@ -116,10 +116,7 @@ class DiscussionsHeader extends StatelessWidget {
                   controller.paginationController.total.value.toString()
                 ]),
                 style: TextStyleHelper.body2(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6),
+                  color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
               ),
             ),

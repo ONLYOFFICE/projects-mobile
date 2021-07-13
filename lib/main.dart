@@ -112,7 +112,7 @@ class App extends StatelessWidget {
       title: 'ONLYOFFICE',
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: ThemeService().themeMode,
+      themeMode: ThemeService().savedThemeMode(),
     );
   }
 }

@@ -53,7 +53,7 @@ class NewDiscussionText extends StatelessWidget {
             ? controller.text.value
             : tr('text'),
         textColor: controller.setTextError == true
-            ? Theme.of(context).customColors().error
+            ? Get.theme.colors().colorError
             : null,
         icon: SvgIcons.description,
         onTap: () => Get.toNamed('NewDiscussionTextScreen',

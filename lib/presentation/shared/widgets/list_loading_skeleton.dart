@@ -43,7 +43,7 @@ class ListLoadingSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var _decoration = BoxDecoration(
-        color: Theme.of(context).customColors().bgDescription,
+        color: Get.theme.colors().bgDescription,
         borderRadius: BorderRadius.circular(2));
 
     return Container(
@@ -51,11 +51,11 @@ class ListLoadingSkeleton extends StatelessWidget {
         children: [
           LinearProgressIndicator(
             minHeight: 4,
-            backgroundColor: Theme.of(context).customColors().primary,
+            backgroundColor: Get.theme.colors().primary,
             valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffb5c4d2)),
           ),
           Shimmer.fromColors(
-            baseColor: Theme.of(context).customColors().bgDescription,
+            baseColor: Get.theme.colors().bgDescription,
             highlightColor: Colors.white,
             child: Column(
               children: [
@@ -71,8 +71,7 @@ class ListLoadingSkeleton extends StatelessWidget {
                         width: 40,
                         decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color:
-                                Theme.of(context).customColors().bgDescription),
+                            color: Get.theme.colors().bgDescription),
                       ),
                       Expanded(
                         child: Column(

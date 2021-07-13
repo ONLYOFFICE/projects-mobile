@@ -68,17 +68,11 @@ class _Step4 extends StatelessWidget {
                 focusedBorder: UnderlineInputBorder(
                     borderSide: BorderSide(
                         width: 0.5,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))),
+                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
                 labelStyle: TextStyleHelper.caption(
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6))),
-            style: TextStyleHelper.subtitle1(
-                color: Theme.of(context).customColors().onSurface),
+                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            style:
+                TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           ),
         ),
         const SizedBox(height: 8),

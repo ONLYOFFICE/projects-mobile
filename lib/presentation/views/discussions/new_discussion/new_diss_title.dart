@@ -55,19 +55,15 @@ class NewDiscussionTitle extends StatelessWidget {
             controller: controller.titleController,
             onChanged: controller.changeTitle,
             style: TextStyleHelper.headline6(
-                color: Theme.of(context).customColors().onBackground),
-            cursorColor:
-                Theme.of(context).customColors().primary.withOpacity(0.87),
+                color: Get.theme.colors().onBackground),
+            cursorColor: Get.theme.colors().primary.withOpacity(0.87),
             decoration: InputDecoration(
                 hintText: tr('discussionTitle'),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 hintStyle: TextStyleHelper.headline6(
                   color: controller.setTitleError == true
-                      ? Theme.of(context).customColors().error
-                      : Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.5),
+                      ? Get.theme.colors().colorError
+                      : Get.theme.colors().onSurface.withOpacity(0.5),
                 ),
                 border: InputBorder.none)),
       ),

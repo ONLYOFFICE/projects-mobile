@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -61,11 +62,11 @@ class FilterElement extends StatelessWidget {
         height: 32,
         padding: const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12),
         decoration: BoxDecoration(
-          border: Border.all(color: const Color(0xffD8D8D8), width: 0.5),
+          border: Border.all(color: Get.theme.colors().outline, width: 0.5),
           borderRadius: BorderRadius.circular(16),
           color: isSelected
-              ? Theme.of(context).customColors().primary
-              : Theme.of(context).customColors().bgDescription,
+              ? Get.theme.colors().primary
+              : Get.theme.colors().bgDescription,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -76,9 +77,8 @@ class FilterElement extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
                       color: isSelected
-                          ? Theme.of(context).customColors().onPrimarySurface
-                          : titleColor ??
-                              Theme.of(context).customColors().primary)),
+                          ? Get.theme.colors().onPrimarySurface
+                          : titleColor ?? Get.theme.colors().primary)),
             ),
             if (cancelButtonEnabled)
               Padding(

@@ -62,7 +62,7 @@ class PasscodeScreen extends StatelessWidget {
                     tr('passcodeToUnlock'),
                     textAlign: TextAlign.center,
                     style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onBackground,
+                      color: Get.theme.colors().onBackground,
                     ),
                   ),
                   SizedBox(
@@ -73,8 +73,7 @@ class PasscodeScreen extends StatelessWidget {
                         if (controller.passcodeCheckFailed.isTrue)
                           Text(tr('incorrectPIN'),
                               style: TextStyleHelper.subtitle1(
-                                  color:
-                                      Theme.of(context).customColors().error)),
+                                  color: Get.theme.colors().colorError)),
                         const Flexible(flex: 2, child: SizedBox(height: 32)),
                       ],
                     ),

@@ -47,7 +47,7 @@ class ProjectSearchView extends StatelessWidget {
     var controller = Get.put(ProjectSearchController());
     controller.clearSearch();
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         title: CustomSearchBar(controller: controller),
       ),

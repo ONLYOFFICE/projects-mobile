@@ -46,6 +46,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(SettingsController());
+
     return WillPopScope(
       onWillPop: () async {
         controller.leave();
@@ -74,7 +75,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     SettingTile(
                       text: tr('colorTheme'),
-                      loverText: tr('sameAsSystem'),
+                      loverText: tr(controller.currentTheme.value),
                       icon: SvgIcons.color_scheme,
                       onTap: () => Get.toNamed('ColorThemeSelectionScreen'),
                     ),
@@ -150,10 +151,7 @@ class SettingTile extends StatelessWidget {
                   child: icon != null
                       ? AppIcon(
                           icon: icon,
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6))
+                          color: Get.theme.colors().onSurface.withOpacity(0.6))
                       : null,
                 ),
                 Expanded(
@@ -171,14 +169,12 @@ class SettingTile extends StatelessWidget {
                                     // ignore: prefer_if_null_operators
                                     color: textColor != null
                                         ? textColor
-                                        : Theme.of(context)
-                                            .customColors()
-                                            .onBackground)),
+                                        : Get.theme.colors().onBackground)),
                         if (loverText != null && loverText.isNotEmpty)
                           Text(loverText,
                               style: TextStyleHelper.body2(
-                                  color: Theme.of(context)
-                                      .customColors()
+                                  color: Get.theme
+                                      .colors()
                                       .onBackground
                                       .withOpacity(0.75))),
                       ],

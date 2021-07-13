@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -116,16 +117,13 @@ class _DiscussionInfo extends StatelessWidget {
           RichText(
             text: TextSpan(
               style: TextStyleHelper.caption(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6)),
+                  color: Get.theme.colors().onSurface.withOpacity(0.6)),
               children: [
                 if (discussion.status == 1)
                   TextSpan(
                       text: '${tr('archived')} • ',
                       style: TextStyleHelper.status(
-                          color: Theme.of(context).customColors().onSurface)),
+                          color: Get.theme.colors().onSurface)),
                 TextSpan(text: formatedDate(discussion.created)),
                 const TextSpan(text: ' • '),
                 TextSpan(text: discussion.createdBy.displayName)
@@ -152,15 +150,11 @@ class _CommentsCount extends StatelessWidget {
       children: [
         AppIcon(
             icon: SvgIcons.comments,
-            color:
-                Theme.of(context).customColors().onBackground.withOpacity(0.6)),
+            color: Get.theme.colors().onBackground.withOpacity(0.6)),
         const SizedBox(width: 5.33),
         Text(commentsCount.toString(),
             style: TextStyleHelper.body2(
-                color: Theme.of(context)
-                    .customColors()
-                    .onBackground
-                    .withOpacity(0.6))),
+                color: Get.theme.colors().onBackground.withOpacity(0.6))),
       ],
     );
   }

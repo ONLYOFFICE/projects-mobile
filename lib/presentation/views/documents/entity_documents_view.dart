@@ -34,7 +34,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart';
+
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
@@ -161,7 +161,7 @@ class _DocsTitle extends StatelessWidget {
                   width: 24,
                   height: 24,
                   icon: SvgIcons.search,
-                  color: Theme.of(context).customColors().primary,
+                  color: Get.theme.colors().primary,
                 ),
               ),
               const SizedBox(width: 24),

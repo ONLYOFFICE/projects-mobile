@@ -64,7 +64,7 @@ class ConfirmFiltersButton extends StatelessWidget {
                       top: 10,
                       bottom: 12)),
               backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                return Theme.of(context).customColors().primary;
+                return Get.theme.colors().primary;
               }),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
@@ -74,8 +74,8 @@ class ConfirmFiltersButton extends StatelessWidget {
               //   filterController.suitableResultCount.value.toString(),
               //   filterController.filtersTitle
               // ]),
-              style: TextStyleHelper.button(
-                  color: Theme.of(context).customColors().onPrimary)),
+              style:
+                  TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
         ),
       ),
     );

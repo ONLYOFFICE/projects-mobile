@@ -82,9 +82,9 @@ class TasksOverviewScreen extends StatelessWidget {
                         trimCollapsedText: tr('showMore'),
                         trimExpandedText: tr('showLess'),
                         moreStyle: TextStyleHelper.body2(
-                            color: Theme.of(context).customColors().links),
+                            color: Get.theme.colors().links),
                         lessStyle: TextStyleHelper.body2(
-                            color: Theme.of(context).customColors().links),
+                            color: Get.theme.colors().links),
                       ),
                     ),
                   ),
@@ -94,7 +94,7 @@ class TasksOverviewScreen extends StatelessWidget {
                   caption: '${tr('project')}:',
                   subtitle: task.projectOwner.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
-                      color: Theme.of(context).customColors().links),
+                      color: Get.theme.colors().links),
                 ),
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
@@ -105,7 +105,7 @@ class TasksOverviewScreen extends StatelessWidget {
                       caption: '${tr('milestone')}:',
                       subtitle: task.milestone.title,
                       subtitleStyle: TextStyleHelper.subtitle1(
-                          color: Theme.of(context).customColors().links)),
+                          color: Get.theme.colors().links)),
                 if (task.startDate != null) const SizedBox(height: 20),
                 if (task.startDate != null)
                   InfoTile(
@@ -144,8 +144,8 @@ class TasksOverviewScreen extends StatelessWidget {
                       suffix: IconButton(
                           icon: Icon(Icons.arrow_forward_ios_rounded,
                               size: 20,
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onSurface
                                   .withOpacity(0.6)),
                           onPressed: () {})),

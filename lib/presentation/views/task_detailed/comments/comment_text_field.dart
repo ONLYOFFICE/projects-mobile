@@ -51,7 +51,7 @@ class CommentTextField extends StatelessWidget {
           hintText: tr('replyText'),
           hintStyle: TextStyle(
               color: controller.setTitleError == true
-                  ? Theme.of(context).customColors().error
+                  ? Get.theme.colors().colorError
                   : null),
         ),
       ),

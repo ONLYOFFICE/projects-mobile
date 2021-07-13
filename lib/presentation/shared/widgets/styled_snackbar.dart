@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -58,10 +59,7 @@ SnackBar styledSnackBar({
                   child: Text(
                     buttonText,
                     style: TextStyleHelper.button(
-                            color: Theme.of(context)
-                                .customColors()
-                                .primary
-                                .withOpacity(0.5))
+                            color: Get.theme.colors().primary.withOpacity(0.5))
                         .copyWith(height: 1),
                   ),
                 ),
@@ -80,10 +78,8 @@ SnackBar styledSnackBar({
                 child: Center(
                   child: Text(tr('ok'),
                       style: TextStyleHelper.button(
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .primary
-                                  .withOpacity(0.5))
+                              color:
+                                  Get.theme.colors().primary.withOpacity(0.5))
                           .copyWith(height: 1)),
                 ),
               ),
@@ -91,7 +87,7 @@ SnackBar styledSnackBar({
           ),
       ],
     ),
-    backgroundColor: Theme.of(context).customColors().snackBarColor,
+    backgroundColor: Get.theme.colors().snackBarColor,
     padding: const EdgeInsets.only(top: 2, bottom: 2, left: 16, right: 10),
     margin: const EdgeInsets.only(left: 8, right: 8, bottom: 9),
     behavior: SnackBarBehavior.floating,

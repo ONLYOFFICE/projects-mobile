@@ -44,12 +44,12 @@ class _Status extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('active'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.status['active'],
               onTap: () => filterController.changeStatus('active')),
           FilterElement(
               title: tr('closed'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.status['closed'],
               onTap: () => filterController.changeStatus('closed')),
         ],

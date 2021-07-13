@@ -58,7 +58,7 @@ class TagsSelectionView extends StatelessWidget {
     controller.setup(projController);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       floatingActionButton: AnimatedPadding(
         padding: const EdgeInsets.only(bottom: 0),
         duration: const Duration(milliseconds: 100),
@@ -146,7 +146,7 @@ class _Header extends StatelessWidget {
                     child: Text(
                       title,
                       style: TextStyleHelper.headline6(
-                          color: Theme.of(context).customColors().onSurface),
+                          color: Get.theme.colors().onSurface),
                     ),
                   ),
                 ],

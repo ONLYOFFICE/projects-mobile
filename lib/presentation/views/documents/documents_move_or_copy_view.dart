@@ -164,7 +164,7 @@ class _DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () {
@@ -203,8 +203,8 @@ class _DocumentsScreen extends StatelessWidget {
                     ? Border(
                         top: BorderSide(
                             width: 0.5,
-                            color: Theme.of(context)
-                                .customColors()
+                            color: Get.theme
+                                .colors()
                                 .onBackground
                                 .withOpacity(0.2)),
                       )
@@ -281,7 +281,7 @@ class _Title extends StatelessWidget {
                   width: 24,
                   height: 24,
                   icon: SvgIcons.search,
-                  color: Theme.of(context).customColors().primary,
+                  color: Get.theme.colors().primary,
                 ),
               ),
               const SizedBox(width: 24),
@@ -338,7 +338,7 @@ class _MoveFolderCell extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 1,
-                      color: const Color(0xffD8D8D8),
+                      color: Get.theme.colors().outline,
                     ),
                     color: Colors.white,
                     shape: BoxShape.circle,
@@ -372,10 +372,8 @@ class _MoveFolderCell extends StatelessWidget {
                       ]),
                       // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6))),
+                          color:
+                              Get.theme.colors().onSurface.withOpacity(0.6))),
                 ],
               ),
             ),
@@ -398,7 +396,7 @@ class MoveDocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () => Column(
@@ -444,8 +442,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                         ? Border(
                             top: BorderSide(
                                 width: 0.5,
-                                color: Theme.of(context)
-                                    .customColors()
+                                color: Get.theme
+                                    .colors()
                                     .onBackground
                                     .withOpacity(0.2)),
                           )

@@ -51,61 +51,44 @@ class DashboardView extends StatelessWidget {
     var dashboardController = Get.put(DashboardController());
 
     return Scaffold(
-      backgroundColor: Theme.of(context).customColors().bgDescription,
+      backgroundColor: Get.theme.colors().background,
       appBar: StyledAppBar(
-        bgColor: Theme.of(context).customColors().bgDescription,
+        bgColor: Get.theme.colors().background,
         title: Title(controller: dashboardController),
         // titleHeight: 50,
-        // elevation: 0,
+        elevation: 0,
         showBackButton: false,
       ),
-      body: Obx(
-        () => DecoratedBox(
-          position: DecorationPosition.foreground,
-          decoration: BoxDecoration(
-            border: dashboardController.needToShowDivider.isTrue
-                ? Border(
-                    top: BorderSide(
-                        width: 0.5,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onBackground
-                            .withOpacity(0.2)),
-                  )
-                : null,
+      body: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        controller: dashboardController.scrollController,
+        children: <Widget>[
+          DashboardCardView(
+            title: tr('myTasks'),
+            overline: tr('tasks'),
+            controller: dashboardController.myTaskController,
           ),
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-            controller: dashboardController.scrollController,
-            children: <Widget>[
-              DashboardCardView(
-                title: tr('myTasks'),
-                overline: tr('tasks'),
-                controller: dashboardController.myTaskController,
-              ),
-              DashboardCardView(
-                title: tr('upcomingTasks'),
-                overline: tr('tasks'),
-                controller: dashboardController.upcomingTaskscontroller,
-              ),
-              DashboardCardView(
-                title: tr('myProjects'),
-                overline: tr('projects'),
-                controller: dashboardController.myProjectsController,
-              ),
-              DashboardCardView(
-                title: tr('projectsIFolow'),
-                overline: tr('projects'),
-                controller: dashboardController.folowedProjectsController,
-              ),
-              DashboardCardView(
-                title: tr('activeProjects'),
-                overline: tr('projects'),
-                controller: dashboardController.activeProjectsController,
-              ),
-            ],
+          DashboardCardView(
+            title: tr('upcomingTasks'),
+            overline: tr('tasks'),
+            controller: dashboardController.upcomingTaskscontroller,
           ),
-        ),
+          DashboardCardView(
+            title: tr('myProjects'),
+            overline: tr('projects'),
+            controller: dashboardController.myProjectsController,
+          ),
+          DashboardCardView(
+            title: tr('projectsIFolow'),
+            overline: tr('projects'),
+            controller: dashboardController.folowedProjectsController,
+          ),
+          DashboardCardView(
+            title: tr('activeProjects'),
+            overline: tr('projects'),
+            controller: dashboardController.activeProjectsController,
+          ),
+        ],
       ),
     );
   }
@@ -130,6 +113,7 @@ class DashboardCardView extends StatelessWidget {
       width: double.maxFinite,
       child: Card(
         elevation: 1,
+        color: Get.theme.colors().surface,
         child: Obx(
           () => Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -153,10 +137,8 @@ class DashboardCardView extends StatelessWidget {
                           Text(
                             overline.toUpperCase(),
                             style: TextStyleHelper.overline(
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .onSurface
-                                  .withOpacity(0.6),
+                              color:
+                                  Get.theme.colors().onSurface.withOpacity(0.6),
                             ),
                           ),
                           Text(
@@ -173,9 +155,7 @@ class DashboardCardView extends StatelessWidget {
                             height: 28,
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             decoration: BoxDecoration(
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .bgDescription,
+                              color: Get.theme.colors().bgDescription,
                               borderRadius: BorderRadius.circular(30),
                             ),
                             child: Center(
@@ -254,8 +234,8 @@ class DashboardCardView extends StatelessWidget {
                                       tr('dashboardNoActive',
                                           args: [overline.toLowerCase()]),
                                       style: TextStyleHelper.subtitle1(
-                                        color: Theme.of(context)
-                                            .customColors()
+                                        color: Get.theme
+                                            .colors()
                                             .onSurface
                                             .withOpacity(0.6),
                                       ),
@@ -290,17 +270,15 @@ class DashboardCardView extends StatelessWidget {
                                           ? Text(
                                               tr('viewAll').toUpperCase(),
                                               style: TextStyleHelper.button(
-                                                color: Theme.of(context)
-                                                    .customColors()
-                                                    .primary,
+                                                color:
+                                                    Get.theme.colors().primary,
                                               ),
                                             )
                                           : Text(
                                               tr('viewLess').toUpperCase(),
                                               style: TextStyleHelper.button(
-                                                color: Theme.of(context)
-                                                    .customColors()
-                                                    .primary,
+                                                color:
+                                                    Get.theme.colors().primary,
                                               ),
                                             ),
                                     ),

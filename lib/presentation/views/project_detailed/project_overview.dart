@@ -69,7 +69,7 @@ class ProjectOverview extends StatelessWidget {
                     caption: tr('project').toUpperCase(),
                     subtitle: projectController.projectTitleText.value,
                     subtitleStyle: TextStyleHelper.headline7(
-                        color: Theme.of(context).customColors().onBackground),
+                        color: Get.theme.colors().onBackground),
                   )),
               const SizedBox(height: 20),
               ProjectStatusButton(projectController: projectController),
@@ -92,7 +92,7 @@ class ProjectOverview extends StatelessWidget {
                       trimCollapsedText: tr('showMore'),
                       trimExpandedText: tr('showLess'),
                       moreStyle: TextStyleHelper.body2(
-                          color: Theme.of(context).customColors().links),
+                          color: Get.theme.colors().links),
                     ),
                   ),
                 ),
@@ -102,7 +102,7 @@ class ProjectOverview extends StatelessWidget {
                     caption: tr('projectManager'),
                     subtitle: projectController.managerText.value,
                     subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Theme.of(context).customColors().onSurface),
+                        color: Get.theme.colors().onSurface),
                   )),
               const SizedBox(height: 20),
               Obx(
@@ -121,7 +121,7 @@ class ProjectOverview extends StatelessWidget {
                     subtitle: plural(
                         'members', projectController.teamMembersCount.value),
                     subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Theme.of(context).customColors().onSurface),
+                        color: Get.theme.colors().onSurface),
                   ),
                 ),
               ),

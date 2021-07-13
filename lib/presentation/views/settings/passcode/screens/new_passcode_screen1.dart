@@ -71,14 +71,11 @@ class NewPasscodeScreen1 extends StatelessWidget {
               SizedBox(height: h(170)),
               Text(title,
                   style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onBackground)),
+                      color: Get.theme.colors().onBackground)),
               SizedBox(height: h(16)),
               Text(caption,
                   style: TextStyleHelper.subtitle1(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onBackground
-                          .withOpacity(0.6))),
+                      color: Get.theme.colors().onBackground.withOpacity(0.6))),
               SizedBox(height: h(32)),
               Obx(
                 () => Row(
@@ -114,7 +111,7 @@ class NewPasscodeScreen1 extends StatelessWidget {
                     child: Text(
                       tr('cancel'),
                       style: TextStyleHelper.button(
-                          color: Theme.of(context).customColors().primary),
+                          color: Get.theme.colors().primary),
                     ),
                   ),
                   SizedBox(width: w(25.8)),

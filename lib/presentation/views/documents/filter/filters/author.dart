@@ -46,7 +46,7 @@ class _Author extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               isSelected: filterController.author['me'],
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               onTap: () => filterController.changeAuthorFilter('me')),
           FilterElement(
               title: filterController.author['users'].isEmpty

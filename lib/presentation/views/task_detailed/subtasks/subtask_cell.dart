@@ -97,8 +97,8 @@ class SubtaskCell extends StatelessWidget {
                                 color:
                                     subtaskController.subtask.value.status == 2
                                         ? const Color(0xffc2c2c2)
-                                        : Theme.of(context)
-                                            .customColors()
+                                        : Get.theme
+                                            .colors()
                                             .onBackground
                                             .withOpacity(0.6))),
                       ],
@@ -125,9 +125,7 @@ class SubtaskCell extends StatelessWidget {
                                 value: 'delete',
                                 child: Text(tr('delete'),
                                     style: TextStyleHelper.subtitle1(
-                                        color: Theme.of(context)
-                                            .customColors()
-                                            .error))),
+                                        color: Get.theme.colors().colorError))),
                         ];
                       },
                     ),

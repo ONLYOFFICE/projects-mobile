@@ -33,6 +33,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/images_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
@@ -58,10 +59,8 @@ class CustomNetworkImage extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting)
           return CircleAvatar(
-              backgroundColor: Theme.of(context)
-                  .customColors()
-                  .bgDescription
-                  .withOpacity(0.4));
+              backgroundColor:
+                  Get.theme.colors().bgDescription.withOpacity(0.4));
         return CachedNetworkImage(
           imageUrl: ImagesController.getImagePath(image),
           httpHeaders: snapshot.data,
@@ -69,10 +68,8 @@ class CustomNetworkImage extends StatelessWidget {
           height: height,
           width: width,
           placeholder: (context, url) => CircleAvatar(
-              backgroundColor: Theme.of(context)
-                  .customColors()
-                  .bgDescription
-                  .withOpacity(0.4)),
+              backgroundColor:
+                  Get.theme.colors().bgDescription.withOpacity(0.4)),
         );
       },
     );

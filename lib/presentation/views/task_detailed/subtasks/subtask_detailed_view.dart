@@ -79,7 +79,7 @@ class SubtaskDetailedView extends StatelessWidget {
                         child: Text(
                           tr('delete'),
                           style: TextStyleHelper.subtitle1(
-                              color: Theme.of(context).customColors().error),
+                              color: Get.theme.colors().colorError),
                         ),
                       ),
                   ];
@@ -134,18 +134,16 @@ class SubtaskDetailedView extends StatelessWidget {
                         width: 56,
                         child: AppIcon(
                             icon: SvgIcons.person,
-                            color: Theme.of(context)
-                                .customColors()
-                                .onSurface
-                                .withOpacity(0.6))),
+                            color:
+                                Get.theme.colors().onSurface.withOpacity(0.6))),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(tr('assignedTo'),
                               style: TextStyleHelper.caption(
-                                  color: Theme.of(context)
-                                      .customColors()
+                                  color: Get.theme
+                                      .colors()
                                       .onBackground
                                       .withOpacity(0.75))),
                           Text(
@@ -154,8 +152,7 @@ class SubtaskDetailedView extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyleHelper.subtitle1(
-                                color:
-                                    Theme.of(context).customColors().onSurface),
+                                color: Get.theme.colors().onSurface),
                           ),
                         ],
                       ),
@@ -163,10 +160,8 @@ class SubtaskDetailedView extends StatelessWidget {
                     if (_subtask.responsible != null && _subtask.canEdit)
                       IconButton(
                         icon: Icon(Icons.clear_rounded,
-                            color: Theme.of(context)
-                                .customColors()
-                                .onSurface
-                                .withOpacity(0.6)),
+                            color:
+                                Get.theme.colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
                             taskId: _subtask.taskId, subtaskId: _subtask.id),
                       )

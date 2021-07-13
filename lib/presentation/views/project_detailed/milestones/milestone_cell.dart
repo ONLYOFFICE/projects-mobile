@@ -116,16 +116,10 @@ class _SecondColumn extends StatelessWidget {
             if (itemController.milestone.value.status == 1) {
               style = TextStyleHelper.projectTitle.copyWith(
                   decoration: TextDecoration.lineThrough,
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6));
+                  color: Get.theme.colors().onSurface.withOpacity(0.6));
             } else if (itemController.milestone.value.status == 2) {
               style = TextStyleHelper.projectTitle.copyWith(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6));
+                  color: Get.theme.colors().onSurface.withOpacity(0.6));
             } else {
               style = TextStyleHelper.projectTitle;
             }
@@ -142,8 +136,8 @@ class _SecondColumn extends StatelessWidget {
             children: [
               Obx(() {
                 var color = itemController.milestone.value.canEdit
-                    ? Theme.of(context).customColors().primary
-                    : Theme.of(context).customColors().onBackground;
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground;
                 return Text(
                   itemController.statusName,
                   style: TextStyleHelper.status(color: color),
@@ -151,20 +145,14 @@ class _SecondColumn extends StatelessWidget {
               }),
               Text(' • ',
                   style: TextStyleHelper.caption(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6))),
+                      color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
                     milestone.responsible.displayName.replaceAll(' ', '\u00A0'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))),
+                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
               ),
             ],
           ),
@@ -196,10 +184,8 @@ class _ThirdColumn extends StatelessWidget {
           Text(
             formatedDate(milestone.deadline),
             style: milestone.deadline.isBefore(_now)
-                ? TextStyleHelper.caption(
-                    color: Theme.of(context).customColors().error)
-                : TextStyleHelper.caption(
-                    color: Theme.of(context).customColors().onSurface),
+                ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
+                : TextStyleHelper.caption(color: Get.theme.colors().onSurface),
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -214,8 +200,7 @@ class _ThirdColumn extends StatelessWidget {
             Text(
               milestone.activeTaskCount.toString(),
               style: TextStyleHelper.body2(
-                color:
-                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
               ),
             ),
           ],
@@ -241,8 +226,8 @@ class _MilestoneIcon extends StatelessWidget {
       children: [
         Obx(() {
           var color = itemController.milestone.value.canEdit
-              ? Theme.of(context).customColors().primary
-              : Theme.of(context).customColors().onBackground;
+              ? Get.theme.colors().primary
+              : Get.theme.colors().background;
           return Container(
             width: 48,
             child: Stack(
@@ -265,19 +250,16 @@ class _MilestoneIcon extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
-                        color: Theme.of(context)
-                            .customColors()
-                            .primary
-                            .withOpacity(0.1),
+                        color: Get.theme.colors().primary.withOpacity(0.1),
                       ),
-                      color: Colors.white,
+                      color: Get.theme.colors().background,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
                       padding: const EdgeInsets.all(4),
                       child: AppIcon(
                         icon: SvgIcons.milestone,
-                        color: const Color(0xff666666),
+                        color: Get.theme.colors().onBackground.withOpacity(0.6),
                         width: 16,
                         height: 16,
                       ),

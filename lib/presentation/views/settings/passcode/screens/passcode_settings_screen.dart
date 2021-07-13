@@ -85,9 +85,8 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           onPressed: controller.tryChangingPasscode,
                           child: Text(
                             tr('changePasscode'),
-                            style: TextStyleHelper.projectTitle.copyWith(
-                                color:
-                                    Theme.of(context).customColors().primary),
+                            style: TextStyleHelper.projectTitle
+                                .copyWith(color: Get.theme.colors().primary),
                           ),
                         ),
                       ),
@@ -99,7 +98,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         text: TextSpan(
                           text: tr('passcodeLock'),
                           style: TextStyleHelper.caption().copyWith(
-                            color: Theme.of(context).customColors().onSurface,
+                            color: Get.theme.colors().onSurface,
                             fontWeight: FontWeight.w700,
                           ),
                           children: [

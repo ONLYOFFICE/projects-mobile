@@ -60,31 +60,23 @@ class TaskTitle extends StatelessWidget {
               if (showCaption)
                 Text('${tr('taskTitle')}:',
                     style: TextStyleHelper.caption(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onBackground
-                            .withOpacity(0.75))),
+                        color:
+                            Get.theme.colors().onBackground.withOpacity(0.75))),
               TextField(
                   focusNode: focusOnTitle ? controller.titleFocus : null,
                   maxLines: null,
                   controller: controller.titleController,
                   onChanged: controller.changeTitle,
                   style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onBackground),
-                  cursorColor: Theme.of(context)
-                      .customColors()
-                      .primary
-                      .withOpacity(0.87),
+                      color: Get.theme.colors().onBackground),
+                  cursorColor: Get.theme.colors().primary.withOpacity(0.87),
                   decoration: InputDecoration(
                       hintText: tr('taskTitle'),
                       contentPadding: const EdgeInsets.symmetric(vertical: 0),
                       hintStyle: TextStyleHelper.headline6(
                           color: controller.setTitleError.isTrue
-                              ? Theme.of(context).customColors().error
-                              : Theme.of(context)
-                                  .customColors()
-                                  .onSurface
-                                  .withOpacity(0.5)),
+                              ? Get.theme.colors().colorError
+                              : Get.theme.colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none)),
               const SizedBox(height: 10)
             ],

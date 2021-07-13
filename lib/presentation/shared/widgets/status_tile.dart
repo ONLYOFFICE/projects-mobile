@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -46,7 +47,7 @@ class StatusTile extends StatelessWidget {
   Widget build(BuildContext context) {
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: Theme.of(context).customColors().bgDescription,
+          color: Get.theme.colors().bgDescription,
           borderRadius: BorderRadius.circular(6));
     }
 
@@ -75,7 +76,7 @@ class StatusTile extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
                 Icons.done_rounded,
-                color: Theme.of(context).customColors().primary,
+                color: Get.theme.colors().primary,
               ),
             )
         ],

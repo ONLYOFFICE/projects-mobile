@@ -105,9 +105,7 @@ class ReplyCommentView extends StatelessWidget {
                       if (comment.userFullName != null)
                         Text(comment.userFullName,
                             style: TextStyleHelper.subtitle1(
-                                color: Theme.of(context)
-                                    .customColors()
-                                    .onSurface)),
+                                color: Get.theme.colors().onSurface)),
                       Text(
                         comment.commentBody,
                         maxLines: 1,

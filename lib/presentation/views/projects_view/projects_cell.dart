@@ -120,8 +120,8 @@ class ProjectIcon extends StatelessWidget {
         const SizedBox(width: 16),
         Obx(() {
           var color = itemController.canEdit.isTrue
-              ? Theme.of(context).customColors().primary
-              : Theme.of(context).customColors().onBackground;
+              ? Get.theme.colors().primary
+              : Get.theme.colors().onBackground;
           return Container(
             width: 48,
             child: Stack(
@@ -144,12 +144,9 @@ class ProjectIcon extends StatelessWidget {
                     decoration: BoxDecoration(
                       border: Border.all(
                         width: 1,
-                        color: Theme.of(context)
-                            .customColors()
-                            .primary
-                            .withOpacity(0.1),
+                        color: Get.theme.colors().primary.withOpacity(0.1),
                       ),
-                      color: Colors.white,
+                      color: Get.theme.colors().background,
                       shape: BoxShape.circle,
                     ),
                     child: Padding(
@@ -199,16 +196,10 @@ class _SecondColumn extends StatelessWidget {
               if (itemController.status.value == 1) {
                 style = TextStyleHelper.projectTitle.copyWith(
                     decoration: TextDecoration.lineThrough,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6));
+                    color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else if (itemController.status.value == 2) {
                 style = TextStyleHelper.projectTitle.copyWith(
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6));
+                    color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else {
                 style = TextStyleHelper.projectTitle;
               }
@@ -226,8 +217,8 @@ class _SecondColumn extends StatelessWidget {
             children: [
               Obx(() {
                 var color = itemController.canEdit.isTrue
-                    ? Theme.of(context).customColors().primary
-                    : Theme.of(context).customColors().onBackground;
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground;
                 return Text(
                   itemController.statusName,
                   style: TextStyleHelper.status(color: color),
@@ -235,20 +226,14 @@ class _SecondColumn extends StatelessWidget {
               }),
               Text(' • ',
                   style: TextStyleHelper.caption(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6))),
+                      color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
                     item.responsible.displayName.replaceAll(' ', '\u00A0'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))),
+                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
               ),
             ],
           ),
@@ -278,7 +263,8 @@ class _ThirdColumn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             AppIcon(
-                icon: SvgIcons.check_square, color: const Color(0xff666666)),
+                icon: SvgIcons.check_square,
+                color: Get.theme.colors().onSurface),
             Text(
               item.taskCount.toString(),
               style: TextStyleHelper.projectCompleatedTasks,
@@ -302,7 +288,7 @@ void showsStatusesBS({context, itemController}) async {
         _getInititalSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
-        color: Theme.of(context).customColors().onPrimarySurface,
+        color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
       return Column(
@@ -312,8 +298,7 @@ void showsStatusesBS({context, itemController}) async {
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(
-                    color: Theme.of(context).customColors().onSurface)),
+                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
           ),
           const SizedBox(height: 18.5),
         ],
@@ -328,10 +313,7 @@ void showsStatusesBS({context, itemController}) async {
                 border: Border(
                   top: BorderSide(
                       width: 1,
-                      color: Theme.of(context)
-                          .customColors()
-                          .outline
-                          .withOpacity(0.5)),
+                      color: Get.theme.colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -352,10 +334,8 @@ void showsStatusesBS({context, itemController}) async {
                           icon: AppIcon(
                               icon: _statusesController.getStatusImageString(i),
                               color: itemController.projectData.canEdit
-                                  ? Theme.of(context).customColors().primary
-                                  : Theme.of(context)
-                                      .customColors()
-                                      .onBackground),
+                                  ? Get.theme.colors().primary
+                                  : Get.theme.colors().onBackground),
                           selected: _statusesController.statuses[i] ==
                               itemController.projectData.status),
                     ),

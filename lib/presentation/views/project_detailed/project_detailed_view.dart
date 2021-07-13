@@ -133,7 +133,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             projectDetailed.canEdit
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => Get.to(const EditProjectView(),
+                    onPressed: () => Get.to(
+                        EditProjectView(projectDetailed: projectDetailed),
                         arguments: {'projectDetailed': projectDetailed}))
                 : const SizedBox(),
             _ProjectContextMenu(controller: projectController)
@@ -143,10 +144,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             child: TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Theme.of(context).customColors().primary,
-                labelColor: Theme.of(context).customColors().onSurface,
+                indicatorColor: Get.theme.colors().primary,
+                labelColor: Get.theme.colors().onSurface,
                 unselectedLabelColor:
-                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+                    Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
@@ -214,15 +215,13 @@ class _ProjectContextMenu extends StatelessWidget {
           ),
           if (controller.projectDetailed.canDelete)
             PopupMenuItem(
-              textStyle: Theme.of(context)
-                  .popupMenuTheme
-                  .textStyle
-                  .copyWith(color: Theme.of(context).customColors().error),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  .copyWith(color: Get.theme.colors().colorError),
               value: 'delete',
               child: Text(
                 tr('delete'),
                 style: TextStyleHelper.subtitle1(
-                    color: Theme.of(context).customColors().error),
+                    color: Get.theme.colors().colorError),
               ),
             )
         ];

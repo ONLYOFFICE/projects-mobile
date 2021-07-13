@@ -69,7 +69,7 @@ class TagItem extends StatelessWidget {
                 return SizedBox(
                     width: 72,
                     child: Icon(Icons.check_box,
-                        color: Theme.of(context).customColors().primary));
+                        color: Get.theme.colors().primary));
               } else {
                 return const SizedBox(
                   width: 72,

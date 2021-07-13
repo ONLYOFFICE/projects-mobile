@@ -44,12 +44,12 @@ class _Milestone extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('milestonesWithMyTasks'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.milestone['my'],
               onTap: () => filterController.changeMilestone('my')),
           FilterElement(
               title: tr('noMilestone'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.milestone['no'],
               onTap: () => filterController.changeMilestone('no')),
           FilterElement(

@@ -60,8 +60,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
           controller: controller.textController.value,
           autofocus: true,
           maxLines: null,
-          style: TextStyleHelper.subtitle1(
-              color: Theme.of(context).customColors().onSurface),
+          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           decoration: InputDecoration.collapsed(
               hintText: tr('discussionText'),
               hintStyle: TextStyleHelper.subtitle1()),

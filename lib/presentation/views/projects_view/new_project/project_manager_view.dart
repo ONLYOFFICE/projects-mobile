@@ -61,7 +61,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
     controller.setupUsersSelection();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
         bottom: Container(

@@ -69,7 +69,7 @@ class MilestoneFilterScreen extends StatelessWidget {
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
-                      color: Theme.of(context).customColors().systemBlue)))
+                      color: Get.theme.colors().systemBlue)))
         ],
       ),
       body: Stack(
