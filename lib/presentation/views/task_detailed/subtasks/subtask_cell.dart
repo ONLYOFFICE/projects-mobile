@@ -114,16 +114,16 @@ class SubtaskCell extends StatelessWidget {
                           if (subtask.canEdit && subtask.responsible == null)
                             PopupMenuItem(
                                 value: 'acceptSubtask',
-                                child: Text('acceptSubtask',
+                                child: Text(tr('acceptSubtask'),
                                     style: TextStyleHelper.subtitle1())),
                           PopupMenuItem(
                               value: 'copySubtask',
-                              child: Text('copySubtask',
+                              child: Text(tr('copySubtask'),
                                   style: TextStyleHelper.subtitle1())),
                           if (subtask.canEdit)
                             PopupMenuItem(
                                 value: 'delete',
-                                child: Text('delete',
+                                child: Text(tr('delete'),
                                     style: TextStyleHelper.subtitle1(
                                         color: Theme.of(context)
                                             .customColors()

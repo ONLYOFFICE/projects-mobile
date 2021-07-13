@@ -477,6 +477,15 @@
 
 	"noDocumentsCreated": "No documents here yet",
 	"noDocumentsMatching": "There are no documents matching these filters",
+
+	"noPeopleMatching": "There are no people matching these filters",
+
+	"selectAll": "Select all",
+	"changeStatus": "Change status",
+	"deselect": "Deselect",
+	"allTasks": "All tasks",
+	"accesRights": "Acces rights",
+	
 	
 	"error": "Error"
 }
