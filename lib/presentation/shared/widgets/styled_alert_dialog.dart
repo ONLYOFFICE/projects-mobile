@@ -57,7 +57,7 @@ class StyledAlertDialog extends StatelessWidget {
           child: Text(
             acceptText ?? tr('accept'),
             style: TextStyleHelper.button(
-                color: acceptColor ?? Theme.of(context).customColors().error),
+                color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
       ],
@@ -110,7 +110,7 @@ class SingleButtonDialog extends StatelessWidget {
           child: Text(
             acceptText ?? tr('accept'),
             style: TextStyleHelper.button(
-                color: acceptColor ?? Theme.of(context).customColors().error),
+                color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
       ],

@@ -24,7 +24,7 @@ class TasksView extends StatelessWidget {
     controller.loadTasks();
     return Obx(
       () => Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Get.theme.backgroundColor,
         floatingActionButton: Obx(() => AnimatedPadding(
             padding:
                 EdgeInsets.only(bottom: controller.fabIsRaised.isTrue ? 48 : 0),
@@ -45,7 +45,7 @@ class TasksView extends StatelessWidget {
                 width: 24,
                 height: 24,
                 icon: SvgIcons.search,
-                color: Theme.of(context).customColors().primary,
+                color: Get.theme.colors().primary,
               ),
               onPressed: controller.showSearch,
             ),
@@ -183,10 +183,7 @@ class TasksHeader extends StatelessWidget {
                   controller.paginationController.total.value.toString()
                 ]),
                 style: TextStyleHelper.body2(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6),
+                  color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
               ),
             ),

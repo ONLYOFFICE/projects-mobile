@@ -51,9 +51,8 @@ class NavigationView extends StatelessWidget {
                   if (controller.onMoreView) const Expanded(child: MoreView()),
                   BottomNavigationBar(
                     unselectedItemColor:
-                        Theme.of(context).customColors().inactiveTabTitle,
-                    selectedItemColor:
-                        Theme.of(context).customColors().activeTabTitle,
+                        Get.theme.colors().onNavBar.withOpacity(0.4),
+                    selectedItemColor: Get.theme.colors().onNavBar,
                     onTap: controller.changeTabIndex,
                     currentIndex:
                         controller.onMoreView || controller.tabIndex > 3
@@ -62,63 +61,50 @@ class NavigationView extends StatelessWidget {
                     showSelectedLabels: true,
                     showUnselectedLabels: true,
                     type: BottomNavigationBarType.fixed,
-                    backgroundColor:
-                        Theme.of(context).customColors().primarySurface,
+                    backgroundColor: Get.theme.colors().primarySurface,
                     elevation: 0,
                     items: [
                       BottomNavigationBarItem(
                         icon: AppIcon(
                             icon: SvgIcons.tab_bar_dashboard,
-                            color: Theme.of(context)
-                                .customColors()
-                                .onNavBar
-                                .withOpacity(0.4),
+                            color: Get.theme.colors().onNavBar.withOpacity(0.4),
                             height: _iconSize),
                         activeIcon: AppIcon(
                             icon: SvgIcons.tab_bar_dashboard,
-                            color: Theme.of(context).customColors().onNavBar,
+                            color: Get.theme.colors().onNavBar,
                             height: _iconSize),
                         label: tr('dashboard'),
                       ),
                       BottomNavigationBarItem(
                         icon: AppIcon(
                             icon: SvgIcons.tab_bar_tasks,
-                            color: Theme.of(context)
-                                .customColors()
-                                .onNavBar
-                                .withOpacity(0.4),
+                            color: Get.theme.colors().onNavBar.withOpacity(0.4),
                             height: _iconSize),
                         activeIcon: AppIcon(
                             icon: SvgIcons.tab_bar_tasks,
-                            color: Theme.of(context).customColors().onNavBar,
+                            color: Get.theme.colors().onNavBar,
                             height: _iconSize),
                         label: tr('tasks'),
                       ),
                       BottomNavigationBarItem(
                         icon: AppIcon(
                             icon: SvgIcons.tab_bar_projects,
-                            color: Theme.of(context)
-                                .customColors()
-                                .onNavBar
-                                .withOpacity(0.4),
+                            color: Get.theme.colors().onNavBar.withOpacity(0.4),
                             height: _iconSize),
                         activeIcon: AppIcon(
                             icon: SvgIcons.tab_bar_projects,
-                            color: Theme.of(context).customColors().onNavBar,
+                            color: Get.theme.colors().onNavBar,
                             height: _iconSize),
                         label: tr('projects'),
                       ),
                       BottomNavigationBarItem(
                         icon: AppIcon(
                             icon: SvgIcons.tab_bar_more,
-                            color: Theme.of(context)
-                                .customColors()
-                                .onNavBar
-                                .withOpacity(0.4),
+                            color: Get.theme.colors().onNavBar.withOpacity(0.4),
                             height: _iconSize),
                         activeIcon: AppIcon(
                             icon: SvgIcons.tab_bar_more,
-                            color: Theme.of(context).customColors().onNavBar,
+                            color: Get.theme.colors().onNavBar,
                             height: _iconSize),
                         label: tr('more'),
                       ),
@@ -145,53 +131,45 @@ class NavigationView extends StatelessWidget {
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_dashboard,
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .onNavBar
-                                  .withOpacity(0.4),
+                              color:
+                                  Get.theme.colors().onNavBar.withOpacity(0.4),
                               height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_dashboard,
-                              color: Theme.of(context).customColors().onNavBar,
+                              color: Get.theme.colors().onNavBar,
                               height: _iconSize),
                           label: Text(tr('dashboard'))),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_tasks,
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .onNavBar
-                                  .withOpacity(0.4),
+                              color:
+                                  Get.theme.colors().onNavBar.withOpacity(0.4),
                               height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_tasks,
-                              color: Theme.of(context).customColors().onNavBar,
+                              color: Get.theme.colors().onNavBar,
                               height: _iconSize),
                           label: Text(tr('tasks'))),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_projects,
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .onNavBar
-                                  .withOpacity(0.4),
+                              color:
+                                  Get.theme.colors().onNavBar.withOpacity(0.4),
                               height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_projects,
-                              color: Theme.of(context).customColors().onNavBar,
+                              color: Get.theme.colors().onNavBar,
                               height: _iconSize),
                           label: Text(tr('projects'))),
                       NavigationRailDestination(
                           icon: AppIcon(
                               icon: SvgIcons.tab_bar_more,
-                              color: Theme.of(context)
-                                  .customColors()
-                                  .onNavBar
-                                  .withOpacity(0.4),
+                              color:
+                                  Get.theme.colors().onNavBar.withOpacity(0.4),
                               height: _iconSize),
                           selectedIcon: AppIcon(
                               icon: SvgIcons.tab_bar_more,
-                              color: Theme.of(context).customColors().onNavBar,
+                              color: Get.theme.colors().onNavBar,
                               height: _iconSize),
                           label: Text(tr('more'))),
                     ],

@@ -45,10 +45,7 @@ class NewTaskInfo extends StatelessWidget {
                   child: icon != null
                       ? AppIcon(
                           icon: icon,
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.4))
+                          color: Get.theme.colors().onSurface.withOpacity(0.4))
                       : null,
                 ),
                 Expanded(
@@ -62,8 +59,8 @@ class NewTaskInfo extends StatelessWidget {
                         if (caption != null && caption.isNotEmpty)
                           Text(caption,
                               style: TextStyleHelper.caption(
-                                  color: Theme.of(context)
-                                      .customColors()
+                                  color: Get.theme
+                                      .colors()
                                       .onBackground
                                       .withOpacity(0.75))),
                         Text(text,
@@ -75,11 +72,9 @@ class NewTaskInfo extends StatelessWidget {
                                     color: textColor != null
                                         ? textColor
                                         : isSelected
-                                            ? Theme.of(context)
-                                                .customColors()
-                                                .onBackground
-                                            : Theme.of(context)
-                                                .customColors()
+                                            ? Get.theme.colors().onBackground
+                                            : Get.theme
+                                                .colors()
                                                 .onSurface
                                                 .withOpacity(0.4))),
                       ],
@@ -125,7 +120,7 @@ class TileWithSwitch extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 72, top: 18, bottom: 18),
                 child: Text(title,
                     style: TextStyleHelper.subtitle1(
-                        color: Theme.of(context).customColors().onSurface)),
+                        color: Get.theme.colors().onSurface)),
               ),
             ),
             Switch(

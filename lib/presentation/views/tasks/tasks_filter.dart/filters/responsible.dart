@@ -12,7 +12,7 @@ class _Responsible extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.responsible['me'],
               onTap: () => filterController.changeResponsible('me')),
           FilterElement(
@@ -43,7 +43,7 @@ class _Responsible extends StatelessWidget {
                   filterController.changeResponsible('groups', null)),
           FilterElement(
               title: tr('noResponsible'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.responsible['no'],
               onTap: () => filterController.changeResponsible('no'))
         ],

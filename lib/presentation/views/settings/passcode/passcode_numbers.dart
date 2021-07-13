@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -23,7 +24,7 @@ class PasscodeNumber extends StatelessWidget {
       icon: Text(
         number.toString(),
         style: TextStyleHelper.headline3(
-          color: Theme.of(context).customColors().onBackground,
+          color: Get.theme.colors().onBackground,
         ).copyWith(height: 1),
       ),
     );

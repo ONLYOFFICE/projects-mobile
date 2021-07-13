@@ -69,8 +69,7 @@ class _PasswordFormState extends State<PasswordForm> {
         child: Text(tr('login'),
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
-                color: Theme.of(context).backgroundColor,
-                fontWeight: FontWeight.bold)),
+                color: Get.theme.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 

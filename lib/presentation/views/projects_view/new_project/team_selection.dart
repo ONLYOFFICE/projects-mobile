@@ -21,7 +21,7 @@ class GroupMembersSelectionView extends StatelessWidget {
 
     groupsDataSource.getGroups();
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('addMembersOf'),
         elevation: 2,

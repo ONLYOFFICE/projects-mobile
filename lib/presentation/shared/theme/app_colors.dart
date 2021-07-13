@@ -3,11 +3,10 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 
 class AppColors {
-  final Color activeTabTitle;
   final Color background;
   final Color backgroundColor;
   final Color bgDescription;
-  final Color inactiveTabTitle;
+
   final Color lightSecondary;
   final Color links;
   final Color onBackground;
@@ -22,17 +21,13 @@ class AppColors {
   final Color snackBarColor;
   final Color systemBlue;
   final Color surface;
-  final Color tabActive;
-  final Color tabSecondary;
   final Color tabbarBackground;
-  final Color error;
+  final Color colorError;
 
   const AppColors({
-    @required this.activeTabTitle,
     @required this.background,
     @required this.backgroundColor,
     @required this.bgDescription,
-    @required this.inactiveTabTitle,
     @required this.lightSecondary,
     @required this.links,
     @required this.onBackground,
@@ -47,9 +42,7 @@ class AppColors {
     @required this.snackBarColor,
     @required this.systemBlue,
     @required this.surface,
-    @required this.tabActive,
-    @required this.tabSecondary,
     @required this.tabbarBackground,
-    @required this.error,
+    @required this.colorError,
   });
 }

@@ -33,15 +33,13 @@ class TFASmsScreen extends StatelessWidget {
                   SizedBox(height: h(11.54)),
                   Text(tr('tfaSMSTitle'),
                       style: TextStyleHelper.subtitle1(
-                          color: Theme.of(context).customColors().onSurface)),
+                          color: Get.theme.colors().onSurface)),
                   SizedBox(height: h(12.54)),
                   Text(tr('tfaSMSCaption'),
                       textAlign: TextAlign.center,
                       style: TextStyleHelper.body2(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6))),
+                          color:
+                              Get.theme.colors().onSurface.withOpacity(0.6))),
                   SizedBox(height: h(6.54)),
                   const _CountrySelection(),
                   SizedBox(height: h(24)),
@@ -85,7 +83,7 @@ class _CountrySelection extends StatelessWidget {
                   controller?.deviceCountry?.value?.countryName ??
                       tr('chooseCountry'),
                   style: TextStyleHelper.subtitle1(
-                      color: Theme.of(context).customColors().primary),
+                      color: Get.theme.colors().primary),
                 ),
               ),
             ),

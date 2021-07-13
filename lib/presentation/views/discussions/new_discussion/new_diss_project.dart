@@ -22,7 +22,7 @@ class NewDiscussionProject extends StatelessWidget {
             ? controller.selectedProjectTitle.value
             : tr('chooseProject'),
         textColor: controller.selectProjectError == true
-            ? Theme.of(context).customColors().error
+            ? Get.theme.colors().colorError
             : null,
         onTap: () => Get.toNamed('SelectProjectView',
             arguments: {'controller': controller}),

@@ -78,7 +78,7 @@ class Comment extends StatelessWidget {
                         child: Text(
                           'Ответить',
                           style: TextStyleHelper.caption(
-                              color: Theme.of(context).customColors().primary),
+                              color: Get.theme.colors().primary),
                         ),
                       ),
                   ],
@@ -126,10 +126,8 @@ class _CommentAuthor extends StatelessWidget {
                 Text(comment.userFullName, style: TextStyleHelper.projectTitle),
                 Text(comment.timeStampStr,
                     style: TextStyleHelper.caption(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onBackground
-                            .withOpacity(0.6))),
+                        color:
+                            Get.theme.colors().onBackground.withOpacity(0.6))),
               ],
             ),
           ),
@@ -144,10 +142,7 @@ class _CommentAuthor extends StatelessWidget {
                       _onSelected(value, context, controller),
                   icon: Icon(Icons.more_vert_rounded,
                       size: 25,
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.5)),
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -165,7 +160,7 @@ class _CommentAuthor extends StatelessWidget {
                           child: Text(
                             tr('delete'),
                             style: TextStyleHelper.subtitle1(
-                                color: Theme.of(context).customColors().error),
+                                color: Get.theme.colors().colorError),
                           ),
                         ),
                     ];

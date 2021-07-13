@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class StyledDivider extends StatelessWidget {
@@ -20,7 +21,7 @@ class StyledDivider extends StatelessWidget {
       key: key,
       indent: leftPadding,
       endIndent: rightPadding,
-      color: Theme.of(context).customColors().outline,
+      color: Get.theme.colors().outline,
       thickness: thickness,
       height: height,
     );

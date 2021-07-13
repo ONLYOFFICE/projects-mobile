@@ -65,18 +65,14 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                                 // focusNode = null if subtaskEditingController
                                 focusNode: controller.titleFocus,
                                 style: TextStyleHelper.subtitle1(
-                                    color: Theme.of(context)
-                                        .customColors()
-                                        .onBackground),
+                                    color: Get.theme.colors().onBackground),
                                 decoration: InputDecoration.collapsed(
                                   hintText: tr('describeSubtask'),
                                   hintStyle: TextStyleHelper.subtitle1(
                                       color: controller.setTiltleError.isTrue
-                                          ? Theme.of(context)
-                                              .customColors()
-                                              .error
-                                          : Theme.of(context)
-                                              .customColors()
+                                          ? Get.theme.colors().colorError
+                                          : Get.theme
+                                              .colors()
                                               .onBackground
                                               .withOpacity(0.5)),
                                 ),
@@ -105,10 +101,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.clear_rounded,
                       size: 20,
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6)),
+                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
                   onPressed: controller.deleteResponsible,
                 ),
               ),

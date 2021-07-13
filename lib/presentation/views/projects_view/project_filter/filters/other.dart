@@ -12,7 +12,7 @@ class _Other extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('followed'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.other['followed'],
               onTap: () => filterController.changeOther('followed')),
           FilterElement(
@@ -29,7 +29,7 @@ class _Other extends StatelessWidget {
               onCancelTap: () => filterController.changeOther('withTag', null)),
           FilterElement(
               title: tr('withoutTag'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.other['withoutTag'],
               onTap: () => filterController.changeOther('withoutTag')),
         ],

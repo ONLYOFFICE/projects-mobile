@@ -129,7 +129,7 @@ class TaskService {
     if (success) {
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await ErrorDialog.show(task.colorError);
       return null;
     }
   }

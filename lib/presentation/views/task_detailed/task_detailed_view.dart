@@ -73,10 +73,10 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
             child: TabBar(
                 isScrollable: true,
                 controller: _tabController,
-                indicatorColor: Theme.of(context).customColors().primary,
-                labelColor: Theme.of(context).customColors().onSurface,
+                indicatorColor: Get.theme.colors().primary,
+                labelColor: Get.theme.colors().onSurface,
                 unselectedLabelColor:
-                    Theme.of(context).customColors().onSurface.withOpacity(0.6),
+                    Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),

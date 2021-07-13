@@ -12,7 +12,7 @@ class _Creator extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.creator['me'],
               onTap: () => filterController.changeCreator('me')),
           FilterElement(
@@ -49,7 +49,7 @@ class _Creator extends StatelessWidget {
 //             child: Wrap(runSpacing: 16, spacing: 16, children: [
 //               _FilterElement(
 //                   title: 'me',
-//                   titleColor: Theme.of(context).customColors().onSurface,
+//                   titleColor: Get.theme.customColors().onSurface,
 //                   selected: filterController.creator['me'],
 //                   onTap: () => filterController.changeCreator('me')),
 //               _FilterElement(
