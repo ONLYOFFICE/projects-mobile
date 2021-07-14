@@ -36,6 +36,7 @@ import 'package:projects/data/services/user_service.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
@@ -105,11 +106,14 @@ void setupLocator() {
 
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
+  Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
   Get.lazyPut(
-      () => DiscussionsController(
-          Get.put(PaginationController(), tag: 'DiscussionsController')),
-      fenix: true);
-
+    () => DiscussionsController(
+      Get.find<DiscussionsFilterController>(),
+      Get.put(PaginationController(), tag: 'DiscussionsController'),
+    ),
+    fenix: true,
+  );
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
   Get.lazyPut(() => NewTaskController(), fenix: true);

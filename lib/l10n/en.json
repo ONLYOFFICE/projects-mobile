@@ -144,6 +144,7 @@
 	"today": "Today",
 	"upcoming": "Upcoming",
 	"customPeriod": "Custom period",
+	"last7Days": "Last 7 days",
 
 	"creator": "Creator",
 
@@ -260,8 +261,18 @@
 		"other": "SHOW {} DOCUMENTS"
 	},
 
+	"discussionsFilterConfirm": {
+		"zero": "SHOW {} DISCUSSION",
+		"one": "SHOW {} DISCUSSION",
+		"two": "SHOW {} DISCUSSIONS",
+		"few": "SHOW {} DISCUSSIONS",
+		"many": "SHOW {} DISCUSSIONS",
+		"other": "SHOW {} DISCUSSIONS"
+	},
+
 	"addMembersOf": "Add members of",
 	"creationDate": "Creation date",
+	"subscribedDiscussions": "Subscribed discussions",
 	"createdBy": "Created by",
 	"tags": "Tags",
 	"tag": "Tag",

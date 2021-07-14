@@ -10,18 +10,17 @@ import 'package:projects/data/models/from_api/error.dart';
 class DiscussionsApi {
   var coreApi = locator<CoreApi>();
 
-  // Проверить параметры
   Future<PageDTO<List<Discussion>>> getDiscussionsByParams({
     int startIndex,
     String query,
     String sortBy,
     String sortOrder,
-    // String responsibleFilter,
-    // String creatorFilter,
-    // String projectFilter,
-    // String milestoneFilter,
+    String authorFilter,
+    String statusFilter,
+    String creationDateFilter,
+    String projectFilter,
     String projectId,
-    // String deadlineFilter,
+    String otherFilter,
   }) async {
     var url = await coreApi.discussionsByParamsUrl();
 
@@ -34,14 +33,20 @@ class DiscussionsApi {
       url += '&FilterValue=$parsedData';
     }
 
-    if (projectId != null) {
-      url += '&projectId=$projectId';
-    }
-
     if (sortBy != null &&
         sortBy.isNotEmpty &&
         sortOrder != null &&
         sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+
+    url += authorFilter ?? '';
+    url += statusFilter ?? '';
+    url += creationDateFilter ?? '';
+    url += projectFilter ?? '';
+    url += otherFilter ?? '';
+
+    if (projectId != null) {
+      url += '&projectId=$projectId';
+    }
 
     var result = PageDTO<List<Discussion>>();
     try {
