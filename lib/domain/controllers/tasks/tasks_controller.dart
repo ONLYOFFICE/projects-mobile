@@ -69,8 +69,8 @@ class TasksController extends BaseController {
 
     _paginationController = paginationController;
     _filterController = filterController;
-    _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
+    _sortController.updateSortDelegate = () async => await loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
     paginationController.refreshDelegate =
         () async => await _getTasks(needToClear: true);

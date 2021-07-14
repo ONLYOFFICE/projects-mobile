@@ -43,6 +43,7 @@ import 'package:projects/presentation/views/authentication/password_recovery/pas
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
+import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 import 'package:projects/presentation/views/discussions/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/new_discussion/select/new_diss_text_screen.dart';
 import 'package:projects/presentation/views/discussions/new_discussion/select/select_diss_subscribers.dart';
@@ -90,6 +91,9 @@ List<GetPage> getxPages() => [
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),
       GetPage(name: 'DiscussionDetailed', page: () => DiscussionDetailed()),
+      GetPage(
+          name: 'DiscussionsFilterScreen',
+          page: () => const DiscussionsFilterScreen()),
       GetPage(
           name: 'DiscussionsSearchScreen',
           page: () => const DiscussionsSearchScreen()),

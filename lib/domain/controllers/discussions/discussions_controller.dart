@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -49,6 +50,9 @@ class DiscussionsController extends BaseController {
   final _sortController = Get.find<DiscussionsSortController>();
   DiscussionsSortController get sortController => _sortController;
 
+  DiscussionsFilterController _filterController;
+  DiscussionsFilterController get filterController => _filterController;
+
   final _scrollController = ScrollController();
 
   ScrollController get scrollController => _scrollController;
@@ -56,8 +60,13 @@ class DiscussionsController extends BaseController {
   RxBool loaded = false.obs;
   var needToShowDivider = false.obs;
 
-  DiscussionsController(PaginationController paginationController) {
+  DiscussionsController(
+    DiscussionsFilterController filterController,
+    PaginationController paginationController,
+  ) {
     _paginationController = paginationController;
+    _filterController = filterController;
+    _filterController.applyFiltersDelegate = () async => loadDiscussions();
     _sortController.updateSortDelegate = () async => await loadDiscussions();
     paginationController.loadDelegate = () async => await _getDiscussions();
     paginationController.refreshDelegate =
@@ -85,13 +94,12 @@ class DiscussionsController extends BaseController {
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
+      authorFilter: _filterController.authorFilter,
+      statusFilter: _filterController.statusFilter,
+      creationDateFilter: _filterController.creationDateFilter,
+      projectFilter: _filterController.projectFilter,
+      otherFilter: _filterController.otherFilter,
       projectId: projectId,
-      // responsibleFilter: _filterController.responsibleFilter,
-      // creatorFilter: _filterController.creatorFilter,
-      // projectFilter: _filterController.projectFilter,
-      // milestoneFilter: _filterController.milestoneFilter,
-      // deadlineFilter: _filterController.deadlineFilter,
-      // query: 'задача',
     );
     paginationController.total.value = result.total;
 
