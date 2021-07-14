@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class StyledFloatingActionButton extends StatelessWidget {
@@ -8,7 +9,7 @@ class StyledFloatingActionButton extends StatelessWidget {
 
   const StyledFloatingActionButton({
     Key key,
-    this.backgroundColor, //= Theme.of(context).customColors().lightSecondary,
+    this.backgroundColor, //= Get.theme.customColors().lightSecondary,
     this.onPressed,
     this.child,
   }) : super(key: key);
@@ -18,18 +19,18 @@ class StyledFloatingActionButton extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(shape: BoxShape.circle, boxShadow: [
         BoxShadow(
-            color: Theme.of(context).customColors().onSurface.withOpacity(0.2),
+            color: Get.theme.colors().onSurface.withOpacity(0.2),
             blurRadius: 10,
             spreadRadius: 1,
             offset: const Offset(0, 1)),
         BoxShadow(
-            color: Theme.of(context).customColors().onSurface.withOpacity(0.12),
+            color: Get.theme.colors().onSurface.withOpacity(0.12),
             blurRadius: 5,
             spreadRadius: 1,
             offset: const Offset(0, 4)),
       ]),
       child: FloatingActionButton(
-        backgroundColor: Theme.of(context).customColors().lightSecondary,
+        backgroundColor: Get.theme.colors().lightSecondary,
         onPressed: onPressed,
         elevation: 0,
         child: child,

@@ -54,10 +54,7 @@ class _Code extends StatelessWidget {
             child: Text(
               tr('code'),
               style: TextStyleHelper.caption(
-                  color: Theme.of(context)
-                      .customColors()
-                      .onSurface
-                      .withOpacity(0.6)),
+                  color: Get.theme.colors().onSurface.withOpacity(0.6)),
             ),
           ),
           Row(
@@ -65,7 +62,7 @@ class _Code extends StatelessWidget {
               const SizedBox(width: 12),
               Text(code,
                   style: TextStyleHelper.subtitle2(
-                      color: Theme.of(context).customColors().onSurface)),
+                      color: Get.theme.colors().onSurface)),
               GestureDetector(
                 onTap: () {
                   Clipboard.setData(

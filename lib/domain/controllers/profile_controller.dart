@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -10,7 +9,7 @@ class ProfileController extends GetxController {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('logOutTitle'),
       acceptText: tr('logOut').toUpperCase(),
-      acceptColor: Theme.of(context).customColors().primary,
+      acceptColor: Get.theme.colors().primary,
       onAcceptTap: () async {
         Get.back();
         await Get.put(LoginController()).logout();

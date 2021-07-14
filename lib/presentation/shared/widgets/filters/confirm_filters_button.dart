@@ -25,32 +25,25 @@ class ConfirmFiltersButton extends StatelessWidget {
             Get.back();
           },
           style: ButtonStyle(
-            padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-              (_) {
-                return EdgeInsets.only(
-                  left: Get.width * 0.243,
-                  right: Get.width * 0.243,
-                  top: 10,
-                  bottom: 12,
-                );
-              },
-            ),
-            backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-              return Theme.of(context).customColors().primary;
-            }),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
-          ),
+              padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
+                  (_) => EdgeInsets.only(
+                      left: Get.width * 0.243,
+                      right: Get.width * 0.243,
+                      top: 10,
+                      bottom: 12)),
+              backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+                return Get.theme.colors().primary;
+              }),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6)))),
           child: Text(filterController.filtersTitle,
               // tr('filterConfirmButton', args: [
               //   filterController.suitableResultCount.value.toString(),
               //   filterController.filtersTitle
               // ]),
-              style: TextStyleHelper.button(
-                  color: Theme.of(context).customColors().onPrimary)),
+              style:
+                  TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
         ),
       ),
     );

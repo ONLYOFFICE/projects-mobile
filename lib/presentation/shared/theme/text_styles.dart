@@ -128,32 +128,33 @@ class TextStyleHelper {
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.w500,
-      color: Get.theme.customColors().projectsSubtitle);
+      color: Get.theme.colors().projectsSubtitle);
 
   static TextStyle projectsSorting = TextStyle(
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Get.theme.customColors().projectsSubtitle);
+      color: Get.theme.colors().projectsSubtitle);
 
   static TextStyle projectResponsible = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.normal,
     fontSize: 14,
-    color: Get.theme.customColors().projectsSubtitle,
+    color: Get.theme.colors().projectsSubtitle,
   );
 
   static TextStyle projectDate = TextStyle(
       fontFamily: 'Roboto',
       fontWeight: FontWeight.normal,
       fontSize: 16,
-      color: Get.theme.customColors().projectsSubtitle);
+      color: Get.theme.colors().projectsSubtitle);
 
-  static TextStyle projectCompleatedTasks = const TextStyle(
-      fontFamily: 'Roboto',
-      fontWeight: FontWeight.w400,
-      fontSize: 14,
-      color: Color(0xFF4294F7));
+  static TextStyle projectCompleatedTasks = TextStyle(
+    fontFamily: 'Roboto',
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: Get.theme.colors().onSurface,
+  );
 
   static const subHeaderStyle = TextStyle(
     fontSize: 14.0,

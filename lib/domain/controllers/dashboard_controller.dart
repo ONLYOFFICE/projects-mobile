@@ -17,8 +17,6 @@ class DashboardController extends GetxController {
   ProjectsController _activeProjectsController;
   var scrollController = ScrollController();
 
-  var needToShowDivider = false.obs;
-
   DashboardController() {
     setupMyTask();
     setupUpcomingTasks();
@@ -26,9 +24,6 @@ class DashboardController extends GetxController {
     setupMyProjects();
     setupMyFolowedProjects();
     setupActiveProjects();
-
-    scrollController.addListener(
-        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   TasksController get myTaskController => _myTaskController;

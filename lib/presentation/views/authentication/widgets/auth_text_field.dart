@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -34,26 +35,22 @@ class AuthTextField extends StatelessWidget {
       obscuringCharacter: '*',
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyleHelper.subtitle1(
-          color: Theme.of(context).customColors().onSurface),
+      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         labelText: hintText,
         labelStyle: TextStyleHelper.caption(
-            color: Theme.of(context).customColors().onSurface.withOpacity(0.6)),
+            color: Get.theme.colors().onSurface.withOpacity(0.6)),
         hintText: hintText,
         hintStyle: TextStyleHelper.subtitle1(
           color: !haveError
-              ? Theme.of(context).customColors().onSurface.withOpacity(0.6)
-              : Theme.of(context).customColors().error,
+              ? Get.theme.colors().onSurface.withOpacity(0.6)
+              : Get.theme.colors().colorError,
         ),
         focusedBorder: UnderlineInputBorder(
             borderSide: BorderSide(
-                color: Theme.of(context)
-                    .customColors()
-                    .onSurface
-                    .withOpacity(0.42))),
+                color: Get.theme.colors().onSurface.withOpacity(0.42))),
       ),
     );
   }

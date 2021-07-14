@@ -18,7 +18,7 @@ class FiltersHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: Theme.of(context).customColors().onPrimarySurface,
+        color: Get.theme.colors().onPrimarySurface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
       ),
       child: SizedBox(
@@ -34,10 +34,7 @@ class FiltersHeader extends StatelessWidget {
                   width: 40,
                   child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.2),
+                        color: Get.theme.colors().onSurface.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(2)),
                   ),
                 ),
@@ -48,7 +45,7 @@ class FiltersHeader extends StatelessWidget {
                 left: 16,
                 child: Text(tr('filter'),
                     style: TextStyleHelper.h6(
-                        color: Theme.of(context).customColors().onSurface))),
+                        color: Get.theme.colors().onSurface))),
             Positioned(
                 top: 5,
                 right: 5,
@@ -59,8 +56,7 @@ class FiltersHeader extends StatelessWidget {
                     },
                     child: Text(tr('reset'),
                         style: TextStyleHelper.button(
-                            color:
-                                Theme.of(context).customColors().systemBlue)))),
+                            color: Get.theme.colors().systemBlue)))),
             const Positioned(
               bottom: 0,
               left: 0,

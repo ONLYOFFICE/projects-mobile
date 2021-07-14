@@ -19,7 +19,7 @@ class __PageSwitcherState extends State<_PageSwitcher> {
     const _duration = Duration(milliseconds: 350);
     const _curve = Curves.easeIn;
     var _buttonsStyle =
-        TextStyleHelper.button(color: Theme.of(context).customColors().primary);
+        TextStyleHelper.button(color: Get.theme.colors().primary);
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -27,23 +27,17 @@ class __PageSwitcherState extends State<_PageSwitcher> {
         height: 56,
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Theme.of(context).customColors().backgroundColor,
+            color: Get.theme.colors().backgroundColor,
             boxShadow: [
               BoxShadow(
                 blurRadius: 3,
                 offset: const Offset(0, 0.85),
-                color: Theme.of(context)
-                    .customColors()
-                    .onSurface
-                    .withOpacity(0.19),
+                color: Get.theme.colors().onSurface.withOpacity(0.19),
               ),
               BoxShadow(
                 blurRadius: 1,
                 offset: const Offset(0, 0.25),
-                color: Theme.of(context)
-                    .customColors()
-                    .onSurface
-                    .withOpacity(0.039),
+                color: Get.theme.colors().onSurface.withOpacity(0.039),
               ),
             ]),
         child: Stack(

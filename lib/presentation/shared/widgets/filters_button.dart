@@ -21,7 +21,7 @@ class FiltersButton extends StatelessWidget {
             width: 24,
             height: 24,
             icon: SvgIcons.preferences,
-            color: Theme.of(context).customColors().primary,
+            color: Get.theme.colors().primary,
           ),
           Positioned(
               top: 0,
@@ -36,8 +36,7 @@ class FiltersButton extends StatelessWidget {
                             width: 2,
                             color: Colors.white,
                           ),
-                          color:
-                              Theme.of(context).customColors().lightSecondary,
+                          color: Get.theme.colors().lightSecondary,
                           shape: BoxShape.circle,
                         ),
                       )

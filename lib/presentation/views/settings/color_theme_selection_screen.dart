@@ -1,5 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/settings/settings_controller.dart';
+
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -10,18 +13,34 @@ class ColorThemeSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: StyledAppBar(titleText: tr('colorTheme')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 10),
-          _ColorThemeTile(text: tr('sameAsSystem'), isSelected: false),
-          const StyledDivider(leftPadding: 16, rightPadding: 16),
-          _ColorThemeTile(text: tr('lightTheme'), isSelected: true),
-          const StyledDivider(leftPadding: 16, rightPadding: 16),
-          _ColorThemeTile(text: tr('darkTheme'), isSelected: false),
-        ],
+    var controller = Get.find<SettingsController>();
+
+    return Obx(
+      () => Scaffold(
+        appBar: StyledAppBar(titleText: tr('colorTheme')),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 10),
+            _ColorThemeTile(
+              text: tr('sameAsSystem'),
+              isSelected: controller.currentTheme.value == 'sameAsSystem',
+              onTap: () async => await controller.setTheme('sameAsSystem'),
+            ),
+            const StyledDivider(leftPadding: 16, rightPadding: 16),
+            _ColorThemeTile(
+              text: tr('lightTheme'),
+              isSelected: controller.currentTheme.value == 'lightTheme',
+              onTap: () async => await controller.setTheme('lightTheme'),
+            ),
+            const StyledDivider(leftPadding: 16, rightPadding: 16),
+            _ColorThemeTile(
+              text: tr('darkTheme'),
+              onTap: () async => await controller.setTheme('darkTheme'),
+              isSelected: controller.currentTheme.value == 'darkTheme',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -30,7 +49,7 @@ class ColorThemeSelectionScreen extends StatelessWidget {
 class _ColorThemeTile extends StatelessWidget {
   final String text;
   final bool isSelected;
-  final Function() onTap;
+  final Function onTap;
   const _ColorThemeTile({
     Key key,
     @required this.text,
@@ -51,10 +70,7 @@ class _ColorThemeTile extends StatelessWidget {
             if (isSelected)
               Icon(
                 Icons.check_rounded,
-                color: Theme.of(context)
-                    .customColors()
-                    .onBackground
-                    .withOpacity(0.6),
+                color: Get.theme.colors().onBackground.withOpacity(0.6),
               )
           ],
         ),

@@ -12,12 +12,12 @@ class _CreatingDate extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('today'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.creationDate['today'],
               onTap: () => filterController.changeCreationDate(('today'))),
           FilterElement(
               title: tr('last7Days'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.creationDate['last7Days'],
               onTap: () => filterController.changeCreationDate(('last7Days'))),
           FilterElement(

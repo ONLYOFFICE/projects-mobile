@@ -55,15 +55,15 @@ class PortalView extends StatelessWidget {
                           BoxShadow(
                               blurRadius: 3,
                               offset: const Offset(0, 0.85),
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onBackground
                                   .withOpacity(0.19)),
                           BoxShadow(
                               blurRadius: 3,
                               offset: const Offset(0, 0.25),
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onBackground
                                   .withOpacity(0.04)),
                         ]),
@@ -78,10 +78,8 @@ class PortalView extends StatelessWidget {
                         tr('appDescription'),
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.body2(
-                            color: Theme.of(context)
-                                .customColors()
-                                .onSurface
-                                .withOpacity(0.6)),
+                            color:
+                                Get.theme.colors().onSurface.withOpacity(0.6)),
                       ),
                     ],
                   ),

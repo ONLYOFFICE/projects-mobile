@@ -100,8 +100,8 @@ class _CountryWithCodeTile extends StatelessWidget {
                   child: showFirstLetter
                       ? Text(country?.countryName[0],
                           style: TextStyleHelper.headline5(
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onBackground
                                   .withOpacity(0.6)))
                       : null,
@@ -110,13 +110,13 @@ class _CountryWithCodeTile extends StatelessWidget {
                   child: Text(
                     country?.countryName,
                     style: TextStyleHelper.body2(
-                        color: Theme.of(context).customColors().onBackground),
+                        color: Get.theme.colors().onBackground),
                   ),
                 ),
                 Text(
                   '+ ${country?.phoneCode}',
                   style: TextStyleHelper.subtitle2(
-                      color: Theme.of(context).customColors().primarySurface),
+                      color: Get.theme.colors().primarySurface),
                 ),
               ],
             ),

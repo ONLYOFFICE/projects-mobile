@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -48,21 +49,15 @@ class SearchField extends StatelessWidget {
         decoration: InputDecoration(
             hintText: hintText,
             filled: true,
-            fillColor: color ?? Theme.of(context).customColors().bgDescription,
+            fillColor: color ?? Get.theme.colors().bgDescription,
             border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
                 borderSide:
                     const BorderSide(width: 0, style: BorderStyle.none)),
             labelStyle: TextStyleHelper.body2(
-                color: Theme.of(context)
-                    .customColors()
-                    .onSurface
-                    .withOpacity(0.4)),
+                color: Get.theme.colors().onSurface.withOpacity(0.4)),
             hintStyle: TextStyleHelper.body2(
-                color: Theme.of(context)
-                    .customColors()
-                    .onSurface
-                    .withOpacity(0.4)),
+                color: Get.theme.colors().onSurface.withOpacity(0.4)),
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             suffixIcon: showClearIcon

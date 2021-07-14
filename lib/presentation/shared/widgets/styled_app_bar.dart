@@ -23,7 +23,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.bottom,
     this.bottomHeight = 44,
     this.centerTitle,
-    this.elevation = 0,
+    this.elevation = 1,
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
@@ -49,9 +49,11 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-      backgroundColor: bgColor ?? lightColors.onPrimarySurface,
+      backgroundColor: bgColor ?? Get.theme.colors().background,
+      // Get.theme.customColors().onPrimarySurface,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
+      shadowColor: Get.theme.colors().outline,
 
       // backwardsCompatibility: false,
       // systemOverlayStyle: const SystemUiOverlayStyle(
@@ -65,7 +67,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : leading,
       textTheme: TextTheme(
-          headline6: TextStyleHelper.headline6(color: lightColors.onSurface)),
+          headline6:
+              TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
       actions: actions,
       // ignore: prefer_if_null_operators
       title: title != null

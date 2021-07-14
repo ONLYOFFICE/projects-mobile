@@ -24,7 +24,7 @@ class ProjectTile extends StatelessWidget {
                 : tr('selectProject'),
             icon: SvgIcons.project,
             textColor: controller.needToSelectProject == true
-                ? Theme.of(context).customColors().error
+                ? Get.theme.colors().colorError
                 : null,
             isSelected: _isSelected,
             caption: _isSelected ? '${tr('project')}:' : null,

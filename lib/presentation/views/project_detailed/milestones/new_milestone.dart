@@ -28,7 +28,7 @@ class NewMilestoneView extends StatelessWidget {
     controller.setup(projectDetailed);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).customColors().backgroundColor,
+      backgroundColor: Get.theme.colors().backgroundColor,
       appBar: StyledAppBar(
           titleText: tr('newMilestone'),
           actions: [
@@ -79,20 +79,16 @@ class MilestoneInput extends StatelessWidget {
           maxLines: 2,
           controller: controller.titleController,
           // onChanged: (value) => controller.changeTitle(value),
-          style: TextStyleHelper.headline6(
-              color: Theme.of(context).customColors().onBackground),
-          cursorColor:
-              Theme.of(context).customColors().primary.withOpacity(0.87),
+          style:
+              TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+          cursorColor: Get.theme.colors().primary.withOpacity(0.87),
           decoration: InputDecoration(
               hintText: tr('milestoneTitle'),
               contentPadding: const EdgeInsets.symmetric(vertical: 0),
               hintStyle: TextStyleHelper.headline6(
                   color: controller.needToSetTitle.value
-                      ? Theme.of(context).customColors().error
-                      : Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.5)),
+                      ? Get.theme.colors().colorError
+                      : Get.theme.colors().onSurface.withOpacity(0.5)),
               border: InputBorder.none),
         ),
       ),
@@ -121,8 +117,7 @@ class AdvancedOptions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
+                  data: Get.theme.copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
                     expandedAlignment: Alignment.topLeft,
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -134,8 +129,8 @@ class AdvancedOptions extends StatelessWidget {
                               icon: SvgIcons.preferences,
                               height: 24,
                               width: 24,
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onSurface
                                   .withOpacity(0.6)),
                         ),
@@ -143,8 +138,7 @@ class AdvancedOptions extends StatelessWidget {
                         Text(
                           tr('advancedOptions'),
                           style: TextStyleHelper.subtitle1(
-                              color:
-                                  Theme.of(context).customColors().onSurface),
+                              color: Get.theme.colors().onSurface),
                         ),
                       ],
                     ),
@@ -173,12 +167,12 @@ class AdvancedOptions extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 56,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),
@@ -208,12 +202,12 @@ class OptionWithSwitch extends StatelessWidget {
       height: 60,
       child: Column(
         children: <Widget>[
-          const Divider(
+          Divider(
             height: 1,
             thickness: 1,
             indent: 0,
             endIndent: 0,
-            color: Color(0xffD8D8D8),
+            color: Get.theme.colors().outline,
           ),
           const SizedBox(height: 5),
           Row(
@@ -235,11 +229,9 @@ class OptionWithSwitch extends StatelessWidget {
                 () => Switch(
                   value: switchValue.value,
                   onChanged: switchOnChanged,
-                  activeTrackColor: Theme.of(context)
-                      .customColors()
-                      .primary
-                      .withOpacity(0.54),
-                  activeColor: Theme.of(context).customColors().primary,
+                  activeTrackColor:
+                      Get.theme.colors().primary.withOpacity(0.54),
+                  activeColor: Get.theme.colors().primary,
                 ),
               ),
             ],
@@ -273,10 +265,7 @@ class DescriptionTile extends StatelessWidget {
             suffix: _isSletected
                 ? Icon(Icons.arrow_forward_ios_outlined,
                     size: 20,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6))
+                    color: Get.theme.colors().onSurface.withOpacity(0.6))
                 : null,
             onTap: () => Get.toNamed('NewMilestoneDescription'));
       },
@@ -302,7 +291,7 @@ class ProjectTile extends StatelessWidget {
                 : tr('selectProject'),
             icon: SvgIcons.project,
             textColor: controller.needToSelectProject.value
-                ? Theme.of(context).customColors().error
+                ? Get.theme.colors().colorError
                 : null,
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
@@ -332,13 +321,11 @@ class ResponsibleTile extends StatelessWidget {
         caption: _isSelected ? tr('assignedTo') : null,
         text: _isSelected ? plural('responsibles', 1) : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value
-            ? Theme.of(context).customColors().error
+            ? Get.theme.colors().colorError
             : null,
         suffix: _isSelected
             ? Icon(Icons.arrow_forward_ios_outlined,
-                size: 20,
-                color:
-                    Theme.of(context).customColors().onSurface.withOpacity(0.6))
+                size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6))
             : null,
         icon: SvgIcons.person,
         onTap: () => {
@@ -372,10 +359,7 @@ class DueDateTile extends StatelessWidget {
                 ? IconButton(
                     icon: Icon(Icons.close_rounded,
                         size: 23,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6)),
+                        color: Get.theme.colors().onSurface.withOpacity(0.6)),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 10),
@@ -433,10 +417,7 @@ class NewMilestoneInfo extends StatelessWidget {
                 child: icon != null
                     ? AppIcon(
                         icon: icon,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))
+                        color: Get.theme.colors().onSurface.withOpacity(0.6))
                     : null,
               ),
               Expanded(
@@ -450,8 +431,8 @@ class NewMilestoneInfo extends StatelessWidget {
                       if (caption != null && caption.isNotEmpty)
                         Text(caption,
                             style: TextStyleHelper.caption(
-                                color: Theme.of(context)
-                                    .customColors()
+                                color: Get.theme
+                                    .colors()
                                     .onBackground
                                     .withOpacity(0.75))),
                       Text(text,
@@ -463,11 +444,9 @@ class NewMilestoneInfo extends StatelessWidget {
                                   color: textColor != null
                                       ? textColor
                                       : isSelected
-                                          ? Theme.of(context)
-                                              .customColors()
-                                              .onBackground
-                                          : Theme.of(context)
-                                              .customColors()
+                                          ? Get.theme.colors().onBackground
+                                          : Get.theme
+                                              .colors()
                                               .onSurface
                                               .withOpacity(0.6))),
                     ],
@@ -573,7 +552,7 @@ class ProjectsList extends StatelessWidget {
                         ),
                         // Text(projects[index].milestoneResponsible.displayName,
                         //     style: TextStyleHelper.caption(
-                        //             color: Theme.of(context)
+                        //             color: Get.theme
                         //                 .customColors()
                         //                 .onSurface
                         //                 .withOpacity(0.6))

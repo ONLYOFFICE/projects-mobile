@@ -53,8 +53,7 @@ class _CodeFormState extends State<CodeForm> {
         child: Text(tr('send'),
             textAlign: TextAlign.center,
             style: TextStyleHelper.mainStyle.copyWith(
-                color: Theme.of(context).backgroundColor,
-                fontWeight: FontWeight.bold)),
+                color: Get.theme.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 

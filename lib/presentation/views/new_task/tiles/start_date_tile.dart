@@ -30,10 +30,7 @@ class StartDateTile extends StatelessWidget {
                 ? IconButton(
                     icon: Icon(Icons.close_rounded,
                         size: 23,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6)),
+                        color: Get.theme.colors().onSurface.withOpacity(0.6)),
                     onPressed: () => controller.changeStartDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 10),

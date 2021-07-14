@@ -41,7 +41,7 @@ class PortalUserItem extends StatelessWidget {
                             width: 40,
                             height: 40,
                             icon: SvgIcons.avatar,
-                            color: Theme.of(context).customColors().onSurface),
+                            color: Get.theme.colors().onSurface),
                       )
                     : SizedBox(
                         width: 72,
@@ -87,9 +87,8 @@ class PortalUserItem extends StatelessWidget {
                                             .replaceAll(' ', '\u00A0'),
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyleHelper.body2(
-                                          color: Theme.of(context)
-                                              .customColors()
-                                              .onBackground,
+                                          color:
+                                              Get.theme.colors().onBackground,
                                         ),
                                       )
                                     : const SizedBox(),
@@ -110,7 +109,7 @@ class PortalUserItem extends StatelessWidget {
                   return SizedBox(
                       width: 72,
                       child: Icon(Icons.check_box,
-                          color: Theme.of(context).customColors().primary));
+                          color: Get.theme.colors().primary));
                 } else {
                   return const SizedBox(
                       width: 72,
@@ -122,7 +121,7 @@ class PortalUserItem extends StatelessWidget {
                     width: 72,
                     child: Icon(
                       Icons.check,
-                      color: Theme.of(context).customColors().primary,
+                      color: Get.theme.colors().primary,
                     ),
                   );
                 } else {

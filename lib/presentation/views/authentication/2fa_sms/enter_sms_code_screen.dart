@@ -42,10 +42,10 @@ class EnterSMSCodeScreen extends StatelessWidget {
               SizedBox(height: h(20.74)),
               Text(tr('enterSendedCode'),
                   style: TextStyleHelper.subtitle1(
-                      color: Theme.of(context).customColors().onSurface)),
+                      color: Get.theme.colors().onSurface)),
               Text(controller.phoneNoise,
                   style: TextStyleHelper.subtitle1(
-                          color: Theme.of(context).customColors().onSurface)
+                          color: Get.theme.colors().onSurface)
                       .copyWith(fontWeight: FontWeight.w500)),
               SizedBox(height: h(100)),
               Obx(
@@ -60,21 +60,15 @@ class EnterSMSCodeScreen extends StatelessWidget {
                     enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: controller.codeError.isTrue
-                            ? Theme.of(context).customColors().error
-                            : Theme.of(context)
-                                .customColors()
-                                .onSurface
-                                .withOpacity(0.3),
+                            ? Get.theme.colors().colorError
+                            : Get.theme.colors().onSurface.withOpacity(0.3),
                       ),
                     ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: controller.codeError.isTrue
-                            ? Theme.of(context).customColors().error
-                            : Theme.of(context)
-                                .customColors()
-                                .onSurface
-                                .withOpacity(0.3),
+                            ? Get.theme.colors().colorError
+                            : Get.theme.colors().onSurface.withOpacity(0.3),
                       ),
                     ),
                   ),
@@ -89,7 +83,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                           child: Text(
                             tr('incorrectCode'),
                             style: TextStyleHelper.caption(
-                                color: Theme.of(context).customColors().error),
+                                color: Get.theme.colors().colorError),
                           ),
                         )
                       : null,

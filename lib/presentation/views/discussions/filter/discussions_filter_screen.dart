@@ -36,7 +36,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
-                      color: Theme.of(context).customColors().systemBlue)))
+                      color: Theme.of(context).colors().systemBlue)))
         ],
       ),
       body: Stack(

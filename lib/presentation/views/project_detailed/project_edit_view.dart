@@ -30,7 +30,7 @@ class EditProjectView extends StatelessWidget {
     editProjectController.setupEditor();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('editProject'),
         elevation: 1,
@@ -53,7 +53,7 @@ class EditProjectView extends StatelessWidget {
                       caption: tr('project').toUpperCase(),
                       subtitle: editProjectController.projectTitleText.value,
                       subtitleStyle: TextStyleHelper.headline7(
-                          color: Theme.of(context).customColors().onBackground),
+                          color: Get.theme.colors().onBackground),
                     )),
                 const SizedBox(height: 20),
                 ProjectStatusButton(projectController: editProjectController),
@@ -118,8 +118,7 @@ class _AdvancedEditOptions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
+                  data: Get.theme.copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
                     expandedAlignment: Alignment.topLeft,
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -131,8 +130,8 @@ class _AdvancedEditOptions extends StatelessWidget {
                               icon: SvgIcons.preferences,
                               height: 24,
                               width: 24,
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onSurface
                                   .withOpacity(0.6)),
                         ),
@@ -140,8 +139,7 @@ class _AdvancedEditOptions extends StatelessWidget {
                         Text(
                           tr('advancedOptions'),
                           style: TextStyleHelper.subtitle1(
-                              color:
-                                  Theme.of(context).customColors().onSurface),
+                              color: Get.theme.colors().onSurface),
                         ),
                       ],
                     ),
@@ -156,12 +154,12 @@ class _AdvancedEditOptions extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 56,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),
@@ -190,8 +188,7 @@ class _Tags extends StatelessWidget {
           SizedBox(
             width: 56,
             child: AppIcon(
-                icon: SvgIcons.tag,
-                color: Theme.of(context).customColors().onSurface),
+                icon: SvgIcons.tag, color: Get.theme.colors().onSurface),
           ),
           Expanded(
             child: Column(
@@ -222,8 +219,8 @@ class _Tags extends StatelessWidget {
                                 child: Text(
                                   tr('addTag'),
                                   style: TextStyleHelper.subtitle1(
-                                    color: Theme.of(context)
-                                        .customColors()
+                                    color: Get.theme
+                                        .colors()
                                         .onSurface
                                         .withOpacity(0.4),
                                   ),
@@ -233,12 +230,12 @@ class _Tags extends StatelessWidget {
                           ),
                         ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 0,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),

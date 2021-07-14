@@ -32,8 +32,7 @@ class NewMilestoneDescription extends StatelessWidget {
           controller: controller.descriptionController.value,
           autofocus: true,
           maxLines: null,
-          style: TextStyleHelper.subtitle1(
-              color: Theme.of(context).customColors().onSurface),
+          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           decoration: InputDecoration.collapsed(
               hintText: tr('milestoneDescription'),
               hintStyle: TextStyleHelper.subtitle1()),

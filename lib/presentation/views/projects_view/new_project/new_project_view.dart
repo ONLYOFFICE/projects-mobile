@@ -20,7 +20,7 @@ class NewProject extends StatelessWidget {
     var controller = Get.put(NewProjectController());
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('project'),
         elevation: 2,
@@ -91,10 +91,7 @@ class DescriptionTile extends StatelessWidget {
             suffix: _isSletected
                 ? Icon(Icons.arrow_forward_ios_outlined,
                     size: 20,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6))
+                    color: Get.theme.colors().onSurface.withOpacity(0.6))
                 : null,
             onTap: () => Get.toNamed('NewProjectDescription',
                 arguments: {'controller': controller}));
@@ -134,8 +131,7 @@ class TitleInput extends StatelessWidget {
                             focusNode: controller.titleFocus,
                             obscureText: false,
                             style: TextStyleHelper.headline7(
-                                color:
-                                    Theme.of(context).customColors().onSurface),
+                                color: Get.theme.colors().onSurface),
                             decoration: InputDecoration(
                               border: InputBorder.none,
                               focusedBorder: InputBorder.none,
@@ -145,9 +141,9 @@ class TitleInput extends StatelessWidget {
                               hintText: tr('projectTitle'),
                               hintStyle: TextStyleHelper.headline7(
                                   color: controller.needToFillTitle.isTrue
-                                      ? Theme.of(context).customColors().error
-                                      : Theme.of(context)
-                                          .customColors()
+                                      ? Get.theme.colors().colorError
+                                      : Get.theme
+                                          .colors()
                                           .onSurface
                                           .withOpacity(0.3)),
                             ),
@@ -190,8 +186,7 @@ class ProjectManager extends StatelessWidget {
           SizedBox(
             width: 56,
             child: AppIcon(
-                icon: SvgIcons.user,
-                color: Theme.of(context).customColors().onSurface),
+                icon: SvgIcons.user, color: Get.theme.colors().onSurface),
           ),
           Expanded(
             child: Column(
@@ -220,11 +215,9 @@ class ProjectManager extends StatelessWidget {
                                     tr('choosePM'),
                                     style: TextStyleHelper.subtitle1(
                                       color: controller.needToFillManager.value
-                                          ? Theme.of(context)
-                                              .customColors()
-                                              .error
-                                          : Theme.of(context)
-                                              .customColors()
+                                          ? Get.theme.colors().colorError
+                                          : Get.theme
+                                              .colors()
                                               .onSurface
                                               .withOpacity(0.4),
                                     ),
@@ -235,12 +228,12 @@ class ProjectManager extends StatelessWidget {
                           ),
                         ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 0,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),
@@ -311,8 +304,7 @@ class TeamMembers extends StatelessWidget {
           SizedBox(
             width: 56,
             child: AppIcon(
-                icon: SvgIcons.users,
-                color: Theme.of(context).customColors().onSurface),
+                icon: SvgIcons.users, color: Get.theme.colors().onSurface),
           ),
           Expanded(
             child: Column(
@@ -341,8 +333,8 @@ class TeamMembers extends StatelessWidget {
                                 child: Text(
                                   tr('addTeamMembers'),
                                   style: TextStyleHelper.subtitle1(
-                                    color: Theme.of(context)
-                                        .customColors()
+                                    color: Get.theme
+                                        .colors()
                                         .onSurface
                                         .withOpacity(0.4),
                                   ),
@@ -352,12 +344,12 @@ class TeamMembers extends StatelessWidget {
                           ),
                         ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 0,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),
@@ -397,8 +389,8 @@ class DescriptionButton extends StatelessWidget {
                         child: Text(
                           tr('addDescription'),
                           style: TextStyleHelper.subtitle1(
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onSurface
                                   .withOpacity(0.4)),
                         ),
@@ -407,12 +399,12 @@ class DescriptionButton extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 18),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 0,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),
@@ -442,9 +434,7 @@ class DescriptionText extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
-              color: Theme.of(context)
-                  .customColors()
-                  .bgDescription, //.withOpacity(0.2),
+              color: Get.theme.colors().bgDescription, //.withOpacity(0.2),
               borderRadius: BorderRadius.circular(4),
             ),
             child: ReadMoreText(
@@ -455,8 +445,7 @@ class DescriptionText extends StatelessWidget {
               trimMode: TrimMode.Line,
               trimCollapsedText: tr('showMore'),
               trimExpandedText: tr('showLess'),
-              moreStyle: TextStyleHelper.body2(
-                  color: Theme.of(context).customColors().links),
+              moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
             ),
           ),
         ),
@@ -486,8 +475,7 @@ class AdvancedOptions extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Theme(
-                  data: Theme.of(context)
-                      .copyWith(dividerColor: Colors.transparent),
+                  data: Get.theme.copyWith(dividerColor: Colors.transparent),
                   child: ExpansionTile(
                     expandedAlignment: Alignment.topLeft,
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -499,8 +487,8 @@ class AdvancedOptions extends StatelessWidget {
                               icon: SvgIcons.preferences,
                               height: 24,
                               width: 24,
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onSurface
                                   .withOpacity(0.6)),
                         ),
@@ -508,8 +496,7 @@ class AdvancedOptions extends StatelessWidget {
                         Text(
                           tr('advancedOptions'),
                           style: TextStyleHelper.subtitle1(
-                              color:
-                                  Theme.of(context).customColors().onSurface),
+                              color: Get.theme.colors().onSurface),
                         ),
                       ],
                     ),
@@ -538,12 +525,12 @@ class AdvancedOptions extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 1,
                   indent: 56,
                   endIndent: 0,
-                  color: Color(0xffD8D8D8),
+                  color: Get.theme.colors().outline,
                 ),
               ],
             ),
@@ -573,12 +560,12 @@ class OptionWithSwitch extends StatelessWidget {
       height: 60,
       child: Column(
         children: <Widget>[
-          const Divider(
+          Divider(
             height: 1,
             thickness: 1,
             indent: 0,
             endIndent: 0,
-            color: Color(0xffD8D8D8),
+            color: Get.theme.colors().outline,
           ),
           const SizedBox(height: 5),
           Row(
@@ -600,11 +587,9 @@ class OptionWithSwitch extends StatelessWidget {
                 () => Switch(
                   value: switchValue.value,
                   onChanged: switchOnChanged,
-                  activeTrackColor: Theme.of(context)
-                      .customColors()
-                      .primary
-                      .withOpacity(0.54),
-                  activeColor: Theme.of(context).customColors().primary,
+                  activeTrackColor:
+                      Get.theme.colors().primary.withOpacity(0.54),
+                  activeColor: Get.theme.colors().primary,
                 ),
               ),
             ],

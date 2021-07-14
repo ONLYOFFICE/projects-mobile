@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class CustomTab extends StatelessWidget {
@@ -25,12 +26,11 @@ class CustomTab extends StatelessWidget {
               height: 21,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color:
-                    Theme.of(context).customColors().onSurface.withOpacity(0.3),
+                color: Get.theme.colors().onSurface.withOpacity(0.3),
                 // TODO change active tabs color
                 // color: currentTab
-                //     ? Theme.of(context).customColors().primary
-                //     : Theme.of(context)
+                //     ? Get.theme.customColors().primary
+                //     : Get.theme
                 //         .customColors()
                 //         .onSurface
                 //         .withOpacity(0.3),
@@ -42,7 +42,7 @@ class CustomTab extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 14,
-                      color: Theme.of(context).customColors().surface,
+                      color: Get.theme.colors().surface,
                       letterSpacing: 0.1),
                 ),
               ),

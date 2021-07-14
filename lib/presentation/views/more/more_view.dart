@@ -22,7 +22,7 @@ class MoreView extends StatelessWidget {
     return Container(
       height: 312,
       decoration: BoxDecoration(
-        color: Theme.of(context).customColors().primarySurface,
+        color: Get.theme.colors().primarySurface,
         borderRadius: const BorderRadius.vertical(
           top: Radius.circular(16),
         ),
@@ -35,9 +35,10 @@ class MoreView extends StatelessWidget {
               child: Container(
                   height: 76,
                   padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
-                      bottom: BorderSide(color: Color(0xffD8D8D8), width: 0.5),
+                      bottom: BorderSide(
+                          color: Get.theme.colors().outline, width: 0.5),
                     ),
                   ),
                   child: userController.loaded.isTrue &&
@@ -67,17 +68,15 @@ class MoreView extends StatelessWidget {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyleHelper.subtitle1(
-                                        color: Theme.of(context)
-                                            .customColors()
-                                            .onNavBar),
+                                        color: Get.theme.colors().onNavBar),
                                   ),
                                   Text(
                                     portalInfoController.portalName,
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyleHelper.body2(
-                                        color: Theme.of(context)
-                                            .customColors()
+                                        color: Get.theme
+                                            .colors()
                                             .onNavBar
                                             .withOpacity(0.6)),
                                   ),
@@ -134,7 +133,7 @@ class _MoreTile extends StatelessWidget {
             ),
             Text(text,
                 style: TextStyleHelper.subtitle1(
-                    color: Theme.of(context).customColors().onNavBar)),
+                    color: Get.theme.colors().onNavBar)),
           ],
         ),
       ),

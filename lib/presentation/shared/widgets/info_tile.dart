@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -38,7 +39,7 @@ class InfoTile extends StatelessWidget {
                 Text(subtitle,
                     style: subtitleStyle ??
                         TextStyleHelper.subtitle1(
-                            color: Theme.of(context).customColors().onSurface))
+                            color: Get.theme.colors().onSurface))
             ],
           ),
         ),

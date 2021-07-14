@@ -12,22 +12,22 @@ class _DueDate extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('overdue'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.deadline['overdue'],
               onTap: () => filterController.changeDeadline('overdue')),
           FilterElement(
               title: tr('today'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.deadline['today'],
               onTap: () => filterController.changeDeadline('today')),
           FilterElement(
               title: tr('upcoming'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.deadline['upcoming'],
               onTap: () => filterController.changeDeadline('upcoming')),
           FilterElement(
               title: tr('customPeriod'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.deadline['custom']['selected'],
               onTap: () =>
                   selectDateRange(context, filterController: filterController)),

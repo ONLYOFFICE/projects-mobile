@@ -14,7 +14,7 @@ class SortView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).customColors().onPrimarySurface,
+        color: Get.theme.colors().onPrimarySurface,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
@@ -30,10 +30,7 @@ class SortView extends StatelessWidget {
                 width: 40,
                 child: DecoratedBox(
                     decoration: BoxDecoration(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.2),
+                        color: Get.theme.colors().onSurface.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(2))),
               ),
             ),
@@ -41,8 +38,8 @@ class SortView extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(left: 15, right: 16, top: 18.5),
               child: Text(tr('sortBy'),
-                  style: TextStyleHelper.h6(
-                      color: Theme.of(context).customColors().onSurface))),
+                  style:
+                      TextStyleHelper.h6(color: Get.theme.colors().onSurface))),
           sortOptions,
         ],
       ),
@@ -63,7 +60,7 @@ class SortTile extends StatelessWidget {
 
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: Theme.of(context).customColors().bgDescription,
+          color: Get.theme.colors().bgDescription,
           borderRadius: BorderRadius.circular(6));
     }
 

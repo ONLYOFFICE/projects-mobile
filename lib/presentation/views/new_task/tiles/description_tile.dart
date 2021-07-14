@@ -86,8 +86,8 @@ class _DescriptionTileState extends State<DescriptionTile>
                           width: 72,
                           child: AppIcon(
                               icon: SvgIcons.description,
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onSurface
                                   .withOpacity(0.6))),
                       Expanded(
@@ -101,8 +101,8 @@ class _DescriptionTileState extends State<DescriptionTile>
                               if (_isSelected)
                                 Text('${tr('description')}:',
                                     style: TextStyleHelper.caption(
-                                        color: Theme.of(context)
-                                            .customColors()
+                                        color: Get.theme
+                                            .colors()
                                             .onBackground
                                             .withOpacity(0.75))),
                               Flexible(
@@ -110,11 +110,9 @@ class _DescriptionTileState extends State<DescriptionTile>
                                     _isSelected ? text : tr('addDescription'),
                                     style: TextStyleHelper.subtitle1(
                                         color: _isSelected
-                                            ? Theme.of(context)
-                                                .customColors()
-                                                .onBackground
-                                            : Theme.of(context)
-                                                .customColors()
+                                            ? Get.theme.colors().onBackground
+                                            : Get.theme
+                                                .colors()
                                                 .onSurface
                                                 .withOpacity(0.4))),
                               ),
@@ -130,8 +128,8 @@ class _DescriptionTileState extends State<DescriptionTile>
                               turns: _iconTurns,
                               child: Icon(Icons.arrow_forward_ios_rounded,
                                   size: 20,
-                                  color: Theme.of(context)
-                                      .customColors()
+                                  color: Get.theme
+                                      .colors()
                                       .onSurface
                                       .withOpacity(0.6)),
                             ),
