@@ -71,7 +71,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
               SizedBox(height: h(170)),
               Text(tr('enterCurrentPasscode'),
                   style: TextStyleHelper.headline6(
-                      color: Theme.of(context).customColors().onBackground)),
+                      color: Get.theme.colors().onBackground)),
               Obx(
                 () => SizedBox(
                   height: h(72),
@@ -81,7 +81,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                       if (passcodeController.passcodeCheckFailed == true)
                         Text(tr('incorrectPIN'),
                             style: TextStyleHelper.subtitle1(
-                                color: Theme.of(context).customColors().error)),
+                                color: Get.theme.colors().colorError)),
                       const Flexible(flex: 2, child: SizedBox(height: 32)),
                     ],
                   ),
@@ -140,7 +140,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                     child: Text(
                       tr('cancel'),
                       style: TextStyleHelper.button(
-                          color: Theme.of(context).customColors().primary),
+                          color: Get.theme.colors().primary),
                     ),
                   ),
                   SizedBox(width: w(25.8)),

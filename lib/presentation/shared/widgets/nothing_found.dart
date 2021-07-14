@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -80,10 +81,7 @@ class EmptyScreen extends StatelessWidget {
             text,
             textAlign: TextAlign.center,
             style: TextStyleHelper.subtitle1(
-                color: Theme.of(context)
-                    .customColors()
-                    .onSurface
-                    .withOpacity(0.4)),
+                color: Get.theme.colors().onSurface.withOpacity(0.4)),
           ),
         ],
       ),

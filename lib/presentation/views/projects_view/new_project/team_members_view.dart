@@ -62,7 +62,7 @@ class TeamMembersSelectionView extends StatelessWidget {
     controller.setupUsersSelection();
 
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         title: TeamMembersSelectionHeader(
           controller: controller,
@@ -128,7 +128,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                     child: Text(
                       title,
                       style: TextStyleHelper.headline6(
-                          color: Theme.of(context).customColors().onSurface),
+                          color: Get.theme.colors().onSurface),
                     ),
                   ),
                   Obx(
@@ -139,8 +139,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                             plural('person',
                                 controller.selectedTeamMembers.length),
                             style: TextStyleHelper.caption(
-                                color:
-                                    Theme.of(context).customColors().onSurface),
+                                color: Get.theme.colors().onSurface),
                           ),
                         );
                       }
@@ -197,7 +196,7 @@ class TeamMembersSearchBar extends StatelessWidget {
               },
               child: AppIcon(
                 icon: SvgIcons.preferences,
-                color: Theme.of(context).customColors().primary,
+                color: Get.theme.colors().primary,
               ),
             ),
           ),

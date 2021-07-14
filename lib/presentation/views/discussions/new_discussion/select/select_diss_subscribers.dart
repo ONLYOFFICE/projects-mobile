@@ -157,9 +157,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                                   usersDataSource.usersList[index].displayName,
                                   maxLines: 2,
                                   style: TextStyleHelper.subtitle1(
-                                      color: Theme.of(context)
-                                          .customColors()
-                                          .onSurface),
+                                      color: Get.theme.colors().onSurface),
                                 ),
                                 if (usersDataSource
                                         .usersList[index].portalUser.title !=
@@ -169,8 +167,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                                         .usersList[index].portalUser.title,
                                     maxLines: 2,
                                     style: TextStyleHelper.caption(
-                                        color: Theme.of(context)
-                                            .customColors()
+                                        color: Get.theme
+                                            .colors()
                                             .onSurface
                                             .withOpacity(0.6)),
                                   ),

@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -54,15 +55,15 @@ class WideButton extends StatelessWidget {
     // ignore: deprecated_member_use
     return FlatButton(
       onPressed: onPressed,
-      disabledColor: Theme.of(context).customColors().surface,
+      disabledColor: Get.theme.colors().surface,
       minWidth: double.infinity,
-      color: color ?? Theme.of(context).customColors().primary,
+      color: color ?? Get.theme.colors().primary,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
       padding: padding,
       child: Text(
         text,
         style: TextStyleHelper.button(
-            color: textColor ?? Theme.of(context).customColors().onNavBar),
+            color: textColor ?? Get.theme.colors().onNavBar),
       ),
     );
   }

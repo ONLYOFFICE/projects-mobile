@@ -91,7 +91,7 @@ class SelfProfileScreen extends StatelessWidget {
                 child: Text(
                   userController.user?.displayName,
                   style: TextStyleHelper.headline6(
-                    color: Theme.of(context).customColors().onSurface,
+                    color: Get.theme.colors().onSurface,
                   ),
                 ),
               ),
@@ -108,10 +108,9 @@ class SelfProfileScreen extends StatelessWidget {
               ),
               _ProfileInfoTile(
                 text: tr('logOut'),
-                textColor: Theme.of(context).customColors().error,
+                textColor: Get.theme.colors().colorError,
                 icon: SvgIcons.logout,
-                iconColor:
-                    Theme.of(context).customColors().error.withOpacity(0.6),
+                iconColor: Get.theme.colors().colorError.withOpacity(0.6),
                 onTap: () async => profileController.logout(context),
               ),
             ],
@@ -162,7 +161,7 @@ class ProfileScreen extends StatelessWidget {
                 child: Text(
                   portalUser?.displayName,
                   style: TextStyleHelper.headline6(
-                    color: Theme.of(context).customColors().onSurface,
+                    color: Get.theme.colors().onSurface,
                   ),
                 ),
               ),
@@ -230,10 +229,7 @@ class _ProfileInfoTile extends StatelessWidget {
                       ? AppIcon(
                           icon: icon,
                           color: iconColor ??
-                              Theme.of(context)
-                                  .customColors()
-                                  .onSurface
-                                  .withOpacity(0.6))
+                              Get.theme.colors().onSurface.withOpacity(0.6))
                       : null,
                 ),
                 Expanded(
@@ -247,8 +243,8 @@ class _ProfileInfoTile extends StatelessWidget {
                         if (caption != null && caption.isNotEmpty)
                           Text(caption,
                               style: TextStyleHelper.caption(
-                                  color: Theme.of(context)
-                                      .customColors()
+                                  color: Get.theme
+                                      .colors()
                                       .onBackground
                                       .withOpacity(0.75))),
                         Text(text,
@@ -258,9 +254,7 @@ class _ProfileInfoTile extends StatelessWidget {
                                 TextStyleHelper.subtitle1(
                                     // ignore: prefer_if_null_operators
                                     color: textColor ??
-                                        Theme.of(context)
-                                            .customColors()
-                                            .onSurface))
+                                        Get.theme.colors().onSurface))
                       ],
                     ),
                   ),

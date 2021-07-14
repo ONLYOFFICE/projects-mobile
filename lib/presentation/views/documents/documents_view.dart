@@ -31,7 +31,6 @@
  */
 
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -137,7 +136,7 @@ class DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () {
@@ -176,10 +175,8 @@ class DocumentsScreen extends StatelessWidget {
                   ? Border(
                       top: BorderSide(
                           width: 0.5,
-                          color: Theme.of(context)
-                              .customColors()
-                              .onBackground
-                              .withOpacity(0.2)),
+                          color:
+                              Get.theme.colors().onBackground.withOpacity(0.2)),
                     )
                   : null,
             ),
@@ -251,7 +248,7 @@ class DocsTitle extends StatelessWidget {
                   width: 24,
                   height: 24,
                   icon: SvgIcons.search,
-                  color: Theme.of(context).customColors().primary,
+                  color: Get.theme.colors().primary,
                 ),
               ),
               const SizedBox(width: 24),
@@ -334,10 +331,7 @@ class DocsBottom extends StatelessWidget {
                           controller.paginationController.total.value.toString()
                         ]),
                         style: TextStyleHelper.body2(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6),
+                          color: Get.theme.colors().onSurface.withOpacity(0.6),
                         ),
                       ),
                     ),
@@ -380,9 +374,9 @@ class FileCell extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(
                     width: 1,
-                    color: const Color(0xffD8D8D8),
+                    color: Get.theme.colors().outline,
                   ),
-                  color: Colors.white,
+                  color: Get.theme.colors().surface,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -407,10 +401,7 @@ class FileCell extends StatelessWidget {
                         width: 20,
                         height: 20,
                         icon: SvgIcons.documents,
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6));
+                        color: Get.theme.colors().onSurface.withOpacity(0.6));
                   }),
                 ),
               ),
@@ -430,10 +421,7 @@ class FileCell extends StatelessWidget {
                 Text(
                     '${formatedDate(element.updated)} • ${element.contentLength} • ${element.updatedBy.displayName}',
                     style: TextStyleHelper.caption(
-                        color: Theme.of(context)
-                            .customColors()
-                            .onSurface
-                            .withOpacity(0.6))),
+                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
               ],
             ),
           ),
@@ -446,10 +434,7 @@ class FileCell extends StatelessWidget {
                   _onFilePopupMenuSelected(value, element, context, controller)
                 },
                 icon: Icon(Icons.more_vert,
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.5)),
+                    color: Get.theme.colors().onSurface.withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem(
@@ -484,7 +469,7 @@ class FileCell extends StatelessWidget {
                       child: Text(
                         tr('delete'),
                         style: TextStyleHelper.subtitle1(
-                            color: Theme.of(context).customColors().error),
+                            color: Get.theme.colors().colorError),
                       ),
                     ),
                   ];
@@ -529,9 +514,9 @@ class FolderCell extends StatelessWidget {
                   decoration: BoxDecoration(
                     border: Border.all(
                       width: 1,
-                      color: const Color(0xffD8D8D8),
+                      color: Get.theme.colors().outline,
                     ),
-                    color: Colors.white,
+                    color: Get.theme.colors().surface,
                     shape: BoxShape.circle,
                   ),
                   child: Center(
@@ -563,10 +548,8 @@ class FolderCell extends StatelessWidget {
                       ]),
                       // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
                       style: TextStyleHelper.caption(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6))),
+                          color:
+                              Get.theme.colors().onSurface.withOpacity(0.6))),
                 ],
               ),
             ),
@@ -582,10 +565,7 @@ class FolderCell extends StatelessWidget {
                     controller,
                   ),
                   icon: Icon(Icons.more_vert,
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.5)),
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -622,7 +602,7 @@ class FolderCell extends StatelessWidget {
                           child: Text(
                             tr('delete'),
                             style: TextStyleHelper.subtitle1(
-                                color: Theme.of(context).customColors().error),
+                                color: Get.theme.colors().colorError),
                           ),
                         ),
                     ];

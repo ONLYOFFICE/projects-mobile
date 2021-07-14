@@ -64,59 +64,57 @@ class ProjectsView extends StatelessWidget {
 
     controller.loadProjects();
 
-    return Obx(
-      () => Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        floatingActionButton: StyledFloatingActionButton(
-          onPressed: () => controller.createNewProject(),
-          child: AppIcon(
-            icon: SvgIcons.add_project,
-            width: 32,
-            height: 32,
-          ),
+    return Scaffold(
+      backgroundColor: Get.theme.colors().backgroundColor,
+      floatingActionButton: StyledFloatingActionButton(
+        onPressed: () => controller.createNewProject(),
+        child: AppIcon(
+          icon: SvgIcons.add_project,
+          width: 32,
+          height: 32,
         ),
-        appBar: StyledAppBar(
-          title: _Title(controller: controller),
-          bottom: _Bottom(controller: controller),
-          showBackButton: false,
-          elevation: controller.needToShowDivider.value ? 1 : 0,
-          titleHeight: 50,
-          bottomHeight: 50,
-        ),
-        body: Obx(
-          () {
-            if (controller.loaded.isFalse) return const ListLoadingSkeleton();
-            if (controller.loaded.isTrue &&
-                controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value) {
-              return Center(
-                child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.project_not_created),
-                    text: tr('noProjectsCreated',
-                        args: [tr('projects').toLowerCase()])),
-              );
-            }
-            if (controller.loaded.isTrue &&
-                controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value) {
-              return Center(
-                child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noProjectsMatching',
-                        args: [tr('projects').toLowerCase()])),
-              );
-            }
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.builder(
-                controller: controller.scrollController,
-                itemBuilder: (c, i) =>
-                    ProjectCell(item: controller.paginationController.data[i]),
-                itemCount: controller.paginationController.data.length,
-              ),
+      ),
+      appBar: StyledAppBar(
+        title: _Title(controller: controller),
+        bottom: _Bottom(controller: controller),
+        showBackButton: false,
+        elevation: 1,
+        titleHeight: 50,
+        bottomHeight: 50,
+      ),
+      body: Obx(
+        () {
+          if (controller.loaded.isFalse) return const ListLoadingSkeleton();
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isEmpty &&
+              !controller.filterController.hasFilters.value) {
+            return Center(
+              child: EmptyScreen(
+                  icon: AppIcon(icon: SvgIcons.project_not_created),
+                  text: tr('noProjectsCreated',
+                      args: [tr('projects').toLowerCase()])),
             );
-          },
-        ),
+          }
+          if (controller.loaded.isTrue &&
+              controller.paginationController.data.isEmpty &&
+              controller.filterController.hasFilters.value) {
+            return Center(
+              child: EmptyScreen(
+                  icon: AppIcon(icon: SvgIcons.not_found),
+                  text: tr('noProjectsMatching',
+                      args: [tr('projects').toLowerCase()])),
+            );
+          }
+          return PaginationListView(
+            paginationController: controller.paginationController,
+            child: ListView.builder(
+              controller: controller.scrollController,
+              itemBuilder: (c, i) =>
+                  ProjectCell(item: controller.paginationController.data[i]),
+              itemCount: controller.paginationController.data.length,
+            ),
+          );
+        },
       ),
     );
   }
@@ -151,7 +149,7 @@ class _Title extends StatelessWidget {
                   width: 24,
                   height: 24,
                   icon: SvgIcons.search,
-                  color: Theme.of(context).customColors().primary,
+                  color: Get.theme.colors().primary,
                 ),
               ),
               const SizedBox(width: 24),
@@ -244,10 +242,7 @@ class _Bottom extends StatelessWidget {
                       controller.paginationController.total.value.toString()
                     ]),
                     style: TextStyleHelper.body2(
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6),
+                      color: Get.theme.colors().onSurface.withOpacity(0.6),
                     ),
                   ),
                 ),

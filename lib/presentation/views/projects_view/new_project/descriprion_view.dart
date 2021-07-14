@@ -64,8 +64,7 @@ class NewProjectDescription extends StatelessWidget {
           autofocus: true,
           controller: controller.descriptionController,
           maxLines: null,
-          style: TextStyleHelper.subtitle1(
-              color: Theme.of(context).customColors().onSurface),
+          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           decoration: InputDecoration.collapsed(
               hintText: tr('enterText'),
               hintStyle: TextStyleHelper.subtitle1()),

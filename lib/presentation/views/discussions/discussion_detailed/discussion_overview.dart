@@ -69,8 +69,8 @@ class DiscussionOverview extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 72),
                   child: Text(tr('discussion').toUpperCase(),
                       style: TextStyleHelper.overline(
-                          color: Theme.of(context)
-                              .customColors()
+                          color: Get.theme
+                              .colors()
                               .onBackground
                               .withOpacity(0.6))),
                 ),
@@ -78,8 +78,7 @@ class DiscussionOverview extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 72, right: 16),
                     child: Text(discussion.title,
                         style: TextStyleHelper.headline6(
-                            color:
-                                Theme.of(context).customColors().onSurface))),
+                            color: Get.theme.colors().onSurface))),
                 const SizedBox(height: 22),
                 Obx(() => Align(
                       // otherwise it will take up the entire width
@@ -109,10 +108,10 @@ class DiscussionOverview extends StatelessWidget {
                     trimMode: TrimMode.Line,
                     trimCollapsedText: tr('showMore'),
                     trimExpandedText: tr('showLess'),
-                    moreStyle: TextStyleHelper.body2(
-                        color: Theme.of(context).customColors().links),
-                    lessStyle: TextStyleHelper.body2(
-                        color: Theme.of(context).customColors().links),
+                    moreStyle:
+                        TextStyleHelper.body2(color: Get.theme.colors().links),
+                    lessStyle:
+                        TextStyleHelper.body2(color: Get.theme.colors().links),
                   ),
                 ),
                 const SizedBox(height: 21),
@@ -122,7 +121,7 @@ class DiscussionOverview extends StatelessWidget {
                     caption: '${tr('project')}:',
                     subtitle: discussion.project.title,
                     subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Theme.of(context).customColors().links)),
+                        color: Get.theme.colors().links)),
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)
                   InfoTile(

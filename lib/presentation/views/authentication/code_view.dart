@@ -61,7 +61,7 @@ class CodeView extends StatelessWidget {
             Text(tr('tfaTitle'),
                 textAlign: TextAlign.center,
                 style: TextStyleHelper.headline5(
-                    color: Theme.of(context).customColors().onSurface)),
+                    color: Get.theme.colors().onSurface)),
             SizedBox(height: Get.height * 0.0222),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -69,10 +69,7 @@ class CodeView extends StatelessWidget {
                 tr('tfaGAcodeDescription'),
                 textAlign: TextAlign.center,
                 style: TextStyleHelper.body2(
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6)),
+                    color: Get.theme.colors().onSurface.withOpacity(0.6)),
               ),
             ),
             SizedBox(height: Get.height * 0.0333),
@@ -96,7 +93,7 @@ class CodeView extends StatelessWidget {
             ),
             // Center(
             //   child: Container(
-            //     color: Theme.of(context).backgroundColor,
+            //     color: Get.theme.backgroundColor,
             //     child: Padding(
             //       padding: const EdgeInsets.all(36.0),
             //       child: Column(

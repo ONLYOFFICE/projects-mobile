@@ -160,7 +160,7 @@ class _DocsTitle extends StatelessWidget {
                   width: 24,
                   height: 24,
                   icon: SvgIcons.search,
-                  color: Theme.of(context).customColors().primary,
+                  color: Get.theme.colors().primary,
                 ),
               ),
               const SizedBox(width: 24),

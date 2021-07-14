@@ -89,11 +89,11 @@ class GetCodeViews extends StatelessWidget {
   }
 }
 
-TextStyle _stepStyle(context) => TextStyleHelper.headline6(
-    color: Theme.of(context).customColors().onSurface);
+TextStyle _stepStyle(context) =>
+    TextStyleHelper.headline6(color: Get.theme.colors().onSurface);
 
-TextStyle _setup1Style(context) => TextStyleHelper.subtitle1(
-    color: Theme.of(context).customColors().onSurface);
+TextStyle _setup1Style(context) =>
+    TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
 
-TextStyle _setup2Style(context) => TextStyleHelper.body2(
-    color: Theme.of(context).customColors().onSurface.withOpacity(0.6));
+TextStyle _setup2Style(context) =>
+    TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6));

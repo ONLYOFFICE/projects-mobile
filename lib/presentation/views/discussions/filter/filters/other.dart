@@ -44,7 +44,7 @@ class _Other extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('subscribedDiscussions'),
-              titleColor: Theme.of(context).customColors().onSurface,
+              titleColor: Theme.of(context).colors().onSurface,
               isSelected: filterController.other['subscribed'],
               onTap: () => filterController.changeOther('subscribed')),
         ],

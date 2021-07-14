@@ -138,8 +138,8 @@ class ProjectsList extends StatelessWidget {
                         ),
                         Text(projects[index].responsible.displayName,
                             style: TextStyleHelper.caption(
-                                    color: Theme.of(context)
-                                        .customColors()
+                                    color: Get.theme
+                                        .colors()
                                         .onSurface
                                         .withOpacity(0.6))
                                 .copyWith(height: 1.667)),

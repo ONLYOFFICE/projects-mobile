@@ -57,10 +57,8 @@ class ProjectDiscussionsScreen extends StatelessWidget {
                   ? Border(
                       top: BorderSide(
                           width: 0.5,
-                          color: Theme.of(context)
-                              .customColors()
-                              .onBackground
-                              .withOpacity(0.2)),
+                          color:
+                              Get.theme.colors().onBackground.withOpacity(0.2)),
                     )
                   : null,
             ),

@@ -67,10 +67,7 @@ class ResponsibleTile extends StatelessWidget {
               ? suffixIcon ??
                   Icon(Icons.arrow_forward_ios_rounded,
                       size: 20,
-                      color: Theme.of(context)
-                          .customColors()
-                          .onSurface
-                          .withOpacity(0.6))
+                      color: Get.theme.colors().onSurface.withOpacity(0.6))
               : null,
           suffixPadding: const EdgeInsets.only(right: 21),
           icon: SvgIcons.person,

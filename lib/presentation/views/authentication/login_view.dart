@@ -54,14 +54,14 @@ class LoginView extends StatelessWidget {
           children: [
             SizedBox(height: Get.height * 0.094),
             Text('${tr('portalAdress')}:',
-                style: TextStyleHelper.body2(
-                    color: Theme.of(context).customColors().onSurface)),
+                style:
+                    TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
             Text(controller.portalAdress,
                 style: TextStyleHelper.headline6(
-                    color: Theme.of(context).customColors().onSurface)),
+                    color: Get.theme.colors().onSurface)),
             Center(
               child: Container(
-                color: Theme.of(context).backgroundColor,
+                color: Get.theme.backgroundColor,
                 child: Padding(
                   padding: const EdgeInsets.all(36.0),
                   child: Column(
@@ -97,15 +97,15 @@ class LoginView extends StatelessWidget {
                           BoxShadow(
                               blurRadius: 3,
                               offset: const Offset(0, 0.85),
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onBackground
                                   .withOpacity(0.19)),
                           BoxShadow(
                               blurRadius: 3,
                               offset: const Offset(0, 0.25),
-                              color: Theme.of(context)
-                                  .customColors()
+                              color: Get.theme
+                                  .colors()
                                   .onBackground
                                   .withOpacity(0.04)),
                         ]),
@@ -122,8 +122,7 @@ class LoginView extends StatelessWidget {
                           child: Text(
                             tr('forgotPassword'),
                             style: TextStyleHelper.subtitle2(
-                                color:
-                                    Theme.of(context).customColors().primary),
+                                color: Get.theme.colors().primary),
                           )),
                       // PasswordForm(),
                       // (controller.capabilities != null)

@@ -61,9 +61,9 @@ class NewTaskView extends StatelessWidget {
     controller.init(projectDetailed);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).customColors().backgroundColor,
+      backgroundColor: Get.theme.colors().backgroundColor,
       appBar: StyledAppBar(
-        titleText: tr('New task'),
+        titleText: tr('newTask'),
         actions: [
           IconButton(
               icon: const Icon(Icons.check_rounded),

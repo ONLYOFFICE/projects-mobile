@@ -109,15 +109,14 @@ class TaskStatus extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => DecoratedBox(
-        decoration: const BoxDecoration(
-            shape: BoxShape.circle, color: Color(0xffD8D8D8)),
+        decoration: BoxDecoration(
+            shape: BoxShape.circle, color: Get.theme.colors().outline),
         child: Container(
             width: 40,
             height: 40,
             margin: const EdgeInsets.all(0.5),
             decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Theme.of(context).customColors().background),
+                shape: BoxShape.circle, color: Get.theme.colors().background),
             child: Center(
               child: SVG.createSizedFromString(
                   itemController.statusImageString.value,
@@ -171,19 +170,15 @@ class SecondColumn extends StatelessWidget {
                   ),
                   Text(' • ',
                       style: TextStyleHelper.caption(
-                          color: Theme.of(context)
-                              .customColors()
-                              .onSurface
-                              .withOpacity(0.6))),
+                          color:
+                              Get.theme.colors().onSurface.withOpacity(0.6))),
                   Flexible(
                     child: Text(task.createdBy.displayName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.caption(
-                            color: Theme.of(context)
-                                .customColors()
-                                .onSurface
-                                .withOpacity(0.6))),
+                            color:
+                                Get.theme.colors().onSurface.withOpacity(0.6))),
                   ),
                 ],
               ),
@@ -220,9 +215,9 @@ class ThirdColumn extends StatelessWidget {
           Text(formatedDateFromString(now: _now, stringDate: task.deadline),
               style: _deadline.isBefore(_now)
                   ? TextStyleHelper.caption(
-                      color: Theme.of(context).customColors().error)
+                      color: Get.theme.colors().colorError)
                   : TextStyleHelper.caption(
-                      color: Theme.of(context).customColors().onSurface)),
+                      color: Get.theme.colors().onSurface)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
@@ -231,10 +226,7 @@ class ThirdColumn extends StatelessWidget {
             const SizedBox(width: 5),
             Text(task.subtasks.length.toString(),
                 style: TextStyleHelper.body2(
-                    color: Theme.of(context)
-                        .customColors()
-                        .onSurface
-                        .withOpacity(0.6))),
+                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ],
         ),
       ],

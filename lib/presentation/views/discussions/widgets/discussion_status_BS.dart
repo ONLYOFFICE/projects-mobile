@@ -50,7 +50,7 @@ Future<void> showsDiscussionStatusesBS({
     initHeight: initSize,
     maxHeight: initSize + 0.1,
     decoration: BoxDecoration(
-        color: Theme.of(context).customColors().onPrimarySurface,
+        color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
       return Column(
@@ -60,8 +60,7 @@ Future<void> showsDiscussionStatusesBS({
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(
-                    color: Theme.of(context).customColors().onSurface)),
+                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
           ),
           const SizedBox(height: 18.5),
         ],
@@ -77,10 +76,7 @@ Future<void> showsDiscussionStatusesBS({
               border: Border(
                 top: BorderSide(
                     width: 1,
-                    color: Theme.of(context)
-                        .customColors()
-                        .outline
-                        .withOpacity(0.5)),
+                    color: Get.theme.colors().outline.withOpacity(0.5)),
               ),
             ),
             child: Obx(
