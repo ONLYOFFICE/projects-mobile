@@ -51,7 +51,13 @@ class SettingsController extends GetxController {
     var isPassEnable = await _service.isPasscodeEnable;
     isPasscodeEnable = isPassEnable.obs;
 
-    currentTheme.value = await GetStorage().read('themeMode');
+    var themeMode = await GetStorage().read('themeMode');
+    if (themeMode == null) {
+      themeMode = 'sameAsSystem';
+      await GetStorage().write(themeMode, themeMode);
+    }
+
+    currentTheme.value = themeMode;
     loaded.value = true;
 
     super.onInit();
