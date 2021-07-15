@@ -255,15 +255,16 @@ class TaskFilterController extends BaseFilterController {
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
       deadline['overdue'] = !deadline['overdue'];
-      var dueDate = formatter.format(DateTime.now());
-      if (deadline['overdue']) _deadlineFilter = '&deadlineStop=$dueDate';
+      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
+      if (deadline['overdue'])
+        _deadlineFilter = '&deadlineStop=$dueDate&status=open';
     }
     if (filter == 'today') {
       deadline['overdue'] = false;
       deadline['upcoming'] = false;
       deadline['custom']['selected'] = false;
       deadline['today'] = !deadline['today'];
-      var dueDate = formatter.format(DateTime.now());
+      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
       if (deadline['today'])
         _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
     }
@@ -272,9 +273,10 @@ class TaskFilterController extends BaseFilterController {
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
       deadline['upcoming'] = !deadline['upcoming'];
-      var startDate = formatter.format(DateTime.now());
-      var stopDate =
-          formatter.format(DateTime.now().add(const Duration(days: 7)));
+      var startDate = formatter.format(DateTime.now()).substring(0, 10);
+      var stopDate = formatter
+          .format(DateTime.now().add(const Duration(days: 7)))
+          .substring(0, 10);
       if (deadline['upcoming'])
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
@@ -285,8 +287,8 @@ class TaskFilterController extends BaseFilterController {
       deadline['custom']['selected'] = !deadline['custom']['selected'];
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start);
-      var stopDate = formatter.format(stop);
+      var startDate = formatter.format(start).substring(0, 10);
+      var stopDate = formatter.format(stop).substring(0, 10);
       if (deadline['custom']['selected'])
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
