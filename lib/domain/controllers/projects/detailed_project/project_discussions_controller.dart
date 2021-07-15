@@ -41,6 +41,7 @@ import 'package:projects/internal/locator.dart';
 class ProjectDiscussionsController extends GetxController {
   final _api = locator<DiscussionsService>();
   final projectId;
+  var projectTitle;
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'ProjectDiscussionsController');
@@ -55,7 +56,7 @@ class ProjectDiscussionsController extends GetxController {
 
   RxBool loaded = false.obs;
 
-  ProjectDiscussionsController(this.projectId) {
+  ProjectDiscussionsController(this.projectId, this.projectTitle) {
     _sortController.updateSortDelegate =
         () async => await loadProjectDiscussions();
 
@@ -82,13 +83,6 @@ class ProjectDiscussionsController extends GetxController {
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: projectId.toString(),
-
-      // responsibleFilter: _filterController.responsibleFilter,
-      // creatorFilter: _filterController.creatorFilter,
-      // projectFilter: _filterController.projectFilter,
-      // milestoneFilter: _filterController.milestoneFilter,
-      // deadlineFilter: _filterController.deadlineFilter,
-      // query: 'задача',
     );
     paginationController.total.value = result.total;
 
@@ -99,4 +93,7 @@ class ProjectDiscussionsController extends GetxController {
 
   void toDetailed(Discussion discussion) =>
       Get.toNamed('DiscussionDetailed', arguments: {'discussion': discussion});
+
+  void toNewDiscussionScreen() => Get.toNamed('NewDiscussionScreen',
+      arguments: {'projectId': projectId, 'projectTitle': projectTitle});
 }

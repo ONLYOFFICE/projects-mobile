@@ -62,4 +62,6 @@ abstract class DiscussionActionsController {
   void leaveTextView();
   void confirmSubscribersSelection();
   void leaveSubscribersSelectionView();
+
+  DiscussionActionsController();
 }

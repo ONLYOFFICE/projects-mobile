@@ -75,8 +75,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   @override
   void initState() {
     super.initState();
-    discussionsController =
-        Get.put(ProjectDiscussionsController(projectDetailed.id));
+    discussionsController = Get.put(ProjectDiscussionsController(
+        projectDetailed.id, projectDetailed.title));
 
     projectController =
         Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
