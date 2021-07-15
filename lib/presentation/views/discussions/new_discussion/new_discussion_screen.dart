@@ -13,7 +13,18 @@ class NewDiscussionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(NewDiscussionController());
+    var projectId;
+    var projectTitle;
+
+    try {
+      projectId = Get.arguments['projectId'];
+      projectTitle = Get.arguments['projectTitle'];
+    } catch (_) {}
+
+    var controller = Get.put(NewDiscussionController(
+      specifiedProjectId: projectId,
+      specifiedProjectTitle: projectTitle,
+    ));
 
     return Scaffold(
       appBar: StyledAppBar(
@@ -38,7 +49,10 @@ class NewDiscussionScreen extends StatelessWidget {
               child: Column(
                 children: [
                   NewDiscussionText(controller: controller),
-                  NewDiscussionProject(controller: controller),
+                  IgnorePointer(
+                    ignoring: projectId != null,
+                    child: NewDiscussionProject(controller: controller),
+                  ),
                   NewDiscussionSubscribers(controller: controller),
                 ],
               ),

@@ -11,6 +11,7 @@ import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -20,6 +21,11 @@ import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 
 class NewDiscussionController extends GetxController
     implements DiscussionActionsController {
+  final specifiedProjectId;
+  final specifiedProjectTitle;
+  NewDiscussionController(
+      {this.specifiedProjectId, this.specifiedProjectTitle});
+
   final _api = locator<DiscussionsService>();
   var _selectedProjectId;
   // for dateTime format
@@ -72,6 +78,10 @@ class NewDiscussionController extends GetxController
   @override
   void onInit() {
     _titleFocus.requestFocus();
+    if (specifiedProjectId != null) {
+      _selectedProjectId = specifiedProjectId;
+      selectedProjectTitle.value = specifiedProjectTitle;
+    }
     super.onInit();
   }
 
@@ -80,6 +90,7 @@ class NewDiscussionController extends GetxController
 
   @override
   void changeProjectSelection({var id, String title}) {
+    if (specifiedProjectId != null) return;
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
@@ -91,6 +102,7 @@ class NewDiscussionController extends GetxController
   }
 
   void removeProjectSelection() {
+    if (specifiedProjectId != null) return;
     _selectedProjectId = null;
     selectedProjectTitle.value = '';
   }
@@ -239,9 +251,15 @@ class NewDiscussionController extends GetxController
       );
 
       if (createdDiss != null) {
-        var tasksController = Get.find<DiscussionsController>();
+        var discussionsController = Get.find<DiscussionsController>();
         // ignore: unawaited_futures
-        tasksController.loadDiscussions();
+        discussionsController.loadDiscussions();
+        if (specifiedProjectId != null) {
+          var projectDiscussionsController =
+              Get.find<ProjectDiscussionsController>();
+          // ignore: unawaited_futures
+          projectDiscussionsController.loadProjectDiscussions();
+        }
         Get.back();
         // ignore: unawaited_futures
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
@@ -257,7 +275,7 @@ class NewDiscussionController extends GetxController
   }
 
   void discardDiscussion() {
-    if (_selectedProjectId != null ||
+    if ((_selectedProjectId != null && specifiedProjectId == null) ||
         title.isNotEmpty ||
         subscribers.isNotEmpty ||
         text.isNotEmpty ||
