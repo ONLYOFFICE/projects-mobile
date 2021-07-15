@@ -241,7 +241,6 @@ class DiscussionsFilterController extends BaseFilterController {
   void getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
-
     var result = await _api.getDiscussionsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
