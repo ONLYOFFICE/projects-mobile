@@ -35,7 +35,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   var selectedTeamMembers = <PortalUserItemController>[].obs;
 
-  PortalUser selectedProjectManager;
+  Rx<PortalUser> selectedProjectManager = PortalUser().obs;
   var needToFillManager = false.obs;
   var needToFillTitle = false.obs;
 
@@ -45,6 +45,16 @@ abstract class BaseProjectEditorController extends GetxController {
   PortalUserItemController selfUserItem;
 
   final FocusNode titleFocus = FocusNode();
+
+  @override
+  void onInit() {
+    _userController.getUserInfo().whenComplete(() => {
+          selfUserItem =
+              PortalUserItemController(portalUser: _userController.user),
+        });
+
+    super.onInit();
+  }
 
   String get teamMembersTitle => selectedTeamMembers.length == 1
       ? selectedTeamMembers.first.displayName
@@ -92,16 +102,16 @@ abstract class BaseProjectEditorController extends GetxController {
 
   void changePMSelection(PortalUserItemController user) {
     if (user.isSelected.isTrue) {
-      selectedProjectManager = user.portalUser;
-      managerName.value = selectedProjectManager.displayName;
+      selectedProjectManager.value = user.portalUser;
+      managerName.value = selectedProjectManager.value.displayName;
       isPMSelected.value = true;
 
       for (var element in usersDataSourse.usersList) {
         element.isSelected.value =
-            element.portalUser.id == selectedProjectManager.id;
+            element.portalUser.id == selectedProjectManager.value.id;
       }
       selfUserItem.isSelected.value =
-          selfUserItem.portalUser.id == selectedProjectManager.id;
+          selfUserItem.portalUser.id == selectedProjectManager.value.id;
 
       Get.back();
     } else {
@@ -111,7 +121,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   void removeManager() {
     managerName.value = '';
-    selectedProjectManager = null;
+    selectedProjectManager.value = null;
     isPMSelected.value = false;
 
     for (var element in usersDataSourse.usersList) {
@@ -160,11 +170,11 @@ abstract class BaseProjectEditorController extends GetxController {
   Future<void> setupPMSelection() async {
     for (var element in usersDataSourse.usersList) {
       element.isSelected.value =
-          element.portalUser.id == selectedProjectManager?.id;
+          element.portalUser.id == selectedProjectManager?.value?.id;
       element.selectionMode.value = selectionMode;
     }
 
-    if (selfUserItem?.portalUser?.id == selectedProjectManager?.id) {
+    if (selfUserItem?.portalUser?.id == selectedProjectManager?.value?.id) {
       selfUserItem.isSelected.value = true;
     }
   }
