@@ -75,7 +75,7 @@ class NewProjectController extends BaseProjectEditorController {
     var newProject = NewProjectDTO(
         title: titleController.text,
         description: descriptionController.text,
-        responsibleId: selectedProjectManager.id,
+        responsibleId: selectedProjectManager.value.id,
         participants: participants,
         private: isPrivate.value,
         notify: notificationEnabled.value,
