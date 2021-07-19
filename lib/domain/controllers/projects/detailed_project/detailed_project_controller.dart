@@ -93,8 +93,11 @@ class ProjectDetailsController extends GetxController {
   }
 
   Future<void> reloadInfo() async {
+    loaded.value = false;
     projectDetailed =
         await _projectService.getProjectById(projectId: projectDetailed.id);
+    loaded.value = true;
+
     await setup();
   }
 
@@ -125,5 +128,6 @@ class ProjectDetailsController extends GetxController {
 
   Future followProject() async {
     await _projectService.followProject(projectId: projectDetailed.id);
+    await reloadInfo();
   }
 }
