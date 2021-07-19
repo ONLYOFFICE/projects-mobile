@@ -211,7 +211,9 @@ class _ProjectContextMenu extends StatelessWidget {
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
           PopupMenuItem(
             value: 'follow',
-            child: Text(tr('followUnfollowProject')),
+            child: controller.projectDetailed.isFollow
+                ? Text(tr('unFollowProjectButton'))
+                : Text(tr('followProjectButton')),
           ),
           if (controller.projectDetailed.canDelete)
             PopupMenuItem(

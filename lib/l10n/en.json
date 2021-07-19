@@ -471,7 +471,7 @@
 	"taskEditing": "Task editing",
 	"discussionText": "Discussion text",
 	"editProject":"Edit Project",
-	"followUnfollowProject":"Follow / Unfollow project",
+	
 
 	
 	"addTag": "Add tag",
@@ -496,7 +496,9 @@
 	"deselect": "Deselect",
 	"allTasks": "All tasks",
 	"accesRights": "Acces rights",
-	
-	
+		
+	"followProjectButton":"Follow project",
+	"unFollowProjectButton":"Unfollow project",
+
 	"error": "Error"
 }
