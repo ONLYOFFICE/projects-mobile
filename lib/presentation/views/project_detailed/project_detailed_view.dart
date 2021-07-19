@@ -5,7 +5,9 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -43,6 +45,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   @override
   void initState() {
     super.initState();
+
     discussionsController = Get.put(ProjectDiscussionsController(
         projectDetailed.id, projectDetailed.title));
 
@@ -177,12 +180,13 @@ class _ProjectContextMenu extends StatelessWidget {
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           // if (controller.projectDetailed.canEdit)
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          PopupMenuItem(
-            value: 'follow',
-            child: controller.projectDetailed.isFollow
-                ? Text(tr('unFollowProjectButton'))
-                : Text(tr('followProjectButton')),
-          ),
+          if (!controller.projectDetailed.security['isInTeam'])
+            PopupMenuItem(
+              value: 'follow',
+              child: controller.projectDetailed.isFollow
+                  ? Text(tr('unFollowProjectButton'))
+                  : Text(tr('followProjectButton')),
+            ),
           if (controller.projectDetailed.canDelete)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
