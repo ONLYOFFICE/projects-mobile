@@ -47,8 +47,8 @@ class GroupMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller =
-        Get.arguments['controller']; // Get.find<NewProjectController>();
+    var controller = Get.arguments['controller'];
+    // Get.find<NewProjectController>();
     var groupsDataSource = Get.find<GroupsDataSource>();
 
     groupsDataSource.getGroups();
@@ -59,8 +59,9 @@ class GroupMembersSelectionView extends StatelessWidget {
         elevation: 2,
         actions: [
           IconButton(
-              icon: const Icon(Icons.check_outlined),
-              onPressed: () => controller.confirmGroupSelection)
+            icon: const Icon(Icons.check_outlined),
+            onPressed: () => controller.confirmGroupSelection(),
+          )
         ],
       ),
       body: Obx(

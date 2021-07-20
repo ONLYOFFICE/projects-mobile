@@ -249,7 +249,7 @@ abstract class BaseProjectEditorController extends GetxController {
     }
   }
 
-  void confirmGroupSelection() async {
+  Future<void> confirmGroupSelection() async {
     for (var group in selectedGroups) {
       var groupMembers = await _userService.getProfilesByExtendedFilter(
           groupId: group.portalGroup.id);
