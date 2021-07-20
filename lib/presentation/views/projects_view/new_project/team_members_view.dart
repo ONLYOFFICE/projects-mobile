@@ -36,7 +36,10 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        bottom: TeamMembersSearchBar(controller: usersDataSource),
+        bottom: TeamMembersSearchBar(
+          usersDataSource: usersDataSource,
+          controller: controller,
+        ),
       ),
       body: Obx(
         () {
@@ -141,9 +144,11 @@ class TeamMembersSearchBar extends StatelessWidget {
   const TeamMembersSearchBar({
     Key key,
     @required this.controller,
+    @required this.usersDataSource,
   }) : super(key: key);
 
-  final UsersDataSource controller;
+  final UsersDataSource usersDataSource;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
@@ -153,14 +158,15 @@ class TeamMembersSearchBar extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Expanded(child: UsersSearchBar(controller: controller)),
+          Expanded(child: UsersSearchBar(controller: usersDataSource)),
           const SizedBox(width: 20),
           Container(
             height: 24,
             width: 24,
             child: InkWell(
               onTap: () {
-                Get.toNamed('GroupMembersSelectionView');
+                Get.toNamed('GroupMembersSelectionView',
+                    arguments: {'controller': controller});
               },
               child: AppIcon(
                 icon: SvgIcons.preferences,
