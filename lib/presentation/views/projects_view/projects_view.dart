@@ -34,12 +34,17 @@ class ProjectsView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () => controller.createNewProject(),
-        child: AppIcon(
-          icon: SvgIcons.add_project,
-          width: 32,
-          height: 32,
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.isTrue,
+          child: StyledFloatingActionButton(
+            onPressed: () => controller.createNewProject(),
+            child: AppIcon(
+              icon: SvgIcons.add_project,
+              width: 32,
+              height: 32,
+            ),
+          ),
         ),
       ),
       appBar: StyledAppBar(
@@ -207,7 +212,7 @@ class _Bottom extends StatelessWidget {
                 Obx(
                   () => Text(
                     tr('total', args: [
-                      controller.paginationController.total.value.toString()
+                      controller.paginationController?.total?.value.toString()
                     ]),
                     style: TextStyleHelper.body2(
                       color: Get.theme.colors().onSurface.withOpacity(0.6),
