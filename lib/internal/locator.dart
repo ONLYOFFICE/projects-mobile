@@ -59,6 +59,7 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -169,4 +170,11 @@ void setupLocator() {
             Get.find<PaginationController>(),
             Get.find<DocumentsSortController>(),
           ));
+
+  Get.put(
+      ProjectsController(
+        Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
+        Get.put(PaginationController(), tag: 'ProjectsView'),
+      ),
+      tag: 'ProjectsView');
 }

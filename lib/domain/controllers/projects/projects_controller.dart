@@ -65,8 +65,7 @@ class ProjectsController extends BaseController {
         () async => await _getProjects(needToClear: true);
 
     paginationController.loadDelegate = () async => await _getProjects();
-    paginationController.refreshDelegate =
-        () async => await _getProjects(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
     scrollController.addListener(
@@ -80,6 +79,10 @@ class ProjectsController extends BaseController {
 
   void updateSort() {
     loadProjects();
+  }
+
+  Future<void> refreshData() async {
+    await _getProjects(needToClear: true);
   }
 
   Future<void> loadProjects() async {

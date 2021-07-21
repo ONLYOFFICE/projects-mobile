@@ -23,12 +23,14 @@ class ProjectsView extends StatelessWidget {
   const ProjectsView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(
-        ProjectsController(
-          Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
-          Get.put(PaginationController(), tag: 'ProjectsView'),
-        ),
-        tag: 'ProjectsView');
+    var controller = Get.find<ProjectsController>(tag: 'ProjectsView');
+    // var controller =
+    //  Get.put(
+    //     ProjectsController(
+    //       Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
+    //       Get.put(PaginationController(), tag: 'ProjectsView'),
+    //     ),
+    //     tag: 'ProjectsView');
 
     controller.loadProjects();
 

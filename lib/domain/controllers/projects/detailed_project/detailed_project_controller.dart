@@ -107,7 +107,7 @@ class ProjectDetailsController extends GetxController {
     milestoneCount.value = projectDetailed.milestoneCount;
   }
 
-  Future<void> reloadInfo() async {
+  Future<void> refreshData() async {
     loaded.value = false;
     projectDetailed =
         await _projectService.getProjectById(projectId: projectDetailed.id);
@@ -134,7 +134,7 @@ class ProjectDetailsController extends GetxController {
   Future updateStatus({int newStatusId}) async {
     var t = await _projectService.updateProjectStatus(
         projectId: projectDetailed.id,
-        newStatus: ProjectStatus.toName(newStatusId));
+        newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {
       projectDetailed.status = t.status;
@@ -143,6 +143,6 @@ class ProjectDetailsController extends GetxController {
 
   Future followProject() async {
     await _projectService.followProject(projectId: projectDetailed.id);
-    await reloadInfo();
+    await refreshData();
   }
 }
