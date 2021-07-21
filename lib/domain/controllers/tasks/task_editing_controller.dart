@@ -219,7 +219,7 @@ class TaskEditingController extends GetxController
   }
 
   void addResponsible(PortalUserItemController user) {
-    if (user.isSelected.isTrue) {
+    if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(
@@ -285,7 +285,7 @@ class TaskEditingController extends GetxController
         deadline: _newDueDate,
         id: task.id,
         startDate: _newStartDate,
-        priority: highPriority.isTrue ? tr('high') : tr('normal'),
+        priority: highPriority.isTrue ? 'high' : 'normal',
         title: title.value,
         milestoneid: _newMilestoneId,
         projectId: task.projectOwner.id,

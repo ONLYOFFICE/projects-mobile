@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -30,9 +31,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Select subscribers'),
+              Text(tr('selectSubscribers')),
               if (controller.subscribers.isNotEmpty)
-                Text('${controller.subscribers.length} users selected',
+                Text(plural('selected', controller.subscribers.length),
                     style: TextStyleHelper.caption())
             ],
           ),
@@ -49,8 +50,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           children: [
             Obx(() => Expanded(
                   child: SearchField(
-                    hintText: 'Search for users...',
-                    onChanged: usersDataSource.searchUsers,
+                    hintText: tr('usersSearch'),
+                    onSubmitted: usersDataSource.searchUsers,
                     showClearIcon: usersDataSource.isSearchResult.isTrue,
                     onClearPressed: controller.clearUserSearch,
                     controller: controller.userSearchController,
@@ -72,11 +73,6 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.isFalse) {
-            // return UsersDefault(
-            //   selfUserItem: controller.selfUserItem,
-            //   usersDataSource: usersDataSource,
-            //   onTapFunction: () => controller.addResponsible,
-            // );
             return SmartRefresher(
               enablePullDown: false,
               controller: usersDataSource.refreshController,
@@ -94,9 +90,10 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                       value:
                           usersDataSource.usersList[index].isSelected == true,
                       onChanged: (value) {
-                        usersDataSource.usersList[index].onTap();
-                        controller
-                            .addSubscriber(usersDataSource.usersList[index]);
+                        controller.addSubscriber(
+                          usersDataSource.usersList[index],
+                          fromUsersDataSource: true,
+                        );
                       },
                       contentPadding: const EdgeInsets.only(left: 16, right: 9),
                       title: Row(

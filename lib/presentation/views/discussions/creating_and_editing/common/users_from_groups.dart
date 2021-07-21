@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/discussions/new_discussion_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -11,7 +11,7 @@ class UsersFromGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NewDiscussionController controller = Get.arguments['controller'];
+    DiscussionActionsController controller = Get.arguments['controller'];
 
     var groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();

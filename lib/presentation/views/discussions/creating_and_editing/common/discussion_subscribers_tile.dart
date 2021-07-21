@@ -1,13 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/new_discussion_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
-class NewDiscussionSubscribers extends StatelessWidget {
+class DiscussionSubscribersTile extends StatelessWidget {
   final DiscussionActionsController controller;
-  const NewDiscussionSubscribers({
+  const DiscussionSubscribersTile({
     Key key,
     @required this.controller,
   }) : super(key: key);
@@ -20,9 +21,12 @@ class NewDiscussionSubscribers extends StatelessWidget {
         text: controller.subscribers.isEmpty
             ? tr('addSubscribers')
             : plural('subscribersPlural', controller.subscribers.length),
-        // : '${controller.subscribers.length} subscribers',
-        onTap: () => Get.toNamed('SelectDiscussionSubscribers',
-            arguments: {'controller': controller}),
+        onTap: () {
+          var toPage = controller is NewDiscussionController
+              ? 'SelectDiscussionSubscribers'
+              : 'ManageDiscussionSubscribersScreen';
+          return Get.toNamed(toPage, arguments: {'controller': controller});
+        },
       ),
     );
   }

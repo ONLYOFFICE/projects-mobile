@@ -11,11 +11,12 @@ class PortalUserItemController extends GetxController {
 
   var userTitle = ''.obs;
 
-  PortalUserItemController({this.portalUser}) {
+  PortalUserItemController({this.portalUser, this.isSelected}) {
     setupUser();
   }
+
   final PortalUser portalUser;
-  var isSelected = false.obs;
+  var isSelected;
   var selectionMode = UserSelectionMode.None.obs;
 
   Rx<Uint8List> avatarData = Uint8List.fromList([]).obs;
@@ -40,6 +41,7 @@ class PortalUserItemController extends GetxController {
   }
 
   void setupUser() {
+    isSelected ??= false.obs;
     if (portalUser?.title != null) {
       userTitle.value = portalUser.title;
     }

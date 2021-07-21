@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 
@@ -17,19 +18,26 @@ class AppBarMenuButton extends StatelessWidget {
       onSelected: (value) => _onSelected(controller, value),
       itemBuilder: (context) {
         return [
+          if (controller.discussion.value.canEdit)
+            PopupMenuItem(value: 'Edit', child: Text(tr('Edit discussion'))),
           // TODO realize
-          // if (controller.discussion.value.canEdit)
-          //   const PopupMenuItem(value: 'Edit', child: Text('Edit discussion')),
           // const PopupMenuItem(
           //     value: 'Create task', child: Text('Create task on discussion')),
           PopupMenuItem(
-              value: 'Subscribe',
-              child: Text(controller.isSubscribed
-                  ? 'Unsubscribe from comments'
-                  : 'Subscribe to comments')),
+            value: 'Subscribe',
+            child: Text(
+              controller.isSubscribed 
+                  ? tr('unsubscribeFromComments')
+                  : tr('subscribeToComments'),
+            ),
+          ),
           if (controller.discussion.value.canEdit)
-            const PopupMenuItem(
-                value: 'Delete', child: Text('Delete discussion')),
+            PopupMenuItem(
+              value: 'Delete',
+              child: Text(
+                tr('deleteDiscussion'),
+              ),
+            ),
         ];
       },
     );
@@ -38,6 +46,7 @@ class AppBarMenuButton extends StatelessWidget {
 
 void _onSelected(DiscussionItemController controller, String value) async {
   var actions = {
+    'Edit': controller.toDiscussionEditingScreen,
     'Subscribe': controller.subscribeToMessageAction,
     'Delete': controller.deleteMessage,
   };

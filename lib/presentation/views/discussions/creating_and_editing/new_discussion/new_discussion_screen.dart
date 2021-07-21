@@ -1,12 +1,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/discussions/new_discussion_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/new_discussion_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_project.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_subscribers.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_text.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_title.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
 
 class NewDiscussionScreen extends StatelessWidget {
   const NewDiscussionScreen({Key key}) : super(key: key);
@@ -39,7 +39,7 @@ class NewDiscussionScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            NewDiscussionTitle(controller: controller),
+            DiscussionTitleTextField(controller: controller),
             Listener(
               onPointerDown: (_) {
                 if (controller.title.isNotEmpty &&
@@ -48,12 +48,12 @@ class NewDiscussionScreen extends StatelessWidget {
               },
               child: Column(
                 children: [
-                  NewDiscussionText(controller: controller),
-                  IgnorePointer(
+                  DiscussionTextTile(controller: controller),
+                  DiscussionProjectTile(
                     ignoring: projectId != null,
-                    child: NewDiscussionProject(controller: controller),
+                    controller: controller,
                   ),
-                  NewDiscussionSubscribers(controller: controller),
+                  DiscussionSubscribersTile(controller: controller),
                 ],
               ),
             ),

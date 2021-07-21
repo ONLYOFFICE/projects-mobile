@@ -30,7 +30,8 @@ class Comment extends StatelessWidget {
       if (taskId != null) {
         controller = Get.put(
           TaskCommentItemController(taskId: taskId, comment: comment.obs),
-          tag: comment.commentId,
+          tag: '${comment.commentId} ${comment.commentBody}',
+          permanent: false,
         );
       } else {
         controller = Get.put(
@@ -38,7 +39,8 @@ class Comment extends StatelessWidget {
             discussionId: discussionId,
             comment: comment.obs,
           ),
-          tag: comment.commentId,
+          tag: '${comment.commentId} ${comment.commentBody}',
+          permanent: false,
         );
       }
 

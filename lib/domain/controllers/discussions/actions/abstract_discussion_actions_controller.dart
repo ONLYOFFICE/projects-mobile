@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class DiscussionActionsController {
@@ -20,7 +21,8 @@ abstract class DiscussionActionsController {
   var selectProjectError;
 
   void setupSubscribersSelection();
-  void addSubscriber(PortalUserItemController user);
+  void addSubscriber(PortalUserItemController user,
+      {fromUsersDataSource = false});
 
   void changeTitle(String newText);
   void changeProjectSelection();
@@ -30,6 +32,9 @@ abstract class DiscussionActionsController {
   void leaveTextView();
   void confirmSubscribersSelection();
   void leaveSubscribersSelectionView();
+
+  void confirmGroupSelection();
+  void selectGroupMembers(PortalGroupItemController group);
 
   DiscussionActionsController();
 }

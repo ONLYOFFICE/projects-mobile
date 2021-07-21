@@ -3,9 +3,11 @@ class NewDiscussionDTO {
     this.title,
     this.content,
     this.participants,
+    this.projectId,
     this.notify,
   });
 
+  final int projectId;
   final bool notify;
   final String title;
   final String content;
@@ -19,6 +21,7 @@ class NewDiscussionDTO {
       'title': title,
       'content': content,
       'participants': part,
+      'projectId': projectId,
       'notify': notify,
     };
   }

@@ -9,7 +9,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
-import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
@@ -28,13 +28,8 @@ class NewDiscussionController extends GetxController
 
   final _api = locator<DiscussionsService>();
   var _selectedProjectId;
-  // for dateTime format
-  DateTime _startDate;
-  DateTime _dueDate;
 
   int get selectedProjectId => _selectedProjectId;
-  DateTime get startDate => _startDate;
-  DateTime get dueDate => _dueDate;
 
   // final _userController = Get.find<UserController>();
   final _userService = locator<UserService>();
@@ -172,19 +167,22 @@ class NewDiscussionController extends GetxController
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
-      for (var selectedMember in subscribers) {
-        for (var user in _usersDataSource.usersList) {
-          if (selectedMember.portalUser.id == user.portalUser.id) {
-            user.isSelected.value = true;
-          }
+    }
+    for (var selectedMember in subscribers) {
+      for (var user in _usersDataSource.usersList) {
+        if (selectedMember.portalUser.id == user.portalUser.id) {
+          user.isSelected.value = true;
         }
       }
     }
   }
 
   @override
-  void addSubscriber(PortalUserItemController user) {
-    if (user.isSelected.isTrue) {
+  void addSubscriber(PortalUserItemController user,
+      {fromUsersDataSource = false}) {
+    user.onTap();
+
+    if (user.isSelected.value == true) {
       subscribers.add(user);
     } else {
       subscribers.removeWhere(
@@ -192,6 +190,7 @@ class NewDiscussionController extends GetxController
     }
   }
 
+  @override
   void selectGroupMembers(PortalGroupItemController group) {
     if (group.isSelected.isTrue) {
       print(group.portalGroup.id);
@@ -202,6 +201,7 @@ class NewDiscussionController extends GetxController
     }
   }
 
+  @override
   void confirmGroupSelection() async {
     for (var group in selectedGroups) {
       var groupMembers = await _userService.getProfilesByExtendedFilter(
@@ -278,9 +278,7 @@ class NewDiscussionController extends GetxController
     if ((_selectedProjectId != null && specifiedProjectId == null) ||
         title.isNotEmpty ||
         subscribers.isNotEmpty ||
-        text.isNotEmpty ||
-        _startDate != null ||
-        _dueDate != null) {
+        text.isNotEmpty) {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),

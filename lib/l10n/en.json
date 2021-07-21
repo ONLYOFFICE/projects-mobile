@@ -110,6 +110,7 @@
 	"author": "Author",
 	"me": "Me",
 	"users": "Users",
+	"allUsers": "All users",
 	"groups": "Groups",
 
 	"searchSettings": "Search settings",
@@ -211,8 +212,18 @@
 		"other": "{} users selected"
 	},
 
+	"selected": {
+		"zero": "{} selected",
+		"one": "{} selected",
+		"two": "{} selected",
+		"few": "{} selected",
+		"many": "{} selected",
+		"other": "{} selected"
+	},
+
 	"subscribers": "subscribers",
 	"subscriber": "subscriber",
+	"subscribed": "Subscribed",
 	"subscribersPlural": {
 		"zero": "{} subscribers",
 		"one": "{} subscriber",
@@ -451,6 +462,10 @@
 	"chooseSection": "Choose section",
 	"discussionCreated": "Discussion has been created",
 	"discardDiscussion": "Discard discussion?",
+	"deleteDiscussion": "Delete discussion",
+	"editDiscussion": "Edit discussion",
+	"unsubscribeFromComments": "Unsubscribe from comments",
+	"subscribeToComments": "Subscribe to comments",
 	
 	"archived": "Archived",
 
@@ -464,6 +479,8 @@
 	"newDiscussion": "New discussion",
 	"chooseProject": "Choose project",
 	"addSubscribers": "Add subscribers",
+	"manageSubscribers": "Manage subscribers",
+	"selectSubscribers": "Select subscribers",
 	"text": "Text",
 	"discussionTitle": "Discussion title",
 	"newComment": "New comment",
