@@ -50,6 +50,22 @@ class ProjectStatus {
     }
   }
 
+  static String toLiteral(int status) {
+    switch (status) {
+      case 0:
+        return 'open';
+        break;
+      case 1:
+        return 'closed';
+        break;
+      case 2:
+        return 'paused';
+        break;
+      default:
+        return 'n/a';
+    }
+  }
+
   static String toImageString(int status) {
     switch (status) {
       case 0:

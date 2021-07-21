@@ -75,6 +75,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   @override
   void initState() {
     super.initState();
+
     discussionsController = Get.put(ProjectDiscussionsController(
         projectDetailed.id, projectDetailed.title));
 
@@ -209,10 +210,13 @@ class _ProjectContextMenu extends StatelessWidget {
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           // if (controller.projectDetailed.canEdit)
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          PopupMenuItem(
-            value: 'follow',
-            child: Text(tr('followUnfollowProject')),
-          ),
+          if (!controller.projectDetailed.security['isInTeam'])
+            PopupMenuItem(
+              value: 'follow',
+              child: controller.projectDetailed.isFollow
+                  ? Text(tr('unFollowProjectButton'))
+                  : Text(tr('followProjectButton')),
+            ),
           if (controller.projectDetailed.canDelete)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle

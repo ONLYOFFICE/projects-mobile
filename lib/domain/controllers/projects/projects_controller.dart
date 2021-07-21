@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -67,6 +68,11 @@ class ProjectsController extends BaseController {
   var scrollController = ScrollController();
   var needToShowDivider = false.obs;
 
+  final _userController = Get.find<UserController>();
+
+  bool get fabIsVisible =>
+      _userController.user.isAdmin || _userController.user.isOwner;
+
   ProjectsController(
     ProjectsFilterController filterController,
     PaginationController paginationController,
@@ -78,12 +84,13 @@ class ProjectsController extends BaseController {
         () async => await _getProjects(needToClear: true);
 
     paginationController.loadDelegate = () async => await _getProjects();
-    paginationController.refreshDelegate =
-        () async => await _getProjects(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
     scrollController.addListener(
         () => needToShowDivider.value = scrollController.offset > 2);
+
+    _userController.getUserInfo();
   }
 
   @override
@@ -93,6 +100,10 @@ class ProjectsController extends BaseController {
 
   void updateSort() {
     loadProjects();
+  }
+
+  Future<void> refreshData() async {
+    await _getProjects(needToClear: true);
   }
 
   Future<void> loadProjects() async {

@@ -547,13 +547,23 @@ class AdvancedOptions extends StatelessWidget {
                           controller.setPrivate(value);
                         },
                       ),
-                      OptionWithSwitch(
-                        title: tr('followProject'),
-                        switchValue: controller.isFolowed,
-                        switchOnChanged: (value) {
-                          controller.folow(value);
-                        },
-                      ),
+                      Obx(() {
+                        if (controller.selfUserItem?.id ==
+                            controller.selectedProjectManager.value?.id)
+                          return OptionWithSwitch(
+                            title: tr('followProject'),
+                            switchValue: false.obs,
+                            switchOnChanged: null,
+                          );
+                        else
+                          return OptionWithSwitch(
+                            title: tr('followProject'),
+                            switchValue: controller.isFolowed,
+                            switchOnChanged: (value) {
+                              controller.folow(value);
+                            },
+                          );
+                      }),
                     ],
                   ),
                 ),

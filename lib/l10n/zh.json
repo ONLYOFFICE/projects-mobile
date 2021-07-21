@@ -58,8 +58,6 @@
 	"viewAll": "查看所有",
 	"viewLess": "查看更少",
 
-	"noEntityCreated": "当前没有 {} ",
-	"noEntityMatching": "不存在满足过滤器要求的 {} ",
 
 	"total": "总 {}",
 	"notFound": "找不到",
@@ -465,6 +463,20 @@
 	"followUnfollowProject":"关注 / 不再关注项目",
 
 	
+	"addTag": "添加标签",
+	"enterTag": "输入新的标签",
+
+	"noTasksCreated": "暂无任务",
+	"noTasksMatching": "没有符合这些过滤选项的任务",
+
+	"noProjectsCreated": "暂无项目",
+	"noProjectsMatching": "没有符合这些过滤选项的项目",
+
+	"noMilestonesCreated": "暂无重要项目",
+	"noMilestonesMatching": "没有符合这些过滤选项的重要项目",
+
+	"noDocumentsCreated": "暂无文档",
+	"noDocumentsMatching": "没有符合这些过滤选项的文档",
 	
 	"error": "错误"
 }
