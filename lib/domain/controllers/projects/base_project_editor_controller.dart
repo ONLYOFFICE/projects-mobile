@@ -145,6 +145,9 @@ abstract class BaseProjectEditorController extends GetxController {
       selfUserItem.isSelected.value =
           selfUserItem.portalUser.id == selectedProjectManager.value.id;
 
+      selectedTeamMembers.removeWhere(
+          (element) => user.portalUser.id == element.portalUser.id);
+
       Get.back();
     } else {
       removeManager();
