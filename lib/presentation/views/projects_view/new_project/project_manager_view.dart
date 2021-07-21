@@ -121,16 +121,25 @@ class UsersDefault extends StatelessWidget {
       onLoading: usersDataSource.onLoading,
       child: ListView(
         children: <Widget>[
-          Container(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('me'), style: TextStyleHelper.body2()),
-          ),
-          const SizedBox(height: 26),
-          PortalUserItem(
-            onTapFunction: onTapFunction,
-            userController: selfUserItem,
-          ),
-          const SizedBox(height: 26),
+          Obx(() {
+            if (usersDataSource.selfIsVisible.isTrue)
+              return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 16),
+                      child: Text(tr('me'), style: TextStyleHelper.body2()),
+                    ),
+                    const SizedBox(height: 26),
+                    PortalUserItem(
+                      onTapFunction: onTapFunction,
+                      userController: selfUserItem,
+                    ),
+                    const SizedBox(height: 26),
+                  ]);
+            else
+              return const SizedBox();
+          }),
           Container(
             padding: const EdgeInsets.only(left: 16),
             child: Text(tr('users'), style: TextStyleHelper.body2()),

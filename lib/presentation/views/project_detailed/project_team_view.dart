@@ -9,8 +9,11 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamView extends StatelessWidget {
   final ProjectDetailed projectDetailed;
-  const ProjectTeamView({Key key, @required this.projectDetailed})
-      : super(key: key);
+
+  const ProjectTeamView({
+    Key key,
+    @required this.projectDetailed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
