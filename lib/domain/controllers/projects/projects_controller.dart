@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
@@ -20,8 +19,6 @@ class ProjectsController extends BaseController {
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   PaginationController _paginationController;
-
-  // var fabIsVisible => ;
   PaginationController get paginationController => _paginationController;
 
   @override
@@ -39,20 +36,10 @@ class ProjectsController extends BaseController {
   var scrollController = ScrollController();
   var needToShowDivider = false.obs;
 
-  Rx<PortalUser> selfUser;
   final _userController = Get.find<UserController>();
 
-  RxBool fabIsVisible = false.obs;
-
-  @override
-  void onInit() {
-    _userController.getUserInfo().whenComplete(() => {
-          selfUser = _userController.user.obs,
-          fabIsVisible.value = selfUser.value.isAdmin || selfUser.value.isOwner,
-        });
-
-    super.onInit();
-  }
+  bool get fabIsVisible =>
+      _userController.user.isAdmin || _userController.user.isOwner;
 
   ProjectsController(
     ProjectsFilterController filterController,
@@ -70,6 +57,8 @@ class ProjectsController extends BaseController {
 
     scrollController.addListener(
         () => needToShowDivider.value = scrollController.offset > 2);
+
+    _userController.getUserInfo();
   }
 
   @override

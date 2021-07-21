@@ -171,10 +171,10 @@ void setupLocator() {
             Get.find<DocumentsSortController>(),
           ));
 
-  Get.put(
-      ProjectsController(
-        Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
-        Get.put(PaginationController(), tag: 'ProjectsView'),
-      ),
+  Get.lazyPut(
+      () => ProjectsController(
+            Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
+            Get.put(PaginationController(), tag: 'ProjectsView'),
+          ),
       tag: 'ProjectsView');
 }
