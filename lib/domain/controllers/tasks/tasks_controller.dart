@@ -72,8 +72,7 @@ class TasksController extends BaseController {
     _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => await loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate =
-        () async => await _getTasks(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
     scrollController.addListener(
@@ -85,6 +84,10 @@ class TasksController extends BaseController {
 
   @override
   RxList get itemList => paginationController.data;
+
+  Future<void> refreshData() async {
+    await _getTasks(needToClear: true);
+  }
 
   Future loadTasks() async {
     loaded.value = false;

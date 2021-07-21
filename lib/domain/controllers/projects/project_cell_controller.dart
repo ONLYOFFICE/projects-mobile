@@ -72,7 +72,7 @@ class ProjectCellController extends GetxController {
   Future updateStatus({int newStatusId}) async {
     var t = await _projectService.updateProjectStatus(
         projectId: projectData.id,
-        newStatus: ProjectStatus.toName(newStatusId));
+        newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {
       _project.status = t.status;

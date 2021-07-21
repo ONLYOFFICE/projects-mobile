@@ -149,7 +149,7 @@ class ProjectEditController extends BaseProjectEditorController {
     var success = await _projectService.editProject(
         project: newProject, projectId: projectDetailed.id);
     if (success) {
-      await Get.find<ProjectDetailsController>().reloadInfo();
+      await Get.find<ProjectDetailsController>().refreshData();
 
       Get.back();
     }
