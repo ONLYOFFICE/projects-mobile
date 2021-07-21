@@ -9,6 +9,8 @@ import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -40,6 +42,19 @@ class ProjectDetailsController extends GetxController {
 
   ProjectDetailed projectDetailed;
   ProjectDetailed get projectData => projectDetailed;
+
+  PortalUserItemController selfUserItem;
+  final _userController = Get.find<UserController>();
+
+  @override
+  void onInit() {
+    _userController.getUserInfo().whenComplete(() => {
+          selfUserItem =
+              PortalUserItemController(portalUser: _userController.user),
+        });
+
+    super.onInit();
+  }
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
@@ -92,9 +107,12 @@ class ProjectDetailsController extends GetxController {
     milestoneCount.value = projectDetailed.milestoneCount;
   }
 
-  Future<void> reloadInfo() async {
+  Future<void> refreshData() async {
+    loaded.value = false;
     projectDetailed =
         await _projectService.getProjectById(projectId: projectDetailed.id);
+    loaded.value = true;
+
     await setup();
   }
 
@@ -116,7 +134,7 @@ class ProjectDetailsController extends GetxController {
   Future updateStatus({int newStatusId}) async {
     var t = await _projectService.updateProjectStatus(
         projectId: projectDetailed.id,
-        newStatus: ProjectStatus.toName(newStatusId));
+        newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {
       projectDetailed.status = t.status;
@@ -125,5 +143,6 @@ class ProjectDetailsController extends GetxController {
 
   Future followProject() async {
     await _projectService.followProject(projectId: projectDetailed.id);
+    await refreshData();
   }
 }

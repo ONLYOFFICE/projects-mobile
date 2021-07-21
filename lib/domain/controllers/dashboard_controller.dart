@@ -26,6 +26,14 @@ class DashboardController extends GetxController {
     setupActiveProjects();
   }
 
+  Future<void> refreshData() async {
+    await myTaskController.refreshData();
+    await upcomingTaskscontroller.refreshData();
+    await myProjectsController.refreshData();
+    await folowedProjectsController.refreshData();
+    await activeProjectsController.refreshData();
+  }
+
   TasksController get myTaskController => _myTaskController;
   TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
 

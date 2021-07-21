@@ -56,10 +56,10 @@ class ProjectEditController extends BaseProjectEditorController {
 
     titleController.text = projectDetailed.title;
     descriptionController.text = projectDetailed.description ?? '';
-    selectedProjectManager = projectDetailed.responsible;
+    selectedProjectManager.value = projectDetailed.responsible;
 
     isPMSelected.value = true;
-    managerName.value = selectedProjectManager.displayName;
+    managerName.value = selectedProjectManager.value.displayName;
 
     var projectTeamDataSource = Get.put(ProjectTeamDataSource());
     projectTeamDataSource.projectDetailed = projectDetailed;
@@ -107,7 +107,7 @@ class ProjectEditController extends BaseProjectEditorController {
     var newProject = EditProjectDTO(
       title: titleController.text,
       description: descriptionController.text,
-      responsibleId: selectedProjectManager.id,
+      responsibleId: selectedProjectManager.value.id,
       participants: participants,
       private: isPrivate.value,
       status: projectDetailed.status,
@@ -117,7 +117,7 @@ class ProjectEditController extends BaseProjectEditorController {
     var success = await _projectService.editProject(
         project: newProject, projectId: projectDetailed.id);
     if (success) {
-      await Get.find<ProjectDetailsController>().reloadInfo();
+      await Get.find<ProjectDetailsController>().refreshData();
 
       Get.back();
     }

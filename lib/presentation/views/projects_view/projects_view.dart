@@ -3,8 +3,6 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -23,23 +21,28 @@ class ProjectsView extends StatelessWidget {
   const ProjectsView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(
-        ProjectsController(
-          Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
-          Get.put(PaginationController(), tag: 'ProjectsView'),
-        ),
-        tag: 'ProjectsView');
+    var controller = Get.find<ProjectsController>(tag: 'ProjectsView');
+    // var controller =
+    //  Get.put(
+    //     ProjectsController(
+    //       Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
+    //       Get.put(PaginationController(), tag: 'ProjectsView'),
+    //     ),
+    //     tag: 'ProjectsView');
 
     controller.loadProjects();
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
-      floatingActionButton: StyledFloatingActionButton(
-        onPressed: () => controller.createNewProject(),
-        child: AppIcon(
-          icon: SvgIcons.add_project,
-          width: 32,
-          height: 32,
+      floatingActionButton: Visibility(
+        visible: controller.fabIsVisible,
+        child: StyledFloatingActionButton(
+          onPressed: () => controller.createNewProject(),
+          child: AppIcon(
+            icon: SvgIcons.add_project,
+            width: 32,
+            height: 32,
+          ),
         ),
       ),
       appBar: StyledAppBar(
@@ -207,7 +210,7 @@ class _Bottom extends StatelessWidget {
                 Obx(
                   () => Text(
                     tr('total', args: [
-                      controller.paginationController.total.value.toString()
+                      controller.paginationController?.total?.value.toString()
                     ]),
                     style: TextStyleHelper.body2(
                       color: Get.theme.colors().onSurface.withOpacity(0.6),

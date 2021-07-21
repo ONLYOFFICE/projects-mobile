@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/dashboard_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -296,6 +298,9 @@ void showsStatusesBS({context, itemController}) async {
                         Get.back();
                         await Get.find<ProjectsController>(tag: 'ProjectsView')
                             .loadProjects();
+                        await Get.find<ProjectDetailsController>()
+                            .refreshData();
+                        await Get.find<DashboardController>().refreshData();
                       },
                       child: StatusTile(
                           title: _statusesController.getStatusName(i),

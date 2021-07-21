@@ -87,7 +87,7 @@ class ProjectsFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
-  void changeOther(String filter, [newValue = '']) async {
+  Future<void> changeOther(String filter, [newValue = '']) async {
     _otherFilter = '';
     switch (filter) {
       case 'followed':
