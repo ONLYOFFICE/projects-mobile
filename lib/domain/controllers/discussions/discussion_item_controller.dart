@@ -35,6 +35,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
@@ -81,12 +82,13 @@ class DiscussionItemController extends GetxController {
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;
     var result = await _api.getMessageDetailed(id: discussion.value.id);
+
     if (result != null) {
       try {
+        await Get.delete<DiscussionCommentItemController>();
         discussion.value = result;
         status.value = result.status;
-        // ignore: empty_catches
-      } catch (e) {}
+      } catch (_) {}
     }
     if (showLoading) loaded.value = true;
   }
@@ -112,6 +114,13 @@ class DiscussionItemController extends GetxController {
       }
       // ignore: empty_catches
     } catch (e) {}
+  }
+
+  Future<void> toDiscussionEditingScreen() async {
+    await Get.toNamed(
+      'DiscussionEditingScreen',
+      arguments: {'discussion': discussion.value},
+    );
   }
 
   Future<void> subscribeToMessageAction() async {
@@ -153,4 +162,10 @@ class DiscussionItemController extends GetxController {
       )
     });
   }
+
+  // void toSubscribersManagingScreen() => Get.toNamed(
+  //       'ManageDiscussionSubscribersScreen',
+  //       arguments: {'controller': this},
+  //     );
+  void toSubscribersManagingScreen() => null;
 }

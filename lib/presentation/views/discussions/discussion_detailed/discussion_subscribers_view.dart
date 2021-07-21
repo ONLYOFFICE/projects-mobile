@@ -118,7 +118,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
                   child: StyledFloatingActionButton(
-                    onPressed: () {},
+                    onPressed: controller.toSubscribersManagingScreen,
                   ),
                 ),
               )

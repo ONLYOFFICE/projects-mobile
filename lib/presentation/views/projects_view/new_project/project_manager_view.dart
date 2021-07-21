@@ -121,8 +121,9 @@ class UsersSearchResult extends StatelessWidget {
             onLoading: usersDataSource.onLoading,
             child: ListView.builder(
               itemBuilder: (c, i) => PortalUserItem(
-                  userController: usersDataSource.usersList[i],
-                  onTapFunction: onTapFunction),
+                userController: usersDataSource.usersList[i],
+                onTapFunction: onTapFunction,
+              ),
               itemExtent: 65.0,
               itemCount: usersDataSource.usersList.length,
             ),

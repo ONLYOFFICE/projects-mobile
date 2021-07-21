@@ -54,7 +54,6 @@ class PortalUserItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         userController.onTap();
-
         onTapFunction(userController);
       },
       child: Container(
@@ -137,7 +136,7 @@ class PortalUserItem extends StatelessWidget {
             Obx(() {
               if (userController.selectionMode.value ==
                   UserSelectionMode.Multiple) {
-                if (userController.isSelected.isTrue) {
+                if (userController.isSelected.value == true) {
                   return SizedBox(
                       width: 72,
                       child: Icon(Icons.check_box,

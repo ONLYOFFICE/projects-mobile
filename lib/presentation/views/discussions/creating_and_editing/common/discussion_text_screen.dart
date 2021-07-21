@@ -33,63 +33,37 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/discussions/new_discussion_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_project.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_subscribers.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_text.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_diss_title.dart';
 
-class NewDiscussionScreen extends StatelessWidget {
-  const NewDiscussionScreen({Key key}) : super(key: key);
+class NewDiscussionTextScreen extends StatelessWidget {
+  const NewDiscussionTextScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var projectId;
-    var projectTitle;
-
-    try {
-      projectId = Get.arguments['projectId'];
-      projectTitle = Get.arguments['projectTitle'];
-    } catch (_) {}
-
-    var controller = Get.put(NewDiscussionController(
-      specifiedProjectId: projectId,
-      specifiedProjectTitle: projectTitle,
-    ));
-
+    DiscussionActionsController controller = Get.arguments['controller'];
     return Scaffold(
       appBar: StyledAppBar(
-        titleText: tr('newDiscussion'),
+        titleText: tr('text'),
+        onLeadingPressed: () => controller.leaveTextView(),
         actions: [
           IconButton(
-              onPressed: () => controller.confirm(context),
-              icon: const Icon(Icons.done_rounded))
+              icon: const Icon(Icons.check_rounded),
+              onPressed: controller.confirmText)
         ],
-        onLeadingPressed: controller.discardDiscussion,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            NewDiscussionTitle(controller: controller),
-            Listener(
-              onPointerDown: (_) {
-                if (controller.title.isNotEmpty &&
-                    controller.titleFocus.hasFocus)
-                  controller.titleFocus.unfocus();
-              },
-              child: Column(
-                children: [
-                  NewDiscussionText(controller: controller),
-                  IgnorePointer(
-                    ignoring: projectId != null,
-                    child: NewDiscussionProject(controller: controller),
-                  ),
-                  NewDiscussionSubscribers(controller: controller),
-                ],
-              ),
-            ),
-          ],
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
+        child: TextField(
+          controller: controller.textController.value,
+          autofocus: true,
+          maxLines: null,
+          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          decoration: InputDecoration.collapsed(
+              hintText: tr('discussionText'),
+              hintStyle: TextStyleHelper.subtitle1()),
         ),
       ),
     );

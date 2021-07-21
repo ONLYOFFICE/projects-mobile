@@ -41,13 +41,15 @@ import 'package:projects/presentation/views/authentication/passcode/passcode_scr
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_screen.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/select/select_dis_subscribers.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/new_discussion_screen.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/select/new_diss_text_screen.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/select/select_diss_subscribers.dart';
-import 'package:projects/presentation/views/discussions/new_discussion/select/users_from_groups.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
@@ -163,6 +165,13 @@ List<GetPage> getxPages() => [
       GetPage(
           name: 'NewDiscussionTextScreen',
           page: () => const NewDiscussionTextScreen()),
+      GetPage(
+          name: 'DiscussionEditingScreen',
+          page: () => const DiscussionEditingScreen()),
+      GetPage(
+        name: 'ManageDiscussionSubscribersScreen',
+        page: () => const ManageDiscussionSubscribersScreen(),
+      ),
       GetPage(name: 'NewMilestoneView', page: () => const NewMilestoneView()),
       GetPage(
           name: 'NewMilestoneDescription',

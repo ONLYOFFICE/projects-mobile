@@ -193,6 +193,9 @@ class CoreApi {
   }) async =>
       '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
+  Future<String> updateMessageUrl({@required int messageId}) async =>
+      '${await getPortalURI()}/api/$version/project/message/$messageId';
+
   Future<String> updateMessageStatusUrl({@required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/status';
 

@@ -30,23 +30,24 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/discussions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/user_selection_tile.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class SelectDiscussionSubscribers extends StatelessWidget {
-  const SelectDiscussionSubscribers({Key key}) : super(key: key);
+class ManageDiscussionSubscribersScreen extends StatelessWidget {
+  const ManageDiscussionSubscribersScreen({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +58,13 @@ class SelectDiscussionSubscribers extends StatelessWidget {
 
     return Scaffold(
       appBar: StyledAppBar(
-        // titleText: 'Select subscribers',
         title: Obx(
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Select subscribers'),
+              Text(tr('manageSubscribers')),
               if (controller.subscribers.isNotEmpty)
-                Text('${controller.subscribers.length} users selected',
+                Text(plural('selected', controller.subscribers.length),
                     style: TextStyleHelper.caption())
             ],
           ),
@@ -81,8 +81,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           children: [
             Obx(() => Expanded(
                   child: SearchField(
-                    hintText: 'Search for users...',
-                    onChanged: usersDataSource.searchUsers,
+                    hintText: tr('usersSearch'),
+                    onSubmitted: (value) => usersDataSource.searchUsers(value),
                     showClearIcon: usersDataSource.isSearchResult.isTrue,
                     onClearPressed: controller.clearUserSearch,
                     controller: controller.userSearchController,
@@ -104,83 +104,26 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.isFalse) {
-            // return UsersDefault(
-            //   selfUserItem: controller.selfUserItem,
-            //   usersDataSource: usersDataSource,
-            //   onTapFunction: () => controller.addResponsible,
-            // );
             return SmartRefresher(
               enablePullDown: false,
               controller: usersDataSource.refreshController,
               onLoading: usersDataSource.onLoading,
               enablePullUp: usersDataSource.pullUpEnabled,
-              child: ListView.separated(
-                itemCount: usersDataSource.usersList.length,
-                padding: const EdgeInsets.symmetric(vertical: 13),
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: 24);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  return Obx(
-                    () => CheckboxListTile(
-                      value:
-                          usersDataSource.usersList[index].isSelected == true,
-                      onChanged: (value) {
-                        usersDataSource.usersList[index].onTap();
-                        controller
-                            .addSubscriber(usersDataSource.usersList[index]);
-                      },
-                      contentPadding: const EdgeInsets.only(left: 16, right: 9),
-                      title: Row(
-                        children: [
-                          SizedBox(
-                            height: 40,
-                            width: 40,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: CustomNetworkImage(
-                                image: usersDataSource
-                                        .usersList[index].portalUser.avatar ??
-                                    usersDataSource.usersList[index].portalUser
-                                        .avatarMedium ??
-                                    usersDataSource.usersList[index].portalUser
-                                        .avatarSmall,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 16),
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  usersDataSource.usersList[index].displayName,
-                                  maxLines: 2,
-                                  style: TextStyleHelper.subtitle1(
-                                      color: Get.theme.colors().onSurface),
-                                ),
-                                if (usersDataSource
-                                        .usersList[index].portalUser.title !=
-                                    null)
-                                  Text(
-                                    usersDataSource
-                                        .usersList[index].portalUser.title,
-                                    maxLines: 2,
-                                    style: TextStyleHelper.caption(
-                                        color: Get.theme
-                                            .colors()
-                                            .onSurface
-                                            .withOpacity(0.6)),
-                                  ),
-                                const SizedBox(width: 10),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  if (controller.subscribers.isNotEmpty)
+                    _UsersCategoryText(text: tr('subscribed')),
+                  if (controller.subscribers.isNotEmpty)
+                    _SubscribedUsers(
+                      controller: controller,
+                      usersDataSource: usersDataSource,
                     ),
-                  );
-                },
+                  _UsersCategoryText(text: tr('allUsers')),
+                  _AllUsers(
+                    usersDataSource: usersDataSource,
+                    controller: controller,
+                  ),
+                ],
               ),
             );
           }
@@ -192,11 +135,108 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               usersDataSource.isSearchResult.isTrue) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.addSubscriber,
+              onTapFunction: (user) =>
+                  controller.addSubscriber(user, fromUsersDataSource: true),
             );
           }
           return const ListLoadingSkeleton();
         },
+      ),
+    );
+  }
+}
+
+class _UsersCategoryText extends StatelessWidget {
+  const _UsersCategoryText({
+    Key key,
+    @required this.text,
+  }) : super(key: key);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15, top: 14),
+        child: Text(
+          text,
+          style: TextStyleHelper.body2(
+              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+        ),
+      ),
+    );
+  }
+}
+
+class _AllUsers extends StatelessWidget {
+  const _AllUsers({
+    Key key,
+    @required this.usersDataSource,
+    @required this.controller,
+  }) : super(key: key);
+
+  final UsersDataSource usersDataSource;
+  final DiscussionActionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) => Padding(
+          padding: const EdgeInsets.only(top: 24),
+          child: UserSelectionTile(
+            image: usersDataSource.usersList[index].portalUser.avatar ??
+                usersDataSource.usersList[index].avatarMedium ??
+                usersDataSource.usersList[index].portalUser.avatarSmall,
+            value: usersDataSource.usersList[index].isSelected == true,
+            onChanged: (value) {
+              // controller.subscribers[index].onTap();
+              controller.addSubscriber(usersDataSource.usersList[index],
+                  fromUsersDataSource: false);
+            },
+            displayName: usersDataSource.usersList[index].displayName,
+            caption: usersDataSource.usersList[index].portalUser.title,
+          ),
+        ),
+        childCount: usersDataSource.usersList.length,
+      ),
+    );
+  }
+}
+
+class _SubscribedUsers extends StatelessWidget {
+  const _SubscribedUsers({
+    Key key,
+    @required this.controller,
+    @required this.usersDataSource,
+  }) : super(key: key);
+
+  final DiscussionActionsController controller;
+  final UsersDataSource usersDataSource;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (_, index) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 24),
+            child: UserSelectionTile(
+              image: controller.subscribers[index].portalUser.avatar ??
+                  controller.subscribers[index].avatarMedium ??
+                  controller.subscribers[index].portalUser.avatarSmall,
+              value: controller.subscribers[index].isSelected == true,
+              onChanged: (value) {
+                // controller.subscribers[index].onTap();
+                controller.addSubscriber(controller.subscribers[index]);
+              },
+              displayName: controller.subscribers[index].displayName,
+              caption: controller.subscribers[index].portalUser.title,
+            ),
+          );
+        },
+        childCount: controller.subscribers.length,
       ),
     );
   }
