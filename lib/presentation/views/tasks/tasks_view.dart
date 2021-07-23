@@ -64,7 +64,7 @@ class TasksView extends StatelessWidget {
             child: StyledFloatingActionButton(
                 onPressed: () => Get.toNamed('NewTaskView',
                     arguments: {'projectDetailed': null}),
-                child: const Icon(Icons.add_rounded)))),
+                child: AppIcon(icon: SvgIcons.add_fab)))),
         appBar: StyledAppBar(
           titleHeight: 101,
           bottomHeight: 0,

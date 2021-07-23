@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
@@ -118,7 +119,9 @@ class DiscussionSubscribersView extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
                   child: StyledFloatingActionButton(
-                    onPressed: controller.toSubscribersManagingScreen,
+                    onPressed: () =>
+                        controller.toSubscribersManagingScreen(context),
+                    child: AppIcon(icon: SvgIcons.add_fab),
                   ),
                 ),
               )

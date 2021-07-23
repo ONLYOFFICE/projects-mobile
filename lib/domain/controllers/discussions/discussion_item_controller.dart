@@ -37,6 +37,7 @@ import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
+import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -163,9 +164,28 @@ class DiscussionItemController extends GetxController {
     });
   }
 
-  // void toSubscribersManagingScreen() => Get.toNamed(
-  //       'ManageDiscussionSubscribersScreen',
-  //       arguments: {'controller': this},
-  //     );
-  void toSubscribersManagingScreen() => null;
+  void toSubscribersManagingScreen(context) {
+    try {
+      Get.find<DiscussionEditingController>().dispose();
+    } catch (_) {}
+
+    var controller = Get.put(
+      DiscussionEditingController(
+        id: discussion.value.id,
+        title: discussion.value.title.obs,
+        text: discussion.value.text.obs,
+        projectId: discussion.value.project.id,
+        selectedProjectTitle: discussion.value.project.title.obs,
+        initialSubscribers: discussion.value.subscribers,
+      ),
+    );
+
+    Get.toNamed(
+      'ManageDiscussionSubscribersScreen',
+      arguments: {
+        'controller': controller,
+        'onConfirm': () => controller.confirm(context),
+      },
+    );
+  }
 }

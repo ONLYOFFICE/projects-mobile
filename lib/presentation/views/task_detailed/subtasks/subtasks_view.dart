@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.dart';
@@ -67,16 +68,16 @@ class SubtasksView extends StatelessWidget {
               ),
               if (controller?.task?.value?.canCreateSubtask)
                 Positioned(
-                    right: 16,
-                    bottom: 24,
-                    child: StyledFloatingActionButton(
-                      onPressed: () =>
-                          Get.toNamed('NewSubtaskView', arguments: {
-                        'taskId': _task.id,
-                        'forEditing': false,
-                      }),
-                      child: const Icon(Icons.add_rounded, size: 34),
-                    )),
+                  right: 16,
+                  bottom: 24,
+                  child: StyledFloatingActionButton(
+                    onPressed: () => Get.toNamed('NewSubtaskView', arguments: {
+                      'taskId': _task.id,
+                      'forEditing': false,
+                    }),
+                    child: AppIcon(icon: SvgIcons.add_fab),
+                  ),
+                ),
             ],
           );
         } else {

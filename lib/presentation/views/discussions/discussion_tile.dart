@@ -112,7 +112,11 @@ class _DiscussionInfo extends StatelessWidget {
             discussion.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyleHelper.projectTitle,
+            style: TextStyleHelper.projectTitle.copyWith(
+              color: discussion.status == 1
+                  ? Get.theme.colors().onBackground.withOpacity(0.6)
+                  : null,
+            ),
           ),
           RichText(
             text: TextSpan(
@@ -123,7 +127,7 @@ class _DiscussionInfo extends StatelessWidget {
                   TextSpan(
                       text: '${tr('archived')} • ',
                       style: TextStyleHelper.status(
-                          color: Get.theme.colors().onSurface)),
+                          color: Get.theme.colors().onBackground)),
                 TextSpan(text: formatedDate(discussion.created)),
                 const TextSpan(text: ' • '),
                 TextSpan(text: discussion.createdBy.displayName)

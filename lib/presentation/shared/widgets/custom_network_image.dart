@@ -67,10 +67,10 @@ class CustomNetworkImage extends StatelessWidget {
           fit: fit,
           height: height,
           width: width,
-          placeholder: (context, url) => CircleAvatar(
+          placeholder: (_, __) => CircleAvatar(
               backgroundColor:
                   Get.theme.colors().bgDescription.withOpacity(0.4)),
-          errorWidget: (context, url, error) => CircleAvatar(
+          errorWidget: (_, __, ___) => CircleAvatar(
               backgroundColor:
                   Get.theme.colors().bgDescription.withOpacity(0.4)),
         );
