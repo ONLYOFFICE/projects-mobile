@@ -43,7 +43,7 @@ final AppColors darkColors = AppColors(
   background: const Color(0xff121212),
   links: const Color(0xff0C76D5),
   surface: const Color(0xff252525),
-  onSurface: const Color(0xffffffff),
+  onSurface: const Color.fromRGBO(255, 255, 255, 0.87),
   primarySurface: const Color(0xff191919),
   bgDescription: const Color(0xff363636),
   lightSecondary: const Color(0xffFFAF49),
