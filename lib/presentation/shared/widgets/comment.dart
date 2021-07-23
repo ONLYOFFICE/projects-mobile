@@ -95,7 +95,9 @@ class Comment extends StatelessWidget {
                       child: HTML.toRichText(
                         context,
                         controller.comment.value.commentBody,
-                        defaultTextStyle: TextStyleHelper.body2(),
+                        defaultTextStyle: TextStyleHelper.body2(
+                          color: Theme.of(context).colors().onSurface,
+                        ),
                       ),
                     ),
                     if (comment.isResponsePermissions)
