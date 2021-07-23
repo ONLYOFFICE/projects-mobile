@@ -22,13 +22,13 @@ class NewTaskController extends GetxController
     implements TaskActionsController {
   final _api = locator<TaskService>();
   var _selectedProjectId;
-  var _selectedMilestoneId;
+  var newMilestoneId;
   // for dateTime format
   DateTime _startDate;
   DateTime _dueDate;
 
   int get selectedProjectId => _selectedProjectId;
-  int get selectedMilestoneId => _selectedMilestoneId;
+  int get selectedMilestoneId => newMilestoneId;
   DateTime get startDate => _startDate;
   DateTime get dueDate => _dueDate;
 
@@ -107,7 +107,7 @@ class NewTaskController extends GetxController
   void changeMilestoneSelection({var id, String title}) {
     if (id != null && title != null) {
       selectedMilestoneTitle.value = title;
-      _selectedMilestoneId = id;
+      newMilestoneId = id;
     } else {
       removeMilestoneSelection();
     }
@@ -115,7 +115,7 @@ class NewTaskController extends GetxController
   }
 
   void removeMilestoneSelection() {
-    _selectedMilestoneId = null;
+    newMilestoneId = null;
     selectedMilestoneTitle.value = '';
   }
 
@@ -268,7 +268,7 @@ class NewTaskController extends GetxController
         notify: notifyResponsibles.value,
         description: descriptionText.value,
         title: title.value,
-        milestoneid: _selectedMilestoneId);
+        milestoneid: newMilestoneId);
 
     var createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {

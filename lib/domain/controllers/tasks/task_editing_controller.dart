@@ -35,7 +35,7 @@ class TaskEditingController extends GetxController
   RxString title;
   @override
   RxString descriptionText;
-  var _newMilestoneId;
+  var newMilestoneId;
   @override
   RxString selectedMilestoneTitle;
   @override
@@ -79,7 +79,7 @@ class TaskEditingController extends GetxController
     descriptionText = task.description.obs;
     descriptionController.value.text = task.description;
     selectedMilestoneTitle = task.milestone?.title?.obs ?? tr('none').obs;
-    _newMilestoneId = task.milestoneId;
+    newMilestoneId = task.milestoneId;
     _newStartDate =
         task.startDate != null ? DateTime.parse(task.startDate) : null;
     startDateText = task.startDate?.obs ?? ''.obs;
@@ -128,7 +128,7 @@ class TaskEditingController extends GetxController
   void changeMilestoneSelection({var id, String title}) {
     if (id != null && title != null) {
       selectedMilestoneTitle.value = title;
-      _newMilestoneId = id;
+      newMilestoneId = id;
     } else {
       removeMilestoneSelection();
     }
@@ -136,7 +136,7 @@ class TaskEditingController extends GetxController
   }
 
   void removeMilestoneSelection() {
-    _newMilestoneId = null;
+    newMilestoneId = null;
     selectedMilestoneTitle.value = tr('none');
   }
 
@@ -235,7 +235,7 @@ class TaskEditingController extends GetxController
     // checking all fields for changes
     taskEdited = title.value != task.title ||
         descriptionText.value != task.description ||
-        _newMilestoneId != task.milestoneId ||
+        newMilestoneId != task.milestoneId ||
         initialStatus.id != newStatus.value.id ||
         task.responsibles.length != responsibles.length;
 
@@ -287,7 +287,7 @@ class TaskEditingController extends GetxController
         startDate: _newStartDate,
         priority: highPriority.isTrue ? 'high' : 'normal',
         title: title.value,
-        milestoneid: _newMilestoneId,
+        milestoneid: newMilestoneId,
         projectId: task.projectOwner.id,
         responsibles: responsibleIds,
       );
@@ -296,7 +296,7 @@ class TaskEditingController extends GetxController
 
       if (updatedTask != null) {
         // ignore: unawaited_futures
-        _taskItemController.reloadTask();
+        _taskItemController.reloadTask(showLoading: true);
         Get.back();
       }
     }
