@@ -21,6 +21,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var usersDataSource = Get.find<UsersDataSource>();
     DiscussionActionsController controller = Get.arguments['controller'];
+    var onConfirm = Get.arguments['onConfirm'];
 
     controller.setupSubscribersSelection();
 
@@ -40,7 +41,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
         onLeadingPressed: controller.leaveSubscribersSelectionView,
         actions: [
           IconButton(
-              onPressed: controller.confirmSubscribersSelection,
+              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
               icon: const Icon(Icons.done))
         ],
         // bottom: CustomSearchBar(controller: controller),
@@ -96,7 +97,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             );
           }
           if (usersDataSource.nothingFound.isTrue) {
-            return const NothingFound();
+            // NothingFound contains Expanded widget, that why it is needed
+            // to use Column
+            return Column(children: [const NothingFound()]);
           }
           if (usersDataSource.loaded.isTrue &&
               usersDataSource.usersList.isNotEmpty &&
@@ -197,7 +200,8 @@ class _SubscribedUsers extends StatelessWidget {
               value: controller.subscribers[index].isSelected == true,
               onChanged: (value) {
                 // controller.subscribers[index].onTap();
-                controller.addSubscriber(controller.subscribers[index]);
+                controller.addSubscriber(controller.subscribers[index],
+                    fromUsersDataSource: false);
               },
               displayName: controller.subscribers[index].displayName,
               caption: controller.subscribers[index].portalUser.title,

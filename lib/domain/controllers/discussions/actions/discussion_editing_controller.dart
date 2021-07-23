@@ -48,11 +48,11 @@ class DiscussionEditingController extends GetxController
   void onInit() {
     titleController.text = title.value;
     textController.value.text = text.value;
+    // ignore: invalid_use_of_protected_member
     for (var item in initialSubscribers) {
       subscribers.add(
           PortalUserItemController(portalUser: item, isSelected: true.obs));
     }
-    // ignore: invalid_use_of_protected_member
     _previusSelectedSubscribers = List.from(subscribers);
     _previusText = text.value;
     _previusTitle = title.value;
@@ -132,6 +132,7 @@ class DiscussionEditingController extends GetxController
   void leaveSubscribersSelectionView() {
     // ignore: invalid_use_of_protected_member
     if (listEquals(_previusSelectedSubscribers, subscribers.value)) {
+      clearUserSearch();
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -154,19 +155,27 @@ class DiscussionEditingController extends GetxController
 
   @override
   void setupSubscribersSelection() async {
-    _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
     await _usersDataSource.getProfiles(needToClear: true);
+    _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
     _usersDataSource.withoutSelf = false;
   }
 
   Future<void> _getSelectedSubscribers() async {
-    for (PortalUserItemController user in _usersDataSource.usersList) {
+    for (var i = 0; i < _usersDataSource.usersList.length; i++) {
+      PortalUserItemController user = _usersDataSource.usersList[i];
       user.selectionMode.value = UserSelectionMode.Multiple;
+      var found = false;
 
-      var userInSubscribers = subscribers
-          .firstWhere((element) => element.id == user.id, orElse: () => null);
+      for (var j = 0; j < subscribers.length; j++) {
+        if (subscribers[j].id == user.id) {
+          subscribers[j] = user;
+          found = true;
+          break;
+        }
+      }
+      _previusSelectedSubscribers = List.from(subscribers);
 
-      user.isSelected.value = userInSubscribers != null ? true : false;
+      user.isSelected.value = found ? true : false;
     }
   }
 
@@ -256,7 +265,7 @@ class DiscussionEditingController extends GetxController
       if (editedDiss != null) {
         var discussionsController = Get.find<DiscussionsController>();
         var discussionController = Get.find<DiscussionItemController>();
-
+        clearUserSearch();
         // ignore: unawaited_futures
         discussionController.onRefresh();
         Get.back();
@@ -267,10 +276,7 @@ class DiscussionEditingController extends GetxController
   }
 
   void discardDiscussion() {
-    if (title.value != _previusTitle ||
-        text.value != _previusText ||
-        // ignore: invalid_use_of_protected_member
-        !listEquals(_previusSelectedSubscribers, subscribers.value)) {
+    if (title.value != _previusTitle || text.value != _previusText) {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),

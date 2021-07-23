@@ -53,7 +53,7 @@ class PortalDiscussionsView extends StatelessWidget {
           ),
           floatingActionButton: StyledFloatingActionButton(
             onPressed: controller.toNewDiscussionScreen,
-            child: AppIcon(icon: SvgIcons.add_fab),
+            child: AppIcon(icon: SvgIcons.add_discussion),
           ),
           body: DiscussionsList(controller: controller)),
     );

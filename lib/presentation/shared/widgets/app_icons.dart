@@ -19,6 +19,8 @@ class SvgIcons {
   static const String about_app = 'lib/assets/images/icons/about_app.svg';
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
   static const String add_fab = 'lib/assets/images/icons/add_fab.svg';
+  static const String add_discussion =
+      'lib/assets/images/icons/add_discussion.svg';
   static const String back_round = 'lib/assets/images/icons/back_round.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
