@@ -74,15 +74,9 @@ class TaskCell extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SecondColumn(
-                          task: task,
-                          itemController: itemController,
-                        ),
+                        SecondColumn(itemController: itemController),
                         const SizedBox(width: 8),
-                        ThirdColumn(
-                          task: task,
-                          controller: itemController,
-                        ),
+                        ThirdColumn(controller: itemController),
                       ],
                     ),
                   ),
@@ -131,12 +125,10 @@ class TaskStatus extends StatelessWidget {
 
 // refactor
 class SecondColumn extends StatelessWidget {
-  final PortalTask task;
   final TaskItemController itemController;
 
   const SecondColumn({
     Key key,
-    @required this.task,
     @required this.itemController,
   }) : super(key: key);
 
@@ -152,10 +144,10 @@ class SecondColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CellAtributedTitle(
-                text: task.title,
+                text: itemController.task.value.title,
                 style: TextStyleHelper.projectTitle,
                 atributeIcon: AppIcon(icon: SvgIcons.high_priority),
-                atributeIconVisible: task.priority == 1,
+                atributeIconVisible: itemController.task.value.priority == 1,
               ),
               Row(
                 children: [
@@ -173,7 +165,7 @@ class SecondColumn extends StatelessWidget {
                           color:
                               Get.theme.colors().onSurface.withOpacity(0.6))),
                   Flexible(
-                    child: Text(task.createdBy.displayName,
+                    child: Text(itemController.task.value.createdBy.displayName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.caption(
@@ -191,12 +183,10 @@ class SecondColumn extends StatelessWidget {
 }
 
 class ThirdColumn extends StatelessWidget {
-  final PortalTask task;
   final TaskItemController controller;
 
   const ThirdColumn({
     Key key,
-    @required this.task,
     @required this.controller,
   }) : super(key: key);
 
@@ -205,14 +195,19 @@ class ThirdColumn extends StatelessWidget {
     var _now = DateTime.now();
 
     DateTime _deadline;
-    if (task.deadline != null) _deadline = DateTime.parse(task.deadline);
+    if (controller.task.value.deadline != null)
+      _deadline = DateTime.parse(controller.task.value.deadline);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         if (_deadline != null)
-          Text(formatedDateFromString(now: _now, stringDate: task.deadline),
+          Text(
+              formatedDateFromString(
+                now: _now,
+                stringDate: controller.task.value.deadline,
+              ),
               style: _deadline.isBefore(_now)
                   ? TextStyleHelper.caption(
                       color: Get.theme.colors().colorError)
@@ -224,7 +219,7 @@ class ThirdColumn extends StatelessWidget {
           children: [
             AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
             const SizedBox(width: 5),
-            Text(task.subtasks.length.toString(),
+            Text(controller.task.value.subtasks.length.toString(),
                 style: TextStyleHelper.body2(
                     color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ],

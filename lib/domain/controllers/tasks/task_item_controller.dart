@@ -30,7 +30,6 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -88,7 +87,7 @@ class TaskItemController extends GetxController {
           : null,
       description: taskFrom.description,
       milestoneid: taskFrom.milestoneId,
-      priority: taskFrom.priority == 1 ? tr('high') : tr('normal'),
+      priority: taskFrom.priority == 1 ? 'high' : 'normal',
       projectId: taskFrom.projectOwner.id,
       responsibles: responsibleIds,
       title: taskFrom.title,

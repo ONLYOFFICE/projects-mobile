@@ -288,7 +288,7 @@ class NewTaskController extends GetxController
     // ignore: omit_local_variable_types
     List<String> responsibleIds = [];
 
-    if (highPriority.isTrue) priority = tr('high');
+    if (highPriority.isTrue) priority = 'high';
     for (var item in responsibles) responsibleIds.add(item.id);
 
     var newTask = NewTaskDTO(
