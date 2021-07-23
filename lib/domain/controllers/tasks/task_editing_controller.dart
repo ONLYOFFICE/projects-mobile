@@ -112,11 +112,7 @@ class TaskEditingController extends GetxController
     descriptionController.value.text = task.description;
     selectedMilestoneTitle = task.milestone?.title?.obs ?? tr('none').obs;
     newMilestoneId = task.milestoneId;
-    _newStartDate =
-        task.startDate != null ? DateTime.parse(task.startDate) : null;
-    startDateText = task.startDate?.obs ?? ''.obs;
-    _newDueDate = task.deadline != null ? DateTime.parse(task.deadline) : null;
-    dueDateText = task.deadline?.obs ?? ''.obs;
+    _initDates();
     highPriority = task.priority == 1 ? true.obs : false.obs;
     responsibles = [].obs;
     for (var user in task.responsibles) {
@@ -124,6 +120,20 @@ class TaskEditingController extends GetxController
     }
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.from(responsibles.value);
+  }
+
+  void _initDates() {
+    var now = DateTime.now();
+    _newStartDate =
+        task.startDate != null ? DateTime.parse(task.startDate) : null;
+    _newDueDate = task.deadline != null ? DateTime.parse(task.deadline) : null;
+
+    startDateText = task.startDate != null
+        ? formatedDateFromString(now: now, stringDate: task.startDate).obs
+        : ''.obs;
+    dueDateText = task.deadline != null
+        ? formatedDateFromString(now: now, stringDate: task.deadline).obs
+        : ''.obs;
   }
 
   @override
@@ -180,7 +190,7 @@ class TaskEditingController extends GetxController
       Get.back();
     } else {
       startDateText.value = '';
-      _newDueDate = null;
+      _newStartDate = null;
     }
   }
 
