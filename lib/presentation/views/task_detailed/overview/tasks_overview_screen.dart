@@ -77,11 +77,15 @@ class TasksOverviewScreen extends StatelessWidget {
                 if (task.startDate != null) const SizedBox(height: 20),
                 if (task.startDate != null)
                   InfoTile(
-                      icon: AppIcon(
-                          icon: SvgIcons.start_date,
-                          color: const Color(0xff707070)),
-                      caption: '${tr('startDate')}:',
-                      subtitle: task.startDate),
+                    icon: AppIcon(
+                        icon: SvgIcons.start_date,
+                        color: const Color(0xff707070)),
+                    caption: '${tr('startDate')}:',
+                    subtitle: formatedDateFromString(
+                      now: DateTime.now(),
+                      stringDate: task.startDate,
+                    ),
+                  ),
                 if (task.deadline != null) const SizedBox(height: 20),
                 if (task.deadline != null)
                   InfoTile(
@@ -123,9 +127,12 @@ class TasksOverviewScreen extends StatelessWidget {
                     subtitle: task.createdBy.displayName),
                 const SizedBox(height: 20),
                 InfoTile(
-                    caption: '${tr('creationDate')}:',
-                    subtitle: formatedDateFromString(
-                        now: DateTime.now(), stringDate: task.created)),
+                  caption: '${tr('creationDate')}:',
+                  subtitle: formatedDateFromString(
+                    now: DateTime.now(),
+                    stringDate: task.created,
+                  ),
+                ),
                 const SizedBox(height: 110)
               ],
             ),
