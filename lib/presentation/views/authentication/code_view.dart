@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -40,7 +39,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class CodeView extends StatelessWidget {
   CodeView({Key key}) : super(key: key);
@@ -48,7 +46,7 @@ class CodeView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<LoginController>();
 
-    var codeController = MaskedTextController(mask: '000 000');
+    var codeController = TextEditingController();
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -77,7 +75,6 @@ class CodeView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 36),
               child: TextField(
                 controller: codeController,
-                keyboardType: TextInputType.number,
                 textAlign: TextAlign.center,
                 style: TextStyleHelper.subtitle1(),
               ),
