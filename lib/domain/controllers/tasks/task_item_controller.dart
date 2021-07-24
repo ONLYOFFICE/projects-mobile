@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task_item_service.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
@@ -158,5 +159,17 @@ class TaskItemController extends GetxController {
     if (info.visibleFraction == 1) {
       update();
     }
+  }
+
+  void toProjectOverview() async {
+    var projectService = locator<ProjectService>();
+    var project = await projectService.getProjectById(
+      projectId: task.value.projectOwner.id,
+    );
+    if (project != null)
+      await Get.toNamed(
+        'ProjectDetailedView',
+        arguments: {'projectDetailed': project},
+      );
   }
 }

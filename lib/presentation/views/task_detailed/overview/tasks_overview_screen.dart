@@ -94,7 +94,9 @@ class TasksOverviewScreen extends StatelessWidget {
                   caption: '${tr('project')}:',
                   subtitle: task.projectOwner.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
-                      color: Get.theme.colors().links),
+                    color: Get.theme.colors().links,
+                  ),
+                  onTap: taskController.toProjectOverview,
                 ),
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
