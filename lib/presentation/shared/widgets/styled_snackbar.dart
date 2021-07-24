@@ -49,8 +49,7 @@ SnackBar styledSnackBar({
       children: [
         Flexible(
             child: Text(text,
-                style: TextStyleHelper.body2(
-                    color: Theme.of(context).colors().onSurface))),
+                style: TextStyleHelper.body2(color: lightColors.surface))),
         if (buttonText != null && buttonText.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(right: 10),
