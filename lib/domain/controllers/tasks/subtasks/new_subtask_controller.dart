@@ -62,7 +62,8 @@ class NewSubtaskController extends GetxController
   @override
   FocusNode get titleFocus => _titleFocus;
   RxList responsibles = [].obs;
-  var status = 1.obs;
+  @override
+  RxInt status = 1.obs;
   @override
   RxBool setTiltleError = false.obs;
 
@@ -89,7 +90,7 @@ class NewSubtaskController extends GetxController
   Future<void> _getSelectedResponsibles() async {
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = false;
+      element.selectionMode.value = UserSelectionMode.Single;
     }
     for (var selectedMember in responsibles) {
       for (var user in _usersDataSource.usersList) {
@@ -110,7 +111,7 @@ class NewSubtaskController extends GetxController
       if (element.portalUser.id != user.id) element.isSelected.value = false;
     });
     responsibles.clear();
-    if (user.isSelected.isTrue) {
+    if (user.isSelected == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(

@@ -40,6 +40,7 @@ abstract class SubtaskActionController extends GetxController {
   TextEditingController get titleController => _titleController;
   FocusNode get titleFocus;
   RxBool setTiltleError;
+  RxInt status;
 
   void init({Subtask subtask});
   void addResponsible(PortalUserItemController user);

@@ -147,7 +147,7 @@ class PortalUserItem extends StatelessWidget {
                       child: Icon(Icons.check_box_outline_blank_outlined));
                 }
               } else {
-                if (userController.isSelected.isTrue) {
+                if (userController.isSelected.value == true) {
                   return SizedBox(
                     width: 72,
                     child: Icon(

@@ -27,7 +27,8 @@ dependencies:
   # for http requests
   http: ^0.13.0
   # to use svg icons
-  flutter_svg: ^0.20.0-nullsafety.3
+  # flutter_svg: ^0.20.0-nullsafety.3
+  flutter_svg: ^0.22.0
   # for storing important data
   flutter_secure_storage: ^4.2.0
   get_it: ^4.0.2
