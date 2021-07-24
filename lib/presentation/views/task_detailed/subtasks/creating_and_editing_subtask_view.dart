@@ -53,10 +53,15 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                   constraints: const BoxConstraints(minHeight: 56),
                   child: Row(
                     children: [
-                      const SizedBox(
-                          width: 56,
-                          child: Icon(Icons.check_box_outline_blank,
-                              color: Color(0xFF666666))),
+                      SizedBox(
+                        width: 56,
+                        child: Icon(
+                          controller.status.value == 1
+                              ? Icons.check_box_outline_blank
+                              : Icons.check_box,
+                          color: const Color(0xFF666666),
+                        ),
+                      ),
                       Expanded(
                         child: Center(
                           child: Obx(() => TextField(

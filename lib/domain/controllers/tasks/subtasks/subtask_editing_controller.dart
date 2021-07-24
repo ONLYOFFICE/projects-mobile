@@ -28,7 +28,8 @@ class SubtaskEditingController extends GetxController
   @override
   FocusNode get titleFocus => null;
   RxList responsibles = [].obs;
-  var status = 1.obs;
+  @override
+  RxInt status;
   @override
   RxBool setTiltleError = false.obs;
   // title befor editing
@@ -46,6 +47,7 @@ class SubtaskEditingController extends GetxController
     _previousTitle = subtask.title;
     _previousResponsibleId = subtask.responsible?.id;
     _titleController.text = subtask.title;
+    status = subtask.status.obs;
     if (_subtask.responsible != null) {
       _previusSelectedResponsible
           .add(PortalUserItemController(portalUser: _subtask.responsible));
@@ -68,7 +70,7 @@ class SubtaskEditingController extends GetxController
   Future<void> _getSelectedResponsibles() async {
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
-      element.multipleSelectionEnabled.value = false;
+      element.selectionMode.value = UserSelectionMode.Single;
     }
     for (var selectedMember in responsibles) {
       for (var user in _usersDataSource.usersList) {
@@ -89,7 +91,7 @@ class SubtaskEditingController extends GetxController
       if (element.portalUser.id != user.id) element.isSelected.value = false;
     });
     responsibles.clear();
-    if (user.isSelected.isTrue) {
+    if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(
