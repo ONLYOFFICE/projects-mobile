@@ -11,12 +11,14 @@ class InfoTile extends StatelessWidget {
   final TextStyle subtitleStyle;
   final Widget subtitleWidget;
   final Widget suffix;
+  final Function() onTap;
 
   const InfoTile({
     Key key,
     this.icon,
     this.caption,
     this.captionStyle,
+    this.onTap,
     this.subtitle,
     this.subtitleStyle,
     this.subtitleWidget,
@@ -25,27 +27,31 @@ class InfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SizedBox(width: 72, child: icon),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (caption != null)
-                Text(caption, style: captionStyle ?? TextStyleHelper.caption()),
-              if (subtitleWidget != null) subtitleWidget,
-              if (subtitleWidget == null && subtitle != null)
-                Text(subtitle,
-                    style: subtitleStyle ??
-                        TextStyleHelper.subtitle1(
-                            color: Get.theme.colors().onSurface))
-            ],
+    return InkWell(
+      onTap: onTap,
+      child: Row(
+        children: [
+          SizedBox(width: 72, child: icon),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (caption != null)
+                  Text(caption,
+                      style: captionStyle ?? TextStyleHelper.caption()),
+                if (subtitleWidget != null) subtitleWidget,
+                if (subtitleWidget == null && subtitle != null)
+                  Text(subtitle,
+                      style: subtitleStyle ??
+                          TextStyleHelper.subtitle1(
+                              color: Get.theme.colors().onSurface))
+              ],
+            ),
           ),
-        ),
-        if (suffix != null) suffix,
-        if (suffix == null) const SizedBox(width: 16),
-      ],
+          if (suffix != null) suffix,
+          if (suffix == null) const SizedBox(width: 16),
+        ],
+      ),
     );
   }
 }
