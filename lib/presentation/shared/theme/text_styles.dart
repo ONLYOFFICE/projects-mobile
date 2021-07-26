@@ -166,7 +166,7 @@ class TextStyleHelper {
       fontFamily: 'Roboto',
       fontSize: 14,
       fontWeight: FontWeight.normal,
-      color: Get.theme.colors().projectsSubtitle);
+      color: Get.theme.colors().primary);
 
   static TextStyle projectResponsible = TextStyle(
     fontFamily: 'Roboto',
