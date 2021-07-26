@@ -62,7 +62,7 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   scaffoldBackgroundColor: lightColors.backgroundColor,
   appBarTheme: AppBarTheme(
     iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-    backgroundColor: Colors.blue, //lightColors.onPrimarySurface,
+    backgroundColor: lightColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
     // lightColors.onSurface),
     // text
@@ -85,7 +85,7 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
   scaffoldBackgroundColor: darkColors.backgroundColor,
   appBarTheme: AppBarTheme(
     iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-    backgroundColor: Colors.blue,
+    backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
   ),
   navigationRailTheme:
