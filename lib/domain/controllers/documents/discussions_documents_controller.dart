@@ -80,6 +80,7 @@ class DiscussionsDocumentsController extends GetxController {
   }
 
   void setupFiles(List<PortalFile> files) {
+    loaded.value = false;
     paginationController.data.clear();
     paginationController.data.addAll(files);
     loaded.value = true;
