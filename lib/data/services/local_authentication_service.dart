@@ -8,8 +8,12 @@ class LocalAuthenticationService {
       await _localAuth.getAvailableBiometrics();
 
   Future<bool> get isFingerprintAvailable async {
+    var canCheckBiometrics = await _localAuth.canCheckBiometrics;
     var biometrics = await availableBiometrics;
-    return biometrics.contains(BiometricType.fingerprint);
+    var isFingerprintAvailable = biometrics.contains(BiometricType.fingerprint);
+    final isDeviceSupported = await _localAuth.isDeviceSupported();
+
+    return canCheckBiometrics && isFingerprintAvailable && isDeviceSupported;
   }
 
   Future<bool> authenticate({String signInTitle}) async {
