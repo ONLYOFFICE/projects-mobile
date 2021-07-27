@@ -5,7 +5,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class AuthTextField extends StatelessWidget {
   final bool obscureText;
-  final bool haveError;
+  final bool hasError;
   final Function(String value) onChanged;
   final String hintText;
   final String autofillHint;
@@ -22,7 +22,7 @@ class AuthTextField extends StatelessWidget {
     this.obscureText = false,
     this.onChanged,
     this.validator,
-    this.haveError = false,
+    this.hasError = false,
   }) : super(key: key);
 
   @override
@@ -44,7 +44,7 @@ class AuthTextField extends StatelessWidget {
             color: Get.theme.colors().onSurface.withOpacity(0.6)),
         hintText: hintText,
         hintStyle: TextStyleHelper.subtitle1(
-          color: !haveError
+          color: !hasError
               ? Get.theme.colors().onSurface.withOpacity(0.6)
               : Get.theme.colors().colorError,
         ),

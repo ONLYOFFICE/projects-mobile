@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -46,7 +46,7 @@ class PortalView extends StatelessWidget {
                           autofillHint: AutofillHints.url,
                           hintText: tr('portalAdress'),
                           validator: controller.emailValidator,
-                          haveError: controller.portalFieldError.value == true,
+                          hasError: controller.portalFieldError.value == true,
                         ),
                       ),
                       SizedBox(height: Get.height * 0.033),
