@@ -86,7 +86,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> loginByPassword() async {
-    if (!_isEmailOrPassEmpty()) {
+    if (_checkEmailAndPass()) {
       var email = _emailController.text;
       var password = _passwordController.text;
 
@@ -137,17 +137,19 @@ class LoginController extends GetxController {
     }
   }
 
-  bool _isEmailOrPassEmpty() {
+  bool _checkEmailAndPass() {
     var result;
-    if (_emailController.text.isEmpty) {
-      result = true;
+    emailFieldError.value = false;
+    passwordFieldError.value = false;
+    if (!_emailController.text.isEmail) {
+      result = false;
       emailFieldError.value = true;
     }
     if (_passwordController.text.isEmpty) {
-      result = true;
+      result = false;
       passwordFieldError.value = true;
     }
-    return result ?? false;
+    return result ?? true;
   }
 
   void _clearInputFields() {
@@ -217,7 +219,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
-    if (_portalAdressController.text.isEmpty) {
+    if (!_portalAdressController.text.isURL) {
       portalFieldError.value = true;
     } else {
       setState(ViewState.Busy);

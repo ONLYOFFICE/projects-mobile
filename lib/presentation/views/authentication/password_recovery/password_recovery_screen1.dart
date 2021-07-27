@@ -33,7 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/domain/controllers/auth/password_recovery_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -45,9 +45,11 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
-    var prEmailController =
-        TextEditingController(text: controller?.emailController?.text);
+    var email;
+
+    if (Get.arguments != null) email = Get.arguments['email'];
+
+    var controller = Get.put(PasswordRecoveryController(email));
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -73,18 +75,22 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
             const SizedBox(height: 76),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: AuthTextField(
-                controller: prEmailController,
-                autofillHint: AutofillHints.email,
-                hintText: tr('email'),
+              child: Obx(
+                () => AuthTextField(
+                  hasError: controller.emailFieldError.value == true,
+                  controller: controller.emailController,
+                  autofillHint: AutofillHints.email,
+                  hintText: tr('email'),
+                ),
               ),
             ),
             const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: WideButton(
-                  text: tr('confirm'),
-                  onPressed: () => Get.toNamed('PasswordRecoveryScreen2')),
+                text: tr('confirm'),
+                onPressed: () => controller.onConfirmPressed(),
+              ),
             ),
           ],
         ),

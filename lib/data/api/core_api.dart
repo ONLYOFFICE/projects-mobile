@@ -146,6 +146,9 @@ class CoreApi {
   }) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#comment_$commentId';
 
+  Future<String> passwordRecoveryUrl() async =>
+      '${await getPortalURI()}/api/$version/people/password';
+
   Future<String> tfaUrl(String code) async =>
       '${await getPortalURI()}/api/$version/authentication/$code';
 

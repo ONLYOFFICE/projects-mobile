@@ -158,4 +158,27 @@ class AuthApi {
 
     return result;
   }
+
+  Future<ApiDTO> passwordRecovery(String email) async {
+    var url = await coreApi.passwordRecoveryUrl();
+
+    var result = ApiDTO();
+
+    var body = {'email': email};
+
+    try {
+      var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

@@ -34,7 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -76,14 +76,14 @@ class LoginView extends StatelessWidget {
                                 controller: controller.emailController,
                                 validator: controller.emailValidator,
                                 autofillHint: AutofillHints.email,
-                                haveError:
+                                hasError:
                                     controller.emailFieldError.value == true,
                               ),
                               SizedBox(height: Get.height * 0.0444),
                               AuthTextField(
                                 hintText: tr('password'),
                                 controller: controller.passwordController,
-                                haveError:
+                                hasError:
                                     controller.passwordFieldError.value == true,
                                 validator: controller.passValidator,
                                 autofillHint: AutofillHints.password,
@@ -119,8 +119,10 @@ class LoginView extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       TextButton(
-                        onPressed: () async =>
-                            Get.toNamed('PasswordRecoveryScreen'),
+                        onPressed: () async => Get.toNamed(
+                          'PasswordRecoveryScreen',
+                          arguments: {'email': controller.emailController.text},
+                        ),
                         child: Text(
                           tr('forgotPassword'),
                           style: TextStyleHelper.subtitle2(

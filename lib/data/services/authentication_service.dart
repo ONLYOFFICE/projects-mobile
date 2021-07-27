@@ -75,4 +75,17 @@ class AuthService {
     }
     return authResponse;
   }
+
+  Future passwordRecovery(String email) async {
+    var response = await _api.passwordRecovery(email);
+
+    var success = response.response != null;
+
+    if (!success) {
+      await ErrorDialog.show(response.error);
+      return null;
+    } else {
+      return response;
+    }
+  }
 }

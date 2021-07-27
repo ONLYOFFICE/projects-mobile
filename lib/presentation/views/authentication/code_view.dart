@@ -33,9 +33,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
@@ -53,8 +54,12 @@ class CodeView extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SizedBox(height: Get.height * 0.1096),
-            // AppIcon(icon: PngIcons.code_light),
+            AppIcon(
+              icon: PngIcons.code_light,
+              isPng: true,
+              height: 200,
+              width: 200,
+            ),
             SizedBox(height: Get.height * 0.0347),
             Text(tr('tfaTitle'),
                 textAlign: TextAlign.center,

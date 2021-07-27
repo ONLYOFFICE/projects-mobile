@@ -36,7 +36,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/numbers_service.dart';
 import 'package:projects/data/services/sms_code_service.dart';
-import 'package:projects/domain/controllers/login_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TFASmsController extends GetxController {

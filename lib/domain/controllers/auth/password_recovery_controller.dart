@@ -30,38 +30,49 @@
  *
  */
 
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/internal/locator.dart';
 
-import 'package:projects/presentation/views/authentication/widgets/login_service_button.dart';
+class PasswordRecoveryController extends GetxController {
+  final String _email;
+  final AuthService _authService = locator<AuthService>();
 
-class LoginSources extends StatelessWidget {
-  final List<String> capabilities;
-  LoginSources({Key key, this.capabilities}) : super(key: key);
+  PasswordRecoveryController(this._email);
 
-  final LoginController controller = Get.find();
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 90,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(child: getLoginServices()),
-        ],
-      ),
-    );
+  void onInit() {
+    _emailController.text = _email;
+    super.onInit();
   }
 
-  Widget getLoginServices() => ListView.builder(
-        itemCount: capabilities.length,
-        itemBuilder: (context, index) => LoginItem(
-          serviceName: capabilities[index],
-          onTap: () {
-            controller.loginByProvider('${capabilities[index]}');
-          },
-        ),
-        scrollDirection: Axis.horizontal,
-      );
+  final TextEditingController _emailController = TextEditingController();
+  TextEditingController get emailController => _emailController;
+
+  var emailFieldError = false.obs;
+
+  Future onConfirmPressed() async {
+    if (_checkEmail()) {
+      var result = await _authService.passwordRecovery(_emailController.text);
+      if (result != null) {
+        await Get.toNamed('PasswordRecoveryScreen2');
+      }
+    }
+  }
+
+  bool _checkEmail() {
+    if (!_emailController.text.isEmail) {
+      emailFieldError.value = true;
+      return false;
+    } else {
+      emailFieldError.value = false;
+      return true;
+    }
+  }
+
+  void backToLogin() {
+    Get.back();
+    Get.back();
+  }
 }
