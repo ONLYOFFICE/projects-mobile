@@ -54,10 +54,14 @@ class TaskCommentItemController extends GetxController
           Get.back();
           // ignore: unawaited_futures
           Get.find<TaskItemController>(tag: taskId.toString()).reloadTask();
-          ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
+            styledSnackBar(
               context: context,
               text: tr('commentDeleted'),
-              buttonText: tr('confirm')));
+              buttonText: tr('confirm'),
+              buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
+            ),
+          );
         }
       },
     ));

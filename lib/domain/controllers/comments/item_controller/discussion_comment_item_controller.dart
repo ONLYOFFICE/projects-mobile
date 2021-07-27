@@ -50,10 +50,14 @@ class DiscussionCommentItemController extends GetxController
         if (response != null) {
           Get.find<DiscussionItemController>().onRefresh();
           Get.back();
-          ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+          ScaffoldMessenger.of(context).showSnackBar(
+            styledSnackBar(
               context: context,
               text: tr('commentDeleted'),
-              buttonText: tr('confirm')));
+              buttonText: tr('confirm'),
+              buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
+            ),
+          );
         }
       },
     ));
