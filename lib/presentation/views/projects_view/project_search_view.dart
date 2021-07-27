@@ -55,9 +55,10 @@ class ProjectSearchView extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.nothingFound.isTrue) const NothingFound(),
-            if (controller.loaded.isTrue && controller.searchResult.isNotEmpty)
+            if (controller.loaded.value == false) const ListLoadingSkeleton(),
+            if (controller.nothingFound.value == true) const NothingFound(),
+            if (controller.loaded.value == true &&
+                controller.searchResult.isNotEmpty)
               Expanded(
                 child: SmartRefresher(
                   enablePullDown: false,

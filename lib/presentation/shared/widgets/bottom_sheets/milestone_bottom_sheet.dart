@@ -69,7 +69,7 @@ class MilestonesBottomSheet extends StatelessWidget {
           const Divider(height: 1),
           Obx(
             () {
-              if (_milestoneController.loaded.isTrue) {
+              if (_milestoneController.loaded.value == true) {
                 return Expanded(
                   child: ListView.separated(
                     itemCount: _milestoneController.milestones.length,

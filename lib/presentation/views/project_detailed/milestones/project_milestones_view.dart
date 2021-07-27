@@ -62,8 +62,8 @@ class ProjectMilestonesScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Header(),
-          if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == false) const ListLoadingSkeleton(),
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value)
             Expanded(
@@ -74,7 +74,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
                         args: [tr('milestones').toLowerCase()])),
               ),
             ),
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value)
             Expanded(
@@ -85,7 +85,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
                         args: [tr('milestones').toLowerCase()])),
               ),
             ),
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isNotEmpty)
             Expanded(
               child: PaginationListView(

@@ -58,7 +58,7 @@ class TaskCommentsView extends StatelessWidget {
         if (snapshot.hasData) {
           return Obx(
             () {
-              if (controller.loaded.isTrue) {
+              if (controller.loaded.value == true) {
                 return Column(
                   children: [
                     Expanded(

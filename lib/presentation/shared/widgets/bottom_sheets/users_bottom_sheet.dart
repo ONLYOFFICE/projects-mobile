@@ -63,7 +63,7 @@ class UsersBottomSheet extends StatelessWidget {
           ),
           const Divider(height: 1),
           Obx(() {
-            if (_usersController.loaded.isTrue) {
+            if (_usersController.loaded.value == true) {
               return Expanded(
                 child: ListView.separated(
                   itemCount: _usersController.users.length,

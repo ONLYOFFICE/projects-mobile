@@ -76,20 +76,20 @@ class SelectProjectView extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (_searchController.switchToSearchView.isTrue &&
+        if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isNotEmpty) {
           return ProjectsList(
             projects: _searchController.searchResult,
             controller: controller,
           );
         }
-        if (_searchController.switchToSearchView.isTrue &&
+        if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isEmpty &&
-            _searchController.loaded.isTrue) {
+            _searchController.loaded.value == true) {
           return const NothingFound();
         }
-        if (_projectsController.loaded.isTrue &&
-            _searchController.switchToSearchView.isFalse) {
+        if (_projectsController.loaded.value == true &&
+            _searchController.switchToSearchView.value == false) {
           return ProjectsList(
             projects: _projectsController.paginationController.data,
             controller: controller,

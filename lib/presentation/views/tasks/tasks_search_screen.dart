@@ -61,7 +61,7 @@ class TasksSearchScreen extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.isFalse)
+          if (controller.loaded.value == false)
             return const ListLoadingSkeleton();
           else {
             return PaginationListView(

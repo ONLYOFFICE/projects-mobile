@@ -74,7 +74,7 @@ class TaskTitle extends StatelessWidget {
                       hintText: tr('taskTitle'),
                       contentPadding: const EdgeInsets.symmetric(vertical: 0),
                       hintStyle: TextStyleHelper.headline6(
-                          color: controller.setTitleError.isTrue
+                          color: controller.setTitleError.value == true
                               ? Get.theme.colors().colorError
                               : Get.theme.colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none)),

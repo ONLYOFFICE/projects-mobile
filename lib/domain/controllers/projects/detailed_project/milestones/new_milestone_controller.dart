@@ -181,7 +181,7 @@ class NewMilestoneController extends GetxController {
   }
 
   void addResponsible(PortalUserItemController user) {
-    if (user.isSelected.isTrue) {
+    if (user.isSelected.value == true) {
       responsible = user.obs;
     } else {
       responsible = null;
@@ -208,9 +208,9 @@ class NewMilestoneController extends GetxController {
     if (titleController.text.isEmpty) needToSetTitle.value = true;
     if (responsible?.value == null) needToSelectResponsible.value = true;
 
-    if (needToSelectProject.isFalse ||
-        needToSetTitle.isFalse ||
-        needToSelectResponsible.isFalse) return;
+    if (needToSelectProject.value == false ||
+        needToSetTitle.value == false ||
+        needToSelectResponsible.value == false) return;
 
     var milestone = NewMilestoneDTO(
       title: titleController.text,

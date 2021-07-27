@@ -84,7 +84,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                   child: SearchField(
                     hintText: tr('usersSearch'),
                     onSubmitted: usersDataSource.searchUsers,
-                    showClearIcon: usersDataSource.isSearchResult.isTrue,
+                    showClearIcon: usersDataSource.isSearchResult.value == true,
                     onClearPressed: controller.clearUserSearch,
                     controller: controller.userSearchController,
                   ),
@@ -102,9 +102,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isFalse) {
+              usersDataSource.isSearchResult.value == false) {
             return SmartRefresher(
               enablePullDown: false,
               controller: usersDataSource.refreshController,
@@ -181,12 +181,12 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               ),
             );
           }
-          if (usersDataSource.nothingFound.isTrue) {
+          if (usersDataSource.nothingFound.value == true) {
             return const NothingFound();
           }
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isTrue) {
+              usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
               onTapFunction: controller.addSubscriber,

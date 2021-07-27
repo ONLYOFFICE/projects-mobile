@@ -168,34 +168,36 @@ class _DocumentsScreen extends StatelessWidget {
       appBar: appBar,
       body: Obx(
         () {
-          if (controller.loaded.isFalse) return const ListLoadingSkeleton();
-          if (controller.loaded.isTrue && controller.nothingFound.isTrue) {
+          if (controller.loaded.value == false)
+            return const ListLoadingSkeleton();
+          if (controller.loaded.value == true &&
+              controller.nothingFound.value == true) {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
                     text: tr('notFound')));
           }
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value &&
-              controller.searchMode.isFalse) {
+              controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.documents_not_created),
                     text: tr('noDocumentsCreated',
                         args: [tr('documents').toLowerCase()])));
           }
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value &&
-              controller.searchMode.isFalse) {
+              controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
                     icon: AppIcon(icon: SvgIcons.not_found),
                     text: tr('noDocumentsMatching',
                         args: [tr('documents').toLowerCase()])));
           }
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isNotEmpty) {
             return DecoratedBox(
               decoration: BoxDecoration(
@@ -402,17 +404,18 @@ class MoveDocumentsScreen extends StatelessWidget {
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-            if (controller.loaded.isTrue && controller.nothingFound.isTrue)
+            if (controller.loaded.value == false) const ListLoadingSkeleton(),
+            if (controller.loaded.value == true &&
+                controller.nothingFound.value == true)
               const Expanded(
                 child: Center(
                   child: NothingFound(),
                 ),
               ),
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isEmpty &&
                 !controller.filterController.hasFilters.value &&
-                controller.searchMode.isFalse)
+                controller.searchMode.value == false)
               Expanded(
                 child: Center(
                   child: EmptyScreen(
@@ -421,10 +424,10 @@ class MoveDocumentsScreen extends StatelessWidget {
                           args: [tr('documents').toLowerCase()])),
                 ),
               ),
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isEmpty &&
                 controller.filterController.hasFilters.value &&
-                controller.searchMode.isFalse)
+                controller.searchMode.value == false)
               Expanded(
                 child: Center(
                   child: EmptyScreen(
@@ -433,7 +436,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                           args: [tr('documents').toLowerCase()])),
                 ),
               ),
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isNotEmpty)
               Expanded(
                 child: DecoratedBox(

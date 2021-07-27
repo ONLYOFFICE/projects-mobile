@@ -66,7 +66,7 @@ class GroupMembersSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (groupsDataSource.loaded.isTrue &&
+          if (groupsDataSource.loaded.value == true &&
               groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,

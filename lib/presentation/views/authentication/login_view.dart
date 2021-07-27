@@ -76,13 +76,15 @@ class LoginView extends StatelessWidget {
                                 controller: controller.emailController,
                                 validator: controller.emailValidator,
                                 autofillHint: AutofillHints.email,
-                                haveError: controller.emailFieldError.isTrue,
+                                haveError:
+                                    controller.emailFieldError.value == true,
                               ),
                               SizedBox(height: Get.height * 0.0444),
                               AuthTextField(
                                 hintText: tr('password'),
                                 controller: controller.passwordController,
-                                haveError: controller.passwordFieldError.isTrue,
+                                haveError:
+                                    controller.passwordFieldError.value == true,
                                 validator: controller.passValidator,
                                 autofillHint: AutofillHints.password,
                                 obscureText: true,
@@ -117,13 +119,15 @@ class LoginView extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       TextButton(
-                          onPressed: () async =>
-                              Get.toNamed('PasswordRecoveryScreen'),
-                          child: Text(
-                            tr('forgotPassword'),
-                            style: TextStyleHelper.subtitle2(
-                                color: Get.theme.colors().primary),
-                          )),
+                        onPressed: () async =>
+                            Get.toNamed('PasswordRecoveryScreen'),
+                        child: Text(
+                          tr('forgotPassword'),
+                          style: TextStyleHelper.subtitle2(
+                            color: Get.theme.colors().primary,
+                          ),
+                        ),
+                      ),
                       // PasswordForm(),
                       // (controller.capabilities != null)
                       //     ? LoginSources(

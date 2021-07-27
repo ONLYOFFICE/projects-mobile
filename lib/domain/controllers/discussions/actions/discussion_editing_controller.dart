@@ -237,7 +237,7 @@ class DiscussionEditingController extends GetxController
 
   @override
   void selectGroupMembers(PortalGroupItemController group) {
-    if (group.isSelected.isTrue) {
+    if (group.isSelected.value == true) {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere(

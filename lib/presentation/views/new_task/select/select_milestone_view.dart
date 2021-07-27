@@ -64,7 +64,7 @@ class SelectMilestoneView extends StatelessWidget {
         children: [
           Obx(
             () {
-              if (_milestoneController.loaded.isTrue) {
+              if (_milestoneController.loaded.value == true) {
                 return Expanded(
                   child: ListView.separated(
                     itemCount: _milestoneController.milestones.length + 1,

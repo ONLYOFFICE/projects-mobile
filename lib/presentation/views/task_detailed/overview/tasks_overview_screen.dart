@@ -56,7 +56,8 @@ class TasksOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (taskController.loaded.isTrue || taskController.firstReload.isTrue) {
+        if (taskController.loaded.value == true ||
+            taskController.firstReload.value == true) {
           taskController.firstReload.value = false;
           var task = taskController.task.value;
           return SmartRefresher(

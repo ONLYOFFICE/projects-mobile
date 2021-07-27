@@ -55,7 +55,7 @@ class DiscussionOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.isFalse)
+        if (controller.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
           var discussion = controller.discussion.value;

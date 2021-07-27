@@ -59,7 +59,7 @@ class SettingsScreen extends StatelessWidget {
         ),
         body: Obx(
           () {
-            if (controller.loaded.isTrue) {
+            if (controller.loaded.value == true) {
               return SingleChildScrollView(
                 child: Column(
                   children: [

@@ -133,7 +133,7 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   void changePMSelection(PortalUserItemController user) {
-    if (user.isSelected.isTrue) {
+    if (user.isSelected.value == true) {
       selectedProjectManager.value = user.portalUser;
       managerName.value = selectedProjectManager.value.displayName;
       isPMSelected.value = true;
@@ -166,7 +166,7 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   void selectTeamMember(PortalUserItemController user) {
-    if (user.isSelected.isTrue) {
+    if (user.isSelected.value == true) {
       selectedTeamMembers.add(user);
     } else {
       selectedTeamMembers.removeWhere(
@@ -244,7 +244,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   var selectedGroups = <PortalGroupItemController>[];
   void selectGroupMembers(PortalGroupItemController group) {
-    if (group.isSelected.isTrue) {
+    if (group.isSelected.value == true) {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere(

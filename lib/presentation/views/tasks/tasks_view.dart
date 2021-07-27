@@ -58,8 +58,8 @@ class TasksView extends StatelessWidget {
       () => Scaffold(
         backgroundColor: Get.theme.backgroundColor,
         floatingActionButton: Obx(() => AnimatedPadding(
-            padding:
-                EdgeInsets.only(bottom: controller.fabIsRaised.isTrue ? 48 : 0),
+            padding: EdgeInsets.only(
+                bottom: controller.fabIsRaised.value == true ? 48 : 0),
             duration: const Duration(milliseconds: 100),
             child: StyledFloatingActionButton(
                 onPressed: () => Get.toNamed('NewTaskView',
@@ -70,7 +70,7 @@ class TasksView extends StatelessWidget {
           bottomHeight: 0,
           showBackButton: false,
           titleText: tr('tasks'),
-          elevation: controller.needToShowDivider.isTrue ? 1 : 0,
+          elevation: controller.needToShowDivider.value == true ? 1 : 0,
           actions: [
             IconButton(
               icon: AppIcon(
@@ -93,8 +93,9 @@ class TasksView extends StatelessWidget {
         ),
         body: Obx(
           () {
-            if (controller.loaded.isFalse) return const ListLoadingSkeleton();
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == false)
+              return const ListLoadingSkeleton();
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isEmpty &&
                 !controller.filterController.hasFilters.value) {
               return Center(
@@ -103,7 +104,7 @@ class TasksView extends StatelessWidget {
                       text: tr('noTasksCreated',
                           args: [tr('tasks').toLowerCase()])));
             }
-            if (controller.loaded.isTrue &&
+            if (controller.loaded.value == true &&
                 controller.paginationController.data.isEmpty &&
                 controller.filterController.hasFilters.value) {
               return Center(

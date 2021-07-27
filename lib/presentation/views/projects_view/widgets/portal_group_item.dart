@@ -52,7 +52,7 @@ class PortalGroupItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () => CheckboxListTile(
-        value: groupController.isSelected.isTrue,
+        value: groupController.isSelected.value == true,
         onChanged: (value) {
           groupController.isSelected.value = !groupController.isSelected.value;
           onTapFunction(groupController);

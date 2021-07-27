@@ -343,7 +343,7 @@ class ProjectCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.showAll.isTrue
+      () => controller.showAll.value == true
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -394,7 +394,7 @@ class TaskCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.showAll.isTrue
+      () => controller.showAll.value == true
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,

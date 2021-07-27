@@ -73,8 +73,8 @@ class MoreView extends StatelessWidget {
                           color: Get.theme.colors().outline, width: 0.5),
                     ),
                   ),
-                  child: userController.loaded.isTrue &&
-                          portalInfoController.loaded.isTrue
+                  child: userController.loaded.value == true &&
+                          portalInfoController.loaded.value == true
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [

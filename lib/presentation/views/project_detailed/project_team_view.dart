@@ -53,7 +53,7 @@ class ProjectTeamView extends StatelessWidget {
     projectTeamDataSource.projectDetailed = projectDetailed;
     projectTeamDataSource.getTeam();
     return Obx(() {
-      if (projectTeamDataSource.loaded.isTrue) {
+      if (projectTeamDataSource.loaded.value == true) {
         return SmartRefresher(
             enablePullDown: false,
             enablePullUp: projectTeamDataSource.pullUpEnabled,

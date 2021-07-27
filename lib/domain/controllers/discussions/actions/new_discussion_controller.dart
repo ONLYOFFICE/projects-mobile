@@ -224,7 +224,7 @@ class NewDiscussionController extends GetxController
 
   @override
   void selectGroupMembers(PortalGroupItemController group) {
-    if (group.isSelected.isTrue) {
+    if (group.isSelected.value == true) {
       print(group.portalGroup.id);
       selectedGroups.add(group);
     } else {

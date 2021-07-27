@@ -77,7 +77,7 @@ class EditProjectView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (editProjectController.loaded.isTrue) {
+          if (editProjectController.loaded.value == true) {
             return ListView(
               children: [
                 const SizedBox(height: 26),

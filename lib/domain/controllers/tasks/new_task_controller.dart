@@ -37,6 +37,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -45,6 +46,7 @@ import 'package:projects/domain/controllers/tasks/abstract_task_actions_controll
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
@@ -244,7 +246,7 @@ class NewTaskController extends GetxController
   }
 
   void addResponsible(PortalUserItemController user) {
-    if (user.isSelected.isTrue) {
+    if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(
@@ -258,9 +260,13 @@ class NewTaskController extends GetxController
   @override
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
-      _startDate = newDate;
-      startDateText.value = formatedDate(newDate);
-      Get.back();
+      // ignore: omit_local_variable_types
+      bool verificationResult = checkDate(newDate, _dueDate);
+      if (verificationResult) {
+        _startDate = newDate;
+        startDateText.value = formatedDate(newDate);
+        Get.back();
+      }
     } else {
       _startDate = null;
       startDateText.value = '';
@@ -270,13 +276,27 @@ class NewTaskController extends GetxController
   @override
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
-      _dueDate = newDate;
-      dueDateText.value = formatedDate(newDate);
-      Get.back();
+      // ignore: omit_local_variable_types
+      bool verificationResult = checkDate(_startDate, newDate);
+      if (verificationResult) {
+        _dueDate = newDate;
+        dueDateText.value = formatedDate(newDate);
+        Get.back();
+      }
     } else {
       _dueDate = null;
       dueDateText.value = '';
     }
+  }
+
+  @override
+  bool checkDate(DateTime startDate, DateTime dueDate) {
+    if (startDate == null || dueDate == null) return true;
+    if (startDate.isAfter(dueDate)) {
+      ErrorDialog.show(CustomError(message: tr('dateSelectionError')));
+      return false;
+    }
+    return true;
   }
 
   void confirm(BuildContext context) async {
@@ -288,7 +308,7 @@ class NewTaskController extends GetxController
     // ignore: omit_local_variable_types
     List<String> responsibleIds = [];
 
-    if (highPriority.isTrue) priority = 'high';
+    if (highPriority.value == true) priority = 'high';
     for (var item in responsibles) responsibleIds.add(item.id);
 
     var newTask = NewTaskDTO(

@@ -60,4 +60,5 @@ abstract class TaskActionsController extends GetxController {
   void changeStartDate(DateTime newDate);
   void changeDueDate(DateTime newDate);
   void changePriority(bool value);
+  void checkDate(DateTime startDate, DateTime dueDate);
 }
