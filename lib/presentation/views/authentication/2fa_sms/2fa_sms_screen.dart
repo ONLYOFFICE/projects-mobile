@@ -24,7 +24,7 @@ class TFASmsScreen extends StatelessWidget {
       appBar: StyledAppBar(),
       body: Obx(
         () {
-          if (controller.loaded.isTrue) {
+          if (controller.loaded.value == true) {
             return SingleChildScrollView(
               child: Column(
                 children: [

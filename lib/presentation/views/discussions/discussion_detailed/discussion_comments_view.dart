@@ -18,7 +18,7 @@ class DiscussionCommentsView extends StatelessWidget {
     return Container(
       child: Obx(
         () {
-          if (controller.loaded.isFalse)
+          if (controller.loaded.value == false)
             return const ListLoadingSkeleton();
           else {
             return Stack(

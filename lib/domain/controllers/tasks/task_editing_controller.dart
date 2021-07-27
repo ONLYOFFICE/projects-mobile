@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
@@ -12,6 +13,7 @@ import 'package:projects/domain/controllers/projects/new_project/users_data_sour
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
@@ -153,9 +155,13 @@ class TaskEditingController extends GetxController
   @override
   void changeStartDate(DateTime newDate) {
     if (newDate != null) {
-      startDateText.value = formatedDate(newDate);
-      _newStartDate = newDate;
-      Get.back();
+      // ignore: omit_local_variable_types
+      bool verificationResult = checkDate(newDate, _newDueDate);
+      if (verificationResult) {
+        startDateText.value = formatedDate(newDate);
+        _newStartDate = newDate;
+        Get.back();
+      }
     } else {
       startDateText.value = '';
       _newStartDate = null;
@@ -165,13 +171,27 @@ class TaskEditingController extends GetxController
   @override
   void changeDueDate(DateTime newDate) {
     if (newDate != null) {
-      _newDueDate = newDate;
-      dueDateText.value = formatedDate(newDate);
-      Get.back();
+      // ignore: omit_local_variable_types
+      bool verificationResult = checkDate(_newStartDate, newDate);
+      if (verificationResult) {
+        dueDateText.value = formatedDate(newDate);
+        _newDueDate = newDate;
+        Get.back();
+      }
     } else {
       dueDateText.value = '';
       _newDueDate = null;
     }
+  }
+
+  @override
+  bool checkDate(DateTime startDate, DateTime dueDate) {
+    if (startDate == null || dueDate == null) return true;
+    if (startDate.isAfter(dueDate)) {
+      ErrorDialog.show(CustomError(message: tr('dateSelectionError')));
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -295,7 +315,7 @@ class TaskEditingController extends GetxController
         deadline: _newDueDate,
         id: task.id,
         startDate: _newStartDate,
-        priority: highPriority.isTrue ? 'high' : 'normal',
+        priority: highPriority.value == true ? 'high' : 'normal',
         title: title.value,
         milestoneid: newMilestoneId,
         projectId: task.projectOwner.id,

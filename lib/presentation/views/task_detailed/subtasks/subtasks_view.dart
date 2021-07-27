@@ -20,7 +20,7 @@ class SubtasksView extends StatelessWidget {
     var _task = controller.task.value;
     return Obx(
       () {
-        if (controller.loaded.isTrue) {
+        if (controller.loaded.value == true) {
           return Stack(
             children: [
               SmartRefresher(

@@ -49,12 +49,12 @@ class ProjectManagerSelectionView extends StatelessWidget {
               onTapFunction: controller.changePMSelection,
             );
           }
-          if (usersDataSource.nothingFound.isTrue) {
+          if (usersDataSource.nothingFound.value == true) {
             return const NothingFound();
           }
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isTrue) {
+              usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
               onTapFunction: controller.changePMSelection,
@@ -123,7 +123,7 @@ class UsersDefault extends StatelessWidget {
       child: ListView(
         children: <Widget>[
           Obx(() {
-            if (usersDataSource.selfIsVisible.isTrue)
+            if (usersDataSource.selfIsVisible.value == true)
               return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

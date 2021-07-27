@@ -74,7 +74,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                                 decoration: InputDecoration.collapsed(
                                   hintText: tr('describeSubtask'),
                                   hintStyle: TextStyleHelper.subtitle1(
-                                      color: controller.setTiltleError.isTrue
+                                      color: controller.setTiltleError.value ==
+                                              true
                                           ? Get.theme.colors().colorError
                                           : Get.theme
                                               .colors()

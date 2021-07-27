@@ -89,7 +89,7 @@ class ProjectIcon extends StatelessWidget {
       children: [
         const SizedBox(width: 16),
         Obx(() {
-          var color = itemController.canEdit.isTrue
+          var color = itemController.canEdit.value == true
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
           return Container(
@@ -177,7 +177,7 @@ class _SecondColumn extends StatelessWidget {
                 text: item.title,
                 style: style,
                 atributeIcon: AppIcon(icon: SvgIcons.lock),
-                atributeIconVisible: itemController.isPrivate.isTrue,
+                atributeIconVisible: itemController.isPrivate.value == true,
               );
             },
           ),
@@ -186,7 +186,7 @@ class _SecondColumn extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Obx(() {
-                var color = itemController.canEdit.isTrue
+                var color = itemController.canEdit.value == true
                     ? Get.theme.colors().primary
                     : Get.theme.colors().onBackground;
                 return Text(

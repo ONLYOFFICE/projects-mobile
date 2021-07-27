@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
@@ -12,6 +13,10 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var controller = Get.find<LoginController>();
+    var prEmailController =
+        TextEditingController(text: controller?.emailController?.text);
+
     return Scaffold(
       appBar: StyledAppBar(),
       body: SingleChildScrollView(
@@ -37,6 +42,7 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 40),
               child: AuthTextField(
+                controller: prEmailController,
                 autofillHint: AutofillHints.email,
                 hintText: tr('email'),
               ),

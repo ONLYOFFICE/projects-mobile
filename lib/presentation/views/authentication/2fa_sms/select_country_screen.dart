@@ -19,10 +19,12 @@ class SelectCountryScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
-          titleText: controller.searching.isTrue ? null : tr('selectCountry'),
-          title: controller.searching.isTrue ? const _SarchField() : null,
+          titleText:
+              controller.searching.value == true ? null : tr('selectCountry'),
+          title:
+              controller.searching.value == true ? const _SarchField() : null,
           actions: [
-            if (controller.searching.isFalse)
+            if (controller.searching.value == false)
               IconButton(
                 icon: const Icon(Icons.search),
                 onPressed: controller.onSearchPressed,

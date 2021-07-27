@@ -140,12 +140,13 @@ class TitleInput extends StatelessWidget {
                               disabledBorder: InputBorder.none,
                               hintText: tr('projectTitle'),
                               hintStyle: TextStyleHelper.headline7(
-                                  color: controller.needToFillTitle.isTrue
-                                      ? Get.theme.colors().colorError
-                                      : Get.theme
-                                          .colors()
-                                          .onSurface
-                                          .withOpacity(0.3)),
+                                  color:
+                                      controller.needToFillTitle.value == true
+                                          ? Get.theme.colors().colorError
+                                          : Get.theme
+                                              .colors()
+                                              .onSurface
+                                              .withOpacity(0.3)),
                             ),
                           ),
                         ),

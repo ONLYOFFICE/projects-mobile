@@ -33,7 +33,7 @@ class GroupsBottomSheet extends StatelessWidget {
           ),
           const Divider(height: 1),
           Obx(() {
-            if (_groupsController.loaded.isTrue) {
+            if (_groupsController.loaded.value == true) {
               return Expanded(
                 child: ListView.separated(
                   itemCount: _groupsController.groups.length,

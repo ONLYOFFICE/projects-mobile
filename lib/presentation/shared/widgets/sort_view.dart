@@ -91,7 +91,7 @@ class SortTile extends StatelessWidget {
             ),
             if (_selected)
               AppIcon(
-                  icon: sortController.isSortAscending.isTrue
+                  icon: sortController.isSortAscending.value == true
                       ? SvgIcons.up_arrow
                       : SvgIcons.down_arrow)
           ],

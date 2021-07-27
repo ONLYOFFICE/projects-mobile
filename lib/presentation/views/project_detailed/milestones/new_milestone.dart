@@ -496,17 +496,17 @@ class SelectProjectForMilestone extends StatelessWidget {
         ),
       ),
       body: Obx(() {
-        if (_searchController.switchToSearchView.isTrue &&
+        if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isNotEmpty) {
           return ProjectsList(projects: _searchController.searchResult);
         }
-        if (_searchController.switchToSearchView.isTrue &&
+        if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isEmpty &&
-            _searchController.loaded.isTrue) {
+            _searchController.loaded.value == true) {
           return const NothingFound();
         }
-        if (_projectsController.loaded.isTrue &&
-            _searchController.switchToSearchView.isFalse) {
+        if (_projectsController.loaded.value == true &&
+            _searchController.switchToSearchView.value == false) {
           return ProjectsList(
               projects: _projectsController.paginationController.data);
         }
@@ -606,21 +606,21 @@ class SelectMilestoneResponsible extends StatelessWidget {
               onPressed: () => controller.leaveResponsiblesSelectionView())),
       body: Obx(
         () {
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isFalse) {
+              usersDataSource.isSearchResult.value == false) {
             return UsersDefault(
               selfUserItem: controller.selfUserItem,
               usersDataSource: usersDataSource,
               onTapFunction: controller.addResponsible,
             );
           }
-          if (usersDataSource.nothingFound.isTrue) {
+          if (usersDataSource.nothingFound.value == true) {
             return const NothingFound();
           }
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isTrue) {
+              usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
               onTapFunction: () => controller.addResponsible,

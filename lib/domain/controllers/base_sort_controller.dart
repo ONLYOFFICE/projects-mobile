@@ -23,7 +23,7 @@ abstract class BaseSortController extends GetxController {
   }
 
   String get currentSortOrder =>
-      isSortAscending.isTrue ? 'ascending' : 'descending';
+      isSortAscending.value == true ? 'ascending' : 'descending';
 
   String getFilterLabel(value) => tr(value);
 }

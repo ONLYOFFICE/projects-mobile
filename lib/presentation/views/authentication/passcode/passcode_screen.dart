@@ -20,7 +20,7 @@ class PasscodeScreen extends StatelessWidget {
     return Scaffold(
       body: Obx(
         () {
-          if (controller.loaded.isTrue) {
+          if (controller.loaded.value == true) {
             return SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -38,7 +38,7 @@ class PasscodeScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         const Flexible(flex: 1, child: SizedBox(height: 16)),
-                        if (controller.passcodeCheckFailed.isTrue)
+                        if (controller.passcodeCheckFailed.value == true)
                           Text(tr('incorrectPIN'),
                               style: TextStyleHelper.subtitle1(
                                   color: Get.theme.colors().colorError)),

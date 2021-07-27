@@ -46,7 +46,7 @@ class ProjectsBottomSheet extends StatelessWidget {
           const Divider(height: 1),
           Obx(
             () {
-              if (_projectsController.loaded.isTrue) {
+              if (_projectsController.loaded.value == true) {
                 return Expanded(
                   child: ListView.separated(
                     itemCount:

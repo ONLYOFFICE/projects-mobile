@@ -155,6 +155,7 @@
 	"invalidRange": "Invalid range.",
 	"startDate": "Start date",
 	"endDate": "End date",
+	"dateSelectionError": "The start date cannot be later than the end date",
 
 	"description": "Description",
 	"milestoneDescription": "Milestone description",

@@ -45,21 +45,21 @@ class TeamMembersSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isFalse) {
+              usersDataSource.isSearchResult.value == false) {
             return UsersDefault(
               selfUserItem: controller.selfUserItem,
               usersDataSource: usersDataSource,
               onTapFunction: controller.selectTeamMember,
             );
           }
-          if (usersDataSource.nothingFound.isTrue) {
+          if (usersDataSource.nothingFound.value == true) {
             return const NothingFound();
           }
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isTrue) {
+              usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
               onTapFunction: controller.selectTeamMember,

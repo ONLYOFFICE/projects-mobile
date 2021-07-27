@@ -88,7 +88,8 @@ class ProjectEditController extends BaseProjectEditorController {
       needToFillManager.value = true;
     }
 
-    if (needToFillTitle.isTrue || needToFillManager.isTrue) return;
+    if (needToFillTitle.value == true || needToFillManager.value == true)
+      return;
 
     var participants = <Participant>[];
 

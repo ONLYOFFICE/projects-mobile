@@ -29,7 +29,7 @@ class ProjectOverview extends StatelessWidget {
 
     return Obx(
       () {
-        if (projectController.loaded.isTrue) {
+        if (projectController.loaded.value == true) {
           return ListView(
             children: [
               const SizedBox(height: 26),

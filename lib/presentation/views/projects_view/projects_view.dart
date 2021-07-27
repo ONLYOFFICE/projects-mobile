@@ -55,8 +55,9 @@ class ProjectsView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.isFalse) return const ListLoadingSkeleton();
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == false)
+            return const ListLoadingSkeleton();
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value) {
             return Center(
@@ -66,7 +67,7 @@ class ProjectsView extends StatelessWidget {
                       args: [tr('projects').toLowerCase()])),
             );
           }
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
             return Center(

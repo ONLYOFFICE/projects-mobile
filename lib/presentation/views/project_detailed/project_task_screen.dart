@@ -35,8 +35,8 @@ class ProjectTaskScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Header(controller: controller),
-          if (controller.loaded.isFalse) const ListLoadingSkeleton(),
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == false) const ListLoadingSkeleton(),
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value)
             Expanded(
@@ -50,7 +50,7 @@ class ProjectTaskScreen extends StatelessWidget {
                 ),
               ),
             ),
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value)
             Expanded(
@@ -61,7 +61,7 @@ class ProjectTaskScreen extends StatelessWidget {
                         args: [tr('tasks').toLowerCase()])),
               ),
             ),
-          if (controller.loaded.isTrue &&
+          if (controller.loaded.value == true &&
               controller.paginationController.data.isNotEmpty)
             Expanded(
               child: PaginationListView(

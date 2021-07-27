@@ -52,7 +52,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                   child: SearchField(
                     hintText: tr('usersSearch'),
                     onSubmitted: (value) => usersDataSource.searchUsers(value),
-                    showClearIcon: usersDataSource.isSearchResult.isTrue,
+                    showClearIcon: usersDataSource.isSearchResult.value == true,
                     onClearPressed: controller.clearUserSearch,
                     controller: controller.userSearchController,
                   ),
@@ -70,9 +70,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isFalse) {
+              usersDataSource.isSearchResult.value == false) {
             return SmartRefresher(
               enablePullDown: false,
               controller: usersDataSource.refreshController,
@@ -96,14 +96,14 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               ),
             );
           }
-          if (usersDataSource.nothingFound.isTrue) {
+          if (usersDataSource.nothingFound.value == true) {
             // NothingFound contains Expanded widget, that why it is needed
             // to use Column
             return Column(children: [const NothingFound()]);
           }
-          if (usersDataSource.loaded.isTrue &&
+          if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.isTrue) {
+              usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
               onTapFunction: (user) =>

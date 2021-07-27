@@ -27,7 +27,7 @@ class PortalDiscussionsView extends StatelessWidget {
             bottomHeight: 0,
             showBackButton: false,
             titleText: tr('discussions'),
-            elevation: controller.needToShowDivider.isTrue ? 1 : 0,
+            elevation: controller.needToShowDivider.value == true ? 1 : 0,
             actions: [
               IconButton(
                 icon: AppIcon(

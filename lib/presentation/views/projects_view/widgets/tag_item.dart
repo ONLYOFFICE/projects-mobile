@@ -33,7 +33,7 @@ class TagItem extends StatelessWidget {
               ),
             ),
             Obx(() {
-              if (tagItemDTO.isSelected.isTrue) {
+              if (tagItemDTO.isSelected.value == true) {
                 return SizedBox(
                     width: 72,
                     child: Icon(Icons.check_box,
