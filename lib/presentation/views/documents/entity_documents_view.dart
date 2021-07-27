@@ -35,12 +35,14 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
@@ -76,14 +78,23 @@ class DiscussionsDocumentsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final documentsController = Get.find<DiscussionsDocumentsController>();
-    documentsController.setupFiles(files);
-    return DocumentsScreen(
-      controller: documentsController,
-      appBar: StyledAppBar(
-        showBackButton: false,
-        titleHeight: 0,
-        elevation: 0,
-      ),
+    final discussionController = Get.find<DiscussionItemController>();
+    return Obx(
+      () {
+        if (discussionController.loaded.value == true) {
+          documentsController.setupFiles(files);
+          return DocumentsScreen(
+            controller: documentsController,
+            appBar: StyledAppBar(
+              showBackButton: false,
+              titleHeight: 0,
+              elevation: 0,
+            ),
+          );
+        } else {
+          return const ListLoadingSkeleton();
+        }
+      },
     );
   }
 }
