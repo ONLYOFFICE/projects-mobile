@@ -85,7 +85,8 @@ class TaskCommentItemController extends GetxController
         if (response != null) {
           Get.back();
           // ignore: unawaited_futures
-          Get.find<TaskItemController>(tag: taskId.toString()).reloadTask();
+          Get.find<TaskItemController>(tag: taskId.toString())
+              .reloadTask(showLoading: true);
           ScaffoldMessenger.of(context).showSnackBar(
             styledSnackBar(
               context: context,
