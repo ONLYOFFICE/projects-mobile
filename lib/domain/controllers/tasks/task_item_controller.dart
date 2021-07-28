@@ -59,6 +59,16 @@ class TaskItemController extends GetxController {
   // to show overview screen without loading
   RxBool firstReload = true.obs;
 
+  // ignore: always_declare_return_types
+  get getActualCommentCount {
+    if (task?.value?.comments == null) return null;
+    var count = 0;
+    for (var item in task?.value?.comments) {
+      if (!item.inactive) count++;
+    }
+    return count;
+  }
+
   TaskItemController(PortalTask task) {
     this.task.value = task;
     initTaskStatus(task);

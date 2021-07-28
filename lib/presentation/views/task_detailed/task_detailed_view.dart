@@ -123,7 +123,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex.value == 3,
-                      count: controller.task.value?.comments?.length)
+                      count: controller.getActualCommentCount)
                 ]),
           ),
         ),
