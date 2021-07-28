@@ -44,15 +44,13 @@ class LoginView extends StatelessWidget {
                                 controller: controller.emailController,
                                 validator: controller.emailValidator,
                                 autofillHint: AutofillHints.email,
-                                hasError:
-                                    controller.emailFieldError.value == true,
+                                hasError: controller.emailFieldError.value,
                               ),
                               SizedBox(height: Get.height * 0.0444),
                               AuthTextField(
                                 hintText: tr('password'),
                                 controller: controller.passwordController,
-                                hasError:
-                                    controller.passwordFieldError.value == true,
+                                hasError: controller.passwordFieldError.value,
                                 validator: controller.passValidator,
                                 autofillHint: AutofillHints.password,
                                 obscureText: true,
