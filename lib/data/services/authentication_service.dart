@@ -88,4 +88,17 @@ class AuthService {
       return response;
     }
   }
+
+  Future sendRegistrationType() async {
+    var response = await _api.sendRegistrationType();
+
+    var success = response.response != null;
+
+    if (!success) {
+      await ErrorDialog.show(response.error);
+      return null;
+    } else {
+      return response;
+    }
+  }
 }

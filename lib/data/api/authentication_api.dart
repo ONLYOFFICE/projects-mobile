@@ -31,6 +31,7 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -168,6 +169,32 @@ class AuthApi {
 
     try {
       var response = await coreApi.postRequest(url, body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> sendRegistrationType() async {
+    var url = await coreApi.sendRegistrationTypeUrl();
+
+    var result = ApiDTO();
+
+    var type = Platform.isAndroid ? 1 : 0;
+
+    var body = {'type': type};
+
+    try {
+      var response = await coreApi.postRequest(url, body);
+
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
