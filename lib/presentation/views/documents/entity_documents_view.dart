@@ -59,13 +59,26 @@ class EntityDocumentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return DocumentsScreen(
       controller: documentsController,
-      appBar: StyledAppBar(
-        title: _DocsTitle(controller: documentsController),
-        showBackButton: false,
-        titleHeight: 50,
-        elevation: 0,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 50),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: _DocsTitle(controller: documentsController),
+            showBackButton: false,
+            titleHeight: 50,
+            elevation: value,
+          ),
+        ),
       ),
     );
   }
@@ -79,16 +92,30 @@ class DiscussionsDocumentsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final documentsController = Get.find<DiscussionsDocumentsController>();
     final discussionController = Get.find<DiscussionItemController>();
+
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return Obx(
       () {
         if (discussionController.loaded.value == true) {
           documentsController.setupFiles(files);
-          return DocumentsScreen(
-            controller: documentsController,
-            appBar: StyledAppBar(
-              showBackButton: false,
-              titleHeight: 0,
-              elevation: 0,
+          return PreferredSize(
+            preferredSize: const Size(double.infinity, 101),
+            child: ValueListenableBuilder(
+              valueListenable: elevation,
+              builder: (_, value, __) => DocumentsScreen(
+                controller: documentsController,
+                scrollController: scrollController,
+                appBar: StyledAppBar(
+                  showBackButton: false,
+                  titleHeight: 0,
+                  elevation: value,
+                ),
+              ),
             ),
           );
         } else {

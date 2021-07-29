@@ -64,6 +64,12 @@ class ProjectsView extends StatelessWidget {
 
     controller.loadProjects();
 
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
       floatingActionButton: Visibility(
@@ -77,13 +83,17 @@ class ProjectsView extends StatelessWidget {
           ),
         ),
       ),
-      appBar: StyledAppBar(
-        title: _Title(controller: controller),
-        bottom: _Bottom(controller: controller),
-        showBackButton: false,
-        elevation: 1,
-        titleHeight: 50,
-        bottomHeight: 50,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: _Title(controller: controller),
+            bottom: _Bottom(controller: controller),
+            showBackButton: false,
+            elevation: value,
+          ),
+        ),
       ),
       body: Obx(
         () {
@@ -112,7 +122,7 @@ class ProjectsView extends StatelessWidget {
           return PaginationListView(
             paginationController: controller.paginationController,
             child: ListView.builder(
-              controller: controller.scrollController,
+              controller: scrollController,
               itemBuilder: (c, i) =>
                   ProjectCell(item: controller.paginationController.data[i]),
               itemCount: controller.paginationController.data.length,

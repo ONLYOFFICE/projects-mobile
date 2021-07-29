@@ -63,14 +63,28 @@ class PortalDocumentsView extends StatelessWidget {
     final controller = Get.find<DocumentsController>();
     controller.initialSetup();
 
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return DocumentsScreen(
       controller: controller,
-      appBar: StyledAppBar(
-        title: DocsTitle(controller: controller),
-        bottom: DocsBottom(controller: controller),
-        showBackButton: false,
-        titleHeight: 50,
-        bottomHeight: 50,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: DocsTitle(controller: controller),
+            bottom: DocsBottom(controller: controller),
+            showBackButton: false,
+            titleHeight: 50,
+            bottomHeight: 50,
+            elevation: value,
+          ),
+        ),
       ),
     );
   }
@@ -86,14 +100,27 @@ class FolderContentView extends StatelessWidget {
     final int folderId = Get.arguments['folderId'];
     controller.setupFolder(folderName: folderName, folderId: folderId);
 
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return DocumentsScreen(
       controller: controller,
-      appBar: StyledAppBar(
-        title: DocsTitle(controller: controller),
-        bottom: DocsBottom(controller: controller),
-        showBackButton: true,
-        titleHeight: 50,
-        bottomHeight: 50,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: DocsTitle(controller: controller),
+            bottom: DocsBottom(controller: controller),
+            showBackButton: true,
+            titleHeight: 50,
+            bottomHeight: 50,
+          ),
+        ),
       ),
     );
   }
@@ -115,6 +142,7 @@ class DocumentsSearchView extends StatelessWidget {
 
     return DocumentsScreen(
       controller: documentsController,
+      scrollController: ScrollController(),
       appBar: StyledAppBar(
         title: CustomSearchBar(controller: documentsController),
         showBackButton: true,
@@ -128,10 +156,13 @@ class DocumentsScreen extends StatelessWidget {
   const DocumentsScreen({
     Key key,
     @required this.controller,
+    @required this.scrollController,
     this.appBar,
   }) : super(key: key);
-  final StyledAppBar appBar;
+
+  final PreferredSizeWidget appBar;
   final controller;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -169,40 +200,26 @@ class DocumentsScreen extends StatelessWidget {
                     text: tr('noDocumentsMatching',
                         args: [tr('documents').toLowerCase()])));
           }
-          return DecoratedBox(
-            decoration: BoxDecoration(
-              border: controller.needToShowDivider.value == true
-                  ? Border(
-                      top: BorderSide(
-                          width: 0.5,
-                          color:
-                              Get.theme.colors().onBackground.withOpacity(0.2)),
-                    )
-                  : null,
-            ),
-            position: DecorationPosition.foreground,
-            child: PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.separated(
-                controller: controller.scrollController,
-                itemCount: controller.paginationController.data.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: 10);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  var element = controller.paginationController.data[index];
-                  return element is Folder
-                      ? FolderCell(
-                          element: element,
-                          controller: controller,
-                        )
-                      : FileCell(
-                          element: element,
-                          index: index,
-                          controller: controller,
-                        );
-                },
-              ),
+          return PaginationListView(
+            paginationController: controller.paginationController,
+            child: ListView.separated(
+              controller: scrollController,
+              itemCount: controller.paginationController.data.length,
+              separatorBuilder: (BuildContext context, int index) =>
+                  const SizedBox(height: 10),
+              itemBuilder: (BuildContext context, int index) {
+                var element = controller.paginationController.data[index];
+                return element is Folder
+                    ? FolderCell(
+                        element: element,
+                        controller: controller,
+                      )
+                    : FileCell(
+                        element: element,
+                        index: index,
+                        controller: controller,
+                      );
+              },
             ),
           );
         },

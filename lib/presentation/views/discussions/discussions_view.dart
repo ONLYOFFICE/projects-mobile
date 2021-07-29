@@ -52,14 +52,23 @@ class PortalDiscussionsView extends StatelessWidget {
 
     controller.loadDiscussions();
 
-    return Obx(
-      () => Scaffold(
-          appBar: StyledAppBar(
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
             titleHeight: 101,
             bottomHeight: 0,
             showBackButton: false,
             titleText: tr('discussions'),
-            elevation: controller.needToShowDivider.value == true ? 1 : 0,
+            elevation: value,
             actions: [
               IconButton(
                 icon: AppIcon(
@@ -83,20 +92,25 @@ class PortalDiscussionsView extends StatelessWidget {
             ],
             bottom: DiscussionsHeader(),
           ),
-          floatingActionButton: StyledFloatingActionButton(
-            onPressed: controller.toNewDiscussionScreen,
-            child: AppIcon(icon: SvgIcons.add_discussion),
-          ),
-          body: DiscussionsList(controller: controller)),
+        ),
+      ),
+      floatingActionButton: StyledFloatingActionButton(
+        onPressed: controller.toNewDiscussionScreen,
+        child: AppIcon(icon: SvgIcons.add_discussion),
+      ),
+      body: DiscussionsList(
+          controller: controller, scrollController: scrollController),
     );
   }
 }
 
 class DiscussionsList extends StatelessWidget {
   final controller;
+  final ScrollController scrollController;
   const DiscussionsList({
     Key key,
     @required this.controller,
+    @required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -110,7 +124,7 @@ class DiscussionsList extends StatelessWidget {
           child: ListView.separated(
             itemCount: controller.paginationController.data.length,
             padding: const EdgeInsets.only(bottom: 65),
-            controller: controller.scrollController,
+            controller: scrollController,
             separatorBuilder: (BuildContext context, int index) {
               return const SizedBox(height: 12);
             },

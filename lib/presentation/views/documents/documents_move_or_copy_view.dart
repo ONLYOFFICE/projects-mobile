@@ -70,13 +70,27 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return MoveDocumentsScreen(
       controller: controller,
-      appBar: StyledAppBar(
-        title: _Title(controller: controller),
-        bottom: DocsBottom(controller: controller),
-        showBackButton: true,
-        titleHeight: 50,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: _Title(controller: controller),
+            bottom: DocsBottom(controller: controller),
+            showBackButton: true,
+            titleHeight: 50,
+            elevation: value,
+          ),
+        ),
       ),
     );
   }
@@ -105,14 +119,28 @@ class _FolderContentView extends StatelessWidget {
     controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return MoveDocumentsScreen(
       controller: controller,
-      appBar: StyledAppBar(
-        title: _Title(controller: controller),
-        bottom: DocsBottom(controller: controller),
-        showBackButton: true,
-        titleHeight: 50,
-        bottomHeight: 50,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: _Title(controller: controller),
+            bottom: DocsBottom(controller: controller),
+            showBackButton: true,
+            titleHeight: 50,
+            bottomHeight: 50,
+            elevation: value,
+          ),
+        ),
       ),
     );
   }
@@ -141,12 +169,25 @@ class DocumentsMoveSearchView extends StatelessWidget {
     controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
     return _DocumentsScreen(
       controller: controller,
-      appBar: StyledAppBar(
-        title: CustomSearchBar(controller: controller),
-        showBackButton: true,
-        titleHeight: 50,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            title: CustomSearchBar(controller: controller),
+            showBackButton: true,
+            titleHeight: 50,
+          ),
+        ),
       ),
     );
   }
@@ -156,10 +197,12 @@ class _DocumentsScreen extends StatelessWidget {
   const _DocumentsScreen({
     Key key,
     @required this.controller,
+    @required this.scrollController,
     this.appBar,
   }) : super(key: key);
-  final StyledAppBar appBar;
+  final PreferredSizeWidget appBar;
   final DocumentsMoveOrCopyController controller;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -199,35 +242,20 @@ class _DocumentsScreen extends StatelessWidget {
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isNotEmpty) {
-            return DecoratedBox(
-              decoration: BoxDecoration(
-                border: controller.needToShowDivider.value == true
-                    ? Border(
-                        top: BorderSide(
-                            width: 0.5,
-                            color: Get.theme
-                                .colors()
-                                .onBackground
-                                .withOpacity(0.2)),
-                      )
-                    : null,
-              ),
-              position: DecorationPosition.foreground,
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: ListView.separated(
-                  itemCount: controller.paginationController.data.length,
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 10);
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    var element = controller.paginationController.data[index];
-                    return _MoveFolderCell(
-                      element: element,
-                      controller: controller,
-                    );
-                  },
-                ),
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: ListView.separated(
+                itemCount: controller.paginationController.data.length,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 10);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  var element = controller.paginationController.data[index];
+                  return _MoveFolderCell(
+                    element: element,
+                    controller: controller,
+                  );
+                },
               ),
             );
           }
@@ -390,10 +418,12 @@ class MoveDocumentsScreen extends StatelessWidget {
   const MoveDocumentsScreen({
     Key key,
     @required this.controller,
+    @required this.scrollController,
     this.appBar,
   }) : super(key: key);
-  final StyledAppBar appBar;
+  final PreferredSizeWidget appBar;
   final DocumentsMoveOrCopyController controller;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -439,38 +469,23 @@ class MoveDocumentsScreen extends StatelessWidget {
             if (controller.loaded.value == true &&
                 controller.paginationController.data.isNotEmpty)
               Expanded(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: controller.needToShowDivider.value == true
-                        ? Border(
-                            top: BorderSide(
-                                width: 0.5,
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.2)),
-                          )
-                        : null,
-                  ),
-                  position: DecorationPosition.foreground,
-                  child: PaginationListView(
-                    paginationController: controller.paginationController,
-                    child: ListView.separated(
-                      itemCount: controller.paginationController.data.length,
-                      separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(height: 10);
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        var element =
-                            controller.paginationController.data[index];
-                        return element is Folder
-                            ? _MoveFolderCell(
-                                element: element,
-                                controller: controller,
-                              )
-                            : const SizedBox();
-                      },
-                    ),
+                child: PaginationListView(
+                  paginationController: controller.paginationController,
+                  child: ListView.separated(
+                    itemCount: controller.paginationController.data.length,
+                    controller: scrollController,
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const SizedBox(height: 10);
+                    },
+                    itemBuilder: (BuildContext context, int index) {
+                      var element = controller.paginationController.data[index];
+                      return element is Folder
+                          ? _MoveFolderCell(
+                              element: element,
+                              controller: controller,
+                            )
+                          : const SizedBox();
+                    },
                   ),
                 ),
               ),

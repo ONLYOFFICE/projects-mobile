@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -60,9 +59,6 @@ class TasksController extends BaseController {
   // when snackbar appears
   RxBool fabIsRaised = false.obs;
 
-  var scrollController = ScrollController();
-  var needToShowDivider = false.obs;
-
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
     taskStatusesController.getStatuses();
@@ -74,9 +70,6 @@ class TasksController extends BaseController {
     paginationController.loadDelegate = () async => await _getTasks();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
-
-    scrollController.addListener(
-        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   @override
