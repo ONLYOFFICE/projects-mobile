@@ -5,6 +5,7 @@ cd $BASE_DIR
 
 SECRETS=(
     "../../google_api.json"
+    "../../google-services.json"
     "../../projects.properties"
     "../../projects.jks"
 )
