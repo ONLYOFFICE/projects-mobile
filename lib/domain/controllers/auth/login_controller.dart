@@ -69,9 +69,15 @@ class LoginController extends GetxController {
       }
       if (result.response.token != null) {
         await saveToken(result);
-        setState(ViewState.Idle);
-        _clearInputFields();
-        await Get.offNamed('NavigationView');
+        // need to save the token to send the device type
+        if (await sendRegistrationType()) {
+          setState(ViewState.Idle);
+          _clearInputFields();
+          await Get.offNamed('NavigationView');
+        } else {
+          // if the device type has not been sent, the token must be deleted
+          await logout();
+        }
       } else if (result.response.tfa == true) {
         _email = email;
         _pass = password;
@@ -146,9 +152,15 @@ class LoginController extends GetxController {
 
     if (result.response.token != null) {
       await saveToken(result);
-      setState(ViewState.Idle);
-      await Get.offNamed('NavigationView');
-      return true;
+      // need to save the token to send the device type
+      if (await sendRegistrationType()) {
+        setState(ViewState.Idle);
+        await Get.offNamed('NavigationView');
+        return true;
+      } else {
+        // if the device type has not been sent, the token must be deleted
+        await logout();
+      }
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
       await Get.toNamed('CodeView');
@@ -248,6 +260,11 @@ class LoginController extends GetxController {
     if (expiration.isBefore(DateTime.now())) return true;
 
     return false;
+  }
+
+  Future<bool> sendRegistrationType() async {
+    var result = await _authService.sendRegistrationType();
+    return result != null;
   }
 
   Future<void> logout() async {
