@@ -10,7 +10,7 @@ Gemfile.lock
 projects.properties
 projects.jks
 google_api.json
-google-services.json
+app/google-services.json
 
 # fastlane
 fastlane/report.xml
