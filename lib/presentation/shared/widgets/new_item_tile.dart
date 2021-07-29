@@ -30,9 +30,14 @@
  *
  */
 
-part of 'new_task_view.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/styled_divider.dart';
 
-class NewTaskInfo extends StatelessWidget {
+class NewItemTile extends StatelessWidget {
   final int maxLines;
   final bool isSelected;
   final bool enableBorder;
@@ -42,18 +47,22 @@ class NewTaskInfo extends StatelessWidget {
   final String caption;
   final Function() onTap;
   final Color textColor;
+  final Color selectedIconColor;
+  final Color iconColor;
   final Widget suffix;
   final EdgeInsetsGeometry suffixPadding;
   final TextOverflow textOverflow;
 
-  const NewTaskInfo({
+  const NewItemTile({
     Key key,
     this.caption,
     this.enableBorder = true,
     this.icon,
+    this.iconColor,
     this.isSelected = false,
     this.maxLines,
     this.onTap,
+    this.selectedIconColor,
     this.suffix,
     this.suffixPadding = const EdgeInsets.symmetric(horizontal: 25),
     this.textOverflow = TextOverflow.ellipsis,
@@ -72,13 +81,11 @@ class NewTaskInfo extends StatelessWidget {
           children: [
             Row(
               children: [
-                SizedBox(
-                  width: 72,
-                  child: icon != null
-                      ? AppIcon(
-                          icon: icon,
-                          color: Get.theme.colors().onSurface.withOpacity(0.4))
-                      : null,
+                _Icon(
+                  icon: icon,
+                  iconColor: iconColor,
+                  isSelected: isSelected,
+                  selectedIconColor: selectedIconColor,
                 ),
                 Expanded(
                   child: Padding(
@@ -127,43 +134,35 @@ class NewTaskInfo extends StatelessWidget {
   }
 }
 
-class TileWithSwitch extends StatelessWidget {
-  final String title;
-  final bool isSelected;
-  final bool enableBorder;
-  final Function(bool value) onChanged;
-  const TileWithSwitch({
+class _Icon extends StatelessWidget {
+  const _Icon({
     Key key,
-    @required this.title,
-    @required this.isSelected,
-    @required this.onChanged,
-    this.enableBorder = false,
+    this.icon,
+    this.selectedIconColor,
+    this.iconColor,
+    this.isSelected,
   }) : super(key: key);
+
+  final bool isSelected;
+  final Color selectedIconColor;
+  final Color iconColor;
+  final String icon;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 72, top: 18, bottom: 18),
-                child: Text(title,
-                    style: TextStyleHelper.subtitle1(
-                        color: Get.theme.colors().onSurface)),
-              ),
-            ),
-            Switch(
-              value: isSelected,
-              onChanged: onChanged,
-            ),
-            const SizedBox(width: 3)
-          ],
-        ),
-        if (enableBorder) const StyledDivider(leftPadding: 72),
-      ],
+    return SizedBox(
+      width: 72,
+      child: icon != null
+          ? AppIcon(
+              icon: icon,
+              color: selectedIconColor != null
+                  ? isSelected
+                      ? selectedIconColor
+                      : iconColor ??
+                          Get.theme.colors().onSurface.withOpacity(0.4)
+                  : iconColor ?? Get.theme.colors().onSurface.withOpacity(0.4),
+            )
+          : null,
     );
   }
 }

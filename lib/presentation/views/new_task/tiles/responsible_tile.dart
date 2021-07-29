@@ -35,7 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 
 class ResponsibleTile extends StatelessWidget {
   final controller;
@@ -54,7 +54,7 @@ class ResponsibleTile extends StatelessWidget {
       () {
         // ignore: omit_local_variable_types
         bool _isSelected = controller.responsibles.isNotEmpty;
-        return NewTaskInfo(
+        return NewItemTile(
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('assignedTo')}:' : null,
           enableBorder: enableUnderline,

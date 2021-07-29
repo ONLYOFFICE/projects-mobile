@@ -30,37 +30,44 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+part of '../new_task_view.dart';
 
-class MilestoneTile extends StatelessWidget {
-  final TaskActionsController controller;
-  const MilestoneTile({
+class TileWithSwitch extends StatelessWidget {
+  final String title;
+  final bool isSelected;
+  final bool enableBorder;
+  final Function(bool value) onChanged;
+  const TileWithSwitch({
     Key key,
-    @required this.controller,
+    @required this.title,
+    @required this.isSelected,
+    @required this.onChanged,
+    this.enableBorder = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        // ignore: omit_local_variable_types
-        bool _isSelected = controller.selectedMilestoneTitle.value.isNotEmpty;
-        return NewItemTile(
-            text: _isSelected
-                ? controller.selectedMilestoneTitle.value
-                : tr('none'),
-            icon: SvgIcons.milestone,
-            // because color is always black
-            isSelected: true,
-            caption: '${tr('milestone')}:',
-            onTap: () => Get.toNamed('SelectMilestoneView',
-                arguments: {'controller': controller}));
-      },
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+                child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 72, top: 18, bottom: 18),
+                    child: Text(title,
+                        style: TextStyleHelper.subtitle1(
+                            color: Get.theme.colors().onSurface)))),
+            Switch(
+              value: isSelected,
+              onChanged: onChanged,
+            ),
+            const SizedBox(width: 3)
+          ],
+        ),
+        if (enableBorder) const StyledDivider(leftPadding: 72),
+      ],
     );
   }
 }

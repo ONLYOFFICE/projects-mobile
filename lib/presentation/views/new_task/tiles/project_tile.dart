@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 
 class ProjectTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -50,7 +50,7 @@ class ProjectTile extends StatelessWidget {
     return Obx(
       () {
         bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
-        return NewTaskInfo(
+        return NewItemTile(
             text: _isSelected
                 ? controller.selectedProjectTitle.value
                 : tr('selectProject'),
