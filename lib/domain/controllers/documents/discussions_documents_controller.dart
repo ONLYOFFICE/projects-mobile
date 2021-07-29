@@ -53,9 +53,6 @@ class DiscussionsDocumentsController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
-  var scrollController = ScrollController();
-  var needToShowDivider = false.obs;
-
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -73,10 +70,6 @@ class DiscussionsDocumentsController extends GetxController {
         () async => {}; //await refreshContent();
 
     paginationController.pullDownEnabled = true;
-
-    scrollController.addListener(() {
-      return needToShowDivider.value = scrollController.offset > 2;
-    });
   }
 
   void setupFiles(List<PortalFile> files) {

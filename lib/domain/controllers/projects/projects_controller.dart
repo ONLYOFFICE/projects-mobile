@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
@@ -33,9 +32,6 @@ class ProjectsController extends BaseController {
   ProjectsFilterController _filterController;
   ProjectsFilterController get filterController => _filterController;
 
-  var scrollController = ScrollController();
-  var needToShowDivider = false.obs;
-
   final _userController = Get.find<UserController>();
 
   bool get fabIsVisible =>
@@ -54,9 +50,6 @@ class ProjectsController extends BaseController {
     paginationController.loadDelegate = () async => await _getProjects();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
-
-    scrollController.addListener(
-        () => needToShowDivider.value = scrollController.offset > 2);
 
     _userController.getUserInfo();
   }

@@ -52,9 +52,6 @@ class DocumentsMoveOrCopyController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
-  var scrollController = ScrollController();
-  var needToShowDivider = false.obs;
-
   DocumentsMoveOrCopyController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -71,9 +68,6 @@ class DocumentsMoveOrCopyController extends GetxController {
     paginationController.refreshDelegate = () async => await refreshContent();
 
     paginationController.pullDownEnabled = true;
-
-    scrollController.addListener(
-        () => needToShowDivider.value = scrollController.offset > 2);
   }
 
   Future<void> refreshContent() async {

@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
@@ -22,79 +23,91 @@ class TasksView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
     controller.loadTasks();
-    return Obx(
-      () => Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
-        floatingActionButton: Obx(() => AnimatedPadding(
-            padding: EdgeInsets.only(
-                bottom: controller.fabIsRaised.value == true ? 48 : 0),
-            duration: const Duration(milliseconds: 100),
-            child: StyledFloatingActionButton(
-                onPressed: () => Get.toNamed('NewTaskView',
-                    arguments: {'projectDetailed': null}),
-                child: AppIcon(icon: SvgIcons.add_fab)))),
-        appBar: StyledAppBar(
-          titleHeight: 101,
-          bottomHeight: 0,
-          showBackButton: false,
-          titleText: tr('tasks'),
-          elevation: controller.needToShowDivider.value == true ? 1 : 0,
-          actions: [
-            IconButton(
-              icon: AppIcon(
-                width: 24,
-                height: 24,
-                icon: SvgIcons.search,
-                color: Get.theme.colors().primary,
+
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
+    return Scaffold(
+      backgroundColor: Get.theme.backgroundColor,
+      floatingActionButton: Obx(() => AnimatedPadding(
+          padding: EdgeInsets.only(
+              bottom: controller.fabIsRaised.value == true ? 48 : 0),
+          duration: const Duration(milliseconds: 100),
+          child: StyledFloatingActionButton(
+              onPressed: () => Get.toNamed('NewTaskView',
+                  arguments: {'projectDetailed': null}),
+              child: AppIcon(icon: SvgIcons.add_fab)))),
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 101),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            showBackButton: false,
+            titleText: tr('tasks'),
+            elevation: value,
+            actions: [
+              IconButton(
+                icon: AppIcon(
+                  width: 24,
+                  height: 24,
+                  icon: SvgIcons.search,
+                  color: Get.theme.colors().primary,
+                ),
+                onPressed: controller.showSearch,
               ),
-              onPressed: controller.showSearch,
-            ),
-            IconButton(
-              icon: FiltersButton(controler: controller),
-              onPressed: () async => Get.toNamed('TasksFilterScreen',
-                  preventDuplicates: false,
-                  arguments: {'filterController': controller.filterController}),
-            ),
-            const SizedBox(width: 4),
-          ],
-          bottom: TasksHeader(),
+              IconButton(
+                icon: FiltersButton(controler: controller),
+                onPressed: () async => Get.toNamed('TasksFilterScreen',
+                    preventDuplicates: false,
+                    arguments: {
+                      'filterController': controller.filterController
+                    }),
+              ),
+              const SizedBox(width: 4),
+            ],
+            bottom: TasksHeader(),
+          ),
         ),
-        body: Obx(
-          () {
-            if (controller.loaded.value == false)
-              return const ListLoadingSkeleton();
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value) {
-              return Center(
-                  child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.task_not_created),
-                      text: tr('noTasksCreated',
-                          args: [tr('tasks').toLowerCase()])));
-            }
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value) {
-              return Center(
+      ),
+      body: Obx(
+        () {
+          if (controller.loaded.value == false)
+            return const ListLoadingSkeleton();
+          if (controller.loaded.value == true &&
+              controller.paginationController.data.isEmpty &&
+              !controller.filterController.hasFilters.value) {
+            return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('noTasksMatching',
-                        args: [tr('tasks').toLowerCase()])),
-              );
-            }
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.builder(
-                controller: controller.scrollController,
-                itemCount: controller.paginationController.data.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return TaskCell(
-                      task: controller.paginationController.data[index]);
-                },
-              ),
+                    icon: AppIcon(icon: SvgIcons.task_not_created),
+                    text: tr('noTasksCreated',
+                        args: [tr('tasks').toLowerCase()])));
+          }
+          if (controller.loaded.value == true &&
+              controller.paginationController.data.isEmpty &&
+              controller.filterController.hasFilters.value) {
+            return Center(
+              child: EmptyScreen(
+                  icon: AppIcon(icon: SvgIcons.not_found),
+                  text:
+                      tr('noTasksMatching', args: [tr('tasks').toLowerCase()])),
             );
-          },
-        ),
+          }
+          return PaginationListView(
+            paginationController: controller.paginationController,
+            child: ListView.builder(
+              // controller: controller.scrollController,
+              controller: scrollController,
+              itemCount: controller.paginationController.data.length,
+              itemBuilder: (BuildContext context, int index) {
+                return TaskCell(
+                    task: controller.paginationController.data[index]);
+              },
+            ),
+          );
+        },
       ),
     );
   }
