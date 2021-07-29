@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 
 class StartDateTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -19,7 +19,7 @@ class StartDateTile extends StatelessWidget {
       () {
         // ignore: omit_local_variable_types
         bool _isSelected = controller.startDateText.value.isNotEmpty;
-        return NewTaskInfo(
+        return NewItemTile(
             icon: SvgIcons.start_date,
             text: _isSelected
                 ? controller.startDateText.value

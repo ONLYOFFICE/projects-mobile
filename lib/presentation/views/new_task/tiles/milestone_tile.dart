@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 
 class MilestoneTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -18,7 +18,7 @@ class MilestoneTile extends StatelessWidget {
       () {
         // ignore: omit_local_variable_types
         bool _isSelected = controller.selectedMilestoneTitle.value.isNotEmpty;
-        return NewTaskInfo(
+        return NewItemTile(
             text: _isSelected
                 ? controller.selectedMilestoneTitle.value
                 : tr('none'),
