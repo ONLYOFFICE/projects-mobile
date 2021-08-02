@@ -59,6 +59,7 @@ class DiscussionCommentsView extends StatelessWidget {
                   controller: controller.refreshController,
                   onRefresh: controller.onRefresh,
                   child: ListView.separated(
+                    controller: controller.commentsListController,
                     itemCount: controller.discussion.value.comments.length,
                     padding: const EdgeInsets.only(top: 32, bottom: 70),
                     separatorBuilder: (BuildContext context, int index) {

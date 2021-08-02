@@ -75,8 +75,9 @@ class NewTaskCommentController extends GetxController
         _textController.clear();
         var taskController =
             Get.find<TaskItemController>(tag: idFrom.toString());
-        // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
+
+        await taskController.reloadTask(showLoading: false);
+        taskController.scrollToLastComment();
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context, text: tr('commentCreated'), buttonText: ''));

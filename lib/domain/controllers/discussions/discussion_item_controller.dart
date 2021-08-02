@@ -65,10 +65,17 @@ class DiscussionItemController extends GetxController {
     status.value = discussion.status;
   }
 
+  var commentsListController = ScrollController();
+
   @override
   void onInit() async {
     selfId = await Get.find<UserController>().getUserId();
     super.onInit();
+  }
+
+  void scrollToLastComment() {
+    commentsListController
+        .jumpTo(commentsListController.position.maxScrollExtent);
   }
 
   bool get isSubscribed {
@@ -78,7 +85,8 @@ class DiscussionItemController extends GetxController {
     return false;
   }
 
-  void onRefresh() async => await getDiscussionDetailed();
+  Future<void> onRefresh({bool showLoading = true}) async =>
+      await getDiscussionDetailed(showLoading: showLoading);
 
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;
