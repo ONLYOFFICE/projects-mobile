@@ -42,8 +42,8 @@ class NewDiscussionCommentController extends GetxController
       if (newComment != null) {
         _textController.clear();
         var discussionController = Get.find<DiscussionItemController>();
-        // ignore: unawaited_futures
-        discussionController.onRefresh();
+        await discussionController.onRefresh(showLoading: false);
+        discussionController.scrollToLastComment();
         Get.back();
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
             context: context, text: tr('commentCreated'), buttonText: ''));

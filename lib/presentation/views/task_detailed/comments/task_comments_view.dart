@@ -30,6 +30,7 @@ class TaskCommentsView extends StatelessWidget {
                       await controller.reloadTask(showLoading: true),
                   child: ListView.separated(
                     itemCount: comments.length,
+                    controller: controller.commentsListController,
                     padding: const EdgeInsets.only(top: 32, bottom: 40),
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 21);
