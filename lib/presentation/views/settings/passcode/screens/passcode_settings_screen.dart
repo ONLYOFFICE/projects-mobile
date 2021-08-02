@@ -71,7 +71,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: tr('passcodeLockDescription'),
+                              text: " - ${tr('passcodeLockDescription')}",
                               style:
                                   const TextStyle(fontWeight: FontWeight.w400),
                             ),
