@@ -71,6 +71,7 @@ import 'package:projects/presentation/views/projects_view/project_filter/project
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
+import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/current_passcode_check_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen1.dart';
@@ -92,6 +93,7 @@ List<GetPage> getxPages() => [
       GetPage(name: 'PortalView', page: () => PortalView()),
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),
+      GetPage(name: 'AnalyticsScreen', page: () => const AnalyticsScreen()),
       GetPage(name: 'DiscussionDetailed', page: () => DiscussionDetailed()),
       GetPage(
           name: 'DiscussionsFilterScreen',

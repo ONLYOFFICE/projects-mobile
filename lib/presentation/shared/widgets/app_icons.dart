@@ -48,7 +48,6 @@ class SvgIcons {
       'lib/assets/images/icons/tab_bar/projects.svg';
   static const String tab_bar_more = 'lib/assets/images/icons/tab_bar/more.svg';
 
-  static const String about_app = 'lib/assets/images/icons/about_app.svg';
   static const String add_button = 'lib/assets/images/icons/add_button.svg';
   static const String add_fab = 'lib/assets/images/icons/add_fab.svg';
   static const String add_discussion =
@@ -56,9 +55,7 @@ class SvgIcons {
   static const String back_round = 'lib/assets/images/icons/back_round.svg';
   static const String check_round = 'lib/assets/images/icons/check_round.svg';
   static const String check_square = 'lib/assets/images/icons/check_square.svg';
-  static const String clean = 'lib/assets/images/icons/clean.svg';
   static const String cloud = 'lib/assets/images/icons/cloud.svg';
-  static const String color_scheme = 'lib/assets/images/icons/color_scheme.svg';
   static const String comments = 'lib/assets/images/icons/comments.svg';
   static const String copy = 'lib/assets/images/icons/copy.svg';
   static const String delete_number =
@@ -66,7 +63,6 @@ class SvgIcons {
   static const String discussions = 'lib/assets/images/icons/discussions.svg';
   static const String documents = 'lib/assets/images/icons/documents.svg';
   static const String down_arrow = 'lib/assets/images/icons/down_arrow.svg';
-  static const String feedback = 'lib/assets/images/icons/feedback.svg';
   static const String finger_print = 'lib/assets/images/icons/finger_print.svg';
   static const String high_priority =
       'lib/assets/images/icons/high_priority.svg';
@@ -78,9 +74,7 @@ class SvgIcons {
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
   static const String subscribers = 'lib/assets/images/icons/subscribers.svg';
-  static const String support = 'lib/assets/images/icons/support.svg';
 
-  static const String passcode = 'lib/assets/images/icons/passcode.svg';
   static const String search = 'lib/assets/images/icons/search.svg';
   static const String settings = 'lib/assets/images/icons/settings.svg';
   static const String sorting_3_descend =
@@ -88,6 +82,20 @@ class SvgIcons {
   static const String subtasks = 'lib/assets/images/icons/subtasks.svg';
   static const String tasklist = 'lib/assets/images/icons/tasklist.svg';
   static const String up_arrow = 'lib/assets/images/icons/up_arrow.svg';
+
+  // settings
+  static const String about_app = 'lib/assets/images/icons/about_app.svg';
+  static const String analytics = 'lib/assets/images/icons/analytics.svg';
+  static const String clean = 'lib/assets/images/icons/clean.svg';
+  static const String color_scheme = 'lib/assets/images/icons/color_scheme.svg';
+  static const String help = 'lib/assets/images/icons/help.svg';
+  static const String passcode = 'lib/assets/images/icons/passcode.svg';
+  static const String rate_app = 'lib/assets/images/icons/rate_app.svg';
+  static const String support = 'lib/assets/images/icons/support.svg';
+  static const String feedback = 'lib/assets/images/icons/feedback.svg';
+  static const String user_agreement =
+      'lib/assets/images/icons/user_agreement.svg';
+  static const String version = 'lib/assets/images/icons/version.svg';
 
   static const String due_date =
       'lib/assets/images/icons/task_detailed/due_date.svg';

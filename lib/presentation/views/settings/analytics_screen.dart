@@ -32,35 +32,40 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:projects/data/services/passcode_service.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/settings/settings_controller.dart';
+
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-class SettingsService {
-  final _passcodeService = locator<PasscodeService>();
+class AnalyticsScreen extends StatelessWidget {
+  const AnalyticsScreen({Key key}) : super(key: key);
 
-  Future<bool> get isPasscodeEnable async =>
-      await _passcodeService.isPasscodeEnable;
+  @override
+  Widget build(BuildContext context) {
+    var controller = Get.find<SettingsController>();
 
-  Future<void> openEmailApp(String url, context) async {
-    try {
-      await launch(url);
-    } catch (e) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return StyledAlertDialog(
-            titleText: tr('failedToSendFeedback'),
-            cancelText: tr('close'),
-            acceptText: tr('goToForum'),
-            acceptColor: Theme.of(context).colors().primary,
-            onAcceptTap: () async =>
-                launch('https://cloud.onlyoffice.org/viewforum.php?f=48'),
-          );
-        },
-      );
-    }
+    return Scaffold(
+      appBar: StyledAppBar(titleText: tr('analytics')),
+      body: Obx(
+        () => SwitchListTile(
+          value: controller.shareAnalytics.value,
+          contentPadding: const EdgeInsets.fromLTRB(16, 14, 5, 30),
+          title: Text(tr('shareAnalytics'),
+              style: TextStyleHelper.subtitle1(
+                  color: Theme.of(context).colors().onBackground)),
+          subtitle: Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Text(tr('shareAnalyticsDescription'),
+                  style: TextStyleHelper.body2(
+                      color: Theme.of(context)
+                          .colors()
+                          .onSurface
+                          .withOpacity(0.6)))),
+          onChanged: controller.changeAnalyticsSharingEnability,
+        ),
+      ),
+    );
   }
 }

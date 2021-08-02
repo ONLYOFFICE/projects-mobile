@@ -30,37 +30,46 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:projects/data/services/passcode_service.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'dart:io';
 
-class SettingsService {
-  final _passcodeService = locator<PasscodeService>();
+import 'package:device_info/device_info.dart';
 
-  Future<bool> get isPasscodeEnable async =>
-      await _passcodeService.isPasscodeEnable;
+class DeviceInfoService {
+  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+  AndroidDeviceInfo _androidInfo;
 
-  Future<void> openEmailApp(String url, context) async {
-    try {
-      await launch(url);
-    } catch (e) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return StyledAlertDialog(
-            titleText: tr('failedToSendFeedback'),
-            cancelText: tr('close'),
-            acceptText: tr('goToForum'),
-            acceptColor: Theme.of(context).colors().primary,
-            onAcceptTap: () async =>
-                launch('https://cloud.onlyoffice.org/viewforum.php?f=48'),
-          );
-        },
-      );
-    }
+  Future<void> init() async {
+    if (_androidInfo != null) return;
+    _androidInfo = await _deviceInfo.androidInfo;
+  }
+
+  Future<String> get manufacturer async {
+    await init();
+    return _androidInfo.manufacturer;
+  }
+
+  Future<String> get model async {
+    await init();
+    return _androidInfo.model;
+  }
+
+  Future<String> get osReleaseVersion async {
+    await init();
+    return _androidInfo.version.release;
+  }
+
+  Future<String> get osIncrementalVersion async {
+    await init();
+    return _androidInfo.version.incremental;
+  }
+
+  Future<String> get osInfo async {
+    await init();
+    return '${Platform.operatingSystem} ${_androidInfo.version.release}';
+  }
+
+  Future<String> get deviceInfo async {
+    await init();
+    return '${_androidInfo.manufacturer} ${_androidInfo.model} ${_androidInfo.version.incremental}';
   }
 }
