@@ -119,8 +119,9 @@ class SettingsController extends GetxController {
     body += '\nDevice model: $device';
     body += '\nAndroid version: $os';
 
+    // TODO change to ONLYOFFICE Projects IOS Feedback on ios
     var url =
-        'mailto:support@onlyoffice.com?subject=ONLYOFFICE Projects (iOS/Android) Feedback&body=$body';
+        'mailto:support@onlyoffice.com?subject=ONLYOFFICE Projects Android Feedback&body=$body';
 
     await _service.openEmailApp(url, context);
   }
