@@ -99,18 +99,6 @@ class SettingsController extends GetxController {
   void onClearCachePressed() async {
     var appDir = (await getTemporaryDirectory()).path;
     await DefaultCacheManager().emptyCache();
-    var dir = Directory(appDir);
-    var totalSize = 0;
-    if (dir.existsSync()) {
-      dir
-          .listSync(recursive: true, followLinks: false)
-          .forEach((FileSystemEntity entity) {
-        if (entity is File) {
-          totalSize += entity.lengthSync();
-        }
-      });
-    }
-    print(totalSize);
     await Directory(appDir).delete(recursive: true);
   }
 
