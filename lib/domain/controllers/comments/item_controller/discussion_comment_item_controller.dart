@@ -82,7 +82,8 @@ class DiscussionCommentItemController extends GetxController
         var response =
             await _api.deleteComment(commentId: comment.value.commentId);
         if (response != null) {
-          Get.find<DiscussionItemController>().onRefresh();
+          // ignore: unawaited_futures
+          Get.find<DiscussionItemController>().onRefresh(showLoading: false);
           Get.back();
           ScaffoldMessenger.of(context).showSnackBar(
             styledSnackBar(

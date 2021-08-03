@@ -30,43 +30,33 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
+import 'package:package_info/package_info.dart';
 
-class ProjectTile extends StatelessWidget {
-  final TaskActionsController controller;
-  const ProjectTile({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+class PackageInfoService {
+  PackageInfo packageInfo;
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
-        return NewItemTile(
-          text: _isSelected
-              ? controller.selectedProjectTitle.value
-              : tr('selectProject'),
-          icon: SvgIcons.project,
-          textColor: controller.needToSelectProject == true
-              ? Get.theme.colors().colorError
-              : null,
-          isSelected: _isSelected,
-          caption: _isSelected ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().showScreen(
-              const SelectProjectView(),
-              arguments: {'controller': controller}),
-        );
-      },
-    );
+  Future<void> init() async {
+    if (packageInfo != null) return;
+    packageInfo = await PackageInfo.fromPlatform();
+  }
+
+  Future<String> get appName async {
+    await init();
+    return packageInfo.appName;
+  }
+
+  Future<String> get buildNumber async {
+    await init();
+    return packageInfo.buildNumber;
+  }
+
+  Future<String> get packageName async {
+    await init();
+    return packageInfo.packageName;
+  }
+
+  Future<String> get version async {
+    await init();
+    return packageInfo.version;
   }
 }

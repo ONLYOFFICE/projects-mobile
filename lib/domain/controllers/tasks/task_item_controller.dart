@@ -61,6 +61,13 @@ class TaskItemController extends GetxController {
   // to show overview screen without loading
   RxBool firstReload = true.obs;
 
+  var commentsListController = ScrollController();
+
+  void scrollToLastComment() {
+    commentsListController
+        .jumpTo(commentsListController.position.maxScrollExtent);
+  }
+
   // ignore: always_declare_return_types
   get getActualCommentCount {
     if (task?.value?.comments == null) return null;

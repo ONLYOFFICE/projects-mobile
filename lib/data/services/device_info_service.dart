@@ -30,43 +30,46 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
+import 'dart:io';
 
-class ProjectTile extends StatelessWidget {
-  final TaskActionsController controller;
-  const ProjectTile({
-    Key key,
-    @required this.controller,
-  }) : super(key: key);
+import 'package:device_info/device_info.dart';
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
-        return NewItemTile(
-          text: _isSelected
-              ? controller.selectedProjectTitle.value
-              : tr('selectProject'),
-          icon: SvgIcons.project,
-          textColor: controller.needToSelectProject == true
-              ? Get.theme.colors().colorError
-              : null,
-          isSelected: _isSelected,
-          caption: _isSelected ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().showScreen(
-              const SelectProjectView(),
-              arguments: {'controller': controller}),
-        );
-      },
-    );
+class DeviceInfoService {
+  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
+  AndroidDeviceInfo _androidInfo;
+
+  Future<void> init() async {
+    if (_androidInfo != null) return;
+    _androidInfo = await _deviceInfo.androidInfo;
+  }
+
+  Future<String> get manufacturer async {
+    await init();
+    return _androidInfo.manufacturer;
+  }
+
+  Future<String> get model async {
+    await init();
+    return _androidInfo.model;
+  }
+
+  Future<String> get osReleaseVersion async {
+    await init();
+    return _androidInfo.version.release;
+  }
+
+  Future<String> get osIncrementalVersion async {
+    await init();
+    return _androidInfo.version.incremental;
+  }
+
+  Future<String> get osInfo async {
+    await init();
+    return '${Platform.operatingSystem} ${_androidInfo.version.release}';
+  }
+
+  Future<String> get deviceInfo async {
+    await init();
+    return '${_androidInfo.manufacturer} ${_androidInfo.model} ${_androidInfo.version.incremental}';
   }
 }

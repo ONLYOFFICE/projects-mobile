@@ -325,11 +325,6 @@ class _Title extends StatelessWidget {
                     arguments: {
                       'filterController': controller.filterController
                     }),
-                //  Get.find<NavigationController>().navigateToFullscreen(const DocumentsFilterScreen',
-                //     preventDuplicates: false,
-                //     arguments: {
-                //       'filterController': controller.filterController
-                //     }),
                 child: FiltersButton(controler: controller),
               ),
             ],

@@ -65,8 +65,6 @@ class DiscussionTextTile extends StatelessWidget {
         onTap: () => Get.find<NavigationController>().showScreen(
             const NewDiscussionTextScreen(),
             arguments: {'controller': controller}),
-        //  Get.find<NavigationController>().navigateToFullscreen(const NewDiscussionTextScreen',
-        //     arguments: {'controller': controller}),
       ),
     );
   }

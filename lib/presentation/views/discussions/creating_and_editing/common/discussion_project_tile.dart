@@ -67,8 +67,6 @@ class DiscussionProjectTile extends StatelessWidget {
           onTap: () => Get.find<NavigationController>().showScreen(
               const SelectProjectView(),
               arguments: {'controller': controller}),
-          //  Get.find<NavigationController>().navigateToFullscreen(const SelectProjectView',
-          //     arguments: {'controller': controller}),
         ),
       ),
     );

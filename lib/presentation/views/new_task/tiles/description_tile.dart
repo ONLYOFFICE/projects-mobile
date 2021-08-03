@@ -108,8 +108,6 @@ class _DescriptionTileState extends State<DescriptionTile>
           onTap: () => Get.find<NavigationController>().showScreen(
               const TaskDescription(),
               arguments: {'controller': widget.controller}),
-          // Get.find<NavigationController>().navigateToFullscreen(const TaskDescription',
-          //     arguments: {'controller': widget.controller}),
           child: Column(
             children: [
               AnimatedSize(

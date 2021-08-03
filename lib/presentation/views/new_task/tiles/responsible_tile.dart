@@ -76,8 +76,6 @@ class ResponsibleTile extends StatelessWidget {
           onTap: () => Get.find<NavigationController>().showScreen(
               const SelectResponsiblesView(),
               arguments: {'controller': controller}),
-          //  Get.find<NavigationController>().navigateToFullscreen(const SelectResponsiblesView',
-          //     arguments: {'controller': controller}),
         );
       },
     );

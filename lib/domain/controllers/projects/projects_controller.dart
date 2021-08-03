@@ -138,6 +138,5 @@ class ProjectsController extends BaseController {
 
   void createNewProject() {
     Get.find<NavigationController>().navigateToFullscreen(const NewProject());
-    // Get.find<NavigationController>().navigateToFullscreen(const NewProject');
   }
 }

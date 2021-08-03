@@ -208,8 +208,6 @@ class TeamMembersSearchBar extends StatelessWidget {
                 Get.find<NavigationController>().showScreen(
                     const GroupMembersSelectionView(),
                     arguments: {'controller': controller});
-                // Get.find<NavigationController>().navigateToFullscreen(const GroupMembersSelectionView',
-                //     arguments: {'controller': controller});
               },
               child: AppIcon(
                 icon: SvgIcons.preferences,

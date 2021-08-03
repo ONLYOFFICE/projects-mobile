@@ -175,15 +175,12 @@ class _TagsSearchBar extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          // Expanded(child: TagsSearchBar(controller: controller)),
           const SizedBox(width: 20),
           Container(
             height: 24,
             width: 24,
             child: InkWell(
-              onTap: () {
-                // Get.find<NavigationController>().navigateToFullscreen(const ');
-              },
+              onTap: () {},
             ),
           ),
         ],

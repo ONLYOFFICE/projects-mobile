@@ -89,13 +89,7 @@ class PortalDiscussionsView extends StatelessWidget {
                               preventDuplicates: false,
                               arguments: {
                             'filterController': controller.filterController
-                          })
-                  //  Get.find<NavigationController>().navigateToFullscreen(const (
-                  //   'DiscussionsFilterScreen',
-                  //   preventDuplicates: false,
-                  //   arguments: {'filterController': controller.filterController},
-                  // ),
-                  ),
+                          })),
               const SizedBox(width: 3),
             ],
             bottom: DiscussionsHeader(),
