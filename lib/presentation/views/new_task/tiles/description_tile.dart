@@ -3,11 +3,13 @@ import 'dart:ui' as _ui;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/views/new_task/task_description.dart';
 
 class DescriptionTile extends StatefulWidget {
   final TaskActionsController controller;
@@ -71,8 +73,11 @@ class _DescriptionTileState extends State<DescriptionTile>
         var textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
-          onTap: () => Get.toNamed('TaskDescription',
+          onTap: () => Get.find<NavigationController>().navigateTo(
+              const TaskDescription(),
               arguments: {'controller': widget.controller}),
+          // Get.toNamed('TaskDescription',
+          //     arguments: {'controller': widget.controller}),
           child: Column(
             children: [
               AnimatedSize(

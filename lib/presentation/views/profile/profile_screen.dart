@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -21,17 +22,24 @@ class SelfProfileScreen extends StatelessWidget {
 
     var profileController = Get.put(ProfileController());
 
+    var showBackButton = Get.arguments['showBackButton'];
+    var showSettingsButton = Get.arguments['showSettingsButton'];
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
         appBar: StyledAppBar(
-          showBackButton: false,
+          showBackButton: showBackButton ?? false,
+          backButtonIcon: Get.put(PlatformController()).isMobile
+              ? const Icon(Icons.arrow_back_rounded)
+              : const Icon(Icons.close),
           titleText: tr('profile'),
           actions: [
-            IconButton(
-              icon: AppIcon(icon: SvgIcons.settings),
-              onPressed: () => Get.toNamed('SettingsScreen'),
-            )
+            if (showSettingsButton)
+              IconButton(
+                icon: AppIcon(icon: SvgIcons.settings),
+                onPressed: () => Get.toNamed('SettingsScreen'),
+              )
           ],
         ),
         body: SingleChildScrollView(

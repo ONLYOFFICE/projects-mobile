@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -11,6 +12,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 
 class ProjectMilestonesScreen extends StatelessWidget {
@@ -147,7 +149,10 @@ class Header extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () async => Get.toNamed('MilestoneFilterScreen'),
+                      onTap: () async => Get.find<NavigationController>()
+                          .navigateTo(const MilestoneFilterScreen()),
+
+                      //  Get.toNamed('MilestoneFilterScreen'),
                       child: FiltersButton(controler: controller),
                     ),
                   ],

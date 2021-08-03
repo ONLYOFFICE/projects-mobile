@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -39,6 +40,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
           ),
         ),
         onLeadingPressed: controller.leaveSubscribersSelectionView,
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         actions: [
           IconButton(
               onPressed: onConfirm ?? controller.confirmSubscribersSelection,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/projects_bottom_sheet.dart';
@@ -31,6 +32,9 @@ class DiscussionsFilterScreen extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('filter'),
         showBackButton: true,
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         actions: [
           TextButton(
               onPressed: () async => filterController.resetFilters(),

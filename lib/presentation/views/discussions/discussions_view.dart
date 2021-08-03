@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
@@ -10,6 +11,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
+import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
@@ -49,13 +51,19 @@ class PortalDiscussionsView extends StatelessWidget {
                 // onPressed: () => controller.showSearch(),
               ),
               IconButton(
-                icon: FiltersButton(controler: controller),
-                onPressed: () async => Get.toNamed(
-                  'DiscussionsFilterScreen',
-                  preventDuplicates: false,
-                  arguments: {'filterController': controller.filterController},
-                ),
-              ),
+                  icon: FiltersButton(controler: controller),
+                  onPressed: () async => Get.find<NavigationController>()
+                          .navigateTo(const DiscussionsFilterScreen(),
+                              preventDuplicates: false,
+                              arguments: {
+                            'filterController': controller.filterController
+                          })
+                  //  Get.toNamed(
+                  //   'DiscussionsFilterScreen',
+                  //   preventDuplicates: false,
+                  //   arguments: {'filterController': controller.filterController},
+                  // ),
+                  ),
               const SizedBox(width: 3),
             ],
             bottom: DiscussionsHeader(),

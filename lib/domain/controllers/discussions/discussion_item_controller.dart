@@ -7,10 +7,12 @@ import 'package:projects/domain/controllers/comments/item_controller/discussion_
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
+import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -125,11 +127,19 @@ class DiscussionItemController extends GetxController {
   }
 
   void toNewCommentView() {
-    Get.toNamed('NewCommentView', arguments: {
-      'controller': Get.put(
-        NewDiscussionCommentController(idFrom: discussion.value.id),
-      )
-    });
+    Get.find<NavigationController>().navigateTo(
+      const NewCommentView(),
+      arguments: {
+        'controller':
+            Get.put(NewDiscussionCommentController(idFrom: discussion.value.id))
+      },
+    );
+
+    // Get.toNamed('NewCommentView', arguments: {
+    //   'controller': Get.put(
+    //     NewDiscussionCommentController(idFrom: discussion.value.id)
+    //   )
+    // });
   }
 
   void toSubscribersManagingScreen(context) {
