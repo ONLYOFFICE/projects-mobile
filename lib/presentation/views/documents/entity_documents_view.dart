@@ -38,6 +38,7 @@ import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -47,6 +48,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 
 class EntityDocumentsView extends StatelessWidget {
   final String folderName;
@@ -186,7 +188,8 @@ class _DocsTitle extends StatelessWidget {
             children: <Widget>[
               InkResponse(
                 onTap: () {
-                  Get.to(DocumentsSearchView(),
+                  Get.find<NavigationController>().navigateToFullscreen(
+                      DocumentsSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
@@ -203,7 +206,8 @@ class _DocsTitle extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.toNamed('DocumentsFilterScreen',
+                onTap: () async => Get.find<NavigationController>().showScreen(
+                    const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {
                       'filterController': controller.filterController

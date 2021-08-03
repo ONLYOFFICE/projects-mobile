@@ -36,6 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -47,7 +48,9 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
+import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
   const TasksView({Key key}) : super(key: key);
@@ -69,8 +72,9 @@ class TasksView extends StatelessWidget {
               bottom: controller.fabIsRaised.value == true ? 48 : 0),
           duration: const Duration(milliseconds: 100),
           child: StyledFloatingActionButton(
-              onPressed: () => Get.toNamed('NewTaskView',
-                  arguments: {'projectDetailed': null}),
+              onPressed: () => Get.find<NavigationController>()
+                  .navigateToFullscreen(const NewTaskView(),
+                      arguments: {'projectDetailed': null}),
               child: AppIcon(icon: SvgIcons.add_fab)))),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
@@ -92,9 +96,10 @@ class TasksView extends StatelessWidget {
               ),
               IconButton(
                 icon: FiltersButton(controler: controller),
-                onPressed: () async => Get.toNamed('TasksFilterScreen',
-                    preventDuplicates: false,
-                    arguments: {
+                onPressed: () async => Get.find<NavigationController>()
+                    .showScreen(const TasksFilterScreen(),
+                        preventDuplicates: false,
+                        arguments: {
                       'filterController': controller.filterController
                     }),
               ),

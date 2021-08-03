@@ -49,6 +49,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function() onLeadingPressed;
   final Color bgColor;
 
+  final Icon backButtonIcon;
+
   StyledAppBar({
     Key key,
     this.actions,
@@ -59,6 +61,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
+    this.backButtonIcon = const Icon(Icons.arrow_back_rounded),
     this.title,
     this.titleHeight = 56,
     this.titleText,
@@ -93,7 +96,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       // ),
       leading: leading == null && showBackButton
           ? IconButton(
-              icon: const Icon(Icons.arrow_back_rounded),
+              icon: backButtonIcon,
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,

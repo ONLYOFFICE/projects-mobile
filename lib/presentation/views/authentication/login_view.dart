@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -62,6 +63,7 @@ class LoginView extends StatelessWidget {
             Center(
               child: Container(
                 color: Get.theme.backgroundColor,
+                constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
                   padding: const EdgeInsets.all(36.0),
                   child: Column(
@@ -117,8 +119,8 @@ class LoginView extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       TextButton(
-                        onPressed: () async => Get.toNamed(
-                          'PasswordRecoveryScreen',
+                        onPressed: () async => Get.to(
+                          () => const PasswordRecoveryScreen1(),
                           arguments: {'email': controller.emailController.text},
                         ),
                         child: Text(

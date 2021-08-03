@@ -34,6 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -41,6 +43,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -66,6 +69,9 @@ class TeamMembersSelectionView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
@@ -199,7 +205,8 @@ class TeamMembersSearchBar extends StatelessWidget {
             width: 24,
             child: InkWell(
               onTap: () {
-                Get.toNamed('GroupMembersSelectionView',
+                Get.find<NavigationController>().showScreen(
+                    const GroupMembersSelectionView(),
                     arguments: {'controller': controller});
               },
               child: AppIcon(

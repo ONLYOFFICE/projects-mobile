@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -48,6 +49,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 
 class NewMilestoneView extends StatelessWidget {
@@ -299,7 +301,8 @@ class DescriptionTile extends StatelessWidget {
                     size: 20,
                     color: Get.theme.colors().onSurface.withOpacity(0.6))
                 : null,
-            onTap: () => Get.toNamed('NewMilestoneDescription'));
+            onTap: () => Get.find<NavigationController>()
+                .navigateToFullscreen(const NewMilestoneDescription()));
       },
     );
   }
@@ -330,7 +333,8 @@ class ProjectTile extends StatelessWidget {
             onTap: () => {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
-                  Get.toNamed('SelectProjectForMilestone'),
+                  Get.find<NavigationController>()
+                      .navigateToFullscreen(const SelectProjectForMilestone()),
                 });
       },
     );
@@ -363,7 +367,8 @@ class ResponsibleTile extends StatelessWidget {
         onTap: () => {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
-          Get.to(const SelectMilestoneResponsible())
+          Get.find<NavigationController>()
+              .navigateToFullscreen(const SelectMilestoneResponsible())
         },
       ),
     );
@@ -399,10 +404,7 @@ class DueDateTile extends StatelessWidget {
                   if (!FocusScope.of(context).hasPrimaryFocus)
                     {FocusScope.of(context).unfocus()},
                   controller.onDueDateTilePressed()
-                }
-            // Get.toNamed('SelectDateView',
-            //     arguments: {'controller': controller, 'startDate': false})
-            );
+                });
       },
     );
   }

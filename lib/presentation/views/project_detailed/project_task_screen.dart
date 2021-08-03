@@ -35,6 +35,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 
@@ -47,6 +48,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -198,9 +200,10 @@ class Header extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () async => Get.toNamed('TasksFilterScreen',
-                          preventDuplicates: false,
-                          arguments: {
+                      onTap: () async => Get.find<NavigationController>()
+                          .showScreen(const TasksFilterScreen(),
+                              preventDuplicates: false,
+                              arguments: {
                             'filterController': controller.filterController
                           }),
                       child: FiltersButton(controler: controller),

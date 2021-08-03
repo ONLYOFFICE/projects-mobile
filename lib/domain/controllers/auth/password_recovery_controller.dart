@@ -33,7 +33,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/authentication_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 
 class PasswordRecoveryController extends GetxController {
   final String _email;
@@ -56,7 +58,8 @@ class PasswordRecoveryController extends GetxController {
     if (_checkEmail()) {
       var result = await _authService.passwordRecovery(_emailController.text);
       if (result != null) {
-        await Get.toNamed('PasswordRecoveryScreen2');
+        Get.find<NavigationController>()
+            .navigateToFullscreen(const PasswordRecoveryScreen2());
       }
     }
   }

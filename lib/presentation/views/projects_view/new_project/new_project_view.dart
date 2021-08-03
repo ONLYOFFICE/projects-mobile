@@ -33,8 +33,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
+import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:readmore/readmore.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
@@ -75,7 +79,8 @@ class NewProject extends StatelessWidget {
             TitleInput(controller: controller),
             InkWell(
               onTap: () {
-                Get.toNamed('ProjectManagerSelectionView',
+                Get.find<NavigationController>().showScreen(
+                    const ProjectManagerSelectionView(),
                     arguments: {'controller': controller});
               },
               child: ProjectManager(
@@ -84,7 +89,8 @@ class NewProject extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.toNamed('TeamMembersSelectionView',
+                Get.find<NavigationController>().showScreen(
+                    const TeamMembersSelectionView(),
                     arguments: {'controller': controller});
               },
               child: TeamMembers(
@@ -113,20 +119,22 @@ class DescriptionTile extends StatelessWidget {
       () {
         bool _isSletected = controller.descriptionText.value.isNotEmpty;
         return NewMilestoneInfo(
-            text: _isSletected
-                ? controller.descriptionText.value
-                : tr('addDescription'),
-            maxLines: 1,
-            icon: SvgIcons.description,
-            caption: _isSletected ? tr('description') : null,
-            isSelected: _isSletected,
-            suffix: _isSletected
-                ? Icon(Icons.arrow_forward_ios_outlined,
-                    size: 20,
-                    color: Get.theme.colors().onSurface.withOpacity(0.6))
-                : null,
-            onTap: () => Get.toNamed('NewProjectDescription',
-                arguments: {'controller': controller}));
+          text: _isSletected
+              ? controller.descriptionText.value
+              : tr('addDescription'),
+          maxLines: 1,
+          icon: SvgIcons.description,
+          caption: _isSletected ? tr('description') : null,
+          isSelected: _isSletected,
+          suffix: _isSletected
+              ? Icon(Icons.arrow_forward_ios_outlined,
+                  size: 20,
+                  color: Get.theme.colors().onSurface.withOpacity(0.6))
+              : null,
+          onTap: () => Get.find<NavigationController>().showScreen(
+              const NewProjectDescription(),
+              arguments: {'controller': controller}),
+        );
       },
     );
   }
@@ -240,7 +248,8 @@ class ProjectManager extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed('ProjectManagerSelectionView',
+                                  Get.find<NavigationController>().showScreen(
+                                      const ProjectManagerSelectionView(),
                                       arguments: {'controller': controller});
                                 },
                                 child: Obx(
@@ -360,7 +369,8 @@ class TeamMembers extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.toNamed('TeamMembersSelectionView',
+                                  Get.find<NavigationController>().showScreen(
+                                      const TeamMembersSelectionView(),
                                       arguments: {'controller': controller});
                                 },
                                 child: Text(

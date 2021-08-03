@@ -60,60 +60,65 @@ class PortalView extends StatelessWidget {
               ? SizedBox(
                   height: Get.height,
                   child: const Center(child: CircularProgressIndicator()))
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 40),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(height: Get.height * 0.165),
-                      AppIcon(icon: SvgIcons.logo_big),
-                      SizedBox(height: Get.height * 0.044),
-                      Text(tr('appName'),
+              : Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    constraints: const BoxConstraints(maxWidth: 480),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        SizedBox(height: Get.height * 0.165),
+                        AppIcon(icon: SvgIcons.logo_big),
+                        SizedBox(height: Get.height * 0.044),
+                        Text(tr('appName'),
+                            textAlign: TextAlign.center,
+                            style: TextStyleHelper.headline6()),
+                        SizedBox(height: Get.height * 0.111),
+                        Obx(
+                          () => AuthTextField(
+                            controller: controller.portalAdressController,
+                            autofillHint: AutofillHints.url,
+                            hintText: tr('portalAdress'),
+                            validator: controller.emailValidator,
+                            hasError: controller.portalFieldError.value == true,
+                          ),
+                        ),
+                        SizedBox(height: Get.height * 0.033),
+                        DecoratedBox(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(0, 0.85),
+                                color: Get.theme
+                                    .colors()
+                                    .onBackground
+                                    .withOpacity(0.19)),
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(0, 0.25),
+                                color: Get.theme
+                                    .colors()
+                                    .onBackground
+                                    .withOpacity(0.04)),
+                          ]),
+                          child: WideButton(
+                            text: tr('next'),
+                            onPressed: () async =>
+                                await controller.getPortalCapabilities(),
+                          ),
+                        ),
+                        SizedBox(height: Get.height * 0.222),
+                        Text(
+                          tr('appDescription'),
                           textAlign: TextAlign.center,
-                          style: TextStyleHelper.headline6()),
-                      SizedBox(height: Get.height * 0.111),
-                      Obx(
-                        () => AuthTextField(
-                          controller: controller.portalAdressController,
-                          autofillHint: AutofillHints.url,
-                          hintText: tr('portalAdress'),
-                          validator: controller.emailValidator,
-                          hasError: controller.portalFieldError.value == true,
-                        ),
-                      ),
-                      SizedBox(height: Get.height * 0.033),
-                      DecoratedBox(
-                        decoration: BoxDecoration(boxShadow: [
-                          BoxShadow(
-                              blurRadius: 3,
-                              offset: const Offset(0, 0.85),
+                          style: TextStyleHelper.body2(
                               color: Get.theme
                                   .colors()
-                                  .onBackground
-                                  .withOpacity(0.19)),
-                          BoxShadow(
-                              blurRadius: 3,
-                              offset: const Offset(0, 0.25),
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.04)),
-                        ]),
-                        child: WideButton(
-                          text: tr('next'),
-                          onPressed: () async =>
-                              await controller.getPortalCapabilities(),
+                                  .onSurface
+                                  .withOpacity(0.6)),
                         ),
-                      ),
-                      SizedBox(height: Get.height * 0.222),
-                      Text(
-                        tr('appDescription'),
-                        textAlign: TextAlign.center,
-                        style: TextStyleHelper.body2(
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6)),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
         ),

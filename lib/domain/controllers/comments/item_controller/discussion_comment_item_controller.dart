@@ -38,9 +38,11 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
 class DiscussionCommentItemController extends GetxController
     implements CommentItemController {
@@ -98,7 +100,8 @@ class DiscussionCommentItemController extends GetxController
 
   @override
   void toCommentEditingView() {
-    Get.toNamed('CommentEditingView', arguments: {
+    Get.find<NavigationController>()
+        .navigateToFullscreen(const CommentEditingView(), arguments: {
       'commentId': comment.value.commentId,
       'commentBody': comment.value.commentBody,
       'itemController': this,

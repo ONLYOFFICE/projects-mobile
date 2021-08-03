@@ -37,8 +37,12 @@ import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
+import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
+import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 
 class DiscussionsController extends BaseController {
   final _api = locator<DiscussionsService>();
@@ -100,11 +104,14 @@ class DiscussionsController extends BaseController {
     paginationController.data.addAll(result.response);
   }
 
-  void toDetailed(Discussion discussion) =>
-      Get.toNamed('DiscussionDetailed', arguments: {'discussion': discussion});
+  void toDetailed(Discussion discussion) => Get.find<NavigationController>()
+      .navigateToFullscreen(DiscussionDetailed(),
+          arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() => Get.toNamed('NewDiscussionScreen');
+  void toNewDiscussionScreen() => Get.find<NavigationController>()
+      .navigateToFullscreen(const NewDiscussionScreen());
 
   @override
-  void showSearch() => Get.toNamed('DiscussionsSearchScreen');
+  void showSearch() => Get.find<NavigationController>()
+      .navigateToFullscreen(const DiscussionsSearchScreen());
 }

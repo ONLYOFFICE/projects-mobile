@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 
@@ -64,6 +65,9 @@ class MilestoneFilterScreen extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('filter'),
         showBackButton: true,
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         actions: [
           TextButton(
               onPressed: () async => filterController.resetFilters(),

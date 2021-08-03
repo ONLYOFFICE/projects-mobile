@@ -30,38 +30,35 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
-class SelectDateView extends StatelessWidget {
-  const SelectDateView({
-    Key key,
-  }) : super(key: key);
+class TasksWithPresets {
+  static var _myTasksController;
 
-  @override
-  Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
-    bool startDate = Get.arguments['startDate'];
-    return Scaffold(
-      appBar: StyledAppBar(
-          backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
-          titleText: startDate ? tr('selectStartDate') : tr('selectDueDate')),
-      body: CalendarDatePicker(
-          initialDate: DateTime.now(),
-          currentDate: DateTime.now(),
-          firstDate: DateTime(2000),
-          lastDate: DateTime(3000),
-          onDateChanged: (value) {
-            return startDate
-                ? controller.changeStartDate(value)
-                : controller.changeDueDate(value);
-          }),
-      // ),
+  static void setupMyTasks() async {
+    final _filterController = Get.put(
+      TaskFilterController(),
+      tag: 'MyTasksContent',
     );
+
+    _myTasksController = Get.put(
+      TasksController(
+        _filterController,
+        Get.put(PaginationController(), tag: 'MyTasksContent'),
+      ),
+      tag: 'MyTasksContent',
+    );
+    _myTasksController.expandedCardView.value = true;
+    await _filterController
+        .setupPreset('myTasks')
+        .then((value) => _myTasksController.loadTasks());
+  }
+
+  static TasksController get myTasksController {
+    setupMyTasks();
+    return _myTasksController;
   }
 }

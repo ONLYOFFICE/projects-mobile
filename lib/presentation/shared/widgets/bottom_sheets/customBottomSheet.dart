@@ -33,8 +33,6 @@
 import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-// TODO удали как увидишь. Я добавил эту функцию для bs, в ней определен
-// максимальный размер, чтобы не закрывался статус бар. Давай использовать ее.
 void showCustomBottomSheet({
   @required context,
   @required double headerHeight,

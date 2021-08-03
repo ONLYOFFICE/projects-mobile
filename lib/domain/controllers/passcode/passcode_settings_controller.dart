@@ -36,6 +36,9 @@ import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/current_passcode_check_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen1.dart';
+import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen2.dart';
 
 class PasscodeSettingsController extends GetxController {
   final _service = locator<PasscodeService>();
@@ -75,7 +78,7 @@ class PasscodeSettingsController extends GetxController {
       passcodeLen.value++;
     }
     if (_passcode.length == 4) {
-      Get.toNamed('NewPasscodeScreen2');
+      Get.to(() => const NewPasscodeScreen2());
     }
   }
 
@@ -129,7 +132,8 @@ class PasscodeSettingsController extends GetxController {
   void leavePasscodeSettingsScreen() {
     clear();
     Get.find<SettingsController>().onInit();
-    Get.offNamed('SettingsScreen');
+    Get.back();
+    //offNamed('SettingsScreen');
   }
 
   void leave() {
@@ -147,14 +151,14 @@ class PasscodeSettingsController extends GetxController {
 
   void tryEnablingPasscode() async {
     isPasscodeEnable.value = true;
-    await Get.toNamed('NewPasscodeScreen1',
+    await Get.to(() => const NewPasscodeScreen1(),
         arguments: {'title': tr('enterPasscode')});
   }
 
   void tryDisablingPasscode() async {
     isPasscodeEnable.value = false;
-    await Get.toNamed(
-      'CurrentPasscodeCheckScreen',
+    await Get.to(
+      () => const CurrentPasscodeCheckScreen(),
       arguments: {
         'title': tr('enterCurrentPasscode'),
         'caption': '',
@@ -164,12 +168,12 @@ class PasscodeSettingsController extends GetxController {
   }
 
   Future<void> tryChangingPasscode() async {
-    await Get.toNamed(
-      'CurrentPasscodeCheckScreen',
+    await Get.to(
+      () => const CurrentPasscodeCheckScreen(),
       arguments: {
         'title': tr('enterCurrentPasscode'),
         'caption': '',
-        'onPass': () => Get.toNamed('NewPasscodeScreen1',
+        'onPass': () => Get.to(() => const NewPasscodeScreen1(),
             arguments: {'title': tr('enterNewPasscode'), 'caption': ''})
       },
     );
