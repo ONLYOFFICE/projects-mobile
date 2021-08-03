@@ -1,10 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -20,16 +18,10 @@ class SelectProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
 
-    var _projectsController = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.put(PaginationController(), tag: 'SelectProjectView'),
-        ),
-        tag: 'SelectProjectView');
+    var projectsController = ProjectsWithPresets.myProjectsController;
 
-    _projectsController.loadProjects();
-
-    var _searchController = Get.put(ProjectSearchController());
+    var searchController =
+        Get.put(ProjectSearchController(onlyMyProjects: true));
 
     return Scaffold(
       appBar: StyledAppBar(
@@ -37,29 +29,29 @@ class SelectProjectView extends StatelessWidget {
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchProjects'),
-          controller: _searchController.searchInputController,
+          controller: searchController.searchInputController,
           showClearIcon: true,
-          onSubmitted: (value) => _searchController.newSearch(value),
-          onClearPressed: () => _searchController.clearSearch(),
+          onSubmitted: (value) => searchController.newSearch(value),
+          onClearPressed: () => searchController.clearSearch(),
         ),
       ),
       body: Obx(() {
-        if (_searchController.switchToSearchView.value == true &&
-            _searchController.searchResult.isNotEmpty) {
+        if (searchController.switchToSearchView.value == true &&
+            searchController.searchResult.isNotEmpty) {
           return ProjectsList(
-            projects: _searchController.searchResult,
+            projects: searchController.searchResult,
             controller: controller,
           );
         }
-        if (_searchController.switchToSearchView.value == true &&
-            _searchController.searchResult.isEmpty &&
-            _searchController.loaded.value == true) {
-          return const NothingFound();
+        if (searchController.switchToSearchView.value == true &&
+            searchController.searchResult.isEmpty &&
+            searchController.loaded.value == true) {
+          return Column(children: [const NothingFound()]);
         }
-        if (_projectsController.loaded.value == true &&
-            _searchController.switchToSearchView.value == false) {
+        if (projectsController.loaded.value == true &&
+            searchController.switchToSearchView.value == false) {
           return ProjectsList(
-            projects: _projectsController.paginationController.data,
+            projects: projectsController.paginationController.data,
             controller: controller,
           );
         }

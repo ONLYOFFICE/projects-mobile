@@ -2,8 +2,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
@@ -21,9 +21,9 @@ class DashboardController extends GetxController {
     setupMyTask();
     setupUpcomingTasks();
 
-    setupMyProjects();
-    setupMyFolowedProjects();
-    setupActiveProjects();
+    _myProjectsController = ProjectsWithPresets.myProjectsController;
+    _folowedProjectsController = ProjectsWithPresets.folowedProjectsController;
+    _activeProjectsController = ProjectsWithPresets.activeProjectsController;
   }
 
   Future<void> refreshData() async {
@@ -77,54 +77,5 @@ class DashboardController extends GetxController {
     _filterController
         .setupPreset('upcomming')
         .then((value) => _upcomingTaskscontroller.loadTasks());
-  }
-
-  void setupMyProjects() {
-    final _filterController = Get.put(
-      ProjectsFilterController(),
-      tag: 'myProjects',
-    );
-
-    _myProjectsController = Get.put(
-      ProjectsController(
-        _filterController,
-        Get.put(PaginationController(), tag: 'myProjects'),
-      ),
-      tag: 'myProjects',
-    );
-
-    _filterController
-        .setupPreset('myProjects')
-        .then((value) => _myProjectsController.loadProjects());
-  }
-
-  void setupMyFolowedProjects() {
-    final _filterController =
-        Get.put(ProjectsFilterController(), tag: 'myFollowedProjects');
-
-    _folowedProjectsController = Get.put(
-        ProjectsController(
-          _filterController,
-          Get.put(PaginationController(), tag: 'myFollowedProjects'),
-        ),
-        tag: 'myFollowedProjects');
-    _filterController
-        .setupPreset('myFollowedProjects')
-        .then((value) => _folowedProjectsController.loadProjects());
-  }
-
-  void setupActiveProjects() {
-    final _filterController =
-        Get.put(ProjectsFilterController(), tag: 'active');
-
-    _activeProjectsController = Get.put(
-        ProjectsController(
-          _filterController,
-          Get.put(PaginationController(), tag: 'active'),
-        ),
-        tag: 'active');
-    _filterController
-        .setupPreset('active')
-        .then((value) => _activeProjectsController.loadProjects());
   }
 }
