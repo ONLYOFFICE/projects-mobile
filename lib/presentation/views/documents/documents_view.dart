@@ -223,7 +223,8 @@ class DocsTitle extends StatelessWidget {
             children: <Widget>[
               InkResponse(
                 onTap: () {
-                  Get.to(DocumentsSearchView(),
+                  Get.find<NavigationController>().navigateToFullscreen(
+                      DocumentsSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
@@ -240,13 +241,13 @@ class DocsTitle extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.find<NavigationController>().navigateTo(
+                onTap: () async => Get.find<NavigationController>().showScreen(
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {
                       'filterController': controller.filterController
                     }),
-                //  Get.toNamed('DocumentsFilterScreen',
+                //  Get.find<NavigationController>().navigateToFullscreen(const DocumentsFilterScreen',
                 // preventDuplicates: false,
                 // arguments: {
                 //   'filterController': controller.filterController
@@ -490,7 +491,8 @@ class FolderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () {
-        Get.to(FolderContentView(),
+        Get.find<NavigationController>().navigateToFullscreen(
+            FolderContentView(),
             preventDuplicates: false,
             arguments: {'folderName': element.title, 'folderId': element.id});
       },
@@ -632,16 +634,19 @@ void _onFolderPopupMenuSelected(
       }
       break;
     case 'open':
-      await Get.to(FolderContentView(), preventDuplicates: false, arguments: {
-        'folderName': selectedFolder.title,
-        'folderId': selectedFolder.id
-      });
+      Get.find<NavigationController>().navigateToFullscreen(FolderContentView(),
+          preventDuplicates: false,
+          arguments: {
+            'folderName': selectedFolder.title,
+            'folderId': selectedFolder.id
+          });
       break;
     case 'download':
       controller.downloadFolder();
       break;
     case 'copy':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'copyFolder',
@@ -651,7 +656,8 @@ void _onFolderPopupMenuSelected(
           });
       break;
     case 'move':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'moveFolder',
@@ -704,7 +710,8 @@ void _onFilePopupMenuSelected(
       await controller.downloadFile(selectedFile.viewUrl);
       break;
     case 'copy':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'copyFile',
@@ -714,7 +721,8 @@ void _onFilePopupMenuSelected(
           });
       break;
     case 'move':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'moveFile',

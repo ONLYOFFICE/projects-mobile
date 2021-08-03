@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 
 class MilestoneTile extends StatelessWidget {
   final TaskActionsController controller;
@@ -26,7 +28,8 @@ class MilestoneTile extends StatelessWidget {
             // because color is always black
             isSelected: true,
             caption: '${tr('milestone')}:',
-            onTap: () => Get.toNamed('SelectMilestoneView',
+            onTap: () => Get.find<NavigationController>().navigateToFullscreen(
+                const SelectMilestoneView(),
                 arguments: {'controller': controller}));
       },
     );

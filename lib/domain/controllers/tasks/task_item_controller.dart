@@ -6,10 +6,12 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task_item_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
+import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -83,10 +85,7 @@ class TaskItemController extends GetxController {
     var newTaskController =
         Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
 
-    // doesnt work
-    // await Get.toNamed('TaskDetailedView',
-    //     arguments: {'controller': newTaskController});
-    await Get.to(() => TaskDetailedView(),
+    Get.find<NavigationController>().navigateToFullscreen(TaskDetailedView(),
         arguments: {'controller': newTaskController});
     // return copiedTask;
   }
@@ -145,8 +144,8 @@ class TaskItemController extends GetxController {
       projectId: task.value.projectOwner.id,
     );
     if (project != null)
-      await Get.toNamed(
-        'ProjectDetailedView',
+      Get.find<NavigationController>().navigateToFullscreen(
+        ProjectDetailedView(),
         arguments: {'projectDetailed': project},
       );
   }

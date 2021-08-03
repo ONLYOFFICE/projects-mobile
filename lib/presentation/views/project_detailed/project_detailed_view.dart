@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -102,9 +103,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             projectDetailed.canEdit
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => Get.to(
-                        EditProjectView(projectDetailed: projectDetailed),
-                        arguments: {'projectDetailed': projectDetailed}))
+                    onPressed: () => Get.find<NavigationController>()
+                        .navigateToFullscreen(
+                            EditProjectView(projectDetailed: projectDetailed),
+                            arguments: {'projectDetailed': projectDetailed}))
                 : const SizedBox(),
             _ProjectContextMenu(controller: projectController)
           ],
@@ -208,10 +210,11 @@ void _onSelected(value, controller) async {
       controller.copyLink();
       break;
 
-    case 'edit':
-      await Get.toNamed('ProjectEditingView',
-          arguments: {'projectDetailed': controller.projectDetailed});
-      break;
+    // case 'edit':
+    //   await Get.find<NavigationController>().navigateToFullscreen(
+    //       ProjectEditingView(),
+    //       arguments: {'projectDetailed': controller.projectDetailed});
+    //   break;
 
     case 'follow':
       controller.followProject();

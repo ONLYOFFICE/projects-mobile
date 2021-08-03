@@ -43,7 +43,7 @@ class ProjectsView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
       floatingActionButton: Visibility(
-        visible: controller.fabIsVisible,
+        visible: controller.fabIsVisible(),
         child: StyledFloatingActionButton(
           onPressed: () => controller.createNewProject(),
           child: AppIcon(
@@ -140,7 +140,7 @@ class _Title extends StatelessWidget {
               InkResponse(
                 onTap: () async => {
                   Get.find<NavigationController>()
-                      .navigateTo(const ProjectsFilterScreen())
+                      .showScreen(const ProjectsFilterScreen())
                 },
                 child: FiltersButton(controler: controller),
               ),

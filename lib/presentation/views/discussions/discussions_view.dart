@@ -53,12 +53,12 @@ class PortalDiscussionsView extends StatelessWidget {
               IconButton(
                   icon: FiltersButton(controler: controller),
                   onPressed: () async => Get.find<NavigationController>()
-                          .navigateTo(const DiscussionsFilterScreen(),
+                          .showScreen(const DiscussionsFilterScreen(),
                               preventDuplicates: false,
                               arguments: {
                             'filterController': controller.filterController
                           })
-                  //  Get.toNamed(
+                  //  Get.find<NavigationController>().navigateToFullscreen(const (
                   //   'DiscussionsFilterScreen',
                   //   preventDuplicates: false,
                   //   arguments: {'filterController': controller.filterController},

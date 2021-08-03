@@ -6,6 +6,7 @@ import 'package:projects/data/services/numbers_service.dart';
 import 'package:projects/data/services/sms_code_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 
 class TFASmsController extends GetxController {
   final _numberService = locator<NumbersService>();
@@ -72,7 +73,7 @@ class TFASmsController extends GetxController {
   void onSearchPressed() => searching.toggle();
   void onSendCodePressed() async {
     var result = await setPhone();
-    if (result != null) await Get.toNamed('EnterSMSCodeScreen');
+    if (result != null) await Get.to(() => const EnterSMSCodeScreen());
   }
 
   void onConfirmPressed(String code) async {

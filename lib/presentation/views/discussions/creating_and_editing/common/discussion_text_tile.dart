@@ -30,10 +30,10 @@ class DiscussionTextTile extends StatelessWidget {
             controller.text?.value != null && controller.text.value.isNotEmpty,
         icon: SvgIcons.description,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
-        onTap: () => Get.find<NavigationController>().navigateTo(
+        onTap: () => Get.find<NavigationController>().showScreen(
             const NewDiscussionTextScreen(),
             arguments: {'controller': controller}),
-        //  Get.toNamed('NewDiscussionTextScreen',
+        //  Get.find<NavigationController>().navigateToFullscreen(const NewDiscussionTextScreen',
         //     arguments: {'controller': controller}),
       ),
     );

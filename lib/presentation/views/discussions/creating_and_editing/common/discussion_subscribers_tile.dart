@@ -28,7 +28,7 @@ class DiscussionSubscribersTile extends StatelessWidget {
         isSelected: controller.subscribers.isNotEmpty,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () {
-          Get.find<NavigationController>().navigateTo(
+          Get.find<NavigationController>().showScreen(
               controller is NewDiscussionController
                   ? const SelectDiscussionSubscribers()
                   : const ManageDiscussionSubscribersScreen(),
@@ -37,7 +37,7 @@ class DiscussionSubscribersTile extends StatelessWidget {
           // var toPage = controller is NewDiscussionController
           //     ? 'SelectDiscussionSubscribers'
           //     : 'ManageDiscussionSubscribersScreen';
-          // return Get.toNamed(toPage, arguments: {'controller': controller});
+          // return Get.find<NavigationController>().navigateToFullscreen(const (toPage, arguments: {'controller': controller});
         },
       ),
     );

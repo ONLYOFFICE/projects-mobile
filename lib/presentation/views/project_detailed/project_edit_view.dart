@@ -64,10 +64,10 @@ class EditProjectView extends StatelessWidget {
                 DescriptionTile(controller: editProjectController),
                 InkWell(
                   onTap: () {
-                    Get.find<NavigationController>().navigateTo(
+                    Get.find<NavigationController>().showScreen(
                         const ProjectManagerSelectionView(),
                         arguments: {'controller': editProjectController});
-                    // Get.toNamed('ProjectManagerSelectionView',
+                    // Get.find<NavigationController>().navigateToFullscreen(const ProjectManagerSelectionView',
                     //     arguments: {'controller': editProjectController});
                   },
                   child: ProjectManager(
@@ -76,10 +76,10 @@ class EditProjectView extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Get.find<NavigationController>().navigateTo(
+                    Get.find<NavigationController>().showScreen(
                         const TeamMembersSelectionView(),
                         arguments: {'controller': editProjectController});
-                    // Get.toNamed('TeamMembersSelectionView',
+                    // Get.find<NavigationController>().navigateToFullscreen(const TeamMembersSelectionView',
                     //     arguments: {'controller': editProjectController});
                   },
                   child: TeamMembers(
@@ -210,7 +210,7 @@ class _Tags extends StatelessWidget {
                           subtitle: controller.tagsText.value,
                           onTapFunction: () {
                             controller.showTags();
-                            // Get.to(const TagsSelectionView(),
+                            // Get.find<NavigationController>().navigateToFullscreen(const const TagsSelectionView(),
                             //     arguments: {'controller': controller});
                           },
                           title: tr('tags'),
@@ -222,7 +222,7 @@ class _Tags extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   controller.showTags();
-                                  // Get.to(const TagsSelectionView(),
+                                  // Get.find<NavigationController>().navigateToFullscreen(const const TagsSelectionView(),
                                   //     arguments: {'controller': controller});
                                 },
                                 child: Text(

@@ -45,21 +45,21 @@ class SettingsScreen extends StatelessWidget {
                           ? tr('enabled')
                           : tr('disabled'),
                       icon: SvgIcons.passcode,
-                      // onTap: () => Get.toNamed('NewPasscodeScreen1'),
-                      onTap: () => Get.find<NavigationController>().navigateTo(
+                      // onTap: () => Get.find<NavigationController>().navigateToFullscreen(const NewPasscodeScreen1'),
+                      onTap: () => Get.find<NavigationController>().showScreen(
                         const PasscodeSettingsScreen(),
                       ),
 
-                      //  Get.toNamed('PasscodeSettingsScreen'),
+                      //  Get.find<NavigationController>().navigateToFullscreen(const PasscodeSettingsScreen'),
                     ),
                     SettingTile(
                       text: tr('colorTheme'),
                       loverText: tr(controller.currentTheme.value),
                       icon: SvgIcons.color_scheme,
-                      onTap: () => Get.find<NavigationController>().navigateTo(
+                      onTap: () => Get.find<NavigationController>().showScreen(
                         const ColorThemeSelectionScreen(),
                       ),
-                      //Get.toNamed('ColorThemeSelectionScreen'),
+                      //Get.find<NavigationController>().navigateToFullscreen(const ColorThemeSelectionScreen'),
                     ),
                     SettingTile(
                       text: tr('clearCache'),

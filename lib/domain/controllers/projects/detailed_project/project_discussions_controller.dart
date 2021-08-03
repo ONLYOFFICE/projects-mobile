@@ -2,8 +2,11 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
+import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class ProjectDiscussionsController extends GetxController {
   final _api = locator<DiscussionsService>();
@@ -52,9 +55,11 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.data.addAll(result.response);
   }
 
-  void toDetailed(Discussion discussion) =>
-      Get.toNamed('DiscussionDetailed', arguments: {'discussion': discussion});
+  void toDetailed(Discussion discussion) => Get.find<NavigationController>()
+      .navigateToFullscreen(DiscussionDetailed(),
+          arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() => Get.toNamed('NewDiscussionScreen',
-      arguments: {'projectId': projectId, 'projectTitle': projectTitle});
+  void toNewDiscussionScreen() => Get.find<NavigationController>()
+      .navigateToFullscreen(const NewDiscussionScreen(),
+          arguments: {'projectId': projectId, 'projectTitle': projectTitle});
 }

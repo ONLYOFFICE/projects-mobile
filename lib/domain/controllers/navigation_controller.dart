@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
+import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
   var tabIndex = 0;
@@ -45,24 +46,37 @@ class NavigationController extends GetxController {
 
   void clearCurrentIndex() => tabIndex = null;
 
-  void navigateTo(Widget widget,
+  void showScreen(Widget widget,
       {bool preventDuplicates, Map<String, dynamic> arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
-        widget,
+        () => widget,
+        preventDuplicates: preventDuplicates ?? true,
+        arguments: arguments,
+      );
+    } else {
+      Get.to(() => ModalScreenView(contentView: widget),
+          opaque: false,
+          transition: Transition.noTransition,
+          preventDuplicates: preventDuplicates ?? false,
+          arguments: arguments);
+    }
+  }
+
+  void navigateToFullscreen(Widget widget,
+      {bool preventDuplicates, Map<String, dynamic> arguments}) {
+    if (Get.find<PlatformController>().isMobile) {
+      Get.to(
+        () => widget,
         preventDuplicates: preventDuplicates ?? true,
         arguments: arguments,
       );
     } else {
       Get.to(
-          FullscreenView(
-            contentView: widget,
-          ),
-          fullscreenDialog: false,
-          opaque: false,
-          transition: Transition.noTransition,
-          preventDuplicates: preventDuplicates ?? false,
-          arguments: arguments);
+        () => TabletLayout(contentView: widget),
+        preventDuplicates: preventDuplicates ?? false,
+        arguments: arguments,
+      );
     }
   }
 
@@ -73,7 +87,7 @@ class NavigationController extends GetxController {
   //       isScrollControlled: true,
   //     );
   //   } else {
-  //     Get.to(
+  //     Get.to(() =>
   //       FullscreenView(
   //         contentView: widget,
   //       ),

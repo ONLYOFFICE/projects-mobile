@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
@@ -9,6 +10,8 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
+import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
+import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 
 class ProjectsController extends BaseController {
   final _api = locator<ProjectService>();
@@ -34,8 +37,11 @@ class ProjectsController extends BaseController {
 
   final _userController = Get.find<UserController>();
 
-  bool get fabIsVisible =>
-      _userController.user.isAdmin || _userController.user.isOwner;
+  bool fabIsVisible() {
+    if (_userController.user == null) return false;
+
+    return _userController.user.isAdmin || _userController.user.isOwner;
+  }
 
   ProjectsController(
     ProjectsFilterController filterController,
@@ -56,7 +62,7 @@ class ProjectsController extends BaseController {
 
   @override
   void showSearch() {
-    Get.toNamed('ProjectSearchView');
+    Get.find<NavigationController>().navigateToFullscreen(ProjectSearchView());
   }
 
   void updateSort() {
@@ -99,6 +105,7 @@ class ProjectsController extends BaseController {
   }
 
   void createNewProject() {
-    Get.toNamed('NewProject');
+    Get.find<NavigationController>().navigateToFullscreen(const NewProject());
+    // Get.find<NavigationController>().navigateToFullscreen(const NewProject');
   }
 }

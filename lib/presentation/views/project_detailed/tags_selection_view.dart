@@ -150,7 +150,7 @@ class _TagsSearchBar extends StatelessWidget {
             width: 24,
             child: InkWell(
               onTap: () {
-                // Get.toNamed('');
+                // Get.find<NavigationController>().navigateToFullscreen(const ');
               },
             ),
           ),

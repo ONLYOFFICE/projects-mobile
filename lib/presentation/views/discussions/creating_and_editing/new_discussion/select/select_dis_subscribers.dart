@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -12,6 +13,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -64,8 +66,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 15.5, right: 16),
               child: InkResponse(
-                onTap: () => Get.toNamed('UsersFromGroups',
-                    arguments: {'controller': controller}),
+                onTap: () => Get.find<NavigationController>()
+                    .navigateToFullscreen(const UsersFromGroups(),
+                        arguments: {'controller': controller}),
                 child: AppIcon(icon: SvgIcons.preferences),
               ),
             )
