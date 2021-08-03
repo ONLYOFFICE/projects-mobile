@@ -31,6 +31,7 @@ class LoginView extends StatelessWidget {
             Center(
               child: Container(
                 color: Get.theme.backgroundColor,
+                constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
                   padding: const EdgeInsets.all(36.0),
                   child: Column(

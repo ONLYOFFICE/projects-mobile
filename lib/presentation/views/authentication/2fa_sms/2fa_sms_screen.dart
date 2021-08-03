@@ -28,32 +28,40 @@ class TFASmsScreen extends StatelessWidget {
         () {
           if (controller.loaded.value == true) {
             return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: h(24.71)),
-                  AppIcon(icon: SvgIcons.password_recovery),
-                  SizedBox(height: h(11.54)),
-                  Text(tr('tfaSMSTitle'),
-                      style: TextStyleHelper.subtitle1(
-                          color: Get.theme.colors().onSurface)),
-                  SizedBox(height: h(12.54)),
-                  Text(tr('tfaSMSCaption'),
-                      textAlign: TextAlign.center,
-                      style: TextStyleHelper.body2(
-                          color:
-                              Get.theme.colors().onSurface.withOpacity(0.6))),
-                  SizedBox(height: h(6.54)),
-                  const _CountrySelection(),
-                  SizedBox(height: h(24)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: WideButton(
-                      text: tr('sendCode'),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      onPressed: controller.onSendCodePressed,
-                    ),
-                  )
-                ],
+              child: Center(
+                child: Container(
+                  color: Get.theme.backgroundColor,
+                  constraints: const BoxConstraints(maxWidth: 480),
+                  child: Column(
+                    children: [
+                      SizedBox(height: h(24.71)),
+                      AppIcon(icon: SvgIcons.password_recovery),
+                      SizedBox(height: h(11.54)),
+                      Text(tr('tfaSMSTitle'),
+                          style: TextStyleHelper.subtitle1(
+                              color: Get.theme.colors().onSurface)),
+                      SizedBox(height: h(12.54)),
+                      Text(tr('tfaSMSCaption'),
+                          textAlign: TextAlign.center,
+                          style: TextStyleHelper.body2(
+                              color: Get.theme
+                                  .colors()
+                                  .onSurface
+                                  .withOpacity(0.6))),
+                      SizedBox(height: h(6.54)),
+                      const _CountrySelection(),
+                      SizedBox(height: h(24)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: WideButton(
+                          text: tr('sendCode'),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          onPressed: controller.onSendCodePressed,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             );
           }
