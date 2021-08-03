@@ -32,9 +32,6 @@ class ProjectCell extends StatelessWidget {
         onTap: () => Get.find<NavigationController>().navigateToFullscreen(
             ProjectDetailedView(),
             arguments: {'projectDetailed': itemController.projectData}),
-
-        // Get.find<NavigationController>().navigateToFullscreen(const ProjectDetailedView',
-        //     arguments: {'projectDetailed': itemController.projectData}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

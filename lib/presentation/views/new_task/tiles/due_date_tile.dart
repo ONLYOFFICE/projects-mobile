@@ -37,8 +37,6 @@ class DueDateTile extends StatelessWidget {
           onTap: () => Get.find<NavigationController>().showScreen(
               const SelectDateView(),
               arguments: {'controller': controller, 'startDate': false}),
-          //  Get.find<NavigationController>().navigateToFullscreen(const SelectDateView',
-          //     arguments: {'controller': controller, 'startDate': false})
         );
       },
     );

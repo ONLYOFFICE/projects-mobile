@@ -177,9 +177,6 @@ class _Bottom extends StatelessWidget {
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
-          // Get.find<NavigationController>().navigateTo(
-          //   SortView(sortOptions: options),
-          // );
           Get.bottomSheet(
             SortView(sortOptions: options),
             isScrollControlled: true,

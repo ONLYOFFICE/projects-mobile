@@ -372,10 +372,7 @@ class DueDateTile extends StatelessWidget {
                   if (!FocusScope.of(context).hasPrimaryFocus)
                     {FocusScope.of(context).unfocus()},
                   controller.onDueDateTilePressed()
-                }
-            // Get.find<NavigationController>().navigateToFullscreen(const SelectDateView',
-            //     arguments: {'controller': controller, 'startDate': false})
-            );
+                });
       },
     );
   }

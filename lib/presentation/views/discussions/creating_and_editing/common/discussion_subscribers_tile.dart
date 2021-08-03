@@ -33,11 +33,6 @@ class DiscussionSubscribersTile extends StatelessWidget {
                   ? const SelectDiscussionSubscribers()
                   : const ManageDiscussionSubscribersScreen(),
               arguments: {'controller': controller});
-
-          // var toPage = controller is NewDiscussionController
-          //     ? 'SelectDiscussionSubscribers'
-          //     : 'ManageDiscussionSubscribersScreen';
-          // return Get.find<NavigationController>().navigateToFullscreen(const (toPage, arguments: {'controller': controller});
         },
       ),
     );

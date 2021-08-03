@@ -97,8 +97,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ),
         ),
         appBar: StyledAppBar(
-          // onLeadingPressed: () =>
-          // Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects(),
           actions: [
             projectDetailed.canEdit
                 ? IconButton(

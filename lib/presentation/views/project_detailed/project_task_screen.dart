@@ -174,11 +174,6 @@ class Header extends StatelessWidget {
                               arguments: {
                             'filterController': controller.filterController
                           }),
-                      //  Get.find<NavigationController>().navigateToFullscreen(const TasksFilterScreen',
-                      //     preventDuplicates: false,
-                      //     arguments: {
-                      //       'filterController': controller.filterController
-                      //     }),
                       child: FiltersButton(controler: controller),
                     ),
                   ],

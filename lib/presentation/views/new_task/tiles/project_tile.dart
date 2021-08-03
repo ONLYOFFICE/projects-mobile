@@ -34,8 +34,6 @@ class ProjectTile extends StatelessWidget {
               const SelectProjectView(),
               arguments: {'controller': controller}),
         );
-        // Get.find<NavigationController>().navigateToFullscreen(const SelectProjectView',
-        //     arguments: {'controller': controller}));
       },
     );
   }

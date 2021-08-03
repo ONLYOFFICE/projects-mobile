@@ -50,8 +50,6 @@ class NewProject extends StatelessWidget {
                 Get.find<NavigationController>().showScreen(
                     const ProjectManagerSelectionView(),
                     arguments: {'controller': controller});
-                // Get.find<NavigationController>().navigateToFullscreen(const ProjectManagerSelectionView',
-                //     arguments: {'controller': controller});
               },
               child: ProjectManager(
                 controller: controller,
@@ -62,8 +60,6 @@ class NewProject extends StatelessWidget {
                 Get.find<NavigationController>().showScreen(
                     const TeamMembersSelectionView(),
                     arguments: {'controller': controller});
-                // Get.find<NavigationController>().navigateToFullscreen(const TeamMembersSelectionView',
-                //     arguments: {'controller': controller});
               },
               child: TeamMembers(
                 controller: controller,
@@ -107,8 +103,6 @@ class DescriptionTile extends StatelessWidget {
               const NewProjectDescription(),
               arguments: {'controller': controller}),
         );
-        //  Get.find<NavigationController>().navigateToFullscreen(const NewProjectDescription',
-        //     arguments: {'controller': controller}));
       },
     );
   }
@@ -226,9 +220,6 @@ class ProjectManager extends StatelessWidget {
                                       const ProjectManagerSelectionView(),
                                       arguments: {'controller': controller});
                                 },
-                                //   Get.find<NavigationController>().navigateToFullscreen(const ProjectManagerSelectionView',
-                                //       arguments: {'controller': controller});
-                                // },
                                 child: Obx(
                                   () => Text(
                                     tr('choosePM'),
@@ -349,8 +340,6 @@ class TeamMembers extends StatelessWidget {
                                   Get.find<NavigationController>().showScreen(
                                       const TeamMembersSelectionView(),
                                       arguments: {'controller': controller});
-                                  // Get.find<NavigationController>().navigateToFullscreen(const TeamMembersSelectionView',
-                                  //     arguments: {'controller': controller});
                                 },
                                 child: Text(
                                   tr('addTeamMembers'),

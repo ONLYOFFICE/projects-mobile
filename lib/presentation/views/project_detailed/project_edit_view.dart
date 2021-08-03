@@ -67,8 +67,6 @@ class EditProjectView extends StatelessWidget {
                     Get.find<NavigationController>().showScreen(
                         const ProjectManagerSelectionView(),
                         arguments: {'controller': editProjectController});
-                    // Get.find<NavigationController>().navigateToFullscreen(const ProjectManagerSelectionView',
-                    //     arguments: {'controller': editProjectController});
                   },
                   child: ProjectManager(
                     controller: editProjectController,
@@ -79,8 +77,6 @@ class EditProjectView extends StatelessWidget {
                     Get.find<NavigationController>().showScreen(
                         const TeamMembersSelectionView(),
                         arguments: {'controller': editProjectController});
-                    // Get.find<NavigationController>().navigateToFullscreen(const TeamMembersSelectionView',
-                    //     arguments: {'controller': editProjectController});
                   },
                   child: TeamMembers(
                     controller: editProjectController,
@@ -210,8 +206,6 @@ class _Tags extends StatelessWidget {
                           subtitle: controller.tagsText.value,
                           onTapFunction: () {
                             controller.showTags();
-                            // Get.find<NavigationController>().navigateToFullscreen(const const TagsSelectionView(),
-                            //     arguments: {'controller': controller});
                           },
                           title: tr('tags'),
                           iconData: Icons.navigate_next)
@@ -222,8 +216,6 @@ class _Tags extends StatelessWidget {
                               InkWell(
                                 onTap: () {
                                   controller.showTags();
-                                  // Get.find<NavigationController>().navigateToFullscreen(const const TagsSelectionView(),
-                                  //     arguments: {'controller': controller});
                                 },
                                 child: Text(
                                   tr('addTag'),

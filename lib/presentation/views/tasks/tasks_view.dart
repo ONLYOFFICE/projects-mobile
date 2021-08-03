@@ -43,8 +43,6 @@ class TasksView extends StatelessWidget {
               onPressed: () => Get.find<NavigationController>()
                   .navigateToFullscreen(const NewTaskView(),
                       arguments: {'projectDetailed': null}),
-              // Get.find<NavigationController>().navigateToFullscreen(const NewTaskView',
-              //     arguments: {'projectDetailed': null}),
               child: AppIcon(icon: SvgIcons.add_fab)))),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
@@ -72,11 +70,6 @@ class TasksView extends StatelessWidget {
                         arguments: {
                       'filterController': controller.filterController
                     }),
-                //  () async => Get.find<NavigationController>().navigateToFullscreen(const TasksFilterScreen',
-                //     preventDuplicates: false,
-                //     arguments: {
-                //       'filterController': controller.filterController
-                //     }),
               ),
               const SizedBox(width: 4),
             ],

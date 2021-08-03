@@ -78,6 +78,7 @@
 
 	"confirm": "CONFIRM",
 	"cancel": "CANCEL",
+	"close": "CLOSE",
 	"accept": "ACCEPT",
 	"ok": "OK",
 	"save": "SAVE",
@@ -347,11 +348,22 @@
 	"colorTheme": "Color theme",
 	"sameAsSystem": "Same as system",
 	"clearCache": "Clear cache",
+	"help": "Help",
 	"support": "Support",
+	"rateApp": "Rate the App",
+	"userAgreement": "User Agreement",
+	"analytics": "Analytics",
+	"version": "Version",
 	"feedback": "Feedback",
 	"aboutApp": "About the app",
 	"lightTheme": "Light theme",
 	"darkTheme": "Dark theme",
+
+	"shareAnalytics": "Share app analytics",
+	"shareAnalyticsDescription": "Help improve the app by automatically sending statistics about how you use it to the developers",
+
+	"failedToSendFeedback": "Failed to send feedback by mail. Try to write your request on our forum.",
+	"goToForum": "GO TO FORUM",
 
 	"changePasscode": "Change passcode",
 	"enablePasscode": "Enable passcode",
