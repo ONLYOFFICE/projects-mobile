@@ -52,7 +52,8 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'editTask':
-      await Get.toNamed('TaskEditingView',
+      Get.find<NavigationController>().navigateToFullscreen(
+          const TaskEditingView(),
           arguments: {'task': controller.task.value});
       break;
 

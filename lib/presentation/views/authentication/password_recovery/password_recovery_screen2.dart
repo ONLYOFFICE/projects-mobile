@@ -17,34 +17,40 @@ class PasswordRecoveryScreen2 extends StatelessWidget {
     return Scaffold(
       appBar: StyledAppBar(),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 20.71),
-            AppIcon(icon: SvgIcons.password_recovery),
-            const SizedBox(height: 6.71),
-            Text(
-              tr('passwordRecovery'),
-              style: TextStyleHelper.headline6(),
+        child: Center(
+          child: Container(
+            color: Get.theme.backgroundColor,
+            constraints: const BoxConstraints(maxWidth: 480),
+            child: Column(
+              children: [
+                const SizedBox(height: 20.71),
+                AppIcon(icon: SvgIcons.password_recovery),
+                const SizedBox(height: 6.71),
+                Text(
+                  tr('passwordRecovery'),
+                  style: TextStyleHelper.headline6(),
+                ),
+                const SizedBox(height: 17.71),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: Text(
+                    tr('passwordChangeInstructionHasBeenSend',
+                        args: [controller.emailController.text]),
+                    textAlign: TextAlign.center,
+                    style: TextStyleHelper.subtitle1(),
+                  ),
+                ),
+                const SizedBox(height: 100),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 40),
+                  child: WideButton(
+                    text: tr('backToLogIn'),
+                    onPressed: controller.backToLogin,
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 17.71),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(
-                tr('passwordChangeInstructionHasBeenSend',
-                    args: [controller.emailController.text]),
-                textAlign: TextAlign.center,
-                style: TextStyleHelper.subtitle1(),
-              ),
-            ),
-            const SizedBox(height: 100),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              child: WideButton(
-                text: tr('backToLogIn'),
-                onPressed: controller.backToLogin,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

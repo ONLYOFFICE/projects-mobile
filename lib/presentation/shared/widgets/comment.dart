@@ -5,9 +5,11 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/task_comment_item_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
 class Comment extends StatelessWidget {
@@ -73,11 +75,13 @@ class Comment extends StatelessWidget {
                     if (comment.isResponsePermissions)
                       GestureDetector(
                         onTap: () {
-                          return Get.toNamed('ReplyCommentView', arguments: {
-                            'comment': controller.comment.value,
-                            'discussionId': discussionId,
-                            'taskId': taskId,
-                          });
+                          return Get.find<NavigationController>()
+                              .navigateToFullscreen(const ReplyCommentView(),
+                                  arguments: {
+                                'comment': controller.comment.value,
+                                'discussionId': discussionId,
+                                'taskId': taskId,
+                              });
                         },
                         child: Text(
                           'Ответить',

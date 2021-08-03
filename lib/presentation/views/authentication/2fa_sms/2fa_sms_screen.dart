@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/utils/adaptive_size.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class TFASmsScreen extends StatelessWidget {
@@ -26,32 +28,40 @@ class TFASmsScreen extends StatelessWidget {
         () {
           if (controller.loaded.value == true) {
             return SingleChildScrollView(
-              child: Column(
-                children: [
-                  SizedBox(height: h(24.71)),
-                  AppIcon(icon: SvgIcons.password_recovery),
-                  SizedBox(height: h(11.54)),
-                  Text(tr('tfaSMSTitle'),
-                      style: TextStyleHelper.subtitle1(
-                          color: Get.theme.colors().onSurface)),
-                  SizedBox(height: h(12.54)),
-                  Text(tr('tfaSMSCaption'),
-                      textAlign: TextAlign.center,
-                      style: TextStyleHelper.body2(
-                          color:
-                              Get.theme.colors().onSurface.withOpacity(0.6))),
-                  SizedBox(height: h(6.54)),
-                  const _CountrySelection(),
-                  SizedBox(height: h(24)),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: WideButton(
-                      text: tr('sendCode'),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      onPressed: controller.onSendCodePressed,
-                    ),
-                  )
-                ],
+              child: Center(
+                child: Container(
+                  color: Get.theme.backgroundColor,
+                  constraints: const BoxConstraints(maxWidth: 480),
+                  child: Column(
+                    children: [
+                      SizedBox(height: h(24.71)),
+                      AppIcon(icon: SvgIcons.password_recovery),
+                      SizedBox(height: h(11.54)),
+                      Text(tr('tfaSMSTitle'),
+                          style: TextStyleHelper.subtitle1(
+                              color: Get.theme.colors().onSurface)),
+                      SizedBox(height: h(12.54)),
+                      Text(tr('tfaSMSCaption'),
+                          textAlign: TextAlign.center,
+                          style: TextStyleHelper.body2(
+                              color: Get.theme
+                                  .colors()
+                                  .onSurface
+                                  .withOpacity(0.6))),
+                      SizedBox(height: h(6.54)),
+                      const _CountrySelection(),
+                      SizedBox(height: h(24)),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: WideButton(
+                          text: tr('sendCode'),
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          onPressed: controller.onSendCodePressed,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
             );
           }
@@ -77,7 +87,8 @@ class _CountrySelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: TextButton(
-              onPressed: () => Get.toNamed('SelectCountryScreen'),
+              onPressed: () => Get.find<NavigationController>()
+                  .navigateToFullscreen(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
                   controller?.deviceCountry?.value?.countryName ??

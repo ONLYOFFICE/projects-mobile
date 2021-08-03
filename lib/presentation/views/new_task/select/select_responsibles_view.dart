@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -39,6 +40,9 @@ class SelectResponsiblesView extends StatelessWidget {
           hintText: tr('searchUsers'),
           onSubmitted: (value) => usersDataSource.searchUsers(value),
         ),
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         onLeadingPressed: controller.leaveResponsiblesSelectionView,
         actions: [
           IconButton(

@@ -125,6 +125,7 @@ class ProjectEditController extends BaseProjectEditorController {
   }
 
   Future<void> showTags() async {
-    await Get.to(const TagsSelectionView(), arguments: {'controller': this});
+    await Get.to(() => const TagsSelectionView(),
+        arguments: {'controller': this});
   }
 }

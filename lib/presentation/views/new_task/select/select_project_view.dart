@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -26,6 +27,9 @@ class SelectProjectView extends StatelessWidget {
     return Scaffold(
       appBar: StyledAppBar(
         titleText: tr('selectProject'),
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchProjects'),

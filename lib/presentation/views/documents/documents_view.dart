@@ -8,6 +8,7 @@ import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -23,6 +24,7 @@ import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key key}) : super(key: key);
@@ -221,7 +223,8 @@ class DocsTitle extends StatelessWidget {
             children: <Widget>[
               InkResponse(
                 onTap: () {
-                  Get.to(DocumentsSearchView(),
+                  Get.find<NavigationController>().navigateToFullscreen(
+                      DocumentsSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
@@ -238,7 +241,8 @@ class DocsTitle extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.toNamed('DocumentsFilterScreen',
+                onTap: () async => Get.find<NavigationController>().showScreen(
+                    const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {
                       'filterController': controller.filterController
@@ -482,7 +486,8 @@ class FolderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () {
-        Get.to(FolderContentView(),
+        Get.find<NavigationController>().navigateToFullscreen(
+            FolderContentView(),
             preventDuplicates: false,
             arguments: {'folderName': element.title, 'folderId': element.id});
       },
@@ -624,16 +629,19 @@ void _onFolderPopupMenuSelected(
       }
       break;
     case 'open':
-      await Get.to(FolderContentView(), preventDuplicates: false, arguments: {
-        'folderName': selectedFolder.title,
-        'folderId': selectedFolder.id
-      });
+      Get.find<NavigationController>().navigateToFullscreen(FolderContentView(),
+          preventDuplicates: false,
+          arguments: {
+            'folderName': selectedFolder.title,
+            'folderId': selectedFolder.id
+          });
       break;
     case 'download':
       controller.downloadFolder();
       break;
     case 'copy':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'copyFolder',
@@ -643,7 +651,8 @@ void _onFolderPopupMenuSelected(
           });
       break;
     case 'move':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'moveFolder',
@@ -696,7 +705,8 @@ void _onFilePopupMenuSelected(
       await controller.downloadFile(selectedFile.viewUrl);
       break;
     case 'copy':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'copyFile',
@@ -706,7 +716,8 @@ void _onFilePopupMenuSelected(
           });
       break;
     case 'move':
-      await Get.to(DocumentsMoveOrCopyView(),
+      Get.find<NavigationController>().navigateToFullscreen(
+          DocumentsMoveOrCopyView(),
           preventDuplicates: false,
           arguments: {
             'mode': 'moveFile',

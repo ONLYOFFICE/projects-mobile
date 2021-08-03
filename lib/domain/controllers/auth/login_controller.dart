@@ -12,6 +12,12 @@ import 'package:projects/data/services/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
+import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
+import 'package:projects/presentation/views/authentication/code_view.dart';
+import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
+import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:projects/presentation/views/navigation_view.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -73,7 +79,7 @@ class LoginController extends GetxController {
         if (await sendRegistrationType()) {
           setState(ViewState.Idle);
           _clearInputFields();
-          await Get.offNamed('NavigationView');
+          await Get.off(() => NavigationView()); //fix
         } else {
           // if the device type has not been sent, the token must be deleted
           await logout();
@@ -86,10 +92,10 @@ class LoginController extends GetxController {
         if (result.response.tfaKey != null) {
           _tfaKey = result.response.tfaKey;
           _clearInputFields();
-          await Get.toNamed('GetCodeViews');
+          await Get.to(() => const GetCodeViews());
         } else {
           _clearInputFields();
-          await Get.toNamed('CodeView');
+          await Get.to(() => CodeView());
         }
       } else if (result.response.sms == true) {
         _email = email;
@@ -97,14 +103,14 @@ class LoginController extends GetxController {
         setState(ViewState.Idle);
         if (result.response.phoneNoise != null) {
           _clearInputFields();
-          await Get.toNamed('EnterSMSCodeScreen', arguments: {
+          await Get.to(() => const EnterSMSCodeScreen(), arguments: {
             'phoneNoise': result.response.phoneNoise,
             'login': _email,
             'password': _pass
           });
         } else {
           _clearInputFields();
-          await Get.toNamed('TFASmsScreen',
+          await Get.to(() => const TFASmsScreen(),
               arguments: {'login': _email, 'password': _pass});
         }
       }
@@ -163,7 +169,7 @@ class LoginController extends GetxController {
       }
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
-      await Get.toNamed('CodeView');
+      await Get.to(() => CodeView());
       return true;
     }
 
@@ -210,7 +216,7 @@ class LoginController extends GetxController {
       if (_capabilities != null) {
         capabilities = _capabilities;
         setState(ViewState.Idle);
-        await Get.toNamed('LoginView');
+        await Get.to(() => LoginView());
       } else {
         // to prevent socket exception
         _portalAdressController.dispose();

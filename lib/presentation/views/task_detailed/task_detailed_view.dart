@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -13,6 +14,7 @@ import 'package:projects/presentation/views/documents/entity_documents_view.dart
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
+import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 part 'app_bar_menu.dart';
 
@@ -64,8 +66,9 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           actions: [
             IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () => Get.toNamed('TaskEditingView',
-                    arguments: {'task': controller.task.value})),
+                onPressed: () => Get.find<NavigationController>()
+                    .navigateToFullscreen(const TaskEditingView(),
+                        arguments: {'task': controller.task.value})),
             _AppBarMenu(controller: controller)
           ],
           bottom: SizedBox(
