@@ -205,10 +205,10 @@ class TeamMembersSearchBar extends StatelessWidget {
             width: 24,
             child: InkWell(
               onTap: () {
-                Get.find<NavigationController>().navigateTo(
+                Get.find<NavigationController>().showScreen(
                     const GroupMembersSelectionView(),
                     arguments: {'controller': controller});
-                // Get.toNamed('GroupMembersSelectionView',
+                // Get.find<NavigationController>().navigateToFullscreen(const GroupMembersSelectionView',
                 //     arguments: {'controller': controller});
               },
               child: AppIcon(

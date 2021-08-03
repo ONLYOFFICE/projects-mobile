@@ -34,9 +34,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
 class SubtaskCell extends StatelessWidget {
   final Subtask subtask;
@@ -53,7 +55,8 @@ class SubtaskCell extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
       child: InkWell(
-        onTap: () => Get.toNamed('SubtaskDetailedView',
+        onTap: () => Get.find<NavigationController>().navigateToFullscreen(
+            const SubtaskDetailedView(),
             arguments: {'controller': subtaskController}),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

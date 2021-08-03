@@ -105,10 +105,10 @@ class _DescriptionTileState extends State<DescriptionTile>
         var textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
-          onTap: () => Get.find<NavigationController>().navigateTo(
+          onTap: () => Get.find<NavigationController>().showScreen(
               const TaskDescription(),
               arguments: {'controller': widget.controller}),
-          // Get.toNamed('TaskDescription',
+          // Get.find<NavigationController>().navigateToFullscreen(const TaskDescription',
           //     arguments: {'controller': widget.controller}),
           child: Column(
             children: [

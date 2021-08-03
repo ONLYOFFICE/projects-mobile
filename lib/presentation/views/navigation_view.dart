@@ -37,7 +37,6 @@ import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
@@ -52,11 +51,20 @@ import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 class NavigationView extends StatelessWidget {
   NavigationView({Key key}) : super(key: key);
-  final NavigationController controller = Get.find<NavigationController>();
 
   @override
   Widget build(BuildContext context) {
     var _pages = [
+      const DashboardView(),
+      const TasksView(),
+      const ProjectsView(),
+      const MoreView(),
+      const SelfProfileScreen(),
+      const PortalDiscussionsView(),
+      const PortalDocumentsView(),
+    ];
+
+    var _tabletPages = [
       const DashboardView(),
       const TasksView(),
       const ProjectsView(),
@@ -77,12 +85,7 @@ class NavigationView extends StatelessWidget {
             iconSize: _iconSize,
           );
         } else {
-          const _iconSize = 34.0;
-          return TabletLayout(
-            controller: controller,
-            iconSize: _iconSize,
-            pages: _pages,
-          );
+          return TabletLayout(contentView: _tabletPages[controller.tabIndex]);
         }
       },
     );
@@ -90,22 +93,15 @@ class NavigationView extends StatelessWidget {
 }
 
 class TabletLayout extends StatelessWidget {
-  final controller;
+  final Widget contentView;
+  const TabletLayout({Key key, @required this.contentView}) : super(key: key);
 
-  const TabletLayout({
-    Key key,
-    @required double iconSize,
-    @required List<StatelessWidget> pages,
-    @required this.controller,
-  })  : _iconSize = iconSize,
-        _pages = pages,
-        super(key: key);
-
-  final double _iconSize;
-  final List<StatelessWidget> _pages;
+  final double _iconSize = 34;
 
   @override
   Widget build(BuildContext context) {
+    var navigationController = Get.find<NavigationController>();
+
     return Scaffold(
       body: SafeArea(
         child: Row(
@@ -118,8 +114,16 @@ class TabletLayout extends StatelessWidget {
                 children: [
                   Flexible(
                     child: NavigationRail(
-                      selectedIndex: controller.tabIndex,
-                      onDestinationSelected: controller.changeTabletIndex,
+                      selectedIndex: navigationController.tabIndex,
+                      onDestinationSelected: (value) => {
+                        if (Get.routing.current != '/' &&
+                            Get.routing.current != '/NavigationView' &&
+                            Get.routing.current != 'NavigationView')
+                          Get.to(() => NavigationView(),
+                              transition: Transition.noTransition),
+                        Get.find<NavigationController>()
+                            .changeTabletIndex(value),
+                      },
                       destinations: [
                         NavigationRailDestination(
                             icon: AppIcon(
@@ -186,26 +190,6 @@ class TabletLayout extends StatelessWidget {
                                 color: Get.theme.colors().onNavBar,
                                 height: _iconSize),
                             label: Text(tr('documents'))),
-                        // NavigationRailDestination(
-                        //     icon: AppIcon(
-                        //         icon: SvgIcons.avatar,
-                        //         color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                        //         height: _iconSize),
-                        //     selectedIcon: AppIcon(
-                        //         icon: SvgIcons.avatar,
-                        //         color: Get.theme.colors().onNavBar,
-                        //         height: _iconSize),
-                        //     label: Text(tr('documents'))),
-                        // NavigationRailDestination(
-                        //     icon: AppIcon(
-                        //         icon: SvgIcons.settings,
-                        //         color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                        //         height: _iconSize),
-                        //     selectedIcon: AppIcon(
-                        //         icon: SvgIcons.settings,
-                        //         color: Get.theme.colors().onNavBar,
-                        //         height: _iconSize),
-                        //     label: Text(tr('settings'))),
                       ],
                     ),
                   ),
@@ -223,15 +207,12 @@ class TabletLayout extends StatelessWidget {
                             height: 40,
                           ),
                           onPressed: () => Get.find<NavigationController>()
-                              .navigateTo(const SelfProfileScreen(),
+                              .showScreen(const SelfProfileScreen(),
                                   arguments: {
                                 'showBackButton': true,
                                 'showSettingsButton': false
                               }),
                         ),
-                        //  const SizedBox(
-                        //   height: 80,
-                        // ),
                         IconButton(
                           iconSize: 64,
                           icon: AppIcon(
@@ -241,7 +222,7 @@ class TabletLayout extends StatelessWidget {
                             color: Get.theme.colors().onNavBar.withOpacity(0.4),
                           ),
                           onPressed: () => Get.find<NavigationController>()
-                              .navigateTo(const SettingsScreen()),
+                              .showScreen(const SettingsScreen()),
                         ),
                         const SizedBox(
                           height: 40,
@@ -252,7 +233,7 @@ class TabletLayout extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(child: _pages[controller.tabIndex]),
+            Expanded(child: contentView),
           ],
         ),
       ),

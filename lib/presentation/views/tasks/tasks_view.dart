@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
@@ -71,8 +72,11 @@ class TasksView extends StatelessWidget {
               bottom: controller.fabIsRaised.value == true ? 48 : 0),
           duration: const Duration(milliseconds: 100),
           child: StyledFloatingActionButton(
-              onPressed: () => Get.toNamed('NewTaskView',
-                  arguments: {'projectDetailed': null}),
+              onPressed: () => Get.find<NavigationController>()
+                  .navigateToFullscreen(const NewTaskView(),
+                      arguments: {'projectDetailed': null}),
+              // Get.find<NavigationController>().navigateToFullscreen(const NewTaskView',
+              //     arguments: {'projectDetailed': null}),
               child: AppIcon(icon: SvgIcons.add_fab)))),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
@@ -95,12 +99,12 @@ class TasksView extends StatelessWidget {
               IconButton(
                 icon: FiltersButton(controler: controller),
                 onPressed: () async => Get.find<NavigationController>()
-                    .navigateTo(const TasksFilterScreen(),
+                    .showScreen(const TasksFilterScreen(),
                         preventDuplicates: false,
                         arguments: {
                       'filterController': controller.filterController
                     }),
-                //  () async => Get.toNamed('TasksFilterScreen',
+                //  () async => Get.find<NavigationController>().navigateToFullscreen(const TasksFilterScreen',
                 //     preventDuplicates: false,
                 //     arguments: {
                 //       'filterController': controller.filterController

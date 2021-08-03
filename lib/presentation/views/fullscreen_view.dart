@@ -33,10 +33,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-class FullscreenView extends StatelessWidget {
+class ModalScreenView extends StatelessWidget {
   final Widget contentView;
 
-  const FullscreenView({
+  const ModalScreenView({
     Key key,
     @required this.contentView,
   }) : super(key: key);

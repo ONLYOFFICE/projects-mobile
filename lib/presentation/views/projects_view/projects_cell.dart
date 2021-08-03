@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
@@ -46,6 +47,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
+import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
   final ProjectDetailed item;
@@ -59,8 +61,12 @@ class ProjectCell extends StatelessWidget {
     return Container(
       height: 72,
       child: InkWell(
-        onTap: () => Get.toNamed('ProjectDetailedView',
+        onTap: () => Get.find<NavigationController>().navigateToFullscreen(
+            ProjectDetailedView(),
             arguments: {'projectDetailed': itemController.projectData}),
+
+        // Get.find<NavigationController>().navigateToFullscreen(const ProjectDetailedView',
+        //     arguments: {'projectDetailed': itemController.projectData}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

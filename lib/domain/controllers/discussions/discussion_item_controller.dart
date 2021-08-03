@@ -43,6 +43,8 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
+import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -120,8 +122,8 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> toDiscussionEditingScreen() async {
-    await Get.toNamed(
-      'DiscussionEditingScreen',
+    Get.find<NavigationController>().navigateToFullscreen(
+      const DiscussionEditingScreen(),
       arguments: {'discussion': discussion.value},
     );
   }
@@ -159,7 +161,7 @@ class DiscussionItemController extends GetxController {
   }
 
   void toNewCommentView() {
-    Get.find<NavigationController>().navigateTo(
+    Get.find<NavigationController>().showScreen(
       const NewCommentView(),
       arguments: {
         'controller':
@@ -167,7 +169,7 @@ class DiscussionItemController extends GetxController {
       },
     );
 
-    // Get.toNamed('NewCommentView', arguments: {
+    // Get.find<NavigationController>().navigateToFullscreen(const NewCommentView', arguments: {
     //   'controller': Get.put(
     //     NewDiscussionCommentController(idFrom: discussion.value.id)
     //   )
@@ -190,8 +192,8 @@ class DiscussionItemController extends GetxController {
       ),
     );
 
-    Get.toNamed(
-      'ManageDiscussionSubscribersScreen',
+    Get.find<NavigationController>().navigateToFullscreen(
+      const ManageDiscussionSubscribersScreen(),
       arguments: {
         'controller': controller,
         'onConfirm': () => controller.confirm(context),

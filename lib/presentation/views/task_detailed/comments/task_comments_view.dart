@@ -80,14 +80,14 @@ class TaskCommentsView extends StatelessWidget {
               if (controller?.task?.value?.canCreateComment == null ||
                   controller?.task?.value?.canCreateComment == true)
                 AddCommentButton(
-                  onPressed: () => Get.find<NavigationController>().navigateTo(
+                  onPressed: () => Get.find<NavigationController>().showScreen(
                     const NewCommentView(),
                     arguments: {
                       'controller': Get.put(NewTaskCommentController(
                           idFrom: controller.task.value.id))
                     },
 
-                    //  Get.toNamed('NewCommentView', arguments: {
+                    //  Get.find<NavigationController>().navigateToFullscreen(const NewCommentView', arguments: {
                     //   'controller': Get.put(NewTaskCommentController(
                     //       idFrom: controller.task.value.id))
                     // // },),

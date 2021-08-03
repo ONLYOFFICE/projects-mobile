@@ -36,7 +36,9 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/profile/profile_screen.dart';
 
 class PortalUserItemController extends GetxController {
   final _downloadService = locator<DownloadService>();
@@ -85,6 +87,8 @@ class PortalUserItemController extends GetxController {
         selectionMode.value == UserSelectionMode.Multiple)
       isSelected.value = !isSelected.value;
     else
-      Get.toNamed('ProfileScreen', arguments: {'portalUser': portalUser});
+      Get.find<NavigationController>().navigateToFullscreen(
+          const ProfileScreen(),
+          arguments: {'portalUser': portalUser});
   }
 }

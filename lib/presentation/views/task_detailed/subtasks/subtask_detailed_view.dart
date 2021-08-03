@@ -33,12 +33,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 
 class SubtaskDetailedView extends StatelessWidget {
   const SubtaskDetailedView({Key key}) : super(key: key);
@@ -186,11 +188,13 @@ void _onSelected(context, value, SubtaskController controller) {
       );
       break;
     case 'edit':
-      Get.toNamed('NewSubtaskView', arguments: {
-        'taskId': controller.subtask.value.taskId,
-        'forEditing': true,
-        'subtask': controller.subtask.value,
-      });
+      Get.find<NavigationController>().navigateToFullscreen(
+          const CreatingAndEditingSubtaskView(),
+          arguments: {
+            'taskId': controller.subtask.value.taskId,
+            'forEditing': true,
+            'subtask': controller.subtask.value,
+          });
       break;
     case 'copy':
       controller.copySubtask(

@@ -38,6 +38,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/subtasks_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
@@ -47,6 +48,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
 class NewSubtaskController extends GetxController
     implements SubtaskActionController {
@@ -194,7 +196,8 @@ class NewSubtaskController extends GetxController
             buttonOnTap: () {
               var controller = Get.put(SubtaskController(subtask: newSubtask),
                   tag: newSubtask.id.toString());
-              return Get.toNamed('SubtaskDetailedView',
+              return Get.find<NavigationController>().navigateToFullscreen(
+                  const SubtaskDetailedView(),
                   arguments: {'controller': controller});
             }));
       }

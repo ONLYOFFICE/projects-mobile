@@ -39,12 +39,14 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 import 'package:projects/data/services/user_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 
 abstract class BaseProjectEditorController extends GetxController {
   final _userService = locator<UserService>();
@@ -181,7 +183,9 @@ abstract class BaseProjectEditorController extends GetxController {
     if (selectedTeamMembers.length == 1) {
       selectedTeamMembers.clear();
     } else {
-      Get.toNamed('TeamMembersSelectionView', arguments: {'controller': this});
+      Get.find<NavigationController>().navigateToFullscreen(
+          const TeamMembersSelectionView(),
+          arguments: {'controller': this});
     }
   }
 

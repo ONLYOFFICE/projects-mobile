@@ -33,12 +33,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task_service.dart';
+import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 class TasksController extends BaseController {
   final _api = locator<TaskService>();
@@ -116,5 +118,6 @@ class TasksController extends BaseController {
   }
 
   @override
-  void showSearch() => Get.toNamed('TasksSearchScreen');
+  void showSearch() => Get.find<NavigationController>()
+      .navigateToFullscreen(const TasksSearchScreen());
 }

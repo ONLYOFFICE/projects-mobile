@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
@@ -42,6 +43,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
+import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class TaskCell extends StatelessWidget {
   final PortalTask task;
@@ -54,7 +56,8 @@ class TaskCell extends StatelessWidget {
         Get.put(TaskItemController(task), tag: task.id.toString());
 
     return InkWell(
-      onTap: () => Get.toNamed('TaskDetailedView',
+      onTap: () => Get.find<NavigationController>().navigateToFullscreen(
+          TaskDetailedView(),
           arguments: {'controller': itemController}),
       child: Container(
         height: 72,

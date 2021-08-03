@@ -201,12 +201,12 @@ class Header extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       onTap: () async => Get.find<NavigationController>()
-                          .navigateTo(const TasksFilterScreen(),
+                          .showScreen(const TasksFilterScreen(),
                               preventDuplicates: false,
                               arguments: {
                             'filterController': controller.filterController
                           }),
-                      //  Get.toNamed('TasksFilterScreen',
+                      //  Get.find<NavigationController>().navigateToFullscreen(const TasksFilterScreen',
                       //     preventDuplicates: false,
                       //     arguments: {
                       //       'filterController': controller.filterController

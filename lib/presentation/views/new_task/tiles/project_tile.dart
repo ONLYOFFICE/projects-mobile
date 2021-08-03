@@ -62,11 +62,11 @@ class ProjectTile extends StatelessWidget {
               : null,
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().navigateTo(
+          onTap: () => Get.find<NavigationController>().showScreen(
               const SelectProjectView(),
               arguments: {'controller': controller}),
         );
-        // Get.toNamed('SelectProjectView',
+        // Get.find<NavigationController>().navigateToFullscreen(const SelectProjectView',
         //     arguments: {'controller': controller}));
       },
     );

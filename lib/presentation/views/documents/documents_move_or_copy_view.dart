@@ -297,7 +297,8 @@ class _Title extends StatelessWidget {
                   var target;
                   target = controller.target;
 
-                  Get.to(DocumentsMoveSearchView(),
+                  Get.find<NavigationController>().navigateToFullscreen(
+                      DocumentsMoveSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'mode': controller.mode,
@@ -318,13 +319,13 @@ class _Title extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.find<NavigationController>().navigateTo(
+                onTap: () async => Get.find<NavigationController>().showScreen(
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {
                       'filterController': controller.filterController
                     }),
-                //  Get.toNamed('DocumentsFilterScreen',
+                //  Get.find<NavigationController>().navigateToFullscreen(const DocumentsFilterScreen',
                 //     preventDuplicates: false,
                 //     arguments: {
                 //       'filterController': controller.filterController
@@ -354,14 +355,17 @@ class _MoveFolderCell extends StatelessWidget {
     return InkResponse(
       onTap: () {
         var target = controller.target;
-        Get.to(_FolderContentView(), preventDuplicates: false, arguments: {
-          'mode': controller.mode,
-          'target': target,
-          'currentFolder': element,
-          'initialFolderId': controller.initialFolderId,
-          'foldersCount': controller.foldersCount,
-          'refreshCalback': controller.refreshCalback,
-        });
+        Get.find<NavigationController>().navigateToFullscreen(
+            _FolderContentView(),
+            preventDuplicates: false,
+            arguments: {
+              'mode': controller.mode,
+              'target': target,
+              'currentFolder': element,
+              'initialFolderId': controller.initialFolderId,
+              'foldersCount': controller.foldersCount,
+              'refreshCalback': controller.refreshCalback,
+            });
       },
       child: Container(
         height: 72,

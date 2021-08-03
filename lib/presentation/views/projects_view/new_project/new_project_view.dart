@@ -79,10 +79,10 @@ class NewProject extends StatelessWidget {
             TitleInput(controller: controller),
             InkWell(
               onTap: () {
-                Get.find<NavigationController>().navigateTo(
+                Get.find<NavigationController>().showScreen(
                     const ProjectManagerSelectionView(),
                     arguments: {'controller': controller});
-                // Get.toNamed('ProjectManagerSelectionView',
+                // Get.find<NavigationController>().navigateToFullscreen(const ProjectManagerSelectionView',
                 //     arguments: {'controller': controller});
               },
               child: ProjectManager(
@@ -91,10 +91,10 @@ class NewProject extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.find<NavigationController>().navigateTo(
+                Get.find<NavigationController>().showScreen(
                     const TeamMembersSelectionView(),
                     arguments: {'controller': controller});
-                // Get.toNamed('TeamMembersSelectionView',
+                // Get.find<NavigationController>().navigateToFullscreen(const TeamMembersSelectionView',
                 //     arguments: {'controller': controller});
               },
               child: TeamMembers(
@@ -135,11 +135,11 @@ class DescriptionTile extends StatelessWidget {
                   size: 20,
                   color: Get.theme.colors().onSurface.withOpacity(0.6))
               : null,
-          onTap: () => Get.find<NavigationController>().navigateTo(
+          onTap: () => Get.find<NavigationController>().showScreen(
               const NewProjectDescription(),
               arguments: {'controller': controller}),
         );
-        //  Get.toNamed('NewProjectDescription',
+        //  Get.find<NavigationController>().navigateToFullscreen(const NewProjectDescription',
         //     arguments: {'controller': controller}));
       },
     );
@@ -254,11 +254,11 @@ class ProjectManager extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.find<NavigationController>().navigateTo(
+                                  Get.find<NavigationController>().showScreen(
                                       const ProjectManagerSelectionView(),
                                       arguments: {'controller': controller});
                                 },
-                                //   Get.toNamed('ProjectManagerSelectionView',
+                                //   Get.find<NavigationController>().navigateToFullscreen(const ProjectManagerSelectionView',
                                 //       arguments: {'controller': controller});
                                 // },
                                 child: Obx(
@@ -378,10 +378,10 @@ class TeamMembers extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.find<NavigationController>().navigateTo(
+                                  Get.find<NavigationController>().showScreen(
                                       const TeamMembersSelectionView(),
                                       arguments: {'controller': controller});
-                                  // Get.toNamed('TeamMembersSelectionView',
+                                  // Get.find<NavigationController>().navigateToFullscreen(const TeamMembersSelectionView',
                                   //     arguments: {'controller': controller});
                                 },
                                 child: Text(

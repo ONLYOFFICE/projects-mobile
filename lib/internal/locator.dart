@@ -139,6 +139,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserService());
 
   Get.lazyPut(() => PlatformController());
+  Get.lazyPut(() => NavigationController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
@@ -177,7 +178,7 @@ void setupLocator() {
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);
   Get.lazyPut(() => MilestonesFilterController(), fenix: true);
-  Get.lazyPut(() => NavigationController(), fenix: true);
+
   Get.lazyPut(() => NewMilestoneController(), fenix: true);
   Get.lazyPut(() => PortalInfoController(), fenix: true);
 
