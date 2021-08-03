@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -57,6 +58,9 @@ class GroupMembersSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('addMembersOf'),
         elevation: 2,
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
         actions: [
           IconButton(
             icon: const Icon(Icons.check_outlined),

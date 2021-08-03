@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
@@ -49,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 
 class DocumentsMoveOrCopyView extends StatelessWidget {
   DocumentsMoveOrCopyView({Key key}) : super(key: key);
@@ -316,11 +318,17 @@ class _Title extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.toNamed('DocumentsFilterScreen',
+                onTap: () async => Get.find<NavigationController>().navigateTo(
+                    const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {
                       'filterController': controller.filterController
                     }),
+                //  Get.toNamed('DocumentsFilterScreen',
+                //     preventDuplicates: false,
+                //     arguments: {
+                //       'filterController': controller.filterController
+                //     }),
                 child: FiltersButton(controler: controller),
               ),
             ],
