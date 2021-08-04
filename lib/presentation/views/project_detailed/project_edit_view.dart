@@ -64,7 +64,7 @@ class EditProjectView extends StatelessWidget {
                 DescriptionTile(controller: editProjectController),
                 InkWell(
                   onTap: () {
-                    Get.find<NavigationController>().showScreen(
+                    Get.find<NavigationController>().toScreen(
                         const ProjectManagerSelectionView(),
                         arguments: {'controller': editProjectController});
                   },
@@ -74,7 +74,7 @@ class EditProjectView extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Get.find<NavigationController>().showScreen(
+                    Get.find<NavigationController>().toScreen(
                         const TeamMembersSelectionView(),
                         arguments: {'controller': editProjectController});
                   },

@@ -28,7 +28,7 @@ class MilestoneTile extends StatelessWidget {
             // because color is always black
             isSelected: true,
             caption: '${tr('milestone')}:',
-            onTap: () => Get.find<NavigationController>().navigateToFullscreen(
+            onTap: () => Get.find<NavigationController>().to(
                 const SelectMilestoneView(),
                 arguments: {'controller': controller}));
       },

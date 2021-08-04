@@ -7,7 +7,6 @@ import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 
-import 'package:projects/presentation/shared/widgets/styled_divider.dart';
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
 
@@ -47,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                           : tr('disabled'),
                       enableIconOpacity: true,
                       icon: SvgIcons.passcode,
-                      onTap: () => Get.find<NavigationController>().showScreen(
+                      onTap: () => Get.find<NavigationController>().toScreen(
                         const PasscodeSettingsScreen(),
                       ),
                     ),
@@ -56,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
-                      onTap: () => Get.find<NavigationController>().showScreen(
+                      onTap: () => Get.find<NavigationController>().toScreen(
                         const ColorThemeSelectionScreen(),
                       ),
                     ),

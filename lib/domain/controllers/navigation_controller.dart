@@ -46,7 +46,7 @@ class NavigationController extends GetxController {
 
   void clearCurrentIndex() => tabIndex = null;
 
-  void showScreen(Widget widget,
+  void toScreen(Widget widget,
       {bool preventDuplicates, Map<String, dynamic> arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
@@ -63,7 +63,7 @@ class NavigationController extends GetxController {
     }
   }
 
-  void navigateToFullscreen(Widget widget,
+  void to(Widget widget,
       {bool preventDuplicates, Map<String, dynamic> arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
@@ -73,6 +73,23 @@ class NavigationController extends GetxController {
       );
     } else {
       Get.to(
+        () => TabletLayout(contentView: widget),
+        preventDuplicates: preventDuplicates ?? false,
+        arguments: arguments,
+      );
+    }
+  }
+
+  void off(Widget widget,
+      {bool preventDuplicates, Map<String, dynamic> arguments}) {
+    if (Get.find<PlatformController>().isMobile) {
+      Get.off(
+        () => widget,
+        preventDuplicates: preventDuplicates ?? true,
+        arguments: arguments,
+      );
+    } else {
+      Get.off(
         () => TabletLayout(contentView: widget),
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,

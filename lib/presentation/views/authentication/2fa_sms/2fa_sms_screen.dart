@@ -88,7 +88,7 @@ class _CountrySelection extends StatelessWidget {
             padding: const EdgeInsets.only(left: 2),
             child: TextButton(
               onPressed: () => Get.find<NavigationController>()
-                  .navigateToFullscreen(const SelectCountryScreen()),
+                  .to(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
                   controller?.deviceCountry?.value?.countryName ??

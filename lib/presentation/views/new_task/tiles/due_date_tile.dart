@@ -34,7 +34,7 @@ class DueDateTile extends StatelessWidget {
                   onPressed: () => controller.changeDueDate(null))
               : null,
           suffixPadding: const EdgeInsets.only(right: 10),
-          onTap: () => Get.find<NavigationController>().showScreen(
+          onTap: () => Get.find<NavigationController>().toScreen(
               const SelectDateView(),
               arguments: {'controller': controller, 'startDate': false}),
         );

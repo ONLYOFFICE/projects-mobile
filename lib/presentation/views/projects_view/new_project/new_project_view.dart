@@ -47,7 +47,7 @@ class NewProject extends StatelessWidget {
             TitleInput(controller: controller),
             InkWell(
               onTap: () {
-                Get.find<NavigationController>().showScreen(
+                Get.find<NavigationController>().toScreen(
                     const ProjectManagerSelectionView(),
                     arguments: {'controller': controller});
               },
@@ -57,7 +57,7 @@ class NewProject extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                Get.find<NavigationController>().showScreen(
+                Get.find<NavigationController>().toScreen(
                     const TeamMembersSelectionView(),
                     arguments: {'controller': controller});
               },
@@ -99,7 +99,7 @@ class DescriptionTile extends StatelessWidget {
                   size: 20,
                   color: Get.theme.colors().onSurface.withOpacity(0.6))
               : null,
-          onTap: () => Get.find<NavigationController>().showScreen(
+          onTap: () => Get.find<NavigationController>().toScreen(
               const NewProjectDescription(),
               arguments: {'controller': controller}),
         );
@@ -216,7 +216,7 @@ class ProjectManager extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.find<NavigationController>().showScreen(
+                                  Get.find<NavigationController>().toScreen(
                                       const ProjectManagerSelectionView(),
                                       arguments: {'controller': controller});
                                 },
@@ -337,7 +337,7 @@ class TeamMembers extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  Get.find<NavigationController>().showScreen(
+                                  Get.find<NavigationController>().toScreen(
                                       const TeamMembersSelectionView(),
                                       arguments: {'controller': controller});
                                 },

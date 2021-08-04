@@ -223,14 +223,12 @@ class NewMilestoneController extends GetxController {
   void enableRemindBeforeDueDate(value) => remindBeforeDueDate.value = value;
 
   void onProjectTilePressed() {
-    Get.find<NavigationController>().navigateToFullscreen(
-        const SelectProjectView(),
-        arguments: {'controller': this});
+    Get.find<NavigationController>()
+        .to(const SelectProjectView(), arguments: {'controller': this});
   }
 
   void onDueDateTilePressed() {
-    Get.find<NavigationController>().navigateToFullscreen(
-        const SelectDateView(),
+    Get.find<NavigationController>().to(const SelectDateView(),
         arguments: {'controller': this, 'startDate': false});
   }
 }

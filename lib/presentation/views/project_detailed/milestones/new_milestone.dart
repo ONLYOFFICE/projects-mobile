@@ -270,7 +270,7 @@ class DescriptionTile extends StatelessWidget {
                     color: Get.theme.colors().onSurface.withOpacity(0.6))
                 : null,
             onTap: () => Get.find<NavigationController>()
-                .navigateToFullscreen(const NewMilestoneDescription()));
+                .to(const NewMilestoneDescription()));
       },
     );
   }
@@ -302,7 +302,7 @@ class ProjectTile extends StatelessWidget {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
                   Get.find<NavigationController>()
-                      .navigateToFullscreen(const SelectProjectForMilestone()),
+                      .to(const SelectProjectForMilestone()),
                 });
       },
     );
@@ -336,7 +336,7 @@ class ResponsibleTile extends StatelessWidget {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
           Get.find<NavigationController>()
-              .navigateToFullscreen(const SelectMilestoneResponsible())
+              .to(const SelectMilestoneResponsible())
         },
       ),
     );

@@ -120,13 +120,12 @@ class ProjectDetailsController extends GetxController {
   }
 
   void createNewMilestone() {
-    Get.find<NavigationController>().navigateToFullscreen(
-        const NewMilestoneView(),
+    Get.find<NavigationController>().to(const NewMilestoneView(),
         arguments: {'projectDetailed': projectDetailed});
   }
 
   void createTask() {
-    Get.find<NavigationController>().navigateToFullscreen(const NewTaskView(),
+    Get.find<NavigationController>().to(const NewTaskView(),
         arguments: {'projectDetailed': projectDetailed});
   }
 

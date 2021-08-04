@@ -101,10 +101,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             projectDetailed.canEdit
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => Get.find<NavigationController>()
-                        .navigateToFullscreen(
-                            EditProjectView(projectDetailed: projectDetailed),
-                            arguments: {'projectDetailed': projectDetailed}))
+                    onPressed: () => Get.find<NavigationController>().to(
+                        EditProjectView(projectDetailed: projectDetailed),
+                        arguments: {'projectDetailed': projectDetailed}))
                 : const SizedBox(),
             _ProjectContextMenu(controller: projectController)
           ],

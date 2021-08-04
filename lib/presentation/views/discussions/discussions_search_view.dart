@@ -42,7 +42,7 @@ class DiscussionsSearchScreen extends StatelessWidget {
                   return DiscussionTile(
                     discussion: controller.paginationController.data[index],
                     onTap: () => Get.find<NavigationController>()
-                        .navigateToFullscreen(DiscussionDetailed(), arguments: {
+                        .to(DiscussionDetailed(), arguments: {
                       'discussion': controller.paginationController.data[index]
                     }),
                   );
