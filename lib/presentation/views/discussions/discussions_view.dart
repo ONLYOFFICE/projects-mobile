@@ -85,7 +85,7 @@ class PortalDiscussionsView extends StatelessWidget {
               IconButton(
                   icon: FiltersButton(controler: controller),
                   onPressed: () async => Get.find<NavigationController>()
-                          .showScreen(const DiscussionsFilterScreen(),
+                          .toScreen(const DiscussionsFilterScreen(),
                               preventDuplicates: false,
                               arguments: {
                             'filterController': controller.filterController

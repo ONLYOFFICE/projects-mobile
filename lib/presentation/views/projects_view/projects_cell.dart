@@ -61,8 +61,7 @@ class ProjectCell extends StatelessWidget {
     return Container(
       height: 72,
       child: InkWell(
-        onTap: () => Get.find<NavigationController>().navigateToFullscreen(
-            ProjectDetailedView(),
+        onTap: () => Get.find<NavigationController>().to(ProjectDetailedView(),
             arguments: {'projectDetailed': itemController.projectData}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,

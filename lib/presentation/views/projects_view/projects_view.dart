@@ -172,7 +172,7 @@ class _Title extends StatelessWidget {
               InkResponse(
                 onTap: () async => {
                   Get.find<NavigationController>()
-                      .showScreen(const ProjectsFilterScreen())
+                      .toScreen(const ProjectsFilterScreen())
                 },
                 child: FiltersButton(controler: controller),
               ),

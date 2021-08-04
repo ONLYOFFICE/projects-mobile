@@ -55,7 +55,7 @@ class SubtaskCell extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
       child: InkWell(
-        onTap: () => Get.find<NavigationController>().navigateToFullscreen(
+        onTap: () => Get.find<NavigationController>().to(
             const SubtaskDetailedView(),
             arguments: {'controller': subtaskController}),
         child: Column(

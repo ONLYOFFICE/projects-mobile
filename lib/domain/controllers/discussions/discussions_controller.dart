@@ -105,13 +105,12 @@ class DiscussionsController extends BaseController {
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
-      .navigateToFullscreen(DiscussionDetailed(),
-          arguments: {'discussion': discussion});
+      .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() => Get.find<NavigationController>()
-      .navigateToFullscreen(const NewDiscussionScreen());
+  void toNewDiscussionScreen() =>
+      Get.find<NavigationController>().to(const NewDiscussionScreen());
 
   @override
-  void showSearch() => Get.find<NavigationController>()
-      .navigateToFullscreen(const DiscussionsSearchScreen());
+  void showSearch() =>
+      Get.find<NavigationController>().to(const DiscussionsSearchScreen());
 }

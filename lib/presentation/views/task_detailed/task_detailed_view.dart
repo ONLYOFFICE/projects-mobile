@@ -98,9 +98,9 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           actions: [
             IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () => Get.find<NavigationController>()
-                    .navigateToFullscreen(const TaskEditingView(),
-                        arguments: {'task': controller.task.value})),
+                onPressed: () => Get.find<NavigationController>().to(
+                    const TaskEditingView(),
+                    arguments: {'task': controller.task.value})),
             _AppBarMenu(controller: controller)
           ],
           bottom: SizedBox(

@@ -201,7 +201,7 @@ class Header extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       onTap: () async => Get.find<NavigationController>()
-                          .showScreen(const TasksFilterScreen(),
+                          .toScreen(const TasksFilterScreen(),
                               preventDuplicates: false,
                               arguments: {
                             'filterController': controller.filterController

@@ -108,12 +108,11 @@ class Comment extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           return Get.find<NavigationController>()
-                              .navigateToFullscreen(const ReplyCommentView(),
-                                  arguments: {
-                                'comment': controller.comment.value,
-                                'discussionId': discussionId,
-                                'taskId': taskId,
-                              });
+                              .to(const ReplyCommentView(), arguments: {
+                            'comment': controller.comment.value,
+                            'discussionId': discussionId,
+                            'taskId': taskId,
+                          });
                         },
                         child: Text(
                           'Ответить',
