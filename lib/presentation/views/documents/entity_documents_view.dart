@@ -188,8 +188,7 @@ class _DocsTitle extends StatelessWidget {
             children: <Widget>[
               InkResponse(
                 onTap: () {
-                  Get.find<NavigationController>().navigateToFullscreen(
-                      DocumentsSearchView(),
+                  Get.find<NavigationController>().to(DocumentsSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
@@ -206,7 +205,7 @@ class _DocsTitle extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.find<NavigationController>().showScreen(
+                onTap: () async => Get.find<NavigationController>().toScreen(
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {

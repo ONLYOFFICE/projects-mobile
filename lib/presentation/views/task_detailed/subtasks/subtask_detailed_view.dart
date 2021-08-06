@@ -188,13 +188,12 @@ void _onSelected(context, value, SubtaskController controller) {
       );
       break;
     case 'edit':
-      Get.find<NavigationController>().navigateToFullscreen(
-          const CreatingAndEditingSubtaskView(),
-          arguments: {
-            'taskId': controller.subtask.value.taskId,
-            'forEditing': true,
-            'subtask': controller.subtask.value,
-          });
+      Get.find<NavigationController>()
+          .to(const CreatingAndEditingSubtaskView(), arguments: {
+        'taskId': controller.subtask.value.taskId,
+        'forEditing': true,
+        'subtask': controller.subtask.value,
+      });
       break;
     case 'copy':
       controller.copySubtask(

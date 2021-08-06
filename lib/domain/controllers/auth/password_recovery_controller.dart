@@ -58,8 +58,7 @@ class PasswordRecoveryController extends GetxController {
     if (_checkEmail()) {
       var result = await _authService.passwordRecovery(_emailController.text);
       if (result != null) {
-        Get.find<NavigationController>()
-            .navigateToFullscreen(const PasswordRecoveryScreen2());
+        Get.find<NavigationController>().to(const PasswordRecoveryScreen2());
       }
     }
   }

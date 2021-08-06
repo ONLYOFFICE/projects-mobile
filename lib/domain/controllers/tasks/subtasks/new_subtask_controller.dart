@@ -196,7 +196,7 @@ class NewSubtaskController extends GetxController
             buttonOnTap: () {
               var controller = Get.put(SubtaskController(subtask: newSubtask),
                   tag: newSubtask.id.toString());
-              return Get.find<NavigationController>().navigateToFullscreen(
+              return Get.find<NavigationController>().to(
                   const SubtaskDetailedView(),
                   arguments: {'controller': controller});
             }));

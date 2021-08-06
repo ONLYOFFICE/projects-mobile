@@ -255,8 +255,7 @@ class DocsTitle extends StatelessWidget {
             children: <Widget>[
               InkResponse(
                 onTap: () {
-                  Get.find<NavigationController>().navigateToFullscreen(
-                      DocumentsSearchView(),
+                  Get.find<NavigationController>().to(DocumentsSearchView(),
                       preventDuplicates: false,
                       arguments: {
                         'folderName': controller.screenName.value,
@@ -273,7 +272,7 @@ class DocsTitle extends StatelessWidget {
               ),
               const SizedBox(width: 24),
               InkResponse(
-                onTap: () async => Get.find<NavigationController>().showScreen(
+                onTap: () async => Get.find<NavigationController>().toScreen(
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {
@@ -518,8 +517,7 @@ class FolderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () {
-        Get.find<NavigationController>().navigateToFullscreen(
-            FolderContentView(),
+        Get.find<NavigationController>().to(FolderContentView(),
             preventDuplicates: false,
             arguments: {'folderName': element.title, 'folderId': element.id});
       },
@@ -661,7 +659,7 @@ void _onFolderPopupMenuSelected(
       }
       break;
     case 'open':
-      Get.find<NavigationController>().navigateToFullscreen(FolderContentView(),
+      Get.find<NavigationController>().to(FolderContentView(),
           preventDuplicates: false,
           arguments: {
             'folderName': selectedFolder.title,
@@ -672,26 +670,22 @@ void _onFolderPopupMenuSelected(
       controller.downloadFolder();
       break;
     case 'copy':
-      Get.find<NavigationController>().navigateToFullscreen(
-          DocumentsMoveOrCopyView(),
-          preventDuplicates: false,
-          arguments: {
-            'mode': 'copyFolder',
-            'target': selectedFolder.id,
-            'initialFolderId': controller.currentFolder,
-            'refreshCalback': controller.refreshContent
-          });
+      Get.find<NavigationController>()
+          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+        'mode': 'copyFolder',
+        'target': selectedFolder.id,
+        'initialFolderId': controller.currentFolder,
+        'refreshCalback': controller.refreshContent
+      });
       break;
     case 'move':
-      Get.find<NavigationController>().navigateToFullscreen(
-          DocumentsMoveOrCopyView(),
-          preventDuplicates: false,
-          arguments: {
-            'mode': 'moveFolder',
-            'target': selectedFolder.id,
-            'initialFolderId': controller.currentFolder,
-            'refreshCalback': controller.refreshContent
-          });
+      Get.find<NavigationController>()
+          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+        'mode': 'moveFolder',
+        'target': selectedFolder.id,
+        'initialFolderId': controller.currentFolder,
+        'refreshCalback': controller.refreshContent
+      });
 
       break;
     case 'rename':
@@ -737,26 +731,22 @@ void _onFilePopupMenuSelected(
       await controller.downloadFile(selectedFile.viewUrl);
       break;
     case 'copy':
-      Get.find<NavigationController>().navigateToFullscreen(
-          DocumentsMoveOrCopyView(),
-          preventDuplicates: false,
-          arguments: {
-            'mode': 'copyFile',
-            'target': selectedFile.id,
-            'initialFolderId': controller.currentFolder,
-            'refreshCalback': controller.refreshContent
-          });
+      Get.find<NavigationController>()
+          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+        'mode': 'copyFile',
+        'target': selectedFile.id,
+        'initialFolderId': controller.currentFolder,
+        'refreshCalback': controller.refreshContent
+      });
       break;
     case 'move':
-      Get.find<NavigationController>().navigateToFullscreen(
-          DocumentsMoveOrCopyView(),
-          preventDuplicates: false,
-          arguments: {
-            'mode': 'moveFile',
-            'target': selectedFile.id,
-            'initialFolderId': controller.currentFolder,
-            'refreshCalback': controller.refreshContent
-          });
+      Get.find<NavigationController>()
+          .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
+        'mode': 'moveFile',
+        'target': selectedFile.id,
+        'initialFolderId': controller.currentFolder,
+        'refreshCalback': controller.refreshContent
+      });
 
       break;
     case 'rename':

@@ -72,9 +72,9 @@ class TasksView extends StatelessWidget {
               bottom: controller.fabIsRaised.value == true ? 48 : 0),
           duration: const Duration(milliseconds: 100),
           child: StyledFloatingActionButton(
-              onPressed: () => Get.find<NavigationController>()
-                  .navigateToFullscreen(const NewTaskView(),
-                      arguments: {'projectDetailed': null}),
+              onPressed: () => Get.find<NavigationController>().to(
+                  const NewTaskView(),
+                  arguments: {'projectDetailed': null}),
               child: AppIcon(icon: SvgIcons.add_fab)))),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
@@ -97,7 +97,7 @@ class TasksView extends StatelessWidget {
               IconButton(
                 icon: FiltersButton(controler: controller),
                 onPressed: () async => Get.find<NavigationController>()
-                    .showScreen(const TasksFilterScreen(),
+                    .toScreen(const TasksFilterScreen(),
                         preventDuplicates: false,
                         arguments: {
                       'filterController': controller.filterController

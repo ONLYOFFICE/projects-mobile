@@ -339,8 +339,7 @@ class NewTaskController extends GetxController
           buttonOnTap: () {
             var itemController = Get.put(TaskItemController(createdTask),
                 tag: createdTask.id.toString());
-            return Get.find<NavigationController>().navigateToFullscreen(
-                TaskDetailedView(),
+            return Get.find<NavigationController>().to(TaskDetailedView(),
                 arguments: {'controller': itemController});
           }));
     }

@@ -74,12 +74,10 @@ class SubtasksView extends StatelessWidget {
                   bottom: 24,
                   child: StyledFloatingActionButton(
                     onPressed: () => Get.find<NavigationController>()
-                        .navigateToFullscreen(
-                            const CreatingAndEditingSubtaskView(),
-                            arguments: {
-                          'taskId': _task.id,
-                          'forEditing': false,
-                        }),
+                        .to(const CreatingAndEditingSubtaskView(), arguments: {
+                      'taskId': _task.id,
+                      'forEditing': false,
+                    }),
                     child: AppIcon(icon: SvgIcons.add_fab),
                   ),
                 ),

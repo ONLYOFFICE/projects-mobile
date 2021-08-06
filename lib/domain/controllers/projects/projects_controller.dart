@@ -94,7 +94,7 @@ class ProjectsController extends BaseController {
 
   @override
   void showSearch() {
-    Get.find<NavigationController>().navigateToFullscreen(ProjectSearchView());
+    Get.find<NavigationController>().to(ProjectSearchView());
   }
 
   void updateSort() {
@@ -137,6 +137,6 @@ class ProjectsController extends BaseController {
   }
 
   void createNewProject() {
-    Get.find<NavigationController>().navigateToFullscreen(const NewProject());
+    Get.find<NavigationController>().to(const NewProject());
   }
 }

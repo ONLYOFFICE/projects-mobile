@@ -118,6 +118,6 @@ class TasksController extends BaseController {
   }
 
   @override
-  void showSearch() => Get.find<NavigationController>()
-      .navigateToFullscreen(const TasksSearchScreen());
+  void showSearch() =>
+      Get.find<NavigationController>().to(const TasksSearchScreen());
 }

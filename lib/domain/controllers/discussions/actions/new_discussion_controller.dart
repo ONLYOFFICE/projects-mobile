@@ -301,8 +301,7 @@ class NewDiscussionController extends GetxController
             text: tr('discussionCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
-              return Get.find<NavigationController>().navigateToFullscreen(
-                  DiscussionDetailed(),
+              return Get.find<NavigationController>().to(DiscussionDetailed(),
                   arguments: {'discussion': createdDiss});
             }));
       }
