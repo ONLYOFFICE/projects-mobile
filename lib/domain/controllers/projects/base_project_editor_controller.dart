@@ -151,8 +151,7 @@ abstract class BaseProjectEditorController extends GetxController {
     if (selectedTeamMembers.length == 1) {
       selectedTeamMembers.clear();
     } else {
-      Get.find<NavigationController>().navigateToFullscreen(
-          const TeamMembersSelectionView(),
+      Get.find<NavigationController>().to(const TeamMembersSelectionView(),
           arguments: {'controller': this});
     }
   }

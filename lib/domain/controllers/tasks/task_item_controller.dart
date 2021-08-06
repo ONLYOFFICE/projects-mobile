@@ -92,8 +92,8 @@ class TaskItemController extends GetxController {
     var newTaskController =
         Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
 
-    Get.find<NavigationController>().navigateToFullscreen(TaskDetailedView(),
-        arguments: {'controller': newTaskController});
+    Get.find<NavigationController>()
+        .to(TaskDetailedView(), arguments: {'controller': newTaskController});
     // return copiedTask;
   }
 
@@ -151,7 +151,7 @@ class TaskItemController extends GetxController {
       projectId: task.value.projectOwner.id,
     );
     if (project != null)
-      Get.find<NavigationController>().navigateToFullscreen(
+      Get.find<NavigationController>().to(
         ProjectDetailedView(),
         arguments: {'projectDetailed': project},
       );

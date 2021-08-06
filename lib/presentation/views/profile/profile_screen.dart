@@ -46,8 +46,8 @@ class SelfProfileScreen extends StatelessWidget {
             if (showSettingsButton)
               IconButton(
                 icon: AppIcon(icon: SvgIcons.settings),
-                onPressed: () => Get.find<NavigationController>()
-                    .navigateToFullscreen(const SettingsScreen()),
+                onPressed: () =>
+                    Get.find<NavigationController>().to(const SettingsScreen()),
               )
           ],
         ),

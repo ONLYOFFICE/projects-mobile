@@ -98,7 +98,7 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> toDiscussionEditingScreen() async {
-    Get.find<NavigationController>().navigateToFullscreen(
+    Get.find<NavigationController>().to(
       const DiscussionEditingScreen(),
       arguments: {'discussion': discussion.value},
     );
@@ -137,7 +137,7 @@ class DiscussionItemController extends GetxController {
   }
 
   void toNewCommentView() {
-    Get.find<NavigationController>().showScreen(
+    Get.find<NavigationController>().toScreen(
       const NewCommentView(),
       arguments: {
         'controller':
@@ -162,7 +162,7 @@ class DiscussionItemController extends GetxController {
       ),
     );
 
-    Get.find<NavigationController>().navigateToFullscreen(
+    Get.find<NavigationController>().to(
       const ManageDiscussionSubscribersScreen(),
       arguments: {
         'controller': controller,

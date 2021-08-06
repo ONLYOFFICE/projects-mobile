@@ -90,8 +90,7 @@ class TabletLayout extends StatelessWidget {
                             Get.routing.current != '/NavigationView')
                           Get.to(() => NavigationView(),
                               transition: Transition.noTransition),
-                        Get.find<NavigationController>()
-                            .changeTabletIndex(value),
+                        navigationController.changeTabletIndex(value),
                       },
                       destinations: [
                         NavigationRailDestination(
@@ -175,12 +174,11 @@ class TabletLayout extends StatelessWidget {
                             width: 40,
                             height: 40,
                           ),
-                          onPressed: () => Get.find<NavigationController>()
-                              .showScreen(const SelfProfileScreen(),
-                                  arguments: {
-                                'showBackButton': true,
-                                'showSettingsButton': false
-                              }),
+                          onPressed: () => navigationController
+                              .toScreen(const SelfProfileScreen(), arguments: {
+                            'showBackButton': true,
+                            'showSettingsButton': false
+                          }),
                         ),
                         IconButton(
                           iconSize: 64,
@@ -190,8 +188,8 @@ class TabletLayout extends StatelessWidget {
                             height: 24,
                             color: Get.theme.colors().onNavBar.withOpacity(0.4),
                           ),
-                          onPressed: () => Get.find<NavigationController>()
-                              .showScreen(const SettingsScreen()),
+                          onPressed: () => navigationController
+                              .toScreen(const SettingsScreen()),
                         ),
                         const SizedBox(
                           height: 40,

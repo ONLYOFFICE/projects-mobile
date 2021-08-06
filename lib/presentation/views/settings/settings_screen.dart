@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                           : tr('disabled'),
                       enableIconOpacity: true,
                       icon: SvgIcons.passcode,
-                      onTap: () => Get.find<NavigationController>().showScreen(
+                      onTap: () => Get.find<NavigationController>().toScreen(
                         const PasscodeSettingsScreen(),
                       ),
                     ),
@@ -55,7 +55,7 @@ class SettingsScreen extends StatelessWidget {
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
-                      onTap: () => Get.find<NavigationController>().showScreen(
+                      onTap: () => Get.find<NavigationController>().toScreen(
                         const ColorThemeSelectionScreen(),
                       ),
                     ),

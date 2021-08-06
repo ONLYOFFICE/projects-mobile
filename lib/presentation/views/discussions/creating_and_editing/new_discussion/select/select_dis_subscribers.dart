@@ -66,9 +66,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 15.5, right: 16),
               child: InkResponse(
-                onTap: () => Get.find<NavigationController>()
-                    .navigateToFullscreen(const UsersFromGroups(),
-                        arguments: {'controller': controller}),
+                onTap: () => Get.find<NavigationController>().to(
+                    const UsersFromGroups(),
+                    arguments: {'controller': controller}),
                 child: AppIcon(icon: SvgIcons.preferences),
               ),
             )

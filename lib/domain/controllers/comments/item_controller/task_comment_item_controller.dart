@@ -72,8 +72,7 @@ class TaskCommentItemController extends GetxController
 
   @override
   void toCommentEditingView() {
-    Get.find<NavigationController>()
-        .navigateToFullscreen(const CommentEditingView(), arguments: {
+    Get.find<NavigationController>().to(const CommentEditingView(), arguments: {
       'commentId': comment.value.commentId,
       'commentBody': comment.value.commentBody,
       'itemController': this,

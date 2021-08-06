@@ -150,7 +150,7 @@ class Header extends StatelessWidget {
                   children: <Widget>[
                     InkWell(
                       onTap: () async => Get.find<NavigationController>()
-                          .showScreen(const MilestoneFilterScreen()),
+                          .toScreen(const MilestoneFilterScreen()),
                       child: FiltersButton(controler: controller),
                     ),
                   ],

@@ -49,7 +49,7 @@ class TaskCommentsView extends StatelessWidget {
               if (controller?.task?.value?.canCreateComment == null ||
                   controller?.task?.value?.canCreateComment == true)
                 AddCommentButton(
-                  onPressed: () => Get.find<NavigationController>().showScreen(
+                  onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewCommentView(),
                     arguments: {
                       'controller': Get.put(NewTaskCommentController(

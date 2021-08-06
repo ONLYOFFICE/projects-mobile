@@ -56,10 +56,9 @@ class ProjectDiscussionsController extends GetxController {
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
-      .navigateToFullscreen(DiscussionDetailed(),
-          arguments: {'discussion': discussion});
+      .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() => Get.find<NavigationController>()
-      .navigateToFullscreen(const NewDiscussionScreen(),
+  void toNewDiscussionScreen() =>
+      Get.find<NavigationController>().to(const NewDiscussionScreen(),
           arguments: {'projectId': projectId, 'projectTitle': projectTitle});
 }

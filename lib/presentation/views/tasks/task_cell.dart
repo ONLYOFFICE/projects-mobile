@@ -24,9 +24,8 @@ class TaskCell extends StatelessWidget {
         Get.put(TaskItemController(task), tag: task.id.toString());
 
     return InkWell(
-      onTap: () => Get.find<NavigationController>().navigateToFullscreen(
-          TaskDetailedView(),
-          arguments: {'controller': itemController}),
+      onTap: () => Get.find<NavigationController>()
+          .to(TaskDetailedView(), arguments: {'controller': itemController}),
       child: Container(
         height: 72,
         padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),

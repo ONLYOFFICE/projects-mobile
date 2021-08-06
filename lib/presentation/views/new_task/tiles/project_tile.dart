@@ -30,7 +30,7 @@ class ProjectTile extends StatelessWidget {
               : null,
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().showScreen(
+          onTap: () => Get.find<NavigationController>().toScreen(
               const SelectProjectView(),
               arguments: {'controller': controller}),
         );
