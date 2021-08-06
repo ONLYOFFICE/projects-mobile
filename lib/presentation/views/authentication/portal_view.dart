@@ -9,18 +9,27 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
-class PortalView extends StatelessWidget {
+class PortalView extends StatefulWidget {
   PortalView({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  _PortalViewState createState() => _PortalViewState();
+}
+
+class _PortalViewState extends State<PortalView> {
+  LoginController controller;
+
+  @override
+  void initState() {
     try {
       Get.find<LoginController>().onClose();
-    } catch (e) {
-      debugPrint(e);
-    }
-    var controller = Get.put(LoginController());
+    } catch (_) {}
+    controller = Get.put(LoginController(), permanent: true);
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Obx(

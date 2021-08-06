@@ -43,6 +43,8 @@ class NavigationView extends StatelessWidget {
       const MoreView(),
     ];
 
+    Get.put(NavigationController(), permanent: false);
+
     return GetBuilder<NavigationController>(
       builder: (controller) {
         if (Get.put(PlatformController()).isMobile) {
@@ -84,9 +86,8 @@ class TabletLayout extends StatelessWidget {
                     child: NavigationRail(
                       selectedIndex: navigationController.tabIndex,
                       onDestinationSelected: (value) => {
-                        if (Get.routing.current != '/' &&
-                            Get.routing.current != '/NavigationView' &&
-                            Get.routing.current != 'NavigationView')
+                        if (Get.routing.current != 'NavigationView' &&
+                            Get.routing.current != '/NavigationView')
                           Get.to(() => NavigationView(),
                               transition: Transition.noTransition),
                         Get.find<NavigationController>()

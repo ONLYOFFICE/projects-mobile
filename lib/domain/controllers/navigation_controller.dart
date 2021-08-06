@@ -80,6 +80,12 @@ class NavigationController extends GetxController {
     }
   }
 
+  @override
+  void onClose() {
+    clearCurrentIndex();
+    super.onClose();
+  }
+
   // void bottomSheet(Widget widget) {
   //   if (Get.find<PlatformController>().isMobile) {
   //     Get.bottomSheet(

@@ -57,7 +57,6 @@ import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
-      GetPage(name: '/', page: () => NavigationView()),
       GetPage(name: 'PortalView', page: () => PortalView()),
       GetPage(name: 'LoginView', page: () => LoginView()),
       GetPage(name: 'CodeView', page: () => CodeView()),

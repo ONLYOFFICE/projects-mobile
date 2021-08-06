@@ -28,12 +28,12 @@ class PasscodeController extends GetxController {
 
   Future<void> useFingerprint() async {
     var didAuthenticate = await _authService.authenticate();
-    if (didAuthenticate) await Get.offNamed('/');
+    if (didAuthenticate) await Get.offNamed('NavigationView');
   }
 
   void addNumberToPasscode(
     int number, {
-    String nextPage = '/',
+    String nextPage = 'NavigationView',
     Map nextPageArguments,
     var onPass,
   }) async {

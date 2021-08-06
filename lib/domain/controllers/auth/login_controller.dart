@@ -24,9 +24,9 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  TextEditingController _portalAdressController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  TextEditingController _portalAdressController;
+  TextEditingController _emailController;
+  TextEditingController _passwordController;
   TextEditingController get portalAdressController => _portalAdressController;
   TextEditingController get emailController => _emailController;
   TextEditingController get passwordController => _passwordController;
@@ -48,15 +48,23 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     setState(ViewState.Busy);
+
+    _portalAdressController = TextEditingController();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
     isTokenExpired().then(
       (value) => {
         _tokenExpired = value,
         setState(ViewState.Idle),
-        if (!_tokenExpired) Get.offNamed('NavigationView'),
+        if (!_tokenExpired)
+          {
+            clearInputFields(),
+            Get.offNamed('NavigationView'),
+          }
       },
     );
+    super.onInit();
   }
 
   Future<void> loginByPassword() async {
@@ -78,7 +86,7 @@ class LoginController extends GetxController {
         // need to save the token to send the device type
         if (await sendRegistrationType()) {
           setState(ViewState.Idle);
-          _clearInputFields();
+          clearInputFields();
           await Get.off(() => NavigationView()); //fix
         } else {
           // if the device type has not been sent, the token must be deleted
@@ -91,10 +99,8 @@ class LoginController extends GetxController {
 
         if (result.response.tfaKey != null) {
           _tfaKey = result.response.tfaKey;
-          _clearInputFields();
           await Get.to(() => const GetCodeViews());
         } else {
-          _clearInputFields();
           await Get.to(() => CodeView());
         }
       } else if (result.response.sms == true) {
@@ -102,14 +108,12 @@ class LoginController extends GetxController {
         _pass = password;
         setState(ViewState.Idle);
         if (result.response.phoneNoise != null) {
-          _clearInputFields();
           await Get.to(() => const EnterSMSCodeScreen(), arguments: {
             'phoneNoise': result.response.phoneNoise,
             'login': _email,
             'password': _pass
           });
         } else {
-          _clearInputFields();
           await Get.to(() => const TFASmsScreen(),
               arguments: {'login': _email, 'password': _pass});
         }
@@ -130,11 +134,6 @@ class LoginController extends GetxController {
       passwordFieldError.value = true;
     }
     return result ?? true;
-  }
-
-  void _clearInputFields() {
-    _emailController.clear();
-    _passwordController.clear();
   }
 
   Future saveToken(ApiDTO<AuthToken> result) async {
@@ -161,6 +160,7 @@ class LoginController extends GetxController {
       // need to save the token to send the device type
       if (await sendRegistrationType()) {
         setState(ViewState.Idle);
+        clearInputFields();
         await Get.offNamed('NavigationView');
         return true;
       } else {
@@ -281,7 +281,21 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    _clearInputFields();
+    // clearInputFields();z
+    _clearErrors();
+    _tokenExpired = null;
     super.onClose();
+  }
+
+  void clearInputFields() {
+    _portalAdressController.clear();
+    _emailController.clear();
+    _passwordController.clear();
+  }
+
+  void _clearErrors() {
+    portalFieldError.value = false;
+    emailFieldError.value = false;
+    passwordFieldError.value = false;
   }
 }
