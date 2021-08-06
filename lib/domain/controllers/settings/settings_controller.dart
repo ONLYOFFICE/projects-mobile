@@ -93,7 +93,7 @@ class SettingsController extends GetxController {
     super.onInit();
   }
 
-  void leave() => Get.offNamed('/');
+  void leave() => Get.offNamed('NavigationView');
 
   Future setTheme(String themeMode) async {
     switch (themeMode) {

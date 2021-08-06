@@ -84,7 +84,7 @@ Future<String> _getInitPage() async {
   // TODO CHECK TOKEN (isTokenExpired)
   if (token != null) {
     if (passcode != null) return 'PasscodeScreen';
-    return '/';
+    return 'NavigationView';
   } else {
     return 'PortalView';
   }

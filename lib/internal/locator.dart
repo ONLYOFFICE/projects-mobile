@@ -79,7 +79,6 @@ import 'package:projects/domain/controllers/documents/documents_sort_controller.
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
@@ -143,7 +142,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserService());
 
   Get.lazyPut(() => PlatformController());
-  Get.lazyPut(() => NavigationController(), fenix: true);
+  // Get.lazyPut(() => NavigationController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
