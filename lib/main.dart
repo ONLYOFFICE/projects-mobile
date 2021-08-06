@@ -71,16 +71,21 @@ class App extends StatelessWidget {
     print(context.locale.toString());
     print(context.deviceLocale.toString());
 
-    return GetMaterialApp(
-      initialRoute: initialPage,
-      getPages: getxPages(),
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.deviceLocale,
-      title: 'ONLYOFFICE',
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeService().savedThemeMode(),
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+      child: GetMaterialApp(
+        initialRoute: initialPage,
+        getPages: getxPages(),
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.deviceLocale,
+        title: 'ONLYOFFICE',
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeService().savedThemeMode(),
+      ),
     );
   }
 }
