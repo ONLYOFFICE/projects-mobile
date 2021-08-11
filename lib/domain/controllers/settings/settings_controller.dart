@@ -41,11 +41,13 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/data/services/package_info_service.dart';
 import 'package:projects/data/services/settings_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -93,7 +95,7 @@ class SettingsController extends GetxController {
     super.onInit();
   }
 
-  void leave() => Get.offNamed('NavigationView');
+  void leave() => Get.back(); //offNamed('NavigationView');
 
   Future setTheme(String themeMode) async {
     switch (themeMode) {
@@ -170,5 +172,5 @@ class SettingsController extends GetxController {
       await launch('https://www.onlyoffice.com/legalterms.aspx');
 
   Future<void> onAnalyticsPressed() async =>
-      await Get.toNamed('AnalyticsScreen');
+      Get.find<NavigationController>().toScreen(const AnalyticsScreen());
 }
