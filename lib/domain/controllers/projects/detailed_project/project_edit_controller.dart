@@ -6,6 +6,7 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
@@ -125,7 +126,7 @@ class ProjectEditController extends BaseProjectEditorController {
   }
 
   Future<void> showTags() async {
-    await Get.to(() => const TagsSelectionView(),
-        arguments: {'controller': this});
+    Get.find<NavigationController>()
+        .toScreen(const TagsSelectionView(), arguments: {'controller': this});
   }
 }

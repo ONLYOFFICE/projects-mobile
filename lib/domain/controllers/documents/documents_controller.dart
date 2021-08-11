@@ -104,7 +104,7 @@ class DocumentsController extends GetxController {
 
     _filterController.folderId = null;
     paginationController.startIndex = 0;
-    paginationController.data.clear();
+    if (paginationController.data.isNotEmpty) paginationController.data.clear();
   }
 
   Future _getDocuments() async {

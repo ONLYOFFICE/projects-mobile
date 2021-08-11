@@ -76,7 +76,7 @@ class NavigationController extends GetxController {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
         () => widget,
-        preventDuplicates: preventDuplicates ?? true,
+        preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
     } else {
@@ -100,7 +100,7 @@ class NavigationController extends GetxController {
     if (Get.find<PlatformController>().isMobile) {
       Get.off(
         () => widget,
-        preventDuplicates: preventDuplicates ?? true,
+        preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
     } else {
