@@ -83,7 +83,7 @@
 	"accept": "ACCEPTER",
 	"ok": "OK",
 	"save": "ENREGISTRER",
-	"next": "SUIVANT":
+	"next": "SUIVANT",
 	"back": "RETOUR",
 
 	"linkCopied": "Le lien a été copié dans le presse-papiers",
@@ -110,7 +110,7 @@
 	"fileDeleted": "Le fichier est supprimé",
 
 	"author": "Auteur",
-	"me": "Moi":
+	"me": "Moi",
 	"users": "Utilisateurs",
 	"groups": "Groupes",
 
@@ -212,7 +212,7 @@
 		"other": "{} utilisateurs sélectionnés"
 	},
 
-	"subscribers": "abonnés",
+	"subscribers": "Abonnés",
 	"subscriber": "abonné",
 	"subscribersPlural": {
 		"zero": "{} abonnés",
@@ -317,7 +317,7 @@
   	"AZ": "Titre",
 	"size": "Taille",
 
-	"high": "Haut":
+	"high": "Haut",
 	"normal": "Normal",
 
 	"passcodeLock": "Code d'accès",
@@ -356,7 +356,7 @@
 	"highPriority": "En haute priorité",
 
 	"notifyResponsible": "Notifier les responsables",
-	"none": "Aucun":
+	"none": "Aucun",
 	"selectResponsibles": "Sélectionnez les responsables",
 
 	"searchUsers": "Rechercher des utilisateurs",

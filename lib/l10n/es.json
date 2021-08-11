@@ -210,7 +210,7 @@
 		"other": "{} usuarios seleccionados"
 	},
 
-	"subscribers": "suscriptores",
+	"subscribers": "Suscriptores",
 	"subscriber": "suscriptor",
 	"subscribersPlural": {
 		"zero": "{} suscriptores",
@@ -238,7 +238,7 @@
 		"one": "MOSTRAR {} PROYECTO",
 		"two": "MOSTRAR {} PROYECTOS",
 		"few": "MOSTRAR {} PROYECTOS",
-		"many": "MOSTRAR {} PROYECTOS",S
+		"many": "MOSTRAR {} PROYECTOS",
 		"other": "MOSTRAR {} PROYECTOS"
 	},
 
@@ -388,7 +388,7 @@
 	"step1SetupText2": "Por favor, establezca una aplicación para generar los códigos de acceso al portal (por ejemplo, Google Authenticator).",
 
 	"step2SetupText1": "Lance la app Google Authenticator",
-	"step2SetupText2": "Ejecute la aplicación\ny toque el icono "Nueva cuenta"",
+	"step2SetupText2": "Ejecute la aplicación\ny toque el icono “Nueva cuenta”",
 	"step3SetupText1": "Añada una clave secreta",
 	"step3SetupText2": "Copie la clave y péguela en Google Authenticator",
 	"step4SetupText1": "Copie el código y péguelo debajo",
