@@ -66,7 +66,7 @@ class ProjectDetailsController extends GetxController {
   Future<void> setup() async {
     setupDetailedParams();
 
-    final formatter = DateFormat.yMMMd(Get.locale.languageCode);
+    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
 
     creationDateText.value =
         formatter.format(DateTime.parse(projectDetailed.created));

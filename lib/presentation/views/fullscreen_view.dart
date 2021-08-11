@@ -12,7 +12,7 @@ class ModalScreenView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff717171).withOpacity(0.6),
+      backgroundColor: Colors.transparent,
       body: Container(
         child: Center(
           child: Padding(

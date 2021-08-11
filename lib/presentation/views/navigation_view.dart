@@ -164,11 +164,37 @@ class TabletLayout extends StatelessWidget {
                     children: [
                       IconButton(
                         iconSize: 64,
-                        icon: AppIcon(
-                          icon: SvgIcons.avatar,
-                          width: 40,
-                          height: 40,
-                        ),
+                        icon: SizedBox(
+                            width: 72,
+                            child: SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: CircleAvatar(
+                                radius: 40.0,
+                                backgroundColor: Colors.white,
+                                child: ClipOval(
+                                  child: Obx(() {
+                                    if (navigationController.selfUserItem ==
+                                        null) {
+                                      return AppIcon(
+                                          width: 40,
+                                          height: 40,
+                                          icon: SvgIcons.avatar,
+                                          color: Get.theme.colors().onSurface);
+                                    } else if (navigationController.selfUserItem
+                                        .value.avatarData.value.isNotEmpty) {
+                                      return Image.memory(navigationController
+                                          .selfUserItem.value.avatarData.value);
+                                    } else
+                                      return AppIcon(
+                                          width: 40,
+                                          height: 40,
+                                          icon: SvgIcons.avatar,
+                                          color: Get.theme.colors().onSurface);
+                                  }),
+                                ),
+                              ),
+                            )),
                         onPressed: () => navigationController
                             .toScreen(const SelfProfileScreen(), arguments: {
                           'showBackButton': true,
