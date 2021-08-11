@@ -84,12 +84,13 @@ class EditProjectView extends StatelessWidget {
             return ListView(
               children: [
                 const SizedBox(height: 26),
-                Obx(() => InfoTile(
-                      caption: tr('project').toUpperCase(),
-                      subtitle: editProjectController.projectTitleText.value,
-                      subtitleStyle: TextStyleHelper.headline7(
-                          color: Get.theme.colors().onBackground),
-                    )),
+                TitleInput(controller: editProjectController),
+                // Obx(() => InfoTile(
+                //       caption: tr('project').toUpperCase(),
+                //       subtitle: editProjectController.projectTitleText.value,
+                //       subtitleStyle: TextStyleHelper.headline7(
+                //           color: Get.theme.colors().onBackground),
+                //     )),
                 const SizedBox(height: 20),
                 ProjectStatusButton(projectController: editProjectController),
                 const SizedBox(height: 20),
