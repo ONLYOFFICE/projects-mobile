@@ -67,7 +67,11 @@ class AuthTextField extends StatelessWidget {
       obscuringCharacter: '*',
       keyboardType: keyboardType,
       validator: validator,
-      style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+      style: TextStyleHelper.subtitle1(
+        color: hasError
+            ? Get.theme.colors().colorError
+            : Get.theme.colors().onSurface,
+      ),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
