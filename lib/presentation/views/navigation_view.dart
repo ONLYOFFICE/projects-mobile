@@ -43,6 +43,8 @@ class NavigationView extends StatelessWidget {
       const MoreView(),
     ];
 
+    Get.put(NavigationController(), permanent: false);
+
     return GetBuilder<NavigationController>(
       builder: (controller) {
         if (Get.put(PlatformController()).isMobile) {

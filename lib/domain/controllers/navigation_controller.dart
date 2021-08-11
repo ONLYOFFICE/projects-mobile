@@ -81,6 +81,12 @@ class NavigationController extends GetxController {
     }
   }
 
+  @override
+  void onClose() {
+    clearCurrentIndex();
+    super.onClose();
+  }
+
   void off(Widget widget,
       {bool preventDuplicates, Map<String, dynamic> arguments}) {
     if (Get.find<PlatformController>().isMobile) {
