@@ -106,6 +106,7 @@ class NavigationController extends GetxController {
     } else {
       Get.to(
         () => TabletLayout(contentView: widget),
+        transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
@@ -129,6 +130,7 @@ class NavigationController extends GetxController {
     } else {
       Get.off(
         () => TabletLayout(contentView: widget),
+        transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
