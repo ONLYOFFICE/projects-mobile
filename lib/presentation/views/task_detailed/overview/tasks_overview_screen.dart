@@ -107,8 +107,7 @@ class TasksOverviewScreen extends StatelessWidget {
                           color: const Color(0xff707070)),
                       caption: '${tr('milestone')}:',
                       subtitle: task.milestone.title,
-                      subtitleStyle: TextStyleHelper.subtitle1(
-                          color: Get.theme.colors().links)),
+                      subtitleStyle: TextStyleHelper.subtitle1()),
                 if (task.startDate != null) const SizedBox(height: 20),
                 if (task.startDate != null)
                   InfoTile(
