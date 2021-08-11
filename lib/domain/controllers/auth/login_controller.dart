@@ -106,8 +106,7 @@ class LoginController extends GetxController {
 
       setState(ViewState.Busy);
 
-      var result =
-          await _authService.login(email.removeAllWhitespace, password);
+      var result = await _authService.login(email, password);
 
       if (result.response == null) {
         setState(ViewState.Idle);
@@ -154,9 +153,12 @@ class LoginController extends GetxController {
   }
 
   bool _checkEmailAndPass() {
+    _emailController.text = _emailController.text.removeAllWhitespace;
     var result;
+
     emailFieldError.value = false;
     passwordFieldError.value = false;
+
     if (!_emailController.text.isEmail) {
       result = false;
       emailFieldError.value = true;
@@ -237,13 +239,16 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
+    _portalAdressController.text =
+        _portalAdressController.text.removeAllWhitespace;
+
     if (!_portalAdressController.text.isURL) {
       portalFieldError.value = true;
     } else {
       setState(ViewState.Busy);
 
-      var _capabilities = await _portalService
-          .portalCapabilities(_portalAdressController.text.removeAllWhitespace);
+      var _capabilities =
+          await _portalService.portalCapabilities(_portalAdressController.text);
 
       if (_capabilities != null) {
         capabilities = _capabilities;
