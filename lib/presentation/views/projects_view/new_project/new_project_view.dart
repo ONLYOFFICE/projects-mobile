@@ -144,7 +144,7 @@ class TitleInput extends StatelessWidget {
     @required this.controller,
   }) : super(key: key);
 
-  final NewProjectController controller;
+  final controller;
 
   @override
   Widget build(BuildContext context) {
