@@ -61,6 +61,8 @@ class ProjectOverview extends StatelessWidget {
                       trimExpandedText: tr('showLess'),
                       moreStyle: TextStyleHelper.body2(
                           color: Get.theme.colors().links),
+                      lessStyle: TextStyleHelper.body2(
+                          color: Get.theme.colors().links),
                     ),
                   ),
                 ),

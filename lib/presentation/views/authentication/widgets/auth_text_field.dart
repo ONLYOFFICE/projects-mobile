@@ -43,7 +43,7 @@ class AuthTextField extends StatelessWidget {
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        labelText: hintText,
+        // labelText: hintText,
         labelStyle: TextStyleHelper.caption(
             color: Get.theme.colors().onSurface.withOpacity(0.6)),
         hintText: hintText,

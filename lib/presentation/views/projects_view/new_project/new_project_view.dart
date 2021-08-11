@@ -455,6 +455,7 @@ class DescriptionText extends StatelessWidget {
               trimCollapsedText: tr('showMore'),
               trimExpandedText: tr('showLess'),
               moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
+              lessStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
             ),
           ),
         ),
