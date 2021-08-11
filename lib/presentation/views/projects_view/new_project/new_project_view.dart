@@ -61,9 +61,7 @@ class NewProject extends StatelessWidget {
                     const TeamMembersSelectionView(),
                     arguments: {'controller': controller});
               },
-              child: TeamMembers(
-                controller: controller,
-              ),
+              child: TeamMembers(controller: controller),
             ),
             DescriptionTile(controller: controller),
             AdvancedOptions(controller: controller),
