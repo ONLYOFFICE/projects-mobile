@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 
-import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -53,12 +52,6 @@ class EditProjectView extends StatelessWidget {
               children: [
                 const SizedBox(height: 26),
                 TitleInput(controller: editProjectController),
-                // Obx(() => InfoTile(
-                //       caption: tr('project').toUpperCase(),
-                //       subtitle: editProjectController.projectTitleText.value,
-                //       subtitleStyle: TextStyleHelper.headline7(
-                //           color: Get.theme.colors().onBackground),
-                //     )),
                 const SizedBox(height: 20),
                 ProjectStatusButton(projectController: editProjectController),
                 const SizedBox(height: 20),

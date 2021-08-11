@@ -532,5 +532,9 @@
 	"followProjectButton":"Follow project",
 	"unFollowProjectButton":"Unfollow project",
 
+	"reloadDialogTitle": "Reload the app to apply the new theme",
+	"reload": "Reload",
+	"notNow": "Not now",
+	
 	"error": "Error"
 }
