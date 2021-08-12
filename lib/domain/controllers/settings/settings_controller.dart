@@ -47,7 +47,9 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -98,27 +100,34 @@ class SettingsController extends GetxController {
   void leave() => Get.back(); //offNamed('NavigationView');
 
   Future setTheme(String themeMode) async {
-    switch (themeMode) {
-      case 'darkTheme':
-        Get.changeThemeMode(ThemeMode.dark);
-        break;
-      case 'lightTheme':
-        Get.changeThemeMode(ThemeMode.light);
-        break;
-      case 'sameAsSystem':
-        Get.isPlatformDarkMode
-            ? Get.changeThemeMode(ThemeMode.dark)
-            : Get.changeThemeMode(ThemeMode.light);
-        break;
-      default:
-        Get.changeThemeMode(ThemeMode.system);
-    }
-
     currentTheme.value = themeMode;
     await GetStorage().write('themeMode', themeMode);
 
-    //TODO fix if possible: errors flood without restart
-    Get.rootController.restartApp();
+    await Get.dialog(StyledAlertDialog(
+      titleText: tr('reloadDialogTitle'),
+      acceptText: tr('reload').toUpperCase(),
+      cancelText: tr('notNow').toUpperCase(),
+      onAcceptTap: () {
+        switch (themeMode) {
+          case 'darkTheme':
+            Get.changeThemeMode(ThemeMode.dark);
+            break;
+          case 'lightTheme':
+            Get.changeThemeMode(ThemeMode.light);
+            break;
+          case 'sameAsSystem':
+            Get.isPlatformDarkMode
+                ? Get.changeThemeMode(ThemeMode.dark)
+                : Get.changeThemeMode(ThemeMode.light);
+            break;
+          default:
+            Get.changeThemeMode(ThemeMode.system);
+        }
+
+        Get.rootController.restartApp();
+      },
+      onCancelTap: Get.back,
+    ));
   }
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {
