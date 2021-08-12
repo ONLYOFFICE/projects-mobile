@@ -37,8 +37,8 @@ import 'package:projects/domain/controllers/settings/settings_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class ColorThemeSelectionScreen extends StatelessWidget {
   const ColorThemeSelectionScreen({Key key}) : super(key: key);

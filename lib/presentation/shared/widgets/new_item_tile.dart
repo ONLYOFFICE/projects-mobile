@@ -35,7 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class NewItemTile extends StatelessWidget {
   final int maxLines;

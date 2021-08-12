@@ -39,8 +39,8 @@ import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 class NewDiscussionCommentController extends GetxController
     implements NewCommentController {
