@@ -8,7 +8,7 @@ import 'package:projects/domain/controllers/tasks/abstract_task_actions_controll
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
 
 class DescriptionTile extends StatefulWidget {

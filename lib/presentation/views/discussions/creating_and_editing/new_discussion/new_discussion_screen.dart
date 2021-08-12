@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/new_discussion_controller.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';

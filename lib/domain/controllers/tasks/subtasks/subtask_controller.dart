@@ -7,7 +7,7 @@ import 'package:projects/data/services/subtasks_service.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();

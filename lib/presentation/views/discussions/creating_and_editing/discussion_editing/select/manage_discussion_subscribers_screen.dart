@@ -11,7 +11,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/user_selection_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';

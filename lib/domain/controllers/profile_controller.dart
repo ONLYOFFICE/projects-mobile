@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ProfileController extends GetxController {
   void logout(context) async {

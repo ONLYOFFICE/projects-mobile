@@ -5,6 +5,17 @@ import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
 class TasksWithPresets {
   static var _myTasksController;
+  static var _upcomingTaskscontroller;
+
+  static TasksController get myTasksController {
+    setupMyTasks();
+    return _myTasksController;
+  }
+
+  static TasksController get upcomingTasksController {
+    setupMyTasks();
+    return _myTasksController;
+  }
 
   static void setupMyTasks() async {
     final _filterController = Get.put(
@@ -25,8 +36,21 @@ class TasksWithPresets {
         .then((value) => _myTasksController.loadTasks());
   }
 
-  static TasksController get myTasksController {
-    setupMyTasks();
-    return _myTasksController;
+  void setupUpcomingTasks() {
+    final _filterController = Get.put(
+      TaskFilterController(),
+      tag: 'UpcommingContent',
+    );
+
+    _upcomingTaskscontroller = Get.put(
+      TasksController(
+        _filterController,
+        Get.put(PaginationController(), tag: 'UpcommingContent'),
+      ),
+      tag: 'UpcommingContent',
+    );
+    _filterController
+        .setupPreset('upcomming')
+        .then((value) => _upcomingTaskscontroller.loadTasks());
   }
 }

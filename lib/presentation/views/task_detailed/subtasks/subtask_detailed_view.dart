@@ -6,8 +6,8 @@ import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.da
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 
 class SubtaskDetailedView extends StatelessWidget {
