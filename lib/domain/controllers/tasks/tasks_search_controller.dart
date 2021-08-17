@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/task_service.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 

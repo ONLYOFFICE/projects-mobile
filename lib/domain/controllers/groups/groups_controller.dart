@@ -1,59 +1,53 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/portal_group.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/user_service.dart';
+import 'package:projects/data/services/group_service.dart';
 
-class UsersController extends BaseController {
-  final _api = locator<UserService>();
+class GroupsController extends BaseController {
+  final _api = locator<GroupService>();
+
+  @override
+  RxList itemList = [].obs;
+
+  @override
+  String get screenName => tr('groups');
 
   PaginationController paginationController;
 
   @override
   void onInit() {
     paginationController =
-        Get.put(PaginationController(), tag: 'UsersController');
+        Get.put(PaginationController(), tag: 'GroupsController');
 
-    paginationController.loadDelegate = () async => await _getUsers();
+    paginationController.loadDelegate = () async => await _getGroups();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
     super.onInit();
   }
 
-  // TODO delete
-  var users = <PortalUser>[].obs;
-
-  @override
-  var itemList = [].obs;
-
-  @override
-  String get screenName => tr('users');
+  // TODO DELETE
+  RxList<PortalGroup> groups = <PortalGroup>[].obs;
 
   RxBool loaded = false.obs;
 
-  Future<void> refreshData() async {
+  Future getAllGroups() async {
     loaded.value = false;
-    await _getUsers(needToClear: true);
+    groups.value = await _api.getAllGroups();
     loaded.value = true;
   }
 
-  Future getAllProfiles({String params}) async {
-    loaded.value = false;
-    users.value = await _api.getAllProfiles();
-    loaded.value = true;
-  }
-
-  Future getUsers({bool needToClear = false}) async {
+  Future getGroups({bool needToClear = false}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
-    await _getUsers(needToClear: needToClear);
+    await _getGroups();
     loaded.value = true;
   }
 
-  Future _getUsers({bool needToClear = false}) async {
-    var result = await _api.getProfilesByExtendedFilter(
+  Future _getGroups({bool needToClear = false}) async {
+    var result = await _api.getGroupsByExtendedFilter(
       startIndex: paginationController.startIndex,
     );
 
@@ -62,5 +56,11 @@ class UsersController extends BaseController {
       if (needToClear) paginationController.data.clear();
       paginationController.data.addAll(result.response);
     }
+  }
+
+  Future<void> refreshData() async {
+    loaded.value = false;
+    await _getGroups(needToClear: true);
+    loaded.value = true;
   }
 }

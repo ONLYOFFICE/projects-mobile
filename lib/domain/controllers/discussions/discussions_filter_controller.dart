@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/discussions_service.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';

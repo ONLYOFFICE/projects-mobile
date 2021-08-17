@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/files_service.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 

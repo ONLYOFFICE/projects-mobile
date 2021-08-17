@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/task_service.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -21,12 +21,14 @@ class TaskFilterController extends BaseFilterController {
   String _creatorFilter = '';
   String _projectFilter = '';
   String _milestoneFilter = '';
+  String _statusFilter = '';
   String _deadlineFilter = '';
 
   String get responsibleFilter => _responsibleFilter;
   String get creatorFilter => _creatorFilter;
   String get projectFilter => _projectFilter;
   String get milestoneFilter => _milestoneFilter;
+  String get statusFilter => _statusFilter;
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
@@ -37,18 +39,23 @@ class TaskFilterController extends BaseFilterController {
       _creatorFilter.isNotEmpty ||
       _projectFilter.isNotEmpty ||
       _deadlineFilter.isNotEmpty ||
-      _milestoneFilter.isNotEmpty;
+      _milestoneFilter.isNotEmpty ||
+      _statusFilter.isNotEmpty;
 
-  RxMap<String, dynamic> responsible =
-      {'me': false, 'other': '', 'groups': '', 'no': false}.obs;
+  RxMap responsible = {'me': false, 'other': '', 'groups': '', 'no': false}.obs;
 
-  RxMap<String, dynamic> creator = {'me': false, 'other': ''}.obs;
+  RxMap creator = {'me': false, 'other': ''}.obs;
 
-  RxMap<String, dynamic> project =
-      {'my': false, 'other': '', 'withTag': '', 'withoutTag': false}.obs;
+  RxMap project = {
+    'my': false,
+    'other': '',
+    'withTag': '',
+    'withoutTag': false,
+  }.obs;
 
-  RxMap<String, dynamic> milestone =
-      {'my': false, 'no': false, 'other': ''}.obs;
+  RxMap milestone = {'my': false, 'no': false, 'other': ''}.obs;
+
+  RxMap status = {'open': false, 'closed': false}.obs;
 
   RxMap<String, dynamic> deadline = {
     'overdue': false,
@@ -214,6 +221,24 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
+  void changeStatus(String filter, [newValue]) {
+    _statusFilter = '';
+    switch (filter) {
+      case 'open':
+        status['closed'] = false;
+        status['open'] = !status['open'];
+        if (status['open']) _statusFilter = '&status=1';
+        break;
+      case 'closed':
+        status['open'] = false;
+        status['closed'] = !status['closed'];
+        if (status['closed']) _statusFilter = '&status=2';
+        break;
+      default:
+    }
+    getSuitableResultCount();
+  }
+
   Future<void> changeDeadline(String filter,
       {DateTime start, DateTime stop}) async {
     _deadlineFilter = '';
@@ -276,6 +301,7 @@ class TaskFilterController extends BaseFilterController {
       creatorFilter: creatorFilter,
       projectFilter: projectFilter,
       milestoneFilter: milestoneFilter,
+      statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
       projectId: _projectId,
     );
@@ -302,6 +328,9 @@ class TaskFilterController extends BaseFilterController {
     milestone['no'] = false;
     milestone['other'] = '';
 
+    status['open'] = false;
+    status['closed'] = false;
+
     deadline['overdue'] = false;
     deadline['today'] = false;
     deadline['upcoming'] = false;
@@ -318,6 +347,7 @@ class TaskFilterController extends BaseFilterController {
     _creatorFilter = '';
     _projectFilter = '';
     _milestoneFilter = '';
+    _statusFilter = '';
     _deadlineFilter = '';
 
     getSuitableResultCount();
@@ -334,7 +364,8 @@ class TaskFilterController extends BaseFilterController {
     switch (preset) {
       case 'myTasks':
         _responsibleFilter = '&participant=$_selfId';
-
+        responsible['me'] = true;
+        hasFilters.value = true;
         break;
       case 'upcomming':
         var startDate = formatter.format(DateTime.now());
@@ -342,6 +373,15 @@ class TaskFilterController extends BaseFilterController {
             formatter.format(DateTime.now().add(const Duration(days: 7)));
 
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+        hasFilters.value = true;
+        break;
+      case 'last':
+        var startDate = formatter.format(DateTime.now());
+        var stopDate =
+            formatter.format(DateTime.now().add(const Duration(days: 7)));
+
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+        hasFilters.value = true;
         break;
     }
   }

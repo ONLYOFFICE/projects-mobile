@@ -53,4 +53,22 @@ class TasksWithPresets {
         .setupPreset('upcomming')
         .then((value) => _upcomingTaskscontroller.loadTasks());
   }
+
+  void setupLastAppliedFilters() {
+    final _filterController = Get.put(
+      TaskFilterController(),
+      tag: 'last',
+    );
+
+    _upcomingTaskscontroller = Get.put(
+      TasksController(
+        _filterController,
+        Get.put(PaginationController(), tag: 'UpcommingContent'),
+      ),
+      tag: 'UpcommingContent',
+    );
+    _filterController
+        .setupPreset('upcomming')
+        .then((value) => _upcomingTaskscontroller.loadTasks());
+  }
 }

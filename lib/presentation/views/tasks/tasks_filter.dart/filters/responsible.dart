@@ -23,7 +23,8 @@ class _Responsible extends StatelessWidget {
               cancelButtonEnabled:
                   filterController.responsible['other'].isNotEmpty,
               onTap: () async {
-                var newUser = await Get.bottomSheet(const UsersBottomSheet());
+                // TODO CHECK
+                var newUser = await Get.to(() => UsersBottomSheet());
                 filterController.changeResponsible('other', newUser);
               },
               onCancelTap: () =>
@@ -36,7 +37,7 @@ class _Responsible extends StatelessWidget {
               cancelButtonEnabled:
                   filterController.responsible['groups'].isNotEmpty,
               onTap: () async {
-                var newGroup = await Get.bottomSheet(const GroupsBottomSheet());
+                var newGroup = await Get.to(const GroupsBottomSheet());
                 filterController.changeResponsible('groups', newGroup);
               },
               onCancelTap: () =>

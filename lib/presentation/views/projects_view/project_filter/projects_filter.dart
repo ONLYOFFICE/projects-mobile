@@ -7,7 +7,7 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/tags_bottom_sheet.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/users_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/users/users_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';

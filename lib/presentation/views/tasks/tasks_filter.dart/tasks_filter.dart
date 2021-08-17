@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -9,9 +9,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/groups_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/milestone_bottom_sheet.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/projects_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/template/select_item_template.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/select_project_screen.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/tags_bottom_sheet.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/users_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/users/users_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
@@ -22,6 +23,7 @@ part 'filters/responsible.dart';
 part 'filters/creator.dart';
 part 'filters/project.dart';
 part 'filters/milestone.dart';
+part 'filters/status.dart';
 part 'filters/duedate.dart';
 
 class TasksFilterScreen extends StatelessWidget {
@@ -60,6 +62,7 @@ class TasksFilterScreen extends StatelessWidget {
                   _Creator(filterController: filterController),
                   _Project(filterController: filterController),
                   _Milestone(filterController: filterController),
+                  _Status(filterController: filterController),
                   _DueDate(filterController: filterController),
                   const SizedBox(height: 60),
                 ],

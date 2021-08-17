@@ -23,7 +23,7 @@ class _TaskResponsible extends StatelessWidget {
             cancelButtonEnabled:
                 filterController.taskResponsible['other'].isNotEmpty,
             onTap: () async {
-              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              var newUser = await Get.bottomSheet(UsersBottomSheet());
               await filterController.changeTasksResponsible('Other', newUser);
             },
             onCancelTap: () =>
