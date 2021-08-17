@@ -52,6 +52,8 @@ abstract class BaseProjectEditorController extends GetxController {
   final _userService = locator<UserService>();
   var usersDataSourse = Get.find<UsersDataSource>();
   var selectionMode = UserSelectionMode.Single;
+  var tags = [].obs;
+  var tagsText = ''.obs;
 
   final _userController = Get.find<UserController>();
   var usersLoaded = false.obs;

@@ -89,6 +89,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
+import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -208,6 +209,8 @@ void setupLocator() {
             Get.find<PaginationController>(),
             Get.find<DocumentsSortController>(),
           ));
+
+  Get.create<NewProjectController>(() => NewProjectController());
 
   Get.lazyPut(
       () => ProjectsController(

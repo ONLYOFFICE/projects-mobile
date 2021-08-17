@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
@@ -53,8 +54,8 @@ class NewProject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(NewProjectController());
-
+    // var controller = Get.put(NewProjectController());
+    var controller = Get.find<NewProjectController>();
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
@@ -96,6 +97,14 @@ class NewProject extends StatelessWidget {
               child: TeamMembers(controller: controller),
             ),
             DescriptionTile(controller: controller),
+            InkWell(
+              onTap: () {
+                controller.showTags();
+              },
+              child: Tags(
+                controller: controller,
+              ),
+            ),
             AdvancedOptions(controller: controller),
           ],
         ),

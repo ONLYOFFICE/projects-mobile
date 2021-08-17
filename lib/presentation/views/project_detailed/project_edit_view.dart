@@ -112,7 +112,7 @@ class EditProjectView extends StatelessWidget {
                   onTap: () {
                     editProjectController.showTags();
                   },
-                  child: _Tags(
+                  child: Tags(
                     controller: editProjectController,
                   ),
                 ),
@@ -201,8 +201,8 @@ class _AdvancedEditOptions extends StatelessWidget {
   }
 }
 
-class _Tags extends StatelessWidget {
-  const _Tags({
+class Tags extends StatelessWidget {
+  const Tags({
     Key key,
     @required this.controller,
   }) : super(key: key);
