@@ -35,7 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsService {

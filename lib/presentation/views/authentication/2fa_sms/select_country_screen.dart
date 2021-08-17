@@ -37,7 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class SelectCountryScreen extends StatelessWidget {
   const SelectCountryScreen({Key key}) : super(key: key);

@@ -39,7 +39,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,7 +48,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
 

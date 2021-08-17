@@ -38,7 +38,7 @@ import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 

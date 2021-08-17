@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 
 class MilestonesBottomSheet extends StatelessWidget {

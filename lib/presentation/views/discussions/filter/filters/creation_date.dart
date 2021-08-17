@@ -67,23 +67,12 @@ Future selectDateRange(
   BuildContext context, {
   DiscussionsFilterController filterController,
 }) async {
-  var pickedRange = await showDateRangePicker(
+  var pickedRange = await showStyledDateRangePicker(
     context: context,
     initialDateRange: DateTimeRange(
       start: filterController.creationDate['custom']['startDate'],
       end: filterController.creationDate['custom']['stopDate'],
     ),
-    firstDate: DateTime(1970),
-    lastDate: DateTime(DateTime.now().year + 2),
-    helpText: tr('selectDateRange'),
-    cancelText: tr('cancel'),
-    confirmText: tr('ok'),
-    saveText: tr('save'),
-    errorFormatText: tr('invalidFormat'),
-    errorInvalidText: tr('outOfRange'),
-    errorInvalidRangeText: tr('invalidRange'),
-    fieldStartHintText: tr('startDate'),
-    fieldEndLabelText: tr('endDate'),
   );
 
   if (pickedRange != null) {

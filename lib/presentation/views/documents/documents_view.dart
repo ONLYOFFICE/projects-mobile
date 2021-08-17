@@ -51,9 +51,9 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';

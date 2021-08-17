@@ -47,7 +47,8 @@ import 'package:projects/presentation/shared/widgets/bottom_sheets/users_bottom_
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
 
 part 'filters/responsible.dart';
 part 'filters/creator.dart';

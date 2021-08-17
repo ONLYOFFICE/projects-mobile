@@ -37,12 +37,12 @@ import 'package:projects/domain/controllers/projects/detailed_project/tags_contr
 
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {

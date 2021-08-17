@@ -36,7 +36,7 @@ import 'package:projects/domain/controllers/projects/project_search_controller.d
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 

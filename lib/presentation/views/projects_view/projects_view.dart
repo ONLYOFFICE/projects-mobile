@@ -45,8 +45,8 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 
