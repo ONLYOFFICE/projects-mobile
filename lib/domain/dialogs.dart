@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/error.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ErrorDialog {
   static Future<void> show(CustomError error) async {

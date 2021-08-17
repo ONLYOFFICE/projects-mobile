@@ -12,7 +12,7 @@ import 'package:projects/domain/controllers/projects/new_project/users_data_sour
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 

@@ -7,7 +7,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscussionSubscribersView extends StatelessWidget {

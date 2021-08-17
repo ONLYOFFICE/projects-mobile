@@ -7,7 +7,7 @@ import 'package:projects/internal/utils/adaptive_size.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class EnterSMSCodeScreen extends StatelessWidget {

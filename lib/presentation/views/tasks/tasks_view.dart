@@ -14,8 +14,8 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';

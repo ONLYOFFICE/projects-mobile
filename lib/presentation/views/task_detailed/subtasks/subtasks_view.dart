@@ -5,7 +5,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';

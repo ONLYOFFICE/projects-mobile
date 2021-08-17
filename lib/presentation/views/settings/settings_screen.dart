@@ -5,7 +5,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
@@ -55,16 +55,10 @@ class SettingsScreen extends StatelessWidget {
                       loverText: tr(controller.currentTheme.value),
                       enableIconOpacity: true,
                       icon: SvgIcons.color_scheme,
+                      enableUnderline: true,
                       onTap: () => Get.find<NavigationController>().toScreen(
                         const ColorThemeSelectionScreen(),
                       ),
-                    ),
-                    SettingTile(
-                      text: tr('clearCache'),
-                      enableIconOpacity: true,
-                      icon: SvgIcons.clean,
-                      enableUnderline: true,
-                      onTap: controller.onClearCachePressed,
                     ),
                     SettingTile(
                       text: tr('help'),

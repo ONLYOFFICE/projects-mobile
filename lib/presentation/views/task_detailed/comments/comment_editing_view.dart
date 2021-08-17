@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/comment_editing_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
-import 'package:projects/presentation/shared/widgets/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_text_field.dart';
 
 class CommentEditingView extends StatelessWidget {

@@ -18,8 +18,8 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled_snackbar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class NewTaskController extends GetxController
