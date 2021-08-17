@@ -30,52 +30,63 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base/base_filter_controller.dart';
+part of 'users_bottom_sheet.dart';
 
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
-
-class ConfirmFiltersButton extends StatelessWidget {
-  const ConfirmFiltersButton({
+class _UserTile extends StatelessWidget {
+  const _UserTile({
     Key key,
-    @required this.filterController,
+    @required this.user,
   }) : super(key: key);
 
-  final BaseFilterController filterController;
+  final PortalUser user;
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.bottomCenter,
+    return InkWell(
+      onTap: () => Get.back(
+        result: {
+          'id': user.id,
+          'displayName': user.displayName,
+        },
+      ),
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 32),
-        child: TextButton(
-          onPressed: () async {
-            filterController.applyFilters();
-            Get.back();
-          },
-          style: ButtonStyle(
-              padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                  (_) => EdgeInsets.only(
-                      left: Get.width * 0.243,
-                      right: Get.width * 0.243,
-                      top: 10,
-                      bottom: 12)),
-              backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                return Get.theme.colors().primary;
-              }),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6)))),
-          child: Text(filterController.filtersTitle,
-              // tr('filterConfirmButton', args: [
-              //   filterController.suitableResultCount.value.toString(),
-              //   filterController.filtersTitle
-              // ]),
-              style:
-                  TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
+        padding: const EdgeInsets.symmetric(vertical: 12.5),
+        child: Row(
+          children: [
+            const SizedBox(width: 16),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(80),
+              child: CustomNetworkImage(
+                height: 40,
+                width: 40,
+                image: user.avatar ?? user.avatarMedium ?? user.avatarSmall,
+                fit: BoxFit.contain,
+              ),
+            ),
+            const SizedBox(width: 16),
+            Flexible(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    user.displayName,
+                    style: TextStyleHelper.projectTitle,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 2,
+                  ),
+                  if (user.title != null)
+                    Text(
+                      user.title,
+                      style: TextStyleHelper.projectResponsible,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+          ],
         ),
       ),
     );

@@ -30,45 +30,30 @@
  *
  */
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/portal_group.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/group_api.dart';
+part of '../tasks_filter.dart';
 
-class GroupService {
-  final GroupApi _api = locator<GroupApi>();
+class _Status extends StatelessWidget {
+  final TaskFilterController filterController;
+  const _Status({Key key, this.filterController}) : super(key: key);
 
-  Future getAllGroups() async {
-    var groups = await _api.getAllGroups();
-
-    var success = groups.response != null;
-
-    if (success) {
-      return groups.response;
-    } else {
-      await ErrorDialog.show(groups.error);
-      return null;
-    }
-  }
-
-  Future<PageDTO<List<PortalGroup>>> getGroupsByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
-  }) async {
-    var profiles = await _api.getProfilesByExtendedFilter(
-      startIndex: startIndex,
-      query: query,
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => FiltersRow(
+        title: tr('status'),
+        options: <Widget>[
+          FilterElement(
+              title: tr('open'),
+              titleColor: Get.theme.colors().onSurface,
+              isSelected: filterController.status['open'],
+              onTap: () => filterController.changeStatus('open')),
+          FilterElement(
+              title: tr('closed'),
+              titleColor: Get.theme.colors().onSurface,
+              isSelected: filterController.status['closed'],
+              onTap: () => filterController.changeStatus('closed')),
+        ],
+      ),
     );
-
-    var success = profiles.response != null;
-
-    if (success) {
-      return profiles;
-    } else {
-      await ErrorDialog.show(profiles.error);
-      return null;
-    }
   }
 }

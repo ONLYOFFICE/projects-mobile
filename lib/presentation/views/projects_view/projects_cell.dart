@@ -70,13 +70,9 @@ class ProjectCell extends StatelessWidget {
                 ? InkWell(
                     onTap: () async => showsStatusesBS(
                         context: context, itemController: itemController),
-                    child: ProjectIcon(
-                      itemController: itemController,
-                    ),
+                    child: ProjectIcon(itemController: itemController),
                   )
-                : ProjectIcon(
-                    itemController: itemController,
-                  ),
+                : ProjectIcon(itemController: itemController),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -127,7 +123,7 @@ class ProjectIcon extends StatelessWidget {
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
           return Container(
-            width: 48,
+            // width: 48,
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[

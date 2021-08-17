@@ -30,45 +30,62 @@
  *
  */
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/portal_group.dart';
-import 'package:projects/domain/dialogs.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/services/group_service.dart';
+import 'package:projects/domain/controllers/base/base_search_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/group_api.dart';
 
-class GroupService {
-  final GroupApi _api = locator<GroupApi>();
+class GroupSearchController extends BaseSearchController {
+  final GroupService _service = locator<GroupService>();
 
-  Future getAllGroups() async {
-    var groups = await _api.getAllGroups();
+  final _paginationController =
+      Get.put(PaginationController(), tag: 'GroupSearchController');
 
-    var success = groups.response != null;
+  @override
+  PaginationController get paginationController => _paginationController;
 
-    if (success) {
-      return groups.response;
-    } else {
-      await ErrorDialog.show(groups.error);
-      return null;
-    }
+  String _query;
+
+  @override
+  void onInit() {
+    paginationController.startIndex = 0;
+
+    paginationController.loadDelegate =
+        () async => await _performSearch(query: _query, needToClear: false);
+
+    paginationController.refreshDelegate = () async => await refreshData();
+    paginationController.pullDownEnabled = true;
+    super.onInit();
   }
 
-  Future<PageDTO<List<PortalGroup>>> getGroupsByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
-  }) async {
-    var profiles = await _api.getProfilesByExtendedFilter(
-      startIndex: startIndex,
+  @override
+  Future search({needToClear = true, String query}) async {
+    paginationController.startIndex = 0;
+    loaded.value = false;
+    _query = query;
+    await _performSearch(query: query, needToClear: needToClear);
+    loaded.value = true;
+  }
+
+  @override
+  Future<void> refreshData() async {
+    loaded.value = false;
+    await _performSearch(needToClear: true, query: _query);
+    loaded.value = true;
+  }
+
+  Future _performSearch({needToClear = true, String query}) async {
+    var result = await _service.getGroupsByExtendedFilter(
+      startIndex: paginationController.startIndex,
       query: query,
     );
 
-    var success = profiles.response != null;
+    addData(result, needToClear);
+  }
 
-    if (success) {
-      return profiles;
-    } else {
-      await ErrorDialog.show(profiles.error);
-      return null;
-    }
+  void clear() {
+    paginationController.data.clear();
+    _query = null;
   }
 }

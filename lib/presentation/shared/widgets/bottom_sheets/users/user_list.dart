@@ -30,45 +30,28 @@
  *
  */
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/portal_group.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/group_api.dart';
+part of 'users_bottom_sheet.dart';
 
-class GroupService {
-  final GroupApi _api = locator<GroupApi>();
+class _UserList extends StatelessWidget {
+  const _UserList({
+    Key key,
+  }) : super(key: key);
 
-  Future getAllGroups() async {
-    var groups = await _api.getAllGroups();
+  @override
+  Widget build(BuildContext context) {
+    var usersController = Get.find<UsersController>();
 
-    var success = groups.response != null;
-
-    if (success) {
-      return groups.response;
-    } else {
-      await ErrorDialog.show(groups.error);
-      return null;
-    }
-  }
-
-  Future<PageDTO<List<PortalGroup>>> getGroupsByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
-  }) async {
-    var profiles = await _api.getProfilesByExtendedFilter(
-      startIndex: startIndex,
-      query: query,
+    return Obx(
+      () => PaginationListView(
+        paginationController: usersController.paginationController,
+        child: ListView.builder(
+          itemCount: usersController.paginationController.data.length,
+          itemBuilder: (BuildContext context, int index) {
+            PortalUser user = usersController.paginationController.data[index];
+            return _UserTile(user: user);
+          },
+        ),
+      ),
     );
-
-    var success = profiles.response != null;
-
-    if (success) {
-      return profiles;
-    } else {
-      await ErrorDialog.show(profiles.error);
-      return null;
-    }
   }
 }

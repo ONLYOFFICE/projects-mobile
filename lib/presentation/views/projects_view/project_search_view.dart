@@ -48,9 +48,7 @@ class ProjectSearchView extends StatelessWidget {
     controller.clearSearch();
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
-      appBar: StyledAppBar(
-        title: CustomSearchBar(controller: controller),
-      ),
+      appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
       body: Obx(
         () => Column(
           crossAxisAlignment: CrossAxisAlignment.center,

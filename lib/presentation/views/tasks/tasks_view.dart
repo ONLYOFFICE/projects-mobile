@@ -54,10 +54,13 @@ import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter
 
 class TasksView extends StatelessWidget {
   const TasksView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
-    controller.loadTasks();
+    // controller.loadTasks();
+
+    // var controller = TasksWithPresets.myTasksController;
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);

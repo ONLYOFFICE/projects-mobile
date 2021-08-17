@@ -32,7 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -64,8 +64,10 @@ class TasksController extends BaseController {
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
     taskStatusesController.getStatuses();
-
     _paginationController = paginationController;
+    expandedCardView.value = true;
+    filterController.setupPreset('myTasks').then((value) => loadTasks());
+
     _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => await loadTasks();
@@ -81,7 +83,9 @@ class TasksController extends BaseController {
   RxList get itemList => paginationController.data;
 
   Future<void> refreshData() async {
+    loaded.value = false;
     await _getTasks(needToClear: true);
+    loaded.value = true;
   }
 
   Future loadTasks() async {
@@ -100,6 +104,7 @@ class TasksController extends BaseController {
       creatorFilter: _filterController.creatorFilter,
       projectFilter: _filterController.projectFilter,
       milestoneFilter: _filterController.milestoneFilter,
+      statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       // query: 'задача',
     );

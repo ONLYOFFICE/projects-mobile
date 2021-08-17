@@ -77,7 +77,7 @@ import 'package:projects/domain/controllers/documents/documents_filter_controlle
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
-import 'package:projects/domain/controllers/groups_controller.dart';
+import 'package:projects/domain/controllers/groups/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -168,7 +168,10 @@ void setupLocator() {
       fenix: true);
 
   Get.lazyPut(() => TasksSortController(), fenix: true);
-  Get.lazyPut(() => UserController(), fenix: true);
+  Get.lazyPut(
+    () => UserController(),
+    fenix: true,
+  );
   Get.lazyPut(() => UsersController(), fenix: true);
 
   Get.lazyPut(() => UsersDataSource(), fenix: true);

@@ -59,11 +59,22 @@ class TaskStatusesController extends GetxController {
 
   Status getTaskStatus(PortalTask task) {
     var status;
+
     if (task.customTaskStatus != null) {
-      status =
-          statuses.firstWhere((element) => element.id == task.customTaskStatus);
+      status = statuses.firstWhere(
+        (element) => element.id == task.customTaskStatus,
+        orElse: () => null,
+      );
     } else {
-      status = statuses.firstWhere((element) => -element.id == task.status);
+      status = statuses.firstWhere(
+        (element) => -element.id == task.status,
+        orElse: () => null,
+      );
+
+      status ??= statuses.lastWhere(
+        (element) => element.statusType == task.status,
+        orElse: () => null,
+      );
     }
     return status;
   }

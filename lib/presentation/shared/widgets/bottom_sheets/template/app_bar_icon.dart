@@ -30,45 +30,46 @@
  *
  */
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/portal_group.dart';
-import 'package:projects/domain/dialogs.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/group_api.dart';
+part of '../users/users_bottom_sheet.dart';
 
-class GroupService {
-  final GroupApi _api = locator<GroupApi>();
+class _AppBarIcon extends StatelessWidget {
+  const _AppBarIcon({
+    Key key,
+    @required this.searchController,
+    @required this.searchIconKey,
+    @required this.clearIconKey,
+    @required this.searchFieldController,
+  }) : super(key: key);
 
-  Future getAllGroups() async {
-    var groups = await _api.getAllGroups();
+  final UserSearchController searchController;
+  final Key searchIconKey;
+  final Key clearIconKey;
+  final TextEditingController searchFieldController;
 
-    var success = groups.response != null;
-
-    if (success) {
-      return groups.response;
-    } else {
-      await ErrorDialog.show(groups.error);
-      return null;
-    }
-  }
-
-  Future<PageDTO<List<PortalGroup>>> getGroupsByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
-  }) async {
-    var profiles = await _api.getProfilesByExtendedFilter(
-      startIndex: startIndex,
-      query: query,
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        reverseDuration: const Duration(milliseconds: 300),
+        switchInCurve: Curves.easeOutSine,
+        switchOutCurve: Curves.fastOutSlowIn,
+        child: searchController.switchToSearchView.isTrue
+            ? IconButton(
+                key: searchIconKey,
+                onPressed: () => searchController.switchToSearchView.toggle(),
+                icon: const Icon(Icons.clear),
+              )
+            : IconButton(
+                key: clearIconKey,
+                onPressed: () {
+                  searchController.switchToSearchView.toggle();
+                  searchController.clearSearch();
+                  searchFieldController.clear();
+                },
+                icon: const Icon(Icons.search),
+              ),
+      ),
     );
-
-    var success = profiles.response != null;
-
-    if (success) {
-      return profiles;
-    } else {
-      await ErrorDialog.show(profiles.error);
-      return null;
-    }
   }
 }

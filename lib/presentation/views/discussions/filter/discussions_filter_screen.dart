@@ -33,14 +33,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/projects_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/select_project_screen.dart';
 import 'package:projects/presentation/shared/widgets/bottom_sheets/tags_bottom_sheet.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/users_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/bottom_sheets/users/users_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
 import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';

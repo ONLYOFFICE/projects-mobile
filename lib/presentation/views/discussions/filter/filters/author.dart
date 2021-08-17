@@ -54,7 +54,7 @@ class _Author extends StatelessWidget {
             isSelected: filterController.author['other'].isNotEmpty,
             cancelButtonEnabled: filterController.author['other'].isNotEmpty,
             onTap: () async {
-              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              var newUser = await Get.bottomSheet(UsersBottomSheet());
               filterController.changeAuthor('other', newUser);
             },
             onCancelTap: () => filterController.changeAuthor('other', null),

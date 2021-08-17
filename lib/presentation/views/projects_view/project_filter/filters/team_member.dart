@@ -56,7 +56,7 @@ class _TeamMember extends StatelessWidget {
             cancelButtonEnabled:
                 filterController.teamMember['other'].isNotEmpty,
             onTap: () async {
-              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              var newUser = await Get.bottomSheet(UsersBottomSheet());
               await filterController.changeTeamMember('other', newUser);
             },
             onCancelTap: () => filterController.changeTeamMember('other', null),
