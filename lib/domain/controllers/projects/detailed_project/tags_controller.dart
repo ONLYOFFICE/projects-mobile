@@ -10,7 +10,6 @@ class TagsController extends GetxController {
   var loaded = true.obs;
 
   var isSearchResult = false.obs;
-  var nothingFound = false.obs;
 
   RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
 
@@ -24,6 +23,7 @@ class TagsController extends GetxController {
     _projController = projController;
     loaded.value = false;
     tags.clear();
+    projectDetailedTags.clear();
     var allTags = await _api.getProjectTags();
 
     if (projController?.tags != null) {
@@ -43,7 +43,16 @@ class TagsController extends GetxController {
     loaded.value = true;
   }
 
-  Future<void> confirm() async => Get.back();
+  Future<void> confirm() async {
+    _projController.tags.clear();
+    for (var tag in tags) {
+      if (tag.isSelected.value) {
+        _projController.tags.add(tag.tag.title);
+      }
+    }
+    _projController.tagsText.value = _projController.tags.join(', ');
+    Get.back();
+  }
 
   Future changeTagSelection(TagItemDTO tag) async {
     tag.isSelected.value = !tag.isSelected.value;

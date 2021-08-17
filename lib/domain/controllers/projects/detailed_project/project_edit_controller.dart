@@ -19,14 +19,8 @@ class ProjectEditController extends BaseProjectEditorController {
   var loaded = true.obs;
   var isSearchResult = false.obs;
   var nothingFound = false.obs;
-
   var projectTitleText = ''.obs;
-
-  var tags = [].obs;
   var statusText = ''.obs;
-
-  var tagsText = ''.obs;
-
   var selectedTags;
 
   ProjectEditController(this.projectDetailed);
@@ -82,12 +76,10 @@ class ProjectEditController extends BaseProjectEditorController {
   }
 
   Future<void> confirmChanges() async {
-    if (titleController.text.isEmpty) {
-      needToFillTitle.value = true;
-    }
-    if (selectedProjectManager == null) {
-      needToFillManager.value = true;
-    }
+    needToFillTitle.value = titleController.text.isEmpty;
+
+    needToFillManager.value = (selectedProjectManager.value == null ||
+        selectedProjectManager.value.id == null);
 
     if (needToFillTitle.value == true || needToFillManager.value == true)
       return;

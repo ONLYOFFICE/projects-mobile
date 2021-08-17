@@ -40,6 +40,11 @@ class TagsSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('tags'),
         ),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: () => controller.confirm())
+        ],
         bottom: _TagsSearchBar(controller: controller),
       ),
       body: Obx(
@@ -51,8 +56,8 @@ class TagsSelectionView extends StatelessWidget {
               controller: controller,
               onTapFunction: () => {},
             );
-          }
-          if (controller.nothingFound.value == true) {
+          } else if (controller.loaded.value == true &&
+              controller.tags.isEmpty) {
             return const NothingFound();
           } else
             return const ListLoadingSkeleton();
