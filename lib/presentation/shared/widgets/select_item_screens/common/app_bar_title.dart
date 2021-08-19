@@ -30,46 +30,41 @@
  *
  */
 
-part of '../users/users_bottom_sheet.dart';
+part of 'select_item_template.dart';
 
-class _AppBarIcon extends StatelessWidget {
-  const _AppBarIcon({
+class _AppBarTitle extends StatelessWidget {
+  const _AppBarTitle({
     Key key,
+    @required this.appBarText,
     @required this.searchController,
-    @required this.searchIconKey,
-    @required this.clearIconKey,
-    @required this.searchFieldController,
   }) : super(key: key);
 
-  final UserSearchController searchController;
-  final Key searchIconKey;
-  final Key clearIconKey;
-  final TextEditingController searchFieldController;
+  final BaseSearchController searchController;
+  final String appBarText;
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        reverseDuration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeOutSine,
-        switchOutCurve: Curves.fastOutSlowIn,
-        child: searchController.switchToSearchView.isTrue
-            ? IconButton(
-                key: searchIconKey,
-                onPressed: () => searchController.switchToSearchView.toggle(),
-                icon: const Icon(Icons.clear),
-              )
-            : IconButton(
-                key: clearIconKey,
-                onPressed: () {
-                  searchController.switchToSearchView.toggle();
-                  searchController.clearSearch();
-                  searchFieldController.clear();
-                },
-                icon: const Icon(Icons.search),
-              ),
-      ),
-    );
+    return Obx(() => AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          reverseDuration: const Duration(milliseconds: 300),
+          switchInCurve: Curves.easeOutSine,
+          switchOutCurve: Curves.fastOutSlowIn,
+          child: searchController.switchToSearchView.value == true
+              ? TextField(
+                  autofocus: true,
+                  controller: searchController.textController,
+                  decoration:
+                      InputDecoration.collapsed(hintText: tr('enterQuery')),
+                  style: TextStyleHelper.headline6(
+                    color: Get.theme.colors().onSurface,
+                  ),
+                  onSubmitted: (value) async =>
+                      await searchController.search(query: value),
+                )
+              : Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(appBarText),
+                ),
+        ));
   }
 }

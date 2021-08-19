@@ -51,15 +51,12 @@ class SelectMilestoneView extends StatelessWidget {
   Widget build(BuildContext context) {
     var _milestoneController = Get.find<MilestonesController>();
 
-    _milestoneController.getMilestonesByFilter();
+    _milestoneController.getAllMilestones();
 
     var controller = Get.arguments['controller'];
 
     return Scaffold(
-      appBar: StyledAppBar(titleText: tr('selectMilestone'), actions: [
-        IconButton(
-            icon: const Icon(Icons.check_rounded), onPressed: () => print('da'))
-      ]),
+      appBar: StyledAppBar(titleText: tr('selectMilestone')),
       body: Column(
         children: [
           Obx(

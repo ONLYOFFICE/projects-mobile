@@ -30,28 +30,43 @@
  *
  */
 
-part of 'users_bottom_sheet.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/tags/tags_controller.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
 
-class _UserList extends StatelessWidget {
-  const _UserList({
-    Key key,
-  }) : super(key: key);
+class SelectTagScreen extends StatelessWidget with SelectItemMixin {
+  const SelectTagScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    var usersController = Get.find<UsersController>();
+  String get appBarText => tr('selectTag');
 
-    return Obx(
-      () => PaginationListView(
-        paginationController: usersController.paginationController,
-        child: ListView.builder(
-          itemCount: usersController.paginationController.data.length,
-          itemBuilder: (BuildContext context, int index) {
-            PortalUser user = usersController.paginationController.data[index];
-            return _UserTile(user: user);
-          },
-        ),
-      ),
-    );
-  }
+  @override
+  TagsController get controller => Get.put(TagsController());
+
+  @override
+  VoidCallback get getItemsFunction => () async => await controller.getItems();
+
+  @override
+  Widget get itemList => const _TagList();
+}
+
+class _TagList extends StatelessWidget with SelectItemListMixin {
+  const _TagList({Key key}) : super(key: key);
+
+  @override
+  PaginationController get paginationController =>
+      Get.find<TagsController>().paginationController;
+
+  @override
+  Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
+        ProjectTag tag = paginationController.data[i];
+        return SelectItemTile(
+            title: tag.title,
+            onSelect: () =>
+                Get.back(result: {'id': tag.id, 'title': tag.title}));
+      };
 }

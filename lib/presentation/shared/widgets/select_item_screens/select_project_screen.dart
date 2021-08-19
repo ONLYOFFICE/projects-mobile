@@ -157,7 +157,6 @@ class SelectProjectScreen extends StatelessWidget {
                   );
                 },
               ),
-              // child: _ProjectList(projectList: searchController.searchResult),
             );
           }
           if (searchController.switchToSearchView.value == true &&

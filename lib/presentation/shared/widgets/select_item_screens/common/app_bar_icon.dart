@@ -30,64 +30,45 @@
  *
  */
 
-part of 'users_bottom_sheet.dart';
+part of 'select_item_template.dart';
 
-class _UserTile extends StatelessWidget {
-  const _UserTile({
+class _AppBarIcon extends StatelessWidget {
+  const _AppBarIcon({
     Key key,
-    @required this.user,
+    @required this.searchController,
+    @required this.searchIconKey,
+    @required this.clearIconKey,
   }) : super(key: key);
 
-  final PortalUser user;
+  final BaseSearchController searchController;
+  final Key searchIconKey;
+  final Key clearIconKey;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Get.back(
-        result: {
-          'id': user.id,
-          'displayName': user.displayName,
-        },
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12.5),
-        child: Row(
-          children: [
-            const SizedBox(width: 16),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(80),
-              child: CustomNetworkImage(
-                height: 40,
-                width: 40,
-                image: user.avatar ?? user.avatarMedium ?? user.avatarSmall,
-                fit: BoxFit.contain,
+    return Obx(
+      () => AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        reverseDuration: const Duration(milliseconds: 300),
+        switchInCurve: Curves.easeOutSine,
+        switchOutCurve: Curves.fastOutSlowIn,
+        child: searchController.switchToSearchView.value == true
+            ? IconButton(
+                key: searchIconKey,
+                onPressed: () {
+                  searchController.switchToSearchView.value =
+                      !searchController.switchToSearchView.value;
+                  searchController.textController.clear();
+                  searchController.clearSearch();
+                },
+                icon: const Icon(Icons.clear),
+              )
+            : IconButton(
+                key: clearIconKey,
+                onPressed: () => searchController.switchToSearchView.value =
+                    !searchController.switchToSearchView.value,
+                icon: const Icon(Icons.search),
               ),
-            ),
-            const SizedBox(width: 16),
-            Flexible(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    user.displayName,
-                    style: TextStyleHelper.projectTitle,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 2,
-                  ),
-                  if (user.title != null)
-                    Text(
-                      user.title,
-                      style: TextStyleHelper.projectResponsible,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 1,
-                    ),
-                ],
-              ),
-            ),
-            const SizedBox(width: 16),
-          ],
-        ),
       ),
     );
   }

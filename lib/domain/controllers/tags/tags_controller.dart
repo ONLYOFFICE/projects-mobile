@@ -30,58 +30,58 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/services/user_service.dart';
-import 'package:projects/domain/controllers/base/base_search_controller.dart';
+import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class UserSearchController extends BaseSearchController {
-  final _api = locator<UserService>();
+class TagsController extends BaseController {
+  final _api = locator<ProjectService>();
 
-  final PaginationController _paginationController =
-      Get.put(PaginationController(), tag: 'UserSearchController');
-
-  @override
-  PaginationController get paginationController => _paginationController;
+  PaginationController paginationController;
 
   @override
   void onInit() {
-    paginationController.startIndex = 0;
+    paginationController =
+        Get.put(PaginationController(), tag: 'TagsController');
 
-    paginationController.loadDelegate =
-        () async => await _performSearch(query: _query, needToClear: false);
-
+    paginationController.loadDelegate = () async => await _getItems();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
-
     super.onInit();
   }
 
-  String _query;
+  @override
+  var itemList = [].obs;
 
   @override
-  Future search({needToClear = true, String query}) async {
-    paginationController.startIndex = 0;
-    loaded.value = false;
-    _query = query;
-    await _performSearch(needToClear: needToClear, query: query);
-    loaded.value = true;
-  }
+  String get screenName => tr('tags');
 
-  Future _performSearch({needToClear = true, String query}) async {
-    var result = await _api.getProfilesByExtendedFilter(
-      startIndex: paginationController.startIndex,
-      query: query,
-    );
+  RxBool loaded = false.obs;
 
-    addData(result, needToClear);
-  }
-
-  @override
   Future<void> refreshData() async {
     loaded.value = false;
-    await search(needToClear: true, query: _query);
+    await _getItems(needToClear: true);
     loaded.value = true;
+  }
+
+  Future getItems({bool needToClear = false}) async {
+    paginationController.startIndex = 0;
+    loaded.value = false;
+    await _getItems(needToClear: needToClear);
+    loaded.value = true;
+  }
+
+  Future _getItems({bool needToClear = false}) async {
+    var result = await _api.getTagsPaginated(
+        startIndex: paginationController.startIndex);
+
+    if (result != null) {
+      paginationController.total.value = result.total;
+      if (needToClear) paginationController.data.clear();
+      paginationController.data.addAll(result.response);
+    }
   }
 }

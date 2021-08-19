@@ -30,27 +30,24 @@
  *
  */
 
-part of 'users_bottom_sheet.dart';
+part of 'select_user_screen.dart';
 
-class _SearchResult extends StatelessWidget {
-  const _SearchResult({
+class _UserList extends StatelessWidget {
+  const _UserList({
     Key key,
-    @required this.searchController,
   }) : super(key: key);
-
-  final UserSearchController searchController;
 
   @override
   Widget build(BuildContext context) {
-    // var searchController = Get.find<UserSearchController>();
+    var usersController = Get.find<UsersController>();
 
     return Obx(
       () => PaginationListView(
-        paginationController: searchController.paginationController,
+        paginationController: usersController.paginationController,
         child: ListView.builder(
-          itemCount: searchController.paginationController.data.length,
+          itemCount: usersController.paginationController.data.length,
           itemBuilder: (BuildContext context, int index) {
-            PortalUser user = searchController.paginationController.data[index];
+            PortalUser user = usersController.paginationController.data[index];
             return _UserTile(user: user);
           },
         ),

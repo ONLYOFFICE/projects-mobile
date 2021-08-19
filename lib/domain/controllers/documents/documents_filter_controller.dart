@@ -97,14 +97,14 @@ class DocumentsFilterController extends BaseFilterController {
         author['me'] = !author['me'];
         if (author['me']) _authorFilter = '&userIdOrGroupId=$_selfId';
         break;
-      case 'other':
+      case 'users':
         author['me'] = false;
         author['groups'] = '';
         author['no'] = false;
         if (newValue == null) {
-          author['other'] = '';
+          author['users'] = '';
         } else {
-          author['other'] = newValue['displayName'];
+          author['users'] = newValue['displayName'];
           _authorFilter = '&userIdOrGroupId=${newValue["id"]}';
         }
         break;

@@ -31,67 +31,61 @@
  */
 
 import 'package:get/get.dart';
-
-import 'package:projects/data/models/tag_itemDTO.dart';
-import 'package:projects/data/services/project_service.dart';
+import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/domain/controllers/base/base_search_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class TagsController extends GetxController {
-  final _api = locator<ProjectService>();
-  var usersList = [].obs;
-  var loaded = true.obs;
+class MilestoneSearchController extends BaseSearchController {
+  final _service = locator<MilestoneService>();
 
-  var isSearchResult = false.obs;
-  var nothingFound = false.obs;
+  final _paginationController =
+      Get.put(PaginationController(), tag: 'MilestoneSearchController');
 
-  RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
+  @override
+  PaginationController get paginationController => _paginationController;
 
-  RxList<String> projectDetailedTags = <String>[].obs;
+  String _query;
 
-  var _projController;
+  @override
+  void onInit() {
+    paginationController.startIndex = 0;
 
-  void onLoading() async {}
+    paginationController.loadDelegate =
+        () async => await _performSearch(query: _query, needToClear: false);
 
-  Future<void> setup(projController) async {
-    _projController = projController;
+    paginationController.refreshDelegate = () async => await refreshData();
+    paginationController.pullDownEnabled = true;
+    super.onInit();
+  }
+
+  @override
+  Future search({needToClear = true, String query}) async {
+    paginationController.startIndex = 0;
     loaded.value = false;
-    tags.clear();
-    var allTags = await _api.getProjectTags();
-
-    if (projController?.tags != null) {
-      for (var value in projController?.tags) {
-        projectDetailedTags.add(value);
-      }
-    }
-
-    if (allTags != null) {
-      for (var tag in allTags) {
-        var isSelected = projectDetailedTags?.contains(tag.title)?.obs;
-
-        tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
-      }
-    }
-
+    _query = query;
+    await _performSearch(query: query, needToClear: needToClear);
     loaded.value = true;
   }
 
-  Future<void> confirm() async => Get.back();
-
-  Future changeTagSelection(TagItemDTO tag) async {
-    tag.isSelected.value = !tag.isSelected.value;
-
-    _projController.tags.clear();
-    for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
-      }
-    }
-
-    _projController.tagsText.value = _projController.tags.join(', ');
+  @override
+  Future<void> refreshData() async {
+    loaded.value = false;
+    await _performSearch(needToClear: true, query: _query);
+    loaded.value = true;
   }
 
-  Future<void> createTag(String value) async {
-    var res = await _api.createTag(name: value);
-    if (res != null) await setup(_projController);
+  Future _performSearch({needToClear = true, String query}) async {
+    var result = await _service.milestonesByFilterPaginated(
+      startIndex: paginationController.startIndex,
+      query: query,
+    );
+
+    addData(result, needToClear);
+  }
+
+  void clear() {
+    paginationController.data.clear();
+    _query = null;
   }
 }

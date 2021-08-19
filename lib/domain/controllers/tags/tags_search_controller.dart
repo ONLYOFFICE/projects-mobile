@@ -31,16 +31,17 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/services/user_service.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class UserSearchController extends BaseSearchController {
-  final _api = locator<UserService>();
+// currently not used. There is no way to search for groups using the api
+class TagSearchController extends BaseSearchController {
+  final _api = locator<ProjectService>();
 
   final PaginationController _paginationController =
-      Get.put(PaginationController(), tag: 'UserSearchController');
+      Get.put(PaginationController(), tag: 'TagSearchController');
 
   @override
   PaginationController get paginationController => _paginationController;
@@ -70,7 +71,8 @@ class UserSearchController extends BaseSearchController {
   }
 
   Future _performSearch({needToClear = true, String query}) async {
-    var result = await _api.getProfilesByExtendedFilter(
+    // now the result is incorrect
+    var result = await _api.getTagsPaginated(
       startIndex: paginationController.startIndex,
       query: query,
     );

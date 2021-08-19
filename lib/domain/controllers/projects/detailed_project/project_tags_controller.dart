@@ -31,57 +31,68 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/services/user_service.dart';
-import 'package:projects/domain/controllers/base/base_search_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
+
+import 'package:projects/data/models/tag_itemDTO.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
 
-class UserSearchController extends BaseSearchController {
-  final _api = locator<UserService>();
+class ProjectTagsController extends GetxController {
+  final _api = locator<ProjectService>();
 
-  final PaginationController _paginationController =
-      Get.put(PaginationController(), tag: 'UserSearchController');
+  var usersList = [].obs;
+  var loaded = true.obs;
 
-  @override
-  PaginationController get paginationController => _paginationController;
+  var isSearchResult = false.obs;
+  var nothingFound = false.obs;
 
-  @override
-  void onInit() {
-    paginationController.startIndex = 0;
+  RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
 
-    paginationController.loadDelegate =
-        () async => await _performSearch(query: _query, needToClear: false);
+  RxList<String> projectDetailedTags = <String>[].obs;
 
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
+  var _projController;
 
-    super.onInit();
-  }
+  void onLoading() async {}
 
-  String _query;
-
-  @override
-  Future search({needToClear = true, String query}) async {
-    paginationController.startIndex = 0;
+  Future<void> setup(projController) async {
+    _projController = projController;
     loaded.value = false;
-    _query = query;
-    await _performSearch(needToClear: needToClear, query: query);
+    tags.clear();
+    var allTags = await _api.getProjectTags();
+
+    if (projController?.tags != null) {
+      for (var value in projController?.tags) {
+        projectDetailedTags.add(value);
+      }
+    }
+
+    if (allTags != null) {
+      for (var tag in allTags) {
+        var isSelected = projectDetailedTags?.contains(tag.title)?.obs;
+
+        tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
+      }
+    }
+
     loaded.value = true;
   }
 
-  Future _performSearch({needToClear = true, String query}) async {
-    var result = await _api.getProfilesByExtendedFilter(
-      startIndex: paginationController.startIndex,
-      query: query,
-    );
+  Future<void> confirm() async => Get.back();
 
-    addData(result, needToClear);
+  Future changeTagSelection(TagItemDTO tag) async {
+    tag.isSelected.value = !tag.isSelected.value;
+
+    _projController.tags.clear();
+    for (var tag in tags) {
+      if (tag.isSelected.value) {
+        _projController.tags.add(tag.tag.title);
+      }
+    }
+
+    _projController.tagsText.value = _projController.tags.join(', ');
   }
 
-  @override
-  Future<void> refreshData() async {
-    loaded.value = false;
-    await search(needToClear: true, query: _query);
-    loaded.value = true;
+  Future<void> createTag(String value) async {
+    var res = await _api.createTag(name: value);
+    if (res != null) await setup(_projController);
   }
 }

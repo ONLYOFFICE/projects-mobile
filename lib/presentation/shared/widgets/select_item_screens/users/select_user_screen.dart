@@ -30,58 +30,44 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/services/user_service.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:projects/domain/controllers/users/user_search_controller.dart';
+import 'package:projects/domain/controllers/users/users_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
 
-class UserSearchController extends BaseSearchController {
-  final _api = locator<UserService>();
+part 'user_tile.dart';
+part 'search_result.dart';
+part 'user_list.dart';
 
-  final PaginationController _paginationController =
-      Get.put(PaginationController(), tag: 'UserSearchController');
-
-  @override
-  PaginationController get paginationController => _paginationController;
-
-  @override
-  void onInit() {
-    paginationController.startIndex = 0;
-
-    paginationController.loadDelegate =
-        () async => await _performSearch(query: _query, needToClear: false);
-
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
-
-    super.onInit();
-  }
-
-  String _query;
+class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
+  const SelectUserScreen({Key key}) : super(key: key);
 
   @override
-  Future search({needToClear = true, String query}) async {
-    paginationController.startIndex = 0;
-    loaded.value = false;
-    _query = query;
-    await _performSearch(needToClear: needToClear, query: query);
-    loaded.value = true;
-  }
-
-  Future _performSearch({needToClear = true, String query}) async {
-    var result = await _api.getProfilesByExtendedFilter(
-      startIndex: paginationController.startIndex,
-      query: query,
-    );
-
-    addData(result, needToClear);
-  }
+  String get appBarText => tr('selectUser');
 
   @override
-  Future<void> refreshData() async {
-    loaded.value = false;
-    await search(needToClear: true, query: _query);
-    loaded.value = true;
-  }
+  BaseSearchController get searchController => Get.put(UserSearchController());
+
+  @override
+  UsersController get controller => Get.find<UsersController>();
+
+  @override
+  VoidCallback get getItemsFunction => () async => await controller.getUsers();
+
+  @override
+  Widget get nothingFound => Column(children: const [NothingFound()]);
+
+  @override
+  Widget get itemList => const _UserList();
+
+  @override
+  Widget get searchResult => _SearchResult(searchController: searchController);
 }

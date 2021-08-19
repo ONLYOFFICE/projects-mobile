@@ -30,42 +30,43 @@
  *
  */
 
-part of '../users/users_bottom_sheet.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_group.dart';
+import 'package:projects/domain/controllers/groups/groups_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
 
-class _AppBarTitle extends StatelessWidget {
-  const _AppBarTitle({
-    Key key,
-    @required this.searchController,
-    @required this.searchFieldController,
-  }) : super(key: key);
-
-  final UserSearchController searchController;
-  final TextEditingController searchFieldController;
+class SelectGroupScreen extends StatelessWidget with SelectItemMixin {
+  const SelectGroupScreen({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        reverseDuration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeOutSine,
-        switchOutCurve: Curves.fastOutSlowIn,
-        child: searchController.switchToSearchView.isTrue
-            ? TextField(
-                autofocus: true,
-                controller: searchFieldController,
-                decoration:
-                    InputDecoration.collapsed(hintText: tr('enterQuery')),
-                style: TextStyleHelper.headline6(
-                  color: Get.theme.colors().onSurface,
-                ),
-                onSubmitted: (value) => searchController.search(query: value),
-              )
-            : Align(
-                alignment: Alignment.centerLeft,
-                child: Text(tr('selectProject')),
-              ),
-      ),
-    );
-  }
+  String get appBarText => tr('selectGroup');
+
+  @override
+  GroupsController get controller => Get.find<GroupsController>();
+
+  @override
+  VoidCallback get getItemsFunction => () async => await controller.getGroups();
+
+  @override
+  Widget get itemList => const _GroupList();
+}
+
+class _GroupList extends StatelessWidget with SelectItemListMixin {
+  const _GroupList({Key key}) : super(key: key);
+
+  @override
+  PaginationController get paginationController =>
+      Get.find<GroupsController>().paginationController;
+
+  @override
+  Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
+        PortalGroup group = paginationController.data[i];
+        return SelectItemTile(
+            title: group.name,
+            onSelect: () =>
+                Get.back(result: {'id': group.id, 'name': group.name}));
+      };
 }

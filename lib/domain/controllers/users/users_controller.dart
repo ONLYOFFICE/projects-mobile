@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -54,9 +53,6 @@ class UsersController extends BaseController {
     super.onInit();
   }
 
-  // TODO delete
-  var users = <PortalUser>[].obs;
-
   @override
   var itemList = [].obs;
 
@@ -73,7 +69,7 @@ class UsersController extends BaseController {
 
   Future getAllProfiles({String params}) async {
     loaded.value = false;
-    users.value = await _api.getAllProfiles();
+    itemList.value = await _api.getAllProfiles();
     loaded.value = true;
   }
 
