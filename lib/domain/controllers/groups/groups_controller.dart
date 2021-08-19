@@ -28,7 +28,6 @@ class GroupsController extends BaseController {
     super.onInit();
   }
 
-  // TODO DELETE
   RxList<PortalGroup> groups = <PortalGroup>[].obs;
 
   RxBool loaded = false.obs;

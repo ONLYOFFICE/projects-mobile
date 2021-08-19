@@ -1,4 +1,4 @@
-part of 'users_bottom_sheet.dart';
+part of 'select_user_screen.dart';
 
 class _SearchResult extends StatelessWidget {
   const _SearchResult({
@@ -10,8 +10,6 @@ class _SearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var searchController = Get.find<UserSearchController>();
-
     return Obx(
       () => PaginationListView(
         paginationController: searchController.paginationController,

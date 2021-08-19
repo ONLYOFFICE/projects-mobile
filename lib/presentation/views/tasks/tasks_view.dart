@@ -28,8 +28,6 @@ class TasksView extends StatelessWidget {
     var controller = Get.find<TasksController>();
     // controller.loadTasks();
 
-    // var controller = TasksWithPresets.myTasksController;
-
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
 

@@ -1,4 +1,4 @@
-part of 'users_bottom_sheet.dart';
+part of 'select_user_screen.dart';
 
 class _UserTile extends StatelessWidget {
   const _UserTile({

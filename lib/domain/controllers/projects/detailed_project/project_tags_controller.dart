@@ -4,8 +4,9 @@ import 'package:projects/data/models/tag_itemDTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/internal/locator.dart';
 
-class TagsController extends GetxController {
+class ProjectTagsController extends GetxController {
   final _api = locator<ProjectService>();
+
   var usersList = [].obs;
   var loaded = true.obs;
 

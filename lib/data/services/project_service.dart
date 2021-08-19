@@ -83,6 +83,23 @@ class ProjectService {
     }
   }
 
+  Future<PageDTO<List<ProjectTag>>> getTagsPaginated({
+    int startIndex,
+    String query,
+  }) async {
+    var tags =
+        await _api.getTagsPaginated(query: query, startIndex: startIndex);
+
+    var success = tags.response != null;
+
+    if (success) {
+      return tags;
+    } else {
+      await ErrorDialog.show(tags.error);
+      return null;
+    }
+  }
+
   Future<List<PortalUser>> getProjectTeam(String projectID) async {
     var team = await _api.getProjectTeam(projectID);
 

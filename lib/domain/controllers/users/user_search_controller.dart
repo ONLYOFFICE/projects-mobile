@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -6,7 +7,9 @@ import 'package:projects/internal/locator.dart';
 class UserSearchController extends BaseSearchController {
   final _api = locator<UserService>();
 
-  final PaginationController _paginationController = PaginationController();
+  final PaginationController _paginationController =
+      Get.put(PaginationController(), tag: 'UserSearchController');
+
   @override
   PaginationController get paginationController => _paginationController;
 

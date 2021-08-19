@@ -1,4 +1,4 @@
-part of '../users/users_bottom_sheet.dart';
+part of 'select_item_template.dart';
 
 class _AppBarIcon extends StatelessWidget {
   const _AppBarIcon({
@@ -6,13 +6,11 @@ class _AppBarIcon extends StatelessWidget {
     @required this.searchController,
     @required this.searchIconKey,
     @required this.clearIconKey,
-    @required this.searchFieldController,
   }) : super(key: key);
 
-  final UserSearchController searchController;
+  final BaseSearchController searchController;
   final Key searchIconKey;
   final Key clearIconKey;
-  final TextEditingController searchFieldController;
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +20,21 @@ class _AppBarIcon extends StatelessWidget {
         reverseDuration: const Duration(milliseconds: 300),
         switchInCurve: Curves.easeOutSine,
         switchOutCurve: Curves.fastOutSlowIn,
-        child: searchController.switchToSearchView.isTrue
+        child: searchController.switchToSearchView.value == true
             ? IconButton(
                 key: searchIconKey,
-                onPressed: () => searchController.switchToSearchView.toggle(),
+                onPressed: () {
+                  searchController.switchToSearchView.value =
+                      !searchController.switchToSearchView.value;
+                  searchController.textController.clear();
+                  searchController.clearSearch();
+                },
                 icon: const Icon(Icons.clear),
               )
             : IconButton(
                 key: clearIconKey,
-                onPressed: () {
-                  searchController.switchToSearchView.toggle();
-                  searchController.clearSearch();
-                  searchFieldController.clear();
-                },
+                onPressed: () => searchController.switchToSearchView.value =
+                    !searchController.switchToSearchView.value,
                 icon: const Icon(Icons.search),
               ),
       ),

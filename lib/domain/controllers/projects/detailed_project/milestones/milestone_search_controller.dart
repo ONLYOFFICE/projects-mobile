@@ -1,15 +1,14 @@
 import 'package:get/get.dart';
-import 'package:projects/data/services/group_service.dart';
+import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-// currently not used. There is no way to search for groups using the api
-class GroupSearchController extends BaseSearchController {
-  final GroupService _service = locator<GroupService>();
+class MilestoneSearchController extends BaseSearchController {
+  final _service = locator<MilestoneService>();
 
   final _paginationController =
-      Get.put(PaginationController(), tag: 'GroupSearchController');
+      Get.put(PaginationController(), tag: 'MilestoneSearchController');
 
   @override
   PaginationController get paginationController => _paginationController;
@@ -45,8 +44,7 @@ class GroupSearchController extends BaseSearchController {
   }
 
   Future _performSearch({needToClear = true, String query}) async {
-    // now the result is incorrect
-    var result = await _service.getGroupsByExtendedFilter(
+    var result = await _service.milestonesByFilterPaginated(
       startIndex: paginationController.startIndex,
       query: query,
     );

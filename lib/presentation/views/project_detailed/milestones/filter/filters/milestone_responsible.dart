@@ -24,7 +24,8 @@ class _MilestoneResponsible extends StatelessWidget {
             cancelButtonEnabled:
                 filterController.milestoneResponsible['other'].isNotEmpty,
             onTap: () async {
-              var newUser = await Get.bottomSheet(UsersBottomSheet());
+              var newUser = await Get.find<NavigationController>()
+                  .toScreen(const SelectUserScreen());
               await filterController.changeResponsible('Other', newUser);
             },
             onCancelTap: () =>
