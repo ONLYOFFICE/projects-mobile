@@ -36,6 +36,7 @@ class EditProjectView extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('editProject'),
         elevation: 1,
+        onLeadingPressed: editProjectController.discardChanges,
         actions: [
           IconButton(
             icon: const Icon(Icons.check_outlined),

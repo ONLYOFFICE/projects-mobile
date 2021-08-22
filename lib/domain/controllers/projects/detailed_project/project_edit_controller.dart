@@ -11,6 +11,7 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class ProjectEditController extends BaseProjectEditorController {
@@ -23,6 +24,8 @@ class ProjectEditController extends BaseProjectEditorController {
   var statusText = ''.obs;
   var selectedTags;
 
+  EditProjectDTO oldProjectDTO;
+
   ProjectEditController(this.projectDetailed);
 
   ProjectDetailed projectDetailed;
@@ -30,6 +33,8 @@ class ProjectEditController extends BaseProjectEditorController {
 
   Future<void> setupEditor() async {
     loaded.value = false;
+
+    oldProjectDTO = null;
     statusText.value = tr('projectStatus',
         args: [ProjectStatus.toName(projectDetailed.status)]);
 
@@ -66,6 +71,31 @@ class ProjectEditController extends BaseProjectEditorController {
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
+
+    var participants = <Participant>[];
+
+    for (var element in selectedTeamMembers) {
+      participants.add(
+        Participant(
+            iD: element.portalUser.id,
+            canReadMessages: true,
+            canReadFiles: true,
+            canReadTasks: true,
+            canReadContacts: true,
+            canReadMilestones: true),
+      );
+    }
+
+    oldProjectDTO = EditProjectDTO(
+      title: titleController.text,
+      description: descriptionController.text,
+      responsibleId: selectedProjectManager.value.id,
+      participants: participants,
+      private: isPrivate.value,
+      status: projectDetailed.status,
+      tags: tagsText.value,
+    );
+
     loaded.value = true;
   }
 
@@ -113,6 +143,43 @@ class ProjectEditController extends BaseProjectEditorController {
     if (success) {
       await Get.find<ProjectDetailsController>().refreshData();
 
+      Get.back();
+    }
+  }
+
+  void discardChanges() {
+    bool edited;
+    // checking all fields for changes
+    edited = oldProjectDTO.title != titleController.text ||
+        oldProjectDTO.description != descriptionController.text ||
+        oldProjectDTO.responsibleId != selectedProjectManager.value.id ||
+        oldProjectDTO.private != isPrivate.value ||
+        oldProjectDTO.status != projectDetailed.status ||
+        tagsText.value != tagsText.value;
+
+    var i = 0;
+    while (!edited && oldProjectDTO.participants.length > i) {
+      if (oldProjectDTO.participants[i].iD !=
+          selectedTeamMembers[i].portalUser.id) {
+        edited = true;
+      }
+      i++;
+    }
+
+    // warn the user if there have been changes
+    if (edited) {
+      Get.dialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('changesWillBeLost'),
+        acceptText: tr('discard'),
+        onAcceptTap: () {
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    } else {
+      //leave
       Get.back();
     }
   }
