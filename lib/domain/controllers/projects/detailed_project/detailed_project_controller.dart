@@ -35,7 +35,7 @@ class ProjectDetailsController extends GetxController {
   var creationDateText = ''.obs;
   var tags = [].obs;
   var statusText = ''.obs;
-  var tasksCount = ''.obs;
+  var tasksCount = 0.obs;
   var docsCount = (-1).obs;
   var tagsText = ''.obs;
   var milestoneCount = (-1).obs;
@@ -83,7 +83,7 @@ class ProjectDetailsController extends GetxController {
                 }
             });
 
-    tasksCount.value = projectDetailed.taskCount.toString();
+    tasksCount.value = projectDetailed.taskCountTotal;
 
     await _docApi
         .getFilesByParams(folderId: projectDetailed.projectFolder)
