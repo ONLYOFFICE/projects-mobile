@@ -97,11 +97,10 @@ class ProjectApi {
 
       if (response.statusCode == 200) {
         result.total = responseJson['total'];
-        {
-          result.response = (responseJson['response'] as List)
-              .map((i) => ProjectDetailed.fromJson(i))
-              .toList();
-        }
+
+        result.response = (responseJson['response'] as List)
+            .map((i) => ProjectDetailed.fromJson(i))
+            .toList();
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
