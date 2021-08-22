@@ -55,8 +55,11 @@ class ProjectCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var itemController =
-        Get.put(ProjectCellController(item), tag: item.id.toString());
+    // var itemController =
+    //     Get.put(ProjectCellController(item), tag: item.id.toString());
+
+    var itemController = Get.find<ProjectCellController>();
+    itemController.setup(item);
 
     return Container(
       height: 72,
