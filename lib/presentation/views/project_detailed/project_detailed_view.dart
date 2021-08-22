@@ -154,7 +154,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('tasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: projectController.projectDetailed.taskCountTotal),
+                      count: projectController.tasksCount.value),
                   CustomTab(
                       title: tr('milestones'),
                       currentTab: _activeIndex.value == 2,

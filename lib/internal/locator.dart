@@ -144,7 +144,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserService());
 
   Get.lazyPut(() => PlatformController());
-  // Get.lazyPut(() => NavigationController(), fenix: true);
+
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
@@ -157,7 +157,6 @@ void setupLocator() {
   );
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
-  Get.lazyPut(() => NewTaskController(), fenix: true);
 
   Get.lazyPut(() => TaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
@@ -213,6 +212,7 @@ void setupLocator() {
 
   Get.create<NewProjectController>(() => NewProjectController());
   Get.create<ProjectCellController>(() => ProjectCellController());
+  Get.create<NewTaskController>(() => NewTaskController());
 
   Get.lazyPut(
       () => ProjectsController(
