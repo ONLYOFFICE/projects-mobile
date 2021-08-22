@@ -44,7 +44,7 @@ class ProjectCellController extends GetxController {
 
   RefreshController refreshController = RefreshController();
 
-  ProjectCellController(ProjectDetailed project) {
+  void setup(ProjectDetailed project) {
     _project = project;
     isPrivate.value = project.isPrivate;
     status.value = project.status;
