@@ -42,6 +42,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
@@ -173,7 +174,12 @@ class ProjectEditController extends BaseProjectEditorController {
     var success = await _projectService.editProject(
         project: newProject, projectId: projectDetailed.id);
     if (success) {
-      await Get.find<ProjectDetailsController>().refreshData();
+      {
+        await Get.find<ProjectDetailsController>().refreshData();
+
+        // ignore: unawaited_futures
+        Get.find<ProjectsController>(tag: 'ProjectsView').refreshData();
+      }
 
       Get.back();
     }
