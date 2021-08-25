@@ -44,6 +44,7 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
+        titleHeight: 60,
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,
@@ -90,59 +91,63 @@ class TeamMembersSelectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyleHelper.headline6(
-                          color: Get.theme.colors().onSurface),
-                    ),
+    return Container(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Obx(
+            () {
+              if (controller.selectedTeamMembers.isNotEmpty) {
+                return Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: TextStyleHelper.headline6(
+                              color: Get.theme.colors().onSurface),
+                        ),
+                      ),
+                      Expanded(
+                        child: Text(
+                          plural(
+                              'person', controller.selectedTeamMembers.length),
+                          style: TextStyleHelper.caption(
+                              color: Get.theme.colors().onSurface),
+                        ),
+                      ),
+                    ],
                   ),
-                  Obx(
-                    () {
-                      if (controller.selectedTeamMembers.isNotEmpty) {
-                        return Expanded(
-                          child: Text(
-                            plural('person',
-                                controller.selectedTeamMembers.length),
-                            style: TextStyleHelper.caption(
-                                color: Get.theme.colors().onSurface),
-                          ),
-                        );
-                      }
-                      return const SizedBox();
-                    },
+                );
+              } else
+                return Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyleHelper.headline6(
+                        color: Get.theme.colors().onSurface),
                   ),
-                ],
-              ),
-            ),
-            Obx(
-              () {
-                if (controller.selectedTeamMembers.isNotEmpty) {
-                  return InkWell(
-                    onTap: () {
-                      controller.confirmTeamMembers();
-                    },
-                    child: const Icon(Icons.check, color: Colors.blue),
-                  );
-                }
-                return const SizedBox();
-              },
-            ),
-          ],
-        ),
+                );
+            },
+          ),
+          Obx(
+            () {
+              if (controller.selectedTeamMembers.isNotEmpty) {
+                return InkWell(
+                  onTap: () {
+                    controller.confirmTeamMembers();
+                  },
+                  child: const Icon(Icons.check, color: Colors.blue),
+                );
+              }
+              return const SizedBox();
+            },
+          ),
+        ],
       ),
     );
   }
