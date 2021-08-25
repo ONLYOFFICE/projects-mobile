@@ -37,6 +37,7 @@ import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
@@ -83,7 +84,11 @@ class NewProjectController extends BaseProjectEditorController {
         notifyResponsibles: responsiblesNotificationEnabled);
 
     var success = await _api.createProject(project: newProject);
-    if (success) Get.back();
+    if (success) {
+      // ignore: unawaited_futures
+      Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects();
+      Get.back();
+    }
   }
 
   Future<void> showTags() async {
