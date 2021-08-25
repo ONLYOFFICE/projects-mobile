@@ -130,7 +130,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('discussions'),
                       currentTab: _activeIndex.value == 3,
-                      count: projectController.projectDetailed.discussionCount),
+                      count: projectController.projectData.discussionCount),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
@@ -138,8 +138,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('team'),
                       currentTab: _activeIndex.value == 5,
-                      count:
-                          projectController.projectDetailed.participantCount),
+                      count: projectController.projectData.participantCount),
                 ]),
           ),
         ),
@@ -177,14 +176,14 @@ class _ProjectContextMenu extends StatelessWidget {
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           // if (controller.projectDetailed.canEdit)
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          if (!controller.projectDetailed.security['isInTeam'])
+          if (!controller.projectData.security['isInTeam'])
             PopupMenuItem(
               value: 'follow',
-              child: controller.projectDetailed.isFollow
+              child: controller.projectData.isFollow
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
             ),
-          if (controller.projectDetailed.canDelete)
+          if (controller.projectData.canDelete)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
                   .copyWith(color: Get.theme.colors().colorError),

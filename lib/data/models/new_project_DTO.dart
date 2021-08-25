@@ -107,7 +107,7 @@ class EditProjectDTO {
   List<Participant> participants;
   bool private;
   int status;
-  // bool notify;
+  bool notify;
 
   EditProjectDTO({
     this.title,
@@ -117,7 +117,7 @@ class EditProjectDTO {
     this.participants,
     this.private,
     this.status,
-    // this.notify,
+    this.notify,
   });
 
   EditProjectDTO.fromJson(Map<String, dynamic> json) {
@@ -133,7 +133,7 @@ class EditProjectDTO {
     }
     private = json['private'];
     status = json['status'];
-    // notify = json['notify'];
+    notify = json['notify'];
   }
 
   Map<String, dynamic> toJson() {

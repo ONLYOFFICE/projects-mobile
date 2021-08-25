@@ -27,9 +27,8 @@ class EditProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var editProjectController =
-        Get.put(ProjectEditController(Get.arguments['projectDetailed']));
-    editProjectController.setupEditor();
+    var editProjectController = Get.find<ProjectEditController>();
+    editProjectController.setupEditor(Get.arguments['projectDetailed']);
 
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
@@ -149,6 +148,13 @@ class _AdvancedEditOptions extends StatelessWidget {
                         switchValue: controller.isPrivate,
                         switchOnChanged: (value) {
                           controller.setPrivate(value);
+                        },
+                      ),
+                      OptionWithSwitch(
+                        title: tr('notifyPM'),
+                        switchValue: controller.notificationEnabled,
+                        switchOnChanged: (value) {
+                          controller.enableNotification(value);
                         },
                       ),
                     ],

@@ -55,6 +55,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
@@ -181,6 +182,7 @@ void setupLocator() {
   Get.create<NewProjectController>(() => NewProjectController());
   Get.create<ProjectCellController>(() => ProjectCellController());
   Get.create<NewTaskController>(() => NewTaskController());
+  Get.create<ProjectEditController>(() => ProjectEditController());
 
   Get.lazyPut(
       () => ProjectsController(

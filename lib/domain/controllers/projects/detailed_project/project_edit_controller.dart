@@ -27,25 +27,24 @@ class ProjectEditController extends BaseProjectEditorController {
 
   EditProjectDTO oldProjectDTO;
 
-  ProjectEditController(this.projectDetailed);
+  ProjectDetailed _projectDetailed;
+  ProjectDetailed get projectData => _projectDetailed;
 
-  ProjectDetailed projectDetailed;
-  ProjectDetailed get projectData => projectDetailed;
-
-  Future<void> setupEditor() async {
+  Future<void> setupEditor(projectDetailed) async {
+    _projectDetailed = projectDetailed;
     loaded.value = false;
 
     oldProjectDTO = null;
     statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(projectDetailed.status)]);
+        args: [ProjectStatus.toName(_projectDetailed.status)]);
 
-    projectTitleText.value = projectDetailed.title;
-    descriptionText.value = projectDetailed.description;
+    projectTitleText.value = _projectDetailed.title;
+    descriptionText.value = _projectDetailed.description;
 
-    isPrivate.value = projectDetailed.isPrivate;
+    isPrivate.value = _projectDetailed.isPrivate;
 
     var projectById =
-        await _projectService.getProjectById(projectId: projectDetailed.id);
+        await _projectService.getProjectById(projectId: _projectDetailed.id);
     tags.clear();
     if (projectById?.tags != null) {
       for (var value in projectById?.tags) {
@@ -55,15 +54,15 @@ class ProjectEditController extends BaseProjectEditorController {
 
     tagsText.value = tags.join(', ');
 
-    titleController.text = projectDetailed.title;
-    descriptionController.text = projectDetailed.description ?? '';
-    selectedProjectManager.value = projectDetailed.responsible;
+    titleController.text = _projectDetailed.title;
+    descriptionController.text = _projectDetailed.description ?? '';
+    selectedProjectManager.value = _projectDetailed.responsible;
 
     isPMSelected.value = true;
     managerName.value = selectedProjectManager.value.displayName;
 
     var projectTeamDataSource = Get.put(ProjectTeamDataSource());
-    projectTeamDataSource.projectDetailed = projectDetailed;
+    projectTeamDataSource.projectDetailed = _projectDetailed;
     await projectTeamDataSource.getTeam();
 
     if (selectedTeamMembers.isNotEmpty) selectedTeamMembers.clear();
@@ -93,7 +92,7 @@ class ProjectEditController extends BaseProjectEditorController {
       responsibleId: selectedProjectManager.value.id,
       participants: participants,
       private: isPrivate.value,
-      status: projectDetailed.status,
+      status: _projectDetailed.status,
       tags: tagsText.value,
     );
 
@@ -101,9 +100,9 @@ class ProjectEditController extends BaseProjectEditorController {
   }
 
   Future updateStatus({int newStatusId}) async {
-    projectDetailed.status = newStatusId;
+    _projectDetailed.status = newStatusId;
     statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(projectDetailed.status)]);
+        args: [ProjectStatus.toName(_projectDetailed.status)]);
   }
 
   Future<void> confirmChanges() async {
@@ -135,12 +134,13 @@ class ProjectEditController extends BaseProjectEditorController {
       responsibleId: selectedProjectManager.value.id,
       participants: participants,
       private: isPrivate.value,
-      status: projectDetailed.status,
+      status: _projectDetailed.status,
       tags: tagsText.value,
+      notify: notificationEnabled.value,
     );
 
     var success = await _projectService.editProject(
-        project: newProject, projectId: projectDetailed.id);
+        project: newProject, projectId: _projectDetailed.id);
     if (success) {
       {
         await Get.find<ProjectDetailsController>().refreshData();
@@ -160,7 +160,7 @@ class ProjectEditController extends BaseProjectEditorController {
         oldProjectDTO.description != descriptionController.text ||
         oldProjectDTO.responsibleId != selectedProjectManager.value?.id ||
         oldProjectDTO.private != isPrivate.value ||
-        oldProjectDTO.status != projectDetailed.status ||
+        oldProjectDTO.status != _projectDetailed.status ||
         tagsText.value != tagsText.value;
 
     var i = 0;
