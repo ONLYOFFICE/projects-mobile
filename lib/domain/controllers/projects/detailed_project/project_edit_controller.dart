@@ -158,7 +158,7 @@ class ProjectEditController extends BaseProjectEditorController {
     // checking all fields for changes
     edited = oldProjectDTO.title != titleController.text ||
         oldProjectDTO.description != descriptionController.text ||
-        oldProjectDTO.responsibleId != selectedProjectManager.value.id ||
+        oldProjectDTO.responsibleId != selectedProjectManager.value?.id ||
         oldProjectDTO.private != isPrivate.value ||
         oldProjectDTO.status != projectDetailed.status ||
         tagsText.value != tagsText.value;
