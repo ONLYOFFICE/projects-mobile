@@ -362,4 +362,30 @@ class ProjectApi {
 
     return result;
   }
+
+  Future<ApiDTO<List<PortalUser>>> addToProjectTeam(
+      String projectID, List<String> users) async {
+    var url = await coreApi.projectTeamUrl(projectID);
+
+    var result = ApiDTO<List<PortalUser>>();
+
+    var body = {'participants': users, 'notify': true};
+
+    try {
+      var response = await coreApi.putRequest(url, body: body);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => PortalUser.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

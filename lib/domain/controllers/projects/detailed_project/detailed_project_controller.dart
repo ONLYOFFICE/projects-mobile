@@ -42,14 +42,18 @@ import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
+import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectDetailsController extends GetxController {
+class ProjectDetailsController extends BaseProjectEditorController {
   final _projectService = locator<ProjectService>();
   final _docApi = locator<FilesService>();
 
@@ -59,17 +63,18 @@ class ProjectDetailsController extends GetxController {
   final statuses = [].obs;
 
   var projectTitleText = ''.obs;
-  var descriptionText = ''.obs;
+
+  // var descriptionText = ''.obs;
   var managerText = ''.obs;
   var teamMembers = [].obs;
   var teamMembersCount = 0.obs;
 
   var creationDateText = ''.obs;
-  var tags = [].obs;
+  // var tags = [].obs;
   var statusText = ''.obs;
   var tasksCount = 0.obs;
   var docsCount = (-1).obs;
-  var tagsText = ''.obs;
+  // var tagsText = ''.obs;
   var milestoneCount = (-1).obs;
   var currentTab = -1.obs;
 
@@ -78,7 +83,7 @@ class ProjectDetailsController extends GetxController {
   ProjectDetailed projectDetailed;
   ProjectDetailed get projectData => projectDetailed;
 
-  PortalUserItemController selfUserItem;
+  // PortalUserItemController selfUserItem;
   final _userController = Get.find<UserController>();
 
   @override
@@ -161,6 +166,18 @@ class ProjectDetailsController extends GetxController {
         arguments: {'projectDetailed': projectDetailed});
   }
 
+  void manageTeamMembers() {
+    selectedProjectManager.value = projectData.responsible;
+
+    var usersList = Get.find<ProjectTeamDataSource>().usersList;
+
+    for (var user in usersList) {
+      selectedTeamMembers.add(user);
+    }
+    Get.find<NavigationController>()
+        .to(const TeamMembersSelectionView(), arguments: {'controller': this});
+  }
+
   Future<void> copyLink() async {}
 
   Future deleteProject() async {
@@ -180,5 +197,19 @@ class ProjectDetailsController extends GetxController {
   Future followProject() async {
     await _projectService.followProject(projectId: projectDetailed.id);
     await refreshData();
+  }
+
+  @override
+  Future<void> confirmTeamMembers() async {
+    Get.find<UsersDataSource>().loaded.value = false;
+    var users = <String>[];
+
+    for (var user in selectedTeamMembers) {
+      users.add(user.id);
+    }
+
+    await _projectService.addToProjectTeam(projectData.id.toString(), users);
+    Get.find<UsersDataSource>().loaded.value = true;
+    Get.back();
   }
 }

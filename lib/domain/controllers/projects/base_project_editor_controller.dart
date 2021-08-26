@@ -226,10 +226,6 @@ abstract class BaseProjectEditorController extends GetxController {
     }
   }
 
-  void confirmTeamMembers() {
-    Get.back();
-  }
-
   Future<void> setupUsersSelection() async {
     usersLoaded.value = false;
 
@@ -262,6 +258,10 @@ abstract class BaseProjectEditorController extends GetxController {
       selectedGroups.removeWhere(
           (element) => group.portalGroup.id == element.portalGroup.id);
     }
+  }
+
+  void confirmTeamMembers() {
+    Get.back();
   }
 
   Future<void> confirmGroupSelection() async {
