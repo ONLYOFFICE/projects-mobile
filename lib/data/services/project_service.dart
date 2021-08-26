@@ -96,6 +96,20 @@ class ProjectService {
     }
   }
 
+  Future<List<PortalUser>> addToProjectTeam(
+      String projectID, List<String> users) async {
+    var team = await _api.addToProjectTeam(projectID, users);
+
+    var success = team.response != null;
+
+    if (success) {
+      return team.response;
+    } else {
+      await ErrorDialog.show(team.error);
+      return null;
+    }
+  }
+
   Future<bool> createProject({NewProjectDTO project}) async {
     var result = await _api.createProject(project: project);
 

@@ -80,20 +80,45 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     return Obx(
       () => Scaffold(
         floatingActionButton: Visibility(
-          visible: _activeIndex.value == 2 || _activeIndex.value == 1,
+          visible: _activeIndex.value == 2 ||
+              _activeIndex.value == 1 ||
+              _activeIndex.value == 5,
           child: StyledFloatingActionButton(
             onPressed: () {
               if (_activeIndex.value == 2)
                 projectController.createNewMilestone();
+              if (_activeIndex.value == 5)
+                projectController.manageTeamMembers();
               if (_activeIndex.value == 1) projectController.createTask();
             },
-            child: _activeIndex.value == 2
-                ? AppIcon(
+            child: Obx(() {
+              switch (_activeIndex.value) {
+                case 2:
+                  return AppIcon(
                     icon: SvgIcons.add_milestone,
                     width: 32,
                     height: 32,
-                  )
-                : const Icon(Icons.add_rounded),
+                  );
+                  break;
+
+                case 5:
+                  return AppIcon(
+                    icon: SvgIcons.fab_user,
+                    width: 32,
+                    height: 32,
+                  );
+                  break;
+                default:
+                  return const Icon(Icons.add_rounded);
+              }
+            }),
+            // _activeIndex.value == 2
+            // ? AppIcon(
+            //     icon: SvgIcons.add_milestone,
+            //     width: 32,
+            //     height: 32,
+            //   )
+            // : const Icon(Icons.add_rounded),
           ),
         ),
         appBar: StyledAppBar(

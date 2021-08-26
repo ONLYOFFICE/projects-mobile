@@ -117,6 +117,8 @@ class SvgIcons {
       'lib/assets/images/icons/empty_state/project_not_created.svg';
   static const String not_found =
       'lib/assets/images/icons/empty_state/not_found.svg';
+
+  static const String fab_user = 'lib/assets/images/icons/fab_user.svg';
 }
 
 class PngIcons {
