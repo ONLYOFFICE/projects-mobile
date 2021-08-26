@@ -39,6 +39,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/current_passcode_check_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen1.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen2.dart';
+import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class PasscodeSettingsController extends GetxController {
   final _service = locator<PasscodeService>();
@@ -133,12 +134,13 @@ class PasscodeSettingsController extends GetxController {
     clear();
     Get.find<SettingsController>().onInit();
     Get.back();
-    //offNamed('SettingsScreen');
   }
 
   void leave() {
     clear();
-    Get.offNamed('PasscodeSettingsScreen');
+
+    Get.back();
+    Get.back();
   }
 
   void clear() {
