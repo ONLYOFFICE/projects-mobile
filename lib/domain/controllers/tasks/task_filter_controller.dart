@@ -33,7 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -42,6 +43,7 @@ import 'package:projects/internal/locator.dart';
 class TaskFilterController extends BaseFilterController {
   final _api = locator<TaskService>();
   final _sortController = Get.find<TasksSortController>();
+  final _storage = locator<Storage>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
@@ -74,31 +76,24 @@ class TaskFilterController extends BaseFilterController {
       _milestoneFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
 
-  RxMap responsible = {'me': false, 'other': '', 'groups': '', 'no': false}.obs;
+  RxMap responsible;
 
-  RxMap creator = {'me': false, 'other': ''}.obs;
+  RxMap creator;
 
-  RxMap project = {
-    'my': false,
-    'other': '',
-    'withTag': '',
-    'withoutTag': false,
-  }.obs;
+  RxMap project;
 
-  RxMap milestone = {'my': false, 'no': false, 'other': ''}.obs;
+  RxMap milestone;
 
-  RxMap status = {'open': false, 'closed': false}.obs;
+  RxMap status;
 
-  RxMap<String, dynamic> deadline = {
-    'overdue': false,
-    'today': false,
-    'upcoming': false,
-    'custom': {
-      'selected': false,
-      'startDate': DateTime.now(),
-      'stopDate': DateTime.now()
-    }
-  }.obs;
+  RxMap deadline;
+
+  @override
+  void onInit() async {
+    // await _storage.removeAll();
+    await loadFilters();
+    super.onInit();
+  }
 
   @override
   String get filtersTitle =>
@@ -271,8 +266,11 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
-  Future<void> changeDeadline(String filter,
-      {DateTime start, DateTime stop}) async {
+  Future<void> changeDeadline(
+    String filter, {
+    DateTime start,
+    DateTime stop,
+  }) async {
     _deadlineFilter = '';
 
     if (filter == 'overdue') {
@@ -342,6 +340,13 @@ class TaskFilterController extends BaseFilterController {
   }
 
   @override
+  void applyFilters() async {
+    hasFilters.value = _hasFilters;
+    await saveFilters();
+    if (applyFiltersDelegate != null) applyFiltersDelegate();
+  }
+
+  @override
   void resetFilters() async {
     responsible['me'] = false;
     responsible['other'] = '';
@@ -385,36 +390,119 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
-  @override
-  void applyFilters() async {
+  Future<void> setupPreset(PresetTaskFilters preset) async {
+    _selfId ??= await Get.find<UserController>().getUserId();
+
+    if (preset == PresetTaskFilters.myTasks) {
+      await _getMyTasks();
+    } else if (preset == PresetTaskFilters.upcomming) {
+      var startDate = formatter.format(DateTime.now());
+      var stopDate =
+          formatter.format(DateTime.now().add(const Duration(days: 7)));
+      _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+    } else if (preset == PresetTaskFilters.last) {
+      var startDate = formatter.format(DateTime.now());
+      var stopDate =
+          formatter.format(DateTime.now().add(const Duration(days: 7)));
+
+      _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+    } else if (preset == PresetTaskFilters.saved) {
+      await _getSavedFilters();
+    }
     hasFilters.value = _hasFilters;
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
-  Future<void> setupPreset(String preset) async {
+  @override
+  Future<void> saveFilters() async {
+    var dLine = deadline;
+
+    var dlineCustom = dateTimesToString(dLine['custom']);
+
+    dLine['custom'] = dlineCustom;
+
+    var map = {
+      'responsible': {'buttons': responsible, 'value': _responsibleFilter},
+      'creator': {'buttons': creator, 'value': _creatorFilter},
+      'project': {'buttons': project, 'value': _projectFilter},
+      'milestone': {'buttons': milestone, 'value': _milestoneFilter},
+      'status': {'buttons': status, 'value': _statusFilter},
+      'deadline': {'buttons': dLine, 'value': _deadlineFilter},
+      'hasFilters': _hasFilters,
+    };
+
+    await _storage.write('taskFilters', map);
+  }
+
+  @override
+  Future<void> loadFilters() async {
+    responsible = {'me': true, 'other': '', 'groups': '', 'no': false}.obs;
+    creator = {'me': false, 'other': ''}.obs;
+    project = {
+      'my': false,
+      'other': '',
+      'withTag': '',
+      'withoutTag': false,
+    }.obs;
+    milestone = {'my': false, 'no': false, 'other': ''}.obs;
+    status = {'open': false, 'closed': false}.obs;
+    deadline = {
+      'overdue': false,
+      'today': false,
+      'upcoming': false,
+      'custom': {
+        'selected': false,
+        'startDate': DateTime.now(),
+        'stopDate': DateTime.now()
+      }
+    }.obs;
+  }
+
+  Future<void> _getMyTasks() async {
     _selfId ??= await Get.find<UserController>().getUserId();
-    switch (preset) {
-      case 'myTasks':
-        _responsibleFilter = '&participant=$_selfId';
-        responsible['me'] = true;
-        hasFilters.value = true;
-        break;
-      case 'upcomming':
-        var startDate = formatter.format(DateTime.now());
-        var stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+    _responsibleFilter = '&participant=$_selfId';
+    responsible['me'] = true;
+  }
 
-        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
-        hasFilters.value = true;
-        break;
-      case 'last':
-        var startDate = formatter.format(DateTime.now());
-        var stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+  Future<void> _getSavedFilters() async {
+    var savedFilters = await _storage.read('taskFilters', returnCopy: true);
 
-        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
-        hasFilters.value = true;
-        break;
+    if (savedFilters != null) {
+      try {
+        responsible = Map.from(savedFilters['responsible']['buttons']).obs;
+        _responsibleFilter = savedFilters['responsible']['value'];
+
+        creator = Map.from(savedFilters['creator']['buttons']).obs;
+        _creatorFilter = savedFilters['creator']['value'];
+
+        project = Map.from(savedFilters['project']['buttons']).obs;
+        _projectFilter = savedFilters['project']['value'];
+
+        milestone = Map.from(savedFilters['milestone']['buttons']).obs;
+        _milestoneFilter = savedFilters['milestone']['value'];
+
+        status = Map.from(savedFilters['status']['buttons']).obs;
+        _statusFilter = savedFilters['status']['value'];
+
+        var deadLineFilters = Map.from(savedFilters['deadline']['buttons']);
+
+        var customDeadlineFilters = deadLineFilters['custom'];
+
+        customDeadlineFilters =
+            stringsToDateTime(customDeadlineFilters, ['startDate', 'stopDate']);
+
+        deadLineFilters['custom'] = customDeadlineFilters;
+
+        deadline = deadLineFilters.obs;
+        _deadlineFilter ??= savedFilters['deadline']['value'];
+
+        hasFilters.value = savedFilters['hasFilters'];
+      } catch (_) {
+        await loadFilters();
+      }
+    } else {
+      await _getMyTasks();
     }
   }
 }
+
+enum PresetTaskFilters { last, myTasks, saved, upcomming }

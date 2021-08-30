@@ -31,36 +31,25 @@
  */
 
 import 'dart:convert';
+import 'package:get_storage/get_storage.dart';
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/capabilities.dart';
-import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
+class Storage {
+  final _storage = GetStorage();
 
-class PortalApi {
-  var coreApi = locator<CoreApi>();
-  var secureStorage = locator<SecureStorage>();
+  Future read(String key, {bool returnCopy = false}) async {
+    var data = await _storage.read(key);
 
-  Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = coreApi.capabilitiesUrl(portalName);
+    if (returnCopy) return json.decode(json.encode(data));
 
-    var result = ApiDTO<Capabilities>();
-    try {
-      var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        result.response = Capabilities.fromJson(responseJson['response']);
-        await coreApi.savePortalName();
-      } else {
-        result.error = CustomError.fromJson(responseJson['error']);
-      }
-    } catch (e) {
-      result.error = CustomError(message: e.toString());
-    }
-
-    return result;
+    return data;
   }
+
+  // ignore: always_declare_return_types
+  getValue(String key) => _storage.read(key);
+
+  Future write(String key, var value) async => await _storage.write(key, value);
+
+  Future<void> remove(String key) async => await _storage.remove(key);
+
+  Future<void> removeAll() async => await _storage.erase();
 }

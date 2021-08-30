@@ -35,7 +35,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskStatusesController extends GetxController {

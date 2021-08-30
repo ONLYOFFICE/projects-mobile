@@ -39,7 +39,7 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';

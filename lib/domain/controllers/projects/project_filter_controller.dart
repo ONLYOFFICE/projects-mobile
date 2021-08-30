@@ -33,13 +33,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/debug_print.dart';
 
 class ProjectsFilterController extends BaseFilterController {
   final _api = locator<ProjectService>();
+  final _storage = locator<Storage>();
 
   final _sortController = Get.find<ProjectsSortController>();
   Function applyFiltersDelegate;
@@ -62,14 +65,12 @@ class ProjectsFilterController extends BaseFilterController {
       _otherFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
 
-  RxMap<String, dynamic> projectManager = {'me': false, 'other': ''}.obs;
-  RxMap<String, dynamic> teamMember = {'me': false, 'other': ''}.obs;
+  RxMap projectManager;
+  RxMap teamMember;
 
-  RxMap<String, dynamic> other =
-      {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
+  RxMap other;
 
-  RxMap<String, dynamic> status =
-      {'active': false, 'paused': false, 'closed': false}.obs;
+  RxMap status;
 
   @override
   String get filtersTitle =>
@@ -77,6 +78,12 @@ class ProjectsFilterController extends BaseFilterController {
 
   ProjectsFilterController() {
     suitableResultCount = (-1).obs;
+  }
+
+  @override
+  void onInit() async {
+    await loadFilters();
+    super.onInit();
   }
 
   Future<void> changeProjectManager(String filter, [newValue = '']) async {
@@ -225,23 +232,84 @@ class ProjectsFilterController extends BaseFilterController {
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+    await saveFilters();
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
-  Future<void> setupPreset(String preset) async {
+  Future<void> setupPreset(PresetProjectFilters preset) async {
     _selfId ??= await Get.find<UserController>().getUserId();
-    switch (preset) {
-      case 'myProjects':
-        _statusFilter = '&status=open';
-        _teamMemberFilter = '&participant=$_selfId';
-        break;
-      case 'myFollowedProjects':
-        _statusFilter = '&status=open';
-        _otherFilter = '&follow=true';
-        break;
-      case 'active':
-        _statusFilter = '&status=open';
-        break;
+
+    if (preset == PresetProjectFilters.myProjects) {
+      await _getMyProjects();
+    } else if (preset == PresetProjectFilters.myFollowedProjects) {
+      _statusFilter = '&status=open';
+      _otherFilter = '&follow=true';
+    } else if (preset == PresetProjectFilters.active) {
+      _statusFilter = '&status=open';
+    } else if (preset == PresetProjectFilters.saved) {
+      await _getSavedFilters();
+    }
+    hasFilters.value = _hasFilters;
+  }
+
+  @override
+  Future<void> saveFilters() async {
+    await _storage.write(
+      'projectFilters',
+      {
+        'projectManager': {
+          'buttons': projectManager,
+          'value': _projectManagerFilter
+        },
+        'teamMember': {'buttons': teamMember, 'value': _teamMemberFilter},
+        'other': {'buttons': other, 'value': _otherFilter},
+        'status': {'buttons': status, 'value': _statusFilter},
+        'hasFilters': _hasFilters,
+      },
+    );
+  }
+
+  @override
+  Future<void> loadFilters() async {
+    projectManager = {'me': false, 'other': ''}.obs;
+    teamMember = {'me': true, 'other': ''}.obs;
+    other = {'followed': false, 'withTag': '', 'withoutTag': false}.obs;
+    status = {'active': true, 'paused': false, 'closed': false}.obs;
+  }
+
+  Future<void> _getMyProjects() async {
+    _selfId ??= await Get.find<UserController>().getUserId();
+    _statusFilter = '&status=open';
+    _teamMemberFilter = '&participant=$_selfId';
+  }
+
+  Future<void> _getSavedFilters() async {
+    var savedFilters = await _storage.read('projectFilters');
+
+    if (savedFilters != null) {
+      try {
+        projectManager =
+            Map.from(savedFilters['projectManager']['buttons']).obs;
+        _projectManagerFilter = savedFilters['projectManager']['value'];
+
+        teamMember = Map.from(savedFilters['teamMember']['buttons']).obs;
+        _teamMemberFilter = savedFilters['teamMember']['value'];
+
+        other = Map.from(savedFilters['other']['buttons']).obs;
+        _otherFilter = savedFilters['other']['value'];
+
+        status = Map.from(savedFilters['status']['buttons']).obs;
+        _statusFilter = savedFilters['status']['value'];
+
+        hasFilters.value = savedFilters['hasFilters'];
+      } catch (e) {
+        printWarning('Projects filter loading error: $e');
+        await loadFilters();
+      }
+    } else {
+      await _getMyProjects();
     }
   }
 }
+
+enum PresetProjectFilters { active, myProjects, myFollowedProjects, saved }

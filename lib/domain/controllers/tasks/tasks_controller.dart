@@ -39,7 +39,7 @@ import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 class TasksController extends BaseController {
@@ -66,8 +66,6 @@ class TasksController extends BaseController {
     taskStatusesController.getStatuses();
     _paginationController = paginationController;
     expandedCardView.value = true;
-    filterController.setupPreset('myTasks').then((value) => loadTasks());
-
     _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => await loadTasks();
@@ -88,10 +86,18 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  Future loadTasks() async {
+  Future loadTasks({PresetTaskFilters preset}) async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    await _getTasks(needToClear: true);
+
+    if (preset != null) {
+      await _filterController
+          .setupPreset(preset)
+          .then((value) => _getTasks(needToClear: true));
+    } else {
+      await _getTasks(needToClear: true);
+    }
+
     loaded.value = true;
   }
 

@@ -57,7 +57,7 @@ class _TaskResponsible extends StatelessWidget {
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());
-              await filterController.changeTasksResponsible('Other', newUser);
+              await filterController.changeTasksResponsible('other', newUser);
             },
             onCancelTap: () =>
                 filterController.changeTasksResponsible('other', null),
