@@ -34,7 +34,7 @@ import 'dart:convert';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
-import 'package:projects/data/services/storage.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';

@@ -31,7 +31,7 @@
  */
 
 import 'package:projects/data/services/local_authentication_service.dart';
-import 'package:projects/data/services/storage.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class PasscodeService {

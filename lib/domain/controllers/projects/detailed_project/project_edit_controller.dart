@@ -223,7 +223,7 @@ class ProjectEditController extends BaseProjectEditorController {
   }
 
   Future<void> showTags() async {
-    Get.find<NavigationController>()
+    await Get.find<NavigationController>()
         .toScreen(const TagsSelectionView(), arguments: {'controller': this});
   }
 }

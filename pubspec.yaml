@@ -22,8 +22,9 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0 
-  get: ^4.1.4
-  get_storage: ^2.0.1
+  get: ^4.3.7
+  get_it: ^7.2.0
+  get_storage: ^2.0.3
   # for http requests
   http: ^0.13.0
   # to use svg icons
@@ -31,7 +32,6 @@ dependencies:
   flutter_svg: ^0.22.0
   # for storing important data
   flutter_secure_storage: ^4.2.0
-  get_it: ^4.0.2
   json_serializable: ^3.5.1 
   json_annotation: ^3.1.1
   source_gen: 0.9.10+2 

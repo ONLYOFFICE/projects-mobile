@@ -30,77 +30,58 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-
-import 'package:projects/data/models/tag_itemDTO.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class TagsController extends GetxController {
+class TagsController extends BaseController {
   final _api = locator<ProjectService>();
-  var usersList = [].obs;
-  var loaded = true.obs;
 
-  var isSearchResult = false.obs;
+  PaginationController paginationController;
 
-  RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
+  @override
+  void onInit() {
+    paginationController =
+        Get.put(PaginationController(), tag: 'TagsController');
 
-  RxList<String> projectDetailedTags = <String>[].obs;
+    paginationController.loadDelegate = () async => await _getItems();
+    paginationController.refreshDelegate = () async => await refreshData();
+    paginationController.pullDownEnabled = true;
+    super.onInit();
+  }
 
-  var _projController;
+  @override
+  var itemList = [].obs;
 
-  void onLoading() async {}
+  @override
+  String get screenName => tr('tags');
 
-  Future<void> setup(projController) async {
-    _projController = projController;
+  RxBool loaded = false.obs;
+
+  Future<void> refreshData() async {
     loaded.value = false;
-    tags.clear();
-    projectDetailedTags.clear();
-    var allTags = await _api.getProjectTags();
-
-    if (projController?.tags != null) {
-      for (var value in projController?.tags) {
-        projectDetailedTags.add(value);
-      }
-    }
-
-    if (allTags != null) {
-      for (var tag in allTags) {
-        var isSelected = projectDetailedTags?.contains(tag.title)?.obs;
-
-        tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
-      }
-    }
-
+    await _getItems(needToClear: true);
     loaded.value = true;
   }
 
-  Future<void> confirm() async {
-    _projController.tags.clear();
-    for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
-      }
-    }
-    _projController.tagsText.value = _projController.tags.join(', ');
-    Get.back();
+  Future getItems({bool needToClear = false}) async {
+    paginationController.startIndex = 0;
+    loaded.value = false;
+    await _getItems(needToClear: needToClear);
+    loaded.value = true;
   }
 
-  Future changeTagSelection(TagItemDTO tag) async {
-    tag.isSelected.value = !tag.isSelected.value;
+  Future _getItems({bool needToClear = false}) async {
+    var result = await _api.getTagsPaginated(
+        startIndex: paginationController.startIndex);
 
-    _projController.tags.clear();
-    for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
-      }
+    if (result != null) {
+      paginationController.total.value = result.total;
+      if (needToClear) paginationController.data.clear();
+      paginationController.data.addAll(result.response);
     }
-
-    _projController.tagsText.value = _projController.tags.join(', ');
-  }
-
-  Future<void> createTag(String value) async {
-    var res = await _api.createTag(name: value);
-    if (res != null) await setup(_projController);
   }
 }

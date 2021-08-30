@@ -64,7 +64,7 @@ class TasksWithPresets {
     );
     _myTasksController.expandedCardView.value = true;
     await _filterController
-        .setupPreset('myTasks')
+        .setupPreset(PresetTaskFilters.myTasks)
         .then((value) => _myTasksController.loadTasks());
   }
 
@@ -82,7 +82,25 @@ class TasksWithPresets {
       tag: 'UpcommingContent',
     );
     _filterController
-        .setupPreset('upcomming')
+        .setupPreset(PresetTaskFilters.upcomming)
+        .then((value) => _upcomingTaskscontroller.loadTasks());
+  }
+
+  void setupLastAppliedFilters() {
+    final _filterController = Get.put(
+      TaskFilterController(),
+      tag: 'last',
+    );
+
+    _upcomingTaskscontroller = Get.put(
+      TasksController(
+        _filterController,
+        Get.put(PaginationController(), tag: 'UpcommingContent'),
+      ),
+      tag: 'UpcommingContent',
+    );
+    _filterController
+        .setupPreset(PresetTaskFilters.upcomming)
         .then((value) => _upcomingTaskscontroller.loadTasks());
   }
 }

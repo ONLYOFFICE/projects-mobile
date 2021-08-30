@@ -74,6 +74,7 @@ class NewPasscodeScreen1 extends StatelessWidget {
                       color: Get.theme.colors().onBackground)),
               SizedBox(height: h(16)),
               Text(caption,
+                  textAlign: TextAlign.center,
                   style: TextStyleHelper.subtitle1(
                       color: Get.theme.colors().onBackground.withOpacity(0.6))),
               SizedBox(height: h(32)),

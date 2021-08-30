@@ -30,22 +30,52 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_group.dart';
-import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/group_service.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class GroupsController extends GetxController {
-  final _api = locator<GroupService>();
+abstract class BaseSearchController extends GetxController {
+  BaseSearchController({this.paginationController});
 
-  RxList<PortalGroup> groups = <PortalGroup>[].obs;
+  final PaginationController paginationController;
+  final TextEditingController textController = TextEditingController();
 
-//for shimmer and progress indicator
+  String _query;
+
   RxBool loaded = false.obs;
+  RxBool switchToSearchView = false.obs;
 
-  Future getAllGroups() async {
+  bool get nothingFound =>
+      switchToSearchView.isTrue &&
+      paginationController.data.isEmpty &&
+      textController.text.isNotEmpty &&
+      loaded.isTrue;
+
+  bool get hasResult =>
+      loaded.isTrue &&
+      switchToSearchView.isTrue &&
+      paginationController.data.isNotEmpty;
+
+  Future search({needToClear = true, String query});
+  Future<void> performSearch({needToClear = true, String query}) async {}
+
+  void addData(var result, bool needToClear) {
+    if (result != null) {
+      paginationController.total.value = result.total;
+      if (needToClear) paginationController.data.clear();
+      paginationController.data.addAll(result.response);
+    }
+  }
+
+  Future<void> refreshData() async {
     loaded.value = false;
-    groups.value = await _api.getAllGroups();
+    await performSearch(needToClear: true, query: _query);
     loaded.value = true;
+  }
+
+  void clearSearch() {
+    paginationController.data.clear();
+    textController.clear();
+    _query = null;
   }
 }

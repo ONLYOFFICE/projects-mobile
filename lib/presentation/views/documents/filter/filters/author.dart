@@ -55,7 +55,8 @@ class _Author extends StatelessWidget {
               isSelected: filterController.author['users'].isNotEmpty,
               cancelButtonEnabled: filterController.author['users'].isNotEmpty,
               onTap: () async {
-                var newUser = await Get.bottomSheet(const UsersBottomSheet());
+                var newUser = await Get.find<NavigationController>()
+                    .toScreen(const SelectUserScreen());
                 await filterController.changeAuthorFilter('users', newUser);
               },
               onCancelTap: () =>
@@ -67,7 +68,8 @@ class _Author extends StatelessWidget {
               isSelected: filterController.author['groups'].isNotEmpty,
               cancelButtonEnabled: filterController.author['groups'].isNotEmpty,
               onTap: () async {
-                var newGroup = await Get.bottomSheet(const GroupsBottomSheet());
+                var newGroup = await Get.find<NavigationController>()
+                    .toScreen(const SelectGroupScreen());
                 await filterController.changeAuthorFilter('groups', newGroup);
               },
               onCancelTap: () =>
