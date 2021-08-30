@@ -27,7 +27,6 @@ class _DueDate extends StatelessWidget {
               onTap: () => filterController.changeDeadline('upcoming')),
           FilterElement(
               title: tr('customPeriod'),
-              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.deadline['custom']['selected'],
               onTap: () =>
                   selectDateRange(context, filterController: filterController)),

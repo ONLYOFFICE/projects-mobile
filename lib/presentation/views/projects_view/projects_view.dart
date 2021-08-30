@@ -38,7 +38,7 @@ class ProjectsView extends StatelessWidget {
           tag: 'ProjectsView');
     }
 
-    controller.loadProjects();
+    controller.loadProjects(preset: PresetProjectFilters.saved);
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);

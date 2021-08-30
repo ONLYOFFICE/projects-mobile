@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -26,7 +27,7 @@ class TasksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
-    // controller.loadTasks();
+    controller.loadTasks(preset: PresetTaskFilters.saved);
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);

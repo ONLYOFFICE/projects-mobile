@@ -46,10 +46,16 @@ class DiscussionsController extends BaseController {
   @override
   RxList get itemList => paginationController.data;
 
-  Future loadDiscussions() async {
+  Future loadDiscussions({PresetDiscussionFilters preset}) async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    await _getDiscussions(needToClear: true);
+    if (preset != null) {
+      await _filterController
+          .setupPreset(preset)
+          .then((value) => _getDiscussions(needToClear: true));
+    } else {
+      await _getDiscussions(needToClear: true);
+    }
     loaded.value = true;
   }
 

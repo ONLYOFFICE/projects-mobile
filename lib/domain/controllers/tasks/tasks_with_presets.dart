@@ -32,7 +32,7 @@ class TasksWithPresets {
     );
     _myTasksController.expandedCardView.value = true;
     await _filterController
-        .setupPreset('myTasks')
+        .setupPreset(PresetTaskFilters.myTasks)
         .then((value) => _myTasksController.loadTasks());
   }
 
@@ -50,7 +50,7 @@ class TasksWithPresets {
       tag: 'UpcommingContent',
     );
     _filterController
-        .setupPreset('upcomming')
+        .setupPreset(PresetTaskFilters.upcomming)
         .then((value) => _upcomingTaskscontroller.loadTasks());
   }
 
@@ -68,7 +68,7 @@ class TasksWithPresets {
       tag: 'UpcommingContent',
     );
     _filterController
-        .setupPreset('upcomming')
+        .setupPreset(PresetTaskFilters.upcomming)
         .then((value) => _upcomingTaskscontroller.loadTasks());
   }
 }

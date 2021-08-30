@@ -22,7 +22,8 @@ class _Project extends StatelessWidget {
               isSelected: filterController.project['other'].isNotEmpty,
               cancelButtonEnabled: filterController.project['other'].isNotEmpty,
               onTap: () async {
-                var selectedProject = await Get.to(SelectProjectScreen());
+                var selectedProject = await Get.find<NavigationController>()
+                    .toScreen(SelectProjectScreen());
                 filterController.changeProject('other', selectedProject);
               },
               onCancelTap: () => filterController.changeProject('other', null)),

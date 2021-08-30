@@ -30,10 +30,11 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/settings_service.dart';
 import 'package:projects/data/services/sms_code_service.dart';
-import 'package:projects/data/services/storage.dart';
-import 'package:projects/data/services/subtasks_service.dart';
-import 'package:projects/data/services/task_item_service.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/data/services/task/subtasks_service.dart';
+import 'package:projects/data/services/task/task_item_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
@@ -98,6 +99,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => PortalService());
   locator.registerLazySingleton(() => ProjectApi());
   locator.registerLazySingleton(() => ProjectService());
+  locator.registerLazySingleton(() => Storage());
   locator.registerLazySingleton(() => SecureStorage());
   locator.registerLazySingleton(() => SubtasksApi());
   locator.registerLazySingleton(() => SubtasksService());

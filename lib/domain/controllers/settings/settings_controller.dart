@@ -9,12 +9,12 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/data/services/package_info_service.dart';
 import 'package:projects/data/services/settings_service.dart';
+import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +23,7 @@ class SettingsController extends GetxController {
   final _service = locator<SettingsService>();
   final _packageInfoService = locator<PackageInfoService>();
   final _deviceInfoService = locator<DeviceInfoService>();
+  final _storage = locator<Storage>();
 
   String appVersion;
   String buildNumber;
@@ -43,16 +44,16 @@ class SettingsController extends GetxController {
     appVersion = await _packageInfoService.version;
     buildNumber = await _packageInfoService.buildNumber;
 
-    var themeMode = await GetStorage().read('themeMode');
+    var themeMode = await _storage.read('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await GetStorage().write(themeMode, themeMode);
+      await _storage.write(themeMode, themeMode);
     }
 
-    var analytics = await GetStorage().read('shareAnalytics');
+    var analytics = await _storage.read('shareAnalytics');
 
     if (analytics == null) {
-      await GetStorage().write('shareAnalytics', true);
+      await _storage.write('shareAnalytics', true);
       shareAnalytics.value = true;
     } else {
       shareAnalytics.value = analytics;
@@ -68,7 +69,7 @@ class SettingsController extends GetxController {
 
   Future setTheme(String themeMode) async {
     currentTheme.value = themeMode;
-    await GetStorage().write('themeMode', themeMode);
+    await _storage.write('themeMode', themeMode);
 
     await Get.dialog(StyledAlertDialog(
       titleText: tr('reloadDialogTitle'),
@@ -99,7 +100,7 @@ class SettingsController extends GetxController {
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {
     try {
-      await GetStorage().write('shareAnalytics', value);
+      await _storage.write('shareAnalytics', value);
       shareAnalytics.value = value;
     } catch (_) {
       await ErrorDialog.show(CustomError(message: tr('error')));
