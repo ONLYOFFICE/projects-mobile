@@ -2,13 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/milestone_service.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestonesFilterController extends BaseFilterController {
   final _api = locator<MilestoneService>();
+  final _storage = locator<Storage>();
 
   final _sortController = Get.find<MilestonesSortController>();
   Function applyFiltersDelegate;
@@ -34,20 +36,10 @@ class MilestonesFilterController extends BaseFilterController {
       _deadlineFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
 
-  RxMap<String, dynamic> milestoneResponsible = {'me': false, 'other': ''}.obs;
-  RxMap<String, dynamic> taskResponsible = {'me': false, 'other': ''}.obs;
-  RxMap<String, dynamic> deadline = {
-    'overdue': false,
-    'today': false,
-    'upcoming': false,
-    'custom': {
-      'selected': false,
-      'startDate': DateTime.now(),
-      'stopDate': DateTime.now()
-    }
-  }.obs;
-  RxMap<String, dynamic> status =
-      {'active': false, 'paused': false, 'closed': false}.obs;
+  RxMap milestoneResponsible;
+  RxMap taskResponsible;
+  RxMap deadline;
+  RxMap status;
 
   @override
   String get filtersTitle =>
@@ -55,6 +47,12 @@ class MilestonesFilterController extends BaseFilterController {
 
   MilestonesFilterController() {
     suitableResultCount = (-1).obs;
+  }
+
+  @override
+  void onInit() async {
+    await loadFilters();
+    super.onInit();
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
@@ -231,5 +229,93 @@ class MilestonesFilterController extends BaseFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
     if (applyFiltersDelegate != null) applyFiltersDelegate();
+  }
+
+  // UNUSED
+  @override
+  Future<void> saveFilters() async {
+    var d = Map.from(deadline);
+
+    var startDate = deadline['custom']['startDate'].toIso8601String();
+    var stopDate = deadline['custom']['stopDate'].toIso8601String();
+
+    d['custom'] = {
+      'selected': deadline['custom']['selected'],
+      'startDate': startDate,
+      'stopDate': stopDate,
+    };
+
+    await _storage.write(
+      'milestonesFilter',
+      {
+        'milestoneResponsible': {
+          'buttons': milestoneResponsible,
+          'value': _milestoneResponsibleFilter
+        },
+        'taskResponsible': {
+          'buttons': taskResponsible,
+          'value': _taskResponsibleFilter
+        },
+        'status': {'buttons': status, 'value': _statusFilter},
+        'deadline': {'buttons': d, 'value': _deadlineFilter},
+        'hasFilters': _hasFilters,
+      },
+    );
+  }
+
+  @override
+  Future<void> loadFilters() async {
+    milestoneResponsible = {'me': false, 'other': ''}.obs;
+    taskResponsible = {'me': false, 'other': ''}.obs;
+    deadline = {
+      'overdue': false,
+      'today': false,
+      'upcoming': false,
+      'custom': {
+        'selected': false,
+        'startDate': DateTime.now(),
+        'stopDate': DateTime.now()
+      }
+    }.obs;
+    status = {'active': false, 'paused': false, 'closed': false}.obs;
+  }
+
+  // UNUSED
+  // ignore: unused_element
+  Future<void> _getSavedFilters() async {
+    var savedFilters =
+        await _storage.read('milestoneFilters', returnCopy: true);
+
+    if (savedFilters != null) {
+      try {
+        milestoneResponsible =
+            Map.from(savedFilters['milestoneResponsible']['buttons']).obs;
+        _milestoneResponsibleFilter =
+            savedFilters['milestoneResponsible']['value'];
+
+        taskResponsible =
+            Map.from(savedFilters['taskResponsible']['buttons']).obs;
+        _taskResponsibleFilter = savedFilters['taskResponsible']['value'];
+
+        status = Map.from(savedFilters['status']['buttons']).obs;
+        _statusFilter = savedFilters['status']['value'];
+
+        Map d = savedFilters['deadline']['buttons'];
+        d['custom'] = {
+          'selected': d['custom']['selected'],
+          'startDate': DateTime.parse(d['custom']['startDate']),
+          'stopDate': DateTime.parse(d['custom']['stopDate']),
+        };
+        deadline = d.obs;
+        _deadlineFilter = savedFilters['deadline']['value'];
+
+        hasFilters.value = savedFilters['hasFilters'];
+      } catch (e) {
+        print(e);
+        await loadFilters();
+      }
+    } else {
+      await loadFilters();
+    }
   }
 }

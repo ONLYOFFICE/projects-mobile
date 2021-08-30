@@ -22,7 +22,8 @@ class _Creator extends StatelessWidget {
             isSelected: filterController.creator['other'].isNotEmpty,
             cancelButtonEnabled: filterController.creator['other'].isNotEmpty,
             onTap: () async {
-              var newUser = await Get.bottomSheet(const UsersBottomSheet());
+              var newUser = await Get.find<NavigationController>()
+                  .toScreen(const SelectUserScreen());
               await filterController.changeCreator('other', newUser);
             },
             onCancelTap: () => filterController.changeCreator('other', null),

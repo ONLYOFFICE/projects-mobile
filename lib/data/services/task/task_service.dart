@@ -60,6 +60,7 @@ class TaskService {
     String creatorFilter,
     String projectFilter,
     String milestoneFilter,
+    String statusFilter,
     String projectId,
     String deadlineFilter,
   }) async {
@@ -72,6 +73,7 @@ class TaskService {
       creatorFilter: creatorFilter,
       projectFilter: projectFilter,
       milestoneFilter: milestoneFilter,
+      statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
       projectId: projectId,
     );

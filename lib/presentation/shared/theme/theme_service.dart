@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'package:get_storage/get_storage.dart';
+import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/internal/locator.dart';
 
 class ThemeService {
-  final storage = GetStorage();
+  final storage = locator<Storage>();
 
   ThemeMode savedThemeMode() {
-    var themeMode = storage.read('themeMode');
+    var themeMode = storage.getValue('themeMode');
 
     switch (themeMode) {
       case 'darkTheme':

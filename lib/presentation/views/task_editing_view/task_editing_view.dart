@@ -21,7 +21,9 @@ class TaskEditingView extends StatelessWidget {
   Widget build(BuildContext context) {
     PortalTask task = Get.arguments['task'];
 
-    var controller = Get.put(TaskEditingController(task: task));
+    var controller =
+        Get.put(TaskEditingController(task: task), permanent: false);
+
     controller.init();
     return Scaffold(
       appBar: StyledAppBar(

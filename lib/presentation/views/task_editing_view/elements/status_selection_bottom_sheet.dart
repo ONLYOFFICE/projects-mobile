@@ -6,7 +6,7 @@ import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
+import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 // here is a different function, because the task changes page has a

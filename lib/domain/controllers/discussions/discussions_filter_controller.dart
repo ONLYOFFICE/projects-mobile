@@ -2,14 +2,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/discussions_service.dart';
-import 'package:projects/domain/controllers/base_filter_controller.dart';
+import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/debug_print.dart';
 
 class DiscussionsFilterController extends BaseFilterController {
   final _api = locator<DiscussionsService>();
   final _sortController = Get.find<DiscussionsSortController>();
+  final _storage = locator<Storage>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
@@ -39,24 +42,21 @@ class DiscussionsFilterController extends BaseFilterController {
       _creationDateFilter.isNotEmpty ||
       _otherFilter.isNotEmpty;
 
-  RxMap<String, dynamic> author = {'me': false, 'other': ''}.obs;
+  RxMap author;
 
-  RxMap<String, dynamic> status = {'open': false, 'archived': false}.obs;
+  RxMap status;
 
-  RxMap<String, dynamic> creationDate = {
-    'today': false,
-    'last7Days': false,
-    'custom': {
-      'selected': false,
-      'startDate': DateTime.now(),
-      'stopDate': DateTime.now()
-    }
-  }.obs;
+  RxMap creationDate;
 
-  RxMap<String, dynamic> project =
-      {'my': false, 'other': '', 'withTag': '', 'withoutTag': false}.obs;
+  RxMap project;
 
-  RxMap<String, dynamic> other = {'subscribed': false}.obs;
+  RxMap other;
+
+  @override
+  void onInit() async {
+    await loadFilters();
+    super.onInit();
+  }
 
   @override
   String get filtersTitle =>
@@ -262,14 +262,104 @@ class DiscussionsFilterController extends BaseFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
     if (applyFiltersDelegate != null) applyFiltersDelegate();
+    await saveFilters();
   }
 
-  Future<void> setupPreset(String preset) async {
+  Future<void> setupPreset(PresetDiscussionFilters preset) async {
     _selfId ??= await Get.find<UserController>().getUserId();
-    switch (preset) {
-      case 'myDiscussions':
-        _authorFilter = '&participant=$_selfId';
-        break;
+
+    if (preset == PresetDiscussionFilters.myDiscussions) {
+      _authorFilter = '&participant=$_selfId';
+    } else if (preset == PresetDiscussionFilters.saved) {
+      await _getSavedFilters();
+    }
+    hasFilters.value = _hasFilters;
+  }
+
+  @override
+  Future<void> saveFilters() async {
+    var creation = Map.from(creationDate);
+
+    var startDate = creation['custom']['startDate'].toIso8601String();
+    var stopDate = creation['custom']['stopDate'].toIso8601String();
+
+    creation['custom'] = {
+      'selected': creationDate['custom']['selected'],
+      'startDate': startDate,
+      'stopDate': stopDate,
+    };
+
+    await _storage.write(
+      'discussionFilters',
+      {
+        'author': {'buttons': author, 'value': _authorFilter},
+        'project': {'buttons': project, 'value': _projectFilter},
+        'status': {'buttons': status, 'value': _statusFilter},
+        'creationDate': {'buttons': creation, 'value': _creationDateFilter},
+        'other': {'buttons': other, 'value': _otherFilter},
+        'hasFilters': _hasFilters,
+      },
+    );
+  }
+
+  @override
+  Future<void> loadFilters() async {
+    author = {'me': false, 'other': ''}.obs;
+    project = {
+      'my': false,
+      'other': '',
+      'withTag': '',
+      'withoutTag': false,
+    }.obs;
+    status = {'open': false, 'archived': false}.obs;
+    creationDate = {
+      'today': false,
+      'last7Days': false,
+      'custom': {
+        'selected': false,
+        'startDate': DateTime.now(),
+        'stopDate': DateTime.now()
+      }
+    }.obs;
+    other = {'subscribed': false}.obs;
+  }
+
+  Future<void> _getSavedFilters() async {
+    var savedFilters =
+        await _storage.read('discussionFilters', returnCopy: true);
+
+    if (savedFilters != null) {
+      try {
+        author = Map.from(savedFilters['author']['buttons']).obs;
+        _authorFilter = savedFilters['author']['value'];
+
+        project = Map.from(savedFilters['project']['buttons']).obs;
+        _projectFilter = savedFilters['project']['value'];
+
+        status = Map.from(savedFilters['status']['buttons']).obs;
+        _statusFilter = savedFilters['status']['value'];
+
+        Map creation = savedFilters['creationDate']['buttons'];
+        creation['custom'] = {
+          'selected': creation['custom']['selected'],
+          'startDate': DateTime.parse(creation['custom']['startDate']),
+          'stopDate': DateTime.parse(creation['custom']['stopDate']),
+        };
+        creationDate = creation.obs;
+        _creationDateFilter = savedFilters['creationDate']['value'];
+
+        other = Map.from(savedFilters['other']['buttons']).obs;
+        _otherFilter = savedFilters['other']['value'];
+
+        hasFilters.value = savedFilters['hasFilters'];
+      } catch (e) {
+        printWarning('Discussions filter loading error: $e');
+        await loadFilters();
+      }
+    } else {
+      await loadFilters();
     }
   }
 }
+
+enum PresetDiscussionFilters { myDiscussions, saved }

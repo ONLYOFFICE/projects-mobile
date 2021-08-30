@@ -169,6 +169,7 @@ class TaskApi {
     String creatorFilter,
     String projectFilter,
     String milestoneFilter,
+    String statusFilter,
     String projectId,
     String deadlineFilter,
   }) async {
@@ -199,6 +200,10 @@ class TaskApi {
     }
     if (milestoneFilter != null) {
       url += milestoneFilter;
+    }
+
+    if (statusFilter != null) {
+      url += statusFilter;
     }
 
     if (deadlineFilter != null) {

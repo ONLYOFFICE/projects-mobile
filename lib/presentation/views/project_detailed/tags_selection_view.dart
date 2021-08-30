@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/tags_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
@@ -22,7 +22,7 @@ class TagsSelectionView extends StatelessWidget {
   Widget build(BuildContext context) {
     var projController = Get.arguments['controller'];
 
-    var controller = Get.put(TagsController());
+    var controller = Get.put(ProjectTagsController());
     controller.setup(projController);
 
     return Scaffold(

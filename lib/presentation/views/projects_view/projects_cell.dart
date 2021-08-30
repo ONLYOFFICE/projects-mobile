@@ -12,8 +12,8 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/bottom_sheets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
+import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
@@ -41,13 +41,9 @@ class ProjectCell extends StatelessWidget {
                 ? InkWell(
                     onTap: () async => showsStatusesBS(
                         context: context, itemController: itemController),
-                    child: ProjectIcon(
-                      itemController: itemController,
-                    ),
+                    child: ProjectIcon(itemController: itemController),
                   )
-                : ProjectIcon(
-                    itemController: itemController,
-                  ),
+                : ProjectIcon(itemController: itemController),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -98,7 +94,7 @@ class ProjectIcon extends StatelessWidget {
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
           return Container(
-            width: 48,
+            // width: 48,
             child: Stack(
               alignment: Alignment.center,
               children: <Widget>[

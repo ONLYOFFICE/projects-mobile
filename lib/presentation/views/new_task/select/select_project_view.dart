@@ -43,8 +43,8 @@ class SelectProjectView extends StatelessWidget {
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isNotEmpty) {
           return ProjectsList(
-            projects: searchController.searchResult,
             controller: controller,
+            projects: searchController.searchResult,
           );
         }
         if (searchController.switchToSearchView.value == true &&

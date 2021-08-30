@@ -53,17 +53,20 @@ class NavigationController extends GetxController {
 
   void clearCurrentIndex() => tabIndex = null;
 
-  void toScreen(Widget widget,
-      {bool preventDuplicates, Map<String, dynamic> arguments}) {
+  Future toScreen(
+    Widget widget, {
+    bool preventDuplicates,
+    Map<String, dynamic> arguments,
+  }) async {
     if (Get.find<PlatformController>().isMobile) {
-      Get.to(
+      return await Get.to(
         () => widget,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
     } else {
       //TODO modal dialog also overlap dimmed background, fix if possible
-      Get.dialog(
+      return await Get.dialog(
         ModalScreenView(contentView: widget),
         barrierDismissible: false,
         arguments: arguments,
