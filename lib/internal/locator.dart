@@ -30,10 +30,11 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/settings_service.dart';
 import 'package:projects/data/services/sms_code_service.dart';
-import 'package:projects/data/services/storage.dart';
-import 'package:projects/data/services/subtasks_service.dart';
-import 'package:projects/data/services/task_item_service.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/data/services/task/subtasks_service.dart';
+import 'package:projects/data/services/task/task_item_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
@@ -45,7 +46,7 @@ import 'package:projects/domain/controllers/documents/documents_filter_controlle
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
-import 'package:projects/domain/controllers/groups_controller.dart';
+import 'package:projects/domain/controllers/groups/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -104,6 +105,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => PortalService());
   locator.registerLazySingleton(() => ProjectApi());
   locator.registerLazySingleton(() => ProjectService());
+  locator.registerLazySingleton(() => Storage());
   locator.registerLazySingleton(() => SecureStorage());
   locator.registerLazySingleton(() => SubtasksApi());
   locator.registerLazySingleton(() => SubtasksService());
@@ -141,7 +143,10 @@ void setupLocator() {
       fenix: true);
 
   Get.lazyPut(() => TasksSortController(), fenix: true);
-  Get.lazyPut(() => UserController(), fenix: true);
+  Get.lazyPut(
+    () => UserController(),
+    fenix: true,
+  );
   Get.lazyPut(() => UsersController(), fenix: true);
 
   Get.lazyPut(() => UsersDataSource(), fenix: true);

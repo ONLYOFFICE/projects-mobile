@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskStatusesController extends GetxController {
@@ -27,11 +27,22 @@ class TaskStatusesController extends GetxController {
 
   Status getTaskStatus(PortalTask task) {
     var status;
+
     if (task.customTaskStatus != null) {
-      status =
-          statuses.firstWhere((element) => element.id == task.customTaskStatus);
+      status = statuses.firstWhere(
+        (element) => element.id == task.customTaskStatus,
+        orElse: () => null,
+      );
     } else {
-      status = statuses.firstWhere((element) => -element.id == task.status);
+      status = statuses.firstWhere(
+        (element) => -element.id == task.status,
+        orElse: () => null,
+      );
+
+      status ??= statuses.lastWhere(
+        (element) => element.statusType == task.status,
+        orElse: () => null,
+      );
     }
     return status;
   }

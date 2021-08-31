@@ -3,7 +3,7 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/task_service.dart';
+import 'package:projects/data/services/task/task_service.dart';
 
 class ProjectTasksController extends GetxController {
   final _api = locator<TaskService>();

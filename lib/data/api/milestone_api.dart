@@ -19,6 +19,7 @@ class MilestoneApi {
     String taskResponsibleFilter,
     String statusFilter,
     String deadlineFilter,
+    String query,
   }) async {
     var url = await coreApi.milestonesByFilter();
 
@@ -48,12 +49,77 @@ class MilestoneApi {
     if (projectId != null && projectId.isNotEmpty)
       url += '&projectid=$projectId';
 
+    if (query != null) url += '&FilterValue=$query';
+
     var result = ApiDTO<List<Milestone>>();
     try {
       var response = await coreApi.getRequest(url);
       final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => Milestone.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<PageDTO<List<Milestone>>> milestonesByFilterPaginated({
+    int startIndex,
+    String sortBy,
+    String sortOrder,
+    String projectId,
+    String milestoneResponsibleFilter,
+    String taskResponsibleFilter,
+    String statusFilter,
+    String deadlineFilter,
+    String query,
+  }) async {
+    var url = await coreApi.milestonesByFilter();
+
+    if (startIndex != null) {
+      url += '?Count=25&StartIndex=$startIndex';
+    }
+
+    if (sortBy != null &&
+        sortBy.isNotEmpty &&
+        sortOrder != null &&
+        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+
+    if (milestoneResponsibleFilter != null) {
+      url += milestoneResponsibleFilter;
+    }
+
+    if (taskResponsibleFilter != null) {
+      url += taskResponsibleFilter;
+    }
+
+    if (statusFilter != null) {
+      url += statusFilter;
+    }
+
+    if (deadlineFilter != null) {
+      url += deadlineFilter;
+    }
+
+    if (projectId != null && projectId.isNotEmpty)
+      url += '&projectid=$projectId';
+
+    if (query != null) url += '&FilterValue=$query';
+
+    var result = PageDTO<List<Milestone>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.total = responseJson['total'];
         result.response = (responseJson['response'] as List)
             .map((i) => Milestone.fromJson(i))
             .toList();

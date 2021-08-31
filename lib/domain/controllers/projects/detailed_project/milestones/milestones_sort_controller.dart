@@ -1,4 +1,4 @@
-import 'package:projects/domain/controllers/base_sort_controller.dart';
+import 'package:projects/domain/controllers/base/base_sort_controller.dart';
 
 class MilestonesSortController extends BaseSortController {
   MilestonesSortController() {

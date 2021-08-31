@@ -38,7 +38,7 @@ class ProjectsWithPresets {
     );
 
     await _filterController
-        .setupPreset('myProjects')
+        .setupPreset(PresetProjectFilters.myProjects)
         .then((value) => _myProjectsController.loadProjects());
   }
 
@@ -53,7 +53,7 @@ class ProjectsWithPresets {
         ),
         tag: 'myFollowedProjects');
     _filterController
-        .setupPreset('myFollowedProjects')
+        .setupPreset(PresetProjectFilters.myFollowedProjects)
         .then((value) => _folowedProjectsController.loadProjects());
   }
 
@@ -68,7 +68,7 @@ class ProjectsWithPresets {
         ),
         tag: 'active');
     _filterController
-        .setupPreset('active')
+        .setupPreset(PresetProjectFilters.active)
         .then((value) => _activeProjectsController.loadProjects());
   }
 }

@@ -45,7 +45,7 @@ class MilestonesDataSource extends GetxController {
     var result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectId: _projectId.toString(),
+      projectId: _projectId != null ? _projectId.toString() : null,
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,

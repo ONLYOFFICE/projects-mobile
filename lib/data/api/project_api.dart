@@ -175,6 +175,35 @@ class ProjectApi {
     return result;
   }
 
+  Future<PageDTO<List<ProjectTag>>> getTagsPaginated({
+    int startIndex,
+    String query,
+  }) async {
+    var url = await coreApi.projectTags();
+
+    if (query != null) url += '/search?tagName=$query';
+
+    if (startIndex != null) url += '?&Count=25&StartIndex=$startIndex';
+
+    var result = PageDTO<List<ProjectTag>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = (responseJson['response'] as List)
+            .map((i) => ProjectTag.fromJson(i))
+            .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
   Future<ApiDTO<Map<String, dynamic>>> createProject(
       {NewProjectDTO project}) async {
     var url = await coreApi.createProjectUrl();

@@ -26,8 +26,8 @@ class _Milestone extends StatelessWidget {
                   : filterController.milestone['other'],
               isSelected: filterController.milestone['other'].isNotEmpty,
               onTap: () async {
-                var milestone =
-                    await Get.bottomSheet(const MilestonesBottomSheet());
+                var milestone = await Get.find<NavigationController>()
+                    .toScreen(const SelectMilestoneScreen());
                 filterController.changeMilestone('other', milestone);
               },
               cancelButtonEnabled:

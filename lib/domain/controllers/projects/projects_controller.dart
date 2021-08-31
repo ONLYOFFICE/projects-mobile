@@ -7,7 +7,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/services/project_service.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
@@ -73,10 +73,16 @@ class ProjectsController extends BaseController {
     await _getProjects(needToClear: true);
   }
 
-  Future<void> loadProjects() async {
+  Future<void> loadProjects({PresetProjectFilters preset}) async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    await _getProjects(needToClear: true);
+    if (preset != null) {
+      await _filterController
+          .setupPreset(preset)
+          .then((value) => _getProjects(needToClear: true));
+    } else {
+      await _getProjects(needToClear: true);
+    }
     loaded.value = true;
   }
 
