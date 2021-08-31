@@ -62,8 +62,6 @@ class DiscussionsDocumentsController extends GetxController {
 
   PaginationController _paginationController;
 
-  String _query;
-
   String _entityType;
 
   String get entityType => _entityType;

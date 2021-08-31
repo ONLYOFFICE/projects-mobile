@@ -37,7 +37,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/views/new_task/select/select_responsibles_view.dart';
+import 'package:projects/presentation/shared/project_team_responsible.dart';
 
 class ResponsibleTile extends StatelessWidget {
   final controller;
@@ -74,7 +74,7 @@ class ResponsibleTile extends StatelessWidget {
           suffixPadding: const EdgeInsets.only(right: 21),
           icon: SvgIcons.person,
           onTap: () => Get.find<NavigationController>().toScreen(
-              const SelectResponsiblesView(),
+              const ProjectTeamResponsibleSelectionView(),
               arguments: {'controller': controller}),
         );
       },
