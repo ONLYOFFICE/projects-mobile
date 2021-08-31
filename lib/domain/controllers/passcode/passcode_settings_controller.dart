@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
@@ -94,8 +95,9 @@ class PasscodeSettingsController extends GetxController {
         try {
           // update code in main passcode controller
           Get.find<PasscodeController>().onInit();
-          // ignore: empty_catches
-        } catch (e) {}
+        } catch (e) {
+          debugPrint(e);
+        }
         leave();
       } else {
         passcodeCheckFailed.value = true;

@@ -347,8 +347,9 @@ class NewTaskController extends GetxController
       try {
         // ignore: unawaited_futures
         Get.find<ProjectDetailsController>().refreshData();
-        // ignore: empty_catches
-      } catch (e) {}
+      } catch (e) {
+        debugPrint(e);
+      }
     }
   }
 

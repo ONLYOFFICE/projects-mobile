@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/comments/new_comment/new_discussion_
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -125,8 +126,9 @@ class DiscussionItemController extends GetxController {
         getDiscussionDetailed(showLoading: true);
         Get.back();
       }
-      // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   Future<void> toDiscussionEditingScreen() async {
@@ -143,8 +145,9 @@ class DiscussionItemController extends GetxController {
       if (result != null) {
         discussion.value.setSubscribers = result.subscribers;
       }
-      // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   Future<void> deleteMessage() async {
@@ -153,15 +156,19 @@ class DiscussionItemController extends GetxController {
       if (result != null) {
         Get.back();
         await Get.find<DiscussionsController>().loadDiscussions();
+        //TODO refactoring needed
         try {
+          // ignore: unawaited_futures
+          Get.find<ProjectDetailsController>().refreshData();
           // ignore: unawaited_futures
           Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
         } catch (e) {
           debugPrint(e);
         }
       }
-      // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e);
+    }
   }
 
   void handleVisibilityChanged(VisibilityInfo info) {
