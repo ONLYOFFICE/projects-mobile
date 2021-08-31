@@ -21,8 +21,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller =
-        Get.arguments['controller']; // Get.find<NewProjectController>();
+    var controller = Get.arguments['controller'];
+
     var usersDataSource = Get.find<UsersDataSource>();
 
     controller.selectionMode = UserSelectionMode.Single;
@@ -78,7 +78,7 @@ class UsersSearchResult extends StatelessWidget {
     @required this.onTapFunction,
   }) : super(key: key);
   final Function onTapFunction;
-  final UsersDataSource usersDataSource;
+  final usersDataSource;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +115,7 @@ class UsersDefault extends StatelessWidget {
   }) : super(key: key);
   final Function onTapFunction;
   final PortalUserItemController selfUserItem;
-  final UsersDataSource usersDataSource;
+  final usersDataSource;
 
   @override
   Widget build(BuildContext context) {

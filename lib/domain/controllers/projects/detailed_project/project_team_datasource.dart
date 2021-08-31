@@ -9,8 +9,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamDataSource extends GetxController {
   final _api = locator<ProjectService>();
-  var usersList = [].obs;
+  var usersList = <PortalUserItemController>[].obs;
   var loaded = true.obs;
+  var nothingFound = false.obs;
 
   var _startIndex = 0;
 
@@ -22,7 +23,7 @@ class ProjectTeamDataSource extends GetxController {
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
-  void onLoading() async {
+  Future onLoading() async {
     _startIndex += 25;
     if (_startIndex >= totalProfiles) {
       refreshController.loadComplete();
@@ -45,11 +46,13 @@ class ProjectTeamDataSource extends GetxController {
       portalUser.selectionMode.value = UserSelectionMode.None;
       usersList.add(portalUser);
     }
+
+    nothingFound.value = usersList.isEmpty;
   }
 
-  Future getTeam() async {
+  Future getTeam({bool needToClear = true}) async {
     loaded.value = false;
-    await _loadTeam(needToClear: true);
+    await _loadTeam(needToClear: needToClear);
     loaded.value = true;
   }
 }

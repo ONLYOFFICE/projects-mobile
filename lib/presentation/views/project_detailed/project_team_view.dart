@@ -17,7 +17,7 @@ class ProjectTeamView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var projectTeamDataSource = Get.put(ProjectTeamDataSource());
+    var projectTeamDataSource = Get.find<ProjectTeamDataSource>();
     projectTeamDataSource.projectDetailed = projectDetailed;
     projectTeamDataSource.getTeam();
     return Obx(() {

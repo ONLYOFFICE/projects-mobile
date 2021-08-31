@@ -7,9 +7,9 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_team_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -26,9 +26,7 @@ class NewMilestoneController extends GetxController {
   int get selectedProjectId => _selectedProjectId;
   DateTime get dueDate => _dueDate;
 
-  final _userController = Get.find<UserController>();
-  final _usersDataSource = Get.find<UsersDataSource>();
-  PortalUserItemController selfUserItem;
+  final milestoneTeamController = Get.find<MilestoneTeamController>();
 
   RxString slectedProjectTitle = ''.obs;
   RxString slectedMilestoneTitle = ''.obs;
@@ -40,17 +38,30 @@ class NewMilestoneController extends GetxController {
   RxBool needToSelectProject = false.obs;
   RxBool needToSetTitle = false.obs;
   RxBool needToSelectResponsible = false.obs;
+  RxBool needToSetDueDate = false.obs;
 
   var titleController = TextEditingController();
 
   PortalUserItemController _previusSelectedResponsible;
   Rx<PortalUserItemController> responsible;
+  var teamMembers = <PortalUserItemController>[].obs;
 
-  void setup(ProjectDetailed projectDetailed) {
+  Future<void> setup(ProjectDetailed projectDetailed) async {
     if (projectDetailed != null) {
+      milestoneTeamController.projectDetailed = projectDetailed;
+      await milestoneTeamController.getTeam();
+
       slectedProjectTitle.value = projectDetailed.title;
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
+
+      var projectTeamDataSource = Get.put(ProjectTeamDataSource());
+      projectTeamDataSource.projectDetailed = projectDetailed;
+      await projectTeamDataSource.getTeam();
+
+      for (var user in projectTeamDataSource.usersList) {
+        teamMembers.add(user);
+      }
     }
   }
 
@@ -117,49 +128,31 @@ class NewMilestoneController extends GetxController {
     }
   }
 
-  void setupResponsibleSelection() async {
-    await _userController.getUserInfo();
-
-    var selfUser = _userController.user;
-    selfUserItem = PortalUserItemController(portalUser: selfUser);
-
-    selfUserItem.selectionMode.value = UserSelectionMode.Single;
-    _usersDataSource.applyUsersSelection = _applyUsersSelection;
-
-    _usersDataSource.withoutSelf = true;
-    _usersDataSource.selfUserItem = selfUserItem;
-
-    await _usersDataSource.getProfiles(needToClear: true);
+  Future setupResponsibleSelection() async {
+    await milestoneTeamController
+        .getTeam()
+        .then((value) => _applyUsersSelection());
   }
 
   Future<void> _applyUsersSelection() async {
-    for (var element in _usersDataSource.usersList) {
+    for (var element in milestoneTeamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
 
     if (responsible != null) {
-      for (var user in _usersDataSource.usersList) {
+      for (var user in milestoneTeamController.usersList) {
         if (responsible.value.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
-      }
-
-      if (selfUserItem.portalUser.id == responsible.value.portalUser.id) {
-        selfUserItem.isSelected.value = responsible.value.isSelected.value;
       }
     }
   }
 
   void addResponsible(PortalUserItemController user) {
-    if (user.isSelected.value == true) {
-      responsible = user.obs;
-    } else {
-      responsible = null;
-    }
-    if (selfUserItem.portalUser.id == user.portalUser.id) {
-      selfUserItem.isSelected.value = user.isSelected.value;
-    }
+    responsible = user.obs;
+
+    Get.back();
   }
 
   void changeDueDate(DateTime newDate) {
@@ -178,10 +171,12 @@ class NewMilestoneController extends GetxController {
     if (_selectedProjectId == null) needToSelectProject.value = true;
     if (titleController.text.isEmpty) needToSetTitle.value = true;
     if (responsible?.value == null) needToSelectResponsible.value = true;
+    if (dueDate == null) needToSetDueDate.value = true;
 
     if (needToSelectProject.value == false ||
         needToSetTitle.value == false ||
-        needToSelectResponsible.value == false) return;
+        needToSelectResponsible.value == false ||
+        needToSetDueDate.value == false) return;
 
     var milestone = NewMilestoneDTO(
       title: titleController.text,
