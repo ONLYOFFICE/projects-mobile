@@ -34,7 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
-import 'package:projects/domain/controllers/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -78,10 +78,16 @@ class DiscussionsController extends BaseController {
   @override
   RxList get itemList => paginationController.data;
 
-  Future loadDiscussions() async {
+  Future loadDiscussions({PresetDiscussionFilters preset}) async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    await _getDiscussions(needToClear: true);
+    if (preset != null) {
+      await _filterController
+          .setupPreset(preset)
+          .then((value) => _getDiscussions(needToClear: true));
+    } else {
+      await _getDiscussions(needToClear: true);
+    }
     loaded.value = true;
   }
 

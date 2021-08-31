@@ -66,7 +66,10 @@ class ListLoadingSkeleton extends StatelessWidget {
                     children: [
                       Container(
                         margin: const EdgeInsets.only(
-                            bottom: 32, left: 16, right: 16),
+                          bottom: 32,
+                          left: 16,
+                          right: 16,
+                        ),
                         height: 40,
                         width: 40,
                         decoration: BoxDecoration(
@@ -87,10 +90,11 @@ class ListLoadingSkeleton extends StatelessWidget {
                         ),
                       ),
                       Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          width: 41,
-                          height: 12,
-                          decoration: _decoration)
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        width: 41,
+                        height: 12,
+                        decoration: _decoration,
+                      )
                     ],
                   )
               ],

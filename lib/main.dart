@@ -36,7 +36,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:projects/data/services/storage.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -79,10 +80,17 @@ Future<String> _getInitPage() async {
   var storage = locator<SecureStorage>();
   var token = await storage.getString('token');
   var passcode = await storage.getString('passcode');
-  // await Get.put(LoginController()).logout();
+  LoginController loginController;
+  try {
+    loginController = Get.find<LoginController>();
+  } catch (e) {
+    loginController = Get.put(LoginController());
+  }
+
+  var isTokenExpired = await loginController.isTokenExpired();
 
   // TODO CHECK TOKEN (isTokenExpired)
-  if (token != null) {
+  if (token != null && !isTokenExpired) {
     if (passcode != null) return 'PasscodeScreen';
     return 'NavigationView';
   } else {

@@ -34,7 +34,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:projects/data/services/storage.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class CoreApi {

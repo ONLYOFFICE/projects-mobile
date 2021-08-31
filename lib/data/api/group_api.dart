@@ -62,4 +62,40 @@ class GroupApi {
 
     return result;
   }
+
+  Future<PageDTO<List<PortalGroup>>> getProfilesByExtendedFilter({
+    int startIndex,
+    String query,
+  }) async {
+    var url = await coreApi.allGroups();
+
+    if (startIndex != null) {
+      url += '?Count=25&StartIndex=$startIndex';
+    }
+
+    if (startIndex != null && query != null) {
+      url += '&FilterValue=$query';
+    }
+
+    var result = PageDTO<List<PortalGroup>>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.total = responseJson['total'];
+        {
+          result.response = (responseJson['response'] as List)
+              .map((i) => PortalGroup.fromJson(i))
+              .toList();
+        }
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
 }

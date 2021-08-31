@@ -37,7 +37,7 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
-import 'package:projects/data/services/task_item_service.dart';
+import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
