@@ -92,6 +92,7 @@ class NewProjectController extends BaseProjectEditorController {
   }
 
   Future<void> showTags() async {
+    // ignore: unawaited_futures
     Get.find<NavigationController>()
         .toScreen(const TagsSelectionView(), arguments: {'controller': this});
   }

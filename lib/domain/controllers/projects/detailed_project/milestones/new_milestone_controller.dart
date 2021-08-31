@@ -55,6 +55,8 @@ class NewMilestoneController extends GetxController {
 
   var remindBeforeDueDate = false.obs;
   var keyMilestone = false.obs;
+
+  var notificationEnabled = false.obs;
   int get selectedProjectId => _selectedProjectId;
   DateTime get dueDate => _dueDate;
 
@@ -217,7 +219,7 @@ class NewMilestoneController extends GetxController {
       isKey: keyMilestone.value,
       responsible: responsible.value.id,
       isNotify: remindBeforeDueDate.value,
-      // notifyResponsible:
+      notifyResponsible: notificationEnabled.value,
     );
 
     var success = await _api.createMilestone(
@@ -257,5 +259,9 @@ class NewMilestoneController extends GetxController {
   void onDueDateTilePressed() {
     Get.find<NavigationController>().to(const SelectDateView(),
         arguments: {'controller': this, 'startDate': false});
+  }
+
+  void enableNotification(bool value) {
+    notificationEnabled.value = value;
   }
 }

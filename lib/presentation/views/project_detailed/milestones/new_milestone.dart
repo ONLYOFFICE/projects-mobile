@@ -198,6 +198,13 @@ class AdvancedOptions extends StatelessWidget {
                               .enableRemindBeforeDueDate(value);
                         },
                       ),
+                      OptionWithSwitch(
+                        title: tr('notifyResponsible'),
+                        switchValue: newMilestoneController.notificationEnabled,
+                        switchOnChanged: (value) {
+                          newMilestoneController.enableNotification(value);
+                        },
+                      ),
                     ],
                   ),
                 ),
