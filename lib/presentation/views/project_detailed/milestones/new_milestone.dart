@@ -81,8 +81,6 @@ class NewMilestoneView extends StatelessWidget {
               ProjectTile(controller: newMilestoneController),
               if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
                 ResponsibleTile(controller: newMilestoneController),
-              // if (controller.responsibles.isNotEmpty)
-              //   NotifyResponsiblesTile(controller: controller),
               DescriptionTile(newMilestoneController: newMilestoneController),
               DueDateTile(controller: newMilestoneController),
               const SizedBox(height: 5),
@@ -362,12 +360,12 @@ class ResponsibleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _isSelected = controller.responsible != null;
-    return Obx(
-      () => NewMilestoneInfo(
+    return Obx(() {
+      var _isSelected = controller.responsible != null;
+      return NewMilestoneInfo(
         isSelected: _isSelected,
         caption: _isSelected ? tr('assignedTo') : null,
-        text: _isSelected
+        text: controller.responsible?.value != null
             ? '${controller.responsible.value.portalUser.displayName}'
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value
@@ -386,8 +384,8 @@ class ResponsibleTile extends StatelessWidget {
             'newMilestoneController': controller,
           })
         },
-      ),
-    );
+      );
+    });
   }
 }
 

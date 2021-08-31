@@ -82,12 +82,12 @@ class NewMilestoneController extends GetxController {
 
   Future<void> setup(ProjectDetailed projectDetailed) async {
     if (projectDetailed != null) {
-      milestoneTeamController.projectDetailed = projectDetailed;
-      await milestoneTeamController.getTeam();
-
       slectedProjectTitle.value = projectDetailed.title;
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
+
+      milestoneTeamController.projectDetailed = projectDetailed;
+      await milestoneTeamController.getTeam();
 
       var projectTeamDataSource = Get.put(ProjectTeamDataSource());
       projectTeamDataSource.projectDetailed = projectDetailed;
@@ -185,7 +185,7 @@ class NewMilestoneController extends GetxController {
 
   void addResponsible(PortalUserItemController user) {
     responsible = user.obs;
-
+    needToSelectResponsible.value = false;
     Get.back();
   }
 
@@ -199,18 +199,20 @@ class NewMilestoneController extends GetxController {
       _dueDate = null;
       dueDateText.value = '';
     }
+
+    needToSetDueDate.value = false;
   }
 
   void confirm(BuildContext context) async {
-    if (_selectedProjectId == null) needToSelectProject.value = true;
-    if (titleController.text.isEmpty) needToSetTitle.value = true;
-    if (responsible?.value == null) needToSelectResponsible.value = true;
-    if (dueDate == null) needToSetDueDate.value = true;
+    needToSelectProject.value = _selectedProjectId == null;
+    needToSetTitle.value = titleController.text.isEmpty;
+    needToSelectResponsible.value = responsible?.value == null;
+    needToSetDueDate.value = dueDate == null;
 
-    if (needToSelectProject.value == false ||
-        needToSetTitle.value == false ||
-        needToSelectResponsible.value == false ||
-        needToSetDueDate.value == false) return;
+    if (needToSelectProject.value ||
+        needToSetTitle.value ||
+        needToSelectResponsible.value ||
+        needToSetDueDate.value) return;
 
     var milestone = NewMilestoneDTO(
       title: titleController.text,
