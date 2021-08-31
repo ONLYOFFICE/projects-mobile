@@ -10,7 +10,7 @@ abstract class SubtaskActionController extends GetxController {
   RxBool setTiltleError;
   RxInt status;
 
-  void init({Subtask subtask});
+  void init({Subtask subtask, int projectId});
   void addResponsible(PortalUserItemController user);
   Future<void> confirm({@required context, int taskId});
   void confirmResponsiblesSelection();

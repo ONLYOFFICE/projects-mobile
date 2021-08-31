@@ -24,7 +24,7 @@ import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
-import 'package:projects/presentation/views/new_task/select/select_responsibles_view.dart';
+
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
@@ -101,9 +101,6 @@ List<GetPage> getxPages() => [
           page: () => const SelectMilestoneView()),
       GetPage(
           name: '/SelectProjectView', page: () => const SelectProjectView()),
-      GetPage(
-          name: '/SelectResponsiblesView',
-          page: () => const SelectResponsiblesView()),
       GetPage(
           name: '/SubtaskDetailedView',
           page: () => const SubtaskDetailedView()),

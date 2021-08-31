@@ -7,8 +7,7 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_team_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
@@ -28,7 +27,7 @@ class NewMilestoneController extends GetxController {
   int get selectedProjectId => _selectedProjectId;
   DateTime get dueDate => _dueDate;
 
-  final milestoneTeamController = Get.find<MilestoneTeamController>();
+  final teamController = Get.find<ProjectTeamController>();
 
   RxString slectedProjectTitle = ''.obs;
   RxString slectedMilestoneTitle = ''.obs;
@@ -54,11 +53,11 @@ class NewMilestoneController extends GetxController {
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
 
-      milestoneTeamController.projectDetailed = projectDetailed;
-      await milestoneTeamController.getTeam();
+      teamController.projectId = projectDetailed.id;
+      await teamController.getTeam();
 
-      var projectTeamDataSource = Get.put(ProjectTeamDataSource());
-      projectTeamDataSource.projectDetailed = projectDetailed;
+      var projectTeamDataSource = Get.put(ProjectTeamController());
+      projectTeamDataSource.projectId = projectDetailed.id;
       await projectTeamDataSource.getTeam();
 
       for (var user in projectTeamDataSource.usersList) {
@@ -131,19 +130,17 @@ class NewMilestoneController extends GetxController {
   }
 
   Future setupResponsibleSelection() async {
-    await milestoneTeamController
-        .getTeam()
-        .then((value) => _applyUsersSelection());
+    await teamController.getTeam().then((value) => _applyUsersSelection());
   }
 
   Future<void> _applyUsersSelection() async {
-    for (var element in milestoneTeamController.usersList) {
+    for (var element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
 
     if (responsible != null) {
-      for (var user in milestoneTeamController.usersList) {
+      for (var user in teamController.usersList) {
         if (responsible.value.id == user.portalUser.id) {
           user.isSelected.value = true;
         }

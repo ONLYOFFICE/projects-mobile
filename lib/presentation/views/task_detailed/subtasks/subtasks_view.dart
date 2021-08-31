@@ -32,7 +32,8 @@ class SubtasksView extends StatelessWidget {
                   itemCount: _task.subtasks.length,
                   padding: const EdgeInsets.only(top: 6, bottom: 50),
                   itemBuilder: (BuildContext context, int index) {
-                    return SubtaskCell(subtask: _task.subtasks[index]);
+                    return SubtaskCell(
+                        subtask: _task.subtasks[index], parentTask: _task);
                   },
                 ),
               ),
@@ -44,6 +45,7 @@ class SubtasksView extends StatelessWidget {
                     onPressed: () => Get.find<NavigationController>()
                         .to(const CreatingAndEditingSubtaskView(), arguments: {
                       'taskId': _task.id,
+                      'projectId': _task.projectOwner.id,
                       'forEditing': false,
                     }),
                     child: AppIcon(icon: SvgIcons.add_fab),
