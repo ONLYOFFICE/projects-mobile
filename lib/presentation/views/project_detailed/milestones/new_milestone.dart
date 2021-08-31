@@ -361,17 +361,19 @@ class ResponsibleTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      var _isSelected = controller.responsible != null;
+      //strange behavior of obx if rx value is used like this:
+      //var _isSelected = controller.responsible != null;
       return NewMilestoneInfo(
-        isSelected: _isSelected,
-        caption: _isSelected ? tr('assignedTo') : null,
+        isSelected: controller.responsible?.value != null,
+        caption:
+            controller.responsible?.value != null ? tr('assignedTo') : null,
         text: controller.responsible?.value != null
             ? '${controller.responsible.value.portalUser.displayName}'
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value
             ? Get.theme.colors().colorError
             : null,
-        suffix: _isSelected
+        suffix: controller.responsible?.value != null
             ? Icon(Icons.arrow_forward_ios_outlined,
                 size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6))
             : null,
