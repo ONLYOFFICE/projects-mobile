@@ -83,6 +83,8 @@ class PortalUserItemController extends GetxController {
   }
 
   void onTap() {
+    if (selectionMode.value == UserSelectionMode.None) return;
+
     if (selectionMode.value == UserSelectionMode.Single ||
         selectionMode.value == UserSelectionMode.Multiple)
       isSelected.value = !isSelected.value;

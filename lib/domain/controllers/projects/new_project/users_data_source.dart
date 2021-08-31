@@ -74,7 +74,7 @@ class UsersDataSource extends GetxController {
       _startIndex -= 25;
       return;
     }
-    _loadUsers();
+    await _loadUsers();
     refreshController.loadComplete();
   }
 
@@ -86,7 +86,7 @@ class UsersDataSource extends GetxController {
     loaded.value = true;
   }
 
-  void _loadUsers({bool needToClear = false}) async {
+  Future _loadUsers({bool needToClear = false}) async {
     nothingFound.value = false;
 
     if (needToClear) usersList.clear();
@@ -143,12 +143,12 @@ class UsersDataSource extends GetxController {
   Future getProfiles({bool needToClear}) async {
     _clear();
     loaded.value = false;
-    _loadUsers(needToClear: true);
+    await _loadUsers(needToClear: true);
     loaded.value = true;
   }
 
   Future<void> updateUsers() async {
     _clear();
-    _loadUsers();
+    await _loadUsers();
   }
 }

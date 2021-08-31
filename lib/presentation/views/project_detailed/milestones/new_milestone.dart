@@ -33,11 +33,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -50,16 +48,17 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
-import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class NewMilestoneView extends StatelessWidget {
   const NewMilestoneView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewMilestoneController>();
+    var newMilestoneController = Get.find<NewMilestoneController>();
     var projectDetailed = Get.arguments['projectDetailed'];
-    controller.setup(projectDetailed);
+    newMilestoneController.setup(projectDetailed);
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
@@ -68,26 +67,26 @@ class NewMilestoneView extends StatelessWidget {
           actions: [
             IconButton(
                 icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirm(context))
+                onPressed: () => newMilestoneController.confirm(context))
           ],
           leading: IconButton(
               icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: () => controller.discard())),
+              onPressed: () => newMilestoneController.discard())),
       body: SingleChildScrollView(
         child: Obx(
           () => Column(
             children: [
               const SizedBox(height: 16),
-              MilestoneInput(controller: controller),
-              ProjectTile(controller: controller),
-              if (controller.slectedProjectTitle.value.isNotEmpty)
-                ResponsibleTile(controller: controller),
+              MilestoneInput(controller: newMilestoneController),
+              ProjectTile(controller: newMilestoneController),
+              if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
+                ResponsibleTile(controller: newMilestoneController),
               // if (controller.responsibles.isNotEmpty)
               //   NotifyResponsiblesTile(controller: controller),
-              DescriptionTile(controller: controller),
-              DueDateTile(controller: controller),
+              DescriptionTile(newMilestoneController: newMilestoneController),
+              DueDateTile(controller: newMilestoneController),
               const SizedBox(height: 5),
-              AdvancedOptions(controller: controller)
+              AdvancedOptions(newMilestoneController: newMilestoneController)
             ],
           ),
         ),
@@ -133,10 +132,10 @@ class MilestoneInput extends StatelessWidget {
 class AdvancedOptions extends StatelessWidget {
   const AdvancedOptions({
     Key key,
-    @required this.controller,
+    @required this.newMilestoneController,
   }) : super(key: key);
 
-  final NewMilestoneController controller;
+  final NewMilestoneController newMilestoneController;
 
   @override
   Widget build(BuildContext context) {
@@ -179,23 +178,24 @@ class AdvancedOptions extends StatelessWidget {
                     children: <Widget>[
                       OptionWithSwitch(
                         title: tr('keyMilestone'),
-                        switchValue: controller.keyMilestone,
+                        switchValue: newMilestoneController.keyMilestone,
                         switchOnChanged: (value) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
-                          controller.setKeyMilestone(value);
+                          newMilestoneController.setKeyMilestone(value);
                         },
                       ),
                       OptionWithSwitch(
                         title: tr('remindBeforeDue'),
-                        switchValue: controller.remindBeforeDueDate,
+                        switchValue: newMilestoneController.remindBeforeDueDate,
                         switchOnChanged: (value) {
                           if (!FocusScope.of(context).hasPrimaryFocus) {
                             FocusScope.of(context).unfocus();
                           }
 
-                          controller.enableRemindBeforeDueDate(value);
+                          newMilestoneController
+                              .enableRemindBeforeDueDate(value);
                         },
                       ),
                     ],
@@ -277,20 +277,21 @@ class OptionWithSwitch extends StatelessWidget {
 }
 
 class DescriptionTile extends StatelessWidget {
-  final controller;
+  final newMilestoneController;
   const DescriptionTile({
     Key key,
-    @required this.controller,
+    @required this.newMilestoneController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSletected = controller.descriptionText.value.isNotEmpty;
+        bool _isSletected =
+            newMilestoneController.descriptionText.value.isNotEmpty;
         return NewMilestoneInfo(
             text: _isSletected
-                ? controller.descriptionText.value
+                ? newMilestoneController.descriptionText.value
                 : tr('addDescription'),
             maxLines: 1,
             icon: SvgIcons.description,
@@ -302,7 +303,9 @@ class DescriptionTile extends StatelessWidget {
                     color: Get.theme.colors().onSurface.withOpacity(0.6))
                 : null,
             onTap: () => Get.find<NavigationController>()
-                .to(const NewMilestoneDescription()));
+                    .to(const NewMilestoneDescription(), arguments: {
+                  'newMilestoneController': newMilestoneController,
+                }));
       },
     );
   }
@@ -334,7 +337,9 @@ class ProjectTile extends StatelessWidget {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
                   Get.find<NavigationController>()
-                      .to(const SelectProjectForMilestone()),
+                      .to(const SelectProjectForMilestone(), arguments: {
+                    'newMilestoneController': controller,
+                  }),
                 });
       },
     );
@@ -355,7 +360,9 @@ class ResponsibleTile extends StatelessWidget {
       () => NewMilestoneInfo(
         isSelected: _isSelected,
         caption: _isSelected ? tr('assignedTo') : null,
-        text: _isSelected ? plural('responsibles', 1) : tr('addResponsible'),
+        text: _isSelected
+            ? '${controller.responsible.value.portalUser.displayName}'
+            : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value
             ? Get.theme.colors().colorError
             : null,
@@ -368,7 +375,9 @@ class ResponsibleTile extends StatelessWidget {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
           Get.find<NavigationController>()
-              .to(const SelectMilestoneResponsible())
+              .to(const SelectMilestoneResponsible(), arguments: {
+            'newMilestoneController': controller,
+          })
         },
       ),
     );
@@ -392,6 +401,9 @@ class DueDateTile extends StatelessWidget {
             text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
             caption: _isSelected ? tr('startDate') : null,
             isSelected: _isSelected,
+            textColor: controller.needToSetDueDate.value
+                ? Get.theme.colors().colorError
+                : null,
             suffix: _isSelected
                 ? IconButton(
                     icon: Icon(Icons.close_rounded,
@@ -505,6 +517,9 @@ class SelectProjectForMilestone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    NewMilestoneController newMilestoneController =
+        Get.arguments['newMilestoneController'];
+
     var _projectsController = Get.put(
         ProjectsController(
           Get.put(ProjectsFilterController(), tag: 'SelectProjectForMilestone'),
@@ -532,7 +547,9 @@ class SelectProjectForMilestone extends StatelessWidget {
       body: Obx(() {
         if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isNotEmpty) {
-          return ProjectsList(projects: _searchController.searchResult);
+          return ProjectsList(
+              projects: _searchController.searchResult,
+              newMilestoneController: newMilestoneController);
         }
         if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isEmpty &&
@@ -542,7 +559,8 @@ class SelectProjectForMilestone extends StatelessWidget {
         if (_projectsController.loaded.value == true &&
             _searchController.switchToSearchView.value == false) {
           return ProjectsList(
-              projects: _projectsController.paginationController.data);
+              projects: _projectsController.paginationController.data,
+              newMilestoneController: newMilestoneController);
         }
         return const ListLoadingSkeleton();
       }),
@@ -552,14 +570,14 @@ class SelectProjectForMilestone extends StatelessWidget {
 
 class ProjectsList extends StatelessWidget {
   final List projects;
-  const ProjectsList({
-    Key key,
-    @required this.projects,
-  }) : super(key: key);
+  final NewMilestoneController newMilestoneController;
+
+  const ProjectsList(
+      {Key key, @required this.projects, @required this.newMilestoneController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewMilestoneController>();
     return ListView.separated(
       itemCount: projects.length,
       separatorBuilder: (BuildContext context, int index) {
@@ -569,7 +587,7 @@ class ProjectsList extends StatelessWidget {
         return Material(
           child: InkWell(
             onTap: () {
-              controller.changeProjectSelection(
+              newMilestoneController.changeProjectSelection(
                   id: projects[index].id, title: projects[index].title);
             },
             child: Padding(
@@ -584,17 +602,9 @@ class ProjectsList extends StatelessWidget {
                           projects[index].title,
                           style: TextStyleHelper.projectTitle,
                         ),
-                        // Text(projects[index].milestoneResponsible.displayName,
-                        //     style: TextStyleHelper.caption(
-                        //             color: Get.theme
-                        //                 .customColors()
-                        //                 .onSurface
-                        //                 .withOpacity(0.6))
-                        //         .copyWith(height: 1.667)),
                       ],
                     ),
                   ),
-                  // Icon(Icons.check_rounded)
                 ],
               ),
             ),
@@ -602,8 +612,6 @@ class ProjectsList extends StatelessWidget {
         );
       },
     );
-    // },
-    // );
   }
 }
 
@@ -612,12 +620,9 @@ class SelectMilestoneResponsible extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var usersDataSource = Get.find<UsersDataSource>();
-    var controller = Get.find<NewMilestoneController>();
-
+    NewMilestoneController controller = Get.arguments['newMilestoneController'];
     controller.setupResponsibleSelection();
 
-    usersDataSource.selectionMode = UserSelectionMode.Single;
     return Scaffold(
       appBar: StyledAppBar(
           title: Column(
@@ -628,36 +633,77 @@ class SelectMilestoneResponsible extends StatelessWidget {
           ),
           bottom: SearchField(
             hintText: tr('usersSearch'),
-            onSubmitted: (value) => usersDataSource.searchUsers(value),
+            onSubmitted: (value) =>
+                controller.milestoneTeamController.searchUsers(value),
+            onChanged: (value) =>
+                controller.milestoneTeamController.searchUsers(value),
           ),
           actions: [
             IconButton(
                 icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirmResponsiblesSelection())
+                onPressed: controller.confirmResponsiblesSelection)
           ],
           leading: IconButton(
               icon: const Icon(Icons.arrow_back),
-              onPressed: () => controller.leaveResponsiblesSelectionView())),
+              onPressed: controller.leaveResponsiblesSelectionView)),
       body: Obx(
         () {
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.value == false) {
-            return UsersDefault(
-              selfUserItem: controller.selfUserItem,
-              usersDataSource: usersDataSource,
-              onTapFunction: controller.addResponsible,
+          if (controller.milestoneTeamController.loaded.value == true &&
+              controller.milestoneTeamController.usersList.isNotEmpty &&
+              controller.milestoneTeamController.isSearchResult.value ==
+                  false) {
+            return SmartRefresher(
+              enablePullDown: false,
+              enablePullUp: controller.milestoneTeamController.pullUpEnabled,
+              controller: controller.milestoneTeamController.refreshController,
+              onLoading: controller.milestoneTeamController.onLoading,
+              child: ListView(
+                children: <Widget>[
+                  Column(children: [
+                    ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) => PortalUserItem(
+                          userController:
+                              controller.milestoneTeamController.usersList[i],
+                          onTapFunction: controller.addResponsible),
+                      itemExtent: 65.0,
+                      itemCount:
+                          controller.milestoneTeamController.usersList.length,
+                    )
+                  ]),
+                ],
+              ),
             );
           }
-          if (usersDataSource.nothingFound.value == true) {
+          if (controller.milestoneTeamController.nothingFound.value == true) {
             return const NothingFound();
           }
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.value == true) {
-            return UsersSearchResult(
-              usersDataSource: usersDataSource,
-              onTapFunction: () => controller.addResponsible,
+          if (controller.milestoneTeamController.loaded.value == true &&
+              controller.milestoneTeamController.searchResult.isNotEmpty &&
+              controller.milestoneTeamController.isSearchResult.value == true) {
+            return SmartRefresher(
+              enablePullDown: false,
+              enablePullUp: controller.milestoneTeamController.pullUpEnabled,
+              controller: controller.milestoneTeamController.refreshController,
+              onLoading: controller.milestoneTeamController.onLoading,
+              child: ListView(
+                children: <Widget>[
+                  Column(children: [
+                    ListView.builder(
+                      physics: const ScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (c, i) => PortalUserItem(
+                          userController: controller
+                              .milestoneTeamController.searchResult[i],
+                          onTapFunction: controller.addResponsible),
+                      itemExtent: 65.0,
+                      itemCount: controller
+                          .milestoneTeamController.searchResult.length,
+                    )
+                  ]),
+                ],
+              ),
             );
           }
           return const ListLoadingSkeleton();
