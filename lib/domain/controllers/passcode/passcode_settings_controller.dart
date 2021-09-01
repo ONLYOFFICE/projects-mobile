@@ -63,7 +63,7 @@ class PasscodeSettingsController extends GetxController {
           // update code in main passcode controller
           Get.find<PasscodeController>().onInit();
           // ignore: empty_catches
-        } catch (e) {}
+        } catch (_) {}
         leave();
       } else {
         passcodeCheckFailed.value = true;

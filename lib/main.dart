@@ -46,24 +46,13 @@ Future<String> _getInitPage() async {
   await FlutterDownloader.initialize(debug: true);
 
   var storage = locator<SecureStorage>();
-  var token = await storage.getString('token');
   var passcode = await storage.getString('passcode');
-  LoginController loginController;
-  try {
-    loginController = Get.find<LoginController>();
-  } catch (e) {
-    loginController = Get.put(LoginController());
-  }
 
-  var isTokenExpired = await loginController.isTokenExpired();
+  var loginController = Get.put(LoginController());
 
-  // TODO CHECK TOKEN (isTokenExpired)
-  if (token != null && !isTokenExpired) {
-    if (passcode != null) return 'PasscodeScreen';
-    return 'NavigationView';
-  } else {
-    return 'PortalView';
-  }
+  if (passcode != null) return 'PasscodeScreen';
+  if (await loginController.isLoggedIn) return 'NavigationView';
+  return 'PortalView';
 }
 
 class App extends StatelessWidget {

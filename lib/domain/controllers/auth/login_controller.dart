@@ -255,6 +255,8 @@ class LoginController extends GetxController {
     state.value = viewState;
   }
 
+  Future<bool> get isLoggedIn async => !await isTokenExpired();
+
   Future<bool> isTokenExpired() async {
     var expirationDate = await _secureStorage.getString('expires');
     var token = await _secureStorage.getString('token');
@@ -279,7 +281,9 @@ class LoginController extends GetxController {
   }
 
   Future<void> logout() async {
-    await _secureStorage.deleteAll();
+    await _secureStorage.delete('expires');
+    await _secureStorage.delete('portalName');
+    await _secureStorage.delete('token');
     Get.find<PortalInfoController>().logout();
     Get.find<NavigationController>().clearCurrentIndex();
   }

@@ -5,7 +5,6 @@ import 'package:projects/domain/controllers/passcode/passcode_settings_controlle
 import 'package:projects/internal/utils/adaptive_size.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/settings/passcode/passcode_dot.dart';
 import 'package:projects/presentation/views/settings/passcode/passcode_numbers.dart';
 
@@ -58,7 +57,7 @@ class NewPasscodeScreen1 extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: h(150)),
+              SizedBox(height: h(165)),
               PasscodeNumbersRow(
                 numbers: [1, 2, 3],
                 onPressed: controller.addNumberToPasscode,
@@ -89,11 +88,7 @@ class NewPasscodeScreen1 extends StatelessWidget {
                     onPressed: controller.addNumberToPasscode,
                   ),
                   SizedBox(width: w(44)),
-                  InkResponse(
-                    onTap: controller.deleteNumber,
-                    child: AppIcon(icon: SvgIcons.delete_number),
-                  ),
-                  // const SizedBox(width: 25),
+                  DeleteButton(onTap: controller.deleteNumber),
                 ],
               ),
             ],
