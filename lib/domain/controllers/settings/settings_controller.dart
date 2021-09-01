@@ -62,7 +62,7 @@ class SettingsController extends GetxController {
 
   var loaded = false.obs;
   var currentTheme = ''.obs;
-  var isPasscodeEnable;
+  RxBool isPasscodeEnable;
   RxBool shareAnalytics = true.obs;
 
   String get versionAndBuildNumber => '$appVersion ($buildNumber)';

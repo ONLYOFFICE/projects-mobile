@@ -47,6 +47,10 @@ class Storage {
   // ignore: always_declare_return_types
   getValue(String key) => _storage.read(key);
 
+  Future getKeys() async => await _storage.getKeys();
+
+  Future getValues() async => await _storage.getValues();
+
   Future write(String key, var value) async => await _storage.write(key, value);
 
   Future<void> remove(String key) async => await _storage.remove(key);

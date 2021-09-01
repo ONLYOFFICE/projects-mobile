@@ -92,11 +92,10 @@ class PasscodeScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(height: h(150)),
+                  SizedBox(height: h(165)),
                   PasscodeNumbersRow(
                     numbers: [1, 2, 3],
                     onPressed: controller.addNumberToPasscode,
-                    // onPressed: print,
                   ),
                   PasscodeNumbersRow(
                     numbers: [4, 5, 6],
@@ -107,27 +106,19 @@ class PasscodeScreen extends StatelessWidget {
                     onPressed: controller.addNumberToPasscode,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (!controller.isFingerprintAvailable ||
-                          !controller.isFingerprintEnable)
-                        SizedBox(width: w(47)),
-                      SizedBox(width: w(63)),
                       if (controller.isFingerprintAvailable &&
                           controller.isFingerprintEnable)
-                        IconButton(
-                          icon: AppIcon(icon: SvgIcons.finger_print),
-                          onPressed: () => controller.useFingerprint(),
-                        ),
-                      SizedBox(width: w(41.2)),
-                      // const SizedBox(width: 17),
+                        FingerprintButton(onTap: controller.useFingerprint),
+                      if (!controller.isFingerprintAvailable ||
+                          !controller.isFingerprintEnable)
+                        const SizedBox(width: 72.53),
+                      const SizedBox(width: 20.53),
                       PasscodeNumber(
                           number: 0, onPressed: controller.addNumberToPasscode),
-                      SizedBox(width: w(40)),
-                      IconButton(
-                        icon: AppIcon(icon: SvgIcons.delete_number),
-                        onPressed: controller.deleteNumber,
-                      )
+                      const SizedBox(width: 20.53),
+                      DeleteButton(onTap: controller.deleteNumber),
                     ],
                   ),
                 ],

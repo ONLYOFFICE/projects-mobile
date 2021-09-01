@@ -73,7 +73,7 @@ class SettingsScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     SettingTile(
                       text: tr('passcodeLock'),
-                      loverText: controller.isPasscodeEnable == true
+                      loverText: controller.isPasscodeEnable.value == true
                           ? tr('enabled')
                           : tr('disabled'),
                       enableIconOpacity: true,

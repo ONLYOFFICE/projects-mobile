@@ -38,7 +38,6 @@ import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
 import 'package:projects/internal/utils/adaptive_size.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/settings/passcode/passcode_dot.dart';
 import 'package:projects/presentation/views/settings/passcode/passcode_numbers.dart';
 
@@ -52,7 +51,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
 
     try {
       passcodeController = Get.find<PasscodeController>();
-    } catch (e) {
+    } catch (_) {
       passcodeController = Get.put(PasscodeController());
     }
 
@@ -101,7 +100,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: h(150)),
+              SizedBox(height: h(165)),
               PasscodeNumbersRow(
                 numbers: [1, 2, 3],
                 onPressed: (number) => passcodeController.addNumberToPasscode(
@@ -119,6 +118,10 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                 onPressed: (number) => passcodeController.addNumberToPasscode(
                   number,
                   nextPage: 'NewPasscodeScreen1',
+                  nextPageArguments: {
+                    'title': tr('enterNewPasscode'),
+                    'caption': '',
+                  },
                   onPass: onPass,
                 ),
               ),
@@ -127,6 +130,10 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                 onPressed: (number) => passcodeController.addNumberToPasscode(
                   number,
                   nextPage: 'NewPasscodeScreen1',
+                  nextPageArguments: {
+                    'title': tr('enterNewPasscode'),
+                    'caption': '',
+                  },
                   onPass: onPass,
                 ),
               ),
@@ -155,10 +162,7 @@ class CurrentPasscodeCheckScreen extends StatelessWidget {
                     },
                   ),
                   SizedBox(width: w(44)),
-                  InkResponse(
-                    onTap: passcodeController.deleteNumber,
-                    child: AppIcon(icon: SvgIcons.delete_number),
-                  ),
+                  DeleteButton(onTap: passcodeController.deleteNumber)
                   // const SizedBox(width: 25),
                 ],
               ),

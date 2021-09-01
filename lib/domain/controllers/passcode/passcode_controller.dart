@@ -33,6 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/passcode_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class PasscodeController extends GetxController {
@@ -60,15 +61,20 @@ class PasscodeController extends GetxController {
 
   Future<void> useFingerprint() async {
     var didAuthenticate = await _authService.authenticate();
-    if (didAuthenticate) await Get.offNamed('NavigationView');
+
+    var nextPage = await _getNextPage();
+
+    if (didAuthenticate) await Get.offNamed(nextPage);
   }
 
   void addNumberToPasscode(
     int number, {
-    String nextPage = 'NavigationView',
+    String nextPage,
     Map nextPageArguments,
     var onPass,
   }) async {
+    nextPage ??= await _getNextPage();
+
     if (_enteredPasscode.length < 4) {
       passcodeCheckFailed.value = false;
       _enteredPasscode += number.toString();
@@ -105,5 +111,17 @@ class PasscodeController extends GetxController {
   void leave() {
     clear();
     Get.back();
+  }
+
+  Future<String> _getNextPage() async {
+    LoginController loginController;
+    try {
+      loginController = Get.find<LoginController>();
+    } catch (_) {
+      loginController = Get.put(LoginController());
+    }
+
+    if (await loginController.isLoggedIn) return 'NavigationView';
+    return 'PortalView';
   }
 }
