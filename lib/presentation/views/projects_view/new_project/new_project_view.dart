@@ -28,6 +28,7 @@ class NewProject extends StatelessWidget {
       backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('project'),
+        onLeadingPressed: controller.discardChanges,
         elevation: 2,
         actions: [
           IconButton(

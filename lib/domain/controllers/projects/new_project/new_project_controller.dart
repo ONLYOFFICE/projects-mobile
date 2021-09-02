@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 
@@ -8,6 +9,7 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
@@ -17,6 +19,19 @@ class NewProjectController extends BaseProjectEditorController {
     selectionMode = UserSelectionMode.Single;
     titleFocus.requestFocus();
     responsible = '';
+  }
+
+  void discardChanges() {
+    Get.dialog(StyledAlertDialog(
+      titleText: tr('discardChanges'),
+      contentText: tr('changesWillBeLost'),
+      acceptText: tr('discard'),
+      onAcceptTap: () {
+        Get.back();
+        Get.back();
+      },
+      onCancelTap: Get.back,
+    ));
   }
 
   Future<void> confirm() async {

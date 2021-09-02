@@ -32,17 +32,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   var projectTitleText = ''.obs;
 
-  // var descriptionText = ''.obs;
   var managerText = ''.obs;
   var teamMembers = [].obs;
   var teamMembersCount = 0.obs;
 
   var creationDateText = ''.obs;
-  // var tags = [].obs;
+
   var statusText = ''.obs;
   var tasksCount = 0.obs;
   var docsCount = (-1).obs;
-  // var tagsText = ''.obs;
+
   var milestoneCount = (-1).obs;
   var currentTab = -1.obs;
 
@@ -69,7 +68,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   Future<void> setup() async {
-    setupDetailedParams();
+    await setupDetailedParams();
 
     final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
 
@@ -103,8 +102,19 @@ class ProjectDetailsController extends BaseProjectEditorController {
             });
   }
 
-  void setupDetailedParams() {
+  Future<void> setupDetailedParams() async {
     teamMembersCount.value = projectDetailed.participantCount;
+
+    var tream = Get.find<ProjectTeamController>();
+
+    tream.projectId = projectDetailed.id;
+    var usersList = await tream.getTeam().then((value) => tream.usersList);
+
+    teamMembers.clear();
+    teamMembers.addAll(usersList);
+    teamMembers.removeWhere(
+        (element) => element.portalUser.id == projectDetailed.responsible.id);
+
     statusText.value = tr('projectStatus',
         args: [ProjectStatus.toName(projectDetailed.status)]);
 
@@ -134,12 +144,12 @@ class ProjectDetailsController extends BaseProjectEditorController {
         arguments: {'projectDetailed': projectDetailed});
   }
 
-  void manageTeamMembers() {
+  Future<void> manageTeamMembers() async {
     selectedProjectManager.value = projectData.responsible;
 
-    var usersList = Get.find<ProjectTeamController>().usersList;
+    selectedTeamMembers.clear();
 
-    for (var user in usersList) {
+    for (var user in teamMembers) {
       selectedTeamMembers.add(user);
     }
     Get.find<NavigationController>()
@@ -177,7 +187,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
     }
 
     await _projectService.addToProjectTeam(projectData.id.toString(), users);
+    await refreshData();
     Get.find<UsersDataSource>().loaded.value = true;
+
     Get.back();
   }
 }
