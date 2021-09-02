@@ -201,6 +201,8 @@ abstract class BaseProjectEditorController extends GetxController {
     var selfUser = _userController.user;
     selfUserItem = PortalUserItemController(portalUser: selfUser);
     selfUserItem.selectionMode.value = selectionMode;
+    usersDataSourse.withoutSelf = true;
+    usersDataSourse.selfUserItem = selfUserItem;
     usersDataSourse.selectionMode = selectionMode;
 
     if (selectionMode == UserSelectionMode.Multiple) {
@@ -211,9 +213,6 @@ abstract class BaseProjectEditorController extends GetxController {
     }
 
     await usersDataSourse.getProfiles(needToClear: true);
-
-    usersDataSourse.withoutSelf = true;
-    usersDataSourse.selfUserItem = selfUserItem;
 
     usersLoaded.value = true;
   }
