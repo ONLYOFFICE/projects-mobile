@@ -48,7 +48,7 @@ Future showStyledDateRangePicker({
                   surface: darkColors.systemBlue,
                   onSurface: darkColors.surface,
                 ),
-          primaryColor: Theme.of(context).colors().surface,
+          primaryColor: Get.theme.colors().surface,
         ),
         child: child,
       );

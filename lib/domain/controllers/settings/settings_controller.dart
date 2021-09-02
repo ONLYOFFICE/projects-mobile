@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:launch_review/launch_review.dart';
@@ -17,6 +18,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
+import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
@@ -75,7 +77,7 @@ class SettingsController extends GetxController {
       titleText: tr('reloadDialogTitle'),
       acceptText: tr('reload').toUpperCase(),
       cancelText: tr('notNow').toUpperCase(),
-      onAcceptTap: () {
+      onAcceptTap: () async {
         switch (themeMode) {
           case 'darkTheme':
             Get.changeThemeMode(ThemeMode.dark);
@@ -92,7 +94,15 @@ class SettingsController extends GetxController {
             Get.changeThemeMode(ThemeMode.system);
         }
 
-        Get.rootController.restartApp();
+        if (kDebugMode) {
+          // this method, unfortunately, restarts the application,
+          // saving the initial route. This leads to the fact that, for example,
+          // after removing the passcode and restarting the application,
+          // we will still get to the passcode entry page.
+          Get.rootController.restartApp();
+        } else {
+          await Restart.restartApp();
+        }
       },
       onCancelTap: Get.back,
     ));

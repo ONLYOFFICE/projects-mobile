@@ -43,7 +43,7 @@ class SettingTile extends StatelessWidget {
         border: enableUnderline
             ? Border(
                 bottom: BorderSide(
-                    color: Theme.of(context).colors().outline.withOpacity(0.5)))
+                    color: Get.theme.colors().outline.withOpacity(0.5)))
             : null,
       ),
       child: SizedBox(

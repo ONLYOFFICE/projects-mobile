@@ -17,17 +17,14 @@ class PasscodeSettingsScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async {
         controller.leavePasscodeSettingsScreen();
-        // controller.leave();
         return true;
       },
       child: Scaffold(
         appBar: StyledAppBar(
-            titleText: tr('passcodeLock'),
-            onLeadingPressed: controller.leavePasscodeSettingsScreen,
-            backButtonIcon: const Icon(Icons.arrow_back_rounded)
-
-            // onLeadingPressed: controller.leave,
-            ),
+          titleText: tr('passcodeLock'),
+          onLeadingPressed: controller.leavePasscodeSettingsScreen,
+          backButtonIcon: const Icon(Icons.arrow_back_rounded),
+        ),
         body: Obx(
           () {
             if (controller.loaded.value == true) {
@@ -86,7 +83,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         controller.isPasscodeEnable.value == true)
                       SwitchListTile(
                         value: controller.isFingerprintEnable.value,
-                        onChanged: controller.toggleFingerprintStatus,
+                        onChanged: controller.tryTogglingFingerprintStatus,
                         title: Text(
                           tr('fingerprint'),
                           style: TextStyleHelper.projectTitle,

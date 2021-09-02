@@ -96,11 +96,10 @@ class _None extends StatelessWidget {
           children: [
             Text(tr('none'),
                 style: TextStyleHelper.subtitle1(
-                    color: Theme.of(context).colors().onSurface)),
+                    color: Get.theme.colors().onSurface)),
             if (isSelected)
               Icon(Icons.check_rounded,
-                  color:
-                      Theme.of(context).colors().onBackground.withOpacity(0.6))
+                  color: Get.theme.colors().onBackground.withOpacity(0.6))
           ],
         ),
       ),
@@ -150,8 +149,7 @@ class _MilestoneSelectionTile extends StatelessWidget {
             ),
             if (isSelected)
               Icon(Icons.check_rounded,
-                  color:
-                      Theme.of(context).colors().onBackground.withOpacity(0.6))
+                  color: Get.theme.colors().onBackground.withOpacity(0.6))
           ],
         ),
       ),

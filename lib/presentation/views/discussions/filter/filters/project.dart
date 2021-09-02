@@ -12,7 +12,7 @@ class _Project extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('myProjects'),
-              titleColor: Theme.of(context).colors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.project['my'],
               onTap: () => filterController.changeProject('my')),
           FilterElement(
@@ -43,7 +43,7 @@ class _Project extends StatelessWidget {
                   filterController.changeProject('withTag', null)),
           FilterElement(
               title: tr('withoutTag'),
-              titleColor: Theme.of(context).colors().onSurface,
+              titleColor: Get.theme.colors().onSurface,
               isSelected: filterController.project['withoutTag'],
               onTap: () => filterController.changeProject('withoutTag')),
         ],

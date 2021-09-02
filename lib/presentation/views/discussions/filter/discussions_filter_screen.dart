@@ -42,7 +42,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
-                      color: Theme.of(context).colors().systemBlue))),
+                      color: Get.theme.colors().systemBlue))),
           SizedBox(width: Get.find<PlatformController>().isMobile ? 8 : 12),
         ],
       ),

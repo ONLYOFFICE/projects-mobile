@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -23,7 +24,7 @@ class SettingsService {
             titleText: tr('failedToSendFeedback'),
             cancelText: tr('close'),
             acceptText: tr('goToForum'),
-            acceptColor: Theme.of(context).colors().primary,
+            acceptColor: Get.theme.colors().primary,
             onAcceptTap: () async =>
                 launch('https://cloud.onlyoffice.org/viewforum.php?f=48'),
           );

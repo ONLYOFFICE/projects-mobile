@@ -58,10 +58,7 @@ Future<String> _getInitPage() async {
 class App extends StatelessWidget {
   final String initialPage;
 
-  App({
-    Key key,
-    this.initialPage,
-  }) : super(key: key);
+  App({Key key, this.initialPage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,9 +66,7 @@ class App extends StatelessWidget {
     print(context.deviceLocale.toString());
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ),
+      value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
       child: GetMaterialApp(
         initialRoute: initialPage,
         getPages: getxPages(),
