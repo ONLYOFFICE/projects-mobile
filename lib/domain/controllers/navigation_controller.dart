@@ -11,14 +11,14 @@ class NavigationController extends GetxController {
   var tabIndex = 0;
   var onMoreView = false;
   final _userController = Get.find<UserController>();
-  Rx<PortalUserItemController> selfUserItem;
+  Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
 
   @override
   void onInit() {
     var portalController = Get.find<PortalInfoController>();
     if (portalController.portalName == null) portalController.onInit();
-    _userController.getUserInfo().whenComplete(() => selfUserItem =
-        PortalUserItemController(portalUser: _userController.user).obs);
+    _userController.getUserInfo().whenComplete(() => selfUserItem.value =
+        PortalUserItemController(portalUser: _userController.user));
 
     super.onInit();
   }
