@@ -42,14 +42,17 @@ import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detai
 
 class SubtaskCell extends StatelessWidget {
   final Subtask subtask;
+  final PortalTask parentTask;
   const SubtaskCell({
     Key key,
     @required this.subtask,
+    @required this.parentTask,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var subtaskController = Get.put(SubtaskController(subtask: subtask),
+    var subtaskController = Get.put(
+        SubtaskController(subtask: subtask, parentTask: parentTask),
         tag: subtask.id.toString());
 
     return ConstrainedBox(

@@ -191,6 +191,7 @@ void _onSelected(context, value, SubtaskController controller) {
       Get.find<NavigationController>()
           .to(const CreatingAndEditingSubtaskView(), arguments: {
         'taskId': controller.subtask.value.taskId,
+        'projectId': controller.parentTask.projectOwner.id,
         'forEditing': true,
         'subtask': controller.subtask.value,
       });

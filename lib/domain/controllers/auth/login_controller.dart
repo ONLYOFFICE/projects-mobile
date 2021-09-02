@@ -215,7 +215,7 @@ class LoginController extends GetxController {
       case 'google':
         // try {
         //   var result = await _authService.signInWithGoogle();
-        // } catch (e) {}
+        // } catch (e) {debugPrint(e);}
 
         break;
       case 'facebook':

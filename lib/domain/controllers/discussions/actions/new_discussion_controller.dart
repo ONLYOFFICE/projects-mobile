@@ -44,6 +44,7 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -289,11 +290,16 @@ class NewDiscussionController extends GetxController
         // ignore: unawaited_futures
         discussionsController.loadDiscussions();
         if (specifiedProjectId != null) {
-          var projectDiscussionsController =
-              Get.find<ProjectDiscussionsController>();
-          // ignore: unawaited_futures
-          projectDiscussionsController.loadProjectDiscussions();
+          try {
+            // ignore: unawaited_futures
+            Get.find<ProjectDetailsController>().refreshData();
+            // ignore: unawaited_futures
+            Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
+          } catch (e) {
+            debugPrint(e);
+          }
         }
+
         Get.back();
         // ignore: unawaited_futures
         ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(

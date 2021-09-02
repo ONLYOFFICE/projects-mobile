@@ -40,11 +40,10 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
@@ -54,6 +53,8 @@ class TaskEditingController extends GetxController
     implements TaskActionsController {
   PortalTask task;
   final _api = locator<TaskService>();
+
+  final teamController = Get.find<ProjectTeamController>();
 
   TaskEditingController({@required this.task});
 
@@ -93,10 +94,6 @@ class TaskEditingController extends GetxController
 
   Status initialStatus;
   Rx<Status> newStatus;
-
-  final _userController = Get.find<UserController>();
-  final _usersDataSource = Get.find<UsersDataSource>();
-  PortalUserItemController selfUserItem;
 
   @override
   TextEditingController get titleController => _titleController;
@@ -254,28 +251,28 @@ class TaskEditingController extends GetxController
     }
   }
 
-  void setupResponsiblesSelection() async {
-    await _userController.getUserInfo();
-    var selfUser = _userController.user;
-    selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.selectionMode.value = UserSelectionMode.Multiple;
-    _usersDataSource.applyUsersSelection = _getSelectedResponsibles;
-    await _usersDataSource.getProfiles(needToClear: true);
+  void setupResponsibleSelection() async {
+    if (teamController.usersList.isEmpty) {
+      teamController.projectId = task.projectOwner.id;
+
+      await teamController
+          .getTeam()
+          .then((value) => _getSelectedResponsibles());
+    } else {
+      await _getSelectedResponsibles();
+    }
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in _usersDataSource.usersList) {
+    for (var element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
     for (var selectedMember in responsibles) {
-      for (var user in _usersDataSource.usersList) {
+      for (var user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
-      }
-      if (selfUserItem.portalUser.id == selectedMember.portalUser.id) {
-        selfUserItem.isSelected.value = selectedMember.isSelected.value;
       }
     }
   }
@@ -286,9 +283,6 @@ class TaskEditingController extends GetxController
     } else {
       responsibles.removeWhere(
           (element) => user.portalUser.id == element.portalUser.id);
-    }
-    if (selfUserItem.portalUser.id == user.portalUser.id) {
-      selfUserItem.isSelected.value = user.isSelected.value;
     }
   }
 

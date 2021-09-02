@@ -41,7 +41,7 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -93,8 +93,8 @@ class ProjectEditController extends BaseProjectEditorController {
     isPMSelected.value = true;
     managerName.value = selectedProjectManager.value.displayName;
 
-    var projectTeamDataSource = Get.put(ProjectTeamDataSource());
-    projectTeamDataSource.projectDetailed = _projectDetailed;
+    var projectTeamDataSource = Get.put(ProjectTeamController());
+    projectTeamDataSource.projectId = projectDetailed.id;
     await projectTeamDataSource.getTeam();
 
     if (selectedTeamMembers.isNotEmpty) selectedTeamMembers.clear();
@@ -103,6 +103,8 @@ class ProjectEditController extends BaseProjectEditorController {
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
+    selectedTeamMembers.removeWhere(
+        (element) => element.portalUser.id == selectedProjectManager.value.id);
 
     var participants = <Participant>[];
 

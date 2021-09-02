@@ -48,8 +48,7 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
-import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/project_team_responsible.dart';
 
 class NewMilestoneView extends StatelessWidget {
   const NewMilestoneView({Key key}) : super(key: key);
@@ -382,8 +381,8 @@ class ResponsibleTile extends StatelessWidget {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
           Get.find<NavigationController>()
-              .to(const SelectMilestoneResponsible(), arguments: {
-            'newMilestoneController': controller,
+              .to(const ProjectTeamResponsibleSelectionView(), arguments: {
+            'controller': controller,
           })
         },
       );
@@ -618,104 +617,6 @@ class ProjectsList extends StatelessWidget {
           ),
         );
       },
-    );
-  }
-}
-
-class SelectMilestoneResponsible extends StatelessWidget {
-  const SelectMilestoneResponsible({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    NewMilestoneController controller = Get.arguments['newMilestoneController'];
-    controller.setupResponsibleSelection();
-
-    return Scaffold(
-      appBar: StyledAppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(tr('selectResponsible')),
-            ],
-          ),
-          bottom: SearchField(
-            hintText: tr('usersSearch'),
-            onSubmitted: (value) =>
-                controller.milestoneTeamController.searchUsers(value),
-            onChanged: (value) =>
-                controller.milestoneTeamController.searchUsers(value),
-          ),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmResponsiblesSelection)
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: controller.leaveResponsiblesSelectionView)),
-      body: Obx(
-        () {
-          if (controller.milestoneTeamController.loaded.value == true &&
-              controller.milestoneTeamController.usersList.isNotEmpty &&
-              controller.milestoneTeamController.isSearchResult.value ==
-                  false) {
-            return SmartRefresher(
-              enablePullDown: false,
-              enablePullUp: controller.milestoneTeamController.pullUpEnabled,
-              controller: controller.milestoneTeamController.refreshController,
-              onLoading: controller.milestoneTeamController.onLoading,
-              child: ListView(
-                children: <Widget>[
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.milestoneTeamController.usersList[i],
-                          onTapFunction: controller.addResponsible),
-                      itemExtent: 65.0,
-                      itemCount:
-                          controller.milestoneTeamController.usersList.length,
-                    )
-                  ]),
-                ],
-              ),
-            );
-          }
-          if (controller.milestoneTeamController.nothingFound.value == true) {
-            return const NothingFound();
-          }
-          if (controller.milestoneTeamController.loaded.value == true &&
-              controller.milestoneTeamController.searchResult.isNotEmpty &&
-              controller.milestoneTeamController.isSearchResult.value == true) {
-            return SmartRefresher(
-              enablePullDown: false,
-              enablePullUp: controller.milestoneTeamController.pullUpEnabled,
-              controller: controller.milestoneTeamController.refreshController,
-              onLoading: controller.milestoneTeamController.onLoading,
-              child: ListView(
-                children: <Widget>[
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController: controller
-                              .milestoneTeamController.searchResult[i],
-                          onTapFunction: controller.addResponsible),
-                      itemExtent: 65.0,
-                      itemCount: controller
-                          .milestoneTeamController.searchResult.length,
-                    )
-                  ]),
-                ],
-              ),
-            );
-          }
-          return const ListLoadingSkeleton();
-        },
-      ),
     );
   }
 }
