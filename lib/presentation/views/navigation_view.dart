@@ -174,23 +174,8 @@ class TabletLayout extends StatelessWidget {
                                 backgroundColor: Colors.white,
                                 child: ClipOval(
                                   child: Obx(() {
-                                    if (navigationController.selfUserItem ==
-                                        null) {
-                                      return AppIcon(
-                                          width: 40,
-                                          height: 40,
-                                          icon: SvgIcons.avatar,
-                                          color: Get.theme.colors().onSurface);
-                                    } else if (navigationController.selfUserItem
-                                        .value.avatarData.value.isNotEmpty) {
-                                      return Image.memory(navigationController
-                                          .selfUserItem.value.avatarData.value);
-                                    } else
-                                      return AppIcon(
-                                          width: 40,
-                                          height: 40,
-                                          icon: SvgIcons.avatar,
-                                          color: Get.theme.colors().onSurface);
+                                    return navigationController
+                                        .selfUserItem.value.avatar.value;
                                   }),
                                 ),
                               ),

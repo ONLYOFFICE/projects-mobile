@@ -20,15 +20,19 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
 
     SubtaskActionController controller;
     int taskId;
+    int projectId = Get.arguments['projectId'];
 
     if (forEditing) {
       controller = Get.put(SubtaskEditingController());
       Subtask subtask = Get.arguments['subtask'];
-      controller.init(subtask: subtask);
+
+      controller.init(subtask: subtask, projectId: projectId);
     } else {
       taskId = Get.arguments['taskId'];
+
       controller = Get.put(NewSubtaskController());
-      controller.init();
+
+      controller.init(projectId: projectId);
     }
 
     return Scaffold(

@@ -12,9 +12,10 @@ import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();
   Rx<Subtask> subtask;
-
+  PortalTask parentTask;
   final _userController = Get.find<UserController>();
-  SubtaskController({Subtask subtask}) {
+
+  SubtaskController({Subtask subtask, this.parentTask}) {
     this.subtask = subtask.obs;
   }
 

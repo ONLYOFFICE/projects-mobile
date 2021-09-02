@@ -56,8 +56,9 @@ class TFASmsController extends GetxController {
       _phoneNumberController = MaskedTextController(
           mask: deleteNumberPrefix(
               deviceCountry?.value?.phoneMaskFixedLineNational));
-      // ignore: empty_catches
-    } catch (e) {}
+    } catch (e) {
+      debugPrint(e);
+    }
 
     loaded.value = true;
     super.onInit();

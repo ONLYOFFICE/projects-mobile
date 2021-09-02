@@ -51,7 +51,7 @@ import 'package:projects/domain/controllers/milestones/milestones_controller.dar
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_team_controller.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
@@ -60,7 +60,6 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_team_datasource.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
@@ -200,6 +199,5 @@ void setupLocator() {
           ),
       tag: 'ProjectsView');
 
-  Get.create<ProjectTeamDataSource>(() => ProjectTeamDataSource());
-  Get.create<MilestoneTeamController>(() => MilestoneTeamController());
+  Get.create<ProjectTeamController>(() => ProjectTeamController());
 }

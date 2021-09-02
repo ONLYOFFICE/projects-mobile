@@ -7,12 +7,11 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
@@ -23,6 +22,8 @@ class NewSubtaskController extends GetxController
   Subtask subtask;
 
   final _api = locator<SubtasksService>();
+
+  final teamController = Get.find<ProjectTeamController>();
 
   final _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
@@ -38,38 +39,35 @@ class NewSubtaskController extends GetxController
   RxBool setTiltleError = false.obs;
 
   List _previusSelectedResponsible = [];
-  final _userController = Get.find<UserController>();
-  final _usersDataSource = Get.find<UsersDataSource>();
-  PortalUserItemController selfUserItem;
 
   @override
-  void init({Subtask subtask}) {
+  void init({Subtask subtask, int projectId}) {
     _titleFocus.requestFocus();
-    setupResponsiblesSelection();
+    setupResponsibleSelection(projectId);
   }
 
-  void setupResponsiblesSelection() async {
-    await _userController.getUserInfo();
-    var selfUser = _userController.user;
-    selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.selectionMode.value = UserSelectionMode.Single;
-    _usersDataSource.applyUsersSelection = _getSelectedResponsibles;
-    await _usersDataSource.getProfiles(needToClear: true);
+  void setupResponsibleSelection([int projectId]) async {
+    if (teamController.usersList.isEmpty) {
+      teamController.projectId = projectId;
+
+      await teamController
+          .getTeam()
+          .then((value) => _getSelectedResponsibles());
+    } else {
+      await _getSelectedResponsibles();
+    }
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in _usersDataSource.usersList) {
+    for (var element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
     for (var selectedMember in responsibles) {
-      for (var user in _usersDataSource.usersList) {
+      for (var user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
-      }
-      if (selfUserItem.portalUser.id == selectedMember.portalUser.id) {
-        selfUserItem.isSelected.value = selectedMember.isSelected.value;
       }
     }
   }
@@ -77,7 +75,7 @@ class NewSubtaskController extends GetxController
   @override
   void addResponsible(PortalUserItemController user) {
     // ignore: avoid_function_literals_in_foreach_calls
-    _usersDataSource.usersList.forEach((element) {
+    teamController.usersList.forEach((element) {
       if (element.portalUser.id != user.id) element.isSelected.value = false;
     });
     responsibles.clear();
@@ -86,9 +84,6 @@ class NewSubtaskController extends GetxController
     } else {
       responsibles.removeWhere(
           (element) => user.portalUser.id == element.portalUser.id);
-    }
-    if (selfUserItem.portalUser.id == user.portalUser.id) {
-      selfUserItem.isSelected.value = user.isSelected.value;
     }
   }
 

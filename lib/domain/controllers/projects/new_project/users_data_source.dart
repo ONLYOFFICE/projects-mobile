@@ -81,11 +81,13 @@ class UsersDataSource extends GetxController {
     }
 
     if (withoutSelf) {
-      usersList.removeWhere((element) =>
-          selfUserItem.portalUser.id == element.id ||
-          (selectedProjectManager != null &&
-              selectedProjectManager.id == element.id));
+      usersList
+          .removeWhere((element) => selfUserItem.portalUser.id == element.id);
     }
+
+    usersList.removeWhere((element) =>
+        selectedProjectManager != null &&
+        selectedProjectManager.id == element.id);
 
     selfIsVisible.value = !(selectedProjectManager != null &&
         selectedProjectManager.id == selfUserItem.portalUser.id);
