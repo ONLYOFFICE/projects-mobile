@@ -79,7 +79,8 @@ dependencies:
   
   # app localization
   easy_localization: ^3.0.0
-  
+  # to restart the application correctly
+  restart_app: ^1.0.3  
   
 dev_dependencies:
   flutter_test:

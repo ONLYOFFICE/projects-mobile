@@ -30,15 +30,15 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
-import 'package:projects/domain/controllers/passcode/passcode_controller.dart';
+import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/current_passcode_check_screen.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen1.dart';
-import 'package:projects/presentation/views/settings/passcode/screens/new_passcode_screen2.dart';
+import 'package:projects/presentation/views/settings/passcode/edit/edit_passcode_screen1.dart';
+import 'package:projects/presentation/views/settings/passcode/edit/enter_current_passcode_screen.dart';
+import 'package:projects/presentation/views/settings/passcode/new/new_passcode_screen1.dart';
+import 'package:projects/presentation/views/settings/passcode/new/new_passcode_screen2.dart';
 
 class PasscodeSettingsController extends GetxController {
   final _service = locator<PasscodeService>();
@@ -51,7 +51,7 @@ class PasscodeSettingsController extends GetxController {
   var isFingerprintEnable;
   var isFingerprintAvailable;
 
-  RxInt passcodeLen = 0.obs;
+  RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
 
   @override
@@ -75,10 +75,10 @@ class PasscodeSettingsController extends GetxController {
   void addNumberToPasscode(int number) {
     if (_passcode.length < 4) {
       _passcode += number.toString();
-      passcodeLen.value++;
+      enteredPasscodeLen.value++;
     }
     if (_passcode.length == 4) {
-      Get.to(() => const NewPasscodeScreen2());
+      Get.to(() => NewPasscodeScreen2());
     }
   }
 
@@ -93,10 +93,10 @@ class PasscodeSettingsController extends GetxController {
         _service.setPasscode(_passcode);
         try {
           // update code in main passcode controller
-          Get.find<PasscodeController>().onInit();
+          Get.find<PasscodeCheckingController>().onInit();
           // ignore: empty_catches
         } catch (_) {}
-        leave();
+        _onPasscodeSaved();
       } else {
         passcodeCheckFailed.value = true;
       }
@@ -111,8 +111,8 @@ class PasscodeSettingsController extends GetxController {
 
   void deleteNumber() {
     if (_passcode.isNotEmpty) {
-      _passcode = _passcode.substring(0, passcodeLen.value - 1);
-      passcodeLen.value--;
+      _passcode = _passcode.substring(0, enteredPasscodeLen.value - 1);
+      enteredPasscodeLen.value--;
     }
   }
 
@@ -124,8 +124,12 @@ class PasscodeSettingsController extends GetxController {
     }
   }
 
-  Future<void> disablePasscode() async {
+  Future<void> _disablePasscode() async {
     await _service.deletePasscode();
+    if (isFingerprintEnable.value == true) {
+      await _service.setFingerprintStatus(false);
+      isFingerprintEnable.value = false;
+    }
     leave();
   }
 
@@ -137,8 +141,6 @@ class PasscodeSettingsController extends GetxController {
 
   void leave() {
     clear();
-
-    Get.back();
     Get.back();
   }
 
@@ -147,37 +149,33 @@ class PasscodeSettingsController extends GetxController {
     passcodeCheckLen.value = 0;
     passcodeCheckFailed.value = false;
     _passcode = '';
-    passcodeLen.value = 0;
+    enteredPasscodeLen.value = 0;
   }
 
   void tryEnablingPasscode() async {
     isPasscodeEnable.value = true;
-    await Get.to(() => const NewPasscodeScreen1(),
-        arguments: {'title': tr('enterPasscode')});
+    await Get.to(() => NewPasscodeScreen1(), preventDuplicates: false);
   }
 
   void tryDisablingPasscode() async {
     isPasscodeEnable.value = false;
     await Get.to(
-      () => const CurrentPasscodeCheckScreen(),
-      arguments: {
-        'title': tr('enterCurrentPasscode'),
-        'caption': '',
-        'onPass': disablePasscode
-      },
+      () => EnterCurrentPasscodeScreen(
+        onPass: _disablePasscode,
+        onBack: () {
+          isPasscodeEnable.value = true;
+          Get.back();
+        },
+      ),
+      preventDuplicates: false,
     );
   }
 
   Future<void> tryChangingPasscode() async {
     await Get.to(
-      () => const CurrentPasscodeCheckScreen(),
-      arguments: {
-        'title': tr('enterCurrentPasscode'),
-        'caption': '',
-        'onPass': () => Get.to(() => const NewPasscodeScreen1(),
-            arguments: {'title': tr('enterNewPasscode'), 'caption': ''})
-      },
-    );
+        () => EnterCurrentPasscodeScreen(
+            onPass: () => Get.to(() => EditPasscodeScreen1())),
+        preventDuplicates: false);
   }
 
   void onPasscodeTilePressed(value) {
@@ -188,10 +186,31 @@ class PasscodeSettingsController extends GetxController {
     }
   }
 
-  void toggleFingerprintStatus(value) {
+  void tryTogglingFingerprintStatus(bool value) {
+    isFingerprintEnable.value = value;
+    Get.to(
+      () => EnterCurrentPasscodeScreen(
+        onPass: () => _toggleFingerprintStatus(value),
+        onBack: () {
+          isFingerprintEnable.value = !value;
+          Get.back();
+        },
+      ),
+      preventDuplicates: false,
+    );
+  }
+
+  void _toggleFingerprintStatus(value) {
     if (isFingerprintAvailable.value == true) {
       isFingerprintEnable.value = value;
       _service.setFingerprintStatus(value);
     }
+    Get.back();
+  }
+
+  void _onPasscodeSaved() {
+    clear();
+    Get.back();
+    Get.back();
   }
 }

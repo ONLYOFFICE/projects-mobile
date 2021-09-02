@@ -172,7 +172,7 @@ class _UsersCategoryText extends StatelessWidget {
         child: Text(
           text,
           style: TextStyleHelper.body2(
-              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
+              color: Get.theme.colors().onSurface.withOpacity(0.6)),
         ),
       ),
     );

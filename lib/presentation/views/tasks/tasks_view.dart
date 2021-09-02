@@ -215,7 +215,7 @@ class TasksHeader extends StatelessWidget {
                               icon: SvgIcons.sorting_4_ascend,
                               width: 20,
                               height: 20,
-                              color: Theme.of(context).colors().primary,
+                              color: Get.theme.colors().primary,
                             )
                           : Transform(
                               alignment: Alignment.center,
@@ -224,7 +224,7 @@ class TasksHeader extends StatelessWidget {
                                 icon: SvgIcons.sorting_4_ascend,
                                 width: 20,
                                 height: 20,
-                                color: Theme.of(context).colors().primary,
+                                color: Get.theme.colors().primary,
                               ),
                             ),
                     ),

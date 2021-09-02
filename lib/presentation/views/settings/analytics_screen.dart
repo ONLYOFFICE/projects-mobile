@@ -54,7 +54,7 @@ class AnalyticsScreen extends StatelessWidget {
           contentPadding: const EdgeInsets.fromLTRB(16, 14, 5, 30),
           title: Text(tr('shareAnalytics'),
               style: TextStyleHelper.subtitle1(
-                  color: Theme.of(context).colors().onBackground)),
+                  color: Get.theme.colors().onBackground)),
           subtitle: Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(tr('shareAnalyticsDescription'),

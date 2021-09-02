@@ -30,38 +30,45 @@
  *
  */
 
-part of '../discussions_filter_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
+import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart';
 
-class _Author extends StatelessWidget {
-  final DiscussionsFilterController filterController;
-  const _Author({Key key, this.filterController}) : super(key: key);
+class EnterCurrentPasscodeScreen extends StatelessWidget
+    with PasscodeScreenMixin {
+  EnterCurrentPasscodeScreen({
+    Key key,
+    @required this.onPass,
+    this.onBack,
+  }) : super(key: key);
+
+  final VoidCallback onPass;
+  final VoidCallback onBack;
+
+  final passcodeCheckingController = Get.put(PasscodeCheckingController());
 
   @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => FiltersRow(
-        title: tr('author'),
-        options: <Widget>[
-          FilterElement(
-              title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.author['me'],
-              onTap: () => filterController.changeAuthor(('me'))),
-          FilterElement(
-            title: filterController.author['other'].isEmpty
-                ? tr('otherUser')
-                : filterController.author['other'],
-            isSelected: filterController.author['other'].isNotEmpty,
-            cancelButtonEnabled: filterController.author['other'].isNotEmpty,
-            onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
-              filterController.changeAuthor('other', newUser);
-            },
-            onCancelTap: () => filterController.changeAuthor('other', null),
-          ),
-        ],
-      ),
-    );
+  String get title => tr('enterCurrentPasscode');
+
+  @override
+  RxInt get enteredCodeLen => passcodeCheckingController.passcodeLen;
+
+  @override
+  RxBool get hasError => passcodeCheckingController.passcodeCheckFailed;
+
+  @override
+  String get errorText => tr('incorrectPIN');
+
+  @override
+  void onBackPressed() => onBack != null ? onBack() : Get.back();
+
+  @override
+  void onDeletePressed() => passcodeCheckingController.deleteNumber();
+
+  @override
+  void onNumberPressed(int number) {
+    passcodeCheckingController.addNumberToPasscode(number, onPass: onPass);
   }
 }

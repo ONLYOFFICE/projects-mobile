@@ -30,38 +30,36 @@
  *
  */
 
-part of '../discussions_filter_screen.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/domain/controllers/passcode/passcode_editing_controller.dart';
+import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart';
 
-class _Author extends StatelessWidget {
-  final DiscussionsFilterController filterController;
-  const _Author({Key key, this.filterController}) : super(key: key);
+class EditPasscodeScreen2 extends StatelessWidget with PasscodeScreenMixin {
+  EditPasscodeScreen2({Key key}) : super(key: key);
+
+  final PasscodeEditingController passcodeController =
+      Get.find<PasscodeEditingController>();
 
   @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => FiltersRow(
-        title: tr('author'),
-        options: <Widget>[
-          FilterElement(
-              title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.author['me'],
-              onTap: () => filterController.changeAuthor(('me'))),
-          FilterElement(
-            title: filterController.author['other'].isEmpty
-                ? tr('otherUser')
-                : filterController.author['other'],
-            isSelected: filterController.author['other'].isNotEmpty,
-            cancelButtonEnabled: filterController.author['other'].isNotEmpty,
-            onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
-              filterController.changeAuthor('other', newUser);
-            },
-            onCancelTap: () => filterController.changeAuthor('other', null),
-          ),
-        ],
-      ),
-    );
-  }
+  String get caption => tr('reEnterPasscode');
+
+  @override
+  String get errorText => tr('passcodesNotMatch');
+
+  @override
+  void onNumberPressed(int number) =>
+      passcodeController.addNumberToPasscodeCheck(number);
+
+  @override
+  void onDeletePressed() => passcodeController.deletePasscodeCheckNumber();
+
+  @override
+  void onBackPressed() => passcodeController.leave2Page();
+
+  @override
+  RxInt get enteredCodeLen => passcodeController.passcodeCheckLen;
+  @override
+  RxBool get hasError => passcodeController.passcodeCheckFailed;
 }

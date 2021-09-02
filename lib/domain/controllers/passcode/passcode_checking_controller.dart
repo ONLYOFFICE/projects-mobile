@@ -30,13 +30,18 @@
  *
  */
 
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/passcode_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/internal/locator.dart';
 
-class PasscodeController extends GetxController {
+class PasscodeCheckingController extends GetxController {
+  PasscodeCheckingController({this.canUseFingerprint = false});
+
+  final bool canUseFingerprint;
+
   final _service = locator<PasscodeService>();
   final _authService = locator<LocalAuthenticationService>();
 
@@ -52,19 +57,28 @@ class PasscodeController extends GetxController {
 
   @override
   void onInit() async {
-    isFingerprintEnable = await _service.isFingerprintEnable;
     _correctPasscode = await _service.getPasscode;
-    isFingerprintAvailable = await _authService.isFingerprintAvailable;
-    loaded.value = true;
+    await _getFingerprintAvailability();
     super.onInit();
+    if (isFingerprintEnable) await useFingerprint();
   }
 
   Future<void> useFingerprint() async {
-    var didAuthenticate = await _authService.authenticate();
+    try {
+      var didAuthenticate = await _authService.authenticate();
 
-    var nextPage = await _getNextPage();
-
-    if (didAuthenticate) await Get.offNamed(nextPage);
+      if (!didAuthenticate) {
+        await _getFingerprintAvailability();
+      } else {
+        var nextPage = await _getNextPage();
+        await Get.offNamed(nextPage);
+      }
+    } catch (_) {
+      loaded.value = false;
+      isFingerprintAvailable = false;
+      isFingerprintEnable = false;
+      loaded.value = true;
+    }
   }
 
   void addNumberToPasscode(
@@ -75,16 +89,18 @@ class PasscodeController extends GetxController {
   }) async {
     nextPage ??= await _getNextPage();
 
+    if (passcodeCheckFailed.isTrue) passcodeCheckFailed.value = false;
+
     if (_enteredPasscode.length < 4) {
-      passcodeCheckFailed.value = false;
       _enteredPasscode += number.toString();
       passcodeLen.value++;
     }
     if (_enteredPasscode.length == 4) {
       if (_enteredPasscode != _correctPasscode) {
-        passcodeCheckFailed.value = true;
+        await HapticFeedback.mediumImpact();
+        _handleIncorrectPinEntering();
       } else {
-        clear();
+        _clear();
         if (onPass != null) {
           await onPass();
         } else {
@@ -95,21 +111,31 @@ class PasscodeController extends GetxController {
   }
 
   void deleteNumber() {
+    if (passcodeCheckFailed.isTrue) _clear();
     if (_enteredPasscode.isNotEmpty) {
-      passcodeCheckFailed.value = false;
       _enteredPasscode = _enteredPasscode.substring(0, passcodeLen.value - 1);
       passcodeLen.value--;
     }
   }
 
-  void clear() {
-    passcodeCheckFailed.value = false;
+  void _clear({bool clearError = true}) {
+    if (clearError) passcodeCheckFailed.value = false;
     _enteredPasscode = '';
     passcodeLen.value = 0;
   }
 
+  void _handleIncorrectPinEntering() async {
+    passcodeCheckFailed.value = true;
+
+    _clear(clearError: false);
+
+    await Future.delayed(const Duration(milliseconds: 1700)).then((value) {
+      if (passcodeCheckFailed.isTrue) _clear();
+    });
+  }
+
   void leave() {
-    clear();
+    _clear();
     Get.back();
   }
 
@@ -123,5 +149,17 @@ class PasscodeController extends GetxController {
 
     if (await loginController.isLoggedIn) return 'NavigationView';
     return 'PortalView';
+  }
+
+  Future<void> _getFingerprintAvailability() async {
+    loaded.value = false;
+    if (!canUseFingerprint) {
+      isFingerprintAvailable = false;
+      isFingerprintEnable = false;
+    } else {
+      isFingerprintAvailable = await _authService.isFingerprintAvailable;
+      isFingerprintEnable = await _service.isFingerprintEnable;
+    }
+    loaded.value = true;
   }
 }

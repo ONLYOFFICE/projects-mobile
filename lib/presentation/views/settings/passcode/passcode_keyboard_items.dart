@@ -71,6 +71,30 @@ class PasscodeNumbersRow extends StatelessWidget {
   }
 }
 
+class PasscodeRowWithZero extends StatelessWidget {
+  const PasscodeRowWithZero({
+    Key key,
+    @required this.onZeroPressed,
+    @required this.onDeletePressed,
+  }) : super(key: key);
+
+  final VoidCallback onDeletePressed;
+  final Function(int number) onZeroPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(width: 92.53),
+        PasscodeNumber(number: 0, onPressed: onZeroPressed),
+        const SizedBox(width: 20.53),
+        DeleteButton(onTap: onDeletePressed)
+      ],
+    );
+  }
+}
+
 class PasscodeNumber extends StatelessWidget {
   final int number;
   final Function(int number) onPressed;
@@ -121,7 +145,7 @@ class DeleteButton extends StatelessWidget {
         child: Center(
           child: AppIcon(
             icon: SvgIcons.delete_number,
-            color: Theme.of(context).colors().onBackground,
+            color: Get.theme.colors().onBackground,
           ),
         ),
       ),

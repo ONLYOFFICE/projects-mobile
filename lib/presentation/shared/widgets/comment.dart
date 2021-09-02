@@ -98,7 +98,7 @@ class Comment extends StatelessWidget {
                         context,
                         controller.comment.value.commentBody,
                         defaultTextStyle: TextStyleHelper.body2(
-                          color: Theme.of(context).colors().onSurface,
+                          color: Get.theme.colors().onSurface,
                         ),
                       ),
                     ),
