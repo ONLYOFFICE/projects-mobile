@@ -35,67 +35,69 @@ mixin PasscodeScreenMixin on StatelessWidget {
         appBar: hasBackButton
             ? StyledAppBar(elevation: 0, onLeadingPressed: onBackPressed)
             : null,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            SizedBox(height: hasBackButton ? h(114) : h(170)),
-            Text(title,
-                textAlign: TextAlign.center,
-                style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onBackground)),
-            SizedBox(
-                height: h(72),
-                child: Obx(() {
-                  return Column(children: [
-                    const Flexible(flex: 1, child: SizedBox(height: 16)),
-                    if (hasError.isTrue)
-                      Text(errorText,
-                          textAlign: TextAlign.center,
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().colorError)),
-                    if (hasError.isFalse && caption != null)
-                      Text(caption,
-                          textAlign: TextAlign.center,
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.6))),
-                    const Flexible(flex: 2, child: SizedBox(height: 32)),
-                  ]);
-                })),
-            Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < 4; i++)
-                    PasscodeDot(
-                      position: i,
-                      inputLenght: enteredCodeLen.value,
-                      passwordIsWrong: hasError.value,
-                    ),
-                ],
-              ),
-            ),
-            SizedBox(height: h(165)),
-            PasscodeNumbersRow(
-              numbers: [1, 2, 3],
-              onPressed: onNumberPressed,
-            ),
-            PasscodeNumbersRow(
-              numbers: [4, 5, 6],
-              onPressed: onNumberPressed,
-            ),
-            PasscodeNumbersRow(
-              numbers: [7, 8, 9],
-              onPressed: onNumberPressed,
-            ),
-            keyboardLastRow ??
-                PasscodeRowWithZero(
-                  onZeroPressed: onNumberPressed,
-                  onDeletePressed: onDeletePressed,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(height: hasBackButton ? h(114) : h(170)),
+              Text(title,
+                  textAlign: TextAlign.center,
+                  style: TextStyleHelper.headline6(
+                      color: Get.theme.colors().onBackground)),
+              SizedBox(
+                  height: h(72),
+                  child: Obx(() {
+                    return Column(children: [
+                      const Flexible(flex: 1, child: SizedBox(height: 16)),
+                      if (hasError.isTrue)
+                        Text(errorText,
+                            textAlign: TextAlign.center,
+                            style: TextStyleHelper.subtitle1(
+                                color: Get.theme.colors().colorError)),
+                      if (hasError.isFalse && caption != null)
+                        Text(caption,
+                            textAlign: TextAlign.center,
+                            style: TextStyleHelper.subtitle1(
+                                color: Get.theme
+                                    .colors()
+                                    .onBackground
+                                    .withOpacity(0.6))),
+                      const Flexible(flex: 2, child: SizedBox(height: 32)),
+                    ]);
+                  })),
+              Obx(
+                () => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < 4; i++)
+                      PasscodeDot(
+                        position: i,
+                        inputLenght: enteredCodeLen.value,
+                        passwordIsWrong: hasError.value,
+                      ),
+                  ],
                 ),
-          ],
+              ),
+              SizedBox(height: h(165)),
+              PasscodeNumbersRow(
+                numbers: [1, 2, 3],
+                onPressed: onNumberPressed,
+              ),
+              PasscodeNumbersRow(
+                numbers: [4, 5, 6],
+                onPressed: onNumberPressed,
+              ),
+              PasscodeNumbersRow(
+                numbers: [7, 8, 9],
+                onPressed: onNumberPressed,
+              ),
+              keyboardLastRow ??
+                  PasscodeRowWithZero(
+                    onZeroPressed: onNumberPressed,
+                    onDeletePressed: onDeletePressed,
+                  ),
+            ],
+          ),
         ),
       ),
     );
