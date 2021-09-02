@@ -103,6 +103,8 @@ class ProjectEditController extends BaseProjectEditorController {
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
+    selectedTeamMembers.removeWhere(
+        (element) => element.portalUser.id == selectedProjectManager.value.id);
 
     var participants = <Participant>[];
 

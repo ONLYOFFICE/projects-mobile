@@ -138,12 +138,12 @@ abstract class BaseProjectEditorController extends GetxController {
 
   void changePMSelection(PortalUserItemController user) {
     if (user.isSelected.value == true) {
-      selectedTeamMembers.removeWhere((element) =>
-          selectedProjectManager.value.id == element.portalUser.id);
-
       selectedProjectManager.value = user.portalUser;
       managerName.value = selectedProjectManager.value.displayName;
       isPMSelected.value = true;
+
+      selectedTeamMembers.removeWhere((element) =>
+          selectedProjectManager.value.id == element.portalUser.id);
 
       for (var element in usersDataSourse.usersList) {
         element.isSelected.value =
@@ -209,7 +209,7 @@ abstract class BaseProjectEditorController extends GetxController {
         }
       }
       if (selfUserItem.portalUser.id == selectedMember.portalUser.id) {
-        selfUserItem.isSelected.value = selectedMember.isSelected.value;
+        selfUserItem.isSelected.value = true;
       }
     }
   }
