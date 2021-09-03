@@ -72,6 +72,10 @@ class SvgIcons {
   static const String password_recovery =
       'lib/assets/images/icons/password_recovery.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
+  static const String preferences_active =
+      'lib/assets/images/icons/preferences_active.svg';
+  static const String preferences_active_dark_theme =
+      'lib/assets/images/icons/preferences_active_dark_theme.svg';
   static const String project_icon = 'lib/assets/images/icons/project_icon.svg';
   static const String subscribers = 'lib/assets/images/icons/subscribers.svg';
 
