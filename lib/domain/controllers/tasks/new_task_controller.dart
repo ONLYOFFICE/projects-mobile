@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,7 +10,6 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
@@ -298,12 +298,7 @@ class NewTaskController extends GetxController
                 arguments: {'controller': itemController});
           }));
 
-      try {
-        // ignore: unawaited_futures
-        Get.find<ProjectDetailsController>().refreshData();
-      } catch (e) {
-        debugPrint(e);
-      }
+      locator<EventHub>().fire('needToRefreshProjects');
     }
   }
 

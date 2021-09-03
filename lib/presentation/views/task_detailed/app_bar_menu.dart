@@ -77,13 +77,8 @@ void _onSelected(value, TaskItemController controller) async {
             // ignore: unawaited_futures
             Get.find<TasksController>().loadTasks();
 
-            //TODO refactoring needed
-            try {
-              // ignore: unawaited_futures
-              Get.find<ProjectDetailsController>().refreshData();
-            } catch (e) {
-              debugPrint(e);
-            }
+            locator<EventHub>().fire('needToRefreshProjects');
+
             Get.back();
             Get.back();
           } else {

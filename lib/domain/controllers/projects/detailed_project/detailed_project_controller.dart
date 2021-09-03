@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -60,6 +61,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
               PortalUserItemController(portalUser: _userController.user),
         });
 
+    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      refreshData();
+    });
     super.onInit();
   }
 

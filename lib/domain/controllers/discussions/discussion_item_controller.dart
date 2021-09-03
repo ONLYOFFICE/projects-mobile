@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -8,7 +9,6 @@ import 'package:projects/domain/controllers/comments/new_comment/new_discussion_
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -126,8 +126,7 @@ class DiscussionItemController extends GetxController {
         await Get.find<DiscussionsController>().loadDiscussions();
         //TODO refactoring needed
         try {
-          // ignore: unawaited_futures
-          Get.find<ProjectDetailsController>().refreshData();
+          locator<EventHub>().fire('needToRefreshProjects');
           // ignore: unawaited_futures
           Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
         } catch (e) {

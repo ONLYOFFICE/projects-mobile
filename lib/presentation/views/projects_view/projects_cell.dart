@@ -1,14 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -296,12 +295,9 @@ void showsStatusesBS({context, itemController}) async {
                         await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
                         );
+                        locator<EventHub>().fire('needToRefreshProjects');
+
                         Get.back();
-                        await Get.find<ProjectsController>(tag: 'ProjectsView')
-                            .loadProjects();
-                        await Get.find<ProjectDetailsController>()
-                            .refreshData();
-                        await Get.find<DashboardController>().refreshData();
                       },
                       child: StatusTile(
                           title: _statusesController.getStatusName(i),

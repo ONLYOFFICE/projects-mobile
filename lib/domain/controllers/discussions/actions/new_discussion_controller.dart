@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -12,7 +13,6 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -259,8 +259,8 @@ class NewDiscussionController extends GetxController
         discussionsController.loadDiscussions();
         if (specifiedProjectId != null) {
           try {
-            // ignore: unawaited_futures
-            Get.find<ProjectDetailsController>().refreshData();
+            locator<EventHub>().fire('needToRefreshProjects');
+
             // ignore: unawaited_futures
             Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
           } catch (e) {
