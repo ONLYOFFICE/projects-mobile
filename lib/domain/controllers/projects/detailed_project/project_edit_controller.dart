@@ -42,7 +42,6 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
