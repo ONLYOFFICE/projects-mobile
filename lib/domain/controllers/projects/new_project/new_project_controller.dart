@@ -7,7 +7,6 @@ import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';

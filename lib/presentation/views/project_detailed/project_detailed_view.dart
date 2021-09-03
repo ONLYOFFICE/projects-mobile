@@ -7,7 +7,6 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
