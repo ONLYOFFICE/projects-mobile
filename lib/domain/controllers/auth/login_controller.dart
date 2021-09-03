@@ -41,6 +41,7 @@ import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
@@ -313,9 +314,16 @@ class LoginController extends GetxController {
   }
 
   Future<void> logout() async {
+    var storage = locator<Storage>();
+
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
     await _secureStorage.delete('token');
+
+    await storage.remove('taskFilters');
+    await storage.remove('projectFilters');
+    await storage.remove('discussionFilters');
+
     Get.find<PortalInfoController>().logout();
     Get.find<NavigationController>().clearCurrentIndex();
   }
