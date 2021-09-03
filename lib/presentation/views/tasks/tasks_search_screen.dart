@@ -30,13 +30,13 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/tasks_search_controller.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 
@@ -47,22 +47,14 @@ class TasksSearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.put(TasksSearchController());
 
-    controller.init();
-
     return Scaffold(
-      appBar: StyledAppBar(
-        titleText: tr('tasksSearch'),
-        bottom: SearchField(
-          autofocus: true,
-          onChanged: (value) {
-            controller.searchTasks(query: value, needToClear: true);
-          },
-        ),
-      ),
+      appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
       body: Obx(
         () {
           if (controller.loaded.value == false)
             return const ListLoadingSkeleton();
+          if (controller.nothingFound.isTrue)
+            return Column(children: [const NothingFound()]);
           else {
             return PaginationListView(
               paginationController: controller.paginationController,
@@ -77,17 +69,6 @@ class TasksSearchScreen extends StatelessWidget {
           }
         },
       ),
-      // body: Container(
-      //   child: ListView.separated(
-      //     itemCount: 10,
-      //     separatorBuilder: (BuildContext context, int index) {
-      //       return const SizedBox(height: 10);
-      //     },
-      //     itemBuilder: (BuildContext context, int index) {
-      //       return Container();
-      //     },
-      //   ),
-      // ),
     );
   }
 }
