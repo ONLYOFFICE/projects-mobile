@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 
@@ -40,7 +41,6 @@ import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -177,10 +177,7 @@ class ProjectEditController extends BaseProjectEditorController {
         project: newProject, projectId: _projectDetailed.id);
     if (success) {
       {
-        await Get.find<ProjectDetailsController>().refreshData();
-
-        // ignore: unawaited_futures
-        Get.find<ProjectsController>(tag: 'ProjectsView').refreshData();
+        locator<EventHub>().fire('needToRefreshProjects');
       }
 
       Get.back();

@@ -31,12 +31,14 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
+import 'package:projects/internal/locator.dart';
 
 class DashboardController extends GetxController {
   var screenName = tr('dashboard').obs;
@@ -54,14 +56,21 @@ class DashboardController extends GetxController {
     _activeProjectsController = ProjectsWithPresets.activeProjectsController;
     _myTaskController = TasksWithPresets.myTasksController;
     _upcomingTaskscontroller = TasksWithPresets.upcomingTasksController;
+
+    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      refreshProjectsData();
+    });
   }
 
   Future<void> refreshData() async {
     await myTaskController.refreshData();
     await upcomingTaskscontroller.refreshData();
-    await myProjectsController.refreshData();
-    await folowedProjectsController.refreshData();
-    await activeProjectsController.refreshData();
+  }
+
+  Future<void> refreshProjectsData() async {
+    await myProjectsController.loadProjects();
+    await folowedProjectsController.loadProjects();
+    await activeProjectsController.loadProjects();
   }
 
   TasksController get myTaskController => _myTaskController;

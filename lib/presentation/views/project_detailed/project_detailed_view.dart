@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -39,6 +40,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -283,8 +285,7 @@ void _onSelected(value, controller) async {
         onAcceptTap: () async {
           var result = await controller.deleteProject();
           if (result != null) {
-            // ignore: unawaited_futures
-            Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects();
+            locator<EventHub>().fire('needToRefreshProjects');
             Get.back();
             Get.back();
           } else {

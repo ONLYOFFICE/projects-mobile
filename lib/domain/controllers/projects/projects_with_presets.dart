@@ -47,12 +47,12 @@ class ProjectsWithPresets {
 
   static ProjectsController get folowedProjectsController {
     _setupMyFolowedProjects();
-    return _myProjectsController;
+    return _folowedProjectsController;
   }
 
   static ProjectsController get activeProjectsController {
     _setupActiveProjects();
-    return _myProjectsController;
+    return _activeProjectsController;
   }
 
   static void _setupMyProjects() async {

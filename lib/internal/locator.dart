@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/authentication_api.dart';
@@ -147,6 +148,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => TaskService());
   locator.registerLazySingleton(() => UserApi());
   locator.registerLazySingleton(() => UserService());
+  locator.registerLazySingleton(() => EventHub());
 
   Get.lazyPut(() => PlatformController());
 

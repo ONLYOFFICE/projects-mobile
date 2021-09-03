@@ -45,8 +45,8 @@ class TasksWithPresets {
   }
 
   static TasksController get upcomingTasksController {
-    setupMyTasks();
-    return _myTasksController;
+    setupUpcomingTasks();
+    return _upcomingTaskscontroller;
   }
 
   static void setupMyTasks() async {
@@ -68,7 +68,7 @@ class TasksWithPresets {
         .then((value) => _myTasksController.loadTasks());
   }
 
-  void setupUpcomingTasks() {
+  static void setupUpcomingTasks() {
     final _filterController = Get.put(
       TaskFilterController(),
       tag: 'UpcommingContent',
@@ -86,21 +86,21 @@ class TasksWithPresets {
         .then((value) => _upcomingTaskscontroller.loadTasks());
   }
 
-  void setupLastAppliedFilters() {
-    final _filterController = Get.put(
-      TaskFilterController(),
-      tag: 'last',
-    );
+  // void setupLastAppliedFilters() {
+  //   final _filterController = Get.put(
+  //     TaskFilterController(),
+  //     tag: 'last',
+  //   );
 
-    _upcomingTaskscontroller = Get.put(
-      TasksController(
-        _filterController,
-        Get.put(PaginationController(), tag: 'UpcommingContent'),
-      ),
-      tag: 'UpcommingContent',
-    );
-    _filterController
-        .setupPreset(PresetTaskFilters.upcomming)
-        .then((value) => _upcomingTaskscontroller.loadTasks());
-  }
+  //   _upcomingTaskscontroller = Get.put(
+  //     TasksController(
+  //       _filterController,
+  //       Get.put(PaginationController(), tag: 'UpcommingContent'),
+  //     ),
+  //     tag: 'UpcommingContent',
+  //   );
+  //   _filterController
+  //       .setupPreset(PresetTaskFilters.upcomming)
+  //       .then((value) => _upcomingTaskscontroller.loadTasks());
+  // }
 }

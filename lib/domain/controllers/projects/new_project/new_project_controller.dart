@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 
@@ -100,8 +101,7 @@ class NewProjectController extends BaseProjectEditorController {
 
     var success = await _api.createProject(project: newProject);
     if (success) {
-      // ignore: unawaited_futures
-      Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects();
+      locator<EventHub>().fire('needToRefreshProjects');
       Get.back();
     }
   }

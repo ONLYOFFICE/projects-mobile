@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -90,6 +91,10 @@ class ProjectsController extends BaseController {
     paginationController.pullDownEnabled = true;
 
     _userController.getUserInfo();
+
+    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      loadProjects();
+    });
   }
 
   @override
