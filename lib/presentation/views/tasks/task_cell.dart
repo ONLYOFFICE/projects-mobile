@@ -82,11 +82,7 @@ class TaskStatus extends StatelessWidget {
             decoration: BoxDecoration(
                 shape: BoxShape.circle, color: Get.theme.colors().background),
             child: Center(
-              child: SVG.createSizedFromString(
-                  itemController.statusImageString.value,
-                  16,
-                  16,
-                  itemController.status.value.color),
+              child: itemController.statusImage.value,
             )),
       ),
     );
