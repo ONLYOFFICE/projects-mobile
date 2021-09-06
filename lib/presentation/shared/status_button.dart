@@ -19,7 +19,7 @@ class StatusButton extends StatelessWidget {
           return const Color(0xff81C4FF).withOpacity(0.1);
         }),
         side: MaterialStateProperty.resolveWith((_) {
-          return const BorderSide(color: Color(0xff0C76D5), width: 1.5);
+          return const BorderSide(color: Colors.transparent, width: 1.5);
         }),
       ),
       child: Row(
