@@ -57,6 +57,12 @@ class DashboardController extends GetxController {
     _myTaskController = TasksWithPresets.myTasksController;
     _upcomingTaskscontroller = TasksWithPresets.upcomingTasksController;
 
+    myTaskController.screenName = tr('myTasks');
+    upcomingTaskscontroller.screenName = tr('upcomingTasks');
+    myProjectsController.screenName = tr('myProjects');
+    folowedProjectsController.screenName = tr('projectsIFolow');
+    activeProjectsController.screenName = tr('activeProjects');
+
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       refreshProjectsData();
     });

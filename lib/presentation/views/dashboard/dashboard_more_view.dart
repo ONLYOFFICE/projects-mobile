@@ -30,47 +30,27 @@
  *
  */
 
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/views/projects_view/projects_view.dart';
 
-class ProjectsView extends StatelessWidget {
-  const ProjectsView({Key key}) : super(key: key);
+class ProjectsDashboardMoreView extends StatelessWidget {
+  const ProjectsDashboardMoreView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    ProjectsController controller;
-
-    try {
-      controller = Get.find<ProjectsController>(tag: 'ProjectsView');
-    } catch (_) {
-      controller = Get.put(
-          ProjectsController(
-            Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
-            Get.put(PaginationController(), tag: 'ProjectsView'),
-          ),
-          tag: 'ProjectsView');
-    }
-
-    controller.loadProjects(preset: PresetProjectFilters.saved);
+    ProjectsController controller = Get.arguments['controller'];
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
@@ -98,7 +78,7 @@ class ProjectsView extends StatelessWidget {
           builder: (_, value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: Bottom(controller: controller),
-            showBackButton: false,
+            showBackButton: true,
             elevation: value,
           ),
         ),
@@ -175,104 +155,7 @@ class _Title extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 24),
-              InkResponse(
-                onTap: () async => {
-                  Get.find<NavigationController>()
-                      .toScreen(const ProjectsFilterScreen())
-                },
-                child: FiltersButton(controler: controller),
-              ),
             ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class Bottom extends StatelessWidget {
-  Bottom({Key key, this.controller}) : super(key: key);
-  final controller;
-  @override
-  Widget build(BuildContext context) {
-    var options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'title',
-          sortController: controller.sortController,
-        ),
-        const SizedBox(height: 20),
-      ],
-    );
-
-    var sortButton = Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: options),
-            isScrollControlled: true,
-          );
-        },
-        child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (controller.sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
-    );
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          sortButton,
-          Container(
-            child: Row(
-              children: <Widget>[
-                Obx(
-                  () => Text(
-                    tr('total', args: [
-                      controller.paginationController?.total?.value.toString()
-                    ]),
-                    style: TextStyleHelper.body2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ],
-            ),
           ),
         ],
       ),

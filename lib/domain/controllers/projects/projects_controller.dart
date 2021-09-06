@@ -57,9 +57,6 @@ class ProjectsController extends BaseController {
   PaginationController get paginationController => _paginationController;
 
   @override
-  String get screenName => tr('projects');
-
-  @override
   RxList get itemList => _paginationController.data;
 
   final _sortController = Get.find<ProjectsSortController>();
@@ -80,6 +77,7 @@ class ProjectsController extends BaseController {
     ProjectsFilterController filterController,
     PaginationController paginationController,
   ) {
+    screenName = tr('projects');
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;

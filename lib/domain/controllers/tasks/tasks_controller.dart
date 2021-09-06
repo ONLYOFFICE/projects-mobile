@@ -63,6 +63,7 @@ class TasksController extends BaseController {
 
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
+    screenName = tr('tasks');
     taskStatusesController.getStatuses();
     _paginationController = paginationController;
     expandedCardView.value = true;
@@ -73,9 +74,6 @@ class TasksController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
   }
-
-  @override
-  String get screenName => tr('tasks');
 
   @override
   RxList get itemList => paginationController.data;
