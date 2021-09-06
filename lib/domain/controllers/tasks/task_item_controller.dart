@@ -31,7 +31,9 @@
  */
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
@@ -42,6 +44,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -57,7 +60,14 @@ class TaskItemController extends GetxController {
   var loaded = true.obs;
   var refreshController = RefreshController();
 
-  RxString statusImageString = ''.obs;
+  // ignore: unnecessary_cast
+  var statusImage = (const SizedBox(
+    width: 16,
+    height: 16,
+    child: Center(child: CircularProgressIndicator()),
+  ) as Widget)
+      .obs;
+
   // to show overview screen without loading
   RxBool firstReload = true.obs;
 
@@ -132,8 +142,13 @@ class TaskItemController extends GetxController {
   void initTaskStatus(PortalTask task) {
     var statusesController = Get.find<TaskStatusesController>();
     status.value = statusesController.getTaskStatus(task);
-    statusImageString.value =
-        statusesController.decodeImageString(status.value.image);
+
+    // ignore: unnecessary_cast
+    statusImage.value = (SVG.createSizedFromString(
+        statusesController.decodeImageString(status.value.image),
+        16,
+        16,
+        status.value.color) as Widget);
   }
 
   Future reloadTask({bool showLoading = false}) async {
