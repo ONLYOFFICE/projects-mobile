@@ -87,7 +87,7 @@ class TaskEditingView extends StatelessWidget {
                   }),
                   side: MaterialStateProperty.resolveWith((_) {
                     return const BorderSide(
-                        color: Color(0xff0C76D5), width: 1.5);
+                        color: Colors.transparent, width: 1.5);
                   }),
                 ),
                 child: Row(
