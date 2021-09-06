@@ -2,11 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
+import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 
@@ -32,27 +35,22 @@ class DashboardView extends StatelessWidget {
         controller: dashboardController.scrollController,
         children: <Widget>[
           DashboardCardView(
-            title: tr('myTasks'),
             overline: tr('tasks'),
             controller: dashboardController.myTaskController,
           ),
           DashboardCardView(
-            title: tr('upcomingTasks'),
             overline: tr('tasks'),
             controller: dashboardController.upcomingTaskscontroller,
           ),
           DashboardCardView(
-            title: tr('myProjects'),
             overline: tr('projects'),
             controller: dashboardController.myProjectsController,
           ),
           DashboardCardView(
-            title: tr('projectsIFolow'),
             overline: tr('projects'),
             controller: dashboardController.folowedProjectsController,
           ),
           DashboardCardView(
-            title: tr('activeProjects'),
             overline: tr('projects'),
             controller: dashboardController.activeProjectsController,
           ),
@@ -64,12 +62,10 @@ class DashboardView extends StatelessWidget {
 
 class DashboardCardView extends StatelessWidget {
   final String overline;
-  final String title;
   final controller;
 
   DashboardCardView({
     Key key,
-    this.title,
     this.overline,
     this.controller,
   }) : super(key: key);
@@ -110,7 +106,7 @@ class DashboardCardView extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            title,
+                            controller.screenName,
                             style: TextStyleHelper.headline7(),
                           ),
                         ],
@@ -231,8 +227,13 @@ class DashboardCardView extends StatelessWidget {
                                   children: [
                                     InkWell(
                                       onTap: () => {
-                                        controller.showAll.value =
-                                            !controller.showAll.value
+                                        Get.find<NavigationController>().to(
+                                            controller is ProjectsController
+                                                ? const ProjectsDashboardMoreView()
+                                                : const TasksDashboardMoreView(),
+                                            arguments: {
+                                              'controller': controller
+                                            }),
                                       },
                                       child: !controller.showAll.value
                                           ? Text(

@@ -12,20 +12,19 @@ class UsersController extends BaseController {
 
   @override
   void onInit() {
+    screenName = tr('users');
     paginationController =
         Get.put(PaginationController(), tag: 'UsersController');
 
     paginationController.loadDelegate = () async => await _getUsers();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
+
     super.onInit();
   }
 
   @override
   var itemList = [].obs;
-
-  @override
-  String get screenName => tr('users');
 
   RxBool loaded = false.obs;
 

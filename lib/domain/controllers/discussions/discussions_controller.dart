@@ -30,6 +30,7 @@ class DiscussionsController extends BaseController {
     DiscussionsFilterController filterController,
     PaginationController paginationController,
   ) {
+    screenName = tr('discussions');
     _paginationController = paginationController;
     _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => loadDiscussions();
@@ -39,9 +40,6 @@ class DiscussionsController extends BaseController {
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
-
-  @override
-  String get screenName => tr('discussions');
 
   @override
   RxList get itemList => paginationController.data;

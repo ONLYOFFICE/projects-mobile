@@ -12,20 +12,19 @@ class TagsController extends BaseController {
 
   @override
   void onInit() {
+    screenName = tr('tags');
     paginationController =
         Get.put(PaginationController(), tag: 'TagsController');
 
     paginationController.loadDelegate = () async => await _getItems();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
+
     super.onInit();
   }
 
   @override
   var itemList = [].obs;
-
-  @override
-  String get screenName => tr('tags');
 
   RxBool loaded = false.obs;
 

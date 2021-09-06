@@ -21,15 +21,13 @@ class TasksSearchController extends BaseController {
 
   @override
   void onInit() {
+    screenName = tr('tasksSearch');
     paginationController.startIndex = 0;
     _paginationController.loadDelegate =
         () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query);
     super.onInit();
   }
-
-  @override
-  String get screenName => tr('tasksSearch');
 
   @override
   RxList get itemList => _paginationController.data;

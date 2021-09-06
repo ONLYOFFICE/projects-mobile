@@ -52,7 +52,7 @@ class TasksView extends StatelessWidget {
           valueListenable: elevation,
           builder: (_, value, __) => StyledAppBar(
             showBackButton: false,
-            titleText: tr('tasks'),
+            titleText: controller.screenName,
             elevation: value,
             actions: [
               IconButton(
@@ -75,7 +75,7 @@ class TasksView extends StatelessWidget {
               ),
               const SizedBox(width: 4),
             ],
-            bottom: TasksHeader(),
+            bottom: TasksHeader(controller: controller),
           ),
         ),
       ),
@@ -121,11 +121,10 @@ class TasksView extends StatelessWidget {
 }
 
 class TasksHeader extends StatelessWidget {
-  TasksHeader({
-    Key key,
-  }) : super(key: key);
+  TasksHeader({Key key, @required this.controller}) : super(key: key);
 
-  final controller = Get.find<TasksController>();
+  final controller;
+  // = Get.find<TasksController>();
 
   @override
   Widget build(BuildContext context) {
