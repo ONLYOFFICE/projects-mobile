@@ -64,7 +64,10 @@ class TagsSelectionView extends StatelessWidget {
         duration: const Duration(milliseconds: 100),
         child: StyledFloatingActionButton(
           onPressed: () => showTagAddingDialog(controller),
-          child: const Icon(Icons.add_rounded),
+          child: Icon(
+            Icons.add_rounded,
+            color: Get.theme.colors().onPrimarySurface,
+          ),
         ),
       ),
       appBar: StyledAppBar(

@@ -124,9 +124,9 @@ class SvgIcons {
   static const String user = 'lib/assets/images/icons/user.svg';
   static const String users = 'lib/assets/images/icons/users.svg';
   static const String avatar = 'lib/assets/images/icons/avatar.svg';
-  static const String add_project = 'lib/assets/images/icons/add_project.svg';
-  static const String add_milestone =
-      'lib/assets/images/icons/add_milestone.svg';
+  static const String fab_project = 'lib/assets/images/icons/fab_project.svg';
+  static const String fab_milestone =
+      'lib/assets/images/icons/fab_milestone.svg';
   static const String sorting_4_ascend =
       'lib/assets/images/icons/sorting_4_ascend.svg';
   static const String description = 'lib/assets/images/icons/description.svg';

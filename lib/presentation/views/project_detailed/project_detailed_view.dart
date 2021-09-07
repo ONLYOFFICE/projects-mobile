@@ -42,11 +42,9 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_di
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
@@ -112,48 +110,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
     return Obx(
       () => Scaffold(
-        floatingActionButton: Visibility(
-          visible: _activeIndex.value == 2 ||
-              _activeIndex.value == 1 ||
-              _activeIndex.value == 5,
-          child: StyledFloatingActionButton(
-            onPressed: () {
-              if (_activeIndex.value == 2)
-                projectController.createNewMilestone();
-              if (_activeIndex.value == 5)
-                projectController.manageTeamMembers();
-              if (_activeIndex.value == 1) projectController.createTask();
-            },
-            child: Obx(() {
-              switch (_activeIndex.value) {
-                case 2:
-                  return AppIcon(
-                    icon: SvgIcons.add_milestone,
-                    width: 32,
-                    height: 32,
-                  );
-                  break;
-
-                case 5:
-                  return AppIcon(
-                    icon: SvgIcons.fab_user,
-                    width: 32,
-                    height: 32,
-                  );
-                  break;
-                default:
-                  return const Icon(Icons.add_rounded);
-              }
-            }),
-            // _activeIndex.value == 2
-            // ? AppIcon(
-            //     icon: SvgIcons.add_milestone,
-            //     width: 32,
-            //     height: 32,
-            //   )
-            // : const Icon(Icons.add_rounded),
-          ),
-        ),
         appBar: StyledAppBar(
           actions: [
             projectDetailed.canEdit
@@ -211,7 +167,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             folderName: projectDetailed.title,
             documentsController: documentsController,
           ),
-          ProjectTeamView(projectDetailed: projectDetailed),
+          ProjectTeamView(
+              projectDetailed: projectDetailed,
+              fabAction: projectController.manageTeamMembers),
         ]),
       ),
     );

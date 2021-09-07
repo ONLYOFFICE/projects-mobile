@@ -41,6 +41,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class SubtasksView extends StatelessWidget {
   final TaskItemController controller;
@@ -80,7 +81,10 @@ class SubtasksView extends StatelessWidget {
                       'projectId': _task.projectOwner.id,
                       'forEditing': false,
                     }),
-                    child: AppIcon(icon: SvgIcons.add_fab),
+                    child: AppIcon(
+                      icon: SvgIcons.add_fab,
+                      color: Get.theme.colors().onPrimarySurface,
+                    ),
                   ),
                 ),
             ],
