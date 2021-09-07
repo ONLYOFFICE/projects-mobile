@@ -38,8 +38,12 @@ import 'package:projects/internal/locator.dart';
 
 class AnalyticsService {
 
+  AnalyticsService._privateConstructor();
+  static final AnalyticsService shared = AnalyticsService._privateConstructor();
+
   // Event names
   static const _AnalyticsEvents Events = const _AnalyticsEvents();
+  static const _AnalyticsParams Params = const _AnalyticsParams();
 
   // Private
   final FirebaseAnalytics _analytics = FirebaseAnalytics();
@@ -72,4 +76,34 @@ class _AnalyticsEvents {
   final openMedia        = 'open_media';
   final openExternal     = 'open_external';
   final createEntity     = 'create_entity';
+  final editEntity       = 'edit_entity';
+  final deleteEntity     = 'delete_entity';
+}
+
+class _AnalyticsParams {
+  const _AnalyticsParams();
+
+  final _AnalyticsParamKeys Key = const _AnalyticsParamKeys();
+  final _AnalyticsParamValues Value = const _AnalyticsParamValues();
+}
+
+class _AnalyticsParamKeys {
+  const _AnalyticsParamKeys();
+
+  final portal    = 'portal';
+  final entity    = 'entity';
+  final extension = 'extension';
+}
+
+class _AnalyticsParamValues {
+  const _AnalyticsParamValues();
+
+  final project   = 'project';
+  final task      = 'task';
+  final subtask   = 'subtask';
+  final milestone = 'milestone';
+  final discussion= 'discussion';
+  final reply     = 'reply';
+  final folder    = 'folder';
+  final file      = 'file';
 }

@@ -57,7 +57,6 @@ class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
-  final AnalyticsService _analytics = AnalyticsService();
 
   TextEditingController _portalAdressController;
   TextEditingController _emailController;
@@ -121,8 +120,9 @@ class LoginController extends GetxController {
         if (await sendRegistrationType()) {
           setState(ViewState.Idle);
           clearInputFields();
-          await _analytics.logEvent(AnalyticsService.Events.loginPortal,
-              {'portal' : await _secureStorage.getString('portalName')});
+          await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal, {
+            AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName')
+          });
           await Get.off(() => NavigationView()); //fix
         } else {
           // if the device type has not been sent, the token must be deleted
@@ -200,8 +200,9 @@ class LoginController extends GetxController {
       if (await sendRegistrationType()) {
         setState(ViewState.Idle);
         clearInputFields();
-        await _analytics.logEvent(AnalyticsService.Events.loginPortal,
-            {'portal' : await _secureStorage.getString('portalName')});
+        await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal, {
+          AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName')
+        });
         await Get.offNamed('NavigationView');
         return true;
       } else {
