@@ -45,6 +45,7 @@ import 'package:projects/data/services/settings_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/constants.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:flutter/material.dart';
@@ -157,8 +158,7 @@ class SettingsController extends GetxController {
 
   void onHelpPressed() async {
     // TODO REPLACE
-    const url = 'https://helpcenter.onlyoffice.com/userguides/projects.aspx';
-    await launch(url);
+    await launch(Const.Urls.help);
   }
 
   void onSupportPressed(context) async {
@@ -174,21 +174,21 @@ class SettingsController extends GetxController {
 
     // TODO change to ONLYOFFICE Projects IOS Feedback on ios
     var url =
-        'mailto:support@onlyoffice.com?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+        '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
 
     await _service.openEmailApp(url, context);
   }
 
   Future<void> onRateAppPressed() async {
     await LaunchReview.launch(
-      androidAppId: 'com.onlyoffice.projects',
-      iOSAppId: '388497605',
+      androidAppId: Const.Identificators.projectsAndroidAppBundle,
+      iOSAppId: Const.Identificators.projectsAppStore,
       writeReview: true,
     );
   }
 
   Future<void> onUserAgreementPressed() async =>
-      await launch('https://www.onlyoffice.com/legalterms.aspx');
+      await launch(Const.Urls.userAgreement);
 
   Future<void> onAnalyticsPressed() async =>
       Get.find<NavigationController>().toScreen(const AnalyticsScreen());

@@ -69,8 +69,8 @@ class _Step1 extends StatelessWidget {
             onPressed: () {
               // TODO change the package
               LaunchReview.launch(
-                androidAppId: 'com.google.android.apps.authenticator2',
-                iOSAppId: '388497605',
+                androidAppId: Const.Identificators.tfa2GooglePlayAppBundle,
+                iOSAppId: Const.Identificators.tfa2GoogleAppStore,
                 writeReview: false,
               );
             },

@@ -35,6 +35,7 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/internal/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -173,16 +174,15 @@ class DiscussionsDocumentsController extends GetxController {
     var bodyString = jsonEncode(body);
     var stringToBase64 = utf8.fuse(base64);
     var encodedBody = stringToBase64.encode(bodyString);
-    var urlString = 'oodocuments://openfile?data=$encodedBody';
+    var urlString = '${Const.Urls.openDocument}$encodedBody';
 
     if (await canLaunch(urlString)) {
       await launch(urlString);
     } else {
       await LaunchApp.openApp(
-        androidPackageName: 'com.onlyoffice.documents',
+        androidPackageName: Const.Identificators.documentsAndroidAppBundle,
         iosUrlScheme: urlString,
-        appStoreLink:
-            'https://apps.apple.com/app/onlyoffice-documents/id944896972',
+        appStoreLink: Const.Urls.appStoreDocuments,
       );
       await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal : portalInfoController.portalName,
