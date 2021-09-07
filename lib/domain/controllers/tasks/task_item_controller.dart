@@ -109,10 +109,11 @@ class TaskItemController extends GetxController {
   void initTaskStatus(PortalTask task) {
     var statusesController = Get.find<TaskStatusesController>();
     status.value = statusesController.getTaskStatus(task);
+    if (status.value == null) return;
 
     // ignore: unnecessary_cast
     statusImage.value = (SVG.createSizedFromString(
-        statusesController.decodeImageString(status.value.image),
+        statusesController.decodeImageString(status.value?.image),
         16,
         16,
         status.value.color) as Widget);
