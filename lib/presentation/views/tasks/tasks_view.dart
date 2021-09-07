@@ -68,16 +68,24 @@ class TasksView extends StatelessWidget {
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Get.theme.backgroundColor,
-      floatingActionButton: Obx(() => AnimatedPadding(
-          padding: EdgeInsets.only(
-              bottom: controller.fabIsRaised.value == true ? 48 : 0),
-          duration: const Duration(milliseconds: 100),
-          child: StyledFloatingActionButton(
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
+          child: AnimatedPadding(
+            padding: EdgeInsets.only(
+                bottom: controller.fabIsRaised.value == true ? 48 : 0),
+            duration: const Duration(milliseconds: 100),
+            child: StyledFloatingActionButton(
               onPressed: () => Get.find<NavigationController>().to(
                   const NewTaskView(),
                   arguments: {'projectDetailed': null}),
-              child: AppIcon(icon: SvgIcons.add_fab)))),
+              child: AppIcon(icon: SvgIcons.add_fab),
+            ),
+          ),
+        ),
+      ),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
