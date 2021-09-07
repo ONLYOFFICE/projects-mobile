@@ -1,9 +1,12 @@
 import 'package:projects/data/api/subtasks_api.dart';
+import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class SubtasksService {
   final SubtasksApi _api = locator<SubtasksApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   Future acceptSubtask({int taskId, int subtaskId, Map data}) async {
     var response = await _api.acceptSubtask(
@@ -11,6 +14,10 @@ class SubtasksService {
     var success = response.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.subtask
+      });
       return response.response;
     } else {
       await ErrorDialog.show(response.error);
@@ -24,6 +31,10 @@ class SubtasksService {
     var success = response.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.subtask
+      });
       return response.response;
     } else {
       await ErrorDialog.show(response.error);
@@ -36,6 +47,10 @@ class SubtasksService {
     var success = response.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.subtask
+      });
       return response.response;
     } else {
       await ErrorDialog.show(response.error);
@@ -61,6 +76,10 @@ class SubtasksService {
     var success = response.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.subtask
+      });
       return response.response;
     } else {
       await ErrorDialog.show(response.error);
@@ -78,6 +97,10 @@ class SubtasksService {
     var success = response.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.subtask
+      });
       return response.response;
     } else {
       await ErrorDialog.show(response.error);

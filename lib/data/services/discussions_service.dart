@@ -2,11 +2,14 @@ import 'package:projects/data/api/discussions_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
+import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionsService {
   final DiscussionsApi _api = locator<DiscussionsApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   Future<PageDTO<List<Discussion>>> getDiscussionsByParams({
     int startIndex,
@@ -53,6 +56,10 @@ class DiscussionsService {
     var success = result.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.discussion
+      });
       return result.response;
     } else {
       await ErrorDialog.show(result.error);
