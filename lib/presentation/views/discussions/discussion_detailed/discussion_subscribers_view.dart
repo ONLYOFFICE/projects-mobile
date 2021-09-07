@@ -89,7 +89,10 @@ class DiscussionSubscribersView extends StatelessWidget {
                   child: StyledFloatingActionButton(
                     onPressed: () =>
                         controller.toSubscribersManagingScreen(context),
-                    child: AppIcon(icon: SvgIcons.add_fab),
+                    child: AppIcon(
+                      icon: SvgIcons.add_fab,
+                      color: Get.theme.colors().onPrimarySurface,
+                    ),
                   ),
                 ),
               )

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/discussions/discussions_view.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectDiscussionsScreen extends StatelessWidget {
   final ProjectDiscussionsController controller;
@@ -25,7 +27,10 @@ class ProjectDiscussionsScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16, bottom: 24),
             child: StyledFloatingActionButton(
               onPressed: controller.toNewDiscussionScreen,
-              child: AppIcon(icon: SvgIcons.add_fab),
+              child: AppIcon(
+                icon: SvgIcons.add_fab,
+                color: Get.theme.colors().onPrimarySurface,
+              ),
             ),
           ),
         ),

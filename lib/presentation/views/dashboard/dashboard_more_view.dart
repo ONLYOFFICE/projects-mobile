@@ -33,9 +33,10 @@ class ProjectsDashboardMoreView extends StatelessWidget {
         child: StyledFloatingActionButton(
           onPressed: () => controller.createNewProject(),
           child: AppIcon(
-            icon: SvgIcons.add_project,
+            icon: SvgIcons.fab_project,
             width: 32,
             height: 32,
+            color: Get.theme.colors().onPrimarySurface,
           ),
         ),
       ),

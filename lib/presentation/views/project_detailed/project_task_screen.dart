@@ -14,9 +14,12 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -32,6 +35,39 @@ class ProjectTaskScreen extends StatelessWidget {
     var controller = Get.find<ProjectTasksController>();
     controller.setup(projectDetailed.id);
 
+    return Stack(
+      children: [
+        _Content(controller: controller),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16, bottom: 24),
+            child: StyledFloatingActionButton(
+              onPressed: () => Get.find<NavigationController>().to(
+                  const NewTaskView(),
+                  arguments: {'projectDetailed': projectDetailed}),
+              child: AppIcon(
+                icon: SvgIcons.fab_milestone,
+                color: Get.theme.colors().onPrimarySurface,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Content extends StatelessWidget {
+  const _Content({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final ProjectTasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,

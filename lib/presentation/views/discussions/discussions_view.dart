@@ -70,7 +70,10 @@ class PortalDiscussionsView extends StatelessWidget {
           visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
             onPressed: controller.toNewDiscussionScreen,
-            child: AppIcon(icon: SvgIcons.add_discussion),
+            child: AppIcon(
+              icon: SvgIcons.add_discussion,
+              color: Get.theme.colors().onPrimarySurface,
+            ),
           ),
         ),
       ),

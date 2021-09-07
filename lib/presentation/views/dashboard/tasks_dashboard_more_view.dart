@@ -37,7 +37,10 @@ class TasksDashboardMoreView extends StatelessWidget {
               onPressed: () => Get.find<NavigationController>().to(
                   const NewTaskView(),
                   arguments: {'projectDetailed': null}),
-              child: AppIcon(icon: SvgIcons.add_fab)))),
+              child: AppIcon(
+                icon: SvgIcons.add_fab,
+                color: Get.theme.colors().onPrimarySurface,
+              )))),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(

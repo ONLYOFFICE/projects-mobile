@@ -17,8 +17,6 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -138,17 +136,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     await setup();
   }
 
-  void createNewMilestone() {
-    Get.find<NavigationController>().to(const NewMilestoneView(),
-        arguments: {'projectDetailed': projectDetailed});
-  }
-
-  void createTask() {
-    Get.find<NavigationController>().to(const NewTaskView(),
-        arguments: {'projectDetailed': projectDetailed});
-  }
-
-  Future<void> manageTeamMembers() async {
+  Future manageTeamMembers() async {
     selectedProjectManager.value = projectData.responsible;
 
     selectedTeamMembers.clear();

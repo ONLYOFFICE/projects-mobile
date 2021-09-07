@@ -49,7 +49,10 @@ class TasksView extends StatelessWidget {
               onPressed: () => Get.find<NavigationController>().to(
                   const NewTaskView(),
                   arguments: {'projectDetailed': null}),
-              child: AppIcon(icon: SvgIcons.add_fab),
+              child: AppIcon(
+                icon: SvgIcons.add_fab,
+                color: Get.theme.colors().onPrimarySurface,
+              ),
             ),
           ),
         ),
