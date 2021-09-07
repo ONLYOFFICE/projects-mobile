@@ -1,9 +1,11 @@
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
@@ -23,22 +25,32 @@ class NavigationController extends GetxController {
     super.onInit();
   }
 
+  void showMoreView() {
+    onMoreView = true;
+    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView);
+  }
+
+  void hideMoreView() {
+    onMoreView = false;
+    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView);
+  }
+
   void changeTabIndex(int index) {
     if (index < 3) {
-      onMoreView = false;
+      hideMoreView();
       tabIndex = index;
       update();
     } else {
       if (index == 3) {
         if (!onMoreView) {
-          onMoreView = true;
+          showMoreView();
           update();
         } else {
-          onMoreView = false;
+          hideMoreView();
           update();
         }
       } else {
-        onMoreView = false;
+        hideMoreView();
         tabIndex = index;
         update();
       }
@@ -46,7 +58,7 @@ class NavigationController extends GetxController {
   }
 
   void changeTabletIndex(int index) {
-    onMoreView = false;
+    hideMoreView();
     tabIndex = index;
     update();
   }

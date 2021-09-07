@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
@@ -25,6 +26,7 @@ class DiscussionsController extends BaseController {
   DiscussionsFilterController get filterController => _filterController;
 
   RxBool loaded = false.obs;
+  var fabIsVisible = true.obs;
 
   DiscussionsController(
     DiscussionsFilterController filterController,
@@ -39,6 +41,10 @@ class DiscussionsController extends BaseController {
     paginationController.refreshDelegate =
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
+
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
+      fabIsVisible.value = data ? false : true;
+    });
   }
 
   @override

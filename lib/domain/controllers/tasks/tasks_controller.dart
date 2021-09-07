@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -29,6 +30,8 @@ class TasksController extends BaseController {
   // when snackbar appears
   RxBool fabIsRaised = false.obs;
 
+  var fabIsVisible = true.obs;
+
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
     screenName = tr('tasks');
@@ -41,6 +44,10 @@ class TasksController extends BaseController {
     paginationController.loadDelegate = () async => await _getTasks();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
+
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
+      fabIsVisible.value = data ? false : true;
+    });
   }
 
   @override

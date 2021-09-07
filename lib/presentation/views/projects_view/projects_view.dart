@@ -48,14 +48,16 @@ class ProjectsView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
-      floatingActionButton: Visibility(
-        visible: controller.fabIsVisible(),
-        child: StyledFloatingActionButton(
-          onPressed: () => controller.createNewProject(),
-          child: AppIcon(
-            icon: SvgIcons.add_project,
-            width: 32,
-            height: 32,
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
+          child: StyledFloatingActionButton(
+            onPressed: () => controller.createNewProject(),
+            child: AppIcon(
+              icon: SvgIcons.add_project,
+              width: 32,
+              height: 32,
+            ),
           ),
         ),
       ),

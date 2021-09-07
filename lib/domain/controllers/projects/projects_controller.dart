@@ -35,11 +35,7 @@ class ProjectsController extends BaseController {
 
   final _userController = Get.find<UserController>();
 
-  bool fabIsVisible() {
-    if (_userController.user == null) return false;
-
-    return _userController.user.isAdmin || _userController.user.isOwner;
-  }
+  var fabIsVisible = false.obs;
 
   ProjectsController(
     ProjectsFilterController filterController,
@@ -56,12 +52,19 @@ class ProjectsController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    _userController.getUserInfo();
-
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       loadProjects();
     });
+    _userController.getUserInfo().then(
+          (value) => fabIsVisible.value = canCreateNewProject,
+        );
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
+      fabIsVisible.value = data ? false : canCreateNewProject;
+    });
   }
+
+  bool get canCreateNewProject =>
+      _userController.user.isAdmin || _userController.user.isOwner;
 
   @override
   void showSearch() {
