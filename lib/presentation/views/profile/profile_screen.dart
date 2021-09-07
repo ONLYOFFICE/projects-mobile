@@ -23,6 +23,7 @@ class SelfProfileScreen extends StatelessWidget {
     var portalInfoController = Get.find<PortalInfoController>();
 
     var profileController = Get.put(ProfileController());
+    profileController.loadAvatar(userController.user);
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
@@ -55,19 +56,14 @@ class SelfProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 32),
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.grey, shape: BoxShape.circle),
-                height: 120,
-                width: 120,
+              CircleAvatar(
+                radius: 60.0,
+                backgroundColor: Colors.transparent,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(80),
-                  child: CustomNetworkImage(
-                    image: userController.user?.avatar ??
-                        userController.user?.avatarMedium ??
-                        userController.user?.avatarSmall,
-                    fit: BoxFit.contain,
-                  ),
+                  borderRadius: BorderRadius.circular(60),
+                  child: Obx(() {
+                    return profileController.avatar.value;
+                  }),
                 ),
               ),
               const SizedBox(height: 10),
