@@ -45,6 +45,7 @@ class TaskStatusHandler {
   }
 
   Color getTextColor(Status status, bool canEdit) {
+    if (status == null) return Colors.grey;
     if (!canEdit) return Get.theme.colors().onSurface.withOpacity(0.75);
     if (status.id < 0) return Get.theme.colors().primary;
 
