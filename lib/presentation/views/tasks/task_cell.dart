@@ -152,6 +152,8 @@ class SecondColumn extends StatelessWidget {
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: Get.width * 0.25),
                     child: Text(
+                      //TODO fix rare issue when itemController.status.value is null.
+                      // On controller side value is valid, but when getx updates widget its value is null;
                       itemController.status.value == null
                           ? ''
                           : itemController.status.value.title,
