@@ -184,9 +184,10 @@ class DiscussionsDocumentsController extends GetxController {
         iosUrlScheme: urlString,
         appStoreLink: Const.Urls.appStoreDocuments,
       );
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
-        AnalyticsService.Params.Key.portal : portalInfoController.portalName,
-        AnalyticsService.Params.Key.extension : extension(selectedFile.title)
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.openEditor, {
+        AnalyticsService.Params.Key.portal: portalInfoController.portalName,
+        AnalyticsService.Params.Key.extension: extension(selectedFile.title)
       });
     }
   }

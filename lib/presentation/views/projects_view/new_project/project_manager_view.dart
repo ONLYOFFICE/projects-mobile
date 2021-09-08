@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -61,10 +62,15 @@ class ProjectManagerSelectionView extends StatelessWidget {
     usersDataSource.selectionMode = UserSelectionMode.Single;
     controller.setupUsersSelection();
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),

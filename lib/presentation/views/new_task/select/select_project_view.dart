@@ -56,8 +56,14 @@ class SelectProjectView extends StatelessWidget {
     var searchController =
         Get.put(ProjectSearchController(onlyMyProjects: true));
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectProject'),
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
@@ -115,7 +121,9 @@ class ProjectsList extends StatelessWidget {
       },
       itemBuilder: (BuildContext context, int index) {
         return Material(
-          color: Get.theme.colors().background,
+          color: Get.find<PlatformController>().isMobile
+              ? Get.theme.colors().background
+              : Get.theme.colors().surface,
           child: InkWell(
             onTap: () {
               controller.changeProjectSelection(

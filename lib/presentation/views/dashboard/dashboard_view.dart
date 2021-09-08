@@ -56,7 +56,7 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Get.theme.colors().background,
       appBar: StyledAppBar(
-        bgColor: Get.theme.colors().background,
+        backgroundColor: Get.theme.colors().background,
         title: Title(controller: dashboardController),
         // titleHeight: 50,
         elevation: 0,

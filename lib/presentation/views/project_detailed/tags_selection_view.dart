@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -57,8 +58,11 @@ class TagsSelectionView extends StatelessWidget {
     var controller = Get.put(ProjectTagsController());
     controller.setup(projController);
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       floatingActionButton: AnimatedPadding(
         padding: const EdgeInsets.only(bottom: 0),
         duration: const Duration(milliseconds: 100),
@@ -71,6 +75,8 @@ class TagsSelectionView extends StatelessWidget {
         ),
       ),
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         title: _Header(
           controller: controller,
           title: tr('tags'),

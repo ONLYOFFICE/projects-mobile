@@ -37,6 +37,7 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_task_comment_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
@@ -50,6 +51,7 @@ class ReplyCommentView extends StatelessWidget {
   Widget build(BuildContext context) {
     PortalComment comment = Get.arguments['comment'];
     NewCommentController controller;
+    final platformController = Get.find<PlatformController>();
 
     if (Get.arguments['taskId'] != null) {
       controller = Get.put(
@@ -69,7 +71,11 @@ class ReplyCommentView extends StatelessWidget {
     }
 
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('newComment'),
         actions: [
           IconButton(

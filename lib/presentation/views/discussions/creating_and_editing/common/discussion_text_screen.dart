@@ -45,8 +45,15 @@ class NewDiscussionTextScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DiscussionActionsController controller = Get.arguments['controller'];
+
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('text'),
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)

@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -46,12 +47,18 @@ class ColorThemeSelectionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<SettingsController>();
+    final platformController = Get.find<PlatformController>();
 
     return Obx(
       () => Scaffold(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-            titleText: tr('colorTheme'),
-            backButtonIcon: const Icon(Icons.arrow_back_rounded)),
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
+          titleText: tr('colorTheme'),
+          backButtonIcon: const Icon(Icons.arrow_back_rounded),
+        ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
