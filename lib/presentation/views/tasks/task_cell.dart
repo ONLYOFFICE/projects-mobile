@@ -5,6 +5,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -70,19 +71,18 @@ class TaskStatus extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => DecoratedBox(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle, color: Get.theme.colors().outline),
-        child: Container(
-            width: 40,
-            height: 40,
-            margin: const EdgeInsets.all(0.5),
-            decoration: BoxDecoration(
-                shape: BoxShape.circle, color: Get.theme.colors().background),
-            child: Center(
-              child: itemController.statusImage.value,
-            )),
-      ),
+      () {
+        return Container(
+          width: 40,
+          height: 40,
+          margin: const EdgeInsets.all(0.5),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: itemController.getStatusBGColor,
+          ),
+          child: itemController.statusImage,
+        );
+      },
     );
   }
 }
@@ -113,28 +113,32 @@ class SecondColumn extends StatelessWidget {
                 atributeIcon: AppIcon(icon: SvgIcons.high_priority),
                 atributeIconVisible: itemController.task.value.priority == 1,
               ),
-              Row(
+              Wrap(
                 children: [
-                  Flexible(
+                  ConstrainedBox(
+                    constraints: BoxConstraints(maxWidth: Get.width * 0.25),
                     child: Text(
                       itemController.status.value.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyleHelper.status(
-                          color: itemController.status.value.color.toColor()),
+                        color: itemController.getStatusTextColor,
+                      ),
                     ),
                   ),
                   Text(' • ',
                       style: TextStyleHelper.caption(
                           color:
                               Get.theme.colors().onSurface.withOpacity(0.6))),
-                  Flexible(
-                    child: Text(itemController.task.value.createdBy.displayName,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.caption(
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6))),
+                  Text(
+                    NameFormatter.formateDisplayName(
+                      itemController.task.value.createdBy.displayName,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyleHelper.caption(
+                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                    ),
                   ),
                 ],
               ),
