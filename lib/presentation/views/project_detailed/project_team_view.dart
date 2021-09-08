@@ -77,8 +77,6 @@ class ProjectTeamView extends StatelessWidget {
         ),
       ],
     );
-
-    //_Content(projectTeamDataSource: projectTeamDataSource);
   }
 }
 
