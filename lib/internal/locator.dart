@@ -106,7 +106,7 @@ import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
 
 GetIt locator = GetIt.instance;

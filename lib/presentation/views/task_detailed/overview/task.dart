@@ -47,9 +47,12 @@ class _Task extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(tr('task').toUpperCase(), style: TextStyleHelper.overline()),
-              Text(taskController.task.value.title,
-                  style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onSurface)),
+              Text(
+                taskController.task.value.title,
+                style: TextStyleHelper.headline6(
+                  color: Get.theme.colors().onSurface,
+                ),
+              ),
               const SizedBox(height: 22),
               StatusButton(
                   text: taskController.status.value.title,

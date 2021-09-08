@@ -30,12 +30,12 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
@@ -47,6 +47,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
+import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -114,7 +115,7 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> updateMessageStatus(int newStatus) async {
-    var newStatusStr = newStatus == 1 ? tr('archived') : tr('open');
+    var newStatusStr = newStatus == 1 ? 'archived' : 'open';
 
     try {
       Discussion result = await _api.updateMessageStatus(
@@ -207,5 +208,17 @@ class DiscussionItemController extends GetxController {
         'onConfirm': () => controller.confirm(context),
       },
     );
+  }
+
+  void toProjectOverview() async {
+    var projectService = locator<ProjectService>();
+    var project = await projectService.getProjectById(
+      projectId: discussion.value.projectOwner.id,
+    );
+    if (project != null)
+      Get.find<NavigationController>().to(
+        ProjectDetailedView(),
+        arguments: {'projectDetailed': project},
+      );
   }
 }

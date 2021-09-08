@@ -69,13 +69,13 @@ class ProjectStatus {
   static String toImageString(int status) {
     switch (status) {
       case 0:
-        return SvgIcons.open;
+        return SvgIcons.projectOpen;
         break;
       case 1:
-        return SvgIcons.closed;
+        return SvgIcons.projectClosed;
         break;
       case 2:
-        return SvgIcons.paused;
+        return SvgIcons.projectPaused;
         break;
       default:
         return 'n/a';

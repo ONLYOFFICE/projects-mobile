@@ -52,11 +52,12 @@ class SVG {
 
   static Widget createSizedFromString(
       String imageString, double width, double height,
-      [String color]) {
+      [Color color]) {
     return SvgPicture.string(
       imageString,
       width: width,
       height: height,
+      color: color,
     );
   }
 }

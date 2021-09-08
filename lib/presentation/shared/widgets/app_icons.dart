@@ -114,12 +114,19 @@ class SvgIcons {
   static const String start_date =
       'lib/assets/images/icons/task_detailed/start_date.svg';
 
-  static const String open =
+  static const String projectOpen =
       'lib/assets/images/icons/project_statuses/open.svg';
-  static const String closed =
+  static const String projectClosed =
       'lib/assets/images/icons/project_statuses/closed.svg';
-  static const String paused =
+  static const String projectPaused =
       'lib/assets/images/icons/project_statuses/paused.svg';
+
+  static const String taskOpen =
+      'lib/assets/images/icons/task_statuses/open_light.svg';
+  static const String taskClosed =
+      'lib/assets/images/icons/task_statuses/closed_light.svg';
+  static const String taskPaused =
+      'lib/assets/images/icons/task_statuses/paused_light.svg';
 
   static const String user = 'lib/assets/images/icons/user.svg';
   static const String users = 'lib/assets/images/icons/users.svg';
