@@ -8,6 +8,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -101,7 +102,7 @@ class ProjectIcon extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.05),
+                    color: color.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -182,8 +183,6 @@ class _SecondColumn extends StatelessWidget {
             },
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
             children: [
               Obx(() {
                 var color = itemController.canEdit.value == true
@@ -199,7 +198,9 @@ class _SecondColumn extends StatelessWidget {
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
-                    item.responsible.displayName.replaceAll(' ', '\u00A0'),
+                    NameFormatter.formateDisplayName(
+                      item.responsible.displayName,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(

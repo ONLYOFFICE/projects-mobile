@@ -17,11 +17,11 @@ class ProjectOverview extends StatelessWidget {
   final ProjectDetailed projectDetailed;
   final TabController tabController;
 
-  const ProjectOverview(
-      {Key key, @required this.projectDetailed, this.tabController})
-      : super(
-          key: key,
-        );
+  const ProjectOverview({
+    Key key,
+    @required this.projectDetailed,
+    this.tabController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +33,15 @@ class ProjectOverview extends StatelessWidget {
           return ListView(
             children: [
               const SizedBox(height: 26),
-              Obx(() => InfoTile(
-                    caption: tr('project').toUpperCase(),
-                    subtitle: projectController.projectTitleText.value,
-                    subtitleStyle: TextStyleHelper.headline7(
-                        color: Get.theme.colors().onBackground),
-                  )),
+              Obx(
+                () => InfoTile(
+                  caption: tr('project').toUpperCase(),
+                  subtitle: projectController.projectTitleText.value,
+                  subtitleStyle: TextStyleHelper.headline7(
+                    color: Get.theme.colors().onBackground,
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               ProjectStatusButton(projectController: projectController),
               const SizedBox(height: 20),
@@ -138,10 +141,10 @@ class ProjectStatusButton extends StatelessWidget {
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                return const Color(0xff81C4FF).withOpacity(0.1);
+                return const Color(0xff81C4FF).withOpacity(0.2);
               }),
               side: MaterialStateProperty.resolveWith((_) {
-                return const BorderSide(color: Colors.transparent, width: 1.5);
+                return const BorderSide(color: Colors.transparent, width: 0);
               }),
             ),
             child: Row(
@@ -149,12 +152,26 @@ class ProjectStatusButton extends StatelessWidget {
               children: [
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: Obx(() => Text(projectController.statusText.value,
-                        style: TextStyleHelper.subtitle2())),
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+                    child: Obx(
+                      () => Text(
+                        projectController.statusText.value,
+                        style: TextStyleHelper.subtitle2(
+                          color: Get.theme.colors().primary,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                const Icon(Icons.arrow_drop_down_sharp)
+                const SizedBox(width: 5),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2),
+                  child: Icon(
+                    Icons.keyboard_arrow_down_rounded,
+                    color: Get.theme.colors().primary,
+                    size: 19,
+                  ),
+                )
               ],
             ),
           ),

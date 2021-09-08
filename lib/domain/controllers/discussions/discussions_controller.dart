@@ -38,8 +38,7 @@ class DiscussionsController extends BaseController {
     _filterController.applyFiltersDelegate = () async => loadDiscussions();
     _sortController.updateSortDelegate = () async => await loadDiscussions();
     paginationController.loadDelegate = () async => await _getDiscussions();
-    paginationController.refreshDelegate =
-        () async => await _getDiscussions(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
@@ -60,6 +59,12 @@ class DiscussionsController extends BaseController {
     } else {
       await _getDiscussions(needToClear: true);
     }
+    loaded.value = true;
+  }
+
+  Future<void> refreshData() async {
+    loaded.value = false;
+    await _getDiscussions(needToClear: true);
     loaded.value = true;
   }
 

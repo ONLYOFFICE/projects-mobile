@@ -8,10 +8,10 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
+import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -27,13 +27,15 @@ class TaskItemController extends GetxController {
   var loaded = true.obs;
   var refreshController = RefreshController();
 
-  // ignore: unnecessary_cast
-  var statusImage = (const SizedBox(
-    width: 16,
-    height: 16,
-    child: Center(child: CircularProgressIndicator()),
-  ) as Widget)
-      .obs;
+  final TaskStatusHandler _statusHandler = TaskStatusHandler();
+
+  Widget get statusImage => _statusHandler.statusImage.value;
+
+  Color get getStatusBGColor =>
+      _statusHandler.getBackgroundColor(status.value, task.value.canEdit);
+
+  Color get getStatusTextColor =>
+      _statusHandler.getTextColor(status.value, task.value.canEdit);
 
   // to show overview screen without loading
   RxBool firstReload = true.obs;
@@ -63,7 +65,6 @@ class TaskItemController extends GetxController {
   void copyLink({@required taskId, @required projectId}) async {
     // ignore: omit_local_variable_types
     String link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
-    print(link);
     await Clipboard.setData(ClipboardData(text: link));
   }
 
@@ -108,16 +109,9 @@ class TaskItemController extends GetxController {
 
   void initTaskStatus(PortalTask portalTask) {
     var statusesController = Get.find<TaskStatusesController>();
-    status = (statusesController.getTaskStatus(portalTask)).obs;
-    if (status.value == null) {
-      return;
-    }
-    // ignore: unnecessary_cast
-    statusImage.value = (SVG.createSizedFromString(
-        statusesController.decodeImageString(status.value?.image),
-        16,
-        16,
-        status.value.color) as Widget);
+    status.value = statusesController.getTaskStatus(portalTask);
+    if (status.value != null)
+      _statusHandler.setStatusImage(status.value, portalTask.canEdit);
   }
 
   Future reloadTask({bool showLoading = false}) async {

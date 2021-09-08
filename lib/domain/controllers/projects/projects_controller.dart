@@ -84,7 +84,9 @@ class ProjectsController extends BaseController {
   }
 
   Future<void> refreshData() async {
+    loaded.value = false;
     await _getProjects(needToClear: true);
+    loaded.value = true;
   }
 
   Future<void> loadProjects({PresetProjectFilters preset}) async {
