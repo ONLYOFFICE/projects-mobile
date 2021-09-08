@@ -226,6 +226,9 @@ class CoreApi {
   Future<String> getFileOperationsUrl() async =>
       '${await getPortalURI()}/api/$version/files/fileops';
 
+  Future<String> getProjectSecurityinfoUrl() async =>
+      '${await getPortalURI()}/api/$version/project/securityinfo';
+
   Future<http.Response> getRequest(String url) async {
     print(url);
     var headers = await getHeaders();

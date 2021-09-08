@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
@@ -22,6 +23,8 @@ class ProjectsController extends BaseController {
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   PaginationController _paginationController;
+
+  var securityInfo = SecrityInfo();
   PaginationController get paginationController => _paginationController;
 
   @override
@@ -55,16 +58,21 @@ class ProjectsController extends BaseController {
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       loadProjects();
     });
-    _userController.getUserInfo().then(
-          (value) => fabIsVisible.value = canCreateNewProject,
-        );
+    _userController
+        .getUserInfo()
+        .then((value) => _api.getProjectSecurityinfo().then((value) => {
+              securityInfo = value,
+              fabIsVisible.value = canCreateNewProject,
+            }));
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
       fabIsVisible.value = data ? false : canCreateNewProject;
     });
   }
 
   bool get canCreateNewProject =>
-      _userController.user.isAdmin || _userController.user.isOwner;
+      _userController.user.isAdmin ||
+      _userController.user.isOwner ||
+      securityInfo.canCreateProject;
 
   @override
   void showSearch() {
