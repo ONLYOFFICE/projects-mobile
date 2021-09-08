@@ -25,7 +25,7 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 class NewTaskController extends GetxController
     implements TaskActionsController {
   final _api = locator<TaskService>();
-  final teamController = Get.find<ProjectTeamController>();
+  var teamController;
 
   var _selectedProjectId;
   var newMilestoneId;
@@ -78,6 +78,9 @@ class NewTaskController extends GetxController
   @override
   void init([projectDetailed]) {
     _titleFocus.requestFocus();
+
+    teamController = Get.find<ProjectTeamController>();
+    teamController.withoutVisitors = true;
 
     if (projectDetailed != null) {
       selectedProjectTitle.value = projectDetailed.title;

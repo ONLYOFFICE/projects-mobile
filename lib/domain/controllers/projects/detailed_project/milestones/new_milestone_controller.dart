@@ -27,7 +27,7 @@ class NewMilestoneController extends GetxController {
   int get selectedProjectId => _selectedProjectId;
   DateTime get dueDate => _dueDate;
 
-  final teamController = Get.find<ProjectTeamController>();
+  var teamController;
 
   RxString slectedProjectTitle = ''.obs;
   RxString slectedMilestoneTitle = ''.obs;
@@ -53,14 +53,12 @@ class NewMilestoneController extends GetxController {
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
 
+      teamController = Get.find<ProjectTeamController>();
+      teamController.withoutVisitors = true;
       teamController.projectId = projectDetailed.id;
       await teamController.getTeam();
 
-      var projectTeamDataSource = Get.put(ProjectTeamController());
-      projectTeamDataSource.projectId = projectDetailed.id;
-      await projectTeamDataSource.getTeam();
-
-      for (var user in projectTeamDataSource.usersList) {
+      for (var user in teamController.usersList) {
         teamMembers.add(user);
       }
     }

@@ -275,7 +275,7 @@ class DescriptionTile extends StatelessWidget {
                     color: Get.theme.colors().onSurface.withOpacity(0.6))
                 : null,
             onTap: () => Get.find<NavigationController>()
-                    .to(const NewMilestoneDescription(), arguments: {
+                    .toScreen(const NewMilestoneDescription(), arguments: {
                   'newMilestoneController': newMilestoneController,
                 }));
       },
@@ -309,7 +309,7 @@ class ProjectTile extends StatelessWidget {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
                   Get.find<NavigationController>()
-                      .to(const SelectProjectForMilestone(), arguments: {
+                      .toScreen(const SelectProjectForMilestone(), arguments: {
                     'newMilestoneController': controller,
                   }),
                 });
@@ -348,10 +348,9 @@ class ResponsibleTile extends StatelessWidget {
         onTap: () => {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
-          Get.find<NavigationController>()
-              .to(const ProjectTeamResponsibleSelectionView(), arguments: {
-            'controller': controller,
-          })
+          Get.find<NavigationController>().toScreen(
+              const ProjectTeamResponsibleSelectionView(),
+              arguments: {'controller': controller})
         },
       );
     });

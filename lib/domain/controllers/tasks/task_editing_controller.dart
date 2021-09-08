@@ -22,7 +22,7 @@ class TaskEditingController extends GetxController
   PortalTask task;
   final _api = locator<TaskService>();
 
-  final teamController = Get.find<ProjectTeamController>();
+  var teamController;
 
   TaskEditingController({@required this.task});
 
@@ -73,6 +73,10 @@ class TaskEditingController extends GetxController
     title = task.title.obs;
     _titleController.text = task.title;
     _taskItemController = Get.find<TaskItemController>(tag: task.id.toString());
+
+    teamController = Get.find<ProjectTeamController>();
+    teamController.withoutVisitors = true;
+
     initialStatus = _taskItemController.status.value;
     newStatus = initialStatus.obs;
     descriptionText = task.description.obs;
