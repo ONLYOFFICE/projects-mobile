@@ -55,9 +55,9 @@ class TaskItemController extends GetxController {
     return count;
   }
 
-  TaskItemController(PortalTask task) {
-    this.task.value = task;
-    initTaskStatus(task);
+  TaskItemController(PortalTask portalTask) {
+    task.value = portalTask;
+    initTaskStatus(portalTask);
   }
 
   void copyLink({@required taskId, @required projectId}) async {
@@ -106,11 +106,12 @@ class TaskItemController extends GetxController {
     // return copiedTask;
   }
 
-  void initTaskStatus(PortalTask task) {
+  void initTaskStatus(PortalTask portalTask) {
     var statusesController = Get.find<TaskStatusesController>();
-    status.value = statusesController.getTaskStatus(task);
-    if (status.value == null) return;
-
+    status = (statusesController.getTaskStatus(portalTask)).obs;
+    if (status.value == null) {
+      return;
+    }
     // ignore: unnecessary_cast
     statusImage.value = (SVG.createSizedFromString(
         statusesController.decodeImageString(status.value?.image),

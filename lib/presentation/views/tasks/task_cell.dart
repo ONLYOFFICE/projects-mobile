@@ -18,8 +18,10 @@ class TaskCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    TaskItemController itemController =
-        Get.put(TaskItemController(task), tag: task.id.toString());
+    TaskItemController itemController = Get.put(
+      TaskItemController(task),
+      tag: task.id.toString(),
+    );
 
     return InkWell(
       onTap: () => Get.find<NavigationController>()
@@ -117,11 +119,15 @@ class SecondColumn extends StatelessWidget {
                 children: [
                   Flexible(
                     child: Text(
-                      itemController.status.value.title,
+                      itemController.status.value == null
+                          ? ''
+                          : itemController.status.value.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyleHelper.status(
-                          color: itemController.status.value.color.toColor()),
+                          color: itemController.status.value == null
+                              ? Colors.grey
+                              : itemController.status.value.color.toColor()),
                     ),
                   ),
                   Text(' • ',
