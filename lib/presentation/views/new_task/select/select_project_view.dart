@@ -115,6 +115,7 @@ class ProjectsList extends StatelessWidget {
       },
       itemBuilder: (BuildContext context, int index) {
         return Material(
+          color: Get.theme.colors().background,
           child: InkWell(
             onTap: () {
               controller.changeProjectSelection(
