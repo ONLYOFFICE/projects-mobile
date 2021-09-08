@@ -33,11 +33,14 @@
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class FilesService {
   final FilesApi _api = locator<FilesApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   Future getTaskFiles({int taskId}) async {
     var files = await _api.getTaskFiles(taskId: taskId);
@@ -89,6 +92,10 @@ class FilesService {
     var success = files.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.folder
+      });
       return files.response;
     } else {
       await ErrorDialog.show(files.error);
@@ -103,6 +110,10 @@ class FilesService {
     var success = result.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.folder
+      });
       return result.response;
     } else {
       await ErrorDialog.show(result.error);
@@ -118,6 +129,10 @@ class FilesService {
     var success = files.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.file
+      });
       return files.response;
     } else {
       await ErrorDialog.show(files.error);
@@ -132,6 +147,10 @@ class FilesService {
     var success = result.response != null;
 
     if (success) {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.file
+      });
       return result.response;
     } else {
       await ErrorDialog.show(result.error);
