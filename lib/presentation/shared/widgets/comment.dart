@@ -76,7 +76,7 @@ class Comment extends StatelessWidget {
                       GestureDetector(
                         onTap: () {
                           return Get.find<NavigationController>()
-                              .to(const ReplyCommentView(), arguments: {
+                              .toScreen(const ReplyCommentView(), arguments: {
                             'comment': controller.comment.value,
                             'discussionId': discussionId,
                             'taskId': taskId,

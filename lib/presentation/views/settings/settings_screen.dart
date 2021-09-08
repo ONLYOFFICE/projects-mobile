@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/settings/settings_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
@@ -18,6 +19,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(SettingsController());
+    final platformController = Get.find<PlatformController>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -25,7 +27,11 @@ class SettingsScreen extends StatelessWidget {
         return true;
       },
       child: Scaffold(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('settings'),
           onLeadingPressed: controller.leave,
           backButtonIcon: Get.put(PlatformController()).isMobile

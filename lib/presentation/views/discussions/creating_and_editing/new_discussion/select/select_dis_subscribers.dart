@@ -27,8 +27,14 @@ class SelectDiscussionSubscribers extends StatelessWidget {
 
     controller.setupSubscribersSelection();
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         // titleText: 'Select subscribers',
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)

@@ -31,10 +31,16 @@ class MilestoneFilterScreen extends StatelessWidget {
     final BaseFilterController filterController =
         Get.find<MilestonesFilterController>();
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         titleText: tr('filter'),
         showBackButton: true,
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
@@ -44,7 +50,7 @@ class MilestoneFilterScreen extends StatelessWidget {
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
                       color: Get.theme.colors().systemBlue))),
-          SizedBox(width: Get.find<PlatformController>().isMobile ? 8 : 12),
+          SizedBox(width: platformController.isMobile ? 8 : 12),
         ],
       ),
       body: Stack(

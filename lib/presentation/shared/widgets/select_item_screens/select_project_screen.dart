@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -39,6 +40,8 @@ class SelectProjectScreen extends StatelessWidget {
     searchFieldController.clear();
   }
 
+  final _platformController = Get.find<PlatformController>();
+
   @override
   Widget build(BuildContext context) {
     _projectsController.loadProjects();
@@ -47,7 +50,11 @@ class SelectProjectScreen extends StatelessWidget {
     const clearIconKey = Key('clr');
 
     return Scaffold(
+      backgroundColor:
+          _platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            _platformController.isMobile ? null : Get.theme.colors().surface,
         showBackButton: true,
         title: Obx(
           () => AnimatedSwitcher(

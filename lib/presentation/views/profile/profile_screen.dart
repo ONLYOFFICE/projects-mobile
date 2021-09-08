@@ -34,11 +34,17 @@ class SelfProfileScreen extends StatelessWidget {
         ? true
         : Get.arguments['showSettingsButton'] ?? true;
 
+    final platformController = Get.find<PlatformController>();
+
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
           showBackButton: showBackButton ?? false,
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
               : const Icon(Icons.close),

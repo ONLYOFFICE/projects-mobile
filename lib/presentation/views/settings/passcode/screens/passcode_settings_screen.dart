@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_settings_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
@@ -13,6 +14,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(PasscodeSettingsController());
+    final platformController = Get.find<PlatformController>();
 
     return WillPopScope(
       onWillPop: () async {
@@ -20,8 +22,12 @@ class PasscodeSettingsScreen extends StatelessWidget {
         return true;
       },
       child: Scaffold(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
           titleText: tr('passcodeLock'),
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
           onLeadingPressed: controller.leavePasscodeSettingsScreen,
           backButtonIcon: const Icon(Icons.arrow_back_rounded),
         ),

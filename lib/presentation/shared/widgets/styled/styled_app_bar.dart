@@ -15,7 +15,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String titleText;
   final List<Widget> actions;
   final Function() onLeadingPressed;
-  final Color bgColor;
+  final Color backgroundColor;
 
   final Icon backButtonIcon;
 
@@ -33,7 +33,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.titleHeight = 56,
     this.titleText,
-    this.bgColor,
+    this.backgroundColor,
   })  : assert(titleText == null || title == null),
         assert(leading == null || onLeadingPressed == null),
         preferredSize = Size.fromHeight(
@@ -52,7 +52,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-      backgroundColor: bgColor,
+      backgroundColor: backgroundColor,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,

@@ -61,7 +61,7 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
   backgroundColor: lightColors.backgroundColor,
   scaffoldBackgroundColor: lightColors.backgroundColor,
   appBarTheme: AppBarTheme(
-    iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
+    iconTheme: IconThemeData(color: lightColors.primary),
     backgroundColor: lightColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
     // lightColors.onSurface),
@@ -84,7 +84,7 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
   backgroundColor: darkColors.backgroundColor,
   scaffoldBackgroundColor: darkColors.backgroundColor,
   appBarTheme: AppBarTheme(
-    iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
+    iconTheme: IconThemeData(color: darkColors.primary),
     backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
   ),

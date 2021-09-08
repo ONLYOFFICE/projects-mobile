@@ -26,10 +26,16 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
     DiscussionActionsController controller = Get.arguments['controller'];
     var onConfirm = Get.arguments['onConfirm'];
 
+    final platformController = Get.find<PlatformController>();
+
     controller.setupSubscribersSelection();
 
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         title: Obx(
           () => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
