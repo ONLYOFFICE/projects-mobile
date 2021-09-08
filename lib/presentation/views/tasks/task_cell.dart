@@ -150,6 +150,8 @@ class SecondColumn extends StatelessWidget {
               Row(
                 children: [
                   Flexible(
+                    //TODO fix rare issue when itemController.status.value is null.
+                    // On controller side value is valid, but when getx updates widget its value is null;
                     child: Text(
                       itemController.status.value == null
                           ? ''
