@@ -57,9 +57,9 @@ class TaskItemController extends GetxController {
     return count;
   }
 
-  TaskItemController(PortalTask task) {
-    this.task.value = task;
-    initTaskStatus(task);
+  TaskItemController(PortalTask portalTask) {
+    task.value = portalTask;
+    initTaskStatus(portalTask);
   }
 
   void copyLink({@required taskId, @required projectId}) async {
@@ -107,12 +107,11 @@ class TaskItemController extends GetxController {
     // return copiedTask;
   }
 
-  void initTaskStatus(PortalTask task) {
+  void initTaskStatus(PortalTask portalTask) {
     var statusesController = Get.find<TaskStatusesController>();
-    status.value = statusesController.getTaskStatus(task);
-    if (status.value == null) return;
-
-    _statusHandler.setStatusImage(status.value, task.canEdit);
+    status.value = statusesController.getTaskStatus(portalTask);
+    if (status.value != null)
+      _statusHandler.setStatusImage(status.value, portalTask.canEdit);
   }
 
   Future reloadTask({bool showLoading = false}) async {

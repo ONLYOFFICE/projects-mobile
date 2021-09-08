@@ -19,8 +19,10 @@ class TaskCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    TaskItemController itemController =
-        Get.put(TaskItemController(task), tag: task.id.toString());
+    TaskItemController itemController = Get.put(
+      TaskItemController(task),
+      tag: task.id.toString(),
+    );
 
     return InkWell(
       onTap: () => Get.find<NavigationController>()
@@ -118,7 +120,9 @@ class SecondColumn extends StatelessWidget {
                   ConstrainedBox(
                     constraints: BoxConstraints(maxWidth: Get.width * 0.25),
                     child: Text(
-                      itemController.status.value.title,
+                      itemController.status.value == null
+                          ? ''
+                          : itemController.status.value.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyleHelper.status(

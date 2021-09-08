@@ -6,6 +6,7 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -231,6 +232,19 @@ class ProjectService {
         AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
       });
+      return result.response;
+    } else {
+      await ErrorDialog.show(result.error);
+      return null;
+    }
+  }
+
+  Future<SecrityInfo> getProjectSecurityinfo({String name}) async {
+    var result = await _api.getProjectSecurityinfo();
+
+    var success = result.response != null;
+
+    if (success) {
       return result.response;
     } else {
       await ErrorDialog.show(result.error);

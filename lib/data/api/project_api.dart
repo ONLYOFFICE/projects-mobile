@@ -6,6 +6,7 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/internal/locator.dart';
@@ -376,6 +377,26 @@ class ProjectApi {
         result.response = (responseJson['response'] as List)
             .map((i) => PortalUser.fromJson(i))
             .toList();
+      } else {
+        result.error = CustomError.fromJson(responseJson['error']);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<SecrityInfo>> getProjectSecurityinfo() async {
+    var url = await coreApi.getProjectSecurityinfoUrl();
+
+    var result = ApiDTO<SecrityInfo>();
+    try {
+      var response = await coreApi.getRequest(url);
+      final Map responseJson = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        result.response = SecrityInfo.fromJson(responseJson['response']);
       } else {
         result.error = CustomError.fromJson(responseJson['error']);
       }
