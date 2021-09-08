@@ -34,9 +34,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
+import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
@@ -47,6 +47,9 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 // but you need to do it when saving changes
 void statusSelectionBS({context, TaskEditingController controller}) async {
   var _statusesController = Get.find<TaskStatusesController>();
+
+  var statusHandler = TaskStatusHandler();
+
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
@@ -93,10 +96,8 @@ void statusSelectionBS({context, TaskEditingController controller}) async {
                       },
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
-                          icon: SVG.createSizedFromString(
-                              _statusesController.statusImagesDecoded[i],
-                              16,
-                              16),
+                          icon: statusHandler.getStatusImage(
+                              _statusesController.statuses[i], true),
                           selected: _statusesController.statuses[i].id ==
                               controller.newStatus.value.id),
                     ),
