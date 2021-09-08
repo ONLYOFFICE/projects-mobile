@@ -268,13 +268,14 @@ class _ThirdColumn extends StatelessWidget {
             AppIcon(
                 icon: SvgIcons.check_square,
                 color: Get.theme.colors().onSurface),
+            const SizedBox(width: 3),
             Text(
               item.taskCount.toString(),
-              style: TextStyleHelper.projectCompleatedTasks,
+              style: TextStyleHelper.projectCompleatedTasks.copyWith(
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
+              ),
             ),
-            const SizedBox(
-              width: 16,
-            )
+            const SizedBox(width: 16)
           ],
         ),
       ],
