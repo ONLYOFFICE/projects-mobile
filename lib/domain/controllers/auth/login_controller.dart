@@ -88,10 +88,12 @@ class LoginController extends GetxController {
         if (await sendRegistrationType()) {
           setState(ViewState.Idle);
           clearInputFields();
-          await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal, {
-            AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName')
+          await AnalyticsService.shared.logEvent(
+              AnalyticsService.Events.loginPortal, {
+            AnalyticsService.Params.Key.portal:
+                await _secureStorage.getString('portalName')
           });
-          await Get.off(() => NavigationView()); //fix
+          await Get.offAll(() => NavigationView()); //fix
         } else {
           // if the device type has not been sent, the token must be deleted
           await logout();
@@ -168,10 +170,12 @@ class LoginController extends GetxController {
       if (await sendRegistrationType()) {
         setState(ViewState.Idle);
         clearInputFields();
-        await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal, {
-          AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName')
+        await AnalyticsService.shared.logEvent(
+            AnalyticsService.Events.loginPortal, {
+          AnalyticsService.Params.Key.portal:
+              await _secureStorage.getString('portalName')
         });
-        await Get.offNamed('NavigationView');
+        await Get.offAllNamed('NavigationView');
         return true;
       } else {
         // if the device type has not been sent, the token must be deleted
