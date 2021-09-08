@@ -19,6 +19,8 @@ class ProjectTeamController extends GetxController {
   var searchResult = <PortalUserItemController>[].obs;
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
+  bool withoutVisitors = false;
+
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
   Future onLoading() async {
@@ -40,6 +42,8 @@ class ProjectTeamController extends GetxController {
     if (needToClear) usersList.clear();
 
     for (var element in result) {
+      if (withoutVisitors && element.isVisitor) continue;
+
       var portalUser = PortalUserItemController(portalUser: element);
       portalUser.selectionMode.value = selectionMode;
       usersList.add(portalUser);

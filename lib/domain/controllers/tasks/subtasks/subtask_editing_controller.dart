@@ -21,7 +21,7 @@ class SubtaskEditingController extends GetxController
   final _api = locator<SubtasksService>();
 
   final _titleController = TextEditingController();
-  final teamController = Get.find<ProjectTeamController>();
+  var teamController;
 
   @override
   TextEditingController get titleController => _titleController;
@@ -44,6 +44,10 @@ class SubtaskEditingController extends GetxController
     _previousTitle = subtask.title;
     _previousResponsibleId = subtask.responsible?.id;
     _titleController.text = subtask.title;
+
+    teamController = Get.find<ProjectTeamController>();
+    teamController.withoutVisitors = true;
+
     status = subtask.status.obs;
     if (_subtask.responsible != null) {
       _previusSelectedResponsible

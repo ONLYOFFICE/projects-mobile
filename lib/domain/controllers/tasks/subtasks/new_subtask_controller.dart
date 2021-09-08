@@ -23,7 +23,7 @@ class NewSubtaskController extends GetxController
 
   final _api = locator<SubtasksService>();
 
-  final teamController = Get.find<ProjectTeamController>();
+  var teamController;
 
   final _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
@@ -42,6 +42,8 @@ class NewSubtaskController extends GetxController
 
   @override
   void init({Subtask subtask, int projectId}) {
+    teamController = Get.find<ProjectTeamController>();
+    teamController.withoutVisitors = true;
     _titleFocus.requestFocus();
     setupResponsibleSelection(projectId);
   }

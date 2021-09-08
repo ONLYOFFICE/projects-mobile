@@ -61,6 +61,7 @@ class ProjectEditController extends BaseProjectEditorController {
     managerName.value = selectedProjectManager.value.displayName;
 
     var projectTeamDataSource = Get.put(ProjectTeamController());
+
     projectTeamDataSource.projectId = projectDetailed.id;
     await projectTeamDataSource.getTeam();
 
