@@ -156,6 +156,7 @@ class AuthApi {
 
     var result = ApiDTO();
 
+    // TODO: IosProjects = 0, AndroidProjects = 1
     var type = Platform.isAndroid ? 1 : 0;
 
     var body = {'type': type};
