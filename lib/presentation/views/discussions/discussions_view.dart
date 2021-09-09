@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
@@ -126,10 +127,33 @@ class DiscussionsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // a temporary solution for the discussion page in projects
+    // where there are no filters yet
+    var hasFilters = false;
+    try {
+      hasFilters = controller?.filterController?.hasFilters?.value;
+    } catch (_) {}
+
     return Obx(() {
       if (controller.loaded == false) {
         return const ListLoadingSkeleton();
       } else {
+        if (controller.paginationController.data.isEmpty && hasFilters)
+          return Center(
+            child: EmptyScreen(
+              icon: AppIcon(icon: SvgIcons.not_found),
+              text: tr('noDiscussionsMatching'),
+            ),
+          );
+
+        if (controller.paginationController.data.isEmpty)
+          return Center(
+            child: EmptyScreen(
+              icon: AppIcon(icon: SvgIcons.comments_not_created),
+              text: tr('noDiscussionsCreated'),
+            ),
+          );
+
         return PaginationListView(
           paginationController: controller.paginationController,
           child: ListView.separated(
