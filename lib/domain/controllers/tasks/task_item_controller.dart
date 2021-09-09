@@ -101,7 +101,12 @@ class TaskItemController extends GetxController {
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
-    initTaskStatus(portalTask);
+  }
+
+  @override
+  void onInit() {
+    initTaskStatus(task.value);
+    super.onInit();
   }
 
   void copyLink({@required taskId, @required projectId}) async {
