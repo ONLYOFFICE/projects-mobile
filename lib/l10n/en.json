@@ -512,6 +512,13 @@
 
 	"noTasksCreated": "No tasks here yet",
 	"noTasksMatching": "There are no tasks matching these filters",
+	
+	"noSubtasksCreated": "No subtasks have been created for this task",
+
+	"noCommentsCreated": "No comments found",
+
+	"noDiscussionsCreated": "No discussions have been started yet",
+	"noDiscussionsMatching": "There are no discussions matching these filters",
 
 	"noProjectsCreated": "No projects here yet",
 	"noProjectsMatching": "There are no projects matching these filters",
