@@ -30,7 +30,7 @@ class SubtasksView extends StatelessWidget {
           return Stack(
             children: [
               EmptyScreen(
-                icon: AppIcon(icon: SvgIcons.comments_not_created),
+                icon: SvgIcons.comments_not_created,
                 text: tr('noSubtasksCreated'),
               ),
               if (controller?.task?.value?.canCreateSubtask) _FAB(task: _task),
@@ -41,7 +41,7 @@ class SubtasksView extends StatelessWidget {
             children: [
               if (_task.subtasks.isEmpty)
                 EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.comments_not_created),
+                  icon: SvgIcons.comments_not_created,
                   text: tr('noSubtasksCreated'),
                 ),
               if (_task.subtasks.isNotEmpty)

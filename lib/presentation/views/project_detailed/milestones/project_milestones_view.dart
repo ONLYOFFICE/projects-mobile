@@ -75,7 +75,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.milestone_not_created),
+                    icon: SvgIcons.milestone_not_created,
                     text: tr('noMilestonesCreated',
                         args: [tr('milestones').toLowerCase()])),
               ),
@@ -86,7 +86,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
+                    icon: SvgIcons.not_found,
                     text: tr('noMilestonesMatching',
                         args: [tr('milestones').toLowerCase()])),
               ),

@@ -109,7 +109,7 @@ class DiscussionsList extends StatelessWidget {
         if (controller.paginationController.data.isEmpty && hasFilters)
           return Center(
             child: EmptyScreen(
-              icon: AppIcon(icon: SvgIcons.not_found),
+              icon: SvgIcons.not_found,
               text: tr('noDiscussionsMatching'),
             ),
           );
@@ -117,7 +117,7 @@ class DiscussionsList extends StatelessWidget {
         if (controller.paginationController.data.isEmpty)
           return Center(
             child: EmptyScreen(
-              icon: AppIcon(icon: SvgIcons.comments_not_created),
+              icon: SvgIcons.comments_not_created,
               text: tr('noDiscussionsCreated'),
             ),
           );

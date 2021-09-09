@@ -142,8 +142,7 @@ class DocumentsScreen extends StatelessWidget {
               controller.nothingFound.value == true) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('notFound')));
+                    icon: SvgIcons.not_found, text: tr('notFound')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
@@ -151,7 +150,7 @@ class DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.documents_not_created),
+                    icon: SvgIcons.documents_not_created,
                     text: tr('noDocumentsCreated',
                         args: [tr('documents').toLowerCase()])));
           }
@@ -161,7 +160,7 @@ class DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
+                    icon: SvgIcons.not_found,
                     text: tr('noDocumentsMatching',
                         args: [tr('documents').toLowerCase()])));
           }

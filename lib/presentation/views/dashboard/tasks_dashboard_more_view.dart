@@ -74,7 +74,7 @@ class TasksDashboardMoreView extends StatelessWidget {
               !controller.filterController.hasFilters.value) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.task_not_created),
+                    icon: SvgIcons.task_not_created,
                     text: tr('noTasksCreated',
                         args: [tr('tasks').toLowerCase()])));
           }
@@ -83,7 +83,7 @@ class TasksDashboardMoreView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.not_found),
+                  icon: SvgIcons.not_found,
                   text:
                       tr('noTasksMatching', args: [tr('tasks').toLowerCase()])),
             );
