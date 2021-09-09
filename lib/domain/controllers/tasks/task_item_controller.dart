@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +45,7 @@ import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -68,6 +70,14 @@ class TaskItemController extends GetxController {
 
   Color get getStatusTextColor =>
       _statusHandler.getTextColor(status.value, task.value.canEdit);
+
+  String get displayName {
+    if (task.value.responsibles.isEmpty) return tr('noResponsible');
+    if (task.value.responsibles.length > 1)
+      return plural('responsibles', task.value.responsibles.length);
+    return NameFormatter.formateDisplayName(
+        task.value.responsibles[0].displayName);
+  }
 
   // to show overview screen without loading
   RxBool firstReload = true.obs;
