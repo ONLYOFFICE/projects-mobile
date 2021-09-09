@@ -97,8 +97,8 @@ class ProjectTeamController extends GetxController {
       isSearchResult.value = false;
     }
     isSearchResult.value = true;
-    searchResult
-        .addAll(usersList.where((user) => user.displayName.contains(query)));
+    searchResult.addAll(usersList.where((user) =>
+        user.displayName.toLowerCase().contains(query.toLowerCase())));
 
     nothingFound.value = searchResult.isEmpty;
   }
