@@ -23,6 +23,8 @@ class TaskCell extends StatelessWidget {
       tag: task.id.toString(),
     );
 
+    itemController.initTaskStatus(task);
+
     return InkWell(
       onTap: () => Get.find<NavigationController>()
           .to(TaskDetailedView(), arguments: {'controller': itemController}),
