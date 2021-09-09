@@ -109,7 +109,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             );
           }
           if (controller.teamController.nothingFound.value == true) {
-            return const NothingFound();
+            return Column(children: [const NothingFound()]);
           }
           if (controller.teamController.loaded.value == true &&
               controller.teamController.searchResult.isNotEmpty &&
