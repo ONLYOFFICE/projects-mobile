@@ -63,7 +63,7 @@ class TaskCommentsView extends StatelessWidget {
               if (comments.isEmpty)
                 Expanded(
                   child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.comments_not_created),
+                    icon: SvgIcons.comments_not_created,
                     text: tr('noCommentsCreated'),
                   ),
                 ),

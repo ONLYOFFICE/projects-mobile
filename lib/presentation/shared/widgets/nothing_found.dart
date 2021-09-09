@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/internal/utils/debug_print.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -49,14 +50,16 @@ class NothingFound extends StatelessWidget {
     return Expanded(
       child: Center(
         child: EmptyScreen(
-            icon: AppIcon(icon: SvgIcons.not_found), text: tr('notFound')),
+          icon: SvgIcons.not_found,
+          text: tr('notFound'),
+        ),
       ),
     );
   }
 }
 
 class EmptyScreen extends StatelessWidget {
-  final AppIcon icon;
+  final String icon;
   final String text;
 
   const EmptyScreen({
@@ -64,6 +67,10 @@ class EmptyScreen extends StatelessWidget {
     this.text,
     this.icon,
   }) : super(key: key);
+
+  String get darkThemeIcon {
+    return icon.replaceFirst('.', '_dark.');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +82,20 @@ class EmptyScreen extends StatelessWidget {
           SizedBox(
             height: 144,
             width: 144,
-            child: icon,
+            child: Builder(
+              builder: (_) {
+                try {
+                  return AppIcon(
+                    icon: Get.theme.brightness == Brightness.light
+                        ? icon
+                        : darkThemeIcon,
+                  );
+                } catch (e) {
+                  printError(e);
+                  return AppIcon(icon: icon);
+                }
+              },
+            ),
           ),
           Text(
             text,

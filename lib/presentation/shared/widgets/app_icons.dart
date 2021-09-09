@@ -150,16 +150,28 @@ class SvgIcons {
 
   static const String comments_not_created =
       'lib/assets/images/icons/empty_state/comments_not_created.svg';
+  static const String comments_not_created_dark =
+      'lib/assets/images/icons/empty_state/comments_not_created_dark.svg';
   static const String documents_not_created =
       'lib/assets/images/icons/empty_state/documents_not_created.svg';
+  static const String documents_not_created_dark =
+      'lib/assets/images/icons/empty_state/documents_not_created_dark.svg';
   static const String milestone_not_created =
       'lib/assets/images/icons/empty_state/milestone_not_created.svg';
+  static const String milestone_not_created_dark =
+      'lib/assets/images/icons/empty_state/milestone_not_created_dark.svg';
   static const String task_not_created =
       'lib/assets/images/icons/empty_state/task_not_created.svg';
+  static const String task_not_created_dark =
+      'lib/assets/images/icons/empty_state/task_not_created_dark.svg';
   static const String project_not_created =
       'lib/assets/images/icons/empty_state/project_not_created.svg';
+  static const String project_not_created_dark =
+      'lib/assets/images/icons/empty_state/project_not_created_dark.svg';
   static const String not_found =
       'lib/assets/images/icons/empty_state/not_found.svg';
+  static const String not_found_dark =
+      'lib/assets/images/icons/empty_state/not_found_dark.svg';
 
   static const String fab_user = 'lib/assets/images/icons/fab_user.svg';
 }

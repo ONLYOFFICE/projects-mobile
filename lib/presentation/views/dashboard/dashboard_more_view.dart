@@ -93,7 +93,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               !controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.project_not_created),
+                  icon: SvgIcons.project_not_created,
                   text: tr('noProjectsCreated',
                       args: [tr('projects').toLowerCase()])),
             );
@@ -103,7 +103,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.not_found),
+                  icon: SvgIcons.not_found,
                   text: tr('noProjectsMatching',
                       args: [tr('projects').toLowerCase()])),
             );
