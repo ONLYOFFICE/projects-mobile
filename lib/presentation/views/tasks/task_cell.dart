@@ -5,7 +5,6 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
-import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -137,9 +136,7 @@ class SecondColumn extends StatelessWidget {
                           color:
                               Get.theme.colors().onSurface.withOpacity(0.6))),
                   Text(
-                    NameFormatter.formateDisplayName(
-                      itemController.task.value.createdBy.displayName,
-                    ),
+                    itemController.displayName,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
