@@ -59,7 +59,8 @@ dependencies:
   tabbar: ^0.1.1
   extended_tabs: ^2.2.0
   cached_network_image: ^3.0.0
-  firebase_analytics: ^8.2.0
+  firebase_core: ^1.6.0
+  firebase_analytics: ^8.3.2
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
