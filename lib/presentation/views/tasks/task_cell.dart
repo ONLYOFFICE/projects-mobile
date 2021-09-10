@@ -43,20 +43,30 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
-class TaskCell extends StatelessWidget {
+class TaskCell extends StatefulWidget {
   final PortalTask task;
   const TaskCell({Key key, this.task}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    // ignore: omit_local_variable_types
-    TaskItemController itemController = Get.put(
-      TaskItemController(task),
-      tag: task.id.toString(),
+  _TaskCellState createState() => _TaskCellState();
+}
+
+class _TaskCellState extends State<TaskCell> {
+  TaskItemController itemController;
+
+  @override
+  void initState() {
+    itemController = Get.put(
+      TaskItemController(widget.task),
+      tag: widget.task.id.toString(),
     );
+    WidgetsBinding.instance.addPostFrameCallback(
+        (_) => itemController.initTaskStatus(widget.task));
+    super.initState();
+  }
 
-    itemController.initTaskStatus(task);
-
+  @override
+  Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Get.find<NavigationController>()
           .to(TaskDetailedView(), arguments: {'controller': itemController}),

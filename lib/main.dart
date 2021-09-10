@@ -87,8 +87,10 @@ Future<String> _getInitPage() async {
 
   var loginController = Get.put(LoginController());
 
-  if (passcode != null) return 'PasscodeScreen';
-  if (await loginController.isLoggedIn) return 'NavigationView';
+  var isLoggedIn = await loginController.isLoggedIn;
+
+  if (passcode != null && isLoggedIn) return 'PasscodeScreen';
+  if (isLoggedIn) return 'NavigationView';
   return 'PortalView';
 }
 
