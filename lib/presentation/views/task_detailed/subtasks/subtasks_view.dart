@@ -26,23 +26,15 @@ class SubtasksView extends StatelessWidget {
     var _task = controller.task.value;
     return Obx(
       () {
-        if (controller.loaded.isTrue && _task.subtasks.isEmpty)
-          return Stack(
-            children: [
-              EmptyScreen(
-                icon: SvgIcons.comments_not_created,
-                text: tr('noSubtasksCreated'),
-              ),
-              if (controller?.task?.value?.canCreateSubtask) _FAB(task: _task),
-            ],
-          );
         if (controller.loaded.value == true) {
           return Stack(
             children: [
               if (_task.subtasks.isEmpty)
-                EmptyScreen(
-                  icon: SvgIcons.comments_not_created,
-                  text: tr('noSubtasksCreated'),
+                Center(
+                  child: EmptyScreen(
+                    icon: SvgIcons.task_not_created,
+                    text: tr('noSubtasksCreated'),
+                  ),
                 ),
               if (_task.subtasks.isNotEmpty)
                 SmartRefresher(
