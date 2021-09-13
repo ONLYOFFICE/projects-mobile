@@ -59,49 +59,55 @@ class NewTaskView extends StatelessWidget {
     var projectDetailed = Get.arguments['projectDetailed'];
     controller.init(projectDetailed);
 
-    return Scaffold(
-      backgroundColor: Get.theme.colors().backgroundColor,
-      appBar: StyledAppBar(
-        titleText: tr('newTask'),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () => controller.confirm(context))
-        ],
-        onLeadingPressed: controller.discardTask,
-      ),
-      body: SingleChildScrollView(
-        child: Obx(
-          () => Column(
-            children: [
-              const SizedBox(height: 16),
-              TaskTitle(controller: controller),
-              // unfocus title
-              Listener(
-                onPointerDown: (_) {
-                  if (controller.title.isNotEmpty &&
-                      controller.titleFocus.hasFocus)
-                    controller.titleFocus.unfocus();
-                },
-                child: Column(
-                  children: [
-                    ProjectTile(controller: controller),
-                    if (controller.selectedProjectTitle.value.isNotEmpty)
-                      MilestoneTile(controller: controller),
-                    if (controller.selectedProjectTitle.value.isNotEmpty)
-                      ResponsibleTile(controller: controller),
-                    if (controller.responsibles.isNotEmpty)
-                      NotifyResponsiblesTile(controller: controller),
-                    DescriptionTile(controller: controller),
-                    GestureDetector(
-                        child: StartDateTile(controller: controller)),
-                    DueDateTile(controller: controller),
-                    const SizedBox(height: 5),
-                    PriorityTile(controller: controller)
-                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        controller.discardTask();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Get.theme.colors().backgroundColor,
+        appBar: StyledAppBar(
+          titleText: tr('newTask'),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => controller.confirm(context))
+          ],
+          onLeadingPressed: controller.discardTask,
+        ),
+        body: SingleChildScrollView(
+          child: Obx(
+            () => Column(
+              children: [
+                const SizedBox(height: 16),
+                TaskTitle(controller: controller),
+                // unfocus title
+                Listener(
+                  onPointerDown: (_) {
+                    if (controller.title.isNotEmpty &&
+                        controller.titleFocus.hasFocus)
+                      controller.titleFocus.unfocus();
+                  },
+                  child: Column(
+                    children: [
+                      ProjectTile(controller: controller),
+                      if (controller.selectedProjectTitle.value.isNotEmpty)
+                        MilestoneTile(controller: controller),
+                      if (controller.selectedProjectTitle.value.isNotEmpty)
+                        ResponsibleTile(controller: controller),
+                      if (controller.responsibles.isNotEmpty)
+                        NotifyResponsiblesTile(controller: controller),
+                      DescriptionTile(controller: controller),
+                      GestureDetector(
+                          child: StartDateTile(controller: controller)),
+                      DueDateTile(controller: controller),
+                      const SizedBox(height: 5),
+                      PriorityTile(controller: controller)
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

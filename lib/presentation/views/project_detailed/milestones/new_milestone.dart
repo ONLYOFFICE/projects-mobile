@@ -60,32 +60,38 @@ class NewMilestoneView extends StatelessWidget {
     var projectDetailed = Get.arguments['projectDetailed'];
     newMilestoneController.setup(projectDetailed);
 
-    return Scaffold(
-      backgroundColor: Get.theme.colors().backgroundColor,
-      appBar: StyledAppBar(
-          titleText: tr('newMilestone'),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => newMilestoneController.confirm(context))
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: () => newMilestoneController.discard())),
-      body: SingleChildScrollView(
-        child: Obx(
-          () => Column(
-            children: [
-              const SizedBox(height: 16),
-              MilestoneInput(controller: newMilestoneController),
-              ProjectTile(controller: newMilestoneController),
-              if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
-                ResponsibleTile(controller: newMilestoneController),
-              DescriptionTile(newMilestoneController: newMilestoneController),
-              DueDateTile(controller: newMilestoneController),
-              const SizedBox(height: 5),
-              AdvancedOptions(newMilestoneController: newMilestoneController)
+    return WillPopScope(
+      onWillPop: () async {
+        newMilestoneController.discard();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Get.theme.colors().backgroundColor,
+        appBar: StyledAppBar(
+            titleText: tr('newMilestone'),
+            actions: [
+              IconButton(
+                  icon: const Icon(Icons.check_rounded),
+                  onPressed: () => newMilestoneController.confirm(context))
             ],
+            leading: IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                onPressed: () => newMilestoneController.discard())),
+        body: SingleChildScrollView(
+          child: Obx(
+            () => Column(
+              children: [
+                const SizedBox(height: 16),
+                MilestoneInput(controller: newMilestoneController),
+                ProjectTile(controller: newMilestoneController),
+                if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
+                  ResponsibleTile(controller: newMilestoneController),
+                DescriptionTile(newMilestoneController: newMilestoneController),
+                DueDateTile(controller: newMilestoneController),
+                const SizedBox(height: 5),
+                AdvancedOptions(newMilestoneController: newMilestoneController)
+              ],
+            ),
           ),
         ),
       ),
