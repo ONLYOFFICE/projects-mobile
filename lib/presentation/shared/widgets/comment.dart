@@ -46,57 +46,55 @@ class Comment extends StatelessWidget {
         );
       }
 
-      return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: _CommentAuthor(comment: comment, controller: controller),
-            ),
-            const SizedBox(height: 28),
-            Obx(
-              () {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: HTML.toRichText(
-                        context,
-                        controller.comment.value.commentBody,
-                        defaultTextStyle: TextStyleHelper.body2(
-                          color: Get.theme.colors().onSurface,
-                        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: _CommentAuthor(comment: comment, controller: controller),
+          ),
+          const SizedBox(height: 28),
+          Obx(
+            () {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: HTML.toRichText(
+                      context,
+                      controller.comment.value.commentBody,
+                      defaultTextStyle: TextStyleHelper.body2(
+                        color: Get.theme.colors().onSurface,
                       ),
                     ),
-                    if (comment.isResponsePermissions)
-                      const SizedBox(height: 5),
-                    if (comment.isResponsePermissions)
-                      GestureDetector(
-                        onTap: () {
-                          return Get.find<NavigationController>()
-                              .toScreen(const ReplyCommentView(), arguments: {
-                            'comment': controller.comment.value,
-                            'discussionId': discussionId,
-                            'taskId': taskId,
-                          });
-                        },
-                        child: Text(
-                          'Ответить',
-                          style: TextStyleHelper.caption(
-                              color: Get.theme.colors().primary),
-                        ),
+                  ),
+                  if (comment.isResponsePermissions) const SizedBox(height: 5),
+                  if (comment.isResponsePermissions)
+                    GestureDetector(
+                      onTap: () {
+                        return Get.find<NavigationController>()
+                            .toScreen(const ReplyCommentView(), arguments: {
+                          'comment': controller.comment.value,
+                          'discussionId': discussionId,
+                          'taskId': taskId,
+                        });
+                      },
+                      child: Text(
+                        'Ответить',
+                        style: TextStyleHelper.caption(
+                            color: Get.theme.colors().primary),
                       ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+                    ),
+                ],
+              );
+            },
+          ),
+        ],
       );
     }
-    return const _DeletedComment();
+    if (comment.show) return const _DeletedComment();
+    return const SizedBox();
   }
 }
 
@@ -111,73 +109,69 @@ class _CommentAuthor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: CustomNetworkImage(
-                image: comment.userAvatarPath,
-                fit: BoxFit.cover,
-              ),
+    return Row(
+      children: [
+        SizedBox(
+          width: 40,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: CustomNetworkImage(
+              image: comment.userAvatarPath,
+              fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(comment.userFullName, style: TextStyleHelper.projectTitle),
-                Text(comment.timeStampStr,
-                    style: TextStyleHelper.caption(
-                        color:
-                            Get.theme.colors().onBackground.withOpacity(0.6))),
-              ],
-            ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(comment.userFullName, style: TextStyleHelper.projectTitle),
+              Text(comment.timeStampStr,
+                  style: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6))),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 7),
-            child: SizedBox(
-              width: 60,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 35),
-                child: PopupMenuButton(
-                  onSelected: (value) =>
-                      _onSelected(value, context, controller),
-                  icon: Icon(Icons.more_vert_rounded,
-                      size: 25,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                  itemBuilder: (context) {
-                    return [
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 7),
+          child: SizedBox(
+            width: 60,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 35),
+              child: PopupMenuButton(
+                onSelected: (value) => _onSelected(value, context, controller),
+                icon: Icon(Icons.more_vert_rounded,
+                    size: 25,
+                    color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      value: 'Copy link',
+                      child: Text(tr('copyLink')),
+                    ),
+                    if (comment.isEditPermissions)
                       PopupMenuItem(
-                        value: 'Copy link',
-                        child: Text(tr('copyLink')),
+                        value: 'Edit',
+                        child: Text(tr('edit')),
                       ),
-                      if (comment.isEditPermissions)
-                        PopupMenuItem(
-                          value: 'Edit',
-                          child: Text(tr('edit')),
+                    if (comment.isEditPermissions)
+                      PopupMenuItem(
+                        value: 'Delete',
+                        child: Text(
+                          tr('delete'),
+                          style: TextStyleHelper.subtitle1(
+                              color: Get.theme.colors().colorError),
                         ),
-                      if (comment.isEditPermissions)
-                        PopupMenuItem(
-                          value: 'Delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError),
-                          ),
-                        ),
-                    ];
-                  },
-                ),
+                      ),
+                  ];
+                },
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

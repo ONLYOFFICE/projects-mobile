@@ -46,7 +46,9 @@ class TaskCommentsView extends StatelessWidget {
                       controller: controller.commentsListController,
                       padding: const EdgeInsets.only(top: 32, bottom: 40),
                       separatorBuilder: (BuildContext context, int index) {
-                        return const SizedBox(height: 21);
+                        return SizedBox(
+                          height: comments[index].show ? 21 : null,
+                        );
                       },
                       itemBuilder: (BuildContext context, int index) {
                         return CommentsThread(

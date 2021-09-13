@@ -66,4 +66,11 @@ class PortalComment {
         'commentList': List<dynamic>.from(commentList.map((x) => x.toJson())),
         'attachments': attachments,
       };
+
+  bool get hasDisplayedReplies {
+    for (var item in commentList) if (!item.inactive) return true;
+    return false;
+  }
+
+  bool get show => !inactive || hasDisplayedReplies;
 }
