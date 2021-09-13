@@ -296,6 +296,8 @@
 	"deleteProjectAlert": "You won't be able to restore it.",
 	"deleteTaskTitle": "Delete task permanently?",
 	"deleteTaskAlert": "You won't be able to restore it.",
+	"deleteDiscussionTitle": "Delete discussion permanently?",
+	"deleteDiscussionAlert": "You won't be able to restore it.",
 
 	"newMilestone": "New milestone",
 	"milestoneTitle": "Milestone title",

@@ -47,9 +47,11 @@ class TaskItemService {
     var success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.task
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
@@ -67,9 +69,11 @@ class TaskItemService {
     var success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.task
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
@@ -83,9 +87,11 @@ class TaskItemService {
     var success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.task
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {

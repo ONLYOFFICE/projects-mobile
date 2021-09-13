@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,8 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/debug_print.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussion_status_BS.dart';
@@ -120,23 +123,32 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> deleteMessage() async {
-    try {
-      Discussion result = await _api.deleteMessage(id: discussion.value.id);
-      if (result != null) {
-        Get.back();
-        await Get.find<DiscussionsController>().loadDiscussions();
-        //TODO refactoring needed
+    await Get.dialog(StyledAlertDialog(
+      titleText: tr('deleteDiscussionTitle'),
+      contentText: tr('deleteDiscussionAlert'),
+      acceptText: tr('delete').toUpperCase(),
+      onCancelTap: () async => Get.back(),
+      onAcceptTap: () async {
         try {
-          locator<EventHub>().fire('needToRefreshProjects');
-          // ignore: unawaited_futures
-          Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
+          Discussion result = await _api.deleteMessage(id: discussion.value.id);
+          if (result != null) {
+            Get.back();
+            Get.back();
+            await Get.find<DiscussionsController>().loadDiscussions();
+            //TODO refactoring needed
+            try {
+              locator<EventHub>().fire('needToRefreshProjects');
+              // ignore: unawaited_futures
+              Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
+            } catch (e) {
+              printError(e);
+            }
+          }
         } catch (e) {
-          debugPrint(e);
+          printError(e);
         }
-      }
-    } catch (e) {
-      debugPrint(e);
-    }
+      },
+    ));
   }
 
   void handleVisibilityChanged(VisibilityInfo info) {
