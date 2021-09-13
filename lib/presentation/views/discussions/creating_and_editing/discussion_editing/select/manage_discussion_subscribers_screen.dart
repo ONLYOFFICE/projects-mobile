@@ -30,101 +30,109 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
 
     controller.setupSubscribersSelection();
 
-    return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
-      appBar: StyledAppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leaveSubscribersSelectionView();
+        return false;
+      },
+      child: Scaffold(
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
-        title: Obx(
-          () => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        appBar: StyledAppBar(
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
+          title: Obx(
+            () => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(tr('manageSubscribers')),
+                if (controller.subscribers.isNotEmpty)
+                  Text(plural('selected', controller.subscribers.length),
+                      style: TextStyleHelper.caption())
+              ],
+            ),
+          ),
+          onLeadingPressed: controller.leaveSubscribersSelectionView,
+          backButtonIcon: Get.put(PlatformController()).isMobile
+              ? const Icon(Icons.arrow_back_rounded)
+              : const Icon(Icons.close),
+          actions: [
+            IconButton(
+                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+                icon: const Icon(Icons.done))
+          ],
+          // bottom: CustomSearchBar(controller: controller),
+          bottom: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(tr('manageSubscribers')),
-              if (controller.subscribers.isNotEmpty)
-                Text(plural('selected', controller.subscribers.length),
-                    style: TextStyleHelper.caption())
+              Obx(() => Expanded(
+                    child: SearchField(
+                      hintText: tr('usersSearch'),
+                      onSubmitted: (value) =>
+                          usersDataSource.searchUsers(value),
+                      showClearIcon:
+                          usersDataSource.isSearchResult.value == true,
+                      onClearPressed: controller.clearUserSearch,
+                      controller: controller.userSearchController,
+                    ),
+                  )),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15.5, right: 16),
+                child: InkResponse(
+                  onTap: () => Get.find<NavigationController>().to(
+                      const UsersFromGroups(),
+                      arguments: {'controller': controller}),
+                  child: AppIcon(icon: SvgIcons.preferences),
+                ),
+              )
             ],
           ),
         ),
-        onLeadingPressed: controller.leaveSubscribersSelectionView,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
-        actions: [
-          IconButton(
-              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-              icon: const Icon(Icons.done))
-        ],
-        // bottom: CustomSearchBar(controller: controller),
-        bottom: Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Obx(() => Expanded(
-                  child: SearchField(
-                    hintText: tr('usersSearch'),
-                    onSubmitted: (value) => usersDataSource.searchUsers(value),
-                    showClearIcon: usersDataSource.isSearchResult.value == true,
-                    onClearPressed: controller.clearUserSearch,
-                    controller: controller.userSearchController,
-                  ),
-                )),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 15.5, right: 16),
-              child: InkResponse(
-                onTap: () => Get.find<NavigationController>().to(
-                    const UsersFromGroups(),
-                    arguments: {'controller': controller}),
-                child: AppIcon(icon: SvgIcons.preferences),
-              ),
-            )
-          ],
-        ),
-      ),
-      body: Obx(
-        () {
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.value == false) {
-            return SmartRefresher(
-              enablePullDown: false,
-              controller: usersDataSource.refreshController,
-              onLoading: usersDataSource.onLoading,
-              enablePullUp: usersDataSource.pullUpEnabled,
-              child: CustomScrollView(
-                slivers: <Widget>[
-                  if (controller.subscribers.isNotEmpty)
-                    _UsersCategoryText(text: tr('subscribed')),
-                  if (controller.subscribers.isNotEmpty)
-                    _SubscribedUsers(
-                      controller: controller,
+        body: Obx(
+          () {
+            if (usersDataSource.loaded.value == true &&
+                usersDataSource.usersList.isNotEmpty &&
+                usersDataSource.isSearchResult.value == false) {
+              return SmartRefresher(
+                enablePullDown: false,
+                controller: usersDataSource.refreshController,
+                onLoading: usersDataSource.onLoading,
+                enablePullUp: usersDataSource.pullUpEnabled,
+                child: CustomScrollView(
+                  slivers: <Widget>[
+                    if (controller.subscribers.isNotEmpty)
+                      _UsersCategoryText(text: tr('subscribed')),
+                    if (controller.subscribers.isNotEmpty)
+                      _SubscribedUsers(
+                        controller: controller,
+                        usersDataSource: usersDataSource,
+                      ),
+                    _UsersCategoryText(text: tr('allUsers')),
+                    _AllUsers(
                       usersDataSource: usersDataSource,
+                      controller: controller,
                     ),
-                  _UsersCategoryText(text: tr('allUsers')),
-                  _AllUsers(
-                    usersDataSource: usersDataSource,
-                    controller: controller,
-                  ),
-                ],
-              ),
-            );
-          }
-          if (usersDataSource.nothingFound.value == true) {
-            // NothingFound contains Expanded widget, that why it is needed
-            // to use Column
-            return Column(children: [const NothingFound()]);
-          }
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
-              usersDataSource.isSearchResult.value == true) {
-            return UsersSearchResult(
-              usersDataSource: usersDataSource,
-              onTapFunction: (user) =>
-                  controller.addSubscriber(user, fromUsersDataSource: true),
-            );
-          }
-          return const ListLoadingSkeleton();
-        },
+                  ],
+                ),
+              );
+            }
+            if (usersDataSource.nothingFound.value == true) {
+              // NothingFound contains Expanded widget, that why it is needed
+              // to use Column
+              return Column(children: [const NothingFound()]);
+            }
+            if (usersDataSource.loaded.value == true &&
+                usersDataSource.usersList.isNotEmpty &&
+                usersDataSource.isSearchResult.value == true) {
+              return UsersSearchResult(
+                usersDataSource: usersDataSource,
+                onTapFunction: (user) =>
+                    controller.addSubscriber(user, fromUsersDataSource: true),
+              );
+            }
+            return const ListLoadingSkeleton();
+          },
+        ),
       ),
     );
   }

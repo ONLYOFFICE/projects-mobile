@@ -24,58 +24,64 @@ class NewProject extends StatelessWidget {
   Widget build(BuildContext context) {
     // var controller = Get.put(NewProjectController());
     var controller = Get.find<NewProjectController>();
-    return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
-      appBar: StyledAppBar(
-        titleText: tr('project'),
-        onLeadingPressed: controller.discardChanges,
-        elevation: 2,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check_outlined),
-            onPressed: () => {
-              controller.confirm(),
-            },
-          )
-        ],
-      ),
-      body: Listener(
-        onPointerDown: (_) {
-          if (controller.titleController.text.isNotEmpty &&
-              controller.titleFocus.hasFocus) controller.titleFocus.unfocus();
-        },
-        child: ListView(
-          children: [
-            TitleInput(controller: controller),
-            InkWell(
-              onTap: () {
-                Get.find<NavigationController>().toScreen(
-                    const ProjectManagerSelectionView(),
-                    arguments: {'controller': controller});
+    return WillPopScope(
+      onWillPop: () async {
+        controller.discardChanges();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor: Get.theme.backgroundColor,
+        appBar: StyledAppBar(
+          titleText: tr('project'),
+          onLeadingPressed: controller.discardChanges,
+          elevation: 2,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.check_outlined),
+              onPressed: () => {
+                controller.confirm(),
               },
-              child: ProjectManager(
-                controller: controller,
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Get.find<NavigationController>().toScreen(
-                    const TeamMembersSelectionView(),
-                    arguments: {'controller': controller});
-              },
-              child: TeamMembers(controller: controller),
-            ),
-            DescriptionTile(controller: controller),
-            InkWell(
-              onTap: () {
-                controller.showTags();
-              },
-              child: Tags(
-                controller: controller,
-              ),
-            ),
-            AdvancedOptions(controller: controller),
+            )
           ],
+        ),
+        body: Listener(
+          onPointerDown: (_) {
+            if (controller.titleController.text.isNotEmpty &&
+                controller.titleFocus.hasFocus) controller.titleFocus.unfocus();
+          },
+          child: ListView(
+            children: [
+              TitleInput(controller: controller),
+              InkWell(
+                onTap: () {
+                  Get.find<NavigationController>().toScreen(
+                      const ProjectManagerSelectionView(),
+                      arguments: {'controller': controller});
+                },
+                child: ProjectManager(
+                  controller: controller,
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Get.find<NavigationController>().toScreen(
+                      const TeamMembersSelectionView(),
+                      arguments: {'controller': controller});
+                },
+                child: TeamMembers(controller: controller),
+              ),
+              DescriptionTile(controller: controller),
+              InkWell(
+                onTap: () {
+                  controller.showTags();
+                },
+                child: Tags(
+                  controller: controller,
+                ),
+              ),
+              AdvancedOptions(controller: controller),
+            ],
+          ),
         ),
       ),
     );

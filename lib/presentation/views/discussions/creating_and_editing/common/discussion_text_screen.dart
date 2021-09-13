@@ -16,33 +16,40 @@ class NewDiscussionTextScreen extends StatelessWidget {
 
     final platformController = Get.find<PlatformController>();
 
-    return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
-      appBar: StyledAppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leaveTextView();
+        return false;
+      },
+      child: Scaffold(
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
-        titleText: tr('text'),
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
-        onLeadingPressed: () => controller.leaveTextView(),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: controller.confirmText)
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
-        child: TextField(
-          controller: controller.textController.value,
-          autofocus: true,
-          maxLines: null,
-          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-          decoration: InputDecoration.collapsed(
-              hintText: tr('discussionText'),
-              hintStyle: TextStyleHelper.subtitle1()),
+        appBar: StyledAppBar(
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
+          titleText: tr('text'),
+          backButtonIcon: Get.put(PlatformController()).isMobile
+              ? const Icon(Icons.arrow_back_rounded)
+              : const Icon(Icons.close),
+          onLeadingPressed: () => controller.leaveTextView(),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: controller.confirmText)
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
+          child: TextField(
+            controller: controller.textController.value,
+            autofocus: true,
+            maxLines: null,
+            style:
+                TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+            decoration: InputDecoration.collapsed(
+                hintText: tr('discussionText'),
+                hintStyle: TextStyleHelper.subtitle1()),
+          ),
         ),
       ),
     );

@@ -26,38 +26,44 @@ class NewDiscussionScreen extends StatelessWidget {
       specifiedProjectTitle: projectTitle,
     ));
 
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: tr('newDiscussion'),
-        actions: [
-          IconButton(
-              onPressed: () => controller.confirm(context),
-              icon: const Icon(Icons.done_rounded))
-        ],
-        onLeadingPressed: controller.discardDiscussion,
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            DiscussionTitleTextField(controller: controller),
-            Listener(
-              onPointerDown: (_) {
-                if (controller.title.isNotEmpty &&
-                    controller.titleFocus.hasFocus)
-                  controller.titleFocus.unfocus();
-              },
-              child: Column(
-                children: [
-                  DiscussionTextTile(controller: controller),
-                  DiscussionProjectTile(
-                    ignoring: projectId != null,
-                    controller: controller,
-                  ),
-                  DiscussionSubscribersTile(controller: controller),
-                ],
-              ),
-            ),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.discardDiscussion();
+        return false;
+      },
+      child: Scaffold(
+        appBar: StyledAppBar(
+          titleText: tr('newDiscussion'),
+          actions: [
+            IconButton(
+                onPressed: () => controller.confirm(context),
+                icon: const Icon(Icons.done_rounded))
           ],
+          onLeadingPressed: controller.discardDiscussion,
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              DiscussionTitleTextField(controller: controller),
+              Listener(
+                onPointerDown: (_) {
+                  if (controller.title.isNotEmpty &&
+                      controller.titleFocus.hasFocus)
+                    controller.titleFocus.unfocus();
+                },
+                child: Column(
+                  children: [
+                    DiscussionTextTile(controller: controller),
+                    DiscussionProjectTile(
+                      ignoring: projectId != null,
+                      controller: controller,
+                    ),
+                    DiscussionSubscribersTile(controller: controller),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

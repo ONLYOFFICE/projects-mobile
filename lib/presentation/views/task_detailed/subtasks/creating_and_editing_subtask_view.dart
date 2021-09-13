@@ -35,88 +35,95 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
       controller.init(projectId: projectId);
     }
 
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
-        onLeadingPressed: controller.leavePage,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done_rounded),
-            onPressed: () =>
-                controller.confirm(context: context, taskId: taskId),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            const SizedBox(height: 6),
-            Column(
-              children: [
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 56),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 56,
-                        child: Icon(
-                          controller.status.value == 1
-                              ? Icons.check_box_outline_blank
-                              : Icons.check_box,
-                          color: const Color(0xFF666666),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leavePage();
+        return false;
+      },
+      child: Scaffold(
+        appBar: StyledAppBar(
+          titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
+          onLeadingPressed: controller.leavePage,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done_rounded),
+              onPressed: () =>
+                  controller.confirm(context: context, taskId: taskId),
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              const SizedBox(height: 6),
+              Column(
+                children: [
+                  ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 56),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          width: 56,
+                          child: Icon(
+                            controller.status.value == 1
+                                ? Icons.check_box_outline_blank
+                                : Icons.check_box,
+                            color: const Color(0xFF666666),
+                          ),
                         ),
-                      ),
-                      Expanded(
-                        child: Center(
-                          child: Obx(() => TextField(
-                                controller: controller.titleController,
-                                maxLines: null,
-                                // focusNode = null if subtaskEditingController
-                                focusNode: controller.titleFocus,
-                                style: TextStyleHelper.subtitle1(
-                                    color: Get.theme.colors().onBackground),
-                                decoration: InputDecoration.collapsed(
-                                  hintText: tr('describeSubtask'),
-                                  hintStyle: TextStyleHelper.subtitle1(
-                                      color: controller.setTiltleError.value ==
-                                              true
-                                          ? Get.theme.colors().colorError
-                                          : Get.theme
-                                              .colors()
-                                              .onBackground
-                                              .withOpacity(0.5)),
-                                ),
-                              )),
+                        Expanded(
+                          child: Center(
+                            child: Obx(() => TextField(
+                                  controller: controller.titleController,
+                                  maxLines: null,
+                                  // focusNode = null if subtaskEditingController
+                                  focusNode: controller.titleFocus,
+                                  style: TextStyleHelper.subtitle1(
+                                      color: Get.theme.colors().onBackground),
+                                  decoration: InputDecoration.collapsed(
+                                    hintText: tr('describeSubtask'),
+                                    hintStyle: TextStyleHelper.subtitle1(
+                                        color:
+                                            controller.setTiltleError.value ==
+                                                    true
+                                                ? Get.theme.colors().colorError
+                                                : Get.theme
+                                                    .colors()
+                                                    .onBackground
+                                                    .withOpacity(0.5)),
+                                  ),
+                                )),
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 4),
-                    ],
+                        const SizedBox(width: 4),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  const StyledDivider(leftPadding: 56)
+                ],
+              ),
+              Listener(
+                onPointerDown: (_) {
+                  if (!forEditing) {
+                    if (controller.titleController.text.isNotEmpty &&
+                        controller.titleFocus.hasFocus)
+                      controller.titleFocus.unfocus();
+                  }
+                },
+                child: ResponsibleTile(
+                  controller: controller,
+                  enableUnderline: false,
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear_rounded,
+                        size: 20,
+                        color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                    onPressed: controller.deleteResponsible,
                   ),
                 ),
-                const SizedBox(height: 4),
-                const StyledDivider(leftPadding: 56)
-              ],
-            ),
-            Listener(
-              onPointerDown: (_) {
-                if (!forEditing) {
-                  if (controller.titleController.text.isNotEmpty &&
-                      controller.titleFocus.hasFocus)
-                    controller.titleFocus.unfocus();
-                }
-              },
-              child: ResponsibleTile(
-                controller: controller,
-                enableUnderline: false,
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.clear_rounded,
-                      size: 20,
-                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
-                  onPressed: controller.deleteResponsible,
-                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
