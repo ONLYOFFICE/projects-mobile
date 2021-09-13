@@ -37,7 +37,6 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/images_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
-// TODO use this for images
 class CustomNetworkImage extends StatelessWidget {
   final String image;
   final BoxFit fit;
