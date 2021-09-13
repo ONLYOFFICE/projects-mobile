@@ -30,11 +30,13 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class CommentEditingController extends GetxController {
   final _api = locator<CommentsService>();
@@ -74,6 +76,24 @@ class CommentEditingController extends GetxController {
       } else {
         debugPrint(result);
       }
+    }
+  }
+
+  void leavePage() {
+    if (_textController.text != commentBody) {
+      Get.dialog(StyledAlertDialog(
+        titleText: tr('discardChanges'),
+        contentText: tr('lostOnLeaveWarning'),
+        acceptText: tr('delete').toUpperCase(),
+        onAcceptTap: () {
+          _textController.clear();
+          Get.back();
+          Get.back();
+        },
+        onCancelTap: Get.back,
+      ));
+    } else {
+      Get.back();
     }
   }
 }

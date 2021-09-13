@@ -68,9 +68,7 @@ class EmptyScreen extends StatelessWidget {
     this.icon,
   }) : super(key: key);
 
-  String get darkThemeIcon {
-    return icon.replaceFirst('.', '_dark.');
-  }
+  String get darkThemeIcon => icon.replaceFirst('.', '_dark.');
 
   @override
   Widget build(BuildContext context) {

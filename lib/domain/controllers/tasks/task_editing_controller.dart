@@ -331,7 +331,7 @@ class TaskEditingController extends GetxController
     } else {
       // update the task status if it has been changed
       if (initialStatus.id != newStatus.value.id) {
-        await _taskItemController.updateTaskStatus(
+        await _taskItemController.tryChangingStatus(
             id: task.id,
             newStatusId: newStatus.value.id,
             newStatusType: newStatus.value.statusType);

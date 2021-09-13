@@ -46,6 +46,7 @@ import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart'
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -168,16 +169,40 @@ class TaskItemController extends GetxController {
     if (showLoading) loaded.value = true;
   }
 
-  void tryChangingStatus(context) {
-    if (task.value.canEdit) {
+  void openStatuses(context) {
+    if (task.value.canEdit)
       showsStatusesBS(context: context, taskItemController: this);
+  }
+
+  Future<void> tryChangingStatus({
+    int id,
+    int newStatusId,
+    int newStatusType,
+  }) async {
+    if (newStatusId == status?.value?.id) return;
+
+    if (newStatusType == 2 && task.value.status != newStatusType) {
+      await Get.dialog(StyledAlertDialog(
+        titleText: tr('closingTask'),
+        contentText: tr('closingTaskWithActiveSubtasks'),
+        acceptText: tr('closeTask').toUpperCase(),
+        onAcceptTap: () async {
+          await _changeTaskStatus(
+              id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+          Get.back();
+        },
+      ));
+    } else {
+      await _changeTaskStatus(
+          id: id, newStatusId: newStatusId, newStatusType: newStatusType);
     }
   }
 
-  Future updateTaskStatus({int id, int newStatusId, int newStatusType}) async {
+  Future _changeTaskStatus({int id, int newStatusId, int newStatusType}) async {
     loaded.value = false;
     var t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
+
     if (t != null) {
       var newTask = PortalTask.fromJson(t);
       task.value = newTask;

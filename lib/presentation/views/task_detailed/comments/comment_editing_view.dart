@@ -53,19 +53,26 @@ class CommentEditingView extends StatelessWidget {
       itemController: itemController,
     ));
 
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: tr('taskEditing'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done_rounded),
-            onPressed: () async => controller.confirm(),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: CommentTextField(controller: controller),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leavePage();
+        return false;
+      },
+      child: Scaffold(
+        appBar: StyledAppBar(
+          titleText: tr('taskEditing'),
+          onLeadingPressed: controller.leavePage,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done_rounded),
+              onPressed: () async => controller.confirm(),
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: CommentTextField(controller: controller),
+        ),
       ),
     );
   }

@@ -77,7 +77,7 @@ class _TaskCellState extends State<TaskCell> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
-                onTap: () async => itemController.tryChangingStatus(context),
+                onTap: () async => itemController.openStatuses(context),
                 child: TaskStatus(itemController: itemController)),
             const SizedBox(width: 16),
             Expanded(
