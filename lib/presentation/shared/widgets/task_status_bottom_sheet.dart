@@ -53,7 +53,7 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await taskItemController.updateTaskStatus(
+                        await taskItemController.tryChangingStatus(
                             id: taskItemController.task.value.id,
                             newStatusId: _statusesController.statuses[i].id,
                             newStatusType:
