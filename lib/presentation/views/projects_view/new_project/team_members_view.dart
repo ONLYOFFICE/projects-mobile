@@ -99,7 +99,7 @@ class TeamMembersSelectionView extends StatelessWidget {
             );
           }
           if (usersDataSource.nothingFound.value == true) {
-            return const NothingFound();
+            return Column(children: [const NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&

@@ -194,8 +194,7 @@ class NewDiscussionController extends GetxController
   @override
   void setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
-    await _usersDataSource.getProfiles(needToClear: true);
-    _usersDataSource.withoutSelf = false;
+    await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
   }
 
   Future<void> _getSelectedSubscribers() async {
