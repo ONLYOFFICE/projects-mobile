@@ -69,7 +69,7 @@ class StyledAlertDialog extends StatelessWidget {
       contentPadding: contentText != null || content != null
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
           : const EdgeInsets.symmetric(horizontal: 24),
-      insetPadding: const EdgeInsets.all(0),
+      insetPadding: EdgeInsets.zero,
       actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       title: title ?? Text(titleText),
       content: content ?? contentText != null ? Text(contentText) : null,
@@ -122,7 +122,7 @@ class SingleButtonDialog extends StatelessWidget {
       contentPadding: contentText != null || content != null
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
           : const EdgeInsets.symmetric(horizontal: 24),
-      insetPadding: const EdgeInsets.all(0),
+      insetPadding: EdgeInsets.zero,
       actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       title: title ?? Text(titleText),
       // ignore: prefer_if_null_operators

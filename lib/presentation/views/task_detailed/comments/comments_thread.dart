@@ -61,7 +61,9 @@ class CommentsThread extends StatelessWidget {
       children: [
         for (var i = 0; i < visited.length; i++)
           Padding(
-            padding: padding[visited[i].paddingLevel],
+            padding: visited[i].comment.show
+                ? padding[visited[i].paddingLevel]
+                : EdgeInsets.zero,
             child: Comment(
               comment: visited[i].comment,
               taskId: taskId,
