@@ -67,7 +67,7 @@ class TagsSelectionView extends StatelessWidget {
             );
           } else if (controller.loaded.value == true &&
               controller.tags.isEmpty) {
-            return const NothingFound();
+            return Column(children: [const NothingFound()]);
           } else
             return const ListLoadingSkeleton();
         },

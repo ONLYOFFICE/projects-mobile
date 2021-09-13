@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-// TODO shared snackBar
 SnackBar styledSnackBar({
   @required BuildContext context,
   @required String text,

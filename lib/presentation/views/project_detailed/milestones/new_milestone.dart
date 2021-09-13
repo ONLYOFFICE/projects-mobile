@@ -540,7 +540,7 @@ class SelectProjectForMilestone extends StatelessWidget {
         if (_searchController.switchToSearchView.value == true &&
             _searchController.searchResult.isEmpty &&
             _searchController.loaded.value == true) {
-          return const NothingFound();
+          return Column(children: [const NothingFound()]);
         }
         if (_projectsController.loaded.value == true &&
             _searchController.switchToSearchView.value == false) {
