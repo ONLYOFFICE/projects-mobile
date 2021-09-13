@@ -74,7 +74,9 @@ class _CodeViewState extends State<CodeView> {
                 child: Column(
                   children: [
                     AppIcon(
+                      hasDarkVersion: true,
                       icon: PngIcons.code_light,
+                      darkThemeIcon: PngIcons.code_dark,
                       isPng: true,
                       height: 200,
                       width: 200,

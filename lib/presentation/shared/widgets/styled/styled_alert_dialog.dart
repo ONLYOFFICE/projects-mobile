@@ -72,7 +72,7 @@ class StyledAlertDialog extends StatelessWidget {
       insetPadding: const EdgeInsets.all(0),
       actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
       title: title ?? Text(titleText),
-      content: content ?? Text(contentText),
+      content: content ?? contentText != null ? Text(contentText) : null,
       actions: [
         TextButton(
           onPressed: onCancelTap ?? Get.back,

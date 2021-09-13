@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 
 class SvgIcons {
   SvgIcons._();
@@ -183,6 +184,7 @@ class PngIcons {
   static const String authentificator_s3 =
       'lib/assets/images/images/authentificator_s3.png';
   static const String code_light = 'lib/assets/images/images/code_light.png';
+  static const String code_dark = 'lib/assets/images/images/code_dark.png';
   static const String download_GA = 'lib/assets/images/images/download_GA.png';
 }
 
@@ -191,16 +193,27 @@ class AppIcon extends StatelessWidget {
   final double height;
   final double width;
   final String icon;
+  final String darkThemeIcon;
   final bool isPng;
+  final bool hasDarkVersion;
 
-  AppIcon(
-      {Key key,
-      @required this.icon,
-      this.color,
-      this.height,
-      this.width,
-      this.isPng = false})
-      : super(key: key);
+  AppIcon({
+    Key key,
+    @required this.icon,
+    this.color,
+    this.height,
+    this.width,
+    this.isPng = false,
+    this.hasDarkVersion = false,
+    this.darkThemeIcon,
+  }) : super(key: key);
+
+  String get iconToDisplay {
+    if (!hasDarkVersion) return icon;
+
+    if (Get.theme.brightness == Brightness.dark)
+      return darkThemeIcon ?? icon.replaceFirst('.', '_dark.');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +221,16 @@ class AppIcon extends StatelessWidget {
     // Therefore, there will be support for png icons as well
     return isPng
         ? Image(
-            image: AssetImage(icon), color: color, height: height, width: width)
-        : SvgPicture.asset(icon, color: color, height: height, width: width);
+            image: AssetImage(iconToDisplay),
+            color: color,
+            height: height,
+            width: width,
+          )
+        : SvgPicture.asset(
+            iconToDisplay,
+            color: color,
+            height: height,
+            width: width,
+          );
   }
 }
