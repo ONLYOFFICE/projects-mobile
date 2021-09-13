@@ -38,66 +38,73 @@ class ReplyCommentView extends StatelessWidget {
       );
     }
 
-    return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
-      appBar: StyledAppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leavePage();
+        return false;
+      },
+      child: Scaffold(
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
-        titleText: tr('newComment'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done_rounded),
-            onPressed: () => controller.addReplyComment(context),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        // controller: controller,
-        child: Column(
-          children: [
-            const SizedBox(height: 12),
-            Row(
-              children: [
-                const SizedBox(width: 16),
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: CustomNetworkImage(
-                      image: comment.userAvatarPath,
-                      fit: BoxFit.cover,
+        appBar: StyledAppBar(
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
+          titleText: tr('newComment'),
+          onLeadingPressed: controller.leavePage,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done_rounded),
+              onPressed: () => controller.addReplyComment(context),
+            )
+          ],
+        ),
+        body: SingleChildScrollView(
+          // controller: controller,
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  const SizedBox(width: 16),
+                  SizedBox(
+                    width: 40,
+                    height: 40,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: CustomNetworkImage(
+                        image: comment.userAvatarPath,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 16),
-                Flexible(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (comment.userFullName != null)
-                        Text(comment.userFullName,
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().onSurface)),
-                      Text(
-                        comment.commentBody,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.caption(),
-                      ),
-                    ],
+                  const SizedBox(width: 16),
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (comment.userFullName != null)
+                          Text(comment.userFullName,
+                              style: TextStyleHelper.subtitle1(
+                                  color: Get.theme.colors().onSurface)),
+                        Text(
+                          comment.commentBody,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.caption(),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 32),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: CommentTextField(controller: controller),
-            ),
-          ],
+                  const SizedBox(width: 32),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: CommentTextField(controller: controller),
+              ),
+            ],
+          ),
         ),
       ),
     );

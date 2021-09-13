@@ -15,27 +15,33 @@ class NewCommentView extends StatelessWidget {
     NewCommentController controller = Get.arguments['controller'];
     final platformController = Get.find<PlatformController>();
 
-    return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
-      appBar: StyledAppBar(
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leavePage();
+        return false;
+      },
+      child: Scaffold(
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
-        titleText: tr('newComment'),
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
-        onLeadingPressed: controller.leavePage,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done_rounded),
-            onPressed: () => controller.addComment(context),
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: CommentTextField(controller: controller),
+        appBar: StyledAppBar(
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
+          titleText: tr('newComment'),
+          backButtonIcon: Get.put(PlatformController()).isMobile
+              ? const Icon(Icons.arrow_back_rounded)
+              : const Icon(Icons.close),
+          onLeadingPressed: controller.leavePage,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done_rounded),
+              onPressed: () => controller.addComment(context),
+            ),
+          ],
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: CommentTextField(controller: controller),
+        ),
       ),
     );
   }

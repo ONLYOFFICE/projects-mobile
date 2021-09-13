@@ -25,60 +25,68 @@ class TaskEditingView extends StatelessWidget {
         Get.put(TaskEditingController(task: task), permanent: false);
 
     controller.init();
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: tr('editTask'),
-        onLeadingPressed: controller.discardChanges,
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.done_rounded),
-              onPressed: () => controller.confirm())
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16),
-            TaskTitle(
-                controller: controller, showCaption: true, focusOnTitle: false),
-            const SizedBox(height: 22),
-            Padding(
-              padding: const EdgeInsets.only(left: 72, right: 16),
-              child: OutlinedButton(
-                onPressed: () =>
-                    statusSelectionBS(context: context, controller: controller),
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.resolveWith<Color>((_) {
-                    return const Color(0xff81C4FF).withOpacity(0.1);
-                  }),
-                  side: MaterialStateProperty.resolveWith((_) {
-                    return const BorderSide(
-                        color: Colors.transparent, width: 1.5);
-                  }),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                        child: Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 8),
-                            child: Obx(() => Text(
-                                controller.newStatus.value.title,
-                                style: TextStyleHelper.subtitle2())))),
-                    const Icon(Icons.arrow_drop_down_sharp)
-                  ],
+    return WillPopScope(
+      onWillPop: () async {
+        controller.discardChanges();
+        return false;
+      },
+      child: Scaffold(
+        appBar: StyledAppBar(
+          titleText: tr('editTask'),
+          onLeadingPressed: controller.discardChanges,
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.done_rounded),
+                onPressed: () => controller.confirm())
+          ],
+        ),
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16),
+              TaskTitle(
+                  controller: controller,
+                  showCaption: true,
+                  focusOnTitle: false),
+              const SizedBox(height: 22),
+              Padding(
+                padding: const EdgeInsets.only(left: 72, right: 16),
+                child: OutlinedButton(
+                  onPressed: () => statusSelectionBS(
+                      context: context, controller: controller),
+                  style: ButtonStyle(
+                    backgroundColor:
+                        MaterialStateProperty.resolveWith<Color>((_) {
+                      return const Color(0xff81C4FF).withOpacity(0.1);
+                    }),
+                    side: MaterialStateProperty.resolveWith((_) {
+                      return const BorderSide(
+                          color: Colors.transparent, width: 1.5);
+                    }),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                          child: Padding(
+                              padding: const EdgeInsets.only(top: 8, bottom: 8),
+                              child: Obx(() => Text(
+                                  controller.newStatus.value.title,
+                                  style: TextStyleHelper.subtitle2())))),
+                      const Icon(Icons.arrow_drop_down_sharp)
+                    ],
+                  ),
                 ),
               ),
-            ),
-            DescriptionTile(controller: controller),
-            MilestoneTile(controller: controller),
-            StartDateTile(controller: controller),
-            DueDateTile(controller: controller),
-            PriorityTile(controller: controller),
-            ResponsibleTile(controller: controller, enableUnderline: false)
-          ],
+              DescriptionTile(controller: controller),
+              MilestoneTile(controller: controller),
+              StartDateTile(controller: controller),
+              DueDateTile(controller: controller),
+              PriorityTile(controller: controller),
+              ResponsibleTile(controller: controller, enableUnderline: false)
+            ],
+          ),
         ),
       ),
     );
