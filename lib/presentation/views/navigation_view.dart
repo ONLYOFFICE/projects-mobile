@@ -171,7 +171,8 @@ class TabletLayout extends StatelessWidget {
                               width: 40,
                               child: CircleAvatar(
                                 radius: 40.0,
-                                backgroundColor: Colors.white,
+                                backgroundColor:
+                                    Get.theme.colors().bgDescription,
                                 child: ClipOval(
                                   child: Obx(() {
                                     return navigationController

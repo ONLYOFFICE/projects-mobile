@@ -9,6 +9,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 
@@ -118,6 +119,7 @@ class _CommentAuthor extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: CustomNetworkImage(
               image: comment.userAvatarPath,
+              defaultImage: const DefaultAvatar(),
               fit: BoxFit.cover,
             ),
           ),

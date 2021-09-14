@@ -121,15 +121,16 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                             SizedBox(
                               height: 40,
                               width: 40,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: CustomNetworkImage(
-                                  image: usersDataSource
-                                          .usersList[index].portalUser.avatar ??
-                                      usersDataSource.usersList[index]
-                                          .portalUser.avatarMedium ??
-                                      usersDataSource.usersList[index]
-                                          .portalUser.avatarSmall,
+                              child: CircleAvatar(
+                                radius: 20.0,
+                                backgroundColor:
+                                    Get.theme.colors().bgDescription,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Obx(() {
+                                    return usersDataSource
+                                        .usersList[index].avatar.value;
+                                  }),
                                 ),
                               ),
                             ),
