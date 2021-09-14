@@ -34,6 +34,8 @@ class TaskEditingController extends GetxController
 
   TaskItemController _taskItemController;
 
+  int get selectedProjectId => task.projectOwner.id;
+
   @override
   RxString title;
   @override
