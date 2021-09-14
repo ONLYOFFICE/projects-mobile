@@ -49,6 +49,9 @@ class MilestonesDataSource extends GetxController {
   MilestonesSortController get sortController => _sortController;
   MilestonesFilterController get filterController => _filterController;
 
+  int get itemCount => paginationController.data.length;
+  RxList get itemList => paginationController.data;
+
   RxBool loaded = false.obs;
 
   var hasFilters = false.obs;
@@ -63,8 +66,6 @@ class MilestonesDataSource extends GetxController {
         () async => await _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
-
-  RxList get itemList => paginationController.data;
 
   Future loadMilestones() async {
     loaded.value = false;
