@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
+enum ProjectStatusCode { open, closed, paused }
+
 class ProjectStatus {
   static String toName(int status) {
     switch (status) {

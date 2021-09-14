@@ -549,6 +549,8 @@
 	"reloadDialogTitle": "Reload the app to apply the new theme",
 	"reload": "Reload",
 	"notNow": "Not now",
+
+	"cannotCloseProject": "Projects with active tasks cannot be closed!",
 	
 	"error": "Error"
 }

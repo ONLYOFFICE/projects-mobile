@@ -15,6 +15,7 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
@@ -154,15 +155,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return await _projectService.deleteProject(projectId: projectDetailed.id);
   }
 
-  Future updateStatus({int newStatusId}) async {
-    var t = await _projectService.updateProjectStatus(
-        projectId: projectDetailed.id,
-        newStatus: ProjectStatus.toLiteral(newStatusId));
-
-    if (t != null) {
-      projectDetailed.status = t.status;
-    }
-  }
+  Future<bool> updateStatus({int newStatusId}) async =>
+      Get.find<ProjectStatusesController>()
+          .updateStatus(newStatusId: newStatusId, projectData: projectDetailed);
 
   Future followProject() async {
     await _projectService.followProject(projectId: projectDetailed.id);
