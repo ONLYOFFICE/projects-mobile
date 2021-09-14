@@ -326,11 +326,12 @@ void showsStatusesBS({context, itemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await itemController.updateStatus(
+                        var success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
                         );
-                        locator<EventHub>().fire('needToRefreshProjects');
-
+                        if (success) {
+                          locator<EventHub>().fire('needToRefreshProjects');
+                        }
                         Get.back();
                       },
                       child: StatusTile(
