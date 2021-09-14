@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/users/user_search_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
