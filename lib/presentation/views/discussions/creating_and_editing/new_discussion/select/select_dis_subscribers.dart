@@ -8,7 +8,6 @@ import 'package:projects/domain/controllers/projects/new_project/users_data_sour
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
