@@ -28,7 +28,7 @@ class ProjectDiscussionsScreen extends StatelessWidget {
             child: StyledFloatingActionButton(
               onPressed: controller.toNewDiscussionScreen,
               child: AppIcon(
-                icon: SvgIcons.add_fab,
+                icon: SvgIcons.add_discussion,
                 color: Get.theme.colors().onPrimarySurface,
               ),
             ),

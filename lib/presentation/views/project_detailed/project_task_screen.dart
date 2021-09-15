@@ -47,7 +47,7 @@ class ProjectTaskScreen extends StatelessWidget {
                   const NewTaskView(),
                   arguments: {'projectDetailed': projectDetailed}),
               child: AppIcon(
-                icon: SvgIcons.fab_milestone,
+                icon: SvgIcons.add_fab,
                 color: Get.theme.colors().onPrimarySurface,
               ),
             ),
