@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -189,7 +190,10 @@ class NewMilestoneController extends GetxController {
 
     var success = await _api.createMilestone(
         projectId: _selectedProjectId, milestone: milestone);
-    if (success) Get.back();
+    if (success) {
+      locator<EventHub>().fire('needToRefreshProjects');
+      Get.back();
+    }
   }
 
   void discard() {
