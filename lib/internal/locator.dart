@@ -85,6 +85,7 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
@@ -234,4 +235,5 @@ void setupLocator() {
       tag: 'ProjectsView');
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
+  Get.create<ProjectDetailsController>(() => ProjectDetailsController());
 }

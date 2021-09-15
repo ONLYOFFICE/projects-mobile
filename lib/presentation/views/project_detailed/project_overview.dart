@@ -36,7 +36,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -46,18 +45,18 @@ import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:readmore/readmore.dart';
 
 class ProjectOverview extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailsController projectController;
   final TabController tabController;
 
   const ProjectOverview({
     Key key,
-    @required this.projectDetailed,
+    @required this.projectController,
     this.tabController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var projectController = Get.find<ProjectDetailsController>();
+    // var projectController = Get.find<ProjectDetailsController>();
 
     return Obx(
       () {

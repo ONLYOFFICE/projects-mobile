@@ -79,10 +79,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     discussionsController = Get.put(ProjectDiscussionsController(
         projectDetailed.id, projectDetailed.title));
 
-    projectController =
-        Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
-
-    projectController.setup();
+    projectController = Get.find<ProjectDetailsController>();
+    projectController.setup(Get.arguments['projectDetailed']);
 
     documentsController.setupFolder(
         folderName: projectDetailed.title,
@@ -158,7 +156,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         ),
         body: TabBarView(controller: _tabController, children: [
           ProjectOverview(
-              projectDetailed: projectDetailed, tabController: _tabController),
+              projectController: projectController,
+              tabController: _tabController),
           ProjectTaskScreen(projectDetailed: projectDetailed),
           ProjectMilestonesScreen(projectDetailed: projectDetailed),
           ProjectDiscussionsScreen(controller: discussionsController),
