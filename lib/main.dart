@@ -85,16 +85,33 @@ Future<String> _getInitPage() async {
   var storage = locator<SecureStorage>();
   var passcode = await storage.getString('passcode');
 
-  var loginController = Get.put(LoginController());
+  var _isLoggedIn = await isLoggedIn();
 
-  var isLoggedIn = await loginController.isLoggedIn;
-
-  if (passcode != null && isLoggedIn) return 'PasscodeScreen';
-  if (isLoggedIn) return 'NavigationView';
-  return 'PortalView';
+  if (passcode != null && _isLoggedIn) return 'PasscodeScreen';
+  if (_isLoggedIn) return 'NavigationView';
+  return 'PortalInputView';
 }
 
-class App extends StatelessWidget {
+Future<bool> isLoggedIn() async {
+  var _secureStorage = locator<SecureStorage>();
+  var expirationDate = await _secureStorage.getString('expires');
+  var token = await _secureStorage.getString('token');
+  var portalName = await _secureStorage.getString('portalName');
+
+  if (expirationDate == null ||
+      expirationDate.isEmpty ||
+      token == null ||
+      token.isEmpty ||
+      portalName == null ||
+      portalName.isEmpty) return false;
+
+  var expiration = DateTime.parse(expirationDate);
+  if (expiration.isBefore(DateTime.now())) return false;
+
+  return true;
+}
+
+class App extends GetMaterialApp {
   final String initialPage;
 
   App({Key key, this.initialPage}) : super(key: key);
