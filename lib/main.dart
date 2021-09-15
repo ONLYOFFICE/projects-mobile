@@ -37,13 +37,14 @@ void main() async {
 }
 
 List<Locale> supportedLocales() => [
-      const Locale('en'),
-      const Locale('ru'),
       const Locale('de'),
+      const Locale('en'),
+      const Locale('es'),
       const Locale('fr'),
       const Locale('it'),
-      const Locale('zh'),
       const Locale('pt_BR'),
+      const Locale('ru'),
+      const Locale('zh'),
     ];
 
 Future<String> _getInitPage() async {
