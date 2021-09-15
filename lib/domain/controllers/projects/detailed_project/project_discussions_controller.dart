@@ -32,10 +32,13 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/discussions_service.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
@@ -54,6 +57,10 @@ class ProjectDiscussionsController extends GetxController {
 
   RxBool loaded = false.obs;
 
+  final _userController = Get.find<UserController>();
+  var securityInfo = SecrityInfo();
+  var fabIsVisible = false.obs;
+
   ProjectDiscussionsController(this.projectId, this.projectTitle) {
     _sortController.updateSortDelegate =
         () async => await loadProjectDiscussions();
@@ -62,7 +69,18 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
+
+    _userController.getUserInfo().then((value) =>
+        locator<ProjectService>().getProjectSecurityinfo().then((value) => {
+              securityInfo = value,
+              fabIsVisible.value = canCreateMessage,
+            }));
   }
+
+  bool get canCreateMessage =>
+      _userController.user.isAdmin ||
+      _userController.user.isOwner ||
+      securityInfo.canCreateMessage;
 
   RxList get itemList => paginationController.data;
 

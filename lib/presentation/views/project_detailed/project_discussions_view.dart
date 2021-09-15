@@ -57,11 +57,16 @@ class ProjectDiscussionsScreen extends StatelessWidget {
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.only(right: 16, bottom: 24),
-            child: StyledFloatingActionButton(
-              onPressed: controller.toNewDiscussionScreen,
-              child: AppIcon(
-                icon: SvgIcons.add_discussion,
-                color: Get.theme.colors().onPrimarySurface,
+            child: Obx(
+              () => Visibility(
+                visible: controller.fabIsVisible.value,
+                child: StyledFloatingActionButton(
+                  onPressed: controller.toNewDiscussionScreen,
+                  child: AppIcon(
+                    icon: SvgIcons.add_discussion,
+                    color: Get.theme.colors().onPrimarySurface,
+                  ),
+                ),
               ),
             ),
           ),
