@@ -8,7 +8,6 @@ import 'package:projects/domain/controllers/projects/new_project/users_data_sour
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
@@ -121,15 +120,16 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                             SizedBox(
                               height: 40,
                               width: 40,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: CustomNetworkImage(
-                                  image: usersDataSource
-                                          .usersList[index].portalUser.avatar ??
-                                      usersDataSource.usersList[index]
-                                          .portalUser.avatarMedium ??
-                                      usersDataSource.usersList[index]
-                                          .portalUser.avatarSmall,
+                              child: CircleAvatar(
+                                radius: 20.0,
+                                backgroundColor:
+                                    Get.theme.colors().bgDescription,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Obx(() {
+                                    return usersDataSource
+                                        .usersList[index].avatar.value;
+                                  }),
                                 ),
                               ),
                             ),

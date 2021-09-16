@@ -8,6 +8,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class MoreView extends StatelessWidget {
   const MoreView({Key key}) : super(key: key);
@@ -55,6 +56,7 @@ class MoreView extends StatelessWidget {
                                   image: userController.user?.avatar ??
                                       userController.user?.avatarMedium ??
                                       userController.user?.avatarSmall,
+                                  defaultImage: const DefaultAvatar(),
                                 ),
                               ),
                             ),

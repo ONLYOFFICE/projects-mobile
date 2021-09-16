@@ -10,6 +10,7 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
@@ -101,11 +102,9 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = true;
   }
 
-  Future updateStatus({int newStatusId}) async {
-    _projectDetailed.status = newStatusId;
-    statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed.status)]);
-  }
+  Future<bool> updateStatus({int newStatusId}) async =>
+      Get.find<ProjectStatusesController>().updateStatus(
+          newStatusId: newStatusId, projectData: _projectDetailed);
 
   Future<void> confirmChanges() async {
     needToFillTitle.value = titleController.text.isEmpty;

@@ -9,6 +9,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_text_field.dart';
 
@@ -73,6 +74,7 @@ class ReplyCommentView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(20),
                       child: CustomNetworkImage(
                         image: comment.userAvatarPath,
+                        defaultImage: const DefaultAvatar(),
                         fit: BoxFit.cover,
                       ),
                     ),

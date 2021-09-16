@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
@@ -29,35 +28,18 @@ class PortalUserItem extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Obx(
-              () {
-                // TODO FIXME
-                // все фотки кроме своей черные
-                return userController.avatarData.value.isEmpty
-                    ? SizedBox(
-                        width: 72,
-                        child: AppIcon(
-                            width: 40,
-                            height: 40,
-                            icon: SvgIcons.avatar,
-                            color: Get.theme.colors().onSurface),
-                      )
-                    : SizedBox(
-                        width: 72,
-                        child: SizedBox(
-                          height: 40,
-                          width: 40,
-                          child: CircleAvatar(
-                            radius: 40.0,
-                            backgroundColor: Colors.white,
-                            child: ClipOval(
-                              child:
-                                  Image.memory(userController.avatarData.value),
-                            ),
-                          ),
-                        ),
-                      );
-              },
+            SizedBox(
+              width: 72,
+              child: CircleAvatar(
+                radius: 20.0,
+                backgroundColor: Get.theme.colors().bgDescription,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Obx(() {
+                    return userController.avatar.value;
+                  }),
+                ),
+              ),
             ),
             Expanded(
               child: Column(

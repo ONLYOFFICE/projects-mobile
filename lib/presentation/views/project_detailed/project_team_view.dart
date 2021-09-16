@@ -37,7 +37,7 @@ class ProjectTeamView extends StatelessWidget {
             child: StyledFloatingActionButton(
               onPressed: fabAction,
               child: AppIcon(
-                icon: SvgIcons.fab_milestone,
+                icon: SvgIcons.fab_user,
                 color: Get.theme.colors().onPrimarySurface,
               ),
             ),

@@ -42,13 +42,18 @@ class ProjectTaskScreen extends StatelessWidget {
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.only(right: 16, bottom: 24),
-            child: StyledFloatingActionButton(
-              onPressed: () => Get.find<NavigationController>().to(
-                  const NewTaskView(),
-                  arguments: {'projectDetailed': projectDetailed}),
-              child: AppIcon(
-                icon: SvgIcons.fab_milestone,
-                color: Get.theme.colors().onPrimarySurface,
+            child: Obx(
+              () => Visibility(
+                visible: controller.fabIsVisible.value,
+                child: StyledFloatingActionButton(
+                  onPressed: () => Get.find<NavigationController>().to(
+                      const NewTaskView(),
+                      arguments: {'projectDetailed': projectDetailed}),
+                  child: AppIcon(
+                    icon: SvgIcons.add_fab,
+                    color: Get.theme.colors().onPrimarySurface,
+                  ),
+                ),
               ),
             ),
           ),

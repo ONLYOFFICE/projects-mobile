@@ -9,14 +9,14 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
-class PortalView extends StatefulWidget {
-  PortalView({Key key}) : super(key: key);
+class PortalInputView extends StatefulWidget {
+  PortalInputView({Key key}) : super(key: key);
 
   @override
-  _PortalViewState createState() => _PortalViewState();
+  _PortalInputViewState createState() => _PortalInputViewState();
 }
 
-class _PortalViewState extends State<PortalView> {
+class _PortalInputViewState extends State<PortalInputView> {
   LoginController controller;
 
   @override
