@@ -49,7 +49,7 @@ class AppBarMenuButton extends StatelessWidget {
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
       // onSelected: (value) => _onSelected(value, controller),
-      onSelected: (value) => _onSelected(controller, value),
+      onSelected: (value) => _onSelected(context, controller, value),
       itemBuilder: (context) {
         return [
           if (controller.discussion.value.canEdit)
@@ -80,11 +80,18 @@ class AppBarMenuButton extends StatelessWidget {
   }
 }
 
-void _onSelected(DiscussionItemController controller, String value) async {
-  var actions = {
-    'Edit': controller.toDiscussionEditingScreen,
-    'Subscribe': controller.subscribeToMessageAction,
-    'Delete': controller.deleteMessage,
-  };
-  await actions[value]();
+void _onSelected(
+    context, DiscussionItemController controller, String value) async {
+  switch (value) {
+    case 'Edit':
+      await controller.toDiscussionEditingScreen();
+      break;
+    case 'Subscribe':
+      await controller.subscribeToMessageAction();
+      break;
+    case 'Delete':
+      await controller.deleteMessage(context);
+      break;
+    default:
+  }
 }

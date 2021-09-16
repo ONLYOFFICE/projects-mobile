@@ -38,6 +38,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -221,7 +222,11 @@ class NewMilestoneController extends GetxController {
 
     var success = await _api.createMilestone(
         projectId: _selectedProjectId, milestone: milestone);
-    if (success) Get.back();
+    if (success) {
+      MessagesHandler.showSnackBar(
+          context: context, text: tr('milestoneCreated'));
+      Get.back();
+    }
   }
 
   void discard() {

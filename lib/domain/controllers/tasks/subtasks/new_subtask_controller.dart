@@ -38,6 +38,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -46,7 +47,6 @@ import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.da
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
 class NewSubtaskController extends GetxController
@@ -186,7 +186,7 @@ class NewSubtaskController extends GetxController
         // ignore: unawaited_futures
         taskController.reloadTask();
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+        MessagesHandler.showSnackBar(
             context: context,
             text: tr('subtaskCreated'),
             buttonText: tr('open').toUpperCase(),
@@ -196,7 +196,7 @@ class NewSubtaskController extends GetxController
               return Get.find<NavigationController>().to(
                   const SubtaskDetailedView(),
                   arguments: {'controller': controller});
-            }));
+            });
       }
     }
   }

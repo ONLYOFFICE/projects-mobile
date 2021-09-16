@@ -41,6 +41,7 @@ import 'package:projects/domain/controllers/comments/item_controller/discussion_
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -154,7 +155,7 @@ class DiscussionItemController extends GetxController {
     }
   }
 
-  Future<void> deleteMessage() async {
+  Future<void> deleteMessage(context) async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
@@ -166,6 +167,8 @@ class DiscussionItemController extends GetxController {
           if (result != null) {
             Get.back();
             Get.back();
+            MessagesHandler.showSnackBar(
+                context: context, text: tr('discussionDeleted'));
             await Get.find<DiscussionsController>().loadDiscussions();
             //TODO refactoring needed
             try {

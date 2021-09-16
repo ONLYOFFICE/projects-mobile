@@ -41,6 +41,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -51,7 +52,6 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
 class NewTaskController extends GetxController
@@ -320,9 +320,7 @@ class NewTaskController extends GetxController
       // ignore: unawaited_futures
       tasksController.loadTasks();
       Get.back();
-      // ignore: unawaited_futures
-      tasksController.raiseFAB();
-      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+      MessagesHandler.showSnackBar(
           context: context,
           text: tr('taskCreated'),
           buttonText: tr('open').toUpperCase(),
@@ -331,7 +329,7 @@ class NewTaskController extends GetxController
                 tag: createdTask.id.toString());
             return Get.find<NavigationController>().to(TaskDetailedView(),
                 arguments: {'controller': itemController});
-          }));
+          });
 
       locator<EventHub>().fire('needToRefreshProjects');
     }

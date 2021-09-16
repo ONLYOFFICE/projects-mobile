@@ -99,8 +99,8 @@ class _Code extends StatelessWidget {
                 onTap: () {
                   Clipboard.setData(
                       ClipboardData(text: code.removeAllWhitespace));
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      styledSnackBar(context: context, text: tr('keyCopied')));
+                  MessagesHandler.showSnackBar(
+                      context: context, text: tr('keyCopied'));
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),

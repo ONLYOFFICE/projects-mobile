@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
@@ -186,7 +187,7 @@ class _ProjectContextMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (value) => _onSelected(value, controller),
+      onSelected: (value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
         return [
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
@@ -216,7 +217,7 @@ class _ProjectContextMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(value, controller) async {
+void _onSelected(value, controller, context) async {
   switch (value) {
     case 'copyLink':
       controller.copyLink();
@@ -242,9 +243,13 @@ void _onSelected(value, controller) async {
         onAcceptTap: () async {
           var result = await controller.deleteProject();
           if (result != null) {
+            Get.back();
+            Get.back();
+            MessagesHandler.showSnackBar(
+              context: context,
+              text: tr('projectDeleted'),
+            );
             locator<EventHub>().fire('needToRefreshProjects');
-            Get.back();
-            Get.back();
           } else {
             print('ERROR');
           }

@@ -38,10 +38,10 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
 class DiscussionCommentItemController extends GetxController
@@ -66,8 +66,7 @@ class DiscussionCommentItemController extends GetxController
 
     if (link != null) {
       await Clipboard.setData(ClipboardData(text: link));
-      ScaffoldMessenger.of(context).showSnackBar(
-          styledSnackBar(context: context, text: tr('linkCopied')));
+      MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
     }
   }
 
@@ -85,13 +84,11 @@ class DiscussionCommentItemController extends GetxController
           // ignore: unawaited_futures
           Get.find<DiscussionItemController>().onRefresh(showLoading: false);
           Get.back();
-          ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(
-              context: context,
-              text: tr('commentDeleted'),
-              buttonText: tr('confirm'),
-              buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
-            ),
+          MessagesHandler.showSnackBar(
+            context: context,
+            text: tr('commentDeleted'),
+            buttonText: tr('confirm'),
+            buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
           );
         }
       },

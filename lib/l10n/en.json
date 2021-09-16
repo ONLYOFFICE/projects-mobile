@@ -474,6 +474,7 @@
 	"cantEditSubtask": "You do not have permission to edit this subtask",
 	
 
+
 	"subtaskCreated": "Subtask has been created",
 	"projectStatus": "Project {}",
 	"discardMilestone": "Discard milestone?",
@@ -550,5 +551,12 @@
 	"reload": "Reload",
 	"notNow": "Not now",
 	
-	"error": "Error"
+	"error": "Error",
+
+	"projectCreated": "Project has been created",
+	"projectDeleted": "Project deleted",
+
+	"taskDeleted": "Task has been deleted",
+	"discussionDeleted": "Discussion has been deleted",
+	"milestoneCreated": "Milestone has been created"
 }

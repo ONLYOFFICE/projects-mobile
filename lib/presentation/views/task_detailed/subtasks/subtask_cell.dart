@@ -163,8 +163,10 @@ void _onSelected(context, value, SubtaskController controller) async {
       break;
     case 'delete':
       controller.deleteSubtask(
-          taskId: controller.subtask.value.taskId,
-          subtaskId: controller.subtask.value.id);
+        context: context,
+        taskId: controller.subtask.value.taskId,
+        subtaskId: controller.subtask.value.id,
+      );
       break;
     default:
   }
