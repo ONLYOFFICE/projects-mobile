@@ -43,6 +43,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 
@@ -96,7 +97,7 @@ class SelfProfileScreen extends StatelessWidget {
               const SizedBox(height: 32),
               CircleAvatar(
                 radius: 60.0,
-                backgroundColor: Colors.transparent,
+                backgroundColor: Get.theme.colors().bgDescription,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(60),
                   child: Obx(() {
@@ -170,6 +171,7 @@ class ProfileScreen extends StatelessWidget {
                     image: portalUser?.avatar ??
                         portalUser?.avatarMedium ??
                         portalUser?.avatarSmall,
+                    defaultImage: const DefaultAvatar(),
                     fit: BoxFit.contain,
                   ),
                 ),

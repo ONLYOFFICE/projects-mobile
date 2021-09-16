@@ -43,6 +43,11 @@ class UserController extends GetxController {
 
   Future getUserInfo() async {
     loaded.value = false;
+    if (user != null && user.id != null) {
+      loaded.value = true;
+      return;
+    }
+
     var data = await _api.getSelfInfo();
     user = data.response;
     loaded.value = true;

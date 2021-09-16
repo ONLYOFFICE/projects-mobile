@@ -171,6 +171,11 @@ abstract class  LocaleKeys {
   static const subscribers = 'subscribers';
   static const subscriber = 'subscriber';
   static const subscribersPlural = 'subscribersPlural';
+  static const filterConfirmButton = 'filterConfirmButton';
+  static const tasksFilterConfirm = 'tasksFilterConfirm';
+  static const projectsFilterConfirm = 'projectsFilterConfirm';
+  static const milestonesFilterConfirm = 'milestonesFilterConfirm';
+  static const documentsFilterConfirm = 'documentsFilterConfirm';
   static const addMembersOf = 'addMembersOf';
   static const creationDate = 'creationDate';
   static const createdBy = 'createdBy';
@@ -179,6 +184,7 @@ abstract class  LocaleKeys {
   static const overview = 'overview';
   static const deleteProject = 'deleteProject';
   static const deleteProjectAlert = 'deleteProjectAlert';
+  static const deleteTaskTitle = 'deleteTaskTitle';
   static const deleteTaskAlert = 'deleteTaskAlert';
   static const newMilestone = 'newMilestone';
   static const milestoneTitle = 'milestoneTitle';
@@ -192,11 +198,12 @@ abstract class  LocaleKeys {
   static const searchProjects = 'searchProjects';
   static const selectResponsible = 'selectResponsible';
   static const tasksSearch = 'tasksSearch';
+  static const discussionsSearch = 'discussionsSearch';
   static const editTask = 'editTask';
   static const followTask = 'followTask';
   static const unfollowTask = 'unfollowTask';
   static const copyTask = 'copyTask';
-  static const deleteTask = 'deleteTask';
+  static const deleteTaskButton = 'deleteTaskButton';
   static const nobody = 'nobody';
   static const acceptSubtask = 'acceptSubtask';
   static const copySubtask = 'copySubtask';
@@ -285,7 +292,6 @@ abstract class  LocaleKeys {
   static const search = 'search';
   static const sortBy = 'sortBy';
   static const enterQuery = 'enterQuery';
-  static const filterConfirmButton = 'filterConfirmButton';
   static const selectGroup = 'selectGroup';
   static const selectTag = 'selectTag';
   static const selectUser = 'selectUser';
@@ -309,7 +315,7 @@ abstract class  LocaleKeys {
   static const discussionCreated = 'discussionCreated';
   static const discardDiscussion = 'discardDiscussion';
   static const archived = 'archived';
-  static const deleteComment = 'deleteComment';
+  static const deleteCommentTitle = 'deleteCommentTitle';
   static const deleteCommentWarning = 'deleteCommentWarning';
   static const commentDeleted = 'commentDeleted';
   static const commentCreated = 'commentCreated';
@@ -322,6 +328,18 @@ abstract class  LocaleKeys {
   static const replyText = 'replyText';
   static const taskEditing = 'taskEditing';
   static const discussionText = 'discussionText';
+  static const editProject = 'editProject';
+  static const followUnfollowProject = 'followUnfollowProject';
+  static const addTag = 'addTag';
+  static const enterTag = 'enterTag';
+  static const noTasksCreated = 'noTasksCreated';
+  static const noTasksMatching = 'noTasksMatching';
+  static const noProjectsCreated = 'noProjectsCreated';
+  static const noProjectsMatching = 'noProjectsMatching';
+  static const noMilestonesCreated = 'noMilestonesCreated';
+  static const noMilestonesMatching = 'noMilestonesMatching';
+  static const noDocumentsCreated = 'noDocumentsCreated';
+  static const noDocumentsMatching = 'noDocumentsMatching';
   static const error = 'error';
 
 }

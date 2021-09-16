@@ -59,7 +59,7 @@ class ProfileController extends GetxController {
       onAcceptTap: () async {
         Get.back();
         await Get.put(LoginController()).logout();
-        await Get.offAllNamed('PortalView');
+        await Get.offAllNamed('PortalInputView');
       },
     ));
   }

@@ -80,6 +80,7 @@ class TasksOverviewScreen extends StatelessWidget {
                         colorClickableText: Colors.pink,
                         style: TextStyleHelper.body1,
                         trimMode: TrimMode.Line,
+                        delimiter: ' ',
                         trimCollapsedText: tr('showMore'),
                         trimExpandedText: tr('showLess'),
                         moreStyle: TextStyleHelper.body2(

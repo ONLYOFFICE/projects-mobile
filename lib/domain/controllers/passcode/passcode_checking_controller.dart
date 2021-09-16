@@ -148,7 +148,7 @@ class PasscodeCheckingController extends GetxController {
     }
 
     if (await loginController.isLoggedIn) return 'NavigationView';
-    return 'PortalView';
+    return 'PortalInputView';
   }
 
   Future<void> _getFingerprintAvailability() async {

@@ -42,10 +42,12 @@ class CustomNetworkImage extends StatelessWidget {
   final BoxFit fit;
   final double height;
   final double width;
+  final defaultImage;
 
   const CustomNetworkImage({
     Key key,
     @required this.image,
+    this.defaultImage,
     this.fit,
     this.height,
     this.width,
@@ -61,18 +63,21 @@ class CustomNetworkImage extends StatelessWidget {
               backgroundColor:
                   Get.theme.colors().bgDescription.withOpacity(0.4));
         return CachedNetworkImage(
-          imageUrl: ImagesController.getImagePath(image),
-          httpHeaders: snapshot.data,
-          fit: fit,
-          height: height,
-          width: width,
-          placeholder: (_, __) => CircleAvatar(
-              backgroundColor:
-                  Get.theme.colors().bgDescription.withOpacity(0.4)),
-          errorWidget: (_, __, ___) => CircleAvatar(
-              backgroundColor:
-                  Get.theme.colors().bgDescription.withOpacity(0.4)),
-        );
+            imageUrl: ImagesController.getImagePath(image),
+            httpHeaders: snapshot.data,
+            fit: fit,
+            height: height,
+            width: width,
+            placeholder: (_, __) =>
+                defaultImage ??
+                CircleAvatar(
+                    backgroundColor:
+                        Get.theme.colors().bgDescription.withOpacity(0.4)),
+            errorWidget: (_, __, ___) =>
+                defaultImage ??
+                CircleAvatar(
+                    backgroundColor:
+                        Get.theme.colors().bgDescription.withOpacity(0.4)));
       },
     );
   }

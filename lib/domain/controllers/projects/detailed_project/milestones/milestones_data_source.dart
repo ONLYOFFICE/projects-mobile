@@ -31,10 +31,13 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestonesDataSource extends GetxController {
@@ -58,6 +61,10 @@ class MilestonesDataSource extends GetxController {
 
   int _projectId;
 
+  final _userController = Get.find<UserController>();
+  var securityInfo = SecrityInfo();
+  var fabIsVisible = false.obs;
+
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => await loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
@@ -65,7 +72,18 @@ class MilestonesDataSource extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
+
+    _userController.getUserInfo().then((value) =>
+        locator<ProjectService>().getProjectSecurityinfo().then((value) => {
+              securityInfo = value,
+              fabIsVisible.value = canCreateMilestone,
+            }));
   }
+
+  bool get canCreateMilestone =>
+      _userController.user.isAdmin ||
+      _userController.user.isOwner ||
+      securityInfo.canCreateMilestone;
 
   Future loadMilestones() async {
     loaded.value = false;

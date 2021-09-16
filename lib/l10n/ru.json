@@ -1,83 +1,56 @@
 {
 	"appName": "ONLYOFFICE\nПроекты",
 	"appDescription": "Работайте с проектами на мобильных устройствах и управляйте задачами, где бы вы ни были",
-
 	"emailAddress": "Email-адрес",
 	"password": "Пароль",
 	"portalName": "Адрес портала",
 	"continueButton": "Продолжить",
 	"portalAdress": "Адрес портала",
 	"logOut": "Выйти",
-
 	"profile": "Профиль",
 	"email": "Email",
 	"forgotPassword": "Забыли пароль?",
-
 	"reset": "СБРОС",
 	"filter": "Фильтр",
-
 	"dashboard": "Главная",
-
 	"projects": "Проекты",
 	"project": "Проект",
-
 	"documents": "Документы",
 	"document": "Документ",
-
 	"milestones": "Вехи",
 	"milestone": "Веха",
-
 	"more": "Ещё",
 	"settings": "Настройки",
-
 	"tasks": "Задачи",
 	"task": "Задача",
-
 	"discussions": "Обсуждения",
 	"discussion": "Обсуждение",
-
 	"subtasks": "Подзадачи",
 	"subtask": "Подзадача",
-
 	"comments": "Комментарии",
 	"comment": "Комментарий",
-
 	"selectStatus": "Выбрать статус",
 	"usersSearch": "Поиск пользователей...",
-
 	"myTasks": "Мои задачи",
 	"upcomingTasks": "Ближайшие",
 	"myProjects": "Мои проекты",
 	"otherProjects": "Другие проекты",
-
 	"projectsIFolow": "Отслеживаемые проекты",
 	"activeProjects": "Активные проекты",
-
 	"dashboardNoActive": "Нет активных элементов {}",
-
 	"viewAll": "Показать все",
 	"viewLess": "Показать меньше",
-
-	"noEntityCreated": "Здесь ещё нет элементов {}",
-	"noEntityMatching": "Нет элементов {}, соответствующих этим фильтрам",
-
 	"total": "Всего {}",
 	"notFound": "Не найдено",
-
 	"open": "Открыть",
 	"copyLink": "Копировать ссылку",
 	"download": "Скачать",
 	"copy": "Копировать",
 	"move": "Переместить",
 	"rename": "Переименовать",
-
 	"delete": "Удалить",
-
 	"edit": "Редактировать",
-
-
 	"documentsCaption": "{} • документов:{} • подпапок:{}",
-
 	"confirm": "ПОДТВЕРДИТЬ",
 	"cancel": "ОТМЕНА",
 	"accept": "ПРИНЯТЬ",
@@ -85,96 +58,76 @@
 	"save": "СОХРАНИТЬ",
 	"next": "ДАЛЕЕ",
 	"back": "НАЗАД",
-
 	"linkCopied": "Ссылка скопирована в буфер обмена",
-
 	"renameFile": "Переименовать файл",
 	"enterFileName": "Введите имя файла",
 	"fileRenamed": "Файл переименован",
-
 	"renameFolder": "Переименовать папку",
 	"enterFolderName": "Введите имя папки",
 	"folderRenamed": "Папка переименована",
-
 	"moveFolderHere": "Переместить папку сюда",
 	"copyFolderHere": "Скопировать папку сюда",
 	"moveFileHere": "Переместить файл сюда",
 	"copyFileHere": "Скопировать файл сюда",
-
 	"folderMoved": "Папка перемещена",
 	"folderCopied": "Папка скопирована",
 	"folderDeleted": "Папка удалена",
-
 	"fileMoved": "Файл перемещен",
 	"fileCopied": "Файл скопирован",
 	"fileDeleted": "Файл удален",
-
 	"author": "Автор",
 	"me": "Я",
 	"users": "Пользователи",
 	"groups": "Группы",
-
 	"searchSettings": "Настройки поиска",
 	"inContent": "По содержимому",
 	"excludeSubfolders": "Без подпапок",
-
 	"type": "Тип",
 	"folders": "папки",
-
 	"presentations": "Презентации",
 	"spreadsheets": "Таблицы",
 	"images": "Изображения",
 	"media": "Мультимедиа",
 	"archives": "Архивы",
 	"allFiles": "Все файлы",
-
 	"other": "Другое",
 	"followed": "Отслеживаемые",
 	"withTag": "С тегом",
 	"withoutTag": "Без тегов",
 	"projectManager": "Менеджер проекта",
-
 	"otherUser": "Другой пользователь",
 	"status": "Статус",
 	"active": "Активные",
 	"paused": "Приостановленные",
 	"closed": "Закрытые",
 	"teamMember": "Участник команды",
-
 	"dueDate": "Крайний срок",
 	"overdue": "Просроченные",
 	"today": "Сегодняшние",
 	"upcoming": "Ближайшие",
 	"customPeriod": "Пользовательский период",
-
 	"creator": "Автор",
-
 	"selectDateRange": "Выбрать диапазон дат",
 	"invalidFormat": "Недопустимый формат.",
 	"outOfRange": "Вне диапазона.",
 	"invalidRange": "Недопустимый диапазон.",
 	"startDate": "Дата начала",
 	"endDate": "Дата окончания",
-
 	"description": "Описание",
 	"milestoneDescription": "Описание вехи",
-
 	"enterText": "Введите текст",
 	"addDescription": "Добавить описание",
 	"projectTitle": "Название проекта",
 	"choosePM": "Выбрать менеджера проекта",
 	"team": "Команда",
 	"addTeamMembers": "Добавить участников команды",
-
 	"showMore": "Показать больше",
 	"showLess": "Показать меньше",
-
 	"advancedOptions": "Дополнительные параметры",
 	"notifyPM": "Оповестить менеджера проекта по email",
 	"privateProject": "Сохранить этот проект как приватный",
 	"followProject": "Отслеживать этот проект",
 	"selectPM": "Выбрать менеджера проекта",
-
 	"person": {
 		"zero": "{} человек",
 		"one": "{} человек",
@@ -183,7 +136,6 @@
 		"many": "{} человек",
 		"other": "{} человек"
 	},
-
 	"members": {
 		"zero": "{} участников",
 		"one": "{} участник",
@@ -192,7 +144,6 @@
 		"many": "{} участников",
 		"other": "{} участников"
 	},
-
 	"responsible": "Ответственный",
 	"responsibles": {
 		"zero": "{} ответственных",
@@ -202,7 +153,6 @@
 		"many": "{} ответственных",
 		"other": "{} ответственных"
 	},
-
 	"usersSelected": {
 		"zero": "{} пользователей выбрано",
 		"one": "{} пользователь выбран",
@@ -211,7 +161,6 @@
 		"many": "{} пользователей выбрано",
 		"other": "{} пользователей выбрано"
 	},
-
 	"subscribers": "Подписчики",
 	"subscriber": "подписчик",
 	"subscribersPlural": {
@@ -222,10 +171,7 @@
 		"many": "{} подписчиков",
 		"other": "{} подписчиков"
 	},
-
 	"filterConfirmButton": "ПОКАЗАТЬ {} {}",
-	
-
 	"tasksFilterConfirm": {
 		"zero": "ПОКАЗАТЬ {} ЗАДАЧ",
 		"one": "ПОКАЗАТЬ {} ЗАДАЧУ",
@@ -234,7 +180,6 @@
 		"many": "ПОКАЗАТЬ {} ЗАДАЧ",
 		"other": "ПОКАЗАТЬ {} ЗАДАЧ"
 	},
-
 	"projectsFilterConfirm": {
 		"zero": "ПОКАЗАТЬ {} ПРОЕКТОВ",
 		"one": "ПОКАЗАТЬ {} ПРОЕКТ",
@@ -243,7 +188,6 @@
 		"many": "ПОКАЗАТЬ {} ПРОЕКТОВ",
 		"other": "ПОКАЗАТЬ {} ПРОЕКТОВ"
 	},
-
 	"milestonesFilterConfirm": {
 		"zero": "ПОКАЗАТЬ {} ВЕХ",
 		"one": "ПОКАЗАТЬ {} ВЕХУ",
@@ -252,7 +196,6 @@
 		"many": "ПОКАЗАТЬ {} ВЕХ",
 		"other": "ПОКАЗАТЬ {} ВЕХ"
 	},
-
 	"documentsFilterConfirm": {
 		"zero": "ПОКАЗАТЬ {} ДОКУМЕНТОВ",
 		"one": "ПОКАЗАТЬ {} ДОКУМЕНТ",
@@ -261,49 +204,37 @@
 		"many": "ПОКАЗАТЬ {} ДОКУМЕНТОВ",
 		"other": "ПОКАЗАТЬ {} ДОКУМЕНТОВ"
 	},
-
 	"addMembersOf": "Добавить участников",
 	"creationDate": "Дата создания",
 	"createdBy": "Кто создал",
 	"tags": "Теги",
 	"tag": "Тег",
-
 	"overview": "Обзор",
 	"deleteProject": "Удалить проект навсегда?",
 	"deleteProjectAlert": "Вы не сможете его восстановить.",
 	"deleteTaskTitle": "Удалить задачу навсегда?",
 	"deleteTaskAlert": "Вы не сможете её восстановить.",
-
 	"newMilestone": "Новая веха",
 	"milestoneTitle": "Название вехи",
 	"keyMilestone": "Ключевая веха",
 	"remindBeforeDue": "Напомнить мне за 48 часов до крайнего срока",
 	"selectProject": "Выбрать проект",
 	"assignedTo": "Кому назначена",
-
 	"addResponsible": "Добавить ответственного",
-
 	"noResponsible": "Без ответственного",
-
 	"setDueDate": "Задать крайний срок",
-
 	"searchProjects": "Поиск проектов...",
 	"selectResponsible": "Выбрать ответственного",
-
 	"tasksSearch": "Поиск задач",
 	"discussionsSearch": "Поиск обсуждений",
-
 	"editTask": "Редактировать задачу",
 	"followTask": "Отслеживать задачу",
 	"unfollowTask": "Не отслеживать задачу",
 	"copyTask": "Копировать задачу",
 	"deleteTaskButton": "Удалить задачу",
-
 	"nobody": "Без ответственного",
 	"acceptSubtask": "Принять подзадачу",
 	"copySubtask": "Копировать подзадачу",
-
-
 	"editSubtask": "Редактировать подзадачу",
 	"addSubtask": "Добавить подзадачу",
 	"describeSubtask": "Опишите подзадачу...",
@@ -313,13 +244,11 @@
 	"start_date": "Дата начала",
 	"title": "Название",
 	"sort_order": "Порядок",
-  	"dateandtime": "Дата последнего изменения",
-  	"AZ": "Название",
+	"dateandtime": "Дата последнего изменения",
+	"AZ": "Название",
 	"size": "Размер",
-
 	"high": "Высокий",
 	"normal": "Обычный",
-
 	"passcodeLock": "Код доступа",
 	"enabled": "Включен",
 	"disabled": "Отключен",
@@ -331,41 +260,29 @@
 	"aboutApp": "О приложении",
 	"lightTheme": "Светлая тема",
 	"darkTheme": "Темная тема",
-
 	"changePasscode": "Сменить код доступа",
 	"enablePasscode": "Включить код доступа",
 	"fingerprint": "Использовать отпечаток пальца для разблокировки",
 	"passcodeLockDescription": "Код, запрашиваемый при запуске приложения.\n\nЕсли вы забудете его, вам понадобится удалить и переустановить приложение.",
 	"enterPasscode": "Введите код доступа",
-
 	"passcodesNotMatch": "Коды доступа не совпадают",
 	"reEnterPasscode": "Введите код доступа еще раз",
-
 	"choosePasscode": "Выберите код доступа для разблокировки приложения",
-
 	"enterCurrentPasscode": "Введите текущий код доступа",
 	"incorrectPIN": "Введен неправильный PIN",
 	"enterNewPasscode": "Введите новый код доступа",
-
 	"taskDescription": "Описание задачи",
 	"newTask": "Новая задача",
-
 	"taskTitle": "Название задачи",
 	"setStartDate": "Задать дату начала",
-
 	"highPriority": "Высокий приоритет",
-
 	"notifyResponsible": "Оповестить ответственных",
 	"none": "Вне вехи",
 	"selectResponsibles": "Выбрать ответственных",
-
 	"searchUsers": "Поиск пользователей",
-
 	"selectMilestone": "Выбрать веху",
-
 	"selectDueDate": "Выбрать крайний срок",
 	"selectStartDate": "Выбрать дату начала",
-
 	"tfaTitle": "Двухфакторная\nаутентификация",
 	"tfaGAcodeDescription": "Скопируйте код, который сгенерировала программа Google Authenticator и вставьте в поле ввода",
 	"tfaCode": "Код",
@@ -375,83 +292,61 @@
 	"emailDescription": "Введите email-адрес, который вы указали при регистрации на портале.",
 	"authAppCodeDescription": "Введите 6-значный код, сгенерированный приложением.\nЕсли у вас нет доступа к телефону, вы можете использовать резервные коды.",
 	"code": "Код",
-
 	"proceed": "ПРОДОЛЖИТЬ",
 	"needHelp": "Нужна помощь?",
 	"passcodeToUnlock": "Введите код доступа для разблокировки приложения",
-
 	"install": "Установить",
 	"step1": "Шаг 1 из 4",
 	"step2": "Шаг 2 из 4",
 	"step3": "Шаг 3 из 4",
 	"step4": "Шаг 4 из 4",
-
 	"step1SetupText1": "Настройте приложение для генерации кодов входа",
 	"step1SetupText2": "Для продолжения работы на портале настройте приложение для генерации кодов входа, например, Google Authenticator.",
-
 	"step2SetupText1": "Запустите приложение Google Authenticator",
 	"step2SetupText2": "Запустите приложение\nи нажмите на иконку “Новый аккаунт”",
 	"step3SetupText1": "Добавьте секретный ключ",
 	"step3SetupText2": "Скопируйте ключ и вставьте в приложение Google Authenticator",
 	"step4SetupText1": "Скопируйте код и вставьте его ниже",
 	"step4SetupText2": "Скопируйте код, который сгенерировала программа Google Authenticator и вставьте в поле ввода",
-
 	"keyCopied": "Ключ скопирован в буфер обмена.",
-
 	"tfaSMSTitle": "Введите ваш номер телефона",
 	"tfaSMSCaption": "Вы получите SMS-код для включения двухфакторной аутентификации.",
 	"sendCode": "ОТПРАВИТЬ КОД",
 	"chooseCountry": "Выбрать страну",
-
 	"enterSendedCode": "Введите 6-значный код, отправленный на ",
 	"incorrectCode": "Неверный код, пожалуйста, повторите попытку.",
 	"requestNewCode": "Запросить новый код",
 	"selectCountry": "Выбрать страну",
 	"search": "Поиск..",
-
 	"sortBy": "Сортировать по",
 	"enterQuery": "Введите запрос",
-	
-
 	"selectGroup": "Выбрать группу",
-
 	"selectTag": "Выбрать тег",
 	"selectUser": "Выбрать пользователя",
-	
 	"logOutTitle": "Выити из ONLYOFFICE Проектов?",
-
 	"milestonesWithMyTasks": "Вехи с моими задачами",
 	"noMilestone": "Вне вех",
 	"otherMilestones": "Другие вехи",
 	"discardChanges": "Сбросить изменения?",
 	"changesWillBeLost": "Ваши изменения не сохранятся.",
 	"discard": "СБРОС",
-	
 	"lostOnLeaveWarning": "Если вы выйдете, все изменения будут потеряны.",
-	
 	"taskCreated": "Задача создана",
 	"discardTask": "Сбросить задачу?",
 	"subtaskAccepted": "Вы приняли подзадачу",
 	"subtaskCopied": "Подзадача скопирована",
 	"cantEditSubtask": "У вас нет прав на редактирование этой подзадачи",
-	
-
 	"subtaskCreated": "Подзадача создана",
 	"projectStatus": "Проект {}",
 	"discardMilestone": "Сбросить веху?",
 	"chooseSection": "Выбрать раздел",
 	"discussionCreated": "Обсуждение создано",
 	"discardDiscussion": "Сбросить обсуждение?",
-	
 	"archived": "Архивные",
-
 	"deleteCommentTitle": "Удалить комментарий навсегда?",
-	
 	"deleteCommentWarning": "Вы не сможете восстановить его.",
 	"commentDeleted": "Комментарий удален",
 	"commentCreated": "Комментарий создан",
-
-	
 	"newDiscussion": "Новое обсуждение",
 	"chooseProject": "Выбрать проект",
 	"addSubscribers": "Добавить подписчиков",
@@ -461,24 +356,16 @@
 	"replyText": "Текст ответа",
 	"taskEditing": "Редактирование задачи",
 	"discussionText": "Текст обсуждения",
-	"editProject":"Редактирование проекта",
-	"followUnfollowProject":"Отслеживать / Не отслеживать проект",
-    
-	
+	"editProject": "Редактирование проекта",
 	"addTag": "Добавить тег",
 	"enterTag": "Введите новый тег",
-
 	"noTasksCreated": "Здесь ещё нет задач",
 	"noTasksMatching": "Нет задач, соответствующих этим фильтрам",
-
 	"noProjectsCreated": "Здесь ещё нет проектов",
 	"noProjectsMatching": "Нет проектов, соответствующих этим фильтрам",
-
 	"noMilestonesCreated": "Здесь ещё нет вех",
 	"noMilestonesMatching": "Нет вех, соответствующих этим фильтрам",
-
 	"noDocumentsCreated": "Здесь ещё нет документов",
 	"noDocumentsMatching": "Нет документов, соответствующих этим фильтрам",
-	
 	"error": "Ошибка"
 }

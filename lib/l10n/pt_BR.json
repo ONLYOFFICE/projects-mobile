@@ -1,81 +1,56 @@
 {
 	"appName": "ONLYOFFICE\nProjects",
 	"appDescription": "Trabalhe com seus projetos em dispositivos móveis e gerencie suas tarefas",
-
 	"emailAddress": "Endereço de e-mail",
 	"password": "Senha",
 	"portalName": "Endereço do portal",
 	"continueButton": "Continue",
 	"portalAdress": "Endereço do portal",
 	"logOut": "Sair",
-
 	"profile": "Perfil",
 	"email": "Email",
 	"forgotPassword": "Esqueceu sua senha??",
-
 	"reset": "RESET",
 	"filter": "Filtro",
-
 	"dashboard": "Painel de controle",
-
 	"projects": "Projetos",
 	"project": "Projeto",
-
 	"documents": "Documentos",
 	"document": "Documento",
-
 	"milestones": "Marcos",
 	"milestone": "Marcos",
-
 	"more": "Mais",
 	"settings": "Configurações",
-
 	"tasks": "Tarefas",
 	"task": "Tarefa",
-
 	"discussions": "Discussões",
 	"discussion": "Discussão",
-
 	"subtasks": "Subtarefas",
 	"subtask": "Subtarefa",
-
 	"comments": "Comentários",
 	"comment": "Comentário",
-
 	"selectStatus": "Selecione o status",
 	"usersSearch": "Busca de usuários...",
-
 	"myTasks": "Minhas tarefas",
 	"upcomingTasks": "Próxima",
 	"myProjects": "Meus projetos",
 	"otherProjects": "Outros projetos",
-
 	"projectsIFolow": "Projetos que eu sigo",
 	"activeProjects": "Projetos ativos",
-
 	"dashboardNoActive": "Não há ativos {}",
-
 	"viewAll": "Ver tudo",
 	"viewLess": "Ver menos",
-
-
 	"total": "Total {}",
 	"notFound": "Não encontrado",
-
 	"open": "Aberto",
 	"copyLink": "Copiar link",
 	"download": "Baixar",
 	"copy": "Copiar",
 	"move": "Mover",
 	"rename": "Renomear",
-
 	"delete": "Excluir",
-
 	"edit": "Editar",
-
-
 	"documentsCaption": "{} • documentos:{} • subpastas:{}",
-
 	"confirm": "CONFIRMAR",
 	"cancel": "CANCELAR",
 	"accept": "ACEITAR",
@@ -83,96 +58,76 @@
 	"save": "SALVAR",
 	"next": "PRÓXIMO",
 	"back": "VOLTAR",
-
 	"linkCopied": "O link foi copiado para a prancheta",
-
 	"renameFile": "Renomear arquivo",
 	"enterFileName": "Digite o nome do arquivo",
 	"fileRenamed": "O arquivo foi renomeado",
-
 	"renameFolder": "Renomear pasta",
 	"enterFolderName": "Digite o nome da pasta",
 	"folderRenamed": "A pasta foi renomeada",
-
 	"moveFolderHere": "Mover pasta aqui",
 	"copyFolderHere": "Copiar pasta aqui",
 	"moveFileHere": "Mover arquivo aqui",
 	"copyFileHere": "Copiar arquivo aqui",
-
 	"folderMoved": "A pasta foi movida",
 	"folderCopied": "A pasta foi copiada",
 	"folderDeleted": "A pasta foi excluída",
-
 	"fileMoved": "A pasta foi movida",
 	"fileCopied": "A pasta foi copiada",
 	"fileDeleted": "A pasta foi excluída",
-
 	"author": "Autor",
 	"me": "Eu",
 	"users": "Usuários",
 	"groups": "Grupos",
-
 	"searchSettings": "Configurações de busca",
 	"inContent": "Em conteúdo",
 	"excludeSubfolders": "Excluir subpastas",
-
 	"type": "Tipo",
 	"folders": "pastas",
-
 	"presentations": "Apresentações",
 	"spreadsheets": "Planilhas",
 	"images": "Imagens",
 	"media": "Mídia",
 	"archives": "Arquivos",
 	"allFiles": "Todos os arquivos",
-
 	"other": "Outro",
 	"followed": "Seguiu-se",
 	"withTag": "Com etiqueta",
 	"withoutTag": "Sem etiqueta",
 	"projectManager": "Gerente de projeto",
-
 	"otherUser": "Outro usuário",
 	"status": "Status",
 	"active": "Ativo",
 	"paused": "Pausado",
 	"closed": "Fechado",
 	"teamMember": "Membro da equipe",
-
 	"dueDate": "Data de vencimento",
 	"overdue": "Vencido",
 	"today": "Hoje",
 	"upcoming": "Próxima",
 	"customPeriod": "Período personalizado",
-
 	"creator": "Criador",
-
 	"selectDateRange": "Selecione o intervalo de datas",
 	"invalidFormat": "Formato inválido.",
 	"outOfRange": "Fora de alcance.",
 	"invalidRange": "Faixa inválida.",
 	"startDate": "Data de início",
 	"endDate": "Data final",
-
 	"description": "Descrição",
 	"milestoneDescription": "Descrição do marco",
-
 	"enterText": "Digite seu texto aqui",
 	"addDescription": "Adicionar descrição",
 	"projectTitle": "Título do projeto",
 	"choosePM": "Escolha o gerente de projeto",
 	"team": "Equipe",
 	"addTeamMembers": "Adicionar membros",
-
 	"showMore": "Mostrar mais",
 	"showLess": "Mostrar menos",
-
 	"advancedOptions": "Opções avançadas",
 	"notifyPM": "Notificar o gerente de projeto por e-mail",
 	"privateProject": "Salvar este projeto como privado",
 	"followProject": "Acompanhe este projeto",
 	"selectPM": "Selecione o gerente de projeto",
-
 	"person": {
 		"zero": "{} pessoas",
 		"one": "{} pessoa",
@@ -181,7 +136,6 @@
 		"many": "{} pessoas",
 		"other": "{} pessoas"
 	},
-
 	"members": {
 		"zero": "{} membros",
 		"one": "{} membro",
@@ -190,7 +144,6 @@
 		"many": "{} membros",
 		"other": "{} membros"
 	},
-
 	"responsible": "Responsável",
 	"responsibles": {
 		"zero": "{} responsável",
@@ -200,7 +153,6 @@
 		"many": "{} responsável",
 		"other": "{} responsável"
 	},
-
 	"usersSelected": {
 		"zero": "{} usuários selecionados",
 		"one": "{} usuário selecionado",
@@ -209,7 +161,6 @@
 		"many": "{} usuários selecionados",
 		"other": "{} usuários selecionados"
 	},
-
 	"subscribers": "Assinantes",
 	"subscriber": "assinante",
 	"subscribersPlural": {
@@ -220,10 +171,7 @@
 		"many": "{} assinantes",
 		"other": "{} assinantes"
 	},
-
 	"filterConfirmButton": "MOSTRAR {} {}",
-	
-
 	"tasksFilterConfirm": {
 		"zero": "MOSTRAR {} TAREFAS",
 		"one": "MOSTRAR {} TAREFA",
@@ -232,7 +180,6 @@
 		"many": "MOSTRAR {} TAREFAS",
 		"other": "MOSTRAR {} TAREFAS"
 	},
-
 	"projectsFilterConfirm": {
 		"zero": "MOSTRE {} PROJETOS",
 		"one": "MOSTRE {} PROJETO",
@@ -241,7 +188,6 @@
 		"many": "MOSTRE {} PROJETOS",
 		"other": "MOSTRE {} PROJETOS"
 	},
-
 	"milestonesFilterConfirm": {
 		"zero": "MOSTRAR {} MARCOS",
 		"one": "MOSTRAR {} MARCOS",
@@ -250,7 +196,6 @@
 		"many": "MOSTRAR {} MARCOS",
 		"other": "MOSTRAR {} MARCOS"
 	},
-
 	"documentsFilterConfirm": {
 		"zero": "MOSTRAR {} DOCUMENTOS",
 		"one": "MOSTRAR {} DOCUMENTO",
@@ -259,49 +204,37 @@
 		"many": "MOSTRAR {} DOCUMENTOS",
 		"other": "MOSTRAR {} DOCUMENTOS"
 	},
-
 	"addMembersOf": "Adicionar membros de",
 	"creationDate": "Data de criação",
 	"createdBy": "Criado por",
 	"tags": "Etiquetas",
 	"tag": "Etiqueta",
-
 	"overview": "Visão geral",
 	"deleteProject": "Excluir projeto permanentemente?",
 	"deleteProjectAlert": "Você não será capaz de restaurá-lo.",
 	"deleteTaskTitle": "Excluir tarefa permanentemente?",
 	"deleteTaskAlert": "Você não será capaz de restaurá-lo.",
-
 	"newMilestone": "Novo marco",
 	"milestoneTitle": "Título do marco",
 	"keyMilestone": "Marco importante",
 	"remindBeforeDue": "Lembre-me 48 horas antes da data de vencimento",
 	"selectProject": "Selecione o projeto",
 	"assignedTo": "Atribuído a",
-
 	"addResponsible": "Adicionar responsável",
-
 	"noResponsible": "Não responsável",
-
 	"setDueDate": "Definir data de vencimento",
-
 	"searchProjects": "Pesquisa de projetos...",
 	"selectResponsible": "Selecione o responsável",
-
 	"tasksSearch": "Pesquisa de tarefas",
 	"discussionsSearch": "Pesquisa de discussões",
-
 	"editTask": "Editar tarefa",
 	"followTask": "Seguir tarefa",
 	"unfollowTask": "Deixar de seguir tarefa",
 	"copyTask": "Tarefa de cópia",
 	"deleteTaskButton": "Apagar tarefa",
-
 	"nobody": "Ninguém",
 	"acceptSubtask": "Aceitar subtarefa",
 	"copySubtask": "Copiar subtarefa",
-
-
 	"editSubtask": "Editar subtarefa",
 	"addSubtask": "Adicionar subtarefa",
 	"describeSubtask": "Descrever subtarefa...",
@@ -311,13 +244,11 @@
 	"start_date": "Data de início",
 	"title": "Título",
 	"sort_order": "Pedido",
-  	"dateandtime": "Data da última modificação",
-  	"AZ": "Título",
+	"dateandtime": "Data da última modificação",
+	"AZ": "Título",
 	"size": "Tamanho",
-
 	"high": "Alto",
 	"normal": "Normal",
-
 	"passcodeLock": "Bloqueio por Código",
 	"enabled": "Habilitado",
 	"disabled": "Desativado",
@@ -329,41 +260,29 @@
 	"aboutApp": "Sobre o app",
 	"lightTheme": "Tema claro",
 	"darkTheme": "Tema escuro",
-
 	"changePasscode": "Alterar senha",
 	"enablePasscode": "Habilitar senha",
 	"fingerprint": "Use a impressão digital para desbloquear",
 	"passcodeLockDescription": "Código a ser inserido ao iniciar o aplicativo.\n\nSe você esquecer, será necessário excluir e reinstalar o aplicativo.",
 	"enterPasscode": "Digite a senha",
-
 	"passcodesNotMatch": "As senhas não conferem",
 	"reEnterPasscode": "Digite a senha mais uma vez",
-
 	"choosePasscode": "Escolha a senha para desbloquear o aplicativo",
-
 	"enterCurrentPasscode": "Digite sua senha atual",
 	"incorrectPIN": "PIN incorreto inserido",
 	"enterNewPasscode": "Digite a nova senha",
-
 	"taskDescription": "Descrição da tarefa",
 	"newTask": "Nova tarefa",
-
 	"taskTitle": "Título da tarefa",
 	"setStartDate": "Definir data de início",
-
 	"highPriority": "Prioridade máxima",
-
 	"notifyResponsible": "Notificar usuários responsáveis",
 	"none": "None",
 	"selectResponsibles": "Selecione os usuários responsáveis",
-
 	"searchUsers": "Pesquisar usuários",
-
 	"selectMilestone": "Selecione o marco",
-
 	"selectDueDate": "Selecione a data de vencimento",
 	"selectStartDate": "Selecione a data de início",
-
 	"tfaTitle": "Autenticação \nde dois fatores",
 	"tfaGAcodeDescription": "Copie o código gerado pelo aplicativo Google Authenticator e insira-o no campo de entrada",
 	"tfaCode": "Código",
@@ -373,83 +292,61 @@
 	"emailDescription": "Por favor, insira o endereço de e-mail que você forneceu ao se registrar no portal.",
 	"authAppCodeDescription": "Insira o código de 6 dígitos gerado pelo aplicativo autenticador. \n\nSe você não tiver acesso ao seu telefone, poderá usar códigos de backup.",
 	"code": "Código",
-
 	"proceed": "CONTINUAR",
 	"needHelp": "Preciso de ajuda?",
 	"passcodeToUnlock": "Digite a senha para desbloquear o aplicativo",
-
 	"install": "Instalar",
 	"step1": "Etapa 1 de 4",
 	"step2": "Etapa 2 de 4",
 	"step3": "Etapa 3 de 4",
 	"step4": "Etapa 4 de 4",
-
 	"step1SetupText1": "Configure um aplicativo para gerar os códigos de autenticação",
 	"step1SetupText2": "Configure um aplicativo para gerar os códigos de acesso ao portal (por exemplo, Google Authenticator).",
-
 	"step2SetupText1": "Abra o aplicativo Google Authenticator",
 	"step2SetupText2": "Execute o aplicativo \ne toque no ícone “Nova conta”",
 	"step3SetupText1": "Adicione uma chave secreta",
 	"step3SetupText2": "Copie a chave e cole-a no Google Authenticator",
 	"step4SetupText1": "Copie o código e cole abaixo",
 	"step4SetupText2": "Copie o código gerado pelo aplicativo Google Authenticator e insira-o no campo de entrada",
-
 	"keyCopied": "Chave copiada para a área de transferência.",
-
 	"tfaSMSTitle": "Digite seu número de telefone",
 	"tfaSMSCaption": "Você receberá um código SMS para habilitar a autenticação de dois fatores.",
 	"sendCode": "ENVIAR CÓDIGO",
 	"chooseCountry": "Escolha o país",
-
 	"enterSendedCode": "Digite o código de 6 dígitos que enviamos para ",
 	"incorrectCode": "Código incorreto, por favor tente novamente.",
 	"requestNewCode": "Solicite um novo código",
 	"selectCountry": "Selecione o pais",
 	"search": "Procurar..",
-
 	"sortBy": "Ordenar por",
 	"enterQuery": "Insira sua consulta",
-	
-
 	"selectGroup": "Selecione o grupo",
-
 	"selectTag": "Selecione a etiqueta",
 	"selectUser": "Selecione o usuário",
-	
 	"logOutTitle": "Sair do ONLYOFFICE Projects?",
-
 	"milestonesWithMyTasks": "Marcos com minhas tarefas",
 	"noMilestone": "Sem marco",
 	"otherMilestones": "Outros marcos",
 	"discardChanges": "Descartar mudanças?",
 	"changesWillBeLost": "Suas alterações não serão salvas.",
 	"discard": "DESCARTAR",
-	
 	"lostOnLeaveWarning": "Se você sair, todas as alterações serão perdidas.",
-	
 	"taskCreated": "A tarefa foi criada",
 	"discardTask": "Descartar tarefa?",
 	"subtaskAccepted": "A subtarefa foi aceita por você",
 	"subtaskCopied": "A subtarefa foi copiada",
 	"cantEditSubtask": "Você não tem permissão para editar esta subtarefa",
-	
-
 	"subtaskCreated": "A subtarefa foi criada",
 	"projectStatus": "Projeto {}",
 	"discardMilestone": "Descartar marco?",
 	"chooseSection": "Escolha a seção",
 	"discussionCreated": "A discussão foi criada",
 	"discardDiscussion": "Descartar discussão?",
-	
 	"archived": "Arquivado",
-
 	"deleteCommentTitle": "Excluir o comentário permanentemente?",
-	
 	"deleteCommentWarning": "Você não será capaz de restaurá-lo.",
 	"commentDeleted": "O comentário foi excluido",
 	"commentCreated": "O comentário foi criado",
-
-	
 	"newDiscussion": "Nova discussão",
 	"chooseProject": "Escolha o projeto",
 	"addSubscribers": "Adicionar assinantes",
@@ -459,24 +356,16 @@
 	"replyText": "Texto de resposta",
 	"taskEditing": "Edição de tarefas",
 	"discussionText": "Texto de discussão",
-	"editProject":"Editar projeto",
-	"followUnfollowProject":"Seguir / Parar de seguir projeto",
-
-	
+	"editProject": "Editar projeto",
 	"addTag": "Adicionar etiqueta",
 	"enterTag": "Insira uma nova etiqueta",
-
 	"noTasksCreated": "Ainda não há tarefas aqui",
 	"noTasksMatching": "Não há tarefas que correspondam a esses filtros",
-
 	"noProjectsCreated": "Nenhum projeto aqui ainda",
 	"noProjectsMatching": "Não há projetos que correspondam a esses filtros",
-
 	"noMilestonesCreated": "Ainda não há marcos aqui",
 	"noMilestonesMatching": "Não há marcos que correspondam a esses filtros",
-
 	"noDocumentsCreated": "Nenhum documento aqui ainda",
 	"noDocumentsMatching": "Não há documentos que correspondam a esses filtros",
-	
 	"error": "Erro"
 }

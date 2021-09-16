@@ -175,6 +175,7 @@ class SvgIcons {
       'lib/assets/images/icons/empty_state/not_found_dark.svg';
 
   static const String fab_user = 'lib/assets/images/icons/fab_user.svg';
+  static const String group = 'lib/assets/images/icons/group.svg';
 }
 
 class PngIcons {
