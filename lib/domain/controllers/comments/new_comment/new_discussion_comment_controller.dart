@@ -6,9 +6,9 @@ import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 class NewDiscussionCommentController extends GetxController
     implements NewCommentController {
@@ -45,8 +45,8 @@ class NewDiscussionCommentController extends GetxController
         await discussionController.onRefresh(showLoading: false);
         discussionController.scrollToLastComment();
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context, text: tr('commentCreated'), buttonText: ''));
+        MessagesHandler.showSnackBar(
+            context: context, text: tr('commentCreated'));
       }
     }
   }
@@ -68,8 +68,8 @@ class NewDiscussionCommentController extends GetxController
         // ignore: unawaited_futures
         discussionController.onRefresh();
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context, text: tr('commentCreated'), buttonText: ''));
+        MessagesHandler.showSnackBar(
+            context: context, text: tr('commentCreated'));
       }
     }
   }

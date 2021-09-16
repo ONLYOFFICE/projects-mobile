@@ -27,9 +27,6 @@ class TasksController extends BaseController {
 
   RxBool loaded = false.obs;
 
-  // when snackbar appears
-  RxBool fabIsRaised = false.obs;
-
   var fabIsVisible = true.obs;
 
   TasksController(TaskFilterController filterController,
@@ -93,12 +90,6 @@ class TasksController extends BaseController {
 
     paginationController.data.addAll(result.response);
     expandedCardView.value = paginationController.data.isNotEmpty;
-  }
-
-  Future raiseFAB() async {
-    fabIsRaised.value = true;
-    await Future.delayed(const Duration(milliseconds: 4600));
-    fabIsRaised.value = false;
   }
 
   @override

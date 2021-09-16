@@ -173,6 +173,7 @@ void _onSelected(context, value, SubtaskController controller) {
       break;
     case 'delete':
       controller.deleteSubtask(
+        context: context,
         taskId: controller.subtask.value.taskId,
         subtaskId: controller.subtask.value.id,
         closePage: true,

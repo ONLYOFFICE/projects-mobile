@@ -4,10 +4,10 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();
@@ -33,12 +33,12 @@ class SubtaskController extends GetxController {
 
     if (result != null) {
       subtask.value = result;
-      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+      MessagesHandler.showSnackBar(
         context: context,
         text: tr('subtaskAccepted'),
         buttonText: tr('ok'),
         buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
-      ));
+      );
     }
   }
 
@@ -51,15 +51,13 @@ class SubtaskController extends GetxController {
     if (result != null) {
       var taskItemController =
           Get.find<TaskItemController>(tag: taskId.toString());
-      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-        context: context,
-        text: tr('subtaskCopied'),
-      ));
+      MessagesHandler.showSnackBar(context: context, text: tr('subtaskCopied'));
       await taskItemController.reloadTask();
     }
   }
 
   void deleteSubtask({
+    @required BuildContext context,
     @required int taskId,
     @required int subtaskId,
     bool closePage = false,
@@ -69,6 +67,7 @@ class SubtaskController extends GetxController {
       var taskItemController =
           Get.find<TaskItemController>(tag: taskId.toString());
       await taskItemController.reloadTask();
+      MessagesHandler.showSnackBar(context: context, text: 'Subtask deleted');
       if (closePage) Get.back();
     }
   }
@@ -93,10 +92,8 @@ class SubtaskController extends GetxController {
 
       if (result != null) subtask.value = result;
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-        context: context,
-        text: tr('cantEditSubtask'),
-      ));
+      MessagesHandler.showSnackBar(
+          context: context, text: tr('cantEditSubtask'));
     }
   }
 
