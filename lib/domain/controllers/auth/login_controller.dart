@@ -50,22 +50,9 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    setState(ViewState.Busy);
-
     _portalAdressController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    isTokenExpired().then(
-      (value) => {
-        _tokenExpired = value,
-        setState(ViewState.Idle),
-        if (!_tokenExpired)
-          {
-            clearInputFields(),
-            Get.offNamed('NavigationView'),
-          }
-      },
-    );
     super.onInit();
   }
 
