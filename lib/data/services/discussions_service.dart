@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:get/get.dart';
 import 'package:projects/data/api/discussions_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -73,7 +74,7 @@ class DiscussionsService {
     if (success) {
       return projects;
     } else {
-      await ErrorDialog.show(projects.error);
+      await Get.find<ErrorDialog>().show(projects.error.message);
       return null;
     }
   }
@@ -88,13 +89,16 @@ class DiscussionsService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }

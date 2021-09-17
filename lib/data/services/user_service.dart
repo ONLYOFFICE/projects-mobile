@@ -51,7 +51,7 @@ class UserService {
     if (success) {
       return profiles.response;
     } else {
-      await ErrorDialog.show(profiles.error);
+      await Get.find<ErrorDialog>().show(profiles.error.message);
       return null;
     }
   }
@@ -72,7 +72,7 @@ class UserService {
     if (success) {
       return profiles;
     } else {
-      await ErrorDialog.show(profiles.error);
+      await Get.find<ErrorDialog>().show(profiles.error.message);
       return null;
     }
   }

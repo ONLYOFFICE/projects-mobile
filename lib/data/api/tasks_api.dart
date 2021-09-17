@@ -50,12 +50,12 @@ class TaskApi {
 
     try {
       var response = await coreApi.postRequest(url, newTask.toJson());
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = PortalTask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -70,12 +70,12 @@ class TaskApi {
 
     try {
       var response = await coreApi.postRequest(url, task.toJson());
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = PortalTask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -89,12 +89,12 @@ class TaskApi {
 
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = PortalTask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -113,14 +113,14 @@ class TaskApi {
     var result = ApiDTO<List<Status>>();
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => Status.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -139,12 +139,12 @@ class TaskApi {
     Map responseJson;
     try {
       var response = await coreApi.putRequest(url, body: body);
-      responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -160,11 +160,12 @@ class TaskApi {
     Map responseJson;
     try {
       var response = await coreApi.deleteRequest(url);
-      responseJson = json.decode(response.body);
+
       if (response.statusCode == 200) {
+        responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -177,14 +178,14 @@ class TaskApi {
 
     var result = ApiDTO();
 
-    Map responseJson;
     try {
       var response = await coreApi.putRequest(url);
-      responseJson = json.decode(response.body);
+
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -249,9 +250,9 @@ class TaskApi {
     var result = PageDTO<List<PortalTask>>();
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        final Map responseJson = json.decode(response.body);
         result.total = responseJson['total'];
         {
           result.response = (responseJson['response'] as List)
@@ -259,7 +260,7 @@ class TaskApi {
               .toList();
         }
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -274,13 +275,13 @@ class TaskApi {
 
     try {
       var response = await coreApi.putRequest(url, body: newTask.toJson());
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        final Map responseJson = json.decode(response.body);
         print(PortalTask.fromJson(responseJson['response']));
         result.response = PortalTask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

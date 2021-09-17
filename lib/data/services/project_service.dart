@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
@@ -57,7 +58,7 @@ class ProjectService {
     if (success) {
       return projects.response;
     } else {
-      await ErrorDialog.show(projects.error);
+      await Get.find<ErrorDialog>().show(projects.error.message);
       return null;
     }
   }
@@ -88,7 +89,7 @@ class ProjectService {
     if (success) {
       return projects;
     } else {
-      await ErrorDialog.show(projects.error);
+      await Get.find<ErrorDialog>().show(projects.error.message);
       return null;
     }
   }
@@ -101,7 +102,7 @@ class ProjectService {
     if (success) {
       return projects.response;
     } else {
-      await ErrorDialog.show(projects.error);
+      await Get.find<ErrorDialog>().show(projects.error.message);
       return null;
     }
   }
@@ -114,7 +115,7 @@ class ProjectService {
     if (success) {
       return tags.response;
     } else {
-      await ErrorDialog.show(tags.error);
+      await Get.find<ErrorDialog>().show(tags.error.message);
       return null;
     }
   }
@@ -131,7 +132,7 @@ class ProjectService {
     if (success) {
       return tags;
     } else {
-      await ErrorDialog.show(tags.error);
+      await Get.find<ErrorDialog>().show(tags.error.message);
       return null;
     }
   }
@@ -144,7 +145,7 @@ class ProjectService {
     if (success) {
       return team.response;
     } else {
-      await ErrorDialog.show(team.error);
+      await Get.find<ErrorDialog>().show(team.error.message);
       return null;
     }
   }
@@ -156,13 +157,16 @@ class ProjectService {
     var success = team.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return team.response;
     } else {
-      await ErrorDialog.show(team.error);
+      await Get.find<ErrorDialog>().show(team.error.message);
       return null;
     }
   }
@@ -173,13 +177,16 @@ class ProjectService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return success;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return false;
     }
   }
@@ -190,13 +197,16 @@ class ProjectService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return success;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return false;
     }
   }
@@ -207,13 +217,16 @@ class ProjectService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return success;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return false;
     }
   }
@@ -226,13 +239,16 @@ class ProjectService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -243,13 +259,16 @@ class ProjectService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -260,13 +279,16 @@ class ProjectService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.project
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.project
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -279,7 +301,7 @@ class ProjectService {
     if (success) {
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
