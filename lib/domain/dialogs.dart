@@ -1,55 +1,52 @@
+import 'dart:collection';
+
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class ErrorDialog {
-  static Future<void> show(CustomError error) async {
+class ErrorDialog extends GetxController {
+  final queue = Queue<String>();
+
+  bool dialogIsShown = false;
+
+  Future<void> show(String message) async {
+    addToQueue(message);
+
+    await processQueue();
+  }
+
+  void hide() {
+    Get.back();
+  }
+
+  Future<void> processQueue() async {
+    if (queue.isEmpty) return;
+
+    if (dialogIsShown) {
+      return;
+    }
+
+    dialogIsShown = true;
+    var error = queue.first;
+
     await Get.dialog(SingleButtonDialog(
-      titleText: tr('error'),
-      contentText: '${error.message}',
-      acceptText: tr('ok'),
-      onAcceptTap: Get.back,
-    ));
+        titleText: tr('error'),
+        contentText: error,
+        acceptText: tr('ok'),
+        onAcceptTap: () => {
+              Get.back(),
+              dialogIsShown = false,
+              queue.removeFirst(),
+              processQueue(),
+            }));
   }
 
-  static void hide() {
-    Get.back();
-  }
-}
+  void addToQueue(String message) {
+    queue.add(message);
 
-class ConfirmDialog {
-  static void show({
-    String title,
-    String message,
-    String textConfirm,
-    String textCancel,
-    Function confirmFunction,
-    Function cancelFunction,
-  }) {
-    Get.defaultDialog(
-      title: title,
-      middleText: message,
-      textConfirm: textConfirm,
-      onConfirm: confirmFunction(),
-      onCancel: cancelFunction(),
-      barrierDismissible: false,
-      textCancel: textCancel,
-    );
-  }
+    var list = queue.toSet().toList();
 
-  static void hide() {
-    Get.back();
-  }
-}
-
-class ProgressDialog {
-  static void show(CustomError error) {
-    Get.dialog(const Center(child: CircularProgressIndicator()));
-  }
-
-  static void hide() {
-    Get.back();
+    queue.clear();
+    queue.addAll(list);
   }
 }

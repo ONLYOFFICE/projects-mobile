@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
@@ -17,7 +18,7 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      await ErrorDialog.show(files.error);
+      await Get.find<ErrorDialog>().show(files.error.message);
       return null;
     }
   }
@@ -47,7 +48,7 @@ class FilesService {
     if (success) {
       return files.response;
     } else {
-      await ErrorDialog.show(files.error);
+      await Get.find<ErrorDialog>().show(files.error.message);
       return null;
     }
   }
@@ -60,13 +61,15 @@ class FilesService {
     var success = files.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.folder
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.folder
       });
       return files.response;
     } else {
-      await ErrorDialog.show(files.error);
+      await Get.find<ErrorDialog>().show(files.error.message);
       return null;
     }
   }
@@ -78,13 +81,15 @@ class FilesService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.folder
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.folder
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -97,13 +102,15 @@ class FilesService {
     var success = files.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.file
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.file
       });
       return files.response;
     } else {
-      await ErrorDialog.show(files.error);
+      await Get.find<ErrorDialog>().show(files.error.message);
       return null;
     }
   }
@@ -115,13 +122,15 @@ class FilesService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.file
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.file
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -138,7 +147,7 @@ class FilesService {
     if (success) {
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -156,7 +165,7 @@ class FilesService {
     if (success) {
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }

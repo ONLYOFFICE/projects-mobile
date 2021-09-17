@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:projects/data/api/milestone_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
@@ -39,7 +40,7 @@ class MilestoneService {
     if (success) {
       return milestones.response;
     } else {
-      await ErrorDialog.show(milestones.error);
+      await Get.find<ErrorDialog>().show(milestones.error.message);
       return null;
     }
   }
@@ -72,7 +73,7 @@ class MilestoneService {
     if (success) {
       return milestones;
     } else {
-      await ErrorDialog.show(milestones.error);
+      await Get.find<ErrorDialog>().show(milestones.error.message);
       return null;
     }
   }
@@ -87,13 +88,16 @@ class MilestoneService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.milestone
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.milestone
       });
       return success;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return false;
     }
   }
