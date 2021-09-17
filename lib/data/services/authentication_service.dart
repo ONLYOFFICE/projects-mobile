@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -48,7 +49,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await ErrorDialog.show(authResponse.error);
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
     return authResponse;
   }
@@ -59,7 +60,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await ErrorDialog.show(authResponse.error);
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
     return authResponse;
   }
@@ -71,7 +72,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await ErrorDialog.show(authResponse.error);
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
     return authResponse;
   }
@@ -82,7 +83,7 @@ class AuthService {
     var success = response.response != null;
 
     if (!success) {
-      await ErrorDialog.show(response.error);
+      await Get.find<ErrorDialog>().show(response.error.message);
       return null;
     } else {
       return response;
@@ -95,7 +96,7 @@ class AuthService {
     var success = response.response != null;
 
     if (!success) {
-      await ErrorDialog.show(response.error);
+      await Get.find<ErrorDialog>().show(response.error.message);
       return null;
     } else {
       return response;

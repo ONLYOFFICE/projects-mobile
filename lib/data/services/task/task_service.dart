@@ -53,13 +53,15 @@ class TaskService {
     var success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.task
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -72,7 +74,7 @@ class TaskService {
     if (success) {
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -85,7 +87,7 @@ class TaskService {
     if (success) {
       return statuses.response;
     } else {
-      await ErrorDialog.show(statuses.error);
+      await Get.find<ErrorDialog>().show(statuses.error.message);
       return null;
     }
   }
@@ -122,7 +124,7 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      await ErrorDialog.show(projects.error);
+      await Get.find<ErrorDialog>().show(projects.error.message);
       return null;
     }
   }
@@ -157,7 +159,7 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      await ErrorDialog.show(projects.error);
+      await Get.find<ErrorDialog>().show(projects.error.message);
       return null;
     }
   }
@@ -168,13 +170,15 @@ class TaskService {
     var success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.task
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }

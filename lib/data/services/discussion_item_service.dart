@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:get/get.dart';
 import 'package:projects/data/api/discussions_api.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/analytics_service.dart';
@@ -48,7 +49,7 @@ class DiscussionItemService {
     if (success) {
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -58,13 +59,16 @@ class DiscussionItemService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -74,13 +78,16 @@ class DiscussionItemService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -90,13 +97,16 @@ class DiscussionItemService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -106,13 +116,16 @@ class DiscussionItemService {
     var success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal : await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity : AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }

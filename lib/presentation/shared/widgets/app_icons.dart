@@ -176,6 +176,11 @@ class SvgIcons {
 
   static const String fab_user = 'lib/assets/images/icons/fab_user.svg';
   static const String group = 'lib/assets/images/icons/group.svg';
+
+  static const String no_internet =
+      'lib/assets/images/icons/empty_state/no_internet.svg';
+  static const String no_internet_dark =
+      'lib/assets/images/icons/empty_state/no_internet_dark.svg';
 }
 
 class PngIcons {
@@ -187,6 +192,9 @@ class PngIcons {
   static const String code_light = 'lib/assets/images/images/code_light.png';
   static const String code_dark = 'lib/assets/images/images/code_dark.png';
   static const String download_GA = 'lib/assets/images/images/download_GA.png';
+
+  static const String splash = 'lib/assets/splash/splash-light.png';
+  static const String splash_dark = 'lib/assets/splash/splash-dark.png';
 }
 
 class AppIcon extends StatelessWidget {

@@ -35,7 +35,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
-import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
@@ -223,7 +222,7 @@ class TaskEditingController extends GetxController
   bool checkDate(DateTime startDate, DateTime dueDate) {
     if (startDate == null || dueDate == null) return true;
     if (startDate.isAfter(dueDate)) {
-      ErrorDialog.show(CustomError(message: tr('dateSelectionError')));
+      Get.find<ErrorDialog>().show(tr('dateSelectionError'));
       return false;
     }
     return true;

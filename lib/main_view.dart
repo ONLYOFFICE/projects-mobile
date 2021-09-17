@@ -30,38 +30,29 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
 
-import 'package:projects/presentation/views/authentication/widgets/login_service_button.dart';
+import 'package:projects/main_controller.dart';
 
-class LoginSources extends StatelessWidget {
-  final List<String> capabilities;
-  LoginSources({Key key, this.capabilities}) : super(key: key);
+import 'package:projects/presentation/views/no_internet_view.dart';
 
-  final LoginController controller = Get.find();
+class MainView extends StatelessWidget {
+  MainView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 90,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(child: getLoginServices()),
-        ],
-      ),
-    );
+    // var controller = Get.put(MainController(), permanent: true);
+    // Get.find()
+    return GetBuilder<MainController>(builder: (controller) {
+      controller.setupMainPage();
+      return Obx(() {
+        if (controller.noInternet.isTrue)
+          return const NoInternetScreen();
+        else
+          return controller.mainPage.value;
+      });
+    });
   }
-
-  Widget getLoginServices() => ListView.builder(
-        itemCount: capabilities.length,
-        itemBuilder: (context, index) => LoginItem(
-          serviceName: capabilities[index],
-          onTap: () {
-            controller.loginByProvider('${capabilities[index]}');
-          },
-        ),
-        scrollDirection: Axis.horizontal,
-      );
 }

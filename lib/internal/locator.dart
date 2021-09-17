@@ -69,6 +69,7 @@ import 'package:projects/data/services/task/subtasks_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/data/services/user_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
@@ -81,7 +82,9 @@ import 'package:projects/domain/controllers/documents/documents_sort_controller.
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/groups/groups_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
@@ -109,6 +112,8 @@ import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/main_controller.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -150,8 +155,6 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserApi());
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton(() => EventHub());
-
-  Get.lazyPut(() => PlatformController());
 
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
@@ -236,4 +239,12 @@ void setupLocator() {
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
   Get.create<ProjectDetailsController>(() => ProjectDetailsController());
+
+  Get.lazyPut(() => ErrorDialog(), fenix: true);
+  Get.lazyPut(() => MainController(), fenix: true);
+  Get.lazyPut(() => PasscodeCheckingController(canUseFingerprint: true),
+      fenix: true);
+  Get.lazyPut(() => LoginController(), fenix: true);
+  Get.lazyPut(() => NavigationController(), fenix: true);
+  Get.lazyPut(() => PlatformController(), fenix: true);
 }

@@ -38,7 +38,6 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:launch_review/launch_review.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/data/services/package_info_service.dart';
 import 'package:projects/data/services/settings_service.dart';
@@ -146,7 +145,7 @@ class SettingsController extends GetxController {
       await _storage.write('shareAnalytics', value);
       shareAnalytics.value = value;
     } catch (_) {
-      await ErrorDialog.show(CustomError(message: tr('error')));
+      await Get.find<ErrorDialog>().show(tr('error'));
     }
   }
 
