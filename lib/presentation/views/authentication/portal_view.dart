@@ -53,10 +53,11 @@ class _PortalInputViewState extends State<PortalInputView> {
 
   @override
   void initState() {
+    controller = Get.find<LoginController>();
     try {
-      Get.find<LoginController>().onClose();
+      controller.onClose();
     } catch (_) {}
-    controller = Get.put(LoginController(), permanent: true);
+
     super.initState();
   }
 

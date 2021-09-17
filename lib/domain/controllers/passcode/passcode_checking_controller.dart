@@ -30,12 +30,13 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/local_authentication_service.dart';
 import 'package:projects/data/services/passcode_service.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/main_view.dart';
 
 class PasscodeCheckingController extends GetxController {
   PasscodeCheckingController({this.canUseFingerprint = false});
@@ -70,8 +71,8 @@ class PasscodeCheckingController extends GetxController {
       if (!didAuthenticate) {
         await _getFingerprintAvailability();
       } else {
-        var nextPage = await _getNextPage();
-        await Get.offNamed(nextPage);
+        locator<EventHub>().fire('correctPasscodeChecked');
+        await Get.offAll(MainView());
       }
     } catch (_) {
       loaded.value = false;
@@ -83,12 +84,8 @@ class PasscodeCheckingController extends GetxController {
 
   void addNumberToPasscode(
     int number, {
-    String nextPage,
-    Map nextPageArguments,
     var onPass,
   }) async {
-    nextPage ??= await _getNextPage();
-
     if (passcodeCheckFailed.isTrue) passcodeCheckFailed.value = false;
 
     if (_enteredPasscode.length < 4) {
@@ -101,10 +98,12 @@ class PasscodeCheckingController extends GetxController {
         _handleIncorrectPinEntering();
       } else {
         _clear();
+
         if (onPass != null) {
           await onPass();
         } else {
-          await Get.offNamed(nextPage, arguments: nextPageArguments);
+          locator<EventHub>().fire('correctPasscodeChecked');
+          await Get.offAll(MainView());
         }
       }
     }
@@ -137,18 +136,6 @@ class PasscodeCheckingController extends GetxController {
   void leave() {
     _clear();
     Get.back();
-  }
-
-  Future<String> _getNextPage() async {
-    LoginController loginController;
-    try {
-      loginController = Get.find<LoginController>();
-    } catch (_) {
-      loginController = Get.put(LoginController());
-    }
-
-    if (await loginController.isLoggedIn) return 'NavigationView';
-    return 'PortalInputView';
   }
 
   Future<void> _getFingerprintAvailability() async {

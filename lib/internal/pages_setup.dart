@@ -31,6 +31,7 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
@@ -86,6 +87,7 @@ import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
+      GetPage(name: '/MainView', page: () => MainView()),
       GetPage(name: '/PortalInputView', page: () => PortalInputView()),
       GetPage(name: '/LoginView', page: () => LoginView()),
       GetPage(name: '/CodeView', page: () => CodeView()),
