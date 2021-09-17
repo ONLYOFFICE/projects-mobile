@@ -37,11 +37,13 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
@@ -66,7 +68,7 @@ class NewProjectController extends BaseProjectEditorController {
     ));
   }
 
-  Future<void> confirm() async {
+  Future<void> confirm(context) async {
     needToFillTitle.value = titleController.text.isEmpty;
 
     needToFillManager.value = (selectedProjectManager.value == null ||
@@ -98,9 +100,17 @@ class NewProjectController extends BaseProjectEditorController {
         notify: notificationEnabled.value,
         notifyResponsibles: responsiblesNotificationEnabled);
 
-    var success = await _api.createProject(project: newProject);
-    if (success) {
+    var result = await _api.createProject(project: newProject);
+    if (result != null) {
       locator<EventHub>().fire('needToRefreshProjects');
+
+      MessagesHandler.showSnackBar(
+        context: context,
+        text: tr('projectCreated'),
+        buttonOnTap: () => Get.find<NavigationController>()
+            .to(ProjectDetailedView(), arguments: {'projectDetailed': result}),
+        buttonText: tr('open').toUpperCase(),
+      );
       Get.back();
     }
   }

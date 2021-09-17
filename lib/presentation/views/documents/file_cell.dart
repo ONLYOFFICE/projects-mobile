@@ -36,13 +36,13 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class FileCell extends StatelessWidget {
@@ -197,8 +197,7 @@ void _onFilePopupMenuSelected(
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
-        ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: tr('linkCopied')));
+        MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
       }
       break;
     case 'open':
@@ -233,8 +232,7 @@ void _onFilePopupMenuSelected(
       var success = await controller.deleteFile(selectedFile);
 
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: tr('fileDeleted')));
+        MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
         Future.delayed(const Duration(milliseconds: 500),
             () => controller.refreshContent());
       }
@@ -270,8 +268,8 @@ void _renameFile(
           var success =
               await controller.renameFile(element, inputController.text);
           if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(
-                styledSnackBar(context: context, text: tr('fileRenamed')));
+            MessagesHandler.showSnackBar(
+                context: context, text: tr('fileRenamed'));
             Get.back();
             await controller.refreshContent();
           }

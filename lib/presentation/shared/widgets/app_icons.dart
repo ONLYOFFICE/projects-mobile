@@ -222,6 +222,7 @@ class AppIcon extends StatelessWidget {
 
     if (Get.theme.brightness == Brightness.dark)
       return darkThemeIcon ?? icon.replaceFirst('.', '_dark.');
+    return icon;
   }
 
   @override

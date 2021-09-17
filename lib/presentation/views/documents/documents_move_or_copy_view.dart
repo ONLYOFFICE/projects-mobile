@@ -32,13 +32,13 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -463,8 +463,7 @@ Future _moveFolder(
     Get.close(controller.foldersCount);
     if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: tr('folderMoved')));
+    MessagesHandler.showSnackBar(context: context, text: tr('folderMoved'));
   }
 }
 
@@ -478,8 +477,7 @@ Future _copyFolder(
     Get.close(controller.foldersCount);
     if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: tr('folderCopied')));
+    MessagesHandler.showSnackBar(context: context, text: tr('folderCopied'));
   }
 }
 
@@ -493,8 +491,7 @@ Future _moveFile(
     Get.close(controller.foldersCount);
     if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(styledSnackBar(context: context, text: tr('fileMoved')));
+    MessagesHandler.showSnackBar(context: context, text: tr('fileMoved'));
   }
 }
 
@@ -508,8 +505,7 @@ Future _copyFile(
     Get.close(controller.foldersCount);
     if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(styledSnackBar(context: context, text: tr('fileCopied')));
+    MessagesHandler.showSnackBar(context: context, text: tr('fileCopied'));
   }
 }
 

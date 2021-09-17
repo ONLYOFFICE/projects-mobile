@@ -38,13 +38,13 @@ import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 
@@ -262,8 +262,7 @@ void _onFolderPopupMenuSelected(
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
-        ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: tr('linkCopied')));
+        MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
       }
       break;
     case 'open':
@@ -303,8 +302,8 @@ void _onFolderPopupMenuSelected(
       var success = await controller.deleteFolder(selectedFolder);
 
       if (success) {
-        ScaffoldMessenger.of(context).showSnackBar(
-            styledSnackBar(context: context, text: tr('folderDeleted')));
+        MessagesHandler.showSnackBar(
+            context: context, text: tr('folderDeleted'));
         Future.delayed(const Duration(milliseconds: 500),
             () => controller.refreshContent());
       }
@@ -339,10 +338,8 @@ void _renameFolder(
           var success =
               await controller.renameFolder(element, inputController.text);
           if (success) {
-            ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-              context: context,
-              text: tr('folderRenamed'),
-            ));
+            MessagesHandler.showSnackBar(
+                context: context, text: tr('folderRenamed'));
             Get.back();
             await controller.refreshContent();
           }

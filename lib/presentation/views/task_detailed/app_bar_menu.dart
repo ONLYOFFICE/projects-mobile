@@ -42,7 +42,7 @@ class _AppBarMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (value) => _onSelected(value, controller),
+      onSelected: (value) => _onSelected(context, value, controller),
       itemBuilder: (context) {
         return [
           PopupMenuItem(
@@ -76,7 +76,7 @@ class _AppBarMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(value, TaskItemController controller) async {
+void _onSelected(context, value, TaskItemController controller) async {
   var task = controller.task.value;
   switch (value) {
     case 'copyLink':
@@ -113,6 +113,9 @@ void _onSelected(value, TaskItemController controller) async {
 
             Get.back();
             Get.back();
+
+            MessagesHandler.showSnackBar(
+                context: context, text: tr('taskDeleted'));
           } else {
             print('ERROR');
           }

@@ -237,11 +237,10 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<Map<String, dynamic>>> createProject(
-      {NewProjectDTO project}) async {
+  Future<ApiDTO<ProjectDetailed>> createProject({NewProjectDTO project}) async {
     var url = await coreApi.createProjectUrl();
 
-    var result = ApiDTO<Map<String, dynamic>>();
+    var result = ApiDTO<ProjectDetailed>();
     var body = project.toJson();
 
     try {
@@ -249,7 +248,7 @@ class ProjectApi {
 
       if (response.statusCode == 201) {
         var responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        result.response = ProjectDetailed.fromJson(responseJson['response']);
       } else {
         result.error = CustomError(message: response.reasonPhrase);
       }
