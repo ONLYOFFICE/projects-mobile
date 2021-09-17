@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -23,6 +25,12 @@ class NavigationController extends GetxController {
         PortalUserItemController(portalUser: _userController.user));
 
     super.onInit();
+  }
+
+  @override
+  void onClose() {
+    clearCurrentIndex();
+    super.onClose();
   }
 
   void showMoreView() {
@@ -104,12 +112,6 @@ class NavigationController extends GetxController {
     }
   }
 
-  @override
-  void onClose() {
-    clearCurrentIndex();
-    super.onClose();
-  }
-
   void off(Widget widget,
       {bool preventDuplicates, Map<String, dynamic> arguments}) {
     if (Get.find<PlatformController>().isMobile) {
@@ -127,22 +129,4 @@ class NavigationController extends GetxController {
       );
     }
   }
-
-  // void bottomSheet(Widget widget) {
-  //   if (Get.find<PlatformController>().isMobile) {
-  //     Get.bottomSheet(
-  //       widget,
-  //       isScrollControlled: true,
-  //     );
-  //   } else {
-  //     Get.to(() =>
-  //       FullscreenView(
-  //         contentView: widget,
-  //       ),
-  //       fullscreenDialog: false,
-  //       opaque: false,
-  //       transition: Transition.noTransition,
-  //     );
-  //   }
-  // }
 }

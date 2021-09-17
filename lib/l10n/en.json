@@ -428,5 +428,8 @@
 	"noCommentsCreated": "No comments found",
 	"noDiscussionsCreated": "No discussions have been started yet",
 	"noDiscussionsMatching": "There are no discussions matching these filters",
-	"error": "Error"
+	"error": "Error",
+	"noInternetConnectionTitle": "No internet connection",
+	"noInternetConnectionSubtitle": "Make sure Wi-Fi or mobile data is turned on and then try again",
+	"tryAgain": "TRY AGAIN"
 }

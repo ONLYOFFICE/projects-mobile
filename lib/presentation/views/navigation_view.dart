@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/main_view.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
@@ -43,11 +44,9 @@ class NavigationView extends StatelessWidget {
       const MoreView(),
     ];
 
-    Get.put(NavigationController(), permanent: false);
-
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        if (Get.put(PlatformController()).isMobile) {
+        if (Get.find<PlatformController>().isMobile) {
           const _iconSize = 24.0;
           return MobileLayout(
             controller: controller,
@@ -91,7 +90,7 @@ class TabletLayout extends StatelessWidget {
                       if (Get.routing.current != '/' &&
                           !Get.routing.current.contains('NavigationView'))
                         Get.to(
-                          () => NavigationView(),
+                          () => MainView(),
                           transition: Transition.noTransition,
                           preventDuplicates: false,
                         ),

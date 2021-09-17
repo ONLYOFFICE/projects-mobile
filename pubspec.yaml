@@ -84,6 +84,7 @@ dependencies:
   restart_app: ^1.0.3  
 
   event_hub: ^0.1.1
+  connectivity_plus: ^1.1.0
   
 dev_dependencies:
   flutter_test:
@@ -111,6 +112,7 @@ flutter:
     - lib/assets/images/icons/task_detailed/
     - lib/assets/images/icons/folders/
     - lib/assets/images/icons/empty_state/
+    - lib/assets/splash/
     - lib/l10n/
 
   # An image asset can refer to one or more resolution-specific "variants", see

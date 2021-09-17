@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
@@ -14,12 +15,12 @@ import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
-import 'package:projects/presentation/views/navigation_view.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -42,30 +43,16 @@ class LoginController extends GetxController {
   String _email;
   String _tfaKey;
 
-  bool _tokenExpired;
-
   String get portalAdress =>
       portalAdressController.text.replaceFirst('https://', '');
   String get tfaKey => _tfaKey;
 
   @override
   void onInit() {
-    setState(ViewState.Busy);
-
     _portalAdressController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    isTokenExpired().then(
-      (value) => {
-        _tokenExpired = value,
-        setState(ViewState.Idle),
-        if (!_tokenExpired)
-          {
-            clearInputFields(),
-            Get.offNamed('NavigationView'),
-          }
-      },
-    );
+
     super.onInit();
   }
 
@@ -93,7 +80,8 @@ class LoginController extends GetxController {
             AnalyticsService.Params.Key.portal:
                 await _secureStorage.getString('portalName')
           });
-          await Get.offAll(() => NavigationView()); //fix
+          locator<EventHub>().fire('loginSuccess');
+          await Get.offAll(() => MainView()); //fix
         } else {
           // if the device type has not been sent, the token must be deleted
           await logout();
@@ -175,7 +163,8 @@ class LoginController extends GetxController {
           AnalyticsService.Params.Key.portal:
               await _secureStorage.getString('portalName')
         });
-        await Get.offAllNamed('NavigationView');
+        locator<EventHub>().fire('loginSuccess');
+        await Get.offAllNamed('MainView');
         return true;
       } else {
         // if the device type has not been sent, the token must be deleted
@@ -188,34 +177,6 @@ class LoginController extends GetxController {
     }
 
     return false;
-  }
-
-  Future<void> loginByProvider(String provider) async {
-    switch (provider) {
-      case 'google':
-        // try {
-        //   var result = await _authService.signInWithGoogle();
-        // } catch (e) {debugPrint(e);}
-
-        break;
-      case 'facebook':
-      // var result = await _authenticationService.signInWithFacebook();
-      // break;
-      case 'twitter':
-      // var result = await _authenticationService.signInWithTwitter();
-      // break;
-      case 'linkedin':
-
-      case 'mailru':
-
-      case 'vk':
-
-      case 'yandex':
-
-      case 'gosuslugi':
-
-      default:
-    }
   }
 
   Future<void> getPortalCapabilities() async {
@@ -303,6 +264,7 @@ class LoginController extends GetxController {
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
 
+    locator<EventHub>().fire('logoutSuccess');
     Get.find<PortalInfoController>().logout();
     Get.find<NavigationController>().clearCurrentIndex();
   }
@@ -311,7 +273,6 @@ class LoginController extends GetxController {
   void onClose() {
     // clearInputFields();z
     _clearErrors();
-    _tokenExpired = null;
     super.onClose();
   }
 
