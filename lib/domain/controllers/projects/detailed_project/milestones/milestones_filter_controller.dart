@@ -74,6 +74,9 @@ class MilestonesFilterController extends BaseFilterController {
   RxMap status;
 
   @override
+  Future<void> restoreFilters() async => await _getSavedFilters();
+
+  @override
   String get filtersTitle =>
       plural('milestonesFilterConfirm', suitableResultCount.value);
 

@@ -69,6 +69,10 @@ class MilestoneFilterScreen extends StatelessWidget {
       backgroundColor:
           platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        onLeadingPressed: () {
+          filterController.restoreFilters();
+          Get.back();
+        },
         titleText: tr('filter'),
         showBackButton: true,
         backgroundColor:
