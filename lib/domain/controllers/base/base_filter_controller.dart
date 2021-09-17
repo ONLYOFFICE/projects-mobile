@@ -13,6 +13,7 @@ abstract class BaseFilterController extends GetxController {
 
   void saveFilters();
   void loadFilters();
+  Future restoreFilters();
 
   Map dateTimesToString(Map map) {
     map.forEach((key, value) {

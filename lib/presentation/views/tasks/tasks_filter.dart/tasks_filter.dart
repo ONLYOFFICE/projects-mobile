@@ -39,6 +39,10 @@ class TasksFilterScreen extends StatelessWidget {
       backgroundColor:
           platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        onLeadingPressed: () {
+          filterController.restoreFilters();
+          Get.back();
+        },
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('filter'),

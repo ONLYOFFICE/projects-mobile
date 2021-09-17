@@ -34,6 +34,10 @@ class ProjectsFilterScreen extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: tr('filter'),
         showBackButton: true,
+        onLeadingPressed: () {
+          filterController.restoreFilters();
+          Get.back();
+        },
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
