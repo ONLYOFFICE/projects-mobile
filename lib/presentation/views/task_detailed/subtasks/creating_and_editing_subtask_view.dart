@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_editing_controller.dart';
@@ -55,15 +54,13 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
     int projectId = Get.arguments['projectId'];
 
     if (forEditing) {
-      controller = Get.put(SubtaskEditingController());
-      Subtask subtask = Get.arguments['subtask'];
-
-      controller.init(subtask: subtask, projectId: projectId);
+      var itemController = Get.arguments['itemController'];
+      controller = Get.put(SubtaskEditingController(itemController));
+      controller.init(
+          subtask: itemController.subtask.value, projectId: projectId);
     } else {
       taskId = Get.arguments['taskId'];
-
       controller = Get.put(NewSubtaskController());
-
       controller.init(projectId: projectId);
     }
 

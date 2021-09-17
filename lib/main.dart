@@ -37,7 +37,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
 
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';

@@ -61,18 +61,14 @@ class TasksDashboardMoreView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
-      floatingActionButton: Obx(() => AnimatedPadding(
-          padding: EdgeInsets.only(
-              bottom: controller.fabIsRaised.value == true ? 48 : 0),
-          duration: const Duration(milliseconds: 100),
-          child: StyledFloatingActionButton(
-              onPressed: () => Get.find<NavigationController>().to(
-                  const NewTaskView(),
-                  arguments: {'projectDetailed': null}),
-              child: AppIcon(
-                icon: SvgIcons.add_fab,
-                color: Get.theme.colors().onPrimarySurface,
-              )))),
+      floatingActionButton: StyledFloatingActionButton(
+        onPressed: () => Get.find<NavigationController>()
+            .to(const NewTaskView(), arguments: {'projectDetailed': null}),
+        child: AppIcon(
+          icon: SvgIcons.add_fab,
+          color: Get.theme.colors().onPrimarySurface,
+        ),
+      ),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(

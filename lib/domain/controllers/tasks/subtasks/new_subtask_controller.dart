@@ -192,7 +192,7 @@ class NewSubtaskController extends GetxController
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
               var controller = Get.put(SubtaskController(subtask: newSubtask),
-                  tag: newSubtask.id.toString());
+                  tag: newSubtask.hashCode.toString());
               return Get.find<NavigationController>().to(
                   const SubtaskDetailedView(),
                   arguments: {'controller': controller});
