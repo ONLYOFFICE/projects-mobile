@@ -261,8 +261,11 @@ class NewMilestoneController extends GetxController {
   }
 
   void onDueDateTilePressed() {
-    Get.find<NavigationController>().to(const SelectDateView(),
-        arguments: {'controller': this, 'startDate': false});
+    Get.find<NavigationController>().to(const SelectDateView(), arguments: {
+      'controller': this,
+      'startDate': false,
+      'initialDate': _dueDate
+    });
   }
 
   void enableNotification(bool value) {

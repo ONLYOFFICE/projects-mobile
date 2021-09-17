@@ -66,7 +66,9 @@ class NewTaskController extends GetxController
 
   int get selectedProjectId => _selectedProjectId;
   int get selectedMilestoneId => newMilestoneId;
+  @override
   DateTime get startDate => _startDate;
+  @override
   DateTime get dueDate => _dueDate;
 
   @override

@@ -82,7 +82,6 @@ import 'package:projects/presentation/views/task_detailed/comments/reply_comment
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
-import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
@@ -110,7 +109,6 @@ List<GetPage> getxPages() => [
       GetPage(name: '/HomeView', page: () => const ProjectsView()),
       GetPage(name: '/NavigationView', page: () => NavigationView()),
       GetPage(name: '/TaskDetailedView', page: () => TaskDetailedView()),
-      GetPage(name: '/TaskEditingView', page: () => const TaskEditingView()),
       GetPage(
           name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),
       GetPage(name: '/NewTaskView', page: () => const NewTaskView()),

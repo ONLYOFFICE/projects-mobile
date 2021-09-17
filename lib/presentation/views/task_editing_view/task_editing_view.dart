@@ -47,16 +47,19 @@ import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
 import 'package:projects/presentation/views/task_editing_view/elements/status_selection_bottom_sheet.dart';
 
 class TaskEditingView extends StatelessWidget {
-  const TaskEditingView({Key key}) : super(key: key);
+  const TaskEditingView({
+    Key key,
+    @required this.task,
+  }) : super(key: key);
+
+  final PortalTask task;
 
   @override
   Widget build(BuildContext context) {
-    PortalTask task = Get.arguments['task'];
-
     var controller =
         Get.put(TaskEditingController(task: task), permanent: false);
 
-    controller.init();
+    // controller.init();
     return WillPopScope(
       onWillPop: () async {
         controller.discardChanges();
@@ -85,8 +88,15 @@ class TaskEditingView extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 72, right: 16),
                 child: OutlinedButton(
-                  onPressed: () => statusSelectionBS(
-                      context: context, controller: controller),
+                  onPressed: () async {
+                    FocusScope.of(context).unfocus();
+                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                      await statusSelectionBS(
+                        context: context,
+                        controller: controller,
+                      );
+                    });
+                  },
                   style: ButtonStyle(
                     backgroundColor:
                         MaterialStateProperty.resolveWith<Color>((_) {
