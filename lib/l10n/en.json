@@ -336,7 +336,6 @@
 	"subtaskAccepted": "Subtask has been accepted by you",
 	"subtaskCopied": "Subtask has been copied",
 	"cantEditSubtask": "You do not have permission to edit this subtask",
-	
 	"subtaskCreated": "Subtask has been created",
 	"projectStatus": "Project {}",
 	"discardMilestone": "Discard milestone?",
@@ -430,10 +429,11 @@
 	"noDiscussionsCreated": "No discussions have been started yet",
 	"noDiscussionsMatching": "There are no discussions matching these filters",
 	"error": "Error",
-
+	"noInternetConnectionTitle": "No internet connection",
+	"noInternetConnectionSubtitle": "Make sure Wi-Fi or mobile data is turned on and then try again",
+	"tryAgain": "TRY AGAIN",
 	"projectCreated": "Project has been created",
 	"projectDeleted": "Project deleted",
-
 	"taskDeleted": "Task has been deleted",
 	"discussionDeleted": "Discussion has been deleted",
 	"milestoneCreated": "Milestone has been created"

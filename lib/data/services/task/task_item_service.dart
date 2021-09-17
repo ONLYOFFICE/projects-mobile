@@ -22,7 +22,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -34,7 +34,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -55,7 +55,7 @@ class TaskItemService {
       });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -77,7 +77,7 @@ class TaskItemService {
       });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -95,7 +95,7 @@ class TaskItemService {
       });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }

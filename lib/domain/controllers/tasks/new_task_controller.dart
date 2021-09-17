@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/enums/user_selection_mode.dart';
-import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -253,7 +252,7 @@ class NewTaskController extends GetxController
   bool checkDate(DateTime startDate, DateTime dueDate) {
     if (startDate == null || dueDate == null) return true;
     if (startDate.isAfter(dueDate)) {
-      ErrorDialog.show(CustomError(message: tr('dateSelectionError')));
+      Get.find<ErrorDialog>().show(tr('dateSelectionError'));
       return false;
     }
     return true;

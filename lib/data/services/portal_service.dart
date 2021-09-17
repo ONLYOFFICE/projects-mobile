@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:projects/data/api/portal_api.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/domain/dialogs.dart';
@@ -16,7 +17,7 @@ class PortalService {
     if (success) {
       return capabilities.response;
     } else {
-      await ErrorDialog.show(capabilities.error);
+      await Get.find<ErrorDialog>().show(capabilities.error.message);
       return null;
     }
   }

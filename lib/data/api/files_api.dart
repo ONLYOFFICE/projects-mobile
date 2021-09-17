@@ -18,14 +18,14 @@ class FilesApi {
 
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalFile.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -80,9 +80,9 @@ class FilesApi {
 
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         if (entityType != null && entityType == 'task') {
           var taskFiles = (responseJson['response'] as List)
               .map((i) => PortalFile.fromJson(i))
@@ -93,7 +93,7 @@ class FilesApi {
         } else
           result.response = FoldersResponse.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -162,7 +162,7 @@ class FilesApi {
   //       } else
   //         result.response = FoldersResponse.fromJson(responseJson['response']);
   //     } else {
-  //       result.error = CustomError.fromJson(responseJson['error']);
+  //       result.error = CustomError(message: response.reasonPhrase);
   //     }
   //   } catch (e) {
   //     result.error = CustomError(message: e.toString());
@@ -180,12 +180,12 @@ class FilesApi {
 
     try {
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = Folder.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -203,12 +203,12 @@ class FilesApi {
 
     try {
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = PortalFile.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -223,12 +223,12 @@ class FilesApi {
 
     try {
       var response = await coreApi.deleteRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -243,12 +243,12 @@ class FilesApi {
 
     try {
       var response = await coreApi.deleteRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -281,13 +281,13 @@ class FilesApi {
 
     try {
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -320,13 +320,13 @@ class FilesApi {
 
     try {
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

@@ -64,6 +64,9 @@ class TaskFilterController extends BaseFilterController {
   }
 
   @override
+  Future<void> restoreFilters() async => await _getSavedFilters();
+
+  @override
   String get filtersTitle =>
       plural('tasksFilterConfirm', suitableResultCount.value);
 

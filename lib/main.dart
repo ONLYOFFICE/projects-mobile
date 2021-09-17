@@ -53,14 +53,14 @@ Future<String> _getInitPage() async {
   var storage = locator<SecureStorage>();
   var passcode = await storage.getString('passcode');
 
-  var _isLoggedIn = await isLoggedIn();
+  var _isLoggedIn = await isAuthorized();
 
   if (passcode != null && _isLoggedIn) return 'PasscodeScreen';
-  if (_isLoggedIn) return 'NavigationView';
-  return 'PortalInputView';
+
+  return 'MainView';
 }
 
-Future<bool> isLoggedIn() async {
+Future<bool> isAuthorized() async {
   var _secureStorage = locator<SecureStorage>();
   var expirationDate = await _secureStorage.getString('expires');
   var token = await _secureStorage.getString('token');

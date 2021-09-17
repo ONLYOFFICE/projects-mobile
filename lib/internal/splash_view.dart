@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class SplashView extends StatelessWidget {
@@ -6,13 +7,19 @@ class SplashView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var icon = Get.theme.brightness == Brightness.light
+        ? PngIcons.splash
+        : PngIcons.splash_dark;
+
     return Material(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppIcon(icon: SvgIcons.logo_big),
-          const SizedBox(height: 32),
-          AppIcon(icon: SvgIcons.title),
+          AppIcon(
+            icon: icon,
+            isPng: true,
+            height: 141,
+          ),
         ],
       ),
     );

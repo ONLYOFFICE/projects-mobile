@@ -26,8 +26,8 @@ class ProfileController extends GetxController {
       acceptColor: Get.theme.colors().primary,
       onAcceptTap: () async {
         Get.back();
-        await Get.put(LoginController()).logout();
-        await Get.offAllNamed('PortalInputView');
+        await Get.find<LoginController>().logout();
+        await Get.offAllNamed('MainView');
       },
     ));
   }

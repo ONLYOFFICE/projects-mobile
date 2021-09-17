@@ -54,12 +54,12 @@ class AuthApi {
     var result = ApiDTO<AuthToken>();
     try {
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -74,12 +74,12 @@ class AuthApi {
     var result = ApiDTO<PortalUser>();
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = PortalUser.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -94,12 +94,12 @@ class AuthApi {
     var result = ApiDTO();
     try {
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -114,12 +114,12 @@ class AuthApi {
     var result = ApiDTO();
     try {
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -137,12 +137,12 @@ class AuthApi {
 
     try {
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -164,12 +164,11 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      final Map responseJson = json.decode(response.body);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
