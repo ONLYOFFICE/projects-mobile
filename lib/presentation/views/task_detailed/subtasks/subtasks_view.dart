@@ -49,7 +49,9 @@ class SubtasksView extends StatelessWidget {
                     },
                   ),
                 ),
-              if (controller?.task?.value?.canCreateSubtask) _FAB(task: _task),
+              if (controller?.task?.value?.canCreateSubtask == true &&
+                  controller?.task?.value?.status != 2)
+                _FAB(task: _task),
             ],
           );
         } else {

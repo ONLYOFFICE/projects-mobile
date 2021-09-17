@@ -23,38 +23,41 @@ class SubtaskDetailedView extends StatelessWidget {
         return Scaffold(
           appBar: StyledAppBar(
             actions: [
-              PopupMenuButton(
-                icon: const Icon(Icons.more_vert, size: 26),
-                offset: const Offset(0, 25),
-                onSelected: (value) => _onSelected(context, value, controller),
-                itemBuilder: (context) {
-                  return [
-                    if (_subtask.canEdit && _subtask.responsible == null)
-                      PopupMenuItem(
-                        value: 'accept',
-                        child: Text(tr('accept')),
-                      ),
-                    if (_subtask.canEdit)
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Text(tr('edit')),
-                      ),
-                    PopupMenuItem(
-                      value: 'copy',
-                      child: Text(tr('copy')),
-                    ),
-                    if (_subtask.canEdit)
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Text(
-                          tr('delete'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().colorError),
+              if (_subtask.canEdit || controller.canCreateSubtask)
+                PopupMenuButton(
+                  icon: const Icon(Icons.more_vert, size: 26),
+                  offset: const Offset(0, 25),
+                  onSelected: (value) =>
+                      _onSelected(context, value, controller),
+                  itemBuilder: (context) {
+                    return [
+                      if (controller.canEdit && _subtask.responsible == null)
+                        PopupMenuItem(
+                          value: 'accept',
+                          child: Text(tr('accept')),
                         ),
-                      ),
-                  ];
-                },
-              )
+                      if (controller.canEdit)
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Text(tr('edit')),
+                        ),
+                      if (controller.canCreateSubtask)
+                        PopupMenuItem(
+                          value: 'copy',
+                          child: Text(tr('copy')),
+                        ),
+                      if (_subtask.canEdit)
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text(
+                            tr('delete'),
+                            style: TextStyleHelper.subtitle1(
+                                color: Get.theme.colors().colorError),
+                          ),
+                        ),
+                    ];
+                  },
+                )
             ],
           ),
           body: SingleChildScrollView(
@@ -161,7 +164,7 @@ void _onSelected(context, value, SubtaskController controller) {
         'taskId': controller.subtask.value.taskId,
         'projectId': controller.parentTask.projectOwner.id,
         'forEditing': true,
-        'subtask': controller.subtask.value,
+        'itemController': controller,
       });
       break;
     case 'copy':

@@ -20,8 +20,9 @@ class SubtaskCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var subtaskController = Get.put(
-        SubtaskController(subtask: subtask, parentTask: parentTask),
-        tag: subtask.id.toString());
+      SubtaskController(subtask: subtask, parentTask: parentTask),
+      tag: subtask.hashCode.toString(),
+    );
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
@@ -78,32 +79,37 @@ class SubtaskCell extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: 52,
-                    child: PopupMenuButton(
-                      onSelected: (value) =>
-                          _onSelected(context, value, subtaskController),
-                      itemBuilder: (context) {
-                        return [
-                          if (subtask.canEdit && subtask.responsible == null)
-                            PopupMenuItem(
-                                value: 'acceptSubtask',
-                                child: Text(tr('acceptSubtask'),
-                                    style: TextStyleHelper.subtitle1())),
-                          PopupMenuItem(
-                              value: 'copySubtask',
-                              child: Text(tr('copySubtask'),
-                                  style: TextStyleHelper.subtitle1())),
-                          if (subtask.canEdit)
-                            PopupMenuItem(
-                                value: 'delete',
-                                child: Text(tr('delete'),
-                                    style: TextStyleHelper.subtitle1(
-                                        color: Get.theme.colors().colorError))),
-                        ];
-                      },
+                  if (subtaskController.subtask.value.canEdit ||
+                      subtaskController.canCreateSubtask)
+                    SizedBox(
+                      width: 52,
+                      child: PopupMenuButton(
+                        onSelected: (value) =>
+                            _onSelected(context, value, subtaskController),
+                        itemBuilder: (context) {
+                          return [
+                            if (subtaskController.canEdit &&
+                                subtask.responsible == null)
+                              PopupMenuItem(
+                                  value: 'acceptSubtask',
+                                  child: Text(tr('acceptSubtask'),
+                                      style: TextStyleHelper.subtitle1())),
+                            if (subtaskController.canCreateSubtask)
+                              PopupMenuItem(
+                                  value: 'copySubtask',
+                                  child: Text(tr('copySubtask'),
+                                      style: TextStyleHelper.subtitle1())),
+                            if (subtask.canEdit)
+                              PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(tr('delete'),
+                                      style: TextStyleHelper.subtitle1(
+                                          color:
+                                              Get.theme.colors().colorError))),
+                          ];
+                        },
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),

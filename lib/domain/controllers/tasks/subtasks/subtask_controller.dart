@@ -19,6 +19,10 @@ class SubtaskController extends GetxController {
     this.subtask = subtask.obs;
   }
 
+  bool get canEdit => subtask.value.canEdit && parentTask.status != 2;
+  bool get canCreateSubtask =>
+      parentTask.canCreateSubtask && parentTask.status != 2;
+
   void acceptSubtask(
     context, {
     @required int taskId,
