@@ -139,12 +139,10 @@ class ProjectService {
     }
   }
 
-  Future<bool> createProject({NewProjectDTO project}) async {
+  Future createProject({NewProjectDTO project}) async {
     var result = await _api.createProject(project: project);
 
-    var success = result.response != null;
-
-    if (success) {
+    if (result.response != null) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.createEntity, {
         AnalyticsService.Params.Key.portal:
@@ -152,10 +150,10 @@ class ProjectService {
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.project
       });
-      return success;
+
+      return result.response;
     } else {
       await Get.find<ErrorDialog>().show(result.error.message);
-      return false;
     }
   }
 

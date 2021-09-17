@@ -12,6 +12,7 @@ import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
@@ -19,7 +20,6 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class NewDiscussionController extends GetxController
@@ -269,14 +269,14 @@ class NewDiscussionController extends GetxController
 
         Get.back();
         // ignore: unawaited_futures
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+        MessagesHandler.showSnackBar(
             context: context,
             text: tr('discussionCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
               return Get.find<NavigationController>().to(DiscussionDetailed(),
                   arguments: {'discussion': createdDiss});
-            }));
+            });
       }
     }
   }

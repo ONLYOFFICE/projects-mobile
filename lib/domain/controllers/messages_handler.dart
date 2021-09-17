@@ -1,12 +1,56 @@
+import 'dart:collection';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-SnackBar styledSnackBar({
+class MessagesHandler {
+  static String _lastMessage;
+
+  static var isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen);
+
+  static final Queue _a = Queue();
+
+  static void showSnackBar({
+    @required BuildContext context,
+    @required String text,
+    bool showOkButton = false,
+    String buttonText,
+    Function buttonOnTap,
+  }) async {
+    isDisplayed.value = true;
+
+    if (text == _lastMessage) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    }
+
+    _a.addLast(text);
+
+    await ScaffoldMessenger.of(context)
+        .showSnackBar(
+          _styledSnackBar(
+            context: context,
+            text: text,
+            showOkButton: showOkButton,
+            buttonText: buttonText,
+            buttonOnTap: buttonOnTap,
+          ),
+        )
+        .closed
+        .then((_) {
+      _a.removeFirst();
+      if (_a.isEmpty) isDisplayed.value = false;
+    });
+    _lastMessage = text;
+  }
+}
+
+SnackBar _styledSnackBar({
   @required BuildContext context,
   @required String text,
+  bool showOkButton = false,
   String buttonText,
   Function() buttonOnTap,
 }) {
@@ -35,12 +79,12 @@ SnackBar styledSnackBar({
               ),
             ),
           ),
-        if (buttonText == null)
+        if (showOkButton)
           Padding(
             padding: const EdgeInsets.only(right: 10),
             child: GestureDetector(
               onTap: () =>
-                  ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar(),
+                  ScaffoldMessenger.maybeOf(context).removeCurrentSnackBar(),
               child: SizedBox(
                 height: 16,
                 width: 65,

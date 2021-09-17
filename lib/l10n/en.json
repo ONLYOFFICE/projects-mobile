@@ -431,5 +431,10 @@
 	"error": "Error",
 	"noInternetConnectionTitle": "No internet connection",
 	"noInternetConnectionSubtitle": "Make sure Wi-Fi or mobile data is turned on and then try again",
-	"tryAgain": "TRY AGAIN"
+	"tryAgain": "TRY AGAIN",
+	"projectCreated": "Project has been created",
+	"projectDeleted": "Project deleted",
+	"taskDeleted": "Task has been deleted",
+	"discussionDeleted": "Discussion has been deleted",
+	"milestoneCreated": "Milestone has been created"
 }
