@@ -36,8 +36,13 @@ class StartDateTile extends StatelessWidget {
               : null,
           suffixPadding: const EdgeInsets.only(right: 10),
           onTap: () => Get.find<NavigationController>().toScreen(
-              const SelectDateView(),
-              arguments: {'controller': controller, 'startDate': true}),
+            const SelectDateView(),
+            arguments: {
+              'controller': controller,
+              'startDate': true,
+              'initialDate': controller.startDate
+            },
+          ),
         );
       },
     );

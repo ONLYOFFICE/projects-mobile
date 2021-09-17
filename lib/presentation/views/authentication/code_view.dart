@@ -43,9 +43,9 @@ class _CodeViewState extends State<CodeView> {
                   children: [
                     //TODO fix dark theme icon
                     AppIcon(
-                      // hasDarkVersion: true,
+                      hasDarkVersion: true,
                       icon: PngIcons.code_light,
-                      // darkThemeIcon: PngIcons.code_dark,
+                      darkThemeIcon: PngIcons.code_dark,
                       isPng: true,
                       height: 200,
                       // width: 200,

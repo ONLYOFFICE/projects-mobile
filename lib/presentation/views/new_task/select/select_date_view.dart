@@ -14,6 +14,7 @@ class SelectDateView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.arguments['controller'];
     bool startDate = Get.arguments['startDate'];
+    DateTime initialDate = Get.arguments['initialDate'];
 
     final platformController = Get.find<PlatformController>();
 
@@ -28,7 +29,7 @@ class SelectDateView extends StatelessWidget {
               : const Icon(Icons.close),
           titleText: startDate ? tr('selectStartDate') : tr('selectDueDate')),
       body: CalendarDatePicker(
-          initialDate: DateTime.now(),
+          initialDate: initialDate ?? DateTime.now(),
           currentDate: DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(3000),

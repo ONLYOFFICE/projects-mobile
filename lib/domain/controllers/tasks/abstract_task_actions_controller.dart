@@ -9,6 +9,8 @@ abstract class TaskActionsController extends GetxController {
   RxList responsibles;
   RxString startDateText;
   RxString dueDateText;
+  DateTime get dueDate;
+  DateTime get startDate;
 
   RxBool highPriority;
 

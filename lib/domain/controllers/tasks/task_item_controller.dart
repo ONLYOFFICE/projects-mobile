@@ -40,13 +40,6 @@ class TaskItemController extends GetxController {
   Color get getStatusTextColor =>
       _statusHandler.getTextColor(status.value, task.value.canEdit);
 
-  bool get hasOpenSubtasks {
-    for (var item in task.value.subtasks) {
-      if (item.status != 2) return true;
-    }
-    return false;
-  }
-
   String get displayName {
     if (task.value.responsibles.isEmpty) return tr('noResponsible');
     if (task.value.responsibles.length > 1)
@@ -159,7 +152,7 @@ class TaskItemController extends GetxController {
 
     if (newStatusType == 2 &&
         task.value.status != newStatusType &&
-        hasOpenSubtasks) {
+        task.value.hasOpenSubtasks) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('closingTask'),
         contentText: tr('closingTaskWithActiveSubtasks'),

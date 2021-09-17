@@ -52,8 +52,8 @@ void _onSelected(context, value, TaskItemController controller) async {
       break;
 
     case 'editTask':
-      Get.find<NavigationController>().to(const TaskEditingView(),
-          arguments: {'task': controller.task.value});
+      Get.find<NavigationController>()
+          .to(TaskEditingView(task: controller.task.value));
       break;
 
     case 'followTask':

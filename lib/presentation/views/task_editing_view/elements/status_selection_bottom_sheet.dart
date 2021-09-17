@@ -13,7 +13,8 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 // slightly different algorithm than on the other pages: you do not need to
 // update the status of the task immediately after clicking,
 // but you need to do it when saving changes
-void statusSelectionBS({context, TaskEditingController controller}) async {
+Future<void> statusSelectionBS(
+    {context, TaskEditingController controller}) async {
   var _statusesController = Get.find<TaskStatusesController>();
 
   var statusHandler = TaskStatusHandler();
@@ -58,7 +59,7 @@ void statusSelectionBS({context, TaskEditingController controller}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        controller
+                        await controller
                             .changeStatus(_statusesController.statuses[i]);
                         Get.back();
                       },

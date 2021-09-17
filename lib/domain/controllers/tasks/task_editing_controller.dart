@@ -70,7 +70,12 @@ class TaskEditingController extends GetxController
   FocusNode get titleFocus => null;
 
   @override
-  void init() {
+  DateTime get dueDate => _newDueDate;
+  @override
+  DateTime get startDate => _newStartDate;
+
+  @override
+  void onInit() async {
     title = task.title.obs;
     _titleController.text = task.title;
     _taskItemController = Get.find<TaskItemController>(tag: task.id.toString());
@@ -92,7 +97,12 @@ class TaskEditingController extends GetxController
     }
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.from(responsibles.value);
+    super.onInit();
   }
+
+  // it was used before, but now it is a just placeholder
+  @override
+  void init() {}
 
   void _initDates() {
     var now = DateTime.now();
@@ -110,7 +120,25 @@ class TaskEditingController extends GetxController
 
   @override
   void changeTitle(String newText) => title.value = newText;
-  void changeStatus(Status status) => newStatus.value = status;
+  Future<void> changeStatus(Status newStatus) async {
+    if (newStatus.id == this.newStatus.value.id) return;
+
+    if (newStatus.statusType == 2 &&
+        initialStatus.statusType != newStatus.statusType &&
+        task.hasOpenSubtasks) {
+      await Get.dialog(StyledAlertDialog(
+        titleText: tr('closingTask'),
+        contentText: tr('closingTaskWithActiveSubtasks'),
+        acceptText: tr('closeTask').toUpperCase(),
+        onAcceptTap: () async {
+          this.newStatus.value = newStatus;
+          Get.back();
+        },
+      ));
+    } else {
+      this.newStatus.value = newStatus;
+    }
+  }
 
   @override
   void confirmDescription(String newText) {

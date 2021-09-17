@@ -152,6 +152,11 @@ class PortalTask {
     data['updated'] = updated;
     return data;
   }
+
+  bool get hasOpenSubtasks {
+    for (var item in subtasks) if (item.status != 2) return true;
+    return false;
+  }
 }
 
 class Subtask {
