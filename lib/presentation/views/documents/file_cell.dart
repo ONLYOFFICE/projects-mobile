@@ -55,6 +55,11 @@ class FileCell extends StatelessWidget {
                         5)
                       return AppIcon(
                           width: 20, height: 20, icon: SvgIcons.table);
+
+                    if (controller.paginationController.data[index].fileType ==
+                        1)
+                      return AppIcon(
+                          width: 20, height: 20, icon: SvgIcons.archive);
                     if (controller.paginationController.data[index].fileType ==
                         4)
                       return AppIcon(
