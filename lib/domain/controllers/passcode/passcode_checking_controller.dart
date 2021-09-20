@@ -88,6 +88,8 @@ class PasscodeCheckingController extends GetxController {
   }) async {
     if (passcodeCheckFailed.isTrue) passcodeCheckFailed.value = false;
 
+    _correctPasscode = _correctPasscode ?? await _service.getPasscode;
+
     if (_enteredPasscode.length < 4) {
       _enteredPasscode += number.toString();
       passcodeLen.value++;
