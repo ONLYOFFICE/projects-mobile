@@ -373,7 +373,7 @@
 	"changeStatus": "Change status",
 	"deselect": "Deselect",
 	"allTasks": "All tasks",
-	"accesRights": "Acces rights",
+	"accessRights": "Access rights",
 	"closingTask": "Closing the Task",
 	"closingTaskWithActiveSubtasks": "You're trying to close a task with open subtasks.\nThe best way is to return and close subtasks manually, then retry to close the task",
 	"closeTask": "Close task",
