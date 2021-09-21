@@ -61,8 +61,11 @@ class MilestonesDataSource extends GetxController {
 
   int _projectId;
 
+  String _selfId;
   final _userController = Get.find<UserController>();
-  var securityInfo = SecrityInfo();
+  final _projectService = locator<ProjectService>();
+
+  var _securityInfo = SecrityInfo();
   var fabIsVisible = false.obs;
 
   MilestonesDataSource() {
@@ -72,18 +75,12 @@ class MilestonesDataSource extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
-
-    _userController.getUserInfo().then((value) =>
-        locator<ProjectService>().getProjectSecurityinfo().then((value) => {
-              securityInfo = value,
-              fabIsVisible.value = canCreateMilestone,
-            }));
   }
 
-  bool get canCreateMilestone =>
+  bool get canCreate =>
       _userController.user.isAdmin ||
       _userController.user.isOwner ||
-      securityInfo.canCreateMilestone;
+      _securityInfo.canCreateMilestone;
 
   Future loadMilestones() async {
     loaded.value = false;
@@ -113,6 +110,16 @@ class MilestonesDataSource extends GetxController {
   Future<void> setup(int projectId) async {
     _projectId = projectId;
     _filterController.projectId = _projectId.toString();
+
+    await _userController.getUserInfo();
+    _selfId ??= await _userController.getUserId();
+    _securityInfo ??= await _projectService.getProjectSecurityinfo();
+    var team = await _projectService.getProjectTeam(projectId.toString());
+    if (team.any((element) => element.id == _selfId))
+      fabIsVisible.value = canCreate;
+    else
+      fabIsVisible.value = false;
+
     await loadMilestones();
   }
 }
