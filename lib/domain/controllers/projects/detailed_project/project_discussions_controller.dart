@@ -26,8 +26,10 @@ class ProjectDiscussionsController extends GetxController {
   RxBool loaded = false.obs;
 
   final _userController = Get.find<UserController>();
-  var securityInfo = SecrityInfo();
+  var _securityInfo = SecrityInfo();
   var fabIsVisible = false.obs;
+  String _selfId;
+  final _projectService = locator<ProjectService>();
 
   ProjectDiscussionsController(this.projectId, this.projectTitle) {
     _sortController.updateSortDelegate =
@@ -38,17 +40,22 @@ class ProjectDiscussionsController extends GetxController {
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
 
-    _userController.getUserInfo().then((value) =>
-        locator<ProjectService>().getProjectSecurityinfo().then((value) => {
-              securityInfo = value,
-              fabIsVisible.value = canCreateMessage,
-            }));
+    var team;
+
+    _userController.getUserInfo().then((value) async => {
+          _securityInfo ??= await _projectService.getProjectSecurityinfo(),
+          team = await _projectService.getProjectTeam(projectId.toString()),
+          if (team.any((element) => element.id == _selfId))
+            fabIsVisible.value = canCreate
+          else
+            fabIsVisible.value = false
+        });
   }
 
-  bool get canCreateMessage =>
+  bool get canCreate =>
       _userController.user.isAdmin ||
       _userController.user.isOwner ||
-      securityInfo.canCreateMessage;
+      _securityInfo.canCreateMessage;
 
   RxList get itemList => paginationController.data;
 
