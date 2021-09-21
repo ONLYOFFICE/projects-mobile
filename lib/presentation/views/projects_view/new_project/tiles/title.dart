@@ -33,50 +33,52 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/shared/project_team_responsible.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
-class ResponsibleTile extends StatelessWidget {
+class ProjectTitleTile extends StatelessWidget {
   final controller;
-  final bool enableUnderline;
-  final Widget suffixIcon;
-  const ResponsibleTile({
+  final bool showCaption;
+  final bool focusOnTitle;
+  const ProjectTitleTile({
     Key key,
     @required this.controller,
-    this.enableUnderline = true,
-    this.suffixIcon,
+    this.showCaption = false,
+    this.focusOnTitle = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        // ignore: omit_local_variable_types
-        bool _isSelected = controller.responsibles.isNotEmpty;
-        return NewItemTile(
-          isSelected: _isSelected,
-          caption: _isSelected ? '${tr('assignedTo')}:' : null,
-          enableBorder: enableUnderline,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
-          text: _isSelected
-              ? controller.responsibles.length == 1
-                  ? controller.responsibles[0]?.displayName
-                  : plural('responsibles', controller.responsibles.length)
-              : tr('addResponsible'),
-          suffix: _isSelected
-              ? suffixIcon ??
-                  Icon(Icons.navigate_next,
-                      size: 24, color: Get.theme.colors().onBackground)
-              : null,
-          suffixPadding: const EdgeInsets.only(right: 21),
-          icon: SvgIcons.person,
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const ProjectTeamResponsibleSelectionView(),
-              arguments: {'controller': controller}),
+        return Padding(
+          padding: const EdgeInsets.only(left: 72, right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showCaption)
+                Text('${tr('projectTitle')}:',
+                    style: TextStyleHelper.caption(
+                        color:
+                            Get.theme.colors().onBackground.withOpacity(0.75))),
+              TextField(
+                  focusNode: focusOnTitle ? controller.titleFocus : null,
+                  maxLines: null,
+                  controller: controller.titleController,
+                  style: TextStyleHelper.headline6(
+                      color: Get.theme.colors().onBackground),
+                  cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                  decoration: InputDecoration(
+                      hintText: tr('projectTitle'),
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                      hintStyle: TextStyleHelper.headline6(
+                          color: controller.needToFillTitle.value == true
+                              ? Get.theme.colors().colorError
+                              : Get.theme.colors().onSurface.withOpacity(0.5)),
+                      border: InputBorder.none)),
+              const SizedBox(height: 10)
+            ],
+          ),
         );
       },
     );
