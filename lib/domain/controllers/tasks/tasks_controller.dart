@@ -49,22 +49,30 @@ class TasksController extends BaseController {
   PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
 
-  var taskStatusesController = Get.find<TaskStatusesController>();
-
+  final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
+  final _loaded = false.obs;
+
   TasksSortController get sortController => _sortController;
 
   TaskFilterController _filterController;
   TaskFilterController get filterController => _filterController;
 
-  RxBool loaded = false.obs;
+  RxBool get loaded =>
+      (_loaded.value && taskStatusesController.loaded.value).obs;
 
   var fabIsVisible = true.obs;
 
+  @override
+  Future<void> onInit() async {
+    await taskStatusesController.getStatuses();
+    super.onInit();
+  }
+
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
+    _loaded.value = false;
     screenName = tr('tasks');
-    taskStatusesController.getStatuses();
     _paginationController = paginationController;
     expandedCardView.value = true;
     _filterController = filterController;
@@ -77,21 +85,21 @@ class TasksController extends BaseController {
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
       fabIsVisible.value = data ? false : true;
     });
+    _loaded.value = true;
   }
 
   @override
   RxList get itemList => paginationController.data;
 
   Future<void> refreshData() async {
-    loaded.value = false;
+    _loaded.value = false;
     await _getTasks(needToClear: true);
-    loaded.value = true;
+    _loaded.value = true;
   }
 
   Future loadTasks({PresetTaskFilters preset}) async {
-    loaded.value = false;
+    _loaded.value = false;
     paginationController.startIndex = 0;
-
     if (preset != null) {
       await _filterController
           .setupPreset(preset)
@@ -99,8 +107,7 @@ class TasksController extends BaseController {
     } else {
       await _getTasks(needToClear: true);
     }
-
-    loaded.value = true;
+    _loaded.value = true;
   }
 
   Future _getTasks({needToClear = false}) async {

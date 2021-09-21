@@ -59,12 +59,13 @@ class TaskItemController extends GetxController {
   var task = PortalTask().obs;
   var status = Status().obs;
 
-  var loaded = true.obs;
+  var loaded = false.obs;
+  var isStatusLoaded = false.obs;
   var refreshController = RefreshController();
 
-  final TaskStatusHandler _statusHandler = TaskStatusHandler();
+  set setLoaded(bool value) => loaded.value = value;
 
-  Widget get statusImage => _statusHandler.statusImage.value;
+  final TaskStatusHandler _statusHandler = TaskStatusHandler();
 
   Color get getStatusBGColor =>
       _statusHandler.getBackgroundColor(status.value, task.value.canEdit);
@@ -100,12 +101,6 @@ class TaskItemController extends GetxController {
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
-  }
-
-  @override
-  void onInit() {
-    initTaskStatus(task.value);
-    super.onInit();
   }
 
   void copyLink({@required taskId, @required projectId}) async {
@@ -153,11 +148,14 @@ class TaskItemController extends GetxController {
     // return copiedTask;
   }
 
-  void initTaskStatus(PortalTask portalTask) {
+  Future<void> initTaskStatus(PortalTask portalTask) async {
+    isStatusLoaded.value = false;
     var statusesController = Get.find<TaskStatusesController>();
-    status.value = statusesController.getTaskStatus(portalTask);
-    if (status.value != null)
-      _statusHandler.setStatusImage(status.value, portalTask.canEdit);
+    Status receivedStatus = await statusesController.getTaskStatus(portalTask);
+    if (receivedStatus != null && !receivedStatus.isNull) {
+      status.value = receivedStatus;
+      isStatusLoaded.value = true;
+    }
   }
 
   Future reloadTask({bool showLoading = false}) async {
@@ -165,13 +163,13 @@ class TaskItemController extends GetxController {
     var t = await _api.getTaskByID(id: task.value.id);
     if (t != null) {
       task.value = t;
-      initTaskStatus(task.value);
+      await initTaskStatus(task.value);
     }
     if (showLoading) loaded.value = true;
   }
 
   void openStatuses(context) {
-    if (task.value.canEdit)
+    if (task.value.canEdit && isStatusLoaded.isTrue)
       showsStatusesBS(context: context, taskItemController: this);
   }
 
@@ -209,7 +207,7 @@ class TaskItemController extends GetxController {
     if (t != null) {
       var newTask = PortalTask.fromJson(t);
       task.value = newTask;
-      initTaskStatus(newTask);
+      await initTaskStatus(newTask);
     }
     loaded.value = true;
   }

@@ -33,15 +33,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/utils/image_decoder.dart';
+import 'package:projects/presentation/shared/svg_manager.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
+
+part 'status_image.dart';
 
 class TaskCell extends StatefulWidget {
   final PortalTask task;
@@ -61,7 +67,7 @@ class _TaskCellState extends State<TaskCell> {
       tag: widget.task.id.toString(),
     );
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => itemController.initTaskStatus(widget.task));
+        (_) async => await itemController.initTaskStatus(widget.task));
     super.initState();
   }
 
@@ -70,16 +76,12 @@ class _TaskCellState extends State<TaskCell> {
     return InkWell(
       onTap: () => Get.find<NavigationController>()
           .to(TaskDetailedView(), arguments: {'controller': itemController}),
-      child: Container(
+      child: SizedBox(
         height: 72,
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            GestureDetector(
-                onTap: () async => itemController.openStatuses(context),
-                child: TaskStatus(itemController: itemController)),
-            const SizedBox(width: 16),
+            _StatusImage(controller: itemController),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -88,15 +90,16 @@ class _TaskCellState extends State<TaskCell> {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SecondColumn(itemController: itemController),
+                        _SecondColumn(itemController: itemController),
                         const SizedBox(width: 8),
-                        ThirdColumn(controller: itemController),
+                        _ThirdColumn(controller: itemController),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
+            const SizedBox(width: 16),
           ],
         ),
       ),
@@ -104,28 +107,39 @@ class _TaskCellState extends State<TaskCell> {
   }
 }
 
-// refactor
-class TaskStatus extends StatelessWidget {
-  final TaskItemController itemController;
-
-  const TaskStatus({
+class _StatusText extends StatelessWidget {
+  const _StatusText({
     Key key,
-    @required this.itemController,
+    @required this.controller,
   }) : super(key: key);
+
+  final TaskItemController controller;
+
+  bool get _loading =>
+      controller.isStatusLoaded.isFalse ||
+      controller?.status?.value?.isNull != false;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        return Container(
-          width: 40,
-          height: 40,
-          margin: const EdgeInsets.all(0.5),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: itemController.getStatusBGColor,
-          ),
-          child: itemController.statusImage,
+        if (_loading) return const SizedBox();
+
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: Get.width * 0.25),
+              child: Text(controller.status.value.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper.status(
+                      color: controller.getStatusTextColor)),
+            ),
+            Text(' • ',
+                style: TextStyleHelper.caption(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
+          ],
         );
       },
     );
@@ -133,10 +147,10 @@ class TaskStatus extends StatelessWidget {
 }
 
 // refactor
-class SecondColumn extends StatelessWidget {
+class _SecondColumn extends StatelessWidget {
   final TaskItemController itemController;
 
-  const SecondColumn({
+  const _SecondColumn({
     Key key,
     @required this.itemController,
   }) : super(key: key);
@@ -160,25 +174,7 @@ class SecondColumn extends StatelessWidget {
               ),
               Wrap(
                 children: [
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxWidth: Get.width * 0.25),
-                    child: Text(
-                      //TODO fix rare issue when itemController.status.value is null.
-                      // On controller side value is valid, but when getx updates widget its value is null;
-                      itemController.status.value == null
-                          ? ''
-                          : itemController.status.value.title,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyleHelper.status(
-                        color: itemController.getStatusTextColor,
-                      ),
-                    ),
-                  ),
-                  Text(' • ',
-                      style: TextStyleHelper.caption(
-                          color:
-                              Get.theme.colors().onSurface.withOpacity(0.6))),
+                  _StatusText(controller: itemController),
                   Text(
                     itemController.displayName,
                     maxLines: 1,
@@ -197,10 +193,10 @@ class SecondColumn extends StatelessWidget {
   }
 }
 
-class ThirdColumn extends StatelessWidget {
+class _ThirdColumn extends StatelessWidget {
   final TaskItemController controller;
 
-  const ThirdColumn({
+  const _ThirdColumn({
     Key key,
     @required this.controller,
   }) : super(key: key);

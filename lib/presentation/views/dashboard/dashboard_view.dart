@@ -43,7 +43,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:projects/presentation/views/tasks/task_cell.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 

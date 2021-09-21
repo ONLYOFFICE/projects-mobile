@@ -73,7 +73,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
     super.initState();
     controller = Get.arguments['controller'];
     controller.firstReload.value = true;
-    controller.reloadTask();
+    // to get full info about task
+    controller.reloadTask().then((value) => controller.setLoaded = true);
     _tabController = TabController(vsync: this, length: 4);
 
     documentsController.entityType = 'task';
