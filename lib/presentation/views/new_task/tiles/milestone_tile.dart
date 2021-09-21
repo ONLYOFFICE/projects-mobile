@@ -7,6 +7,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
 
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+
 class MilestoneTile extends StatelessWidget {
   final TaskActionsController controller;
   const MilestoneTile({
@@ -25,6 +27,8 @@ class MilestoneTile extends StatelessWidget {
                 ? controller.selectedMilestoneTitle.value
                 : tr('none'),
             icon: SvgIcons.milestone,
+            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+            selectedIconColor: Get.theme.colors().onBackground,
             // because color is always black
             isSelected: true,
             caption: '${tr('milestone')}:',

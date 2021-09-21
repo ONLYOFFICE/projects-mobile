@@ -12,12 +12,14 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
+import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class NewMilestoneView extends StatelessWidget {
   const NewMilestoneView({Key key}) : super(key: key);
@@ -57,7 +59,38 @@ class NewMilestoneView extends StatelessWidget {
                 DescriptionTile(newMilestoneController: newMilestoneController),
                 DueDateTile(controller: newMilestoneController),
                 const SizedBox(height: 5),
-                AdvancedOptions(newMilestoneController: newMilestoneController)
+                AdvancedOptions(
+                  options: <Widget>[
+                    OptionWithSwitch(
+                      title: tr('keyMilestone'),
+                      switchValue: newMilestoneController.keyMilestone,
+                      switchOnChanged: (value) {
+                        if (!FocusScope.of(context).hasPrimaryFocus) {
+                          FocusScope.of(context).unfocus();
+                        }
+                        newMilestoneController.setKeyMilestone(value);
+                      },
+                    ),
+                    OptionWithSwitch(
+                      title: tr('remindBeforeDue'),
+                      switchValue: newMilestoneController.remindBeforeDueDate,
+                      switchOnChanged: (value) {
+                        if (!FocusScope.of(context).hasPrimaryFocus) {
+                          FocusScope.of(context).unfocus();
+                        }
+
+                        newMilestoneController.enableRemindBeforeDueDate(value);
+                      },
+                    ),
+                    OptionWithSwitch(
+                      title: tr('notifyResponsible'),
+                      switchValue: newMilestoneController.notificationEnabled,
+                      switchOnChanged: (value) {
+                        newMilestoneController.enableNotification(value);
+                      },
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
@@ -77,13 +110,11 @@ class MilestoneInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 56, right: 16),
+      padding: const EdgeInsets.only(left: 72, right: 25),
       child: Obx(
         () => TextField(
-          // autofocus: controller.titleController.text.isEmpty,
           maxLines: 2,
           controller: controller.titleController,
-          // onChanged: (value) => controller.changeTitle(value),
           style:
               TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
           cursorColor: Get.theme.colors().primary.withOpacity(0.87),
@@ -96,160 +127,6 @@ class MilestoneInput extends StatelessWidget {
                       : Get.theme.colors().onSurface.withOpacity(0.5)),
               border: InputBorder.none),
         ),
-      ),
-    );
-  }
-}
-
-class AdvancedOptions extends StatelessWidget {
-  const AdvancedOptions({
-    Key key,
-    @required this.newMilestoneController,
-  }) : super(key: key);
-
-  final NewMilestoneController newMilestoneController;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Theme(
-                  data: Get.theme.copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    expandedAlignment: Alignment.topLeft,
-                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          child: AppIcon(
-                              icon: SvgIcons.preferences,
-                              height: 24,
-                              width: 24,
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6)),
-                        ),
-                        const SizedBox(width: 16),
-                        Text(
-                          tr('advancedOptions'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface),
-                        ),
-                      ],
-                    ),
-                    children: <Widget>[
-                      OptionWithSwitch(
-                        title: tr('keyMilestone'),
-                        switchValue: newMilestoneController.keyMilestone,
-                        switchOnChanged: (value) {
-                          if (!FocusScope.of(context).hasPrimaryFocus) {
-                            FocusScope.of(context).unfocus();
-                          }
-                          newMilestoneController.setKeyMilestone(value);
-                        },
-                      ),
-                      OptionWithSwitch(
-                        title: tr('remindBeforeDue'),
-                        switchValue: newMilestoneController.remindBeforeDueDate,
-                        switchOnChanged: (value) {
-                          if (!FocusScope.of(context).hasPrimaryFocus) {
-                            FocusScope.of(context).unfocus();
-                          }
-
-                          newMilestoneController
-                              .enableRemindBeforeDueDate(value);
-                        },
-                      ),
-                      OptionWithSwitch(
-                        title: tr('notifyResponsible'),
-                        switchValue: newMilestoneController.notificationEnabled,
-                        switchOnChanged: (value) {
-                          newMilestoneController.enableNotification(value);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 56,
-                  endIndent: 0,
-                  color: Get.theme.colors().outline,
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class OptionWithSwitch extends StatelessWidget {
-  const OptionWithSwitch({
-    Key key,
-    @required this.title,
-    @required this.switchOnChanged,
-    @required this.switchValue,
-  }) : super(key: key);
-
-  final RxBool switchValue;
-  final Function switchOnChanged;
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(56, 0, 16, 0),
-      height: 60,
-      child: Column(
-        children: <Widget>[
-          Divider(
-            height: 1,
-            thickness: 1,
-            indent: 0,
-            endIndent: 0,
-            color: Get.theme.colors().outline,
-          ),
-          const SizedBox(height: 5),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: FittedBox(
-                  alignment: Alignment.topLeft,
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    title,
-                    style: TextStyleHelper.subtitle1(),
-                  ),
-                ),
-              ),
-              Obx(
-                () => Switch(
-                  value: switchValue.value,
-                  onChanged: switchOnChanged,
-                  activeTrackColor:
-                      Get.theme.colors().primary.withOpacity(0.54),
-                  activeColor: Get.theme.colors().primary,
-                ),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
@@ -268,18 +145,19 @@ class DescriptionTile extends StatelessWidget {
       () {
         bool _isSletected =
             newMilestoneController.descriptionText.value.isNotEmpty;
-        return NewMilestoneInfo(
+        return NewItemTile(
             text: _isSletected
                 ? newMilestoneController.descriptionText.value
                 : tr('addDescription'),
             maxLines: 1,
             icon: SvgIcons.description,
+            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+            selectedIconColor: Get.theme.colors().onBackground,
             caption: _isSletected ? tr('description') : null,
             isSelected: _isSletected,
             suffix: _isSletected
-                ? Icon(Icons.arrow_forward_ios_outlined,
-                    size: 20,
-                    color: Get.theme.colors().onSurface.withOpacity(0.6))
+                ? Icon(Icons.navigate_next,
+                    size: 24, color: Get.theme.colors().onBackground)
                 : null,
             onTap: () => Get.find<NavigationController>()
                     .toScreen(const NewMilestoneDescription(), arguments: {
@@ -302,16 +180,25 @@ class ProjectTile extends StatelessWidget {
     return Obx(
       () {
         bool _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
-        return NewMilestoneInfo(
+        return NewItemTile(
             text: _isSelected
                 ? controller.slectedProjectTitle.value
                 : tr('selectProject'),
             icon: SvgIcons.project,
+            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+            selectedIconColor: Get.theme.colors().onBackground,
             textColor: controller.needToSelectProject.value
                 ? Get.theme.colors().colorError
                 : null,
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
+            suffix: _isSelected
+                ? IconButton(
+                    icon: Icon(Icons.navigate_next,
+                        size: 24, color: Get.theme.colors().onBackground),
+                    onPressed: () => controller.changeDueDate(null))
+                : null,
+            suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
@@ -337,7 +224,7 @@ class ResponsibleTile extends StatelessWidget {
     return Obx(() {
       //strange behavior of obx if rx value is used like this:
       //var _isSelected = controller.responsible != null;
-      return NewMilestoneInfo(
+      return NewItemTile(
         isSelected: controller.responsible?.value != null,
         caption:
             controller.responsible?.value != null ? tr('assignedTo') : null,
@@ -348,10 +235,12 @@ class ResponsibleTile extends StatelessWidget {
             ? Get.theme.colors().colorError
             : null,
         suffix: controller.responsible?.value != null
-            ? Icon(Icons.arrow_forward_ios_outlined,
-                size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6))
+            ? Icon(Icons.navigate_next,
+                size: 24, color: Get.theme.colors().onBackground)
             : null,
         icon: SvgIcons.person,
+        iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+        selectedIconColor: Get.theme.colors().onBackground,
         onTap: () => {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
@@ -376,8 +265,10 @@ class DueDateTile extends StatelessWidget {
     return Obx(
       () {
         bool _isSelected = controller.dueDateText.value.isNotEmpty;
-        return NewMilestoneInfo(
+        return NewItemTile(
             icon: SvgIcons.due_date,
+            iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+            selectedIconColor: Get.theme.colors().onBackground,
             text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
             caption: _isSelected ? tr('startDate') : null,
             isSelected: _isSelected,
@@ -387,107 +278,16 @@ class DueDateTile extends StatelessWidget {
             suffix: _isSelected
                 ? IconButton(
                     icon: Icon(Icons.close_rounded,
-                        size: 23,
-                        color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                        size: 24, color: Get.theme.colors().onBackground),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
-            suffixPadding: const EdgeInsets.only(right: 10),
+            suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
                   if (!FocusScope.of(context).hasPrimaryFocus)
                     {FocusScope.of(context).unfocus()},
                   controller.onDueDateTilePressed()
                 });
       },
-    );
-  }
-}
-
-class NewMilestoneInfo extends StatelessWidget {
-  final int maxLines;
-  final bool isSelected;
-  final bool enableBorder;
-  final TextStyle textStyle;
-  final String text;
-  final String icon;
-  final String caption;
-  final Function() onTap;
-  final Color textColor;
-  final Widget suffix;
-  final EdgeInsetsGeometry suffixPadding;
-
-  const NewMilestoneInfo({
-    Key key,
-    this.caption,
-    this.enableBorder = true,
-    this.icon,
-    this.isSelected = false,
-    this.maxLines,
-    this.onTap,
-    this.suffix,
-    this.suffixPadding = const EdgeInsets.symmetric(horizontal: 25),
-    this.textColor,
-    this.textStyle,
-    @required this.text,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              SizedBox(
-                width: 56,
-                child: icon != null
-                    ? AppIcon(
-                        icon: icon,
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))
-                    : null,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical:
-                          caption != null && caption.isNotEmpty ? 10 : 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (caption != null && caption.isNotEmpty)
-                        Text(caption,
-                            style: TextStyleHelper.caption(
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.75))),
-                      Text(text,
-                          maxLines: maxLines,
-                          overflow: TextOverflow.ellipsis,
-                          style: textStyle ??
-                              TextStyleHelper.subtitle1(
-                                  // ignore: prefer_if_null_operators
-                                  color: textColor != null
-                                      ? textColor
-                                      : isSelected
-                                          ? Get.theme.colors().onBackground
-                                          : Get.theme
-                                              .colors()
-                                              .onSurface
-                                              .withOpacity(0.6))),
-                    ],
-                  ),
-                ),
-              ),
-              if (suffix != null)
-                Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(padding: suffixPadding, child: suffix)),
-            ],
-          ),
-          if (enableBorder) const StyledDivider(leftPadding: 56.5),
-        ],
-      ),
     );
   }
 }

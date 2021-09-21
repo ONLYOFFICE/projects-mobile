@@ -90,7 +90,7 @@ class ProjectOverview extends StatelessWidget {
                       tabController.animateTo(5);
                     },
                     caption: tr('team'),
-                    iconData: Icons.navigate_next,
+                    iconData: Icons.arrow_forward_ios_rounded,
                     subtitle: plural(
                         'members', projectController.teamMembersCount.value),
                     subtitleStyle: TextStyleHelper.subtitle1(
