@@ -146,6 +146,7 @@ class SvgIcons {
   static const String doc = 'lib/assets/images/icons/folders/doc.svg';
   static const String image = 'lib/assets/images/icons/folders/image.svg';
   static const String table = 'lib/assets/images/icons/folders/table.svg';
+  static const String archive = 'lib/assets/images/icons/folders/archive.svg';
   static const String presentation =
       'lib/assets/images/icons/folders/presentation.svg';
 

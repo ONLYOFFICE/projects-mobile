@@ -291,7 +291,7 @@ class ProjectService {
     }
   }
 
-  Future<SecrityInfo> getProjectSecurityinfo({String name}) async {
+  Future<SecrityInfo> getProjectSecurityinfo() async {
     var result = await _api.getProjectSecurityinfo();
 
     var success = result.response != null;

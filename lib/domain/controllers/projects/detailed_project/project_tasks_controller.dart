@@ -61,8 +61,10 @@ class ProjectTasksController extends GetxController {
 
   int _projectId;
 
+  String _selfId;
+  final _projectService = locator<ProjectService>();
   final _userController = Get.find<UserController>();
-  var securityInfo = SecrityInfo();
+  var _securityInfo = SecrityInfo();
   var fabIsVisible = false.obs;
 
   ProjectTasksController() {
@@ -72,18 +74,12 @@ class ProjectTasksController extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getTasks(needToClear: true);
     paginationController.pullDownEnabled = true;
-
-    _userController.getUserInfo().then((value) =>
-        locator<ProjectService>().getProjectSecurityinfo().then((value) => {
-              securityInfo = value,
-              fabIsVisible.value = canCreateNewTask,
-            }));
   }
 
-  bool get canCreateNewTask =>
+  bool get canCreate =>
       _userController.user.isAdmin ||
       _userController.user.isOwner ||
-      securityInfo.canCreateTask;
+      _securityInfo.canCreateTask;
 
   RxList get itemList => paginationController.data;
 
@@ -112,9 +108,20 @@ class ProjectTasksController extends GetxController {
     paginationController.data.addAll(result.response);
   }
 
-  void setup(int projectId) {
+  Future<void> setup(int projectId) async {
     _projectId = projectId;
     _filterController.projectId = _projectId.toString();
+
+// ignore: unawaited_futures
     loadTasks();
+
+    await _userController.getUserInfo();
+    _selfId ??= await _userController.getUserId();
+    _securityInfo ??= await _projectService.getProjectSecurityinfo();
+    var team = await _projectService.getProjectTeam(projectId.toString());
+    if (team.any((element) => element.id == _selfId))
+      fabIsVisible.value = canCreate;
+    else
+      fabIsVisible.value = false;
   }
 }

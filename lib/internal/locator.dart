@@ -246,5 +246,5 @@ void setupLocator() {
       fenix: true);
   Get.lazyPut(() => LoginController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
-  Get.lazyPut(() => PlatformController(), fenix: true);
+  Get.create<PlatformController>(() => PlatformController());
 }
