@@ -2,16 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 void showsStatusesBS({context, TaskItemController taskItemController}) async {
   var _statusesController = Get.find<TaskStatusesController>();
-  var statusHandler = TaskStatusHandler();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
@@ -62,8 +61,10 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
                       },
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
-                          icon: statusHandler.getStatusImage(
-                              _statusesController.statuses[i], true),
+                          icon: StatusIcon(
+                            canEditTask: taskItemController.task.value.canEdit,
+                            status: _statusesController.statuses[i],
+                          ),
                           selected: _statusesController.statuses[i].title ==
                               taskItemController.status.value.title),
                     ),

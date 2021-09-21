@@ -53,4 +53,6 @@ class Status {
     data['available'] = available;
     return data;
   }
+
+  bool get isNull => this == null || id == null || title == null;
 }

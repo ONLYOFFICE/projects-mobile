@@ -2,12 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 // here is a different function, because the task changes page has a
 // slightly different algorithm than on the other pages: you do not need to
@@ -16,8 +16,6 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 Future<void> statusSelectionBS(
     {context, TaskEditingController controller}) async {
   var _statusesController = Get.find<TaskStatusesController>();
-
-  var statusHandler = TaskStatusHandler();
 
   showCustomBottomSheet(
     context: context,
@@ -65,8 +63,10 @@ Future<void> statusSelectionBS(
                       },
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
-                          icon: statusHandler.getStatusImage(
-                              _statusesController.statuses[i], true),
+                          icon: StatusIcon(
+                            canEditTask: true,
+                            status: _statusesController.statuses[i],
+                          ),
                           selected: _statusesController.statuses[i].id ==
                               controller.newStatus.value.id),
                     ),

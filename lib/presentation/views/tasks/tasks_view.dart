@@ -18,7 +18,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/tasks/task_cell.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
@@ -86,9 +86,8 @@ class TasksView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
-          if (controller.loaded.value == true &&
+          if (!controller.loaded.value) return const ListLoadingSkeleton();
+          if (controller.loaded.value &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value) {
             return Center(
@@ -97,7 +96,7 @@ class TasksView extends StatelessWidget {
                     text: tr('noTasksCreated',
                         args: [tr('tasks').toLowerCase()])));
           }
-          if (controller.loaded.value == true &&
+          if (controller.loaded.value &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
             return Center(
