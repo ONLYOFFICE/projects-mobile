@@ -428,5 +428,13 @@
 	"noSubtasksCreated": "Aucune sous-tâche n'a été créée pour cette tâche",
 	"noCommentsCreated": "Aucun commentaire trouvé",
 	"noDiscussionsCreated": "Aucune discussion n'est encore lancée",
-	"noDiscussionsMatching": "Aucune discussion ne correspond à ces filtres"
+	"noDiscussionsMatching": "Aucune discussion ne correspond à ces filtres",
+	"noInternetConnectionTitle": "Aucun accès à Internet",
+	"noInternetConnectionSubtitle": "Assurez-vous que le Wi-Fi ou les données mobiles sont activés et réessayez.",
+	"tryAgain": "ESSAYER DE NOUVEAU",
+	"projectCreated": "Le projet a été créé",
+	"projectDeleted": "Le projet a été supprimé",
+	"taskDeleted": "La tâche a été supprimée",
+	"discussionDeleted": "La discussion a été supprimée",
+	"milestoneCreated": "Le jalon a été créé"
 }
