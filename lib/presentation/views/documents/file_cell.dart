@@ -67,48 +67,31 @@ class FileCell extends StatelessWidget {
           SizedBox(
             width: 72,
             child: Center(
-              child: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    width: 1,
-                    color: Get.theme.colors().outline,
-                  ),
-                  color: Get.theme.colors().surface,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Obx(() {
-                    if (controller.paginationController.data[index].fileType ==
-                        7)
-                      return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
-                    if (controller.paginationController.data[index].fileType ==
-                        5)
-                      return AppIcon(
-                          width: 20, height: 20, icon: SvgIcons.table);
+              child: Obx(() {
+                if (controller.paginationController.data[index].fileType == 7)
+                  return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
+                if (controller.paginationController.data[index].fileType == 5)
+                  return AppIcon(width: 20, height: 20, icon: SvgIcons.table);
 
-                    if (controller.paginationController.data[index].fileType ==
-                        1)
-                      return AppIcon(
-                          width: 20, height: 20, icon: SvgIcons.archive);
-                    if (controller.paginationController.data[index].fileType ==
-                        4)
-                      return AppIcon(
-                          width: 20, height: 20, icon: SvgIcons.image);
-                    if (controller.paginationController.data[index].fileType ==
-                        6)
-                      return AppIcon(
-                          width: 20, height: 20, icon: SvgIcons.presentation);
+                if (controller.paginationController.data[index].fileType == 1)
+                  return AppIcon(
+                    width: 20,
+                    height: 20,
+                    icon: SvgIcons.archive,
+                    color: Get.theme.colors().onSurface,
+                  );
+                if (controller.paginationController.data[index].fileType == 4)
+                  return AppIcon(width: 20, height: 20, icon: SvgIcons.image);
+                if (controller.paginationController.data[index].fileType == 6)
+                  return AppIcon(
+                      width: 20, height: 20, icon: SvgIcons.presentation);
 
-                    return AppIcon(
-                        width: 20,
-                        height: 20,
-                        icon: SvgIcons.documents,
-                        color: Get.theme.colors().onSurface.withOpacity(0.6));
-                  }),
-                ),
-              ),
+                return AppIcon(
+                    width: 20,
+                    height: 20,
+                    icon: SvgIcons.documents,
+                    color: Get.theme.colors().onSurface.withOpacity(0.6));
+              }),
             ),
           ),
           Expanded(

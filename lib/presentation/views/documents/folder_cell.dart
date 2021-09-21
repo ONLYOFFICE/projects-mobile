@@ -184,25 +184,11 @@ class FolderCellAvatar extends StatelessWidget {
     return SizedBox(
       width: 72,
       child: Center(
-        child: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            border: Border.all(
-              width: 1,
-              color: Get.theme.colors().outline,
-            ),
-            color: Get.theme.colors().surface,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: AppIcon(
-              width: 20,
-              height: 20,
-              color: Get.theme.colors().onSurface.withOpacity(0.8),
-              icon: SvgIcons.folder,
-            ),
-          ),
+        child: AppIcon(
+          width: 20,
+          height: 20,
+          color: Get.theme.colors().onSurface.withOpacity(0.8),
+          icon: SvgIcons.folder,
         ),
       ),
     );
