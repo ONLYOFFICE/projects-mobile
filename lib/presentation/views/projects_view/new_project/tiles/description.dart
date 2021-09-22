@@ -4,29 +4,28 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/views/new_task/task_description.dart';
+import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
 
-class DescriptionTile extends StatefulWidget {
-  final TaskActionsController controller;
-  DescriptionTile({
+class ProjectDescriptionTile extends StatefulWidget {
+  final controller;
+  ProjectDescriptionTile({
     Key key,
     this.controller,
   }) : super(key: key);
 
   @override
-  _DescriptionTileState createState() => _DescriptionTileState();
+  _ProjectDescriptionTileState createState() => _ProjectDescriptionTileState();
 }
 
-class _DescriptionTileState extends State<DescriptionTile>
+class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
     with TickerProviderStateMixin {
   bool _isExpanded;
 
-  AnimationController _controller;
+  AnimationController _animationController;
 
   final Animatable<double> _halfTween = Tween<double>(begin: 0, end: 0.245);
   final Animatable<double> _turnsTween = CurveTween(curve: Curves.easeIn);
@@ -37,14 +36,14 @@ class _DescriptionTileState extends State<DescriptionTile>
   void initState() {
     super.initState();
     _isExpanded = false;
-    _controller = AnimationController(
+    _animationController = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
-    _iconTurns = _controller.drive(_halfTween.chain(_turnsTween));
+    _iconTurns = _animationController.drive(_halfTween.chain(_turnsTween));
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -57,9 +56,9 @@ class _DescriptionTileState extends State<DescriptionTile>
       setState(() {
         _isExpanded = !_isExpanded;
         if (_isExpanded) {
-          _controller.forward();
+          _animationController.forward();
         } else {
-          _controller.reverse();
+          _animationController.reverse();
         }
       });
     }
@@ -76,7 +75,7 @@ class _DescriptionTileState extends State<DescriptionTile>
 
         return InkWell(
           onTap: () => Get.find<NavigationController>().toScreen(
-              const TaskDescription(),
+              const NewProjectDescription(),
               arguments: {'controller': widget.controller}),
           child: Column(
             children: [
@@ -117,19 +116,26 @@ class _DescriptionTileState extends State<DescriptionTile>
                         ),
                       ),
                       if (_needToExpand(textSize.width, text))
-                        Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: IconButton(
-                            icon: RotationTransition(
-                              turns: _iconTurns,
-                              child: Icon(
-                                Icons.navigate_next,
-                                size: 24,
-                                color: Get.theme.colors().onBackground,
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 5, right: 13),
+                              child: IconButton(
+                                icon: RotationTransition(
+                                  turns: _iconTurns,
+                                  child: Icon(
+                                    Icons.navigate_next,
+                                    size: 24,
+                                    color: Get.theme.colors().onBackground,
+                                  ),
+                                ),
+                                onPressed: changeExpansion,
                               ),
                             ),
-                            onPressed: changeExpansion,
-                          ),
+                          ],
                         ),
                     ],
                   ),

@@ -31,7 +31,7 @@ import 'package:projects/presentation/views/project_detailed/milestones/descript
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
-import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';

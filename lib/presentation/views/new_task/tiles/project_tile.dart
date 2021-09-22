@@ -19,17 +19,20 @@ class ProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSelected = controller.selectedProjectTitle.value.isNotEmpty;
+        bool _isNotEmpty = controller.selectedProjectTitle.value.isNotEmpty;
+
         return NewItemTile(
-          text: _isSelected
+          text: _isNotEmpty
               ? controller.selectedProjectTitle.value
               : tr('selectProject'),
           icon: SvgIcons.project,
           textColor: controller.needToSelectProject == true
               ? Get.theme.colors().colorError
               : null,
-          isSelected: _isSelected,
-          caption: _isSelected ? '${tr('project')}:' : null,
+          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Get.theme.colors().onBackground,
+          isSelected: _isNotEmpty,
+          caption: _isNotEmpty ? '${tr('project')}:' : null,
           onTap: () => Get.find<NavigationController>().toScreen(
               const SelectProjectView(),
               arguments: {'controller': controller}),

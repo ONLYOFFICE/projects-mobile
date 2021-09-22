@@ -428,5 +428,13 @@
 	"noSubtasksCreated": "Для этой задачи не было создано ни одной подзадачи",
 	"noCommentsCreated": "Комментариев не найдено",
 	"noDiscussionsCreated": "Ни одно обсуждение пока не начато",
-	"noDiscussionsMatching": "Нет обсуждений, соответствующих этим фильтрам"
+	"noDiscussionsMatching": "Нет обсуждений, соответствующих этим фильтрам",
+	"noInternetConnectionTitle": "Соединение с интернетом отсутствует",
+	"noInternetConnectionSubtitle": "Убедитесь, что включен Wi-Fi или мобильный интернет, и повторите попытку",
+	"tryAgain": "ПОВТОРИТЬ ПОПЫТКУ",
+	"projectCreated": "Проект создан",
+	"projectDeleted": "Проект удален",
+	"taskDeleted": "Задача удалена",
+	"discussionDeleted": "Обсуждение удалено",
+	"milestoneCreated": "Веха создана"
 }

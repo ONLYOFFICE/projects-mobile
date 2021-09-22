@@ -18,7 +18,7 @@ class GroupMembersSelectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.arguments['controller'];
-    // Get.find<NewProjectController>();
+
     var groupsDataSource = Get.find<GroupsDataSource>();
 
     groupsDataSource.getGroups();

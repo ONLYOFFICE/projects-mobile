@@ -428,5 +428,13 @@
 	"noSubtasksCreated": "Für diese Aufgabe wurden keine Teilaufgaben erstellt",
 	"noCommentsCreated": "Keine Kommentare gefunden",
 	"noDiscussionsCreated": "Keine Diskussionen vorhanden",
-	"noDiscussionsMatching": "Für diese Filter wurden keine Diskussionen gefunden"
+	"noDiscussionsMatching": "Für diese Filter wurden keine Diskussionen gefunden",
+	"noInternetConnectionTitle": "Keine Internetverbindung",
+	"noInternetConnectionSubtitle": "Schalten Sie WLAN oder das Mobilfunknetz ein und versuchen Sie erneut",
+	"tryAgain": "ERNEUT VERSUCHEN",
+	"projectCreated": "Projekt wurde erstellt",
+	"projectDeleted": "Projekt gelöscht",
+	"taskDeleted": "Aufgabe wurde gelöscht",
+	"discussionDeleted": "Diskussion wurde gelöscht",
+	"milestoneCreated": "Meilenstein wurde erstellt"
 }
