@@ -152,6 +152,7 @@ class _DiscussionStatus extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 72, right: 16),
           child: StatusButton(
+            canEdit: controller.discussion.value.canEdit,
             text: controller.status.value == 1 ? tr('archived') : tr('open'),
             onPressed: () async => controller.tryChangingStatus(context),
           ),

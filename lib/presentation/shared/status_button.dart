@@ -36,10 +36,13 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StatusButton extends StatelessWidget {
+  final bool canEdit;
   final String text;
   final Function() onPressed;
+
   const StatusButton({
     Key key,
+    @required this.canEdit,
     @required this.text,
     @required this.onPressed,
   }) : super(key: key);
@@ -47,10 +50,12 @@ class StatusButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: onPressed,
+      onPressed: canEdit ? onPressed : null,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-          return const Color(0xff81C4FF).withOpacity(0.2);
+          return canEdit
+              ? const Color(0xff81C4FF).withOpacity(0.2)
+              : Get.theme.colors().bgDescription;
         }),
         side: MaterialStateProperty.resolveWith((_) {
           return const BorderSide(color: Colors.transparent, width: 0);
@@ -65,20 +70,23 @@ class StatusButton extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyleHelper.subtitle2(
-                  color: Get.theme.colors().primary,
+                  color: canEdit
+                      ? Get.theme.colors().primary
+                      : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
           ),
           const SizedBox(width: 5),
-          Padding(
-            padding: const EdgeInsets.only(top: 2),
-            child: Icon(
-              Icons.keyboard_arrow_down_rounded,
-              color: Get.theme.colors().primary,
-              size: 19,
-            ),
-          )
+          if (canEdit)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Get.theme.colors().primary,
+                size: 19,
+              ),
+            )
         ],
       ),
     );
