@@ -68,11 +68,12 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            IconButton(
-              icon: const Icon(Icons.edit_outlined),
-              onPressed: () => Get.find<NavigationController>()
-                  .to(TaskEditingView(task: controller.task.value)),
-            ),
+            if (controller.canEdit)
+              IconButton(
+                icon: const Icon(Icons.edit_outlined),
+                onPressed: () => Get.find<NavigationController>()
+                    .to(TaskEditingView(task: controller.task.value)),
+              ),
             _AppBarMenu(controller: controller)
           ],
           bottom: SizedBox(

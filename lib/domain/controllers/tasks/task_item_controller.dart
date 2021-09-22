@@ -9,9 +9,12 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -34,6 +37,8 @@ class TaskItemController extends GetxController {
   set setLoaded(bool value) => loaded.value = value;
 
   final TaskStatusHandler _statusHandler = TaskStatusHandler();
+
+  bool get canEdit => task.value.canEdit && task.value.status != 2;
 
   Color get getStatusBGColor =>
       _statusHandler.getBackgroundColor(status.value, task.value.canEdit);
@@ -75,6 +80,17 @@ class TaskItemController extends GetxController {
     // ignore: omit_local_variable_types
     String link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
     await Clipboard.setData(ClipboardData(text: link));
+  }
+
+  Future accept(context) async {
+    var controller = Get.put(TaskEditingController(task: task.value));
+    controller.addResponsible(
+      PortalUserItemController(
+        isSelected: true.obs,
+        portalUser: Get.find<UserController>().user,
+      ),
+    );
+    await controller.acceptTask(context);
   }
 
   Future copyTask({PortalTask taskk}) async {

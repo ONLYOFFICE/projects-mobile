@@ -45,7 +45,9 @@ class SubtasksView extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 6, bottom: 50),
                     itemBuilder: (BuildContext context, int index) {
                       return SubtaskCell(
-                          subtask: _task.subtasks[index], parentTask: _task);
+                        subtask: _task.subtasks[index],
+                        parentTask: _task,
+                      );
                     },
                   ),
                 ),
