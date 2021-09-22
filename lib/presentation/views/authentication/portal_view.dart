@@ -46,7 +46,7 @@ class _PortalInputViewState extends State<PortalInputView> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(height: Get.height * 0.165),
-                        AppIcon(icon: SvgIcons.logo_big),
+                        AppIcon(icon: SvgIcons.app_logo),
                         SizedBox(height: Get.height * 0.044),
                         Text(tr('appName'),
                             textAlign: TextAlign.center,
