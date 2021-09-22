@@ -397,8 +397,11 @@ class TaskFilterController extends BaseFilterController {
     _selfId ??= await Get.find<UserController>().getUserId();
 
     if (preset == PresetTaskFilters.myTasks) {
+      _statusFilter = '&status=1';
+
       await _getMyTasks();
     } else if (preset == PresetTaskFilters.upcomming) {
+      _statusFilter = '&status=1';
       var startDate = formatter.format(DateTime.now());
       var stopDate =
           formatter.format(DateTime.now().add(const Duration(days: 7)));

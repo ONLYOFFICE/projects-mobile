@@ -109,6 +109,7 @@ class ProjectTasksController extends GetxController {
   }
 
   Future<void> setup(int projectId) async {
+    loaded.value = false;
     _projectId = projectId;
     _filterController.projectId = _projectId.toString();
 
