@@ -41,6 +41,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 
 class SubtaskDetailedView extends StatelessWidget {
   const SubtaskDetailedView({Key key}) : super(key: key);
@@ -101,20 +102,7 @@ class SubtaskDetailedView extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 56,
-                          child: Checkbox(
-                            value: _subtask.status == 2,
-                            activeColor: const Color(0xFF666666),
-                            onChanged: (value) {
-                              controller.updateSubtaskStatus(
-                                context: context,
-                                taskId: _subtask.taskId,
-                                subtaskId: _subtask.id,
-                              );
-                            },
-                          ),
-                        ),
+                        SubtaskCheckBox(subtaskController: controller),
                         Obx(() => Expanded(
                               child: Text(_subtask.title,
                                   style: controller.subtask.value.status == 2
@@ -129,14 +117,14 @@ class SubtaskDetailedView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const StyledDivider(leftPadding: 56)
+                    const StyledDivider(leftPadding: 72)
                   ],
                 ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
                     SizedBox(
-                        width: 56,
+                        width: 72,
                         child: AppIcon(
                             icon: SvgIcons.person,
                             color:

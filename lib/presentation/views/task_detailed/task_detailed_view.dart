@@ -136,7 +136,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          TasksOverviewScreen(taskController: controller),
+          TaskOverviewScreen(taskController: controller),
           SubtasksView(controller: controller),
           EntityDocumentsView(
             folderId: controller.task.value.id,

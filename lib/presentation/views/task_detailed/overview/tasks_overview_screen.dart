@@ -46,10 +46,10 @@ import 'package:readmore/readmore.dart';
 
 part 'task.dart';
 
-class TasksOverviewScreen extends StatelessWidget {
+class TaskOverviewScreen extends StatelessWidget {
   final TaskItemController taskController;
 
-  const TasksOverviewScreen({Key key, @required this.taskController})
+  const TaskOverviewScreen({Key key, @required this.taskController})
       : super(key: key);
 
   @override

@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
 class SubtaskCell extends StatelessWidget {
@@ -69,20 +70,7 @@ class SubtaskCell extends StatelessWidget {
             Obx(
               () => Row(
                 children: [
-                  SizedBox(
-                    width: 52,
-                    child: Checkbox(
-                      value: subtaskController.subtask.value.status == 2,
-                      activeColor: const Color(0xFF666666),
-                      onChanged: (value) {
-                        subtaskController.updateSubtaskStatus(
-                          context: context,
-                          taskId: subtaskController.subtask.value.taskId,
-                          subtaskId: subtaskController.subtask.value.id,
-                        );
-                      },
-                    ),
-                  ),
+                  SubtaskCheckBox(subtaskController: subtaskController),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,7 +134,7 @@ class SubtaskCell extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 6),
-            const Divider(indent: 56, thickness: 1, height: 1)
+            const Divider(indent: 72, thickness: 1, height: 1)
           ],
         ),
       ),
