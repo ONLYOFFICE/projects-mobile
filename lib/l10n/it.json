@@ -428,5 +428,13 @@
 	"noSubtasksCreated": "Non ci sono le sottoattività create per questa attività",
 	"noCommentsCreated": "Nessun commento trovato",
 	"noDiscussionsCreated": "Non è stata avviata nessuna discussione",
-	"noDiscussionsMatching": "Non ci sono discussioni che corrispondono a questi filtri"
+	"noDiscussionsMatching": "Non ci sono discussioni che corrispondono a questi filtri",
+	"noInternetConnectionTitle": "Nessuna connessione a Internet",
+	"noInternetConnectionSubtitle": "Verifica che il Wi-Fi o i dati mobili siano attivati e riprova di nuovo",
+	"tryAgain": "RIPROVARE",
+	"projectCreated": "Il progetto è stato creato",
+	"projectDeleted": "Progetto eliminato",
+	"taskDeleted": "Attività eliminata",
+	"discussionDeleted": "Discussione eliminata",
+	"milestoneCreated": "Pietra miliare è stata creata"
 }

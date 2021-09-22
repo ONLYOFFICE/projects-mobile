@@ -428,5 +428,13 @@
 	"noSubtasksCreated": "No se han creado subtareas para esta tarea",
 	"noCommentsCreated": "No se han encontrado comentarios",
 	"noDiscussionsCreated": "Todavía no se ha iniciado ninguna discusión",
-	"noDiscussionsMatching": "No hay discusiones que coincidan con estos filtros"
+	"noDiscussionsMatching": "No hay discusiones que coincidan con estos filtros",
+	"noInternetConnectionTitle": "No hay conexión a Internet",
+	"noInternetConnectionSubtitle": "Asegúrese de que la red Wi-Fi o los datos móviles están activados y vuelva a intentarlo.",
+	"tryAgain": "VOLVER A INTENTARLO",
+	"projectCreated": "El proyecto se ha creado",
+	"projectDeleted": "El proyecto se ha eliminado",
+	"taskDeleted": "La tarea se ha eliminado",
+	"discussionDeleted": "La discusión se ha eliminado",
+	"milestoneCreated": "El hito se ha creado"
 }

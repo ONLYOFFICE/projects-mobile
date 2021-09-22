@@ -33,52 +33,51 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/shared/project_team_responsible.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
-class ResponsibleTile extends StatelessWidget {
-  final controller;
-  final bool enableUnderline;
-  final Widget suffixIcon;
-  const ResponsibleTile({
-    Key key,
-    @required this.controller,
-    this.enableUnderline = true,
-    this.suffixIcon,
-  }) : super(key: key);
+class NewProjectDescription extends StatelessWidget {
+  const NewProjectDescription({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        // ignore: omit_local_variable_types
-        bool _isSelected = controller.responsibles.isNotEmpty;
-        return NewItemTile(
-          isSelected: _isSelected,
-          caption: _isSelected ? '${tr('assignedTo')}:' : null,
-          enableBorder: enableUnderline,
-          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
-          text: _isSelected
-              ? controller.responsibles.length == 1
-                  ? controller.responsibles[0]?.displayName
-                  : plural('responsibles', controller.responsibles.length)
-              : tr('addResponsible'),
-          suffix: _isSelected
-              ? suffixIcon ??
-                  Icon(Icons.navigate_next,
-                      size: 24, color: Get.theme.colors().onBackground)
-              : null,
-          suffixPadding: const EdgeInsets.only(right: 21),
-          icon: SvgIcons.person,
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const ProjectTeamResponsibleSelectionView(),
-              arguments: {'controller': controller}),
-        );
-      },
+    var controller = Get.arguments['controller'];
+    final platformController = Get.find<PlatformController>();
+
+    return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
+      appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
+        titleText: tr('description'),
+        leading: IconButton(
+            icon: Get.put(PlatformController()).isMobile
+                ? const Icon(Icons.arrow_back_rounded)
+                : const Icon(Icons.close),
+            onPressed: () => controller.leaveDescriptionView(
+                controller.descriptionController.value.text)),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: () => controller.confirmDescription(
+                  controller.descriptionController.value.text))
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
+        child: TextField(
+          autofocus: true,
+          controller: controller.descriptionController,
+          maxLines: null,
+          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+          decoration: InputDecoration.collapsed(
+              hintText: tr('enterText'),
+              hintStyle: TextStyleHelper.subtitle1()),
+        ),
+      ),
     );
   }
 }
