@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
@@ -299,6 +300,12 @@ void showsStatusesBS({context, itemController}) async {
                         );
                         if (success) {
                           locator<EventHub>().fire('needToRefreshProjects');
+                          // ignore: unawaited_futures
+                          350.milliseconds.delay().then((_) {
+                            MessagesHandler.showSnackBar(
+                                context: Get.context,
+                                text: tr('projectUpdated'));
+                          });
                         }
                         Get.back();
                       },

@@ -437,6 +437,8 @@
 	"taskDeleted": "Task has been deleted",
 	"discussionDeleted": "Discussion has been deleted",
 	"milestoneCreated": "Milestone has been created",
-	"taskAccepted": "Task has been accepted by you"
-
+	"taskAccepted": "Task has been accepted by you",
+	"taskUpdated": "Task has been updated",
+	"projectUpdated": "Project has been updated",
+	"discussionUpdated": "Discussion has been updated"
 }
