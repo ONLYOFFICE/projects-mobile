@@ -45,11 +45,16 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (value) => _onSelected(context, value, controller),
       itemBuilder: (context) {
         return [
+          if (controller.canEdit && task.responsibles.isEmpty)
+            PopupMenuItem(
+              value: 'accept',
+              child: Text(tr('accept')),
+            ),
           PopupMenuItem(
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
-          if (task.canEdit)
+          if (controller.canEdit)
             PopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
@@ -79,6 +84,10 @@ class _AppBarMenu extends StatelessWidget {
 void _onSelected(context, value, TaskItemController controller) async {
   var task = controller.task.value;
   switch (value) {
+    case 'accept':
+      await controller.accept(context);
+      break;
+
     case 'copyLink':
       controller.copyLink(taskId: task.id, projectId: task.projectOwner.id);
       break;

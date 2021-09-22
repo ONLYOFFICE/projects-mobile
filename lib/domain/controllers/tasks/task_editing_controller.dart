@@ -33,16 +33,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
@@ -354,7 +357,7 @@ class TaskEditingController extends GetxController
     }
   }
 
-  void confirm() async {
+  Future<void> confirm() async {
     if (title.isEmpty || task.title == null) {
       setTitleError.value = true;
     } else {
@@ -388,6 +391,33 @@ class TaskEditingController extends GetxController
         _taskItemController.reloadTask(showLoading: true);
         Get.back();
       }
+    }
+  }
+
+  Future<void> acceptTask(context) async {
+    var newTask = NewTaskDTO(
+      description: descriptionText.value,
+      deadline: _newDueDate,
+      id: task.id,
+      startDate: _newStartDate,
+      priority: highPriority.value == true ? 'high' : 'normal',
+      title: title.value,
+      milestoneid: newMilestoneId,
+      projectId: task.projectOwner.id,
+      responsibles: [Get.find<UserController>().user.id],
+    );
+    _taskItemController.setLoaded = false;
+    var updatedTask = await _api.updateTask(newTask: newTask);
+    _taskItemController.setLoaded = true;
+
+    if (updatedTask != null) {
+      _taskItemController.task.value = updatedTask;
+      MessagesHandler.showSnackBar(
+        context: context,
+        text: tr('taskAccepted'),
+        buttonText: tr('ok'),
+        buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
+      );
     }
   }
 }
