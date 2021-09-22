@@ -32,7 +32,7 @@ class ProjectTasksController extends GetxController {
   String _selfId;
   final _projectService = locator<ProjectService>();
   final _userController = Get.find<UserController>();
-  var _securityInfo = SecrityInfo();
+  SecrityInfo _securityInfo;
   var fabIsVisible = false.obs;
 
   ProjectTasksController() {

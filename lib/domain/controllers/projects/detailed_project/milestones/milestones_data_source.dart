@@ -33,7 +33,7 @@ class MilestonesDataSource extends GetxController {
   final _userController = Get.find<UserController>();
   final _projectService = locator<ProjectService>();
 
-  var _securityInfo = SecrityInfo();
+  SecrityInfo _securityInfo;
   var fabIsVisible = false.obs;
 
   MilestonesDataSource() {
@@ -76,8 +76,12 @@ class MilestonesDataSource extends GetxController {
   }
 
   Future<void> setup(int projectId) async {
+    loaded.value = false;
     _projectId = projectId;
     _filterController.projectId = _projectId.toString();
+
+    // ignore: unawaited_futures
+    loadMilestones();
 
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
@@ -87,7 +91,5 @@ class MilestonesDataSource extends GetxController {
       fabIsVisible.value = canCreate;
     else
       fabIsVisible.value = false;
-
-    await loadMilestones();
   }
 }

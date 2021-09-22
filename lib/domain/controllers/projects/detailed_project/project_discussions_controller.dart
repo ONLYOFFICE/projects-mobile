@@ -26,7 +26,7 @@ class ProjectDiscussionsController extends GetxController {
   RxBool loaded = false.obs;
 
   final _userController = Get.find<UserController>();
-  var _securityInfo = SecrityInfo();
+  SecrityInfo _securityInfo;
   var fabIsVisible = false.obs;
   String _selfId;
   final _projectService = locator<ProjectService>();
@@ -43,6 +43,7 @@ class ProjectDiscussionsController extends GetxController {
     var team;
 
     _userController.getUserInfo().then((value) async => {
+          _selfId ??= await _userController.getUserId(),
           _securityInfo ??= await _projectService.getProjectSecurityinfo(),
           team = await _projectService.getProjectTeam(projectId.toString()),
           if (team.any((element) => element.id == _selfId))
