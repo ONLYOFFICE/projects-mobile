@@ -23,8 +23,10 @@ class _Task extends StatelessWidget {
               ),
               const SizedBox(height: 22),
               StatusButton(
-                  text: taskController?.status?.value?.title ?? '',
-                  onPressed: () => taskController.openStatuses(context)),
+                canEdit: taskController.task.value.canEdit,
+                text: taskController?.status?.value?.title ?? '',
+                onPressed: () => taskController.openStatuses(context),
+              ),
             ],
           );
         },
