@@ -40,6 +40,8 @@ import 'package:projects/domain/controllers/discussions/discussions_filter_contr
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
@@ -51,6 +53,7 @@ class DiscussionsController extends BaseController {
   PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
 
+  final _userController = Get.find<UserController>();
   final _sortController = Get.find<DiscussionsSortController>();
   DiscussionsSortController get sortController => _sortController;
 
@@ -73,8 +76,10 @@ class DiscussionsController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
+    getFabVisibility().then((value) => fabIsVisible.value = value);
+
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
-      fabIsVisible.value = data ? false : true;
+      fabIsVisible.value = data ? false : getFabVisibility();
     });
   }
 
@@ -128,4 +133,16 @@ class DiscussionsController extends BaseController {
   @override
   void showSearch() =>
       Get.find<NavigationController>().to(const DiscussionsSearchScreen());
+
+  Future<bool> getFabVisibility() async {
+    var fabVisibility =
+        ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+    await _userController.getUserInfo();
+    var selfUser = _userController.user;
+    if (selfUser.isAdmin || selfUser.isOwner) {
+      fabVisibility =
+          ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+    }
+    return fabVisibility;
+  }
 }
