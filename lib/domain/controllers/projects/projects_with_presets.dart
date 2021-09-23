@@ -41,17 +41,17 @@ class ProjectsWithPresets {
   static var _activeProjectsController;
 
   static ProjectsController get myProjectsController {
-    _setupMyProjects();
+    _myProjectsController ?? _setupMyProjects();
     return _myProjectsController;
   }
 
   static ProjectsController get folowedProjectsController {
-    _setupMyFolowedProjects();
+    _folowedProjectsController ?? _setupMyFolowedProjects();
     return _folowedProjectsController;
   }
 
   static ProjectsController get activeProjectsController {
-    _setupActiveProjects();
+    _activeProjectsController ?? _setupActiveProjects();
     return _activeProjectsController;
   }
 
