@@ -428,5 +428,13 @@
 	"noSubtasksCreated": "未为此任务创建任何子任务",
 	"noCommentsCreated": "未找到评论",
 	"noDiscussionsCreated": "尚未开始讨论",
-	"noDiscussionsMatching": "没有符合过滤条件的讨论"
+	"noDiscussionsMatching": "没有符合过滤条件的讨论",
+	"noInternetConnectionTitle": "无网络连接",
+	"noInternetConnectionSubtitle": "确保Wi-Fi或移动数据已打开并重试",
+	"tryAgain": "再试一次",
+	"projectCreated": "项目已创建",
+	"projectDeleted": "项目已删除",
+	"taskDeleted": "任务已删除",
+	"discussionDeleted": "讨论已删除",
+	"milestoneCreated": "里程碑已创建"
 }
