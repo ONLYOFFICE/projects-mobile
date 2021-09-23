@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -50,8 +51,12 @@ class SelectProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
-
     var projectsController = ProjectsWithPresets.myProjectsController;
+
+    var selfUser = Get.find<UserController>().user;
+    if (selfUser.isAdmin || selfUser.isOwner) {
+      projectsController = ProjectsWithPresets.activeProjectsController;
+    }
 
     var searchController =
         Get.put(ProjectSearchController(onlyMyProjects: true));
