@@ -46,8 +46,8 @@ class DiscussionsController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
-      fabIsVisible.value = data ? false : getFabVisibility();
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+      fabIsVisible.value = data ? false : await getFabVisibility();
     });
   }
 

@@ -75,7 +75,6 @@ List<GetPage> getxPages() => [
       GetPage(
           name: '/EnterSMSCodeScreen', page: () => const EnterSMSCodeScreen()),
       GetPage(name: '/HomeView', page: () => const ProjectsView()),
-      GetPage(name: '/NavigationView', page: () => NavigationView()),
       GetPage(name: '/TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(
           name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),

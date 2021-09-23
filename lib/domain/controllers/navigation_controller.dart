@@ -71,7 +71,7 @@ class NavigationController extends GetxController {
     update();
   }
 
-  void clearCurrentIndex() => tabIndex = null;
+  void clearCurrentIndex() => tabIndex = 0;
 
   Future toScreen(
     Widget widget, {

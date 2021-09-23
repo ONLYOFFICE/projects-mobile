@@ -22,6 +22,10 @@ class MainController extends GetxController {
   var subscriptions = <StreamSubscription>[];
 
   final passcodeCheckingController = Get.find<PasscodeCheckingController>();
+
+  NavigationView _navigationView;
+  PortalInputView _portalView;
+
   MainController() {
     Connectivity()
         .checkConnectivity()
@@ -75,14 +79,18 @@ class MainController extends GetxController {
             {
               if (!(mainPage.value is NavigationView))
                 {
+                  _navigationView ??= NavigationView(),
+
                   // ignore: unnecessary_cast
-                  mainPage.value = NavigationView() as Widget,
+                  mainPage.value = _navigationView as Widget,
                 }
             }
           else if (!(mainPage.value is PortalInputView))
-            // ignore: unnecessary_cast
-            mainPage.value = PortalInputView() as Widget,
-          // })
+            {
+              _portalView ??= PortalInputView(),
+              // ignore: unnecessary_cast
+              mainPage.value = _portalView as Widget,
+            }
         });
   }
 }

@@ -72,6 +72,8 @@ class DashboardCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.refreshData();
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       width: double.maxFinite,
