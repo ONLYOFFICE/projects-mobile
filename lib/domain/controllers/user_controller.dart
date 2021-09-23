@@ -1,3 +1,5 @@
+import 'package:synchronized/synchronized.dart';
+
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/authentication_service.dart';
@@ -9,15 +11,21 @@ class UserController extends GetxController {
   PortalUser user;
   RxBool loaded = false.obs;
 
+  var lock = Lock();
+
   Future getUserInfo() async {
     loaded.value = false;
-    if (user != null && user.id != null) {
-      loaded.value = true;
-      return;
-    }
 
-    var data = await _api.getSelfInfo();
-    user = data.response;
+    await lock.synchronized(() async {
+      if (user != null && user.id != null) {
+        loaded.value = true;
+        return;
+      }
+
+      var data = await _api.getSelfInfo();
+      user = data.response;
+    });
+
     loaded.value = true;
   }
 
