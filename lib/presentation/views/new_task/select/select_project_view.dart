@@ -80,7 +80,7 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isNotEmpty) {
-          return ProjectsList(
+          return ProjectList(
             controller: controller,
             projects: searchController.searchResult,
           );
@@ -92,7 +92,7 @@ class SelectProjectView extends StatelessWidget {
         }
         if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
-          return ProjectsList(
+          return ProjectList(
             projects: projectsController.paginationController.data,
             controller: controller,
           );
@@ -103,10 +103,10 @@ class SelectProjectView extends StatelessWidget {
   }
 }
 
-class ProjectsList extends StatelessWidget {
+class ProjectList extends StatelessWidget {
   final List projects;
   final controller;
-  const ProjectsList({
+  const ProjectList({
     Key key,
     @required this.projects,
     @required this.controller,
@@ -122,7 +122,7 @@ class ProjectsList extends StatelessWidget {
       itemBuilder: (BuildContext context, int index) {
         return Material(
           color: Get.find<PlatformController>().isMobile
-              ? Get.theme.colors().background
+              ? Get.theme.colors().backgroundColor
               : Get.theme.colors().surface,
           child: InkWell(
             onTap: () {
