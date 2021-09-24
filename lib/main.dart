@@ -55,9 +55,9 @@ Future<String> _getInitPage() async {
 
   var _isLoggedIn = await isAuthorized();
 
-  if (passcode != null && _isLoggedIn) return 'PasscodeScreen';
+  if (passcode != null && _isLoggedIn) return '/PasscodeScreen';
 
-  return 'MainView';
+  return '/MainView';
 }
 
 Future<bool> isAuthorized() async {

@@ -5,10 +5,11 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/splash_view.dart';
+import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
@@ -20,11 +21,6 @@ class MainController extends GetxController {
   bool correctPasscodeChecked = false;
 
   var subscriptions = <StreamSubscription>[];
-
-  final passcodeCheckingController = Get.find<PasscodeCheckingController>();
-
-  NavigationView _navigationView;
-  PortalInputView _portalView;
 
   MainController() {
     Connectivity()
@@ -38,12 +34,18 @@ class MainController extends GetxController {
       setupMainPage();
     }));
 
-    subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) {
+    subscriptions
+        .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       setupMainPage();
+      await Get.offAll(() => MainView());
     }));
 
-    subscriptions.add(locator<EventHub>().on('logoutSuccess', (dynamic data) {
+    subscriptions
+        .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       setupMainPage();
+      await Get.offAll(() => MainView());
+
+      Get.find<NavigationController>().clearCurrentIndex();
     }));
   }
 
@@ -79,17 +81,14 @@ class MainController extends GetxController {
             {
               if (!(mainPage.value is NavigationView))
                 {
-                  _navigationView ??= NavigationView(),
-
                   // ignore: unnecessary_cast
-                  mainPage.value = _navigationView as Widget,
+                  mainPage.value = NavigationView() as Widget,
                 }
             }
           else if (!(mainPage.value is PortalInputView))
             {
-              _portalView ??= PortalInputView(),
               // ignore: unnecessary_cast
-              mainPage.value = _portalView as Widget,
+              mainPage.value = PortalInputView() as Widget,
             }
         });
   }

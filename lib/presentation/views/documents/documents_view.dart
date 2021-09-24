@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
@@ -26,7 +27,9 @@ class PortalDocumentsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<DocumentsController>();
-    controller.initialSetup();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.initialSetup();
+    });
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);

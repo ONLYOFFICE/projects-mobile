@@ -71,6 +71,8 @@ class DiscussionsDocumentsController extends GetxController {
         () async => {}; //await refreshContent();
 
     paginationController.pullDownEnabled = true;
+
+    portalInfoController.setup();
   }
 
   void setupFiles(List<PortalFile> files) {
@@ -125,7 +127,6 @@ class DiscussionsDocumentsController extends GetxController {
 
   Future openFile(PortalFile selectedFile) async {
     var userController = Get.find<UserController>();
-    var portalInfoController = Get.find<PortalInfoController>();
 
     await userController.getUserInfo();
     var body = <String, dynamic>{

@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
@@ -22,7 +23,9 @@ class PortalDiscussionsView extends StatelessWidget {
   Widget build(BuildContext context) {
     var controller = Get.find<DiscussionsController>();
 
-    controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
+    });
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
