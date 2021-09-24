@@ -50,7 +50,7 @@ class PortalUserItemController extends GetxController {
   var userTitle = ''.obs;
 
   PortalUserItemController({this.portalUser, this.isSelected}) {
-    setupUser();
+    if (portalUser != null) setupUser();
   }
 
   final PortalUser portalUser;

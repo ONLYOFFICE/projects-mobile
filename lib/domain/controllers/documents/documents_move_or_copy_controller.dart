@@ -38,14 +38,12 @@ import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DocumentsMoveOrCopyController extends GetxController {
   final _api = locator<FilesService>();
-  var portalInfoController = Get.find<PortalInfoController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;

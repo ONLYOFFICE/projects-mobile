@@ -72,7 +72,7 @@ class PasscodeCheckingController extends GetxController {
         await _getFingerprintAvailability();
       } else {
         locator<EventHub>().fire('correctPasscodeChecked');
-        await Get.offAll(MainView());
+        await Get.offAll(() => MainView());
       }
     } catch (_) {
       loaded.value = false;
@@ -105,7 +105,7 @@ class PasscodeCheckingController extends GetxController {
           await onPass();
         } else {
           locator<EventHub>().fire('correctPasscodeChecked');
-          await Get.offAll(MainView());
+          await Get.offAll(() => MainView());
         }
       }
     }

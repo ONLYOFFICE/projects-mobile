@@ -32,13 +32,14 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
+
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -52,11 +53,11 @@ class SelfProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userController = Get.find<UserController>();
-    var portalInfoController = Get.find<PortalInfoController>();
+    var profileController = Get.find<ProfileController>();
 
-    var profileController = Get.put(ProfileController());
-    profileController.loadAvatar(userController.user);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      profileController.setup();
+    });
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
@@ -95,36 +96,41 @@ class SelfProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 32),
-              CircleAvatar(
-                radius: 60.0,
-                backgroundColor: Get.theme.colors().bgDescription,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(60),
-                  child: Obx(() {
-                    return profileController.avatar.value;
-                  }),
+              Obx(
+                () => CircleAvatar(
+                  radius: 60.0,
+                  backgroundColor: Get.theme.colors().bgDescription,
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(60),
+                      child: profileController.avatar.value),
                 ),
               ),
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  userController.user?.displayName,
-                  style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onSurface,
+                child: Obx(
+                  () => Text(
+                    profileController.username.value,
+                    style: TextStyleHelper.headline6(
+                      color: Get.theme.colors().onSurface,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 68),
-              _ProfileInfoTile(
-                caption: '${tr('email')}:',
-                text: userController.user?.email ?? '',
-                icon: SvgIcons.message,
+              Obx(
+                () => _ProfileInfoTile(
+                  caption: '${tr('email')}:',
+                  text: profileController.email.value,
+                  icon: SvgIcons.message,
+                ),
               ),
-              _ProfileInfoTile(
-                caption: '${tr('portalAdress')}:',
-                text: portalInfoController.portalName ?? '',
-                icon: SvgIcons.cloud,
+              Obx(
+                () => _ProfileInfoTile(
+                  caption: '${tr('portalAdress')}:',
+                  text: profileController.portalName.value,
+                  icon: SvgIcons.cloud,
+                ),
               ),
               _ProfileInfoTile(
                 text: tr('logOut'),
@@ -148,6 +154,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     PortalUser portalUser = Get.arguments['portalUser'];
     var portalInfoController = Get.find<PortalInfoController>();
+    portalInfoController.setup();
 
     return WillPopScope(
       onWillPop: () async => false,

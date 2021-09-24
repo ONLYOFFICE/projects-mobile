@@ -81,12 +81,14 @@ import 'package:projects/domain/controllers/documents/documents_move_or_copy_con
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/groups/groups_controller.dart';
+import 'package:projects/domain/controllers/images_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 
@@ -155,6 +157,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserApi());
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton(() => EventHub());
+  locator.registerLazySingleton(() => ImagesController());
 
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
@@ -246,5 +249,7 @@ void setupLocator() {
       fenix: true);
   Get.lazyPut(() => LoginController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
-  Get.create<PlatformController>(() => PlatformController());
+  Get.lazyPut(() => PlatformController(), fenix: true);
+
+  Get.lazyPut(() => ProfileController(), fenix: true);
 }

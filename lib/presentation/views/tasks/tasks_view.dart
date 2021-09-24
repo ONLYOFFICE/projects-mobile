@@ -35,6 +35,7 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -59,7 +60,9 @@ class TasksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
-    controller.loadTasks(preset: PresetTaskFilters.saved);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.loadTasks(preset: PresetTaskFilters.saved);
+    });
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
@@ -118,8 +121,10 @@ class TasksView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (!controller.loaded.value) return const ListLoadingSkeleton();
+          if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
+            return const ListLoadingSkeleton();
           if (controller.loaded.value &&
+              controller.taskStatusesLoaded.value &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value) {
             return Center(
@@ -129,6 +134,7 @@ class TasksView extends StatelessWidget {
                         args: [tr('tasks').toLowerCase()])));
           }
           if (controller.loaded.value &&
+              controller.taskStatusesLoaded.value &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
             return Center(

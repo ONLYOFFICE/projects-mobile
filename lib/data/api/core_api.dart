@@ -309,6 +309,8 @@ class CoreApi {
       _portalName = await _secureStorage.getString('portalName');
     }
 
+    if (_portalName == null) return null;
+
     if (!_portalName.contains('http')) {
       _portalName = 'https://$_portalName';
       await savePortalName();
