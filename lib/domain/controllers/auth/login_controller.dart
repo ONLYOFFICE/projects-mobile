@@ -44,10 +44,8 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/code_view.dart';
@@ -113,7 +111,6 @@ class LoginController extends GetxController {
                 await _secureStorage.getString('portalName')
           });
           locator<EventHub>().fire('loginSuccess');
-          await Get.offAll(() => MainView()); //fix
         } else {
           // if the device type has not been sent, the token must be deleted
           await logout();
@@ -196,7 +193,6 @@ class LoginController extends GetxController {
               await _secureStorage.getString('portalName')
         });
         locator<EventHub>().fire('loginSuccess');
-        await Get.offAllNamed('MainView');
         return true;
       } else {
         // if the device type has not been sent, the token must be deleted
@@ -298,7 +294,6 @@ class LoginController extends GetxController {
 
     locator<EventHub>().fire('logoutSuccess');
     Get.find<PortalInfoController>().logout();
-    Get.find<NavigationController>().clearCurrentIndex();
   }
 
   @override

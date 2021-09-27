@@ -30,27 +30,13 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'dart:io';
 
-import 'package:projects/main_controller.dart';
-
-import 'package:projects/presentation/views/no_internet_view.dart';
-
-class MainView extends StatelessWidget {
-  MainView({Key key}) : super(key: key);
-
+class DevHttpOverrides extends HttpOverrides {
   @override
-  Widget build(BuildContext context) {
-    return GetBuilder<MainController>(builder: (controller) {
-      controller.setupMainPage();
-      return Obx(() {
-        if (controller.noInternet.isTrue)
-          return const NoInternetScreen();
-        else
-          return controller.mainPage.value;
-      });
-    });
+  HttpClient createHttpClient(SecurityContext context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
   }
 }

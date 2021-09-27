@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -104,6 +105,10 @@ class DashboardCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.refreshData();
+    });
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       width: double.maxFinite,

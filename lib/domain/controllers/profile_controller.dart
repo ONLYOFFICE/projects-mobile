@@ -36,6 +36,8 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -43,6 +45,17 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 
 class ProfileController extends GetxController {
   final _downloadService = locator<DownloadService>();
+
+  var portalInfoController = Get.find<PortalInfoController>();
+  var userController = Get.find<UserController>();
+
+  Rx<PortalUser> user = PortalUser().obs;
+  RxBool loaded = false.obs;
+  var username = ''.obs;
+  var portalName = ''.obs;
+  var displayName = ''.obs;
+  var email = ''.obs;
+
   // ignore: unnecessary_cast
   Rx<Widget> avatar = (AppIcon(
           width: 120,
@@ -50,6 +63,18 @@ class ProfileController extends GetxController {
           icon: SvgIcons.avatar,
           color: Get.theme.colors().onSurface) as Widget)
       .obs;
+
+  Future<void> setup() async {
+    await userController.getUserInfo();
+    await portalInfoController.setup();
+
+    user.value = userController.user;
+    portalName.value = portalInfoController.portalName;
+    username.value = userController.user.displayName;
+
+    email.value = userController.user.email;
+    await loadAvatar();
+  }
 
   void logout(context) async {
     await Get.dialog(StyledAlertDialog(
@@ -59,17 +84,16 @@ class ProfileController extends GetxController {
       onAcceptTap: () async {
         Get.back();
         await Get.find<LoginController>().logout();
-        await Get.offAllNamed('MainView');
       },
     ));
   }
 
-  Future<void> loadAvatar(PortalUser portalUser) async {
+  Future<void> loadAvatar() async {
     try {
       var avatarBytes = await _downloadService.downloadImage(
-          portalUser?.avatar ??
-              portalUser?.avatarMedium ??
-              portalUser?.avatarSmall);
+          user.value?.avatar ??
+              user.value?.avatarMedium ??
+              user.value?.avatarSmall);
       if (avatarBytes == null) return;
 
       // ignore: unnecessary_cast

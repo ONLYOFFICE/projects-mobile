@@ -37,10 +37,11 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/splash_view.dart';
+import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
@@ -53,7 +54,6 @@ class MainController extends GetxController {
 
   var subscriptions = <StreamSubscription>[];
 
-  final passcodeCheckingController = Get.find<PasscodeCheckingController>();
   MainController() {
     Connectivity()
         .checkConnectivity()
@@ -66,12 +66,18 @@ class MainController extends GetxController {
       setupMainPage();
     }));
 
-    subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) {
+    subscriptions
+        .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       setupMainPage();
+      await Get.offAll(() => MainView());
     }));
 
-    subscriptions.add(locator<EventHub>().on('logoutSuccess', (dynamic data) {
+    subscriptions
+        .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       setupMainPage();
+      await Get.offAll(() => MainView());
+
+      Get.find<NavigationController>().clearCurrentIndex();
     }));
   }
 
@@ -112,9 +118,10 @@ class MainController extends GetxController {
                 }
             }
           else if (!(mainPage.value is PortalInputView))
-            // ignore: unnecessary_cast
-            mainPage.value = PortalInputView() as Widget,
-          // })
+            {
+              // ignore: unnecessary_cast
+              mainPage.value = PortalInputView() as Widget,
+            }
         });
   }
 }

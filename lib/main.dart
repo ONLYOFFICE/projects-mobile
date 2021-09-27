@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +39,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/internal/dev_http_overrides.dart';
 
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -44,6 +47,7 @@ import 'package:projects/presentation/shared/theme/theme_service.dart';
 import 'package:projects/internal/locator.dart';
 
 void main() async {
+  HttpOverrides.global = DevHttpOverrides();
   setupLocator();
   await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -87,9 +91,9 @@ Future<String> _getInitPage() async {
 
   var _isLoggedIn = await isAuthorized();
 
-  if (passcode != null && _isLoggedIn) return 'PasscodeScreen';
+  if (passcode != null && _isLoggedIn) return '/PasscodeScreen';
 
-  return 'MainView';
+  return '/MainView';
 }
 
 Future<bool> isAuthorized() async {

@@ -36,7 +36,6 @@ import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -44,17 +43,18 @@ import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
-  var tabIndex = 0;
+  var tabIndex = 0.obs;
   var onMoreView = false;
   final _userController = Get.find<UserController>();
   Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
 
   @override
   void onInit() {
-    var portalController = Get.find<PortalInfoController>();
-    if (portalController.portalName == null) portalController.onInit();
-    _userController.getUserInfo().whenComplete(() => selfUserItem.value =
-        PortalUserItemController(portalUser: _userController.user));
+    _userController
+        .getUserInfo()
+        .then((value) => selfUserItem.value =
+            PortalUserItemController(portalUser: _userController.user))
+        .obs;
 
     super.onInit();
   }
@@ -77,33 +77,29 @@ class NavigationController extends GetxController {
 
   void changeTabIndex(int index) {
     if (index < 3) {
+      tabIndex.value = index;
       hideMoreView();
-      tabIndex = index;
-      update();
     } else {
       if (index == 3) {
         if (!onMoreView) {
           showMoreView();
-          update();
+          tabIndex.refresh();
         } else {
           hideMoreView();
-          update();
+          tabIndex.refresh();
         }
       } else {
         hideMoreView();
-        tabIndex = index;
-        update();
+        tabIndex.value = index;
       }
     }
   }
 
   void changeTabletIndex(int index) {
-    hideMoreView();
-    tabIndex = index;
-    update();
+    tabIndex.value = index;
   }
 
-  void clearCurrentIndex() => tabIndex = null;
+  void clearCurrentIndex() => tabIndex.value = 0;
 
   Future toScreen(
     Widget widget, {
