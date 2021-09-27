@@ -11,8 +11,6 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var controller = Get.put(MainController(), permanent: true);
-    // Get.find()
     return GetBuilder<MainController>(builder: (controller) {
       controller.setupMainPage();
       return Obx(() {

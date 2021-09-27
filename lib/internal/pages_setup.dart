@@ -20,7 +20,6 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
-import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
@@ -75,7 +74,6 @@ List<GetPage> getxPages() => [
       GetPage(
           name: '/EnterSMSCodeScreen', page: () => const EnterSMSCodeScreen()),
       GetPage(name: '/HomeView', page: () => const ProjectsView()),
-      GetPage(name: '/NavigationView', page: () => NavigationView()),
       GetPage(name: '/TaskDetailedView', page: () => TaskDetailedView()),
       GetPage(
           name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),

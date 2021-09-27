@@ -4,9 +4,11 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
@@ -15,31 +17,32 @@ class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
   PaginationController _paginationController;
+
+  final _userController = Get.find<UserController>();
   PaginationController get paginationController => _paginationController;
 
   final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
-  final _loaded = false.obs;
-
+  final loaded = false.obs;
+  final taskStatusesLoaded = false.obs;
   TasksSortController get sortController => _sortController;
 
   TaskFilterController _filterController;
   TaskFilterController get filterController => _filterController;
 
-  RxBool get loaded =>
-      (_loaded.value && taskStatusesController.loaded.value).obs;
-
   var fabIsVisible = true.obs;
 
   @override
   Future<void> onInit() async {
-    await taskStatusesController.getStatuses();
+    await taskStatusesController
+        .getStatuses()
+        .then((value) => taskStatusesLoaded.value = true);
     super.onInit();
   }
 
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
-    _loaded.value = false;
+    loaded.value = false;
     screenName = tr('tasks');
     _paginationController = paginationController;
     expandedCardView.value = true;
@@ -50,23 +53,25 @@ class TasksController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
-      fabIsVisible.value = data ? false : true;
+    getFabVisibility().then((value) => fabIsVisible.value = value);
+
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+      fabIsVisible.value = data ? false : await getFabVisibility();
     });
-    _loaded.value = true;
+    loaded.value = true;
   }
 
   @override
   RxList get itemList => paginationController.data;
 
   Future<void> refreshData() async {
-    _loaded.value = false;
+    loaded.value = false;
     await _getTasks(needToClear: true);
-    _loaded.value = true;
+    loaded.value = true;
   }
 
   Future loadTasks({PresetTaskFilters preset}) async {
-    _loaded.value = false;
+    loaded.value = false;
     paginationController.startIndex = 0;
     if (preset != null) {
       await _filterController
@@ -75,7 +80,7 @@ class TasksController extends BaseController {
     } else {
       await _getTasks(needToClear: true);
     }
-    _loaded.value = true;
+    loaded.value = true;
   }
 
   Future _getTasks({needToClear = false}) async {
@@ -102,4 +107,16 @@ class TasksController extends BaseController {
   @override
   void showSearch() =>
       Get.find<NavigationController>().to(const TasksSearchScreen());
+
+  Future<bool> getFabVisibility() async {
+    var fabVisibility =
+        ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+    await _userController.getUserInfo();
+    var selfUser = _userController.user;
+    if (selfUser.isAdmin || selfUser.isOwner) {
+      fabVisibility =
+          ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+    }
+    return fabVisibility;
+  }
 }
