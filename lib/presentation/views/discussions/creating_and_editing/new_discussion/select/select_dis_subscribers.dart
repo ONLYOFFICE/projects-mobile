@@ -107,6 +107,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                       () => CheckboxListTile(
                         value:
                             usersDataSource.usersList[index].isSelected == true,
+                        activeColor: Get.theme.colors().primary,
                         onChanged: (value) {
                           controller.addSubscriber(
                             usersDataSource.usersList[index],

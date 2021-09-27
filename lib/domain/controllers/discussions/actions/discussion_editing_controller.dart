@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
@@ -47,7 +48,6 @@ class DiscussionEditingController extends GetxController
   @override
   void onInit() {
     titleController.text = title.value;
-    textController.value.text = text.value;
     // ignore: invalid_use_of_protected_member
     for (var item in initialSubscribers) {
       subscribers.add(
@@ -67,7 +67,7 @@ class DiscussionEditingController extends GetxController
   var selectedGroups = <PortalGroupItemController>[];
 
   @override
-  var textController = TextEditingController().obs;
+  var textController = HtmlEditorController();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _userSearchController = TextEditingController();
@@ -94,24 +94,21 @@ class DiscussionEditingController extends GetxController
   void changeProjectSelection() => null;
 
   @override
-  void confirmText() {
-    text.value = textController.value.text;
-
+  void confirmText() async {
+    text.value = await textController.getText();
     Get.back();
   }
 
   @override
-  void leaveTextView() {
-    if (textController.value.text == text.value) {
+  void leaveTextView() async {
+    if (await textController.getText() == text.value) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          textController.value.text = text.value;
-
           Get.back();
           Get.back();
         },

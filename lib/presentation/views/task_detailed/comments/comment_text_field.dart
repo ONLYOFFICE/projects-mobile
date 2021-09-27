@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
+// unused
 class CommentTextField extends StatelessWidget {
   final controller;
   const CommentTextField({Key key, this.controller}) : super(key: key);

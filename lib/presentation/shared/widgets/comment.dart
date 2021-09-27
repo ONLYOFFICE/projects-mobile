@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
@@ -11,7 +12,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
-import 'package:simple_html_css/simple_html_css.dart';
 
 class Comment extends StatelessWidget {
   final int taskId;
@@ -33,7 +33,7 @@ class Comment extends StatelessWidget {
       if (taskId != null) {
         controller = Get.put(
           TaskCommentItemController(taskId: taskId, comment: comment.obs),
-          tag: '${comment.commentId} ${comment.commentBody}',
+          tag: comment.hashCode.toString(),
           permanent: false,
         );
       } else {
@@ -42,7 +42,7 @@ class Comment extends StatelessWidget {
             discussionId: discussionId,
             comment: comment.obs,
           ),
-          tag: '${comment.commentId} ${comment.commentBody}',
+          tag: comment.hashCode.toString(),
           permanent: false,
         );
       }
@@ -62,12 +62,8 @@ class Comment extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
-                    child: HTML.toRichText(
-                      context,
+                    child: HtmlWidget(
                       controller.comment.value.commentBody,
-                      defaultTextStyle: TextStyleHelper.body2(
-                        color: Get.theme.colors().onSurface,
-                      ),
                     ),
                   ),
                   if (comment.isResponsePermissions) const SizedBox(height: 5),

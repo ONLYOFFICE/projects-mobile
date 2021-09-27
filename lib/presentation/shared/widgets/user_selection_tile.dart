@@ -25,6 +25,7 @@ class UserSelectionTile extends StatelessWidget {
     return CheckboxListTile(
       value: value,
       onChanged: onChanged,
+      activeColor: Get.theme.colors().primary,
       contentPadding: const EdgeInsets.only(left: 16, right: 9),
       title: Row(
         children: [

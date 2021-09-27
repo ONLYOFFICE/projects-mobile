@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/internal/utils/html_parser.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
@@ -20,7 +21,7 @@ class DiscussionTextTile extends StatelessWidget {
     return Obx(
       () => NewItemTile(
         text: controller.text?.value != null && controller.text.value.isNotEmpty
-            ? controller.text.value
+            ? parseHtml(controller.text.value)
             : tr('text'),
         textColor:
             controller.setTextError == true && controller.text.value.isEmpty
@@ -31,7 +32,7 @@ class DiscussionTextTile extends StatelessWidget {
         icon: SvgIcons.description,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () => Get.find<NavigationController>().toScreen(
-            const NewDiscussionTextScreen(),
+            NewDiscussionTextScreen(controller: controller),
             arguments: {'controller': controller}),
       ),
     );
