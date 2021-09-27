@@ -36,8 +36,8 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/task_detailed/comments/comment_text_field.dart';
 
 class NewCommentView extends StatelessWidget {
   const NewCommentView({Key key}) : super(key: key);
@@ -70,9 +70,12 @@ class NewCommentView extends StatelessWidget {
             ),
           ],
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: CommentTextField(controller: controller),
+        body: Obx(
+          () => HtmlTextEditor(
+            hintText: tr('replyText'),
+            hasError: controller.setTitleError.value,
+            textController: controller.textController,
+          ),
         ),
       ),
     );

@@ -32,70 +32,74 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
-import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
-class UserSelectionTile extends StatelessWidget {
-  final String image;
-  final String displayName;
-  final String caption;
-  final bool value;
-  final Function(bool value) onChanged;
-  const UserSelectionTile({
+class HtmlTextEditor extends StatelessWidget {
+  const HtmlTextEditor({
     Key key,
-    this.image,
-    this.displayName,
-    this.caption,
-    this.onChanged,
-    this.value,
+    this.height,
+    this.hintText,
+    this.hasError = false,
+    this.initialText,
+    this.textController,
   }) : super(key: key);
+
+  final HtmlEditorController textController;
+  final String hintText;
+  final String initialText;
+  final double height;
+  final bool hasError;
 
   @override
   Widget build(BuildContext context) {
-    return CheckboxListTile(
-      value: value,
-      onChanged: onChanged,
-      activeColor: Get.theme.colors().primary,
-      contentPadding: const EdgeInsets.only(left: 16, right: 9),
-      title: Row(
-        children: [
-          SizedBox(
-            height: 40,
-            width: 40,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(30),
-              child: CustomNetworkImage(
-                image: image,
-                defaultImage: const DefaultAvatar(),
-              ),
-            ),
+    print('has error $hasError');
+    return HtmlEditor(
+      plugins: [],
+      controller: textController ?? HtmlEditorController(),
+      htmlToolbarOptions: HtmlToolbarOptions(
+        textStyle:
+            TextStyleHelper.body2(color: Get.theme.colors().onBackground),
+        defaultToolbarButtons: const [
+          StyleButtons(),
+          FontSettingButtons(fontSizeUnit: false),
+          FontButtons(
+            clearAll: false,
+            subscript: false,
+            superscript: false,
           ),
-          const SizedBox(width: 16),
-          Flexible(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  displayName,
-                  maxLines: 2,
-                  style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onSurface,
-                  ),
-                ),
-                if (caption != null)
-                  Text(
-                    caption,
-                    maxLines: 2,
-                    style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6)),
-                  ),
-                const SizedBox(width: 10),
-              ],
-            ),
+          // they don't work
+          ColorButtons(foregroundColor: false, highlightColor: false),
+          ListButtons(listStyles: false),
+          ParagraphButtons(
+            textDirection: false,
+            lineHeight: false,
+            caseConverter: false,
+          ),
+          InsertButtons(
+            video: false,
+            audio: false,
+            table: false,
+            hr: false,
+            otherFile: false,
           ),
         ],
+      ),
+      htmlEditorOptions: HtmlEditorOptions(
+        hint: hintText,
+        initialText: initialText,
+        darkMode: Get.isPlatformDarkMode,
+      ),
+      otherOptions: OtherOptions(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Get.theme.colors().colorError,
+            width: 2,
+            style: hasError ? BorderStyle.solid : BorderStyle.none,
+          ),
+        ),
+        height: Get.height - Get.bottomBarHeight - Get.statusBarHeight,
       ),
     );
   }

@@ -38,12 +38,13 @@ import 'package:projects/domain/controllers/comments/new_comment/abstract_new_co
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_task_comment_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/internal/utils/html_parser.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
+import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/task_detailed/comments/comment_text_field.dart';
 
 class ReplyCommentView extends StatelessWidget {
   const ReplyCommentView({Key key}) : super(key: key);
@@ -121,7 +122,7 @@ class ReplyCommentView extends StatelessWidget {
                               style: TextStyleHelper.subtitle1(
                                   color: Get.theme.colors().onSurface)),
                         Text(
-                          comment.commentBody,
+                          parseHtml(comment.commentBody),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyleHelper.caption(),
@@ -133,9 +134,12 @@ class ReplyCommentView extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 12),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: CommentTextField(controller: controller),
+              Obx(
+                () => HtmlTextEditor(
+                  hintText: tr('replyText'),
+                  hasError: controller.setTitleError.value,
+                  textController: controller.textController,
+                ),
               ),
             ],
           ),

@@ -440,5 +440,6 @@
 	"taskAccepted": "Task has been accepted by you",
 	"taskUpdated": "Task has been updated",
 	"projectUpdated": "Project has been updated",
-	"discussionUpdated": "Discussion has been updated"
+	"discussionUpdated": "Discussion has been updated",
+	"commentEditing": "Comment editing"
 }
