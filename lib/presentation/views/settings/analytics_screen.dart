@@ -27,6 +27,7 @@ class AnalyticsScreen extends StatelessWidget {
       body: Obx(
         () => SwitchListTile(
           value: controller.shareAnalytics.value,
+          activeColor: Get.theme.colors().primary,
           contentPadding: const EdgeInsets.fromLTRB(16, 14, 5, 30),
           title: Text(tr('shareAnalytics'),
               style: TextStyleHelper.subtitle1(

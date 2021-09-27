@@ -42,6 +42,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                     Obx(
                       () => SwitchListTile(
                         value: controller.isPasscodeEnable.value,
+                        activeColor: Get.theme.colors().primary,
                         onChanged: (value) async =>
                             controller.onPasscodeTilePressed(value),
                         // controller.tryEnablingPasscode(),
@@ -90,6 +91,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       SwitchListTile(
                         value: controller.isFingerprintEnable.value,
                         onChanged: controller.tryTogglingFingerprintStatus,
+                        activeColor: Get.theme.colors().primary,
                         title: Text(
                           tr('fingerprint'),
                           style: TextStyleHelper.projectTitle,

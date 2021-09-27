@@ -30,6 +30,7 @@ class TileWithSwitch extends StatelessWidget {
             Switch(
               value: isSelected,
               onChanged: onChanged,
+              activeColor: Get.theme.colors().primary,
             ),
             const SizedBox(width: 3)
           ],
