@@ -10,7 +10,12 @@ class _Step2 extends StatelessWidget {
         const SizedBox(height: 12),
         Text(tr('step2'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
-        AppIcon(icon: PngIcons.authentificator_s2, isPng: true, height: 184.5),
+        AppIcon(
+          icon: PngIcons.authentificator_s2,
+          isPng: true,
+          height: 184.5,
+          hasDarkVersion: true,
+        ),
         const SizedBox(height: 23),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),

@@ -155,11 +155,17 @@ class PngIcons {
   PngIcons._();
   static const String authentificator_s2 =
       'lib/assets/images/images/authentificator_s2.png';
+  static const String authentificator_s2_dark =
+      'lib/assets/images/images/authentificator_s2_dark.png';
   static const String authentificator_s3 =
       'lib/assets/images/images/authentificator_s3.png';
+  static const String authentificator_s3_dark =
+      'lib/assets/images/images/authentificator_s3_dark.png';
   static const String code_light = 'lib/assets/images/images/code_light.png';
   static const String code_dark = 'lib/assets/images/images/code_dark.png';
   static const String download_GA = 'lib/assets/images/images/download_GA.png';
+  static const String download_GA_dark =
+      'lib/assets/images/images/download_GA_dark.png';
 
   static const String splash = 'lib/assets/splash/splash-light.png';
   static const String splash_dark = 'lib/assets/splash/splash-dark.png';

@@ -10,7 +10,12 @@ class _Step3 extends StatelessWidget {
         const SizedBox(height: 12),
         Text(tr('step3'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
-        AppIcon(icon: PngIcons.authentificator_s3, isPng: true, height: 184.5),
+        AppIcon(
+          icon: PngIcons.authentificator_s3,
+          hasDarkVersion: true,
+          isPng: true,
+          height: 184.5,
+        ),
         const SizedBox(height: 23),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),
@@ -72,7 +77,12 @@ class _Code extends StatelessWidget {
                 },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 20, bottom: 10),
-                  child: SizedBox(child: AppIcon(icon: SvgIcons.copy)),
+                  child: SizedBox(
+                    child: AppIcon(
+                      icon: SvgIcons.copy,
+                      color: Get.theme.colors().onBackground,
+                    ),
+                  ),
                 ),
               ),
             ],
