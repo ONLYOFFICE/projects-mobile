@@ -38,14 +38,20 @@ class _Step4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<LoginController>();
-    var codeController = MaskedTextController(mask: '000 000');
+    var codeController = MaskedTextController(mask: '000000');
 
     return Column(
       children: [
         const SizedBox(height: 12),
         Text(tr('step4'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
-        AppIcon(icon: PngIcons.code_light, isPng: true, height: 184.5),
+        AppIcon(
+          icon: PngIcons.code_light,
+          hasDarkVersion: true,
+          darkThemeIcon: PngIcons.code_dark,
+          isPng: true,
+          height: 184.5,
+        ),
         const SizedBox(height: 13),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),

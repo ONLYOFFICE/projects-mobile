@@ -42,7 +42,12 @@ class _Step1 extends StatelessWidget {
         const SizedBox(height: 12),
         Text(tr('step1'), style: _stepStyle(context)),
         const SizedBox(height: 16.5),
-        AppIcon(icon: PngIcons.download_GA, isPng: true, height: 184.5),
+        AppIcon(
+          icon: PngIcons.download_GA,
+          hasDarkVersion: true,
+          isPng: true,
+          height: 184.5,
+        ),
         const SizedBox(height: 23),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 43),
