@@ -45,7 +45,7 @@ List<Locale> supportedLocales() => [
       const Locale('es'),
       const Locale('fr'),
       const Locale('it'),
-      const Locale('pt_BR'),
+      const Locale('pt'),
       const Locale('ru'),
       const Locale('zh'),
     ];
