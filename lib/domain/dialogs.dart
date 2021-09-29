@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ErrorDialog extends GetxController {
@@ -12,7 +13,8 @@ class ErrorDialog extends GetxController {
   Future<void> show(String message) async {
     addToQueue(message);
 
-    await processQueue();
+    // ignore: unawaited_futures
+    processQueue();
   }
 
   void hide() {
@@ -27,6 +29,7 @@ class ErrorDialog extends GetxController {
     }
 
     dialogIsShown = true;
+
     var error = queue.first;
 
     await Get.dialog(SingleButtonDialog(
@@ -36,8 +39,17 @@ class ErrorDialog extends GetxController {
         onAcceptTap: () => {
               Get.back(),
               dialogIsShown = false,
-              queue.removeFirst(),
-              processQueue(),
+              if (error.toLowerCase().contains('unauthorized'))
+                {
+                  Get.find<LoginController>().logout(),
+                  dialogIsShown = false,
+                  queue.clear(),
+                }
+              else
+                {
+                  queue.removeFirst(),
+                  processQueue(),
+                }
             }));
   }
 

@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/main_view.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
@@ -46,12 +45,18 @@ class NavigationView extends StatelessWidget {
 
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        if (Get.find<PlatformController>().isMobile) {
-          return Obx(() =>
-              MobileLayout(contentView: _pages[controller.tabIndex.value]));
+        PlatformController platformController;
+
+        try {
+          platformController = Get.find<PlatformController>();
+        } catch (e) {
+          platformController = Get.put(PlatformController(), permanent: true);
+        }
+
+        if (platformController.isMobile) {
+          return MobileLayout(pages: _pages);
         } else {
-          return Obx(() => TabletLayout(
-              contentView: _tabletPages[controller.tabIndex.value]));
+          return TabletLayout(tabletPages: _tabletPages);
         }
       },
     );
@@ -60,13 +65,15 @@ class NavigationView extends StatelessWidget {
 
 class TabletLayout extends StatelessWidget {
   final Widget contentView;
-  const TabletLayout({Key key, @required this.contentView}) : super(key: key);
+  final tabletPages;
+  const TabletLayout({Key key, this.contentView, this.tabletPages})
+      : super(key: key);
 
   final double _iconSize = 34;
 
   @override
   Widget build(BuildContext context) {
-    var navigationController = Get.find<NavigationController>();
+    var controller = Get.find<NavigationController>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -83,15 +90,17 @@ class TabletLayout extends StatelessWidget {
                 Obx(
                   () => Flexible(
                     child: NavigationRail(
-                      selectedIndex: navigationController.tabIndex.value,
+                      selectedIndex: controller.tabIndex.value,
                       onDestinationSelected: (value) => {
-                        if (Get.routing.current != '/' &&
-                            !Get.routing.current.contains('MainView'))
-                          Get.offAll(
-                            () => MainView(),
-                            transition: Transition.noTransition,
-                          ),
-                        navigationController.changeTabletIndex(value),
+                        if (controller.treeLength > 0)
+                          {
+                            for (var i = controller.treeLength; i > 0; i--)
+                              {
+                                Get.back(),
+                              },
+                            controller.treeLength = 0,
+                          },
+                        controller.changeTabletIndex(value),
                       },
                       destinations: [
                         NavigationRailDestination(
@@ -182,13 +191,13 @@ class TabletLayout extends StatelessWidget {
                                     Get.theme.colors().bgDescription,
                                 child: ClipOval(
                                   child: Obx(() {
-                                    return navigationController
+                                    return controller
                                         .selfUserItem.value.avatar.value;
                                   }),
                                 ),
                               ),
                             )),
-                        onPressed: () => navigationController
+                        onPressed: () => controller
                             .toScreen(const SelfProfileScreen(), arguments: {
                           'showBackButton': true,
                           'showSettingsButton': false
@@ -202,8 +211,8 @@ class TabletLayout extends StatelessWidget {
                           height: 24,
                           color: Get.theme.colors().onNavBar.withOpacity(0.4),
                         ),
-                        onPressed: () => navigationController
-                            .toScreen(const SettingsScreen()),
+                        onPressed: () =>
+                            controller.toScreen(const SettingsScreen()),
                       ),
                       const SizedBox(
                         height: 40,
@@ -215,7 +224,8 @@ class TabletLayout extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: contentView,
+            child: contentView ??
+                Obx(() => tabletPages[controller.tabIndex.value]),
           ),
         ],
       ),
@@ -224,85 +234,89 @@ class TabletLayout extends StatelessWidget {
 }
 
 class MobileLayout extends StatelessWidget {
-  final Widget contentView;
+  final pages;
   final double iconSize = 24;
 
   MobileLayout({
     Key key,
-    @required this.contentView,
+    @required this.pages,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NavigationController>();
-    return Scaffold(
-      body: contentView,
-      bottomNavigationBar: SizedBox(
-        height: controller.onMoreView ? 300 : 56,
-        child: Column(
-          children: [
-            if (controller.onMoreView) const Expanded(child: MoreView()),
-            BottomNavigationBar(
-              unselectedItemColor: Get.theme.colors().onNavBar.withOpacity(0.4),
-              selectedItemColor: Get.theme.colors().onNavBar,
-              onTap: controller.changeTabIndex,
-              currentIndex:
-                  controller.onMoreView || controller.tabIndex.value > 3
-                      ? 3
-                      : controller.tabIndex.value,
-              showSelectedLabels: true,
-              showUnselectedLabels: true,
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Get.theme.colors().primarySurface,
-              elevation: 0,
-              items: [
-                BottomNavigationBarItem(
-                  icon: AppIcon(
-                      icon: SvgIcons.tab_bar_dashboard,
-                      color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                      height: iconSize),
-                  activeIcon: AppIcon(
-                      icon: SvgIcons.tab_bar_dashboard,
-                      color: Get.theme.colors().onNavBar,
-                      height: iconSize),
-                  label: tr('dashboard'),
-                ),
-                BottomNavigationBarItem(
-                  icon: AppIcon(
-                      icon: SvgIcons.tab_bar_tasks,
-                      color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                      height: iconSize),
-                  activeIcon: AppIcon(
-                      icon: SvgIcons.tab_bar_tasks,
-                      color: Get.theme.colors().onNavBar,
-                      height: iconSize),
-                  label: tr('tasks'),
-                ),
-                BottomNavigationBarItem(
-                  icon: AppIcon(
-                      icon: SvgIcons.tab_bar_projects,
-                      color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                      height: iconSize),
-                  activeIcon: AppIcon(
-                      icon: SvgIcons.tab_bar_projects,
-                      color: Get.theme.colors().onNavBar,
-                      height: iconSize),
-                  label: tr('projects'),
-                ),
-                BottomNavigationBarItem(
-                  icon: AppIcon(
-                      icon: SvgIcons.tab_bar_more,
-                      color: Get.theme.colors().onNavBar.withOpacity(0.4),
-                      height: iconSize),
-                  activeIcon: AppIcon(
-                      icon: SvgIcons.tab_bar_more,
-                      color: Get.theme.colors().onNavBar,
-                      height: iconSize),
-                  label: tr('more'),
-                ),
-              ],
-            ),
-          ],
+    var navigationController = Get.find<NavigationController>();
+    return Obx(
+      () => Scaffold(
+        body: pages[navigationController.tabIndex.value],
+        bottomNavigationBar: SizedBox(
+          height: navigationController.onMoreView ? 300 : 56,
+          child: Column(
+            children: [
+              if (navigationController.onMoreView)
+                const Expanded(child: MoreView()),
+              BottomNavigationBar(
+                unselectedItemColor:
+                    Get.theme.colors().onNavBar.withOpacity(0.4),
+                selectedItemColor: Get.theme.colors().onNavBar,
+                onTap: navigationController.changeTabIndex,
+                currentIndex: navigationController.onMoreView ||
+                        navigationController.tabIndex.value > 3
+                    ? 3
+                    : navigationController.tabIndex.value,
+                showSelectedLabels: true,
+                showUnselectedLabels: true,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Get.theme.colors().primarySurface,
+                elevation: 0,
+                items: [
+                  BottomNavigationBarItem(
+                    icon: AppIcon(
+                        icon: SvgIcons.tab_bar_dashboard,
+                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        height: iconSize),
+                    activeIcon: AppIcon(
+                        icon: SvgIcons.tab_bar_dashboard,
+                        color: Get.theme.colors().onNavBar,
+                        height: iconSize),
+                    label: tr('dashboard'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: AppIcon(
+                        icon: SvgIcons.tab_bar_tasks,
+                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        height: iconSize),
+                    activeIcon: AppIcon(
+                        icon: SvgIcons.tab_bar_tasks,
+                        color: Get.theme.colors().onNavBar,
+                        height: iconSize),
+                    label: tr('tasks'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: AppIcon(
+                        icon: SvgIcons.tab_bar_projects,
+                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        height: iconSize),
+                    activeIcon: AppIcon(
+                        icon: SvgIcons.tab_bar_projects,
+                        color: Get.theme.colors().onNavBar,
+                        height: iconSize),
+                    label: tr('projects'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: AppIcon(
+                        icon: SvgIcons.tab_bar_more,
+                        color: Get.theme.colors().onNavBar.withOpacity(0.4),
+                        height: iconSize),
+                    activeIcon: AppIcon(
+                        icon: SvgIcons.tab_bar_more,
+                        color: Get.theme.colors().onNavBar,
+                        height: iconSize),
+                    label: tr('more'),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
