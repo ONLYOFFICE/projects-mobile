@@ -48,6 +48,8 @@ class NavigationController extends GetxController {
   final _userController = Get.find<UserController>();
   Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
 
+  int treeLength = 0;
+
   @override
   void onInit() {
     _userController
@@ -61,7 +63,7 @@ class NavigationController extends GetxController {
 
   @override
   void onClose() {
-    clearCurrentIndex();
+    // clearCurrentIndex();
     super.onClose();
   }
 
@@ -131,25 +133,8 @@ class NavigationController extends GetxController {
         arguments: arguments,
       );
     } else {
+      treeLength++;
       Get.to(
-        () => TabletLayout(contentView: widget),
-        transition: Transition.noTransition,
-        preventDuplicates: preventDuplicates ?? false,
-        arguments: arguments,
-      );
-    }
-  }
-
-  void off(Widget widget,
-      {bool preventDuplicates, Map<String, dynamic> arguments}) {
-    if (Get.find<PlatformController>().isMobile) {
-      Get.off(
-        () => widget,
-        preventDuplicates: preventDuplicates ?? false,
-        arguments: arguments,
-      );
-    } else {
-      Get.off(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,
