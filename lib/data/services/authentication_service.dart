@@ -52,7 +52,10 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await Get.find<ErrorDialog>().show(authResponse.error.message);
+      var errorText;
+      if (authResponse?.error?.message != 'Server error')
+        errorText = authResponse?.error?.message;
+      await Get.find<ErrorDialog>().show(errorText ?? '');
     }
     return authResponse;
   }
