@@ -151,7 +151,8 @@ class Header extends StatelessWidget {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),

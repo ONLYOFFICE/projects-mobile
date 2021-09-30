@@ -52,7 +52,8 @@ class DiscussionsHeader extends StatelessWidget {
                     Obx(
                       () => Text(
                         controller.sortController.currentSortTitle.value,
-                        style: TextStyleHelper.projectsSorting,
+                        style: TextStyleHelper.projectsSorting
+                            .copyWith(color: Get.theme.colors().primary),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -61,6 +62,7 @@ class DiscussionsHeader extends StatelessWidget {
                               'ascending')
                           ? AppIcon(
                               icon: SvgIcons.sorting_4_ascend,
+                              color: Get.theme.colors().primary,
                               width: 20,
                               height: 20,
                             )
@@ -69,6 +71,7 @@ class DiscussionsHeader extends StatelessWidget {
                               transform: Matrix4.rotationX(math.pi),
                               child: AppIcon(
                                 icon: SvgIcons.sorting_4_ascend,
+                                color: Get.theme.colors().primary,
                                 width: 20,
                                 height: 20,
                               ),
