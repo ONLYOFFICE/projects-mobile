@@ -90,9 +90,9 @@ class _PortalInputViewState extends State<PortalInputView> {
                         TextButton(
                           onPressed: () => Get.to(() {
                             testMode = true;
-                            return GetCodeViews();
+                            return const GetCodeViews();
                           }),
-                          child: Text('ПРОВЕРИТЬ ЭКРАНЫ 2FA'),
+                          child: const Text('ПРОВЕРИТЬ ЭКРАНЫ 2FA'),
                         ),
                         SizedBox(height: Get.height * 0.222),
                         Text(

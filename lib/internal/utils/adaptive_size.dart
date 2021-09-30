@@ -13,3 +13,8 @@ class AdaptiveSize {
 
 double h(num height) => height * AdaptiveSize.heightK;
 double w(num width) => width * AdaptiveSize.widthK;
+
+extension Adaptive on num {
+  num get h => this * AdaptiveSize.heightK;
+  num get w => this * AdaptiveSize.widthK;
+}
