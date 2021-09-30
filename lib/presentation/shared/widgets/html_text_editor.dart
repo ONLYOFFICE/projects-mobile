@@ -89,7 +89,6 @@ class HtmlTextEditor extends StatelessWidget {
       htmlEditorOptions: HtmlEditorOptions(
         hint: hintText,
         initialText: initialText,
-        darkMode: Get.isPlatformDarkMode,
       ),
       otherOptions: OtherOptions(
         decoration: BoxDecoration(
