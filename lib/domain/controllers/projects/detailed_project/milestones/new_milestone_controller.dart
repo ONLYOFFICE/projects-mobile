@@ -15,7 +15,6 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
-import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 
 class NewMilestoneController extends GetxController {
   final _api = locator<MilestoneService>();
@@ -222,11 +221,6 @@ class NewMilestoneController extends GetxController {
 
   void setKeyMilestone(value) => keyMilestone.value = value;
   void enableRemindBeforeDueDate(value) => remindBeforeDueDate.value = value;
-
-  void onProjectTilePressed() {
-    Get.find<NavigationController>()
-        .to(const SelectProjectView(), arguments: {'controller': this});
-  }
 
   void onDueDateTilePressed() {
     Get.find<NavigationController>().to(const SelectDateView(), arguments: {

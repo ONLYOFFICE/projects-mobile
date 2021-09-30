@@ -28,7 +28,7 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
 
   @override
   void initState() {
-    _milestoneController.setup(_controller.selectedProjectId);
+    _milestoneController.setup(projectId: _controller.selectedProjectId);
     super.initState();
   }
 

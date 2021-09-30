@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -32,7 +31,7 @@ class ProjectTasksController extends GetxController {
   String _selfId;
   final _projectService = locator<ProjectService>();
   final _userController = Get.find<UserController>();
-  SecrityInfo _securityInfo;
+
   var fabIsVisible = false.obs;
 
   ProjectTasksController() {
@@ -43,11 +42,6 @@ class ProjectTasksController extends GetxController {
         () async => await _getTasks(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
-
-  bool get canCreate =>
-      _userController.user.isAdmin ||
-      _userController.user.isOwner ||
-      _securityInfo.canCreateTask;
 
   RxList get itemList => paginationController.data;
 
@@ -86,11 +80,15 @@ class ProjectTasksController extends GetxController {
 
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
-    _securityInfo ??= await _projectService.getProjectSecurityinfo();
+
     var team = await _projectService.getProjectTeam(projectId.toString());
-    if (team.any((element) => element.id == _selfId))
-      fabIsVisible.value = canCreate;
-    else
-      fabIsVisible.value = false;
+
+    fabIsVisible.value =
+        team.any((element) => element.id == _selfId) || _canCreate();
   }
+
+  bool _canCreate() =>
+      _userController.user.isAdmin ||
+      _userController.user.isOwner ||
+      _userController.user.listAdminModules.contains('projects');
 }
