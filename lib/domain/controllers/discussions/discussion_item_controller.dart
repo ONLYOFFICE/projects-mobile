@@ -130,11 +130,6 @@ class DiscussionItemController extends GetxController {
         // ignore: unawaited_futures
         getDiscussionDetailed(showLoading: true);
         Get.back();
-        // ignore: unawaited_futures
-        350.milliseconds.delay().then((_) {
-          MessagesHandler.showSnackBar(
-              context: Get.context, text: tr('discussionUpdated'));
-        });
       }
     } catch (e) {
       debugPrint(e);

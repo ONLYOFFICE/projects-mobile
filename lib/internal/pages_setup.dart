@@ -45,7 +45,6 @@ import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
-import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/select/select_dis_subscribers.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
@@ -156,9 +155,6 @@ List<GetPage> getxPages() => [
       GetPage(
           name: '/NewDiscussionScreen',
           page: () => const NewDiscussionScreen()),
-      GetPage(
-          name: '/NewDiscussionTextScreen',
-          page: () => const NewDiscussionTextScreen()),
       GetPage(
           name: '/DiscussionEditingScreen',
           page: () => const DiscussionEditingScreen()),
