@@ -2,23 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
-import 'package:projects/domain/controllers/projects/project_search_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
-import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class NewMilestoneView extends StatelessWidget {
@@ -203,8 +194,8 @@ class ProjectTile extends StatelessWidget {
                   // if (!FocusScope.of(context).hasPrimaryFocus)
                   //   {FocusScope.of(context).unfocus()},
                   Get.find<NavigationController>()
-                      .toScreen(const SelectProjectForMilestone(), arguments: {
-                    'newMilestoneController': controller,
+                      .toScreen(const SelectProjectView(), arguments: {
+                    'controller': controller,
                   }),
                 });
       },
@@ -244,9 +235,11 @@ class ResponsibleTile extends StatelessWidget {
         onTap: () => {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
-          Get.find<NavigationController>().toScreen(
-              const ProjectTeamResponsibleSelectionView(),
+          Get.find<NavigationController>().to(const SelectProjectView(),
               arguments: {'controller': controller})
+          // Get.find<NavigationController>().toScreen(
+          //     const ProjectTeamResponsibleSelectionView(),
+          //     arguments: {'controller': controller})
         },
       );
     });
@@ -287,118 +280,6 @@ class DueDateTile extends StatelessWidget {
                     {FocusScope.of(context).unfocus()},
                   controller.onDueDateTilePressed()
                 });
-      },
-    );
-  }
-}
-
-class SelectProjectForMilestone extends StatelessWidget {
-  const SelectProjectForMilestone({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    NewMilestoneController newMilestoneController =
-        Get.arguments['newMilestoneController'];
-
-    final platformController = Get.find<PlatformController>();
-
-    var _projectsController = Get.put(
-        ProjectsController(
-          Get.put(ProjectsFilterController(), tag: 'SelectProjectForMilestone'),
-          Get.put(PaginationController(), tag: 'SelectProjectForMilestone'),
-        ),
-        tag: 'SelectProjectForMilestone');
-
-    _projectsController.loadProjects();
-
-    var _searchController =
-        Get.put(ProjectSearchController(), tag: 'SelectProjectForMilestone');
-
-    return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
-      appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
-        titleText: tr('selectProject'),
-        bottomHeight: 44,
-        bottom: SearchField(
-          hintText: tr('searchProjects'),
-          controller: _searchController.searchInputController,
-          showClearIcon: true,
-          onSubmitted: (value) => _searchController.newSearch(value),
-          onClearPressed: () => _searchController.clearSearch(),
-        ),
-      ),
-      body: Obx(() {
-        if (_searchController.switchToSearchView.value == true &&
-            _searchController.searchResult.isNotEmpty) {
-          return ProjectsList(
-              projects: _searchController.searchResult,
-              newMilestoneController: newMilestoneController);
-        }
-        if (_searchController.switchToSearchView.value == true &&
-            _searchController.searchResult.isEmpty &&
-            _searchController.loaded.value == true) {
-          return Column(children: [const NothingFound()]);
-        }
-        if (_projectsController.loaded.value == true &&
-            _searchController.switchToSearchView.value == false) {
-          return ProjectsList(
-              projects: _projectsController.paginationController.data,
-              newMilestoneController: newMilestoneController);
-        }
-        return const ListLoadingSkeleton();
-      }),
-    );
-  }
-}
-
-class ProjectsList extends StatelessWidget {
-  final List projects;
-  final NewMilestoneController newMilestoneController;
-
-  const ProjectsList(
-      {Key key, @required this.projects, @required this.newMilestoneController})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: projects.length,
-      separatorBuilder: (BuildContext context, int index) {
-        return const StyledDivider(leftPadding: 16, rightPadding: 16);
-      },
-      itemBuilder: (BuildContext context, int index) {
-        return Material(
-          color: Get.find<PlatformController>().isMobile
-              ? Get.theme.colors().background
-              : Get.theme.colors().surface,
-          child: InkWell(
-            onTap: () {
-              newMilestoneController.changeProjectSelection(
-                  id: projects[index].id, title: projects[index].title);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          projects[index].title,
-                          style: TextStyleHelper.projectTitle,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
       },
     );
   }

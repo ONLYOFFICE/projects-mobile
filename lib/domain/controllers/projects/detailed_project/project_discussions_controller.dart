@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
-import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
@@ -26,7 +25,7 @@ class ProjectDiscussionsController extends GetxController {
   RxBool loaded = false.obs;
 
   final _userController = Get.find<UserController>();
-  SecrityInfo _securityInfo;
+
   var fabIsVisible = false.obs;
   String _selfId;
   final _projectService = locator<ProjectService>();
@@ -44,19 +43,16 @@ class ProjectDiscussionsController extends GetxController {
 
     _userController.getUserInfo().then((value) async => {
           _selfId ??= await _userController.getUserId(),
-          _securityInfo ??= await _projectService.getProjectSecurityinfo(),
           team = await _projectService.getProjectTeam(projectId.toString()),
-          if (team.any((element) => element.id == _selfId))
-            fabIsVisible.value = canCreate
-          else
-            fabIsVisible.value = false
+          fabIsVisible.value =
+              team.any((element) => element.id == _selfId) || _canCreate(),
         });
   }
 
-  bool get canCreate =>
+  bool _canCreate() =>
       _userController.user.isAdmin ||
       _userController.user.isOwner ||
-      _securityInfo.canCreateMessage;
+      _userController.user.listAdminModules.contains('projects');
 
   RxList get itemList => paginationController.data;
 

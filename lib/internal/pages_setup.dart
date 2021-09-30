@@ -147,9 +147,6 @@ List<GetPage> getxPages() => [
       GetPage(
           name: '/SelectCountryScreen',
           page: () => const SelectCountryScreen()),
-      GetPage(
-          name: '/SelectProjectForMilestone',
-          page: () => const SelectProjectForMilestone()),
       GetPage(name: '/SettingsScreen', page: () => const SettingsScreen()),
       GetPage(
           name: '/TasksSearchScreen', page: () => const TasksSearchScreen()),
