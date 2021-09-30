@@ -139,7 +139,10 @@ class DiscussionsController extends BaseController {
         ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
     await _userController.getUserInfo();
     var selfUser = _userController.user;
-    if (selfUser.isAdmin || selfUser.isOwner) {
+
+    if (selfUser.isAdmin ||
+        selfUser.isOwner ||
+        selfUser.listAdminModules.contains('projects')) {
       fabVisibility =
           ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     }
