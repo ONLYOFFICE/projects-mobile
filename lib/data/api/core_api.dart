@@ -262,7 +262,7 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project/securityinfo';
 
   Future<http.Response> getRequest(String url) async {
-    print(url);
+    debugPrint(url);
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);
     final response = await request;

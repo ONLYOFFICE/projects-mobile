@@ -442,5 +442,7 @@
 	"projectUpdated": "Project has been updated",
 	"discussionUpdated": "Discussion has been updated",
 	"commentEditing": "Comment editing",
-	"acceptTask": "Accept task"
+	"acceptTask": "Accept task",
+	"noAdress": "No address associated with hostname",
+	"authenticationFailed": "User authentication failed"
 }
