@@ -44,7 +44,7 @@ import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
   var tabIndex = 0.obs;
-  var onMoreView = false;
+  var onMoreView = false.obs;
   final _userController = Get.find<UserController>();
   Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
 
@@ -68,22 +68,25 @@ class NavigationController extends GetxController {
   }
 
   void showMoreView() {
-    onMoreView = true;
-    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView);
+    onMoreView.value = true;
+    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
   }
 
   void hideMoreView() {
-    onMoreView = false;
-    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView);
+    onMoreView.value = false;
+    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
   }
 
   void changeTabIndex(int index) {
     if (index < 3) {
-      tabIndex.value = index;
+      if (tabIndex.value == index)
+        tabIndex.refresh();
+      else
+        tabIndex.value = index;
       hideMoreView();
     } else {
       if (index == 3) {
-        if (!onMoreView) {
+        if (!onMoreView.value) {
           showMoreView();
           tabIndex.refresh();
         } else {
@@ -92,7 +95,10 @@ class NavigationController extends GetxController {
         }
       } else {
         hideMoreView();
-        tabIndex.value = index;
+        if (tabIndex.value == index)
+          tabIndex.refresh();
+        else
+          tabIndex.value = index;
       }
     }
   }
