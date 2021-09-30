@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
@@ -11,9 +12,12 @@ class ProjectCellController extends GetxController {
 
   void setup(ProjectDetailed project) {
     _project = project;
-    isPrivate.value = project.isPrivate;
-    status.value = project.status;
-    canEdit.value = project.canEdit;
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      isPrivate.value = project.isPrivate;
+      status.value = project.status;
+      canEdit.value = project.canEdit;
+    });
   }
 
   var _project;

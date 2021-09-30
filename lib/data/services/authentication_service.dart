@@ -14,12 +14,24 @@ class AuthService {
   Future<ApiDTO<PortalUser>> getSelfInfo() async {
     var authResponse = await _api.getUserInfo();
 
-    var tokenReceived = authResponse.response != null;
+    var result = authResponse.response != null;
 
-    if (!tokenReceived) {
+    if (!result) {
       await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
     return authResponse;
+  }
+
+  Future<bool> checkAuthorization() async {
+    var authResponse = await _api.getUserInfo();
+
+    if (authResponse.response == null) {
+      if (authResponse.error.message.toLowerCase().contains('unauthorized'))
+        return false;
+      else
+        await Get.find<ErrorDialog>().show(authResponse.error.message);
+    }
+    return true;
   }
 
   Future<ApiDTO<AuthToken>> login(String email, String pass) async {

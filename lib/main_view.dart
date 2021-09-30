@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/main_controller.dart';
@@ -12,7 +13,10 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MainController>(builder: (controller) {
-      controller.setupMainPage();
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        controller.setupMainPage();
+      });
+
       return Obx(() {
         if (controller.noInternet.isTrue)
           return const NoInternetScreen();
