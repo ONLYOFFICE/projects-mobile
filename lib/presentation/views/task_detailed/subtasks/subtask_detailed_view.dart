@@ -35,7 +35,7 @@ class SubtaskDetailedView extends StatelessWidget {
                       if (controller.canEdit && _subtask.responsible == null)
                         PopupMenuItem(
                           value: 'accept',
-                          child: Text(tr('accept')),
+                          child: Text(tr('acceptSubtask')),
                         ),
                       if (controller.canEdit)
                         PopupMenuItem(

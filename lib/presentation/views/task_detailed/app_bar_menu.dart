@@ -16,7 +16,7 @@ class _AppBarMenu extends StatelessWidget {
           if (controller.canEdit && task.responsibles.isEmpty)
             PopupMenuItem(
               value: 'accept',
-              child: Text(tr('accept')),
+              child: Text(tr('acceptTask')),
             ),
           PopupMenuItem(
             value: 'copyLink',
