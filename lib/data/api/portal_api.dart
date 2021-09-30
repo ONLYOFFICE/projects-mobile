@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
@@ -26,7 +27,9 @@ class PortalApi {
         result.error = CustomError(message: response.reasonPhrase);
       }
     } catch (e) {
-      result.error = CustomError(message: e.toString());
+      var error;
+      if (e is SocketException) error = e?.osError?.message;
+      result.error = CustomError(message: error ?? e.toString());
     }
 
     return result;
