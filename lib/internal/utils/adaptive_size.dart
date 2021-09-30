@@ -33,14 +33,19 @@
 import 'package:get/get.dart';
 
 class AdaptiveSize {
-  static double screenHeight = Get.height;
-  static double screenWidth = Get.width;
-
   static const double designHeight = 812;
   static const double designWidth = 375;
 
-  static double heightK = screenHeight / designHeight;
-  static double widthK = screenWidth / designWidth;
+  static double screenHeight = Get.height;
+  static double screenWidth = Get.width;
+
+  static double get heightK => screenHeight / designHeight;
+  static double get widthK => screenWidth / designWidth;
+
+  static void updateScreenSize({double height, double width}) {
+    screenHeight = height ?? Get.height;
+    screenWidth = width ?? Get.width;
+  }
 }
 
 double h(num height) => height * AdaptiveSize.heightK;
