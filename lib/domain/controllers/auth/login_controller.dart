@@ -87,7 +87,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> loginByPassword() async {
-    if (_checkEmailAndPass()) {
+    if (await _checkEmailAndPass()) {
       var email = _emailController.text;
       var password = _passwordController.text;
 
@@ -144,7 +144,7 @@ class LoginController extends GetxController {
     }
   }
 
-  bool _checkEmailAndPass() {
+  Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
     var result;
 
@@ -154,10 +154,18 @@ class LoginController extends GetxController {
     if (!_emailController.text.isEmail) {
       result = false;
       emailFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => emailFieldError.value = false);
+      // save cursor position
+      emailController.selection = TextSelection.fromPosition(
+        TextPosition(offset: emailController.text.length),
+      );
     }
     if (_passwordController.text.isEmpty) {
       result = false;
       passwordFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => passwordFieldError.value = false);
     }
     return result ?? true;
   }
@@ -213,6 +221,11 @@ class LoginController extends GetxController {
 
     if (!_portalAdressController.text.isURL) {
       portalFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => portalFieldError.value = false);
+      _portalAdressController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _portalAdressController.text.length),
+      );
     } else {
       setState(ViewState.Busy);
 
