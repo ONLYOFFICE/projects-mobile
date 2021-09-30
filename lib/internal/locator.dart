@@ -159,6 +159,7 @@ void setupLocator() {
   locator.registerLazySingleton(() => EventHub());
   locator.registerLazySingleton(() => ImagesController());
 
+  Get.lazyPut(() => PlatformController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
@@ -249,7 +250,6 @@ void setupLocator() {
       fenix: true);
   Get.lazyPut(() => LoginController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
-  Get.lazyPut(() => PlatformController(), fenix: true);
 
   Get.lazyPut(() => ProfileController(), fenix: true);
 }
