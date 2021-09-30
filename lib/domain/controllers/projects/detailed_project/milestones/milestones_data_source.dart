@@ -31,6 +31,8 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -48,6 +50,8 @@ class MilestonesDataSource extends GetxController {
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
+
+  List<PortalUser> _team;
 
   MilestonesSortController get sortController => _sortController;
   MilestonesFilterController get filterController => _filterController;
@@ -77,7 +81,7 @@ class MilestonesDataSource extends GetxController {
     paginationController.pullDownEnabled = true;
   }
 
-  bool get canCreate =>
+  bool _canCreate() =>
       _userController.user.isAdmin ||
       _userController.user.isOwner ||
       _securityInfo.canCreateMilestone;
@@ -107,9 +111,9 @@ class MilestonesDataSource extends GetxController {
     paginationController.data.addAll(result);
   }
 
-  Future<void> setup(int projectId) async {
+  Future<void> setup(ProjectDetailed projectDetailed) async {
     loaded.value = false;
-    _projectId = projectId;
+    _projectId = projectDetailed.id;
     _filterController.projectId = _projectId.toString();
 
     // ignore: unawaited_futures
@@ -118,9 +122,9 @@ class MilestonesDataSource extends GetxController {
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
     _securityInfo ??= await _projectService.getProjectSecurityinfo();
-    var team = await _projectService.getProjectTeam(projectId.toString());
-    if (team.any((element) => element.id == _selfId))
-      fabIsVisible.value = canCreate;
+
+    if (projectDetailed.responsible.id == _selfId)
+      fabIsVisible.value = _canCreate();
     else
       fabIsVisible.value = false;
   }
