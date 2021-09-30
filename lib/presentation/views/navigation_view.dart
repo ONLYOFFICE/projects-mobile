@@ -281,17 +281,17 @@ class MobileLayout extends StatelessWidget {
       () => Scaffold(
         body: pages[navigationController.tabIndex.value],
         bottomNavigationBar: SizedBox(
-          height: navigationController.onMoreView ? 300 : 56,
+          height: navigationController.onMoreView.value ? 300 : 56,
           child: Column(
             children: [
-              if (navigationController.onMoreView)
+              if (navigationController.onMoreView.value)
                 const Expanded(child: MoreView()),
               BottomNavigationBar(
                 unselectedItemColor:
                     Get.theme.colors().onNavBar.withOpacity(0.4),
                 selectedItemColor: Get.theme.colors().onNavBar,
                 onTap: navigationController.changeTabIndex,
-                currentIndex: navigationController.onMoreView ||
+                currentIndex: navigationController.onMoreView.value ||
                         navigationController.tabIndex.value > 3
                     ? 3
                     : navigationController.tabIndex.value,
