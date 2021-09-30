@@ -33,9 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/from_api/security_info.dart';
 import 'package:projects/data/services/milestone_service.dart';
-import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
@@ -67,9 +65,7 @@ class MilestonesDataSource extends GetxController {
 
   String _selfId;
   final _userController = Get.find<UserController>();
-  final _projectService = locator<ProjectService>();
 
-  SecrityInfo _securityInfo;
   var fabIsVisible = false.obs;
 
   MilestonesDataSource() {
@@ -80,11 +76,6 @@ class MilestonesDataSource extends GetxController {
         () async => await _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
-
-  bool _canCreate() =>
-      _userController.user.isAdmin ||
-      _userController.user.isOwner ||
-      _securityInfo.canCreateMilestone;
 
   Future loadMilestones() async {
     loaded.value = false;
@@ -111,9 +102,9 @@ class MilestonesDataSource extends GetxController {
     paginationController.data.addAll(result);
   }
 
-  Future<void> setup(ProjectDetailed projectDetailed) async {
+  Future<void> setup({ProjectDetailed projectDetailed, int projectId}) async {
     loaded.value = false;
-    _projectId = projectDetailed.id;
+    _projectId = projectId ?? projectDetailed.id;
     _filterController.projectId = _projectId.toString();
 
     // ignore: unawaited_futures
@@ -121,11 +112,13 @@ class MilestonesDataSource extends GetxController {
 
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
-    _securityInfo ??= await _projectService.getProjectSecurityinfo();
-
-    if (projectDetailed.responsible.id == _selfId)
-      fabIsVisible.value = _canCreate();
-    else
-      fabIsVisible.value = false;
+    fabIsVisible.value = projectDetailed != null
+        ? projectDetailed.responsible.id == _selfId || _canCreate()
+        : _canCreate();
   }
+
+  bool _canCreate() =>
+      _userController.user.isAdmin ||
+      _userController.user.isOwner ||
+      _userController.user.listAdminModules.contains('projects');
 }

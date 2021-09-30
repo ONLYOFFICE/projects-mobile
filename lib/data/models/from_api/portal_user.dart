@@ -60,34 +60,37 @@ class PortalUser {
   bool isSSO;
   String avatarSmall;
   String profileUrl;
+  List<String> listAdminModules;
 
-  PortalUser(
-      {this.id,
-      this.userName,
-      this.isVisitor,
-      this.firstName,
-      this.lastName,
-      this.email,
-      this.birthday,
-      this.sex,
-      this.status,
-      this.activationStatus,
-      this.terminated,
-      this.department,
-      this.workFrom,
-      this.displayName,
-      this.mobilePhone,
-      this.title,
-      this.contacts,
-      this.groups,
-      this.avatarMedium,
-      this.avatar,
-      this.isAdmin,
-      this.isLDAP,
-      this.isOwner,
-      this.isSSO,
-      this.avatarSmall,
-      this.profileUrl});
+  PortalUser({
+    this.id,
+    this.userName,
+    this.isVisitor,
+    this.firstName,
+    this.lastName,
+    this.email,
+    this.birthday,
+    this.sex,
+    this.status,
+    this.activationStatus,
+    this.terminated,
+    this.department,
+    this.workFrom,
+    this.displayName,
+    this.mobilePhone,
+    this.title,
+    this.contacts,
+    this.groups,
+    this.avatarMedium,
+    this.avatar,
+    this.isAdmin,
+    this.isLDAP,
+    this.isOwner,
+    this.isSSO,
+    this.avatarSmall,
+    this.profileUrl,
+    this.listAdminModules,
+  });
 
   PortalUser.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
@@ -126,6 +129,12 @@ class PortalUser {
     isSSO = json['isSSO'];
     avatarSmall = json['avatarSmall'];
     profileUrl = json['profileUrl'];
+    if (json['listAdminModules'] != null) {
+      listAdminModules = <String>[];
+      json['listAdminModules'].forEach((v) {
+        listAdminModules.add(v);
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -160,6 +169,10 @@ class PortalUser {
     data['isSSO'] = isSSO;
     data['avatarSmall'] = avatarSmall;
     data['profileUrl'] = profileUrl;
+    if (listAdminModules != null) {
+      // data['contacts'] = listAdminModules.map((v) => v.toJson()).toList();
+    }
+
     return data;
   }
 }

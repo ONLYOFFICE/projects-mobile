@@ -30,6 +30,8 @@
  *
  */
 
+import 'package:projects/data/models/from_api/security_info.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:synchronized/synchronized.dart';
 
 import 'package:get/get.dart';
@@ -42,6 +44,8 @@ class UserController extends GetxController {
   PortalUser user;
   var lock = Lock();
 
+  SecrityInfo securityInfo;
+
   Future getUserInfo() async {
     await lock.synchronized(() async {
       if (user != null && user.id != null) {
@@ -50,6 +54,8 @@ class UserController extends GetxController {
 
       var data = await _api.getSelfInfo();
       user = data.response;
+
+      securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
     });
   }
 

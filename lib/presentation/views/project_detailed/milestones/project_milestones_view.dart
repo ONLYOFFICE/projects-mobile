@@ -61,7 +61,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<MilestonesDataSource>();
-    controller.setup(projectDetailed);
+    controller.setup(projectDetailed: projectDetailed);
     return Stack(
       children: [
         _Content(controller: controller),

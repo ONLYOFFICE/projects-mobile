@@ -33,9 +33,12 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -53,8 +56,17 @@ class SelectProjectView extends StatelessWidget {
     final controller = Get.arguments['controller'];
     var projectsController = ProjectsWithPresets.myProjectsController;
 
-    var selfUser = Get.find<UserController>().user;
-    if (selfUser.isAdmin || selfUser.isOwner) {
+    var userController = Get.find<UserController>();
+
+    if (userController.user.isAdmin ||
+        userController.user.isOwner ||
+        userController.user.listAdminModules.contains('projects') ||
+        ((controller is NewTaskController) &&
+            userController.securityInfo.canCreateTask) ||
+        ((controller is DiscussionActionsController) &&
+            userController.securityInfo.canCreateMessage) ||
+        ((controller is NewMilestoneController) &&
+            userController.securityInfo.canCreateMilestone)) {
       projectsController = ProjectsWithPresets.activeProjectsController;
     }
 
