@@ -45,8 +45,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   void initState() {
     super.initState();
 
-    discussionsController = Get.put(ProjectDiscussionsController(
-        projectDetailed.id, projectDetailed.title));
+    discussionsController =
+        Get.put(ProjectDiscussionsController(projectDetailed));
 
     projectController = Get.find<ProjectDetailsController>();
     projectController.setup(Get.arguments['projectDetailed']);

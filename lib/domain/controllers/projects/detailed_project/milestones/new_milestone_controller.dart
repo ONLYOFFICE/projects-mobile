@@ -54,9 +54,9 @@ class NewMilestoneController extends GetxController {
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
 
-      teamController = Get.find<ProjectTeamController>();
-      teamController.withoutVisitors = true;
-      teamController.projectId = projectDetailed.id;
+      teamController = Get.find<ProjectTeamController>()
+        ..setup(projectDetailed: projectDetailed, withoutVisitors: true);
+
       await teamController.getTeam();
 
       for (var user in teamController.usersList) {

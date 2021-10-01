@@ -32,8 +32,7 @@ class ProjectTaskScreen extends StatelessWidget {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
 
-    var controller = Get.find<ProjectTasksController>();
-    controller.setup(projectDetailed.id);
+    var controller = Get.find<ProjectTasksController>()..setup(projectDetailed);
 
     return Stack(
       children: [

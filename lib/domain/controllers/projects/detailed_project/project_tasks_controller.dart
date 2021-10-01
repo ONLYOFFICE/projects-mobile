@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -18,6 +20,8 @@ class ProjectTasksController extends GetxController {
 
   final _filterController =
       Get.put(TaskFilterController(), tag: 'ProjectTasksController');
+
+  ProjectDetailed _projectDetailed;
 
   TaskFilterController get filterController => _filterController;
   TasksSortController get sortController => _sortController;
@@ -70,9 +74,10 @@ class ProjectTasksController extends GetxController {
     paginationController.data.addAll(result.response);
   }
 
-  Future<void> setup(int projectId) async {
+  Future<void> setup(ProjectDetailed projectDetailed) async {
     loaded.value = false;
-    _projectId = projectId;
+    _projectDetailed = projectDetailed;
+    _projectId = projectDetailed.id;
     _filterController.projectId = _projectId.toString();
 
 // ignore: unawaited_futures
@@ -81,15 +86,17 @@ class ProjectTasksController extends GetxController {
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
 
-    var team = await _projectService.getProjectTeam(projectId.toString());
+    var team = await _projectService.getProjectTeam(_projectId.toString());
 
     fabIsVisible.value =
-        team.any((element) => element.id == _selfId) || _canCreate();
+        (team.any((element) => element.id == _selfId) || _canCreate()) &&
+            _projectDetailed.status != ProjectStatusCode.closed.index;
   }
 
   bool _canCreate() =>
-      _userController.user.isAdmin ||
-      _userController.user.isOwner ||
-      (_userController.user.listAdminModules != null &&
-          _userController.user.listAdminModules.contains('projects'));
+      (_projectDetailed.status != ProjectStatusCode.closed.index) &&
+      (_userController.user.isAdmin ||
+          _userController.user.isOwner ||
+          (_userController.user.listAdminModules != null &&
+              _userController.user.listAdminModules.contains('projects')));
 }

@@ -122,9 +122,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> fillProjectInfo() async {
     teamMembersCount.value = _projectDetailed.participantCount;
 
-    var tream = Get.find<ProjectTeamController>();
-
-    tream.projectId = _projectDetailed.id;
+    var tream = Get.find<ProjectTeamController>()
+      ..setup(projectDetailed: _projectDetailed);
     var usersList = await tream.getTeam().then((value) => tream.usersList);
 
     teamMembers.clear();

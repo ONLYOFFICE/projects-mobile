@@ -61,9 +61,9 @@ class ProjectEditController extends BaseProjectEditorController {
     isPMSelected.value = true;
     managerName.value = selectedProjectManager.value.displayName;
 
-    var projectTeamDataSource = Get.put(ProjectTeamController());
+    var projectTeamDataSource = Get.put(ProjectTeamController())
+      ..setup(projectDetailed: projectDetailed);
 
-    projectTeamDataSource.projectId = projectDetailed.id;
     await projectTeamDataSource.getTeam();
 
     if (selectedTeamMembers.isNotEmpty) selectedTeamMembers.clear();

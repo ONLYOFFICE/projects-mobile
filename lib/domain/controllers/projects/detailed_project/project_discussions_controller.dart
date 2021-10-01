@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
@@ -12,11 +14,13 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 
 class ProjectDiscussionsController extends GetxController {
   final _api = locator<DiscussionsService>();
-  final projectId;
+  var projectId;
   var projectTitle;
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'ProjectDiscussionsController');
+
+  ProjectDetailed _projectDetailed;
 
   PaginationController get paginationController => _paginationController;
 
@@ -30,7 +34,11 @@ class ProjectDiscussionsController extends GetxController {
   String _selfId;
   final _projectService = locator<ProjectService>();
 
-  ProjectDiscussionsController(this.projectId, this.projectTitle) {
+  ProjectDiscussionsController(ProjectDetailed projectDetailed) {
+    _projectDetailed = projectDetailed;
+    projectId = projectDetailed.id;
+    projectTitle = projectDetailed.title;
+
     _sortController.updateSortDelegate =
         () async => await loadProjectDiscussions();
 
@@ -45,7 +53,8 @@ class ProjectDiscussionsController extends GetxController {
           _selfId ??= await _userController.getUserId(),
           team = await _projectService.getProjectTeam(projectId.toString()),
           fabIsVisible.value =
-              team.any((element) => element.id == _selfId) || _canCreate(),
+              (team.any((element) => element.id == _selfId) || _canCreate()) &&
+                  _projectDetailed.status != ProjectStatusCode.closed.index
         });
   }
 
