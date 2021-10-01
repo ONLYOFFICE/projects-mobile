@@ -60,8 +60,8 @@ class SelectProjectView extends StatelessWidget {
 
     if (userController.user.isAdmin ||
         userController.user.isOwner ||
-        (controller.listAdminModules != null &&
-            controller.listAdminModules.contains('projects')) ||
+        (userController.user.listAdminModules != null &&
+            userController.user.listAdminModules.contains('projects')) ||
         ((controller is NewTaskController) &&
             userController.securityInfo.canCreateTask) ||
         ((controller is DiscussionActionsController) &&
