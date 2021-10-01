@@ -6,7 +6,6 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -86,14 +85,6 @@ class _PortalInputViewState extends State<PortalInputView> {
                                 await controller.getPortalCapabilities(),
                           ),
                         ),
-                        // TODO УБРАТЬ!
-                        TextButton(
-                          onPressed: () => Get.to(() {
-                            testMode = true;
-                            return const GetCodeViews();
-                          }),
-                          child: const Text('ПРОВЕРИТЬ ЭКРАНЫ 2FA'),
-                        ),
                         SizedBox(height: Get.height * 0.222),
                         Text(
                           tr('appDescription'),
@@ -113,6 +104,3 @@ class _PortalInputViewState extends State<PortalInputView> {
     );
   }
 }
-
-// TODO УБРАТЬ!
-bool testMode = false;

@@ -53,10 +53,8 @@ class _Code extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<LoginController>();
-    // TODO УБРАТЬ
-    String code;
-    if (testMode) code = _splitCode('1234567891011121');
-    if (!testMode) code = _splitCode(controller.tfaKey);
+    var code = _splitCode(controller.tfaKey);
+
     return SizedBox(
       width: 280,
       child: Column(
