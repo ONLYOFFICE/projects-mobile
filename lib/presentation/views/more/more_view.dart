@@ -13,7 +13,12 @@ class MoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<ProfileController>();
+    var controller;
+    try {
+      controller = Get.find<ProfileController>();
+    } catch (e) {
+      controller = Get.put(ProfileController(), permanent: true);
+    }
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       controller.setup();
