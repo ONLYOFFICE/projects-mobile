@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0 
-  get: ^4.3.8
+  get: ^4.3.7
   get_it: ^7.2.0
   get_storage: ^2.0.3
   # for http requests
