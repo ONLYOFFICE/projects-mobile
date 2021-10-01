@@ -109,15 +109,22 @@ class TasksController extends BaseController {
       Get.find<NavigationController>().to(const TasksSearchScreen());
 
   Future<bool> getFabVisibility() async {
-    var fabVisibility =
-        ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+    var fabVisibility = false;
+
     await _userController.getUserInfo();
     var selfUser = _userController.user;
     if (selfUser.isAdmin ||
         selfUser.isOwner ||
         selfUser.listAdminModules.contains('projects')) {
+      if (ProjectsWithPresets.activeProjectsController.itemList.isEmpty)
+        await ProjectsWithPresets.activeProjectsController.loadProjects();
       fabVisibility =
           ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+    } else {
+      if (ProjectsWithPresets.myProjectsController.itemList.isEmpty)
+        await ProjectsWithPresets.myProjectsController.loadProjects();
+      fabVisibility =
+          ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     return fabVisibility;
   }
