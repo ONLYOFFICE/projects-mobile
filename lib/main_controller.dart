@@ -92,6 +92,28 @@ class MainController extends GetxController {
     super.onInit();
   }
 
+  void setupMainPage() {
+    if (noInternet.isTrue) return;
+
+    isAuthorized().then((isAuthorized) {
+      return {
+        if (isAuthorized)
+          {
+            if (!(mainPage.value is NavigationView))
+              {
+                // ignore: unnecessary_cast
+                mainPage.value = navigationView,
+              }
+          }
+        else if (!(mainPage.value is PortalInputView))
+          {
+            // ignore: unnecessary_cast
+            mainPage.value = portalInputView,
+          }
+      };
+    });
+  }
+
   Future<bool> isAuthorized() async {
     var expirationDate = await _secureStorage.getString('expires');
     var token = await _secureStorage.getString('token');
@@ -125,27 +147,5 @@ class MainController extends GetxController {
     await storage.remove('discussionFilters');
 
     Get.find<PortalInfoController>().logout();
-  }
-
-  void setupMainPage() {
-    if (noInternet.isTrue) return;
-
-    isAuthorized().then((isAuthorized) {
-      return {
-        if (isAuthorized)
-          {
-            if (!(mainPage.value is NavigationView))
-              {
-                // ignore: unnecessary_cast
-                mainPage.value = navigationView,
-              }
-          }
-        else if (!(mainPage.value is PortalInputView))
-          {
-            // ignore: unnecessary_cast
-            mainPage.value = portalInputView,
-          }
-      };
-    });
   }
 }

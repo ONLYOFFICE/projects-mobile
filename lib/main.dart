@@ -49,6 +49,7 @@ import 'package:projects/internal/locator.dart';
 void main() async {
   HttpOverrides.global = DevHttpOverrides();
   setupLocator();
+  setupGetX();
   await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
