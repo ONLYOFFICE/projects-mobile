@@ -69,10 +69,14 @@ class NavigationController extends GetxController {
           tabIndex.value = index;
       }
     }
+    update();
   }
 
   void changeTabletIndex(int index) {
-    tabIndex.value = index;
+    if (tabIndex.value == index)
+      tabIndex.refresh();
+    else
+      tabIndex.value = index;
   }
 
   void clearCurrentIndex() => tabIndex.value = 0;

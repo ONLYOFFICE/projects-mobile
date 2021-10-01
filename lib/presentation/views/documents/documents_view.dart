@@ -66,7 +66,10 @@ class FolderContentView extends StatelessWidget {
     final controller = Get.find<DocumentsController>();
     final String folderName = Get.arguments['folderName'];
     final int folderId = Get.arguments['folderId'];
-    controller.setupFolder(folderName: folderName, folderId: folderId);
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.setupFolder(folderName: folderName, folderId: folderId);
+    });
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
@@ -105,8 +108,11 @@ class DocumentsSearchView extends StatelessWidget {
     final int folderId = Get.arguments['folderId'];
 
     documentsController.entityType = Get.arguments['entityType'];
-    documentsController.setupSearchMode(
-        folderName: folderName, folderId: folderId);
+
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      documentsController.setupSearchMode(
+          folderName: folderName, folderId: folderId);
+    });
 
     return DocumentsScreen(
       controller: documentsController,
