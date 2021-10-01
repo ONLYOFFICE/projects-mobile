@@ -165,12 +165,11 @@ void setupGetX() {
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
-  Get.lazyPut(
+  Get.create(
     () => DiscussionsController(
       Get.find<DiscussionsFilterController>(),
       Get.put(PaginationController(), tag: 'DiscussionsController'),
     ),
-    fenix: true,
   );
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);

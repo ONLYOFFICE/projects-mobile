@@ -34,7 +34,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:projects/internal/locator.dart';
+// import 'package:projects/internal/locator.dart';
 
 import 'package:projects/main_controller.dart';
 
@@ -45,7 +45,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    setupGetX();
+    // setupGetX();
     return GetBuilder<MainController>(builder: (controller) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
         controller.setupMainPage();
