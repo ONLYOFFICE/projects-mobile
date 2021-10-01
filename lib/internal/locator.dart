@@ -126,7 +126,9 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton(() => EventHub());
   locator.registerLazySingleton(() => ImagesController());
+}
 
+void setupGetX() {
   Get.lazyPut(() => PlatformController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
