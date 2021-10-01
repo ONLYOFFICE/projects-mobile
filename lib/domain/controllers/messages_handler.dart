@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/internal/utils/debug_print.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -20,29 +21,31 @@ class MessagesHandler {
     String buttonText,
     Function buttonOnTap,
   }) async {
-    isDisplayed.value = true;
+    try {
+      if (text == _lastMessage)
+        ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar();
 
-    if (text == _lastMessage) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      _a.addLast(text);
+      isDisplayed.value = true;
+
+      await ScaffoldMessenger.maybeOf(context)
+          .showSnackBar(
+            _styledSnackBar(
+              context: context,
+              text: text,
+              showOkButton: showOkButton,
+              buttonText: buttonText,
+              buttonOnTap: buttonOnTap,
+            ),
+          )
+          .closed;
+    } catch (e) {
+      printError('SnackBar error: $e');
+    } finally {
+      if (_a.isNotEmpty) _a.removeFirst();
+      if (_a.isEmpty) isDisplayed.value = false;
     }
 
-    _a.addLast(text);
-
-    await ScaffoldMessenger.of(context)
-        .showSnackBar(
-          _styledSnackBar(
-            context: context,
-            text: text,
-            showOkButton: showOkButton,
-            buttonText: buttonText,
-            buttonOnTap: buttonOnTap,
-          ),
-        )
-        .closed
-        .then((_) {
-      _a.removeFirst();
-      if (_a.isEmpty) isDisplayed.value = false;
-    });
     _lastMessage = text;
   }
 }

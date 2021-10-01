@@ -151,15 +151,17 @@ class NewSubtaskController extends GetxController
         var taskController =
             Get.find<TaskItemController>(tag: taskId.toString());
 
-        // ignore: unawaited_futures
-        taskController.reloadTask();
         Get.back();
+        await taskController.reloadTask(showLoading: true);
         MessagesHandler.showSnackBar(
-            context: context,
+            context: Get.context,
             text: tr('subtaskCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
-              var controller = Get.put(SubtaskController(subtask: newSubtask),
+              var controller = Get.put(
+                  SubtaskController(
+                      subtask: newSubtask,
+                      parentTask: taskController.task.value),
                   tag: newSubtask.hashCode.toString());
               return Get.find<NavigationController>().to(
                   const SubtaskDetailedView(),
