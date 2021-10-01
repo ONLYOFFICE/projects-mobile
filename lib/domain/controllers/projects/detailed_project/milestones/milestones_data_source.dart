@@ -120,5 +120,6 @@ class MilestonesDataSource extends GetxController {
   bool _canCreate() =>
       _userController.user.isAdmin ||
       _userController.user.isOwner ||
-      _userController.user.listAdminModules.contains('projects');
+      (_userController.user.listAdminModules != null &&
+          _userController.user.listAdminModules.contains('projects'));
 }

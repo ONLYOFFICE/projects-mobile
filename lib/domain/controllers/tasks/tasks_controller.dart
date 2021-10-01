@@ -147,7 +147,8 @@ class TasksController extends BaseController {
     var selfUser = _userController.user;
     if (selfUser.isAdmin ||
         selfUser.isOwner ||
-        selfUser.listAdminModules.contains('projects')) {
+        (selfUser.listAdminModules != null &&
+            selfUser.listAdminModules.contains('projects'))) {
       if (ProjectsWithPresets.activeProjectsController.itemList.isEmpty)
         await ProjectsWithPresets.activeProjectsController.loadProjects();
       fabVisibility =
