@@ -53,7 +53,7 @@ class SubtaskEditingController extends GetxController
   final _api = locator<SubtasksService>();
   final _titleController = TextEditingController();
   Subtask _subtask;
-  var teamController;
+  ProjectTeamController teamController;
 
   @override
   TextEditingController get titleController => _titleController;
@@ -78,7 +78,6 @@ class SubtaskEditingController extends GetxController
     _titleController.text = subtask.title;
 
     teamController = Get.find<ProjectTeamController>();
-    teamController.withoutVisitors = true;
 
     status = subtask.status.obs;
     if (_subtask.responsible != null) {
@@ -92,7 +91,7 @@ class SubtaskEditingController extends GetxController
 
   void setupResponsibleSelection([int projectId]) async {
     if (teamController.usersList.isEmpty) {
-      teamController.projectId = projectId;
+      teamController.setup(projectId: projectId, withoutVisitors: true);
 
       await teamController
           .getTeam()

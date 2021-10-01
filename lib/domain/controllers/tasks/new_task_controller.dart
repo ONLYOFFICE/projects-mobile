@@ -56,7 +56,7 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 class NewTaskController extends GetxController
     implements TaskActionsController {
   final _api = locator<TaskService>();
-  var teamController;
+  ProjectTeamController teamController;
 
   var _selectedProjectId;
   var newMilestoneId;
@@ -113,7 +113,6 @@ class NewTaskController extends GetxController
     _titleFocus.requestFocus();
 
     teamController = Get.find<ProjectTeamController>();
-    teamController.withoutVisitors = true;
 
     if (projectDetailed != null) {
       selectedProjectTitle.value = projectDetailed.title;
@@ -217,7 +216,8 @@ class NewTaskController extends GetxController
 
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
-      teamController.projectId = _selectedProjectId;
+      teamController.setup(
+          projectId: _selectedProjectId, withoutVisitors: true);
 
       await teamController
           .getTeam()

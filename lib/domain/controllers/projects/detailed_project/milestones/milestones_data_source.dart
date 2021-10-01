@@ -33,6 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
@@ -50,6 +51,8 @@ class MilestonesDataSource extends GetxController {
   final _filterController = Get.find<MilestonesFilterController>();
 
   List<PortalUser> _team;
+
+  ProjectDetailed _projectDetailed;
 
   MilestonesSortController get sortController => _sortController;
   MilestonesFilterController get filterController => _filterController;
@@ -104,6 +107,7 @@ class MilestonesDataSource extends GetxController {
 
   Future<void> setup({ProjectDetailed projectDetailed, int projectId}) async {
     loaded.value = false;
+    _projectDetailed = projectDetailed;
     _projectId = projectId ?? projectDetailed.id;
     _filterController.projectId = _projectId.toString();
 
@@ -112,9 +116,10 @@ class MilestonesDataSource extends GetxController {
 
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
-    fabIsVisible.value = projectDetailed != null
-        ? projectDetailed.responsible.id == _selfId || _canCreate()
-        : _canCreate();
+    fabIsVisible.value = (projectDetailed != null
+            ? projectDetailed.responsible.id == _selfId || _canCreate()
+            : _canCreate()) &&
+        _projectDetailed?.status != ProjectStatusCode.closed.index;
   }
 
   bool _canCreate() =>

@@ -56,9 +56,10 @@ class ProjectTeamView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var projectTeamDataSource = Get.find<ProjectTeamController>();
-    projectTeamDataSource.projectId = projectDetailed.id;
-    projectTeamDataSource.getTeam();
+    var projectTeamDataSource = Get.find<ProjectTeamController>()
+      ..setup(projectDetailed: projectDetailed)
+      ..getTeam();
+
     return Stack(
       children: [
         _Content(projectTeamDataSource: projectTeamDataSource),
@@ -66,11 +67,16 @@ class ProjectTeamView extends StatelessWidget {
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.only(right: 16, bottom: 24),
-            child: StyledFloatingActionButton(
-              onPressed: fabAction,
-              child: AppIcon(
-                icon: SvgIcons.fab_user,
-                color: Get.theme.colors().onPrimarySurface,
+            child: Obx(
+              () => Visibility(
+                visible: projectTeamDataSource.fabIsVisible.value,
+                child: StyledFloatingActionButton(
+                  onPressed: fabAction,
+                  child: AppIcon(
+                    icon: SvgIcons.fab_user,
+                    color: Get.theme.colors().onPrimarySurface,
+                  ),
+                ),
               ),
             ),
           ),

@@ -56,7 +56,7 @@ class TaskEditingController extends GetxController
   PortalTask task;
   final _api = locator<TaskService>();
 
-  var teamController;
+  ProjectTeamController teamController;
 
   TaskEditingController({@required this.task});
 
@@ -116,7 +116,6 @@ class TaskEditingController extends GetxController
     _taskItemController = Get.find<TaskItemController>(tag: task.id.toString());
 
     teamController = Get.find<ProjectTeamController>();
-    teamController.withoutVisitors = true;
 
     initialStatus = _taskItemController.status.value;
     newStatus = initialStatus.obs;
@@ -289,7 +288,8 @@ class TaskEditingController extends GetxController
 
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
-      teamController.projectId = task.projectOwner.id;
+      teamController.setup(
+          projectId: task.projectOwner.id, withoutVisitors: true);
 
       await teamController
           .getTeam()
