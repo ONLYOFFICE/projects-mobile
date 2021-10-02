@@ -436,5 +436,10 @@
 	"projectDeleted": "Le projet a été supprimé",
 	"taskDeleted": "La tâche a été supprimée",
 	"discussionDeleted": "La discussion a été supprimée",
-	"milestoneCreated": "Le jalon a été créé"
+	"milestoneCreated": "Le jalon a été créé",
+	"taskAccepted": "La tâche a été acceptée par vous",
+	"taskUpdated": "La tâche a été mise à jour",
+	"projectUpdated": "Le projet a été mis à jour",
+	"discussionUpdated": "La discussion a été mise à jour",
+	"commentEditing": "Modifier le commentaire"
 }

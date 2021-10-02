@@ -436,5 +436,10 @@
 	"projectDeleted": "Progetto eliminato",
 	"taskDeleted": "Attività eliminata",
 	"discussionDeleted": "Discussione eliminata",
-	"milestoneCreated": "Pietra miliare è stata creata"
+	"milestoneCreated": "Pietra miliare è stata creata",
+	"taskAccepted": "Attività è stata accettata da te",
+	"taskUpdated": "Attività è stata aggoirnata",
+	"projectUpdated": "Progetto è stato aggoirnato",
+	"discussionUpdated": "Discussione è stata aggoirnata",
+	"commentEditing": "Modifica di commento"
 }

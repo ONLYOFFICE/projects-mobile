@@ -436,5 +436,10 @@
 	"projectDeleted": "El proyecto se ha eliminado",
 	"taskDeleted": "La tarea se ha eliminado",
 	"discussionDeleted": "La discusión se ha eliminado",
-	"milestoneCreated": "El hito se ha creado"
+	"milestoneCreated": "El hito se ha creado",
+	"taskAccepted": "Tarea ha sido aceptada por usted",
+	"taskUpdated": "Tarea se ha actualizado",
+	"projectUpdated": "Proyecto se ha actualizado",
+	"discussionUpdated": "Discusión se ha actualizado",
+	"commentEditing": "Edición de comentarios"
 }

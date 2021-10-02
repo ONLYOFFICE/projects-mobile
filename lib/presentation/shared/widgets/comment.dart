@@ -78,7 +78,7 @@ class Comment extends StatelessWidget {
                         });
                       },
                       child: Text(
-                        'Ответить',
+                        tr('reply'),
                         style: TextStyleHelper.caption(
                             color: Get.theme.colors().primary),
                       ),

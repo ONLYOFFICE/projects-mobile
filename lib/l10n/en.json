@@ -444,5 +444,7 @@
 	"commentEditing": "Comment editing",
 	"acceptTask": "Accept task",
 	"noAdress": "No address associated with hostname",
-	"authenticationFailed": "User authentication failed"
+	"authenticationFailed": "User authentication failed",
+	"reply": "Ответить",
+	"addComment": "Add comment..."
 }
