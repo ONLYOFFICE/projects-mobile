@@ -436,5 +436,10 @@
 	"projectDeleted": "Projeto excluído",
 	"taskDeleted": "A tarefa foi excluída",
 	"discussionDeleted": "A discussão foi excluída",
-	"milestoneCreated": "O marco foi criado"
+	"milestoneCreated": "O marco foi criado",
+	"taskAccepted": "Você aceitou a tarefa",
+	"taskUpdated": "A tarefa foi atualizada",
+	"projectUpdated": "O projeto foi atualizado",
+	"discussionUpdated": "A discussão foi atualizada",
+	"commentEditing": "Edição de comentários"
 }

@@ -436,5 +436,10 @@
 	"projectDeleted": "Projekt gelöscht",
 	"taskDeleted": "Aufgabe wurde gelöscht",
 	"discussionDeleted": "Diskussion wurde gelöscht",
-	"milestoneCreated": "Meilenstein wurde erstellt"
+	"milestoneCreated": "Meilenstein wurde erstellt",
+	"taskAccepted": "Sie haben die Aufgabe angenommen",
+	"taskUpdated": "Die Aufgabe wurde aktualisiert",
+	"projectUpdated": "Das Projekt wurde aktualisiert",
+	"discussionUpdated": "Die Diskussion wurde aktualisiert",
+	"commentEditing": "Bearbeitung eines Kommentars"
 }

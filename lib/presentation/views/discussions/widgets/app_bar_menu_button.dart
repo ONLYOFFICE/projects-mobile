@@ -53,7 +53,7 @@ class AppBarMenuButton extends StatelessWidget {
       itemBuilder: (context) {
         return [
           if (controller.discussion.value.canEdit)
-            PopupMenuItem(value: 'Edit', child: Text(tr('Edit discussion'))),
+            PopupMenuItem(value: 'Edit', child: Text(tr('editDiscussion'))),
           // TODO realize
           // const PopupMenuItem(
           //     value: 'Create task', child: Text('Create task on discussion')),

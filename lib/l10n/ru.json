@@ -436,5 +436,10 @@
 	"projectDeleted": "Проект удален",
 	"taskDeleted": "Задача удалена",
 	"discussionDeleted": "Обсуждение удалено",
-	"milestoneCreated": "Веха создана"
+	"milestoneCreated": "Веха создана",
+	"taskAccepted": "Задача принята вами",
+	"taskUpdated": "Задача обновлена",
+	"projectUpdated": "Проект обновлен",
+	"discussionUpdated": "Обсуждение обновлено",
+	"commentEditing": "Редактирование комментария"
 }

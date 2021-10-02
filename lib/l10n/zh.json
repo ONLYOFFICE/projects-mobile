@@ -436,5 +436,10 @@
 	"projectDeleted": "项目已删除",
 	"taskDeleted": "任务已删除",
 	"discussionDeleted": "讨论已删除",
-	"milestoneCreated": "里程碑已创建"
+	"milestoneCreated": "里程碑已创建",
+	"taskAccepted": "任务已被您接受了",
+	"taskUpdated": "任务已更新了",
+	"projectUpdated": "项目已更新了",
+	"discussionUpdated": "讨论已更新了",
+	"commentEditing": "评论的编辑"
 }
