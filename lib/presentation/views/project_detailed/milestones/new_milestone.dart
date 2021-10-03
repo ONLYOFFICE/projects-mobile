@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
+import 'package:projects/presentation/shared/project_team_responsible.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -191,8 +192,6 @@ class ProjectTile extends StatelessWidget {
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
-                  // if (!FocusScope.of(context).hasPrimaryFocus)
-                  //   {FocusScope.of(context).unfocus()},
                   Get.find<NavigationController>()
                       .toScreen(const SelectProjectView(), arguments: {
                     'controller': controller,
@@ -235,11 +234,9 @@ class ResponsibleTile extends StatelessWidget {
         onTap: () => {
           if (!FocusScope.of(context).hasPrimaryFocus)
             {FocusScope.of(context).unfocus()},
-          Get.find<NavigationController>().to(const SelectProjectView(),
+          Get.find<NavigationController>().toScreen(
+              const ProjectTeamResponsibleSelectionView(),
               arguments: {'controller': controller})
-          // Get.find<NavigationController>().toScreen(
-          //     const ProjectTeamResponsibleSelectionView(),
-          //     arguments: {'controller': controller})
         },
       );
     });

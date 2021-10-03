@@ -16,8 +16,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
-    controller.setupResponsibleSelection();
+    var controller = Get.arguments['controller']..setupResponsibleSelection();
 
     final platformController = Get.find<PlatformController>();
 
