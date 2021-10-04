@@ -61,7 +61,9 @@ class MilestoneApi {
             .map((i) => Milestone.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -124,7 +126,9 @@ class MilestoneApi {
             .map((i) => Milestone.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -147,7 +151,9 @@ class MilestoneApi {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

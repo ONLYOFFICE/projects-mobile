@@ -22,7 +22,9 @@ class GroupApi {
             .map((i) => PortalGroup.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -58,7 +60,9 @@ class GroupApi {
               .toList();
         }
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

@@ -24,7 +24,9 @@ class PortalApi {
         result.response = Capabilities.fromJson(responseJson['response']);
         await coreApi.savePortalName();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       var error;

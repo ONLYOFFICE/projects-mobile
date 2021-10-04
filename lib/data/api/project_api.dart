@@ -29,7 +29,9 @@ class ProjectApi {
             .map((i) => Project.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -103,7 +105,9 @@ class ProjectApi {
             .map((i) => ProjectDetailed.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -125,7 +129,9 @@ class ProjectApi {
           result.response = ProjectDetailed.fromJson(responseJson['response']);
         }
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -146,7 +152,9 @@ class ProjectApi {
             .map((i) => Status.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -167,7 +175,9 @@ class ProjectApi {
             .map((i) => ProjectTag.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -196,7 +206,9 @@ class ProjectApi {
             .map((i) => ProjectTag.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -218,7 +230,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = ProjectDetailed.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -241,7 +255,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -263,7 +279,9 @@ class ProjectApi {
             .map((i) => PortalUser.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -284,7 +302,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = PortalUser.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -307,7 +327,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = ProjectDetailed.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -328,7 +350,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = FollowProject.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -351,7 +375,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = ProjectTag.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -377,7 +403,9 @@ class ProjectApi {
             .map((i) => PortalUser.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -397,7 +425,9 @@ class ProjectApi {
         var responseJson = json.decode(response.body);
         result.response = SecrityInfo.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
