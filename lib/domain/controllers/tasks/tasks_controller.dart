@@ -30,7 +30,7 @@ class TasksController extends BaseController {
   TaskFilterController _filterController;
   TaskFilterController get filterController => _filterController;
 
-  var fabIsVisible = true.obs;
+  var fabIsVisible = false.obs;
 
   @override
   Future<void> onInit() async {
@@ -127,6 +127,8 @@ class TasksController extends BaseController {
       fabVisibility =
           ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
+    if (selfUser.isVisitor) fabVisibility = false;
+
     return fabVisibility;
   }
 }

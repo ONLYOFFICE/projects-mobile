@@ -80,12 +80,18 @@ class ProjectTeamController extends GetxController {
       }
     }
 
-    if (selfUser.isAdmin ||
-        selfUser.isOwner ||
-        (selfUser.listAdminModules != null &&
-            selfUser.listAdminModules.contains('projects'))) {
+    if (_projectDetailed?.security['canEditTeam']) {
       fabIsVisible.value = true;
+    } else {
+      if (selfUser.isAdmin ||
+          selfUser.isOwner ||
+          (selfUser.listAdminModules != null &&
+              selfUser.listAdminModules.contains('projects'))) {
+        fabIsVisible.value = true;
+      }
     }
+
+    if (selfUser.isVisitor) fabIsVisible.value = false;
 
     loaded.value = true;
   }

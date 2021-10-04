@@ -29,7 +29,7 @@ class DiscussionsController extends BaseController {
   DiscussionsFilterController get filterController => _filterController;
 
   RxBool loaded = false.obs;
-  var fabIsVisible = true.obs;
+  var fabIsVisible = false.obs;
 
   DiscussionsController(
     DiscussionsFilterController filterController,
@@ -121,6 +121,8 @@ class DiscussionsController extends BaseController {
       fabVisibility =
           ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
+    if (selfUser.isVisitor) fabVisibility = false;
+
     return fabVisibility;
   }
 }

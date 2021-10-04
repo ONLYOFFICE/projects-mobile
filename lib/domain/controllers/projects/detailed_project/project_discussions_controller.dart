@@ -52,17 +52,17 @@ class ProjectDiscussionsController extends GetxController {
     _userController.getUserInfo().then((value) async => {
           _selfId ??= await _userController.getUserId(),
           team = await _projectService.getProjectTeam(projectId.toString()),
-          fabIsVisible.value =
-              (team.any((element) => element.id == _selfId) || _canCreate()) &&
-                  _projectDetailed.status != ProjectStatusCode.closed.index
+          fabIsVisible.value = _canCreate()
+          // (team.any((element) => element.id == _selfId) || _canCreate()) &&
+          //     _projectDetailed.status != ProjectStatusCode.closed.index
         });
   }
 
-  bool _canCreate() =>
-      _userController.user.isAdmin ||
-      _userController.user.isOwner ||
-      (_userController.user.listAdminModules != null &&
-          _userController.user.listAdminModules.contains('projects'));
+  bool _canCreate() => _projectDetailed.security['canCreateMessage'];
+  // (_userController.user.isAdmin ||
+  //     _userController.user.isOwner ||
+  //     (_userController.user.listAdminModules != null &&
+  //         _userController.user.listAdminModules.contains('projects')));
 
   RxList get itemList => paginationController.data;
 
