@@ -53,7 +53,9 @@ class SubtasksApi {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -73,7 +75,9 @@ class SubtasksApi {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -92,7 +96,9 @@ class SubtasksApi {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -111,7 +117,9 @@ class SubtasksApi {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -135,7 +143,9 @@ class SubtasksApi {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -161,7 +171,9 @@ class SubtasksApi {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

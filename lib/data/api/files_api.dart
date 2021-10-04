@@ -57,7 +57,9 @@ class FilesApi {
             .map((i) => PortalFile.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -125,7 +127,9 @@ class FilesApi {
         } else
           result.response = FoldersResponse.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -194,7 +198,7 @@ class FilesApi {
   //       } else
   //         result.response = FoldersResponse.fromJson(responseJson['response']);
   //     } else {
-  //       result.error = CustomError(message: response.reasonPhrase);
+  //       result.error = CustomError(message: json.decode(response.body)['error']['message'] ?? response.reasonPhrase);
   //     }
   //   } catch (e) {
   //     result.error = CustomError(message: e.toString());
@@ -217,7 +221,9 @@ class FilesApi {
         var responseJson = json.decode(response.body);
         result.response = Folder.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -240,7 +246,9 @@ class FilesApi {
         var responseJson = json.decode(response.body);
         result.response = PortalFile.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -260,7 +268,9 @@ class FilesApi {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -280,7 +290,9 @@ class FilesApi {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -319,7 +331,9 @@ class FilesApi {
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -358,7 +372,9 @@ class FilesApi {
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
-        result.error = CustomError(message: response.reasonPhrase);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

@@ -66,12 +66,12 @@ class ErrorDialog extends GetxController {
 
     await Get.dialog(SingleButtonDialog(
         titleText: tr('error'),
-        contentText: error,
+        contentText: _customErrors[error] ?? error,
         acceptText: tr('ok'),
         onAcceptTap: () => {
               Get.back(),
               dialogIsShown = false,
-              if (error.toLowerCase().contains('unauthorized'))
+              if (_blockingErrors[error] != null)
                 {
                   Get.find<LoginController>().logout(),
                   dialogIsShown = false,
@@ -94,3 +94,18 @@ class ErrorDialog extends GetxController {
     queue.addAll(list);
   }
 }
+
+Map _blockingErrors = {
+  'Forbidden': 'Forbidden',
+  'Payment required': 'Payment required',
+  'The paid period is over': 'The paid period is over',
+  'Access to the Projects module is Forbidden':
+      'Access to the Projects module is Forbidden',
+  'Contact the portal administrator for access to the Projects module.':
+      'Contact the portal administrator for access to the Projects module.',
+};
+
+Map _customErrors = {
+  'User authentication failed': tr('authenticationFailed'),
+  'No address associated with hostname': tr('noAdress'),
+};
