@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
-import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -104,29 +104,30 @@ class FileCell extends StatelessWidget {
                       value: 'download',
                       child: Text(tr('download')),
                     ),
-                    if (!(controller is DiscussionsDocumentsController))
+                    if (controller.canCopy)
                       PopupMenuItem(
                         value: 'copy',
                         child: Text(tr('copy')),
                       ),
-                    if (!(controller is DiscussionsDocumentsController))
+                    if (controller.canMove)
                       PopupMenuItem(
                         value: 'move',
                         child: Text(tr('move')),
                       ),
-                    if (!(controller is DiscussionsDocumentsController))
+                    if (controller.canRename)
                       PopupMenuItem(
                         value: 'rename',
                         child: Text(tr('rename')),
                       ),
-                    PopupMenuItem(
-                      value: 'delete',
-                      child: Text(
-                        tr('delete'),
-                        style: TextStyleHelper.subtitle1(
-                            color: Get.theme.colors().colorError),
+                    if (controller.canDelete)
+                      PopupMenuItem(
+                        value: 'delete',
+                        child: Text(
+                          tr('delete'),
+                          style: TextStyleHelper.subtitle1(
+                              color: Get.theme.colors().colorError),
+                        ),
                       ),
-                    ),
                   ];
                 },
               ),
