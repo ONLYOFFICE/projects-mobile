@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/badge/License-GNU%20AGPL%20V3-green.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.en.html) ![Platforms](https://img.shields.io/badge/Platforms-Android-lightgrey.svg)
-![Release](https://img.shields.io/badge/Release-v1.0-blue.svg?style=flat)
+![Release](https://img.shields.io/badge/Release-v1.1-blue.svg?style=flat)
 ## Overview
 
 ONLYOFFICE Projects is an app created for everyone who wants to bring ease to project communication, keep up team productivity, get quick access to the assignments, and control progress.
