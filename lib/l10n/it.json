@@ -441,5 +441,15 @@
 	"taskUpdated": "Attività è stata aggoirnata",
 	"projectUpdated": "Progetto è stato aggoirnato",
 	"discussionUpdated": "Discussione è stata aggoirnata",
-	"commentEditing": "Modifica di commento"
+	"commentEditing": "Modifica di commento",
+	"acceptTask": "Accettare l'attività",
+	"noAdress": "Nessun indirizzo associato con il hostname",
+	"authenticationFailed": "Autenticazione dell'utente fallita",
+	"reply": "Rispondere",
+	"addComment": "Aggiungere un commento...",
+	"statusOpen": "Aperto",
+	"statusClosed": "Chiuso",
+	"statusPaused": "Fermato",
+	"taskStatusOpen": "Aperta",
+	"taskStatusClosed": "Chiusa"
 }
