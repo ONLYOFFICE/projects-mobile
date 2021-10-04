@@ -32,24 +32,29 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 
 class MoreView extends StatelessWidget {
   const MoreView({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var userController = Get.find<UserController>();
-    var portalInfoController = Get.find<PortalInfoController>();
+    var controller;
+    try {
+      controller = Get.find<ProfileController>();
+    } catch (e) {
+      controller = Get.put(ProfileController(), permanent: true);
+    }
 
-    userController.getUserInfo();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.setup();
+    });
 
     return Container(
       height: 312,
@@ -61,69 +66,64 @@ class MoreView extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Obx(
-            () => GestureDetector(
-              onTap: () => Get.find<NavigationController>().changeTabIndex(4),
-              child: Container(
-                  height: 76,
-                  padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                          color: Get.theme.colors().outline, width: 0.5),
-                    ),
+          GestureDetector(
+            onTap: () => Get.find<NavigationController>().changeTabIndex(4),
+            child: Container(
+                height: 76,
+                padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
+                decoration: BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(
+                        color: Get.theme.colors().outline, width: 0.5),
                   ),
-                  child: userController.loaded.value == true &&
-                          portalInfoController.loaded.value == true
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(30),
-                                child: CustomNetworkImage(
-                                  image: userController.user?.avatar ??
-                                      userController.user?.avatarMedium ??
-                                      userController.user?.avatarSmall,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    userController.user?.displayName,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyleHelper.subtitle1(
-                                        color: Get.theme.colors().onNavBar),
-                                  ),
-                                  Text(
-                                    portalInfoController.portalName,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyleHelper.body2(
-                                        color: Get.theme
-                                            .colors()
-                                            .onNavBar
-                                            .withOpacity(0.6)),
-                                  ),
-                                  // Text(),
-                                ],
-                              ),
-                            )
-                          ],
-                        )
-                      : const Center(
-                          child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator()))),
-            ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: CircleAvatar(
+                        radius: 40.0,
+                        backgroundColor: Get.theme.colors().bgDescription,
+                        child: ClipOval(
+                          child: Obx(() {
+                            return controller.avatar.value;
+                          }),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              controller.username.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyleHelper.subtitle1(
+                                  color: Get.theme.colors().onNavBar),
+                            );
+                          }),
+                          Obx(() {
+                            return Text(
+                              controller.portalName.value,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyleHelper.body2(
+                                  color: Get.theme
+                                      .colors()
+                                      .onNavBar
+                                      .withOpacity(0.6)),
+                            );
+                          }),
+                        ],
+                      ),
+                    )
+                  ],
+                )),
           ),
           _MoreTile(
               iconPath: SvgIcons.discussions,

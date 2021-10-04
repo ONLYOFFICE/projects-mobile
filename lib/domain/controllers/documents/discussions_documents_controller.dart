@@ -34,9 +34,12 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/internal/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/download_service.dart';
@@ -52,6 +55,8 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 class DiscussionsDocumentsController extends GetxController {
   final _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
+
+  final _userController = Get.find<UserController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;
@@ -83,6 +88,11 @@ class DiscussionsDocumentsController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
+  bool get canCopy => false;
+  bool get canMove => false;
+  bool get canRename => false;
+  bool get canDelete => !_userController.user.isVisitor;
+
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -100,6 +110,8 @@ class DiscussionsDocumentsController extends GetxController {
         () async => {}; //await refreshContent();
 
     paginationController.pullDownEnabled = true;
+
+    portalInfoController.setup();
   }
 
   void setupFiles(List<PortalFile> files) {
@@ -138,15 +150,6 @@ class DiscussionsDocumentsController extends GetxController {
     return result != null;
   }
 
-  // Future<bool> renameFile(PortalFile element, String newName) async {
-  //   var result = await _api.renameFile(
-  //     fileId: element.id.toString(),
-  //     newTitle: newName,
-  //   );
-
-  //   return result != null;
-  // }
-
   Future<void> downloadFile(String viewUrl) async {
     final _downloadService = locator<DownloadService>();
     await _downloadService.downloadDocument(viewUrl);
@@ -154,7 +157,6 @@ class DiscussionsDocumentsController extends GetxController {
 
   Future openFile(PortalFile selectedFile) async {
     var userController = Get.find<UserController>();
-    var portalInfoController = Get.find<PortalInfoController>();
 
     await userController.getUserInfo();
     var body = <String, dynamic>{
@@ -171,17 +173,21 @@ class DiscussionsDocumentsController extends GetxController {
     var bodyString = jsonEncode(body);
     var stringToBase64 = utf8.fuse(base64);
     var encodedBody = stringToBase64.encode(bodyString);
-    var urlString = 'oodocuments://openfile?data=$encodedBody';
+    var urlString = '${Const.Urls.openDocument}$encodedBody';
 
     if (await canLaunch(urlString)) {
       await launch(urlString);
     } else {
       await LaunchApp.openApp(
-        androidPackageName: 'com.onlyoffice.documents',
+        androidPackageName: Const.Identificators.documentsAndroidAppBundle,
         iosUrlScheme: urlString,
-        appStoreLink:
-            'https://apps.apple.com/app/onlyoffice-documents/id944896972',
+        appStoreLink: Const.Urls.appStoreDocuments,
       );
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.openEditor, {
+        AnalyticsService.Params.Key.portal: portalInfoController.portalName,
+        AnalyticsService.Params.Key.extension: extension(selectedFile.title)
+      });
     }
   }
 }

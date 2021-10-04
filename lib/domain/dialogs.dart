@@ -30,58 +30,82 @@
  *
  */
 
+import 'dart:collection';
+
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class ErrorDialog {
-  static Future<void> show(CustomError error) async {
+class ErrorDialog extends GetxController {
+  final queue = Queue<String>();
+
+  bool dialogIsShown = false;
+
+  Future<void> show(String message) async {
+    addToQueue(message);
+
+    // ignore: unawaited_futures
+    processQueue();
+  }
+
+  void hide() {
+    Get.back();
+  }
+
+  Future<void> processQueue() async {
+    if (queue.isEmpty) return;
+
+    if (dialogIsShown) {
+      return;
+    }
+
+    dialogIsShown = true;
+
+    var error = queue.first;
+
     await Get.dialog(SingleButtonDialog(
-      titleText: tr('error'),
-      contentText: '${error.message}',
-      acceptText: tr('ok'),
-      onAcceptTap: Get.back,
-    ));
+        titleText: tr('error'),
+        contentText: _customErrors[error] ?? error,
+        acceptText: tr('ok'),
+        onAcceptTap: () => {
+              Get.back(),
+              dialogIsShown = false,
+              if (_blockingErrors[error] != null)
+                {
+                  Get.find<LoginController>().logout(),
+                  dialogIsShown = false,
+                  queue.clear(),
+                }
+              else
+                {
+                  queue.removeFirst(),
+                  processQueue(),
+                }
+            }));
   }
 
-  static void hide() {
-    Get.back();
+  void addToQueue(String message) {
+    queue.add(message);
+
+    var list = queue.toSet().toList();
+
+    queue.clear();
+    queue.addAll(list);
   }
 }
 
-class ConfirmDialog {
-  static void show({
-    String title,
-    String message,
-    String textConfirm,
-    String textCancel,
-    Function confirmFunction,
-    Function cancelFunction,
-  }) {
-    Get.defaultDialog(
-      title: title,
-      middleText: message,
-      textConfirm: textConfirm,
-      onConfirm: confirmFunction(),
-      onCancel: cancelFunction(),
-      barrierDismissible: false,
-      textCancel: textCancel,
-    );
-  }
+Map _blockingErrors = {
+  'Forbidden': 'Forbidden',
+  'Payment required': 'Payment required',
+  'The paid period is over': 'The paid period is over',
+  'Access to the Projects module is Forbidden':
+      'Access to the Projects module is Forbidden',
+  'Contact the portal administrator for access to the Projects module.':
+      'Contact the portal administrator for access to the Projects module.',
+};
 
-  static void hide() {
-    Get.back();
-  }
-}
-
-class ProgressDialog {
-  static void show(CustomError error) {
-    Get.dialog(const Center(child: CircularProgressIndicator()));
-  }
-
-  static void hide() {
-    Get.back();
-  }
-}
+Map _customErrors = {
+  'User authentication failed': tr('authenticationFailed'),
+  'No address associated with hostname': tr('noAdress'),
+};

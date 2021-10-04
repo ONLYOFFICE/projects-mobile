@@ -32,11 +32,16 @@
 
 import 'dart:convert';
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:path/path.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
+
+import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/internal/constants.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/download_service.dart';
@@ -45,13 +50,13 @@ import 'package:projects/domain/controllers/documents/documents_filter_controlle
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DocumentsController extends GetxController {
   final _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
+  final _userController = Get.find<UserController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;
@@ -86,6 +91,11 @@ class DocumentsController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
+  bool get canCopy => !_userController.user.isVisitor;
+  bool get canMove => !_userController.user.isVisitor;
+  bool get canRename => !_userController.user.isVisitor;
+  bool get canDelete => !_userController.user.isVisitor;
+
   DocumentsController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -100,6 +110,12 @@ class DocumentsController extends GetxController {
     paginationController.refreshDelegate = () async => await refreshContent();
 
     paginationController.pullDownEnabled = true;
+
+    portalInfoController.setup();
+
+    locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
+      refreshContent();
+    });
   }
 
   Future<void> refreshContent() async {
@@ -210,16 +226,16 @@ class DocumentsController extends GetxController {
       folderId: element.id.toString(),
       newTitle: newName,
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
-
-  void downloadFolder() {}
 
   Future<bool> deleteFolder(Folder element) async {
     var result = await _api.deleteFolder(
       folderId: element.id.toString(),
     );
+
+    locator<EventHub>().fire('needToRefreshDocuments');
 
     return result != null;
   }
@@ -229,6 +245,8 @@ class DocumentsController extends GetxController {
       fileId: element.id.toString(),
     );
 
+    locator<EventHub>().fire('needToRefreshDocuments');
+
     return result != null;
   }
 
@@ -237,7 +255,7 @@ class DocumentsController extends GetxController {
       fileId: element.id.toString(),
       newTitle: newName,
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -248,7 +266,6 @@ class DocumentsController extends GetxController {
 
   Future openFile(PortalFile selectedFile) async {
     var userController = Get.find<UserController>();
-    var portalInfoController = Get.find<PortalInfoController>();
 
     await userController.getUserInfo();
     var body = <String, dynamic>{
@@ -265,17 +282,21 @@ class DocumentsController extends GetxController {
     var bodyString = jsonEncode(body);
     var stringToBase64 = utf8.fuse(base64);
     var encodedBody = stringToBase64.encode(bodyString);
-    var urlString = 'oodocuments://openfile?data=$encodedBody';
+    var urlString = '${Const.Urls.openDocument}$encodedBody';
 
     if (await canLaunch(urlString)) {
       await launch(urlString);
     } else {
       await LaunchApp.openApp(
-        androidPackageName: 'com.onlyoffice.documents',
+        androidPackageName: Const.Identificators.documentsAndroidAppBundle,
         iosUrlScheme: urlString,
-        appStoreLink:
-            'https://apps.apple.com/app/onlyoffice-documents/id944896972',
+        appStoreLink: Const.Urls.appStoreDocuments,
       );
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.openEditor, {
+        AnalyticsService.Params.Key.portal: portalInfoController.portalName,
+        AnalyticsService.Params.Key.extension: extension(selectedFile.title)
+      });
     }
   }
 }

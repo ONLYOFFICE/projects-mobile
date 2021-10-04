@@ -60,6 +60,8 @@ class ResponsibleTile extends StatelessWidget {
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('assignedTo')}:' : null,
           enableBorder: enableUnderline,
+          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Get.theme.colors().onBackground,
           text: _isSelected
               ? controller.responsibles.length == 1
                   ? controller.responsibles[0]?.displayName
@@ -67,9 +69,8 @@ class ResponsibleTile extends StatelessWidget {
               : tr('addResponsible'),
           suffix: _isSelected
               ? suffixIcon ??
-                  Icon(Icons.arrow_forward_ios_rounded,
-                      size: 20,
-                      color: Get.theme.colors().onSurface.withOpacity(0.6))
+                  Icon(Icons.navigate_next,
+                      size: 24, color: Get.theme.colors().onBackground)
               : null,
           suffixPadding: const EdgeInsets.only(right: 21),
           icon: SvgIcons.person,

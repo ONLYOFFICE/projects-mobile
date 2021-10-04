@@ -30,38 +30,35 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
+class SecrityInfo {
+  bool canCreateProject;
+  bool canCreateTask;
+  bool canCreateMilestone;
+  bool canCreateMessage;
+  bool canCreateTimeSpend;
 
-import 'package:projects/presentation/views/authentication/widgets/login_service_button.dart';
+  SecrityInfo(
+      {this.canCreateProject,
+      this.canCreateTask,
+      this.canCreateMilestone,
+      this.canCreateMessage,
+      this.canCreateTimeSpend});
 
-class LoginSources extends StatelessWidget {
-  final List<String> capabilities;
-  LoginSources({Key key, this.capabilities}) : super(key: key);
-
-  final LoginController controller = Get.find();
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 90,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(child: getLoginServices()),
-        ],
-      ),
-    );
+  SecrityInfo.fromJson(Map<String, dynamic> json) {
+    canCreateProject = json['canCreateProject'];
+    canCreateTask = json['canCreateTask'];
+    canCreateMilestone = json['canCreateMilestone'];
+    canCreateMessage = json['canCreateMessage'];
+    canCreateTimeSpend = json['canCreateTimeSpend'];
   }
 
-  Widget getLoginServices() => ListView.builder(
-        itemCount: capabilities.length,
-        itemBuilder: (context, index) => LoginItem(
-          serviceName: capabilities[index],
-          onTap: () {
-            controller.loginByProvider('${capabilities[index]}');
-          },
-        ),
-        scrollDirection: Axis.horizontal,
-      );
+  Map<String, dynamic> toJson() {
+    final data = <String, dynamic>{};
+    data['canCreateProject'] = canCreateProject;
+    data['canCreateTask'] = canCreateTask;
+    data['canCreateMilestone'] = canCreateMilestone;
+    data['canCreateMessage'] = canCreateMessage;
+    data['canCreateTimeSpend'] = canCreateTimeSpend;
+    return data;
+  }
 }

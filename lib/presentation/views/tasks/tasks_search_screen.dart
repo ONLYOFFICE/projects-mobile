@@ -38,7 +38,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/tasks/task_cell.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 class TasksSearchScreen extends StatelessWidget {
   const TasksSearchScreen({Key key}) : super(key: key);

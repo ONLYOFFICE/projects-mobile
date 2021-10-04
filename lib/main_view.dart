@@ -30,56 +30,33 @@
  *
  */
 
-import 'dart:convert';
-
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/services/task/task_service.dart';
-import 'package:projects/internal/locator.dart';
+// import 'package:projects/internal/locator.dart';
 
-class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
+import 'package:projects/main_controller.dart';
 
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
-  RxBool loaded = false.obs;
+import 'package:projects/presentation/views/no_internet_view.dart';
 
-  Future getStatuses() async {
-    loaded.value = false;
-    if (statuses.isEmpty) {
-      statuses.value = await _api.getStatuses();
-      statusImagesDecoded.clear();
-      for (var element in statuses) {
-        statusImagesDecoded.add(decodeImageString(element.image));
-      }
-    }
-    loaded.value = true;
-  }
+class MainView extends StatelessWidget {
+  MainView({Key key}) : super(key: key);
 
-  Status getTaskStatus(PortalTask task) {
-    var status;
+  @override
+  Widget build(BuildContext context) {
+    // setupGetX();
+    return GetBuilder<MainController>(builder: (controller) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        controller.setupMainPage();
+      });
 
-    if (task.customTaskStatus != null) {
-      status = statuses.firstWhere(
-        (element) => element.id == task.customTaskStatus,
-        orElse: () => null,
-      );
-    } else {
-      status = statuses.firstWhere(
-        (element) => -element.id == task.status,
-        orElse: () => null,
-      );
-
-      status ??= statuses.lastWhere(
-        (element) => element.statusType == task.status,
-        orElse: () => null,
-      );
-    }
-    return status;
-  }
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
+      return Obx(() {
+        if (controller.noInternet.isTrue)
+          return const NoInternetScreen();
+        else
+          return controller.mainPage.value;
+      });
+    });
   }
 }

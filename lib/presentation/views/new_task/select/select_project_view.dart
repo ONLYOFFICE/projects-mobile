@@ -33,9 +33,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
+import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -50,14 +54,34 @@ class SelectProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
-
     var projectsController = ProjectsWithPresets.myProjectsController;
+
+    var userController = Get.find<UserController>();
+
+    if (userController.user.isAdmin ||
+        userController.user.isOwner ||
+        (userController.user.listAdminModules != null &&
+            userController.user.listAdminModules.contains('projects')) ||
+        ((controller is NewTaskController) &&
+            userController.securityInfo.canCreateTask) ||
+        ((controller is DiscussionActionsController) &&
+            userController.securityInfo.canCreateMessage) ||
+        ((controller is NewMilestoneController) &&
+            userController.securityInfo.canCreateMilestone)) {
+      projectsController = ProjectsWithPresets.activeProjectsController;
+    }
 
     var searchController =
         Get.put(ProjectSearchController(onlyMyProjects: true));
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectProject'),
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
@@ -74,7 +98,7 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isNotEmpty) {
-          return ProjectsList(
+          return ProjectList(
             controller: controller,
             projects: searchController.searchResult,
           );
@@ -86,7 +110,7 @@ class SelectProjectView extends StatelessWidget {
         }
         if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
-          return ProjectsList(
+          return ProjectList(
             projects: projectsController.paginationController.data,
             controller: controller,
           );
@@ -97,10 +121,10 @@ class SelectProjectView extends StatelessWidget {
   }
 }
 
-class ProjectsList extends StatelessWidget {
+class ProjectList extends StatelessWidget {
   final List projects;
   final controller;
-  const ProjectsList({
+  const ProjectList({
     Key key,
     @required this.projects,
     @required this.controller,
@@ -115,6 +139,9 @@ class ProjectsList extends StatelessWidget {
       },
       itemBuilder: (BuildContext context, int index) {
         return Material(
+          color: Get.find<PlatformController>().isMobile
+              ? Get.theme.colors().backgroundColor
+              : Get.theme.colors().surface,
           child: InkWell(
             onTap: () {
               controller.changeProjectSelection(

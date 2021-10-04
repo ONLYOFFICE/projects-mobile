@@ -35,10 +35,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class DiscussionTile extends StatelessWidget {
   final Discussion discussion;
@@ -88,6 +90,7 @@ class _Image extends StatelessWidget {
         borderRadius: BorderRadius.circular(30),
         child: CustomNetworkImage(
           image: image,
+          defaultImage: const DefaultAvatar(),
           fit: BoxFit.cover,
         ),
       ),
@@ -130,7 +133,11 @@ class _DiscussionInfo extends StatelessWidget {
                           color: Get.theme.colors().onBackground)),
                 TextSpan(text: formatedDate(discussion.created)),
                 const TextSpan(text: ' • '),
-                TextSpan(text: discussion.createdBy.displayName)
+                TextSpan(
+                  text: NameFormatter.formateDisplayName(
+                    discussion.createdBy.displayName,
+                  ),
+                )
               ],
             ),
           ),

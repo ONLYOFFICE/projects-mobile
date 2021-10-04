@@ -32,17 +32,18 @@
 
 import 'dart:async';
 
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
+import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
@@ -50,7 +51,6 @@ import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_cod
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
-import 'package:projects/presentation/views/navigation_view.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -73,35 +73,21 @@ class LoginController extends GetxController {
   String _email;
   String _tfaKey;
 
-  bool _tokenExpired;
-
   String get portalAdress =>
       portalAdressController.text.replaceFirst('https://', '');
   String get tfaKey => _tfaKey;
 
   @override
   void onInit() {
-    setState(ViewState.Busy);
-
     _portalAdressController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    isTokenExpired().then(
-      (value) => {
-        _tokenExpired = value,
-        setState(ViewState.Idle),
-        if (!_tokenExpired)
-          {
-            clearInputFields(),
-            Get.offNamed('NavigationView'),
-          }
-      },
-    );
+
     super.onInit();
   }
 
   Future<void> loginByPassword() async {
-    if (_checkEmailAndPass()) {
+    if (await _checkEmailAndPass()) {
       var email = _emailController.text;
       var password = _passwordController.text;
 
@@ -119,7 +105,12 @@ class LoginController extends GetxController {
         if (await sendRegistrationType()) {
           setState(ViewState.Idle);
           clearInputFields();
-          await Get.off(() => NavigationView()); //fix
+          await AnalyticsService.shared.logEvent(
+              AnalyticsService.Events.loginPortal, {
+            AnalyticsService.Params.Key.portal:
+                await _secureStorage.getString('portalName')
+          });
+          locator<EventHub>().fire('loginSuccess');
         } else {
           // if the device type has not been sent, the token must be deleted
           await logout();
@@ -153,7 +144,7 @@ class LoginController extends GetxController {
     }
   }
 
-  bool _checkEmailAndPass() {
+  Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
     var result;
 
@@ -163,10 +154,18 @@ class LoginController extends GetxController {
     if (!_emailController.text.isEmail) {
       result = false;
       emailFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => emailFieldError.value = false);
+      // save cursor position
+      emailController.selection = TextSelection.fromPosition(
+        TextPosition(offset: emailController.text.length),
+      );
     }
     if (_passwordController.text.isEmpty) {
       result = false;
       passwordFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => passwordFieldError.value = false);
     }
     return result ?? true;
   }
@@ -196,7 +195,12 @@ class LoginController extends GetxController {
       if (await sendRegistrationType()) {
         setState(ViewState.Idle);
         clearInputFields();
-        await Get.offNamed('NavigationView');
+        await AnalyticsService.shared.logEvent(
+            AnalyticsService.Events.loginPortal, {
+          AnalyticsService.Params.Key.portal:
+              await _secureStorage.getString('portalName')
+        });
+        locator<EventHub>().fire('loginSuccess');
         return true;
       } else {
         // if the device type has not been sent, the token must be deleted
@@ -211,40 +215,17 @@ class LoginController extends GetxController {
     return false;
   }
 
-  Future<void> loginByProvider(String provider) async {
-    switch (provider) {
-      case 'google':
-        // try {
-        //   var result = await _authService.signInWithGoogle();
-        // } catch (e) {debugPrint(e);}
-
-        break;
-      case 'facebook':
-      // var result = await _authenticationService.signInWithFacebook();
-      // break;
-      case 'twitter':
-      // var result = await _authenticationService.signInWithTwitter();
-      // break;
-      case 'linkedin':
-
-      case 'mailru':
-
-      case 'vk':
-
-      case 'yandex':
-
-      case 'gosuslugi':
-
-      default:
-    }
-  }
-
   Future<void> getPortalCapabilities() async {
     _portalAdressController.text =
         _portalAdressController.text.removeAllWhitespace;
 
     if (!_portalAdressController.text.isURL) {
       portalFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => portalFieldError.value = false);
+      _portalAdressController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _portalAdressController.text.length),
+      );
     } else {
       setState(ViewState.Busy);
 
@@ -324,15 +305,14 @@ class LoginController extends GetxController {
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
 
+    locator<EventHub>().fire('logoutSuccess');
     Get.find<PortalInfoController>().logout();
-    Get.find<NavigationController>().clearCurrentIndex();
   }
 
   @override
   void onClose() {
     // clearInputFields();z
     _clearErrors();
-    _tokenExpired = null;
     super.onClose();
   }
 

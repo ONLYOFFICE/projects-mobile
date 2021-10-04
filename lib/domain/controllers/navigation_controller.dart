@@ -30,60 +30,88 @@
  *
  */
 
+import 'dart:async';
+
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
-  var tabIndex = 0;
-  var onMoreView = false;
+  var tabIndex = 0.obs;
+  var onMoreView = false.obs;
   final _userController = Get.find<UserController>();
   Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
 
+  int treeLength = 0;
+
   @override
   void onInit() {
-    var portalController = Get.find<PortalInfoController>();
-    if (portalController.portalName == null) portalController.onInit();
-    _userController.getUserInfo().whenComplete(() => selfUserItem.value =
-        PortalUserItemController(portalUser: _userController.user));
+    _userController
+        .getUserInfo()
+        .then((value) => selfUserItem.value =
+            PortalUserItemController(portalUser: _userController.user))
+        .obs;
 
     super.onInit();
   }
 
-  void changeTabIndex(int index) {
-    if (index < 3) {
-      onMoreView = false;
-      tabIndex = index;
-      update();
-    } else {
-      if (index == 3) {
-        if (!onMoreView) {
-          onMoreView = true;
-          update();
-        } else {
-          onMoreView = false;
-          update();
-        }
-      } else {
-        onMoreView = false;
-        tabIndex = index;
-        update();
-      }
-    }
+  @override
+  void onClose() {
+    // clearCurrentIndex();
+    super.onClose();
   }
 
-  void changeTabletIndex(int index) {
-    onMoreView = false;
-    tabIndex = index;
+  void showMoreView() {
+    onMoreView.value = true;
+    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
+  }
+
+  void hideMoreView() {
+    onMoreView.value = false;
+    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
+  }
+
+  void changeTabIndex(int index) {
+    if (index < 3) {
+      if (tabIndex.value == index)
+        tabIndex.refresh();
+      else
+        tabIndex.value = index;
+      hideMoreView();
+    } else {
+      if (index == 3) {
+        if (!onMoreView.value) {
+          showMoreView();
+          tabIndex.refresh();
+        } else {
+          hideMoreView();
+          tabIndex.refresh();
+        }
+      } else {
+        hideMoreView();
+        if (tabIndex.value == index)
+          tabIndex.refresh();
+        else
+          tabIndex.value = index;
+      }
+    }
     update();
   }
 
-  void clearCurrentIndex() => tabIndex = null;
+  void changeTabletIndex(int index) {
+    if (tabIndex.value == index)
+      tabIndex.refresh();
+    else
+      tabIndex.value = index;
+  }
+
+  void clearCurrentIndex() => tabIndex.value = 0;
 
   Future toScreen(
     Widget widget, {
@@ -115,6 +143,7 @@ class NavigationController extends GetxController {
         arguments: arguments,
       );
     } else {
+      treeLength++;
       Get.to(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
@@ -123,46 +152,4 @@ class NavigationController extends GetxController {
       );
     }
   }
-
-  @override
-  void onClose() {
-    clearCurrentIndex();
-    super.onClose();
-  }
-
-  void off(Widget widget,
-      {bool preventDuplicates, Map<String, dynamic> arguments}) {
-    if (Get.find<PlatformController>().isMobile) {
-      Get.off(
-        () => widget,
-        preventDuplicates: preventDuplicates ?? false,
-        arguments: arguments,
-      );
-    } else {
-      Get.off(
-        () => TabletLayout(contentView: widget),
-        transition: Transition.noTransition,
-        preventDuplicates: preventDuplicates ?? false,
-        arguments: arguments,
-      );
-    }
-  }
-
-  // void bottomSheet(Widget widget) {
-  //   if (Get.find<PlatformController>().isMobile) {
-  //     Get.bottomSheet(
-  //       widget,
-  //       isScrollControlled: true,
-  //     );
-  //   } else {
-  //     Get.to(() =>
-  //       FullscreenView(
-  //         contentView: widget,
-  //       ),
-  //       fullscreenDialog: false,
-  //       opaque: false,
-  //       transition: Transition.noTransition,
-  //     );
-  //   }
-  // }
 }

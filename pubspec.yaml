@@ -13,7 +13,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0+60
+version: 1.0+101
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -37,7 +37,7 @@ dependencies:
   source_gen: 0.9.10+2 
   
   pull_to_refresh: ^1.6.4
-  visibility_detector: ^0.1.5
+  visibility_detector: ^0.2.0
   # shimmer for loading
   shimmer: ^1.1.2
   drop_cap_text: ^1.0.7
@@ -59,12 +59,12 @@ dependencies:
   tabbar: ^0.1.1
   extended_tabs: ^2.2.0
   cached_network_image: ^3.0.0
-  firebase_analytics: ^8.2.0
+  firebase_core: ^1.6.0
+  firebase_analytics: ^8.3.2
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
-  simple_html_css: ^3.0.1
 
   path_provider: ^2.0.2
   flutter_downloader: ^1.6.1
@@ -81,6 +81,11 @@ dependencies:
   easy_localization: ^3.0.0
   # to restart the application correctly
   restart_app: ^1.0.3  
+
+  event_hub: ^0.1.1
+  connectivity_plus: ^1.1.0
+  html_editor_enhanced: ^2.3.0
+  flutter_widget_from_html: ^0.7.0
   
 dev_dependencies:
   flutter_test:
@@ -98,15 +103,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - lib/assets/images/logo_new.svg
-    - lib/assets/images/logo_big.svg
+    - lib/assets/images/
     - lib/assets/images/icons/
     - lib/assets/images/images/
     - lib/assets/images/icons/tab_bar/
     - lib/assets/images/icons/project_statuses/
+    - lib/assets/images/icons/task_statuses/
     - lib/assets/images/icons/task_detailed/
     - lib/assets/images/icons/folders/
     - lib/assets/images/icons/empty_state/
+    - lib/assets/splash/
     - lib/l10n/
 
   # An image asset can refer to one or more resolution-specific "variants", see

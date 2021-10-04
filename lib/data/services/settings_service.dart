@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
+import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -58,7 +59,7 @@ class SettingsService {
             acceptText: tr('goToForum'),
             acceptColor: Get.theme.colors().primary,
             onAcceptTap: () async =>
-                launch('https://cloud.onlyoffice.org/viewforum.php?f=48'),
+                launch(Const.Urls.forumSupport),
           );
         },
       );

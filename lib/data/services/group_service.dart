@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:get/get.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 import 'package:projects/domain/dialogs.dart';
@@ -47,7 +48,7 @@ class GroupService {
     if (success) {
       return groups.response;
     } else {
-      await ErrorDialog.show(groups.error);
+      await Get.find<ErrorDialog>().show(groups.error.message);
       return null;
     }
   }
@@ -67,7 +68,7 @@ class GroupService {
     if (success) {
       return profiles;
     } else {
-      await ErrorDialog.show(profiles.error);
+      await Get.find<ErrorDialog>().show(profiles.error.message);
       return null;
     }
   }

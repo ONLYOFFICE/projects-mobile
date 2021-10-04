@@ -50,7 +50,7 @@ class PortalUserItemController extends GetxController {
   var userTitle = ''.obs;
 
   PortalUserItemController({this.portalUser, this.isSelected}) {
-    setupUser();
+    if (portalUser != null) setupUser();
   }
 
   final PortalUser portalUser;
@@ -72,17 +72,16 @@ class PortalUserItemController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      var avatarBytes =
-          await _downloadService.downloadImage(portalUser.avatarMedium);
+      var avatarBytes = await _downloadService.downloadImage(
+          portalUser?.avatar ??
+              portalUser?.avatarMedium ??
+              portalUser?.avatarSmall);
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;
       // ignore: unnecessary_cast
       avatar.value = Image.memory(avatarData.value) as Widget;
     } catch (e) {
-      // TODO if no user.avatarMedium case
-      // only prints error now
-      // test: "3 resp" task
       print(e);
       return;
     }
@@ -103,7 +102,7 @@ class PortalUserItemController extends GetxController {
         selectionMode.value == UserSelectionMode.Multiple)
       isSelected.value = !isSelected.value;
     else
-      Get.find<NavigationController>()
-          .to(const ProfileScreen(), arguments: {'portalUser': portalUser});
+      Get.find<NavigationController>().toScreen(const ProfileScreen(),
+          arguments: {'portalUser': portalUser});
   }
 }

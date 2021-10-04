@@ -37,7 +37,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -46,9 +46,12 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/views/tasks/task_cell.dart';
+import 'package:projects/presentation/views/new_task/new_task_view.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -61,9 +64,46 @@ class ProjectTaskScreen extends StatelessWidget {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
 
-    var controller = Get.find<ProjectTasksController>();
-    controller.setup(projectDetailed.id);
+    var controller = Get.find<ProjectTasksController>()..setup(projectDetailed);
 
+    return Stack(
+      children: [
+        _Content(controller: controller),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16, bottom: 24),
+            child: Obx(
+              () => Visibility(
+                visible: controller.fabIsVisible.value,
+                child: StyledFloatingActionButton(
+                  onPressed: () => Get.find<NavigationController>().to(
+                      const NewTaskView(),
+                      arguments: {'projectDetailed': projectDetailed}),
+                  child: AppIcon(
+                    icon: SvgIcons.add_fab,
+                    color: Get.theme.colors().onPrimarySurface,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _Content extends StatelessWidget {
+  const _Content({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final ProjectTasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +116,7 @@ class ProjectTaskScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.task_not_created),
+                  icon: SvgIcons.task_not_created,
                   text: tr(
                     'noTasksCreated',
                     args: [tr('tasks').toLowerCase()],
@@ -90,7 +130,7 @@ class ProjectTaskScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
+                    icon: SvgIcons.not_found,
                     text: tr('noTasksMatching',
                         args: [tr('tasks').toLowerCase()])),
               ),
@@ -161,7 +201,8 @@ class Header extends StatelessWidget {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -169,6 +210,7 @@ class Header extends StatelessWidget {
               () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
                       width: 20,
                       height: 20,
                     )
@@ -177,6 +219,7 @@ class Header extends StatelessWidget {
                       transform: Matrix4.rotationX(math.pi),
                       child: AppIcon(
                         icon: SvgIcons.sorting_4_ascend,
+                        color: Get.theme.colors().primary,
                         width: 20,
                         height: 20,
                       ),

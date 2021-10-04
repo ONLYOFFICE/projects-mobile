@@ -36,7 +36,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -46,18 +45,18 @@ import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:readmore/readmore.dart';
 
 class ProjectOverview extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailsController projectController;
   final TabController tabController;
 
-  const ProjectOverview(
-      {Key key, @required this.projectDetailed, this.tabController})
-      : super(
-          key: key,
-        );
+  const ProjectOverview({
+    Key key,
+    @required this.projectController,
+    this.tabController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var projectController = Get.find<ProjectDetailsController>();
+    // var projectController = Get.find<ProjectDetailsController>();
 
     return Obx(
       () {
@@ -65,12 +64,15 @@ class ProjectOverview extends StatelessWidget {
           return ListView(
             children: [
               const SizedBox(height: 26),
-              Obx(() => InfoTile(
-                    caption: tr('project').toUpperCase(),
-                    subtitle: projectController.projectTitleText.value,
-                    subtitleStyle: TextStyleHelper.headline7(
-                        color: Get.theme.colors().onBackground),
-                  )),
+              Obx(
+                () => InfoTile(
+                  caption: tr('project').toUpperCase(),
+                  subtitle: projectController.projectTitleText.value,
+                  subtitleStyle: TextStyleHelper.headline7(
+                    color: Get.theme.colors().onBackground,
+                  ),
+                ),
+              ),
               const SizedBox(height: 20),
               ProjectStatusButton(projectController: projectController),
               const SizedBox(height: 20),
@@ -89,7 +91,7 @@ class ProjectOverview extends StatelessWidget {
                       colorClickableText: Colors.pink,
                       style: TextStyleHelper.body1,
                       trimMode: TrimMode.Line,
-                      delimiter: '',
+                      delimiter: ' ',
                       trimCollapsedText: tr('showMore'),
                       trimExpandedText: tr('showLess'),
                       moreStyle: TextStyleHelper.body2(
@@ -120,7 +122,7 @@ class ProjectOverview extends StatelessWidget {
                       tabController.animateTo(5);
                     },
                     caption: tr('team'),
-                    iconData: Icons.navigate_next,
+                    iconData: Icons.arrow_forward_ios_rounded,
                     subtitle: plural(
                         'members', projectController.teamMembersCount.value),
                     subtitleStyle: TextStyleHelper.subtitle1(
@@ -158,22 +160,29 @@ class ProjectStatusButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: omit_local_variable_types
+    bool canEdit = projectController.projectData.canEdit;
     return Padding(
       padding: const EdgeInsets.only(left: 72),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           OutlinedButton(
-            onPressed: () => {
-              showsStatusesBS(
-                  context: context, itemController: projectController),
-            },
+            onPressed: canEdit
+                ? () => {
+                      showsStatusesBS(
+                          context: context, itemController: projectController),
+                    }
+                : null,
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                return const Color(0xff81C4FF).withOpacity(0.1);
+                if (canEdit)
+                  return const Color(0xff81C4FF).withOpacity(0.2);
+                else
+                  return Get.theme.colors().bgDescription;
               }),
               side: MaterialStateProperty.resolveWith((_) {
-                return const BorderSide(color: Color(0xff0C76D5), width: 1.5);
+                return const BorderSide(color: Colors.transparent, width: 0);
               }),
             ),
             child: Row(
@@ -181,12 +190,32 @@ class ProjectStatusButton extends StatelessWidget {
               children: [
                 Flexible(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: Obx(() => Text(projectController.statusText.value,
-                        style: TextStyleHelper.subtitle2())),
+                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+                    child: Obx(
+                      () => Text(
+                        projectController.statusText.value,
+                        style: TextStyleHelper.subtitle2(
+                          color: canEdit
+                              ? Get.theme.colors().primary
+                              : Get.theme
+                                  .colors()
+                                  .onBackground
+                                  .withOpacity(0.75),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                const Icon(Icons.arrow_drop_down_sharp)
+                const SizedBox(width: 5),
+                if (canEdit)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 2),
+                    child: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: Get.theme.colors().primary,
+                      size: 19,
+                    ),
+                  )
               ],
             ),
           ),

@@ -31,13 +31,16 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
@@ -46,24 +49,33 @@ class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
   PaginationController _paginationController;
+
+  final _userController = Get.find<UserController>();
   PaginationController get paginationController => _paginationController;
 
-  var taskStatusesController = Get.find<TaskStatusesController>();
-
+  final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
+  final loaded = false.obs;
+  final taskStatusesLoaded = false.obs;
   TasksSortController get sortController => _sortController;
 
   TaskFilterController _filterController;
   TaskFilterController get filterController => _filterController;
 
-  RxBool loaded = false.obs;
+  var fabIsVisible = false.obs;
 
-  // when snackbar appears
-  RxBool fabIsRaised = false.obs;
+  @override
+  Future<void> onInit() async {
+    await taskStatusesController
+        .getStatuses()
+        .then((value) => taskStatusesLoaded.value = true);
+    super.onInit();
+  }
 
   TasksController(TaskFilterController filterController,
       PaginationController paginationController) {
-    taskStatusesController.getStatuses();
+    loaded.value = false;
+    screenName = tr('tasks');
     _paginationController = paginationController;
     expandedCardView.value = true;
     _filterController = filterController;
@@ -72,10 +84,14 @@ class TasksController extends BaseController {
     paginationController.loadDelegate = () async => await _getTasks();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
-  }
 
-  @override
-  String get screenName => tr('tasks');
+    getFabVisibility().then((value) => fabIsVisible.value = value);
+
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+      fabIsVisible.value = data ? false : await getFabVisibility();
+    });
+    loaded.value = true;
+  }
 
   @override
   RxList get itemList => paginationController.data;
@@ -89,7 +105,6 @@ class TasksController extends BaseController {
   Future loadTasks({PresetTaskFilters preset}) async {
     loaded.value = false;
     paginationController.startIndex = 0;
-
     if (preset != null) {
       await _filterController
           .setupPreset(preset)
@@ -97,7 +112,6 @@ class TasksController extends BaseController {
     } else {
       await _getTasks(needToClear: true);
     }
-
     loaded.value = true;
   }
 
@@ -122,13 +136,31 @@ class TasksController extends BaseController {
     expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
-  Future raiseFAB() async {
-    fabIsRaised.value = true;
-    await Future.delayed(const Duration(milliseconds: 4600));
-    fabIsRaised.value = false;
-  }
-
   @override
   void showSearch() =>
       Get.find<NavigationController>().to(const TasksSearchScreen());
+
+  Future<bool> getFabVisibility() async {
+    var fabVisibility = false;
+
+    await _userController.getUserInfo();
+    var selfUser = _userController.user;
+    if (selfUser.isAdmin ||
+        selfUser.isOwner ||
+        (selfUser.listAdminModules != null &&
+            selfUser.listAdminModules.contains('projects'))) {
+      if (ProjectsWithPresets.activeProjectsController.itemList.isEmpty)
+        await ProjectsWithPresets.activeProjectsController.loadProjects();
+      fabVisibility =
+          ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+    } else {
+      if (ProjectsWithPresets.myProjectsController.itemList.isEmpty)
+        await ProjectsWithPresets.myProjectsController.loadProjects();
+      fabVisibility =
+          ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+    }
+    if (selfUser.isVisitor) fabVisibility = false;
+
+    return fabVisibility;
+  }
 }

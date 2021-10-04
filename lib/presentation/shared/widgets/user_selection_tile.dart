@@ -35,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class UserSelectionTile extends StatelessWidget {
   final String image;
@@ -56,6 +57,7 @@ class UserSelectionTile extends StatelessWidget {
     return CheckboxListTile(
       value: value,
       onChanged: onChanged,
+      activeColor: Get.theme.colors().primary,
       contentPadding: const EdgeInsets.only(left: 16, right: 9),
       title: Row(
         children: [
@@ -64,7 +66,10 @@ class UserSelectionTile extends StatelessWidget {
             width: 40,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(30),
-              child: CustomNetworkImage(image: image),
+              child: CustomNetworkImage(
+                image: image,
+                defaultImage: const DefaultAvatar(),
+              ),
             ),
           ),
           const SizedBox(width: 16),

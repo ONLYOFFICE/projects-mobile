@@ -31,6 +31,7 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
@@ -44,14 +45,12 @@ import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
-import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/select/select_dis_subscribers.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
-import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';
@@ -62,7 +61,7 @@ import 'package:projects/presentation/views/project_detailed/milestones/descript
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
-import 'package:projects/presentation/views/projects_view/new_project/descriprion_view.dart';
+import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/new_project_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
@@ -81,12 +80,12 @@ import 'package:projects/presentation/views/task_detailed/comments/reply_comment
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
-import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
-      GetPage(name: '/PortalView', page: () => PortalView()),
+      GetPage(name: '/MainView', page: () => MainView()),
+      GetPage(name: '/PortalInputView', page: () => PortalInputView()),
       GetPage(name: '/LoginView', page: () => LoginView()),
       GetPage(name: '/CodeView', page: () => CodeView()),
       GetPage(name: '/AnalyticsScreen', page: () => const AnalyticsScreen()),
@@ -106,9 +105,7 @@ List<GetPage> getxPages() => [
       GetPage(
           name: '/EnterSMSCodeScreen', page: () => const EnterSMSCodeScreen()),
       GetPage(name: '/HomeView', page: () => const ProjectsView()),
-      GetPage(name: '/NavigationView', page: () => NavigationView()),
       GetPage(name: '/TaskDetailedView', page: () => TaskDetailedView()),
-      GetPage(name: '/TaskEditingView', page: () => const TaskEditingView()),
       GetPage(
           name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),
       GetPage(name: '/NewTaskView', page: () => const NewTaskView()),
@@ -159,9 +156,6 @@ List<GetPage> getxPages() => [
           name: '/NewDiscussionScreen',
           page: () => const NewDiscussionScreen()),
       GetPage(
-          name: '/NewDiscussionTextScreen',
-          page: () => const NewDiscussionTextScreen()),
-      GetPage(
           name: '/DiscussionEditingScreen',
           page: () => const DiscussionEditingScreen()),
       GetPage(
@@ -185,9 +179,6 @@ List<GetPage> getxPages() => [
       GetPage(
           name: '/SelectCountryScreen',
           page: () => const SelectCountryScreen()),
-      GetPage(
-          name: '/SelectProjectForMilestone',
-          page: () => const SelectProjectForMilestone()),
       GetPage(name: '/SettingsScreen', page: () => const SettingsScreen()),
       GetPage(
           name: '/TasksSearchScreen', page: () => const TasksSearchScreen()),

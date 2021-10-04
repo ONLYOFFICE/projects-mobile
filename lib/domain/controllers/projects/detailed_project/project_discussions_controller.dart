@@ -32,21 +32,27 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/discussions_service.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class ProjectDiscussionsController extends GetxController {
   final _api = locator<DiscussionsService>();
-  final projectId;
+  var projectId;
   var projectTitle;
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'ProjectDiscussionsController');
+
+  ProjectDetailed _projectDetailed;
 
   PaginationController get paginationController => _paginationController;
 
@@ -54,7 +60,17 @@ class ProjectDiscussionsController extends GetxController {
 
   RxBool loaded = false.obs;
 
-  ProjectDiscussionsController(this.projectId, this.projectTitle) {
+  final _userController = Get.find<UserController>();
+
+  var fabIsVisible = false.obs;
+  String _selfId;
+  final _projectService = locator<ProjectService>();
+
+  ProjectDiscussionsController(ProjectDetailed projectDetailed) {
+    _projectDetailed = projectDetailed;
+    projectId = projectDetailed.id;
+    projectTitle = projectDetailed.title;
+
     _sortController.updateSortDelegate =
         () async => await loadProjectDiscussions();
 
@@ -62,7 +78,23 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
+
+    var team;
+
+    _userController.getUserInfo().then((value) async => {
+          _selfId ??= await _userController.getUserId(),
+          team = await _projectService.getProjectTeam(projectId.toString()),
+          fabIsVisible.value = _canCreate()
+          // (team.any((element) => element.id == _selfId) || _canCreate()) &&
+          //     _projectDetailed.status != ProjectStatusCode.closed.index
+        });
   }
+
+  bool _canCreate() => _projectDetailed.security['canCreateMessage'];
+  // (_userController.user.isAdmin ||
+  //     _userController.user.isOwner ||
+  //     (_userController.user.listAdminModules != null &&
+  //         _userController.user.listAdminModules.contains('projects')));
 
   RxList get itemList => paginationController.data;
 

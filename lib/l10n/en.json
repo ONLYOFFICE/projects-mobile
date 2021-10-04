@@ -1,183 +1,133 @@
 {
 	"appName": "ONLYOFFICE\nProjects",
 	"appDescription": "Work with your projects on mobile devices and manage your tasks on-the-go",
-
 	"emailAddress": "Email address",
 	"password": "Password",
 	"portalName": "Portal address",
 	"continueButton": "Continue",
 	"portalAdress": "Portal address",
 	"logOut": "Log out",
-
 	"profile": "Profile",
 	"email": "Email",
 	"forgotPassword": "Forgot your password?",
-
 	"reset": "RESET",
 	"filter": "Filter",
-
 	"dashboard": "Dashboard",
-
 	"projects": "Projects",
 	"project": "Project",
-
 	"documents": "Documents",
 	"document": "Document",
-
 	"milestones": "Milestones",
 	"milestone": "Milestone",
-
 	"more": "More",
 	"settings": "Settings",
-
 	"tasks": "Tasks",
 	"task": "Task",
-
 	"discussions": "Discussions",
 	"discussion": "Discussion",
-
 	"subtasks": "Subtasks",
 	"subtask": "Subtask",
-
 	"comments": "Comments",
 	"comment": "Comment",
-
 	"selectStatus": "Select status",
 	"usersSearch": "Search for users...",
-
 	"myTasks": "My tasks",
 	"upcomingTasks": "Upcoming",
 	"myProjects": "My projects",
 	"otherProjects": "Other projects",
-
 	"projectsIFolow": "Projects I follow",
 	"activeProjects": "Active projects",
-
 	"dashboardNoActive": "There are no active {}",
-
 	"viewAll": "View all",
 	"viewLess": "View less",
-
-
 	"total": "Total {}",
 	"notFound": "Not found",
-
 	"open": "Open",
 	"copyLink": "Copy link",
 	"download": "Download",
 	"copy": "Copy",
 	"move": "Move",
 	"rename": "Rename",
-
 	"delete": "Delete",
-
 	"edit": "Edit",
-
-
 	"documentsCaption": "{} • documents:{} • subfolders:{}",
-
 	"confirm": "CONFIRM",
 	"cancel": "CANCEL",
-	"close": "CLOSE",
 	"accept": "ACCEPT",
 	"ok": "OK",
 	"save": "SAVE",
 	"next": "NEXT",
 	"back": "BACK",
-
 	"linkCopied": "Link has been copied to the clipboard",
-
 	"renameFile": "Rename file",
 	"enterFileName": "Enter file name",
 	"fileRenamed": "File has been renamed",
-
 	"renameFolder": "Rename folder",
 	"enterFolderName": "Enter folder name",
 	"folderRenamed": "Folder has been renamed",
-
 	"moveFolderHere": "Move folder here",
 	"copyFolderHere": "Copy folder here",
 	"moveFileHere": "Move file here",
 	"copyFileHere": "Copy file here",
-
 	"folderMoved": "Folder has been moved",
 	"folderCopied": "Folder has been copied",
 	"folderDeleted": "Folder has been deleted",
-
 	"fileMoved": "File has been moved",
 	"fileCopied": "File has been copied",
 	"fileDeleted": "File has been deleted",
-
 	"author": "Author",
 	"me": "Me",
 	"users": "Users",
-	"allUsers": "All users",
 	"groups": "Groups",
-	"groupsSearch": "Groups search",
-
 	"searchSettings": "Search settings",
 	"inContent": "In content",
 	"excludeSubfolders": "Exclude subfolders",
-
 	"type": "Type",
 	"folders": "folders",
-
 	"presentations": "Presentations",
 	"spreadsheets": "Spreadsheets",
 	"images": "Images",
 	"media": "Media",
 	"archives": "Archives",
 	"allFiles": "All files",
-
 	"other": "Other",
 	"followed": "Followed",
 	"withTag": "With tag",
 	"withoutTag": "Without tag",
 	"projectManager": "Project manager",
-
 	"otherUser": "Other user",
 	"status": "Status",
 	"active": "Active",
 	"paused": "Paused",
 	"closed": "Closed",
 	"teamMember": "Team member",
-
 	"dueDate": "Due date",
 	"overdue": "Overdue",
 	"today": "Today",
 	"upcoming": "Upcoming",
 	"customPeriod": "Custom period",
-	"last7Days": "Last 7 days",
-
 	"creator": "Creator",
-
 	"selectDateRange": "Select date range",
 	"invalidFormat": "Invalid format.",
 	"outOfRange": "Out of range.",
 	"invalidRange": "Invalid range.",
 	"startDate": "Start date",
 	"endDate": "End date",
-	"dateSelectionError": "The start date cannot be later than the end date",
-
 	"description": "Description",
 	"milestoneDescription": "Milestone description",
-
 	"enterText": "Enter your text here",
 	"addDescription": "Add description",
 	"projectTitle": "Project title",
 	"choosePM": "Choose project manager",
 	"team": "Team",
 	"addTeamMembers": "Add team members",
-
 	"showMore": "Show more",
 	"showLess": "Show less",
-
 	"advancedOptions": "Advanced options",
 	"notifyPM": "Notify project manager by email",
 	"privateProject": "Save this project as private",
 	"followProject": "Follow this project",
 	"selectPM": "Select project manager",
-
 	"person": {
 		"zero": "{} persons",
 		"one": "{} person",
@@ -186,7 +136,6 @@
 		"many": "{} persons",
 		"other": "{} persons"
 	},
-
 	"members": {
 		"zero": "{} members",
 		"one": "{} member",
@@ -195,7 +144,6 @@
 		"many": "{} members",
 		"other": "{} members"
 	},
-
 	"responsible": "Responsible",
 	"responsibles": {
 		"zero": "{} responsible",
@@ -205,7 +153,6 @@
 		"many": "{} responsible",
 		"other": "{} responsible"
 	},
-
 	"usersSelected": {
 		"zero": "{} users selected",
 		"one": "{} user selected",
@@ -214,19 +161,8 @@
 		"many": "{} users selected",
 		"other": "{} users selected"
 	},
-
-	"selected": {
-		"zero": "{} selected",
-		"one": "{} selected",
-		"two": "{} selected",
-		"few": "{} selected",
-		"many": "{} selected",
-		"other": "{} selected"
-	},
-
 	"subscribers": "Subscribers",
 	"subscriber": "subscriber",
-	"subscribed": "Subscribed",
 	"subscribersPlural": {
 		"zero": "{} subscribers",
 		"one": "{} subscriber",
@@ -235,10 +171,7 @@
 		"many": "{} subscribers",
 		"other": "{} subscribers"
 	},
-
 	"filterConfirmButton": "SHOW {} {}",
-	
-
 	"tasksFilterConfirm": {
 		"zero": "SHOW {} TASKS",
 		"one": "SHOW {} TASK",
@@ -247,7 +180,6 @@
 		"many": "SHOW {} TASKS",
 		"other": "SHOW {} TASKS"
 	},
-
 	"projectsFilterConfirm": {
 		"zero": "SHOW {} PROJECTS",
 		"one": "SHOW {} PROJECT",
@@ -256,7 +188,6 @@
 		"many": "SHOW {} PROJECTS",
 		"other": "SHOW {} PROJECTS"
 	},
-
 	"milestonesFilterConfirm": {
 		"zero": "SHOW {} MILESTONES",
 		"one": "SHOW {} MILESTONE",
@@ -265,7 +196,6 @@
 		"many": "SHOW {} MILESTONES",
 		"other": "SHOW {} MILESTONES"
 	},
-
 	"documentsFilterConfirm": {
 		"zero": "SHOW {} DOCUMENTS",
 		"one": "SHOW {} DOCUMENT",
@@ -274,59 +204,37 @@
 		"many": "SHOW {} DOCUMENTS",
 		"other": "SHOW {} DOCUMENTS"
 	},
-
-	"discussionsFilterConfirm": {
-		"zero": "SHOW {} DISCUSSION",
-		"one": "SHOW {} DISCUSSION",
-		"two": "SHOW {} DISCUSSIONS",
-		"few": "SHOW {} DISCUSSIONS",
-		"many": "SHOW {} DISCUSSIONS",
-		"other": "SHOW {} DISCUSSIONS"
-	},
-
 	"addMembersOf": "Add members of",
 	"creationDate": "Creation date",
-	"subscribedDiscussions": "Subscribed discussions",
 	"createdBy": "Created by",
 	"tags": "Tags",
 	"tag": "Tag",
-
 	"overview": "Overview",
 	"deleteProject": "Delete project permanently?",
 	"deleteProjectAlert": "You won't be able to restore it.",
 	"deleteTaskTitle": "Delete task permanently?",
 	"deleteTaskAlert": "You won't be able to restore it.",
-
 	"newMilestone": "New milestone",
 	"milestoneTitle": "Milestone title",
 	"keyMilestone": "Key milestone",
 	"remindBeforeDue": "Remind me 48 hours before the due date",
 	"selectProject": "Select project",
 	"assignedTo": "Assigned to",
-
 	"addResponsible": "Add responsible",
-
 	"noResponsible": "No responsible",
-
 	"setDueDate": "Set due date",
-
 	"searchProjects": "Search for projects...",
 	"selectResponsible": "Select responsible",
-
 	"tasksSearch": "Tasks search",
 	"discussionsSearch": "Discussions search",
-
 	"editTask": "Edit task",
 	"followTask": "Follow task",
 	"unfollowTask": "Unfollow task",
 	"copyTask": "Copy task",
 	"deleteTaskButton": "Delete task",
-
 	"nobody": "Nobody",
 	"acceptSubtask": "Accept subtask",
 	"copySubtask": "Copy subtask",
-
-
 	"editSubtask": "Edit subtask",
 	"addSubtask": "Add subtask",
 	"describeSubtask": "Describe subtask...",
@@ -336,70 +244,45 @@
 	"start_date": "Start date",
 	"title": "Title",
 	"sort_order": "Order",
-  	"dateandtime": "Last modified date",
-  	"AZ": "Title",
+	"dateandtime": "Last modified date",
+	"AZ": "Title",
 	"size": "Size",
-
 	"high": "High",
 	"normal": "Normal",
-
 	"passcodeLock": "Passcode lock",
 	"enabled": "Enabled",
 	"disabled": "Disabled",
 	"colorTheme": "Color theme",
 	"sameAsSystem": "Same as system",
 	"clearCache": "Clear cache",
-	"help": "Help",
 	"support": "Support",
-	"rateApp": "Rate the App",
-	"userAgreement": "User Agreement",
-	"analytics": "Analytics",
-	"version": "Version",
 	"feedback": "Feedback",
 	"aboutApp": "About the app",
 	"lightTheme": "Light theme",
 	"darkTheme": "Dark theme",
-
-	"shareAnalytics": "Share app analytics",
-	"shareAnalyticsDescription": "Help improve the app by automatically sending statistics about how you use it to the developers",
-
-	"failedToSendFeedback": "Failed to send feedback by mail. Try to write your request on our forum.",
-	"goToForum": "GO TO FORUM",
-
 	"changePasscode": "Change passcode",
 	"enablePasscode": "Enable passcode",
 	"fingerprint": "Use fingerprint to unlock",
 	"passcodeLockDescription": "Code to enter when you start the app.\n\nIf you forget it, you'll have to delete and re-install the app.",
 	"enterPasscode": "Enter passcode",
-
 	"passcodesNotMatch": "Passcodes didn’t match",
 	"reEnterPasscode": "Enter passcode one more time",
-
 	"choosePasscode": "Choose passcode to unlock app",
-
 	"enterCurrentPasscode": "Enter your current passcode",
 	"incorrectPIN": "Incorrect PIN entered",
 	"enterNewPasscode": "Enter new passcode",
-
 	"taskDescription": "Task description",
 	"newTask": "New task",
-
 	"taskTitle": "Task title",
 	"setStartDate": "Set start date",
-
 	"highPriority": "High priority",
-
 	"notifyResponsible": "Notify responsible users",
 	"none": "None",
 	"selectResponsibles": "Select responsible users",
-
 	"searchUsers": "Search for users",
-
 	"selectMilestone": "Select milestone",
-
 	"selectDueDate": "Select due date",
 	"selectStartDate": "Select start date",
-
 	"tfaTitle": "Two-factor\nauthentication",
 	"tfaGAcodeDescription": "Copy the code generated by Google Authenticator app and insert it to the input field",
 	"tfaCode": "Code",
@@ -408,134 +291,165 @@
 	"passwordRecovery": "Password recovery",
 	"emailDescription": "Please enter the email address you provided when registering on the portal.",
 	"authAppCodeDescription": "Enter the 6-digit code generated by the authentificator app.\nIf you don't have access to your phone, you can use backup codes.",
-	"passwordChangeInstructionHasBeenSend": "If a user with the {} email exists, the password change instruction has been sent to this email address.",
-	"backToLogIn": "BACK TO LOG IN",
 	"code": "Code",
-
 	"proceed": "PROCEED",
 	"needHelp": "Need help?",
 	"passcodeToUnlock": "Enter passcode to unlock App",
-
 	"install": "Install",
 	"step1": "Step 1 of 4",
 	"step2": "Step 2 of 4",
 	"step3": "Step 3 of 4",
 	"step4": "Step 4 of 4",
-
 	"step1SetupText1": "Set up an application to generate the authentication codes",
 	"step1SetupText2": "Please set up an application to generate the codes for the portal access (e.g. Google Authenticator).",
-
 	"step2SetupText1": "Launch Google Authenticator app",
 	"step2SetupText2": "Run the application\nand tap the “New account” icon",
 	"step3SetupText1": "Add a secret key",
 	"step3SetupText2": "Copy the key and paste it to the Google Authenticator",
 	"step4SetupText1": "Copy the code and paste below",
 	"step4SetupText2": "Copy the code generated by Google Authenticator application and insert it to the input field",
-
 	"keyCopied": "Key copied to clipboard.",
-
 	"tfaSMSTitle": "Enter your phone number",
 	"tfaSMSCaption": "You will receive SMS-code to enable two-factor authentification.",
 	"sendCode": "SEND CODE",
 	"chooseCountry": "Choose country",
-
 	"enterSendedCode": "Enter the 6-digit code we sent to ",
 	"incorrectCode": "Incorrect code, please try again.",
 	"requestNewCode": "Request new code",
 	"selectCountry": "Select Country",
 	"search": "Search..",
-
 	"sortBy": "Sort by",
 	"enterQuery": "Enter your query",
-	
-
 	"selectGroup": "Select group",
-
 	"selectTag": "Select tag",
 	"selectUser": "Select user",
-	
 	"logOutTitle": "Log out of ONLYOFFICE Projects?",
-
 	"milestonesWithMyTasks": "Milestones with my tasks",
 	"noMilestone": "No milestone",
 	"otherMilestones": "Other milestones",
 	"discardChanges": "Discard changes?",
 	"changesWillBeLost": "Your changes will not be saved.",
 	"discard": "DISCARD",
-	
 	"lostOnLeaveWarning": "If you leave, all changes will be lost.",
-	
 	"taskCreated": "Task has been created",
 	"discardTask": "Discard task?",
 	"subtaskAccepted": "Subtask has been accepted by you",
 	"subtaskCopied": "Subtask has been copied",
 	"cantEditSubtask": "You do not have permission to edit this subtask",
-	
-
 	"subtaskCreated": "Subtask has been created",
 	"projectStatus": "Project {}",
 	"discardMilestone": "Discard milestone?",
 	"chooseSection": "Choose section",
 	"discussionCreated": "Discussion has been created",
 	"discardDiscussion": "Discard discussion?",
-	"deleteDiscussion": "Delete discussion",
-	"editDiscussion": "Edit discussion",
-	"unsubscribeFromComments": "Unsubscribe from comments",
-	"subscribeToComments": "Subscribe to comments",
-	
 	"archived": "Archived",
-
 	"deleteCommentTitle": "Delete comment permanently?",
-	
 	"deleteCommentWarning": "You won't be able to restore it.",
 	"commentDeleted": "Comment has been deleted",
 	"commentCreated": "Comment has been created",
-
-	
 	"newDiscussion": "New discussion",
 	"chooseProject": "Choose project",
 	"addSubscribers": "Add subscribers",
-	"manageSubscribers": "Manage subscribers",
-	"selectSubscribers": "Select subscribers",
 	"text": "Text",
 	"discussionTitle": "Discussion title",
 	"newComment": "New comment",
 	"replyText": "Reply text",
 	"taskEditing": "Task editing",
 	"discussionText": "Discussion text",
-	"editProject":"Edit Project",
-	
-
-	
+	"editProject": "Edit Project",
 	"addTag": "Add tag",
 	"enterTag": "Enter new tag",
-
 	"noTasksCreated": "No tasks here yet",
 	"noTasksMatching": "There are no tasks matching these filters",
-
 	"noProjectsCreated": "No projects here yet",
 	"noProjectsMatching": "There are no projects matching these filters",
-
 	"noMilestonesCreated": "No milestones here yet",
 	"noMilestonesMatching": "There are no milestones matching these filters",
-
 	"noDocumentsCreated": "No documents here yet",
 	"noDocumentsMatching": "There are no documents matching these filters",
-
+	"close": "CLOSE",
 	"noPeopleMatching": "There are no people matching these filters",
-
 	"selectAll": "Select all",
 	"changeStatus": "Change status",
 	"deselect": "Deselect",
 	"allTasks": "All tasks",
-	"accesRights": "Acces rights",
-		
-	"followProjectButton":"Follow project",
-	"unFollowProjectButton":"Unfollow project",
-
+	"accessRights": "Access rights",
+	"closingTask": "Closing the Task",
+	"closingTaskWithActiveSubtasks": "You're trying to close a task with open subtasks.\nThe best way is to return and close subtasks manually, then retry to close the task",
+	"closeTask": "Close task",
+	"followProjectButton": "Follow project",
+	"unFollowProjectButton": "Unfollow project",
 	"reloadDialogTitle": "Reload the app to apply the new theme",
 	"reload": "Reload",
 	"notNow": "Not now",
-	
-	"error": "Error"
+	"cannotCloseProject": "Projects with active tasks cannot be closed!",
+	"allUsers": "All users",
+	"groupsSearch": "Groups search",
+	"last7Days": "Last 7 days",
+	"dateSelectionError": "The start date cannot be later than the end date",
+	"selected": {
+		"zero": "{} selected",
+		"one": "{} selected",
+		"two": "{} selected",
+		"few": "{} selected",
+		"many": "{} selected",
+		"other": "{} selected"
+	},
+	"subscribed": "Subscribed",
+	"discussionsFilterConfirm": {
+		"zero": "SHOW {} DISCUSSION",
+		"one": "SHOW {} DISCUSSION",
+		"two": "SHOW {} DISCUSSIONS",
+		"few": "SHOW {} DISCUSSIONS",
+		"many": "SHOW {} DISCUSSIONS",
+		"other": "SHOW {} DISCUSSIONS"
+	},
+	"subscribedDiscussions": "Subscribed discussions",
+	"deleteDiscussionTitle": "Delete discussion permanently?",
+	"deleteDiscussionAlert": "You won't be able to restore it.",
+	"help": "Help",
+	"rateApp": "Rate the App",
+	"userAgreement": "User Agreement",
+	"analytics": "Analytics",
+	"version": "Version",
+	"shareAnalytics": "Share app analytics",
+	"shareAnalyticsDescription": "Help improve the app by automatically sending statistics about how you use it to the developers",
+	"failedToSendFeedback": "Failed to send feedback by mail. Try to write your request on our forum.",
+	"goToForum": "GO TO FORUM",
+	"passwordChangeInstructionHasBeenSend": "If a user with the {} email exists, the password change instruction has been sent to this email address.",
+	"backToLogIn": "BACK TO LOG IN",
+	"deleteDiscussion": "Delete discussion",
+	"editDiscussion": "Edit discussion",
+	"unsubscribeFromComments": "Unsubscribe from comments",
+	"subscribeToComments": "Subscribe to comments",
+	"manageSubscribers": "Manage subscribers",
+	"selectSubscribers": "Select subscribers",
+	"noSubtasksCreated": "No subtasks have been created for this task",
+	"noCommentsCreated": "No comments found",
+	"noDiscussionsCreated": "No discussions have been started yet",
+	"noDiscussionsMatching": "There are no discussions matching these filters",
+	"error": "Error",
+	"noInternetConnectionTitle": "No internet connection",
+	"noInternetConnectionSubtitle": "Make sure Wi-Fi or mobile data is turned on and then try again",
+	"tryAgain": "TRY AGAIN",
+	"projectCreated": "Project has been created",
+	"projectDeleted": "Project has been deleted",
+	"taskDeleted": "Task has been deleted",
+	"discussionDeleted": "Discussion has been deleted",
+	"milestoneCreated": "Milestone has been created",
+	"taskAccepted": "Task has been accepted by you",
+	"taskUpdated": "Task has been updated",
+	"projectUpdated": "Project has been updated",
+	"discussionUpdated": "Discussion has been updated",
+	"commentEditing": "Comment editing",
+	"acceptTask": "Accept task",
+	"noAdress": "No address associated with hostname",
+	"authenticationFailed": "User authentication failed",
+	"reply": "Reply",
+	"addComment": "Add comment...",
+	"statusOpen": "Open",
+	"statusClosed": "Closed",
+	"statusPaused": "Paused",
+	"taskStatusOpen": "Open",
+	"taskStatusClosed": "Closed"
 }

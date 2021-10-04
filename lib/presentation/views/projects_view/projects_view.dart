@@ -34,6 +34,7 @@ import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -69,8 +70,9 @@ class ProjectsView extends StatelessWidget {
           ),
           tag: 'ProjectsView');
     }
-
-    controller.loadProjects(preset: PresetProjectFilters.saved);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.loadProjects(preset: PresetProjectFilters.saved);
+    });
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
@@ -80,14 +82,17 @@ class ProjectsView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
-      floatingActionButton: Visibility(
-        visible: controller.fabIsVisible(),
-        child: StyledFloatingActionButton(
-          onPressed: () => controller.createNewProject(),
-          child: AppIcon(
-            icon: SvgIcons.add_project,
-            width: 32,
-            height: 32,
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
+          child: StyledFloatingActionButton(
+            onPressed: () => controller.createNewProject(),
+            child: AppIcon(
+              icon: SvgIcons.fab_project,
+              width: 32,
+              height: 32,
+              color: Get.theme.colors().onPrimarySurface,
+            ),
           ),
         ),
       ),
@@ -97,7 +102,7 @@ class ProjectsView extends StatelessWidget {
           valueListenable: elevation,
           builder: (_, value, __) => StyledAppBar(
             title: _Title(controller: controller),
-            bottom: _Bottom(controller: controller),
+            bottom: Bottom(controller: controller),
             showBackButton: false,
             elevation: value,
           ),
@@ -112,7 +117,7 @@ class ProjectsView extends StatelessWidget {
               !controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.project_not_created),
+                  icon: SvgIcons.project_not_created,
                   text: tr('noProjectsCreated',
                       args: [tr('projects').toLowerCase()])),
             );
@@ -122,7 +127,7 @@ class ProjectsView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.not_found),
+                  icon: SvgIcons.not_found,
                   text: tr('noProjectsMatching',
                       args: [tr('projects').toLowerCase()])),
             );
@@ -190,8 +195,8 @@ class _Title extends StatelessWidget {
   }
 }
 
-class _Bottom extends StatelessWidget {
-  _Bottom({Key key, this.controller}) : super(key: key);
+class Bottom extends StatelessWidget {
+  Bottom({Key key, this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {
@@ -225,7 +230,8 @@ class _Bottom extends StatelessWidget {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -233,6 +239,7 @@ class _Bottom extends StatelessWidget {
               () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
                       width: 20,
                       height: 20,
                     )
@@ -241,6 +248,7 @@ class _Bottom extends StatelessWidget {
                       transform: Matrix4.rotationX(math.pi),
                       child: AppIcon(
                         icon: SvgIcons.sorting_4_ascend,
+                        color: Get.theme.colors().primary,
                         width: 20,
                         height: 20,
                       ),

@@ -61,6 +61,7 @@ class _UserTile extends StatelessWidget {
                 width: 40,
                 image: user.avatar ?? user.avatarMedium ?? user.avatarSmall,
                 fit: BoxFit.contain,
+                defaultImage: const DefaultAvatar(),
               ),
             ),
             const SizedBox(width: 16),

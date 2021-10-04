@@ -34,6 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
@@ -46,31 +48,37 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
-    controller.setupResponsibleSelection();
+    var controller = Get.arguments['controller']..setupResponsibleSelection();
+
+    final platformController = Get.find<PlatformController>();
 
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(tr('selectResponsible')),
-            ],
-          ),
-          bottom: SearchField(
-            hintText: tr('usersSearch'),
-            onSubmitted: (value) =>
-                controller.teamController.searchUsers(value),
-            onChanged: (value) => controller.teamController.searchUsers(value),
-          ),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmResponsiblesSelection)
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(tr('selectResponsible')),
           ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: controller.leaveResponsiblesSelectionView)),
+        ),
+        bottom: SearchField(
+          hintText: tr('usersSearch'),
+          onSubmitted: (value) => controller.teamController.searchUsers(value),
+          onChanged: (value) => controller.teamController.searchUsers(value),
+        ),
+        actions: [
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: controller.confirmResponsiblesSelection)
+        ],
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: controller.leaveResponsiblesSelectionView,
+        ),
+      ),
       body: Obx(
         () {
           if (controller.teamController.loaded.value == true &&
@@ -100,7 +108,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             );
           }
           if (controller.teamController.nothingFound.value == true) {
-            return const NothingFound();
+            return Column(children: [const NothingFound()]);
           }
           if (controller.teamController.loaded.value == true &&
               controller.teamController.searchResult.isNotEmpty &&

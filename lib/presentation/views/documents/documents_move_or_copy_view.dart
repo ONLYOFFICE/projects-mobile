@@ -32,14 +32,13 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -51,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class DocumentsMoveOrCopyView extends StatelessWidget {
   DocumentsMoveOrCopyView({Key key}) : super(key: key);
@@ -61,7 +61,6 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final target = Get.arguments['target'];
     final int initialFolderId = Get.arguments['initialFolderId'];
-    final refreshCalback = Get.arguments['refreshCalback'];
     final String mode = Get.arguments['mode'];
 
     controller.initialSetup();
@@ -69,7 +68,6 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = 1;
-    controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
     var scrollController = ScrollController();
@@ -98,8 +96,8 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
   }
 }
 
-class _FolderContentView extends StatelessWidget {
-  _FolderContentView({Key key}) : super(key: key);
+class MoveFolderContentView extends StatelessWidget {
+  MoveFolderContentView({Key key}) : super(key: key);
 
   final controller = Get.find<DocumentsMoveOrCopyController>();
 
@@ -109,7 +107,6 @@ class _FolderContentView extends StatelessWidget {
     final target = Get.arguments['target'];
     final int initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
-    final refreshCalback = Get.arguments['refreshCalback'];
     final String mode = Get.arguments['mode'];
 
     controller.setupFolder(
@@ -118,7 +115,6 @@ class _FolderContentView extends StatelessWidget {
     controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = foldersCount + 1;
-    controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
     var scrollController = ScrollController();
@@ -159,7 +155,6 @@ class DocumentsMoveSearchView extends StatelessWidget {
     final target = Get.arguments['target'];
     final int initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
-    final refreshCalback = Get.arguments['refreshCalback'];
     final String folderName = Get.arguments['folderName'];
     final String mode = Get.arguments['mode'];
 
@@ -168,7 +163,6 @@ class DocumentsMoveSearchView extends StatelessWidget {
     controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = foldersCount + 1;
-    controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
     var scrollController = ScrollController();
@@ -219,8 +213,7 @@ class _DocumentsScreen extends StatelessWidget {
               controller.nothingFound.value == true) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
-                    text: tr('notFound')));
+                    icon: SvgIcons.not_found, text: tr('notFound')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
@@ -228,7 +221,7 @@ class _DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.documents_not_created),
+                    icon: SvgIcons.documents_not_created,
                     text: tr('noDocumentsCreated',
                         args: [tr('documents').toLowerCase()])));
           }
@@ -238,7 +231,7 @@ class _DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
+                    icon: SvgIcons.not_found,
                     text: tr('noDocumentsMatching',
                         args: [tr('documents').toLowerCase()])));
           }
@@ -253,7 +246,7 @@ class _DocumentsScreen extends StatelessWidget {
                 },
                 itemBuilder: (BuildContext context, int index) {
                   var element = controller.paginationController.data[index];
-                  return _MoveFolderCell(
+                  return MoveFolderCell(
                     element: element,
                     controller: controller,
                   );
@@ -306,7 +299,6 @@ class _Title extends StatelessWidget {
                         'currentFolder': controller.currentFolder,
                         'initialFolderId': controller.initialFolderId,
                         'foldersCount': controller.foldersCount,
-                        'refreshCalback': controller.refreshCalback,
                       });
                 },
                 child: AppIcon(
@@ -329,90 +321,6 @@ class _Title extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _MoveFolderCell extends StatelessWidget {
-  const _MoveFolderCell({
-    Key key,
-    @required this.element,
-    @required this.controller,
-  }) : super(key: key);
-
-  final Folder element;
-  final DocumentsMoveOrCopyController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkResponse(
-      onTap: () {
-        var target = controller.target;
-        Get.find<NavigationController>()
-            .to(_FolderContentView(), preventDuplicates: false, arguments: {
-          'mode': controller.mode,
-          'target': target,
-          'currentFolder': element,
-          'initialFolderId': controller.initialFolderId,
-          'foldersCount': controller.foldersCount,
-          'refreshCalback': controller.refreshCalback,
-        });
-      },
-      child: Container(
-        height: 72,
-        child: Row(
-          children: [
-            SizedBox(
-              width: 72,
-              child: Center(
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 1,
-                      color: Get.theme.colors().outline,
-                    ),
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Center(
-                    child: AppIcon(
-                      width: 20,
-                      height: 20,
-                      icon: SvgIcons.folder,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Flexible(
-                    child: Text(element.title.replaceAll(' ', '\u00A0'),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.projectTitle),
-                  ),
-                  Text(
-                      tr('documentsCaption', args: [
-                        formatedDate(element.updated),
-                        element.filesCount.toString(),
-                        element.foldersCount.toString()
-                      ]),
-                      // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
-                      style: TextStyleHelper.caption(
-                          color:
-                              Get.theme.colors().onSurface.withOpacity(0.6))),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -453,7 +361,7 @@ class MoveDocumentsScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.documents_not_created),
+                      icon: SvgIcons.documents_not_created,
                       text: tr('noDocumentsCreated',
                           args: [tr('documents').toLowerCase()])),
                 ),
@@ -465,7 +373,7 @@ class MoveDocumentsScreen extends StatelessWidget {
               Expanded(
                 child: Center(
                   child: EmptyScreen(
-                      icon: AppIcon(icon: SvgIcons.not_found),
+                      icon: SvgIcons.not_found,
                       text: tr('noDocumentsMatching',
                           args: [tr('documents').toLowerCase()])),
                 ),
@@ -484,7 +392,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                     itemBuilder: (BuildContext context, int index) {
                       var element = controller.paginationController.data[index];
                       return element is Folder
-                          ? _MoveFolderCell(
+                          ? MoveFolderCell(
                               element: element,
                               controller: controller,
                             )
@@ -546,10 +454,8 @@ Future _moveFolder(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: tr('folderMoved')));
+    MessagesHandler.showSnackBar(context: context, text: tr('folderMoved'));
   }
 }
 
@@ -561,10 +467,8 @@ Future _copyFolder(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context).showSnackBar(
-        styledSnackBar(context: context, text: tr('folderCopied')));
+    MessagesHandler.showSnackBar(context: context, text: tr('folderCopied'));
   }
 }
 
@@ -576,10 +480,8 @@ Future _moveFile(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(styledSnackBar(context: context, text: tr('fileMoved')));
+    MessagesHandler.showSnackBar(context: context, text: tr('fileMoved'));
   }
 }
 
@@ -591,16 +493,13 @@ Future _copyFile(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
-    ScaffoldMessenger.of(context)
-        .showSnackBar(styledSnackBar(context: context, text: tr('fileCopied')));
+    MessagesHandler.showSnackBar(context: context, text: tr('fileCopied'));
   }
 }
 
 Future _cancel(DocumentsMoveOrCopyController controller) async {
   Get.close(controller.foldersCount);
-  if (controller.refreshCalback != null) controller.refreshCalback();
 }
 
 bool _isRoot(element) {

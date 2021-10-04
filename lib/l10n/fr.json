@@ -1,83 +1,56 @@
 {
 	"appName": "ONLYOFFICE\nProjects",
 	"appDescription": "Travaillez sur vos projets sur vos appareils mobiles et gérez vos tâches en mobilité",
-
 	"emailAddress": "Adresse email",
 	"password": "Mot de passe",
 	"portalName": "Nom du portail",
 	"continueButton": "Continuer",
 	"portalAdress": "Adresse du portail",
 	"logOut": "Se déconnecter",
-
 	"profile": "Profil",
 	"email": "Email",
 	"forgotPassword": "Mot de passe oublié?",
-
 	"reset": "RÉINITIALISER",
 	"filter": "Filtrer",
-
-	"dashboard": "Tableau de bord",
-
+	"dashboard": "Dashboard",
 	"projects": "Projets",
 	"project": "Projet",
-
 	"documents": "Documents",
 	"document": "Document",
-
 	"milestones": "Jalons",
 	"milestone": "Jalon",
-
 	"more": "Plus",
 	"settings": "Paramètres",
-
 	"tasks": "Tâches",
 	"task": "Tâche",
-
 	"discussions": "Discussions",
 	"discussion": "Discussion",
-
 	"subtasks": "Sous-tâches",
 	"subtask": "Sous-tâche",
-
 	"comments": "Commentaires",
 	"comment": "Commentaire",
-
 	"selectStatus": "Sélectionnez statut",
 	"usersSearch": "Recherche utilisateur...",
-
 	"myTasks": "Mes tâches",
 	"upcomingTasks": "Prochaines",
 	"myProjects": "Mes projets",
 	"otherProjects": "Autres projets",
-
 	"projectsIFolow": "Projets à suivre",
 	"activeProjects": "Projet actifs",
-
 	"dashboardNoActive": "Il n'y a aucun {} actif",
-
 	"viewAll": "Afficher tous",
 	"viewLess": "Afficher moins",
-
-	"noEntityCreated": "Ici encore, aucun {}",
-	"noEntityMatching": "Aucun {} ne correspond aux filtres",
-
 	"total": "Total {}",
 	"notFound": "N'est pas trouvé",
-
 	"open": "Ouvrir",
 	"copyLink": "Copier le lien",
 	"download": "Télécharger",
 	"copy": "Copier",
 	"move": "Déplacer",
 	"rename": "Renommer",
-
 	"delete": "Supprimer",
-
 	"edit": "Modifier",
-
-
 	"documentsCaption": "{} • documents:{} • sous-dossier:{}",
-
 	"confirm": "CONFIRMER",
 	"cancel": "ANNULER",
 	"accept": "ACCEPTER",
@@ -85,96 +58,76 @@
 	"save": "ENREGISTRER",
 	"next": "SUIVANT",
 	"back": "RETOUR",
-
 	"linkCopied": "Le lien a été copié dans le presse-papiers",
-
 	"renameFile": "Renommer le fichier",
 	"enterFileName": "Saisissez le nom du fichier",
 	"fileRenamed": "Le fichier est renommé",
-
 	"renameFolder": "Renommer le dossier",
 	"enterFolderName": "Saisissez le nom du dossier",
 	"folderRenamed": "Le dossier est renommé",
-
 	"moveFolderHere": "Déplacer dossier ici",
 	"copyFolderHere": "Copier dossier ici",
 	"moveFileHere": "Déplacer fichier ici",
 	"copyFileHere": "Copier fichier ici",
-
 	"folderMoved": "Le dossier est déplacé",
 	"folderCopied": "Le dossier est copié",
 	"folderDeleted": "Le dossier est supprimé",
-
 	"fileMoved": "Le fichier est déplacé",
 	"fileCopied": "Le fichier est copié",
 	"fileDeleted": "Le fichier est supprimé",
-
 	"author": "Auteur",
 	"me": "Moi",
 	"users": "Utilisateurs",
 	"groups": "Groupes",
-
 	"searchSettings": "Paramètres de recherche",
 	"inContent": "Dans le contenu",
 	"excludeSubfolders": "Pas de sous-dossiers",
-
 	"type": "Type",
 	"folders": "dossiers",
-
 	"presentations": "Présentations",
 	"spreadsheets": "Feuilles de calcul",
 	"images": "Images",
 	"media": "Média",
 	"archives": "Archives",
 	"allFiles": "Tous les fichiers",
-
 	"other": "Autre",
 	"followed": "Suivis",
 	"withTag": "Avec tag",
 	"withoutTag": "Sans tag",
 	"projectManager": "Chef de projet",
-
 	"otherUser": "Autres utilisateurs",
 	"status": "Statut",
 	"active": "Actif",
 	"paused": "En pause",
 	"closed": "Fermé",
 	"teamMember": "Membre de l'équipe",
-
 	"dueDate": "Date d'échéance",
 	"overdue": "En retard",
 	"today": "Aujourd'hui",
 	"upcoming": "Prochains",
 	"customPeriod": "Période personnalisée",
-
 	"creator": "Auteur",
-
 	"selectDateRange": "Sélectionner une plage de dates",
 	"invalidFormat": "Format non valide",
 	"outOfRange": "Hors plage",
 	"invalidRange": "Plage n'est pas valide.",
 	"startDate": "Date de début",
 	"endDate": "Date limite",
-
 	"description": "Description",
 	"milestoneDescription": "Description du jalon",
-
 	"enterText": "Votre texte ici",
 	"addDescription": "Ajouter description",
 	"projectTitle": "Titre du projet",
 	"choosePM": "Choisir un chef de projet",
 	"team": "Équipe",
 	"addTeamMembers": "Ajouter des membres à l'équipe",
-
 	"showMore": "Afficher plus",
 	"showLess": "Afficher moins",
-
 	"advancedOptions": "Paramètres avancés",
 	"notifyPM": "Informer le chef de projet par email",
 	"privateProject": "Enregistrer ce projet en tant que privé",
 	"followProject": "Suivre ce projet",
 	"selectPM": "Sélectionner un chef de projet",
-
 	"person": {
 		"zero": "{} personnes",
 		"one": "{} personne",
@@ -183,7 +136,6 @@
 		"many": "{} personnes",
 		"other": "{} personnes"
 	},
-
 	"members": {
 		"zero": "{} membres",
 		"one": "{} membre",
@@ -192,7 +144,6 @@
 		"many": "{} membres",
 		"other": "{} members"
 	},
-
 	"responsible": "Responsable",
 	"responsibles": {
 		"zero": "{} responsables",
@@ -202,7 +153,6 @@
 		"many": "{} responsables",
 		"other": "{} responsables"
 	},
-
 	"usersSelected": {
 		"zero": "{} utilisateurs sélectionnés",
 		"one": "{} utilisateur sélectionné",
@@ -211,7 +161,6 @@
 		"many": "{} utilisateurs sélectionnés",
 		"other": "{} utilisateurs sélectionnés"
 	},
-
 	"subscribers": "Abonnés",
 	"subscriber": "abonné",
 	"subscribersPlural": {
@@ -222,10 +171,7 @@
 		"many": "{} abonnés",
 		"other": "{} abonnés"
 	},
-
 	"filterConfirmButton": "AFFICHER {} {}",
-	
-
 	"tasksFilterConfirm": {
 		"zero": "AFFICHER {} TÂCHES",
 		"one": "AFFICHER {} TÂCHE",
@@ -234,7 +180,6 @@
 		"many": "AFFICHER {} TÂCHES",
 		"other": "AFFICHER {} TÂCHES"
 	},
-
 	"projectsFilterConfirm": {
 		"zero": "AFFICHER {} PROJETS",
 		"one": "AFFICHER {} PROJET",
@@ -243,7 +188,6 @@
 		"many": "AFFICHER {} PROJETS",
 		"other": "AFFICHER {} PROJETS"
 	},
-
 	"milestonesFilterConfirm": {
 		"zero": "AFFICHER {} JALONS",
 		"one": "AFFICHER {} JALON",
@@ -252,7 +196,6 @@
 		"many": "AFFICHER {} JALONS",
 		"other": "AFFICHER {} JALONS"
 	},
-
 	"documentsFilterConfirm": {
 		"zero": "AFFICHER {} DOCUMENTS",
 		"one": "AFFICHER {} DOCUMENT",
@@ -261,49 +204,37 @@
 		"many": "AFFICHER {} DOCUMENTS",
 		"other": "AFFICHER {} DOCUMENTS"
 	},
-
 	"addMembersOf": "Ajouter des membres de",
 	"creationDate": "Date de création",
 	"createdBy": "Créer par",
 	"tags": "Tags",
 	"tag": "Tag",
-
 	"overview": "Aperçu",
 	"deleteProject": "Êtes-vous sûr de vouloir supprimer ce projet définitivement?",
 	"deleteProjectAlert": "La restauration est impossible.",
 	"deleteTaskTitle": "Êtes-vous sûr de vouloir supprimer cette tâche définitivement?",
 	"deleteTaskAlert": "La restauration est impossible.",
-
 	"newMilestone": "Nouveau jalon",
 	"milestoneTitle": "Titre du jalon",
 	"keyMilestone": "Jalon clé",
 	"remindBeforeDue": "Me rappeler 48 heures avant la date d'échéance",
 	"selectProject": "Sélectionner un projet",
 	"assignedTo": "Assigné à",
-
 	"addResponsible": "Ajouter un responsable",
-
 	"noResponsible": "Pas de responsable",
-
 	"setDueDate": "Définir la date d'échéance",
-
 	"searchProjects": "Rechercher des projets...",
 	"selectResponsible": "Sélectionnez responsable",
-
 	"tasksSearch": "Rechercher des tâches",
 	"discussionsSearch": "Rechercher des discussions",
-
 	"editTask": "Modifier une tâche",
 	"followTask": "Suivre la tâche",
 	"unfollowTask": "Ne pas suivre la tâche",
 	"copyTask": "Copier la tâche",
 	"deleteTaskButton": "Supprimer la tâche",
-
 	"nobody": "Aucun",
 	"acceptSubtask": "Accepter la sous-tâche",
 	"copySubtask": "Copier la sous-tâche",
-
-
 	"editSubtask": "Modifier la sous-tâche",
 	"addSubtask": "Ajouter une sous-tâche",
 	"describeSubtask": "Décrire la sous-tâche...",
@@ -313,13 +244,11 @@
 	"start_date": "Date de début",
 	"title": "Titre",
 	"sort_order": "Ordre",
-  	"dateandtime": "Modifié le",
-  	"AZ": "Titre",
+	"dateandtime": "Modifié le",
+	"AZ": "Titre",
 	"size": "Taille",
-
 	"high": "Haut",
 	"normal": "Normal",
-
 	"passcodeLock": "Code d'accès",
 	"enabled": "Activé",
 	"disabled": "Désactivé",
@@ -331,41 +260,29 @@
 	"aboutApp": "À propos de l'application",
 	"lightTheme": "Thème claire",
 	"darkTheme": "Thème sombre",
-
 	"changePasscode": "Modifier code d'accès",
 	"enablePasscode": "Activer code d'accès",
 	"fingerprint": "Utiliser votre empreinte pour déverrouiller",
 	"passcodeLockDescription": "Le code à saisir pour faire démarrer l'application.\n\nSi vous l'oubliez, il faudra supprimer ou réinstaller l'application.",
 	"enterPasscode": "Saisir le code d'accès",
-
 	"passcodesNotMatch": "Codes d'accès ne correspondent pas",
 	"reEnterPasscode": "Saisissez à nouveau le code d'accès",
-
 	"choosePasscode": "Choisissez le code d'accès à déverrouiller l'application",
-
 	"enterCurrentPasscode": "Saisissez votre code d'accès actuel",
 	"incorrectPIN": " Code PIN incorrect",
 	"enterNewPasscode": "Saisir un nouveau code d'accès",
-
 	"taskDescription": "Description de la tâche",
 	"newTask": "Nouvelle tâche",
-
 	"taskTitle": "Titre de la tâche",
 	"setStartDate": "Définir la date de début",
-
 	"highPriority": "En haute priorité",
-
 	"notifyResponsible": "Notifier les responsables",
 	"none": "Aucun",
 	"selectResponsibles": "Sélectionnez les responsables",
-
 	"searchUsers": "Rechercher des utilisateurs",
-
 	"selectMilestone": "Sélectionnez un jalon",
-
 	"selectDueDate": "Sélectionnez la date d'échéance",
 	"selectStartDate": "Sélectionnez la date de début",
-
 	"tfaTitle": "Authentification\nà deux facteurs",
 	"tfaGAcodeDescription": "Copiez le code généré par Google Authenticator et insérez-le dans le champ de saisie",
 	"tfaCode": "Code",
@@ -375,83 +292,61 @@
 	"emailDescription": "Saisissez l'adresse email que vous avez fournie au moment de votre inscription au portail",
 	"authAppCodeDescription": "Saisissez le code à six chiffres généré par l'application d'authentification.\nSi vous n'avez pas votre téléphone sur vous, vous pouvez utilisez les codes de sauvegarde.",
 	"code": "Code",
-
 	"proceed": "CONTINUER",
 	"needHelp": "Avez-vous besoin d'aide?",
 	"passcodeToUnlock": "Saisissez le code d'accès à déverrouiller l'application",
-
 	"install": "Installer",
 	"step1": "Étape 1 de 4",
 	"step2": "Étape 2 de 4",
 	"step3": "Étape 3 de 4",
 	"step4": "Étape 4 de 4",
-
 	"step1SetupText1": "Installez une application pour générer des codes d'authentification",
 	"step1SetupText2": "Veuillez installer une application pour générer des codes d'accès au portail (par ex. Google Authenticator).",
-
 	"step2SetupText1": "Lancez Google Authenticator",
 	"step2SetupText2": "Lancez l'application\net appuyez sur Nouveau compte",
 	"step3SetupText1": "Ajoutez une clé secrète",
 	"step3SetupText2": "Copiez la clé secrète et collez-la dans Google Authenticator",
 	"step4SetupText1": "Copiez le code et collez-le ci-dessous",
 	"step4SetupText2": "Copiez le code généré par Google Authenticator et insérez-le dans le champ de saisie",
-
 	"keyCopied": "La clé est copiée dans le presse-papiers.",
-
 	"tfaSMSTitle": "Entrez votre numéro de téléphone",
 	"tfaSMSCaption": "Vous recevez un SMS avec un code d'activation de l'authentification à deux facteurs.",
 	"sendCode": "ENVOYER UN CODE",
 	"chooseCountry": "Choisissez votre pays",
-
 	"enterSendedCode": "Saisissez le code à six chiffres reçu",
 	"incorrectCode": "Code incorrect, veuillez réessayer.",
 	"requestNewCode": "Demander un nouveau code",
 	"selectCountry": "Sélectionnez un pays",
 	"search": "Recherche..",
-
 	"sortBy": "Trier par",
 	"enterQuery": "Taper votre requête",
-	
-
 	"selectGroup": "Sélectionnez un groupe",
-
 	"selectTag": "Sélectionnez un tag",
 	"selectUser": "Sélectionnez un utilisateur",
-	
 	"logOutTitle": "Voulez-vous vous déconnecter de ONLYOFFICE Projects?",
-
 	"milestonesWithMyTasks": "Jalons avec mes tâches",
 	"noMilestone": "Aucun jalon",
 	"otherMilestones": "Autres jalons",
 	"discardChanges": "Voulez-vous renoncer aux modifications?",
 	"changesWillBeLost": "Les modifications apportées ne seront pas sauvegardées.",
 	"discard": "RENONCER",
-	
 	"lostOnLeaveWarning": "Si vous quittez, toute modification apportée sera perdue.",
-	
 	"taskCreated": "Une tâche est crée",
 	"discardTask": "Voulez-vous renoncer à la tâche?",
 	"subtaskAccepted": "Vous avez accepté une tâche",
 	"subtaskCopied": "La tâche est copiée",
 	"cantEditSubtask": "Vous n'avez pas la permission pour modifier cette tâche",
-	
-
 	"subtaskCreated": "Une tâche est crée",
 	"projectStatus": "Projet {}",
 	"discardMilestone": "Voulez-vous renoncer au jalon?",
 	"chooseSection": "Choisissez une section",
 	"discussionCreated": "Une discussion est crée",
 	"discardDiscussion": "Voulez-vous renoncer à la discussion?",
-	
 	"archived": "Archivé",
-
 	"deleteCommentTitle": "Êtes-vous sûr de vouloir supprimer cette tâche définitivement?",
-	
 	"deleteCommentWarning": "La restauration est impossible.",
 	"commentDeleted": "Le commentaire est supprimé",
 	"commentCreated": "Un commentaire est créé",
-
-	
 	"newDiscussion": "Nouvelle discussion",
 	"chooseProject": "Choisissez un projet",
 	"addSubscribers": "Ajoutez des abonnés",
@@ -461,24 +356,100 @@
 	"replyText": "Texte de réponse",
 	"taskEditing": "Modifier la tâche",
 	"discussionText": "Texte de discussion",
-	"editProject":"Modifier projet",
-	"followUnfollowProject":"Suivre / Ne pas suivre le projet",
-
-	
+	"editProject": "Modifier projet",
 	"addTag": "Ajouter un tag",
-    "enterTag": "Saisir un nouveau tag",
-
-    "noTasksCreated": "Pas de tâches encore ici",
-    "noTasksMatching": "Aucune tâche ne correspond à vos critères de filtre",
-
-    "noProjectsCreated": "Pas de projets encore ici",
-    "noProjectsMatching": "Aucun projet ne correspond à vos critères de filtre",
-
-    "noMilestonesCreated": "Pas de jalons encore ici",
-    "noMilestonesMatching": "Aucun jalon ne correspond à vos critères de filtre",
-
-    "noDocumentsCreated": "Pas de documents encore ici",
-    "noDocumentsMatching": "Aucun document ne correspond à vos critères de filtre",
-	
-	"error": "Erreur"
+	"enterTag": "Saisir un nouveau tag",
+	"noTasksCreated": "Pas de tâches encore ici",
+	"noTasksMatching": "Aucune tâche ne correspond à vos critères de filtre",
+	"noProjectsCreated": "Pas de projets encore ici",
+	"noProjectsMatching": "Aucun projet ne correspond à vos critères de filtre",
+	"noMilestonesCreated": "Pas de jalons encore ici",
+	"noMilestonesMatching": "Aucun jalon ne correspond à vos critères de filtre",
+	"noDocumentsCreated": "Pas de documents encore ici",
+	"noDocumentsMatching": "Aucun document ne correspond à vos critères de filtre",
+	"error": "Erreur",
+	"close": "FERMER",
+	"noPeopleMatching": "Aucune personne ne correspond à ces filtres",
+	"selectAll": "Sélectionner tout",
+	"changeStatus": "Changer le statut",
+	"deselect": "Annuler la sélection",
+	"allTasks": "Toutes les tâches",
+	"accessRights": "Droits d'accès",
+	"closingTask": "Clôture de la tâche",
+	"closingTaskWithActiveSubtasks": "Vous essayez de fermer une tâche avec des sous-tâches ouvertes.\nLa meilleure façon est de revenir et de fermer les sous-tâches manuellement, puis de réessayer de fermer la tâche.",
+	"closeTask": "Fermer la tâche",
+	"followProjectButton": "Suivre le projet",
+	"unFollowProjectButton": "Ne plus suivre le projet",
+	"reloadDialogTitle": "Rechargez l'application pour appliquer le nouveau thème d'interface",
+	"reload": "Recharger",
+	"notNow": "Plus tard",
+	"cannotCloseProject": "Les projets avec des tâches actives ne peuvent pas être fermés !",
+	"allUsers": "Tous les utilisateurs",
+	"groupsSearch": "Recherche de groupe",
+	"last7Days": "7 derniers jours",
+	"dateSelectionError": "La date de début ne peut être postérieure à la date de fin",
+	"selected": {
+		"zero": "{} sélectionné",
+		"one": "{} sélectionné",
+		"two": "{} sélectionné",
+		"few": "{} sélectionné",
+		"many": "{} sélectionné",
+		"other": "{} sélectionné"
+	},
+	"subscribed": "Suivi",
+	"discussionsFilterConfirm": {
+		"zero": "AFFICHER {} DISCUSSION",
+		"one": "AFFICHER {} DISCUSSION",
+		"two": "AFFICHER {} DISCUSSION",
+		"few": "AFFICHER {} DISCUSSION",
+		"many": "AFFICHER {} DISCUSSION",
+		"other": "AFFICHER {} DISCUSSION"
+	},
+	"subscribedDiscussions": "Discussions suivies",
+	"deleteDiscussionTitle": "Supprimer définitivement la discussion ?",
+	"deleteDiscussionAlert": "Vous ne serez pas en mesure de le restaurer.",
+	"help": "Aide",
+	"rateApp": "Évaluer l'application",
+	"userAgreement": "Accord de l'utilisateur",
+	"analytics": "Statistiques",
+	"version": "Version",
+	"shareAnalytics": "Partager les statistiques d'applications",
+	"shareAnalyticsDescription": "Contribuez à améliorer l'application en envoyant automatiquement aux développeurs des statistiques sur la façon de son utilisation",
+	"failedToSendFeedback": "Impossible d'envoyer un commentaire par email. Essayez d'écrire votre demande sur notre forum.",
+	"goToForum": "ALLER AU FORUM",
+	"passwordChangeInstructionHasBeenSend": "Si un utilisateur avec l'adresse email {} existe, l'instruction de changement de mot de passe a été envoyée à cette adresse email.",
+	"backToLogIn": "RETOUR À LA PAGE DE CONNEXION",
+	"deleteDiscussion": "Supprimer la discussion",
+	"editDiscussion": "Modifier la discussion",
+	"unsubscribeFromComments": "Se désabonner des commentaires",
+	"subscribeToComments": "S'abonner aux commentaires",
+	"manageSubscribers": "Gérer les abonnés",
+	"selectSubscribers": "Sélectionner les abonnés",
+	"noSubtasksCreated": "Aucune sous-tâche n'a été créée pour cette tâche",
+	"noCommentsCreated": "Aucun commentaire trouvé",
+	"noDiscussionsCreated": "Aucune discussion n'est encore lancée",
+	"noDiscussionsMatching": "Aucune discussion ne correspond à ces filtres",
+	"noInternetConnectionTitle": "Aucun accès à Internet",
+	"noInternetConnectionSubtitle": "Assurez-vous que le Wi-Fi ou les données mobiles sont activés et réessayez.",
+	"tryAgain": "ESSAYER DE NOUVEAU",
+	"projectCreated": "Le projet a été créé",
+	"projectDeleted": "Le projet a été supprimé",
+	"taskDeleted": "La tâche a été supprimée",
+	"discussionDeleted": "La discussion a été supprimée",
+	"milestoneCreated": "Le jalon a été créé",
+	"taskAccepted": "La tâche a été acceptée par vous",
+	"taskUpdated": "La tâche a été mise à jour",
+	"projectUpdated": "Le projet a été mis à jour",
+	"discussionUpdated": "La discussion a été mise à jour",
+	"commentEditing": "Modifier le commentaire",
+	"acceptTask": "Accepter la tâche",
+	"noAdress": "Aucune adresse associée au nom de l'hôte",
+	"authenticationFailed": "L'authentification de l'utilisateur a échoué",
+	"reply": "Répondre",
+	"addComment": "Ajouter un commentaire...",
+	"statusOpen": "Ouvert",
+	"statusClosed": "Fermé",
+	"statusPaused": "En pause",
+	"taskStatusOpen": "Ouverte",
+	"taskStatusClosed": "Fermée"
 }

@@ -33,17 +33,19 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
-import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
@@ -54,7 +56,7 @@ class TaskEditingController extends GetxController
   PortalTask task;
   final _api = locator<TaskService>();
 
-  final teamController = Get.find<ProjectTeamController>();
+  ProjectTeamController teamController;
 
   TaskEditingController({@required this.task});
 
@@ -65,6 +67,8 @@ class TaskEditingController extends GetxController
   final TextEditingController _titleController = TextEditingController();
 
   TaskItemController _taskItemController;
+
+  int get selectedProjectId => task.projectOwner.id;
 
   @override
   RxString title;
@@ -101,10 +105,18 @@ class TaskEditingController extends GetxController
   FocusNode get titleFocus => null;
 
   @override
-  void init() {
+  DateTime get dueDate => _newDueDate;
+  @override
+  DateTime get startDate => _newStartDate;
+
+  @override
+  void onInit() async {
     title = task.title.obs;
     _titleController.text = task.title;
     _taskItemController = Get.find<TaskItemController>(tag: task.id.toString());
+
+    teamController = Get.find<ProjectTeamController>();
+
     initialStatus = _taskItemController.status.value;
     newStatus = initialStatus.obs;
     descriptionText = task.description.obs;
@@ -119,7 +131,12 @@ class TaskEditingController extends GetxController
     }
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.from(responsibles.value);
+    super.onInit();
   }
+
+  // it was used before, but now it is a just placeholder
+  @override
+  void init() {}
 
   void _initDates() {
     var now = DateTime.now();
@@ -137,7 +154,25 @@ class TaskEditingController extends GetxController
 
   @override
   void changeTitle(String newText) => title.value = newText;
-  void changeStatus(Status status) => newStatus.value = status;
+  Future<void> changeStatus(Status newStatus) async {
+    if (newStatus.id == this.newStatus.value.id) return;
+
+    if (newStatus.statusType == 2 &&
+        initialStatus.statusType != newStatus.statusType &&
+        task.hasOpenSubtasks) {
+      await Get.dialog(StyledAlertDialog(
+        titleText: tr('closingTask'),
+        contentText: tr('closingTaskWithActiveSubtasks'),
+        acceptText: tr('closeTask').toUpperCase(),
+        onAcceptTap: () async {
+          this.newStatus.value = newStatus;
+          Get.back();
+        },
+      ));
+    } else {
+      this.newStatus.value = newStatus;
+    }
+  }
 
   @override
   void confirmDescription(String newText) {
@@ -217,7 +252,7 @@ class TaskEditingController extends GetxController
   bool checkDate(DateTime startDate, DateTime dueDate) {
     if (startDate == null || dueDate == null) return true;
     if (startDate.isAfter(dueDate)) {
-      ErrorDialog.show(CustomError(message: tr('dateSelectionError')));
+      Get.find<ErrorDialog>().show(tr('dateSelectionError'));
       return false;
     }
     return true;
@@ -253,7 +288,8 @@ class TaskEditingController extends GetxController
 
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
-      teamController.projectId = task.projectOwner.id;
+      teamController.setup(
+          projectId: task.projectOwner.id, withoutVisitors: true);
 
       await teamController
           .getTeam()
@@ -321,13 +357,13 @@ class TaskEditingController extends GetxController
     }
   }
 
-  void confirm() async {
+  Future<void> confirm() async {
     if (title.isEmpty || task.title == null) {
       setTitleError.value = true;
     } else {
       // update the task status if it has been changed
       if (initialStatus.id != newStatus.value.id) {
-        await _taskItemController.updateTaskStatus(
+        await _taskItemController.tryChangingStatus(
             id: task.id,
             newStatusId: newStatus.value.id,
             newStatusType: newStatus.value.statusType);
@@ -355,6 +391,33 @@ class TaskEditingController extends GetxController
         _taskItemController.reloadTask(showLoading: true);
         Get.back();
       }
+    }
+  }
+
+  Future<void> acceptTask(context) async {
+    var newTask = NewTaskDTO(
+      description: descriptionText.value,
+      deadline: _newDueDate,
+      id: task.id,
+      startDate: _newStartDate,
+      priority: highPriority.value == true ? 'high' : 'normal',
+      title: title.value,
+      milestoneid: newMilestoneId,
+      projectId: task.projectOwner.id,
+      responsibles: [Get.find<UserController>().user.id],
+    );
+    _taskItemController.setLoaded = false;
+    var updatedTask = await _api.updateTask(newTask: newTask);
+    _taskItemController.setLoaded = true;
+
+    if (updatedTask != null) {
+      _taskItemController.task.value = updatedTask;
+      MessagesHandler.showSnackBar(
+        context: context,
+        text: tr('taskAccepted'),
+        buttonText: tr('ok'),
+        buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
+      );
     }
   }
 }

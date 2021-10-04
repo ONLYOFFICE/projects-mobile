@@ -38,6 +38,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -82,6 +83,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                                   discussion.subscribers[index].avatarMedium ??
                                   discussion.subscribers[index].avatarSmall,
                               fit: BoxFit.contain,
+                              defaultImage: const DefaultAvatar(),
                             ),
                           ),
                         ),
@@ -121,7 +123,10 @@ class DiscussionSubscribersView extends StatelessWidget {
                   child: StyledFloatingActionButton(
                     onPressed: () =>
                         controller.toSubscribersManagingScreen(context),
-                    child: AppIcon(icon: SvgIcons.add_fab),
+                    child: AppIcon(
+                      icon: SvgIcons.add_fab,
+                      color: Get.theme.colors().onPrimarySurface,
+                    ),
                   ),
                 ),
               )

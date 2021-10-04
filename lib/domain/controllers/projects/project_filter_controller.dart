@@ -81,6 +81,9 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   @override
+  Future<void> restoreFilters() async => await _getSavedFilters();
+
+  @override
   void onInit() async {
     await loadFilters();
     super.onInit();

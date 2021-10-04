@@ -258,8 +258,11 @@ class CoreApi {
   Future<String> getFileOperationsUrl() async =>
       '${await getPortalURI()}/api/$version/files/fileops';
 
+  Future<String> getProjectSecurityinfoUrl() async =>
+      '${await getPortalURI()}/api/$version/project/securityinfo';
+
   Future<http.Response> getRequest(String url) async {
-    print(url);
+    debugPrint(url);
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);
     final response = await request;
@@ -305,6 +308,8 @@ class CoreApi {
     if (_portalName == null || _portalName.isEmpty) {
       _portalName = await _secureStorage.getString('portalName');
     }
+
+    if (_portalName == null) return null;
 
     if (!_portalName.contains('http')) {
       _portalName = 'https://$_portalName';

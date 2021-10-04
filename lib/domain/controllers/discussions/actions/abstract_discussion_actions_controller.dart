@@ -46,7 +46,7 @@ abstract class DiscussionActionsController {
   TextEditingController _userSearchController;
   TextEditingController get titleController => _titleController;
   TextEditingController get userSearchController => _userSearchController;
-  Rx<TextEditingController> textController;
+  var textController;
 
   var setTitleError;
   var setTextError;

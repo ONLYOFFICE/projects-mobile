@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -69,7 +70,7 @@ class AddCommentButton extends StatelessWidget {
           onPressed: onPressed,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text('Add comment...',
+            child: Text(tr('addComment'),
                 style: TextStyleHelper.body2(
                     color: Get.theme.colors().onBackground.withOpacity(0.4))),
           ),

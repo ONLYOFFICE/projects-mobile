@@ -59,17 +59,23 @@ class StartDateTile extends StatelessWidget {
               _isSelected ? controller.startDateText.value : tr('setStartDate'),
           caption: _isSelected ? '${tr('startDate')}:' : null,
           isSelected: _isSelected,
+          iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
+          selectedIconColor: Get.theme.colors().onBackground,
           suffix: _isSelected
               ? IconButton(
                   icon: Icon(Icons.close_rounded,
-                      size: 23,
-                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                      size: 24, color: Get.theme.colors().onBackground),
                   onPressed: () => controller.changeStartDate(null))
               : null,
           suffixPadding: const EdgeInsets.only(right: 10),
           onTap: () => Get.find<NavigationController>().toScreen(
-              const SelectDateView(),
-              arguments: {'controller': controller, 'startDate': true}),
+            const SelectDateView(),
+            arguments: {
+              'controller': controller,
+              'startDate': true,
+              'initialDate': controller.startDate
+            },
+          ),
         );
       },
     );

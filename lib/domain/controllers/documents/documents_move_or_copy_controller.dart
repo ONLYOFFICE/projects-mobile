@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -38,14 +39,12 @@ import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DocumentsMoveOrCopyController extends GetxController {
   final _api = locator<FilesService>();
-  var portalInfoController = Get.find<PortalInfoController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;
@@ -61,7 +60,6 @@ class DocumentsMoveOrCopyController extends GetxController {
   int initialFolderId;
 
   int foldersCount = 0;
-  Function refreshCalback;
 
   String mode;
 
@@ -203,7 +201,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -212,7 +210,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -221,7 +219,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -230,7 +228,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 

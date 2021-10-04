@@ -31,23 +31,24 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 
-class NewTaskCommentController extends GetxController
-    implements NewCommentController {
+class NewTaskCommentController extends NewCommentController {
   final _api = locator<CommentsService>();
 
   @override
+  // ignore: overridden_fields
   final int idFrom;
+  @override
+  // ignore: overridden_fields
   final String parentId;
 
   NewTaskCommentController({
@@ -55,22 +56,20 @@ class NewTaskCommentController extends GetxController
     this.idFrom,
   });
 
-  @override
-  RxBool setTitleError = false.obs;
-
-  final TextEditingController _textController = TextEditingController();
+  final HtmlEditorController _textController = HtmlEditorController();
 
   @override
-  TextEditingController get textController => _textController;
+  HtmlEditorController get textController => _textController;
 
   @override
   Future addComment(context) async {
-    if (_textController.text.isEmpty)
-      setTitleError.value = true;
-    else {
+    var text = await _textController.getText();
+    if (text.isEmpty) {
+      emptyTitleError();
+    } else {
       setTitleError.value = false;
-      PortalComment newComment = await _api.addTaskComment(
-          content: _textController.text, taskId: idFrom);
+      PortalComment newComment =
+          await _api.addTaskComment(content: text, taskId: idFrom);
       if (newComment != null) {
         _textController.clear();
         var taskController =
@@ -79,20 +78,21 @@ class NewTaskCommentController extends GetxController
         await taskController.reloadTask(showLoading: false);
         taskController.scrollToLastComment();
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context, text: tr('commentCreated'), buttonText: ''));
+        MessagesHandler.showSnackBar(
+            context: context, text: tr('commentCreated'));
       }
     }
   }
 
   @override
   Future addReplyComment(context) async {
-    if (_textController.text.isEmpty)
-      setTitleError.value = true;
-    else {
+    var text = await _textController.getText();
+    if (text.isEmpty) {
+      emptyTitleError();
+    } else {
       setTitleError.value = false;
       PortalComment newComment = await _api.addTaskReplyComment(
-        content: _textController.text,
+        content: text,
         taskId: idFrom,
         parentId: parentId,
       );
@@ -103,16 +103,17 @@ class NewTaskCommentController extends GetxController
         // ignore: unawaited_futures
         taskController.reloadTask(showLoading: true);
         Get.back();
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
-            context: context, text: tr('commentCreated'), buttonText: ''));
+        MessagesHandler.showSnackBar(
+            context: context, text: tr('commentCreated'));
       }
     }
   }
 
   @override
-  void leavePage() {
-    if (_textController.text.isNotEmpty) {
-      Get.dialog(StyledAlertDialog(
+  void leavePage() async {
+    var text = await _textController.getText();
+    if (text.isNotEmpty) {
+      await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),

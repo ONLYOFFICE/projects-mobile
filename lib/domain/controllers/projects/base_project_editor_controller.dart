@@ -192,7 +192,8 @@ abstract class BaseProjectEditorController extends GetxController {
     if (selectedTeamMembers.length == 1) {
       selectedTeamMembers.clear();
     } else {
-      Get.find<NavigationController>().to(const TeamMembersSelectionView(),
+      Get.find<NavigationController>().toScreen(
+          const TeamMembersSelectionView(),
           arguments: {'controller': this});
     }
   }
@@ -233,7 +234,6 @@ abstract class BaseProjectEditorController extends GetxController {
     var selfUser = _userController.user;
     selfUserItem = PortalUserItemController(portalUser: selfUser);
     selfUserItem.selectionMode.value = selectionMode;
-    usersDataSourse.withoutSelf = true;
     usersDataSourse.selfUserItem = selfUserItem;
     usersDataSourse.selectionMode = selectionMode;
 
@@ -244,7 +244,7 @@ abstract class BaseProjectEditorController extends GetxController {
       usersDataSourse.applyUsersSelection = setupPMSelection;
     }
 
-    await usersDataSourse.getProfiles(needToClear: true);
+    await usersDataSourse.getProfiles(needToClear: true, withoutSelf: true);
 
     usersLoaded.value = true;
   }

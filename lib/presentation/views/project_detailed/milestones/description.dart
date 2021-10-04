@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -46,8 +47,15 @@ class NewMilestoneDescription extends StatelessWidget {
   Widget build(BuildContext context) {
     NewMilestoneController newMilestoneController =
         Get.arguments['newMilestoneController'];
+
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('description'),
         leading: IconButton(
             icon: const Icon(Icons.arrow_back),

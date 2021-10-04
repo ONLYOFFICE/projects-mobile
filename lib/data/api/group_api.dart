@@ -47,14 +47,16 @@ class GroupApi {
     var result = ApiDTO<List<PortalGroup>>();
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalGroup.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -80,9 +82,9 @@ class GroupApi {
     var result = PageDTO<List<PortalGroup>>();
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.total = responseJson['total'];
         {
           result.response = (responseJson['response'] as List)
@@ -90,7 +92,9 @@ class GroupApi {
               .toList();
         }
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

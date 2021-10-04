@@ -35,11 +35,14 @@ import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
+import 'package:projects/data/services/analytics_service.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskItemService {
   final TaskApi _api = locator<TaskApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   var portalTask = PortalTask().obs;
 
@@ -51,7 +54,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -63,7 +66,7 @@ class TaskItemService {
     if (success) {
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -76,9 +79,15 @@ class TaskItemService {
     var success = task.response != null;
 
     if (success) {
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
+      });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -92,9 +101,15 @@ class TaskItemService {
     var success = task.response != null;
 
     if (success) {
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
+      });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }
@@ -104,9 +119,15 @@ class TaskItemService {
     var success = task.response != null;
 
     if (success) {
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
+      });
       return task.response;
     } else {
-      await ErrorDialog.show(task.error);
+      await Get.find<ErrorDialog>().show(task.error.message);
       return null;
     }
   }

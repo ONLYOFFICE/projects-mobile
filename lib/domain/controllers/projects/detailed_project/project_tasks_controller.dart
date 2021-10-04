@@ -31,9 +31,13 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/data/models/project_status.dart';
+import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 
@@ -49,6 +53,8 @@ class ProjectTasksController extends GetxController {
   final _filterController =
       Get.put(TaskFilterController(), tag: 'ProjectTasksController');
 
+  ProjectDetailed _projectDetailed;
+
   TaskFilterController get filterController => _filterController;
   TasksSortController get sortController => _sortController;
 
@@ -57,6 +63,12 @@ class ProjectTasksController extends GetxController {
   var hasFilters = false.obs;
 
   int _projectId;
+
+  String _selfId;
+  final _projectService = locator<ProjectService>();
+  final _userController = Get.find<UserController>();
+
+  var fabIsVisible = false.obs;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
@@ -94,9 +106,31 @@ class ProjectTasksController extends GetxController {
     paginationController.data.addAll(result.response);
   }
 
-  void setup(int projectId) {
-    _projectId = projectId;
+  Future<void> setup(ProjectDetailed projectDetailed) async {
+    loaded.value = false;
+    _projectDetailed = projectDetailed;
+    _projectId = projectDetailed.id;
     _filterController.projectId = _projectId.toString();
+
+// ignore: unawaited_futures
     loadTasks();
+
+    await _userController.getUserInfo();
+    _selfId ??= await _userController.getUserId();
+
+    var team = await _projectService.getProjectTeam(_projectId.toString());
+
+    fabIsVisible.value =
+        (team.any((element) => element.id == _selfId) && _canCreate()) &&
+            _projectDetailed.status != ProjectStatusCode.closed.index;
   }
+
+  bool _canCreate() => _projectDetailed.security['canCreateTask'];
+  // (_projectDetailed.status != ProjectStatusCode.closed.index) &&
+  // _projectDetailed.security['canCreateTask'] &&
+  // !_userController.user.isVisitor &&
+  // (_userController.user.isAdmin ||
+  //     _userController.user.isOwner ||
+  //     (_userController.user.listAdminModules != null &&
+  //         _userController.user.listAdminModules.contains('projects')));
 }
