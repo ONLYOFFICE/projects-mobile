@@ -31,41 +31,193 @@
  */
 
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:only_office_mobile/data/models/authDTO.dart';
-import 'package:only_office_mobile/data/models/auth_token.dart';
-import 'package:only_office_mobile/data/models/user.dart';
-import 'package:only_office_mobile/internal/locator.dart';
-import 'package:only_office_mobile/data/api/core_api.dart';
-import 'package:only_office_mobile/data/models/error.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/auth_token.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/from_api/error.dart';
 
 class AuthApi {
   var coreApi = locator<CoreApi>();
 
-  Future<AuthDTO> loginByUsername(
-      String email, String pass, String portalName) async {
-    var url = coreApi.getAuthUrl(portalName);
-    var body =
-        jsonEncode(<String, String>{'userName': email, 'password': pass});
+  Future<ApiDTO<AuthToken>> loginByUsername(String email, String pass) async {
+    var url = await coreApi.authUrl();
+    var body = {'userName': email, 'password': pass};
 
-    var result = new AuthDTO();
+    var result = ApiDTO<AuthToken>();
     try {
-      var response = await coreApi.post(url, body);
-      final responseJson = json.decode(response.body);
+      var response = await coreApi.postRequest(url, body);
 
+      if (response.statusCode == 500) {
+        var message = json.decode(response.body)['error']['message'];
+        result.error = CustomError(message: message);
+        return result;
+      }
       if (response.statusCode == 201) {
-        result.authToken = AuthToken.fromJson(responseJson);
+        result.response =
+            // ignore: avoid_dynamic_calls
+            AuthToken.fromJson(json.decode(response.body)['response']);
       } else {
-        result.error = PortalError.fromJson(responseJson);
+        result.error = CustomError.fromJson(json.decode(response.body));
       }
     } catch (e) {
-      result.error = new PortalError(message: 'Чтото пошло не так');
+      result.error = CustomError(message: e.toString());
     }
 
     return result;
   }
 
-  Future<User> getUserProfile(int userId) async {
-    return new User(id: 1123, name: "test", username: "testing");
+  Future<ApiDTO<AuthToken>> confirmTFACode(
+    String email,
+    String pass,
+    String code,
+  ) async {
+    var url = await coreApi.tfaUrl(code);
+    var body = {
+      'userName': email,
+      'password': pass,
+      'accessToken': '',
+      'provider': ''
+    };
+
+    var result = ApiDTO<AuthToken>();
+    try {
+      var response = await coreApi.postRequest(url, body);
+
+      if (response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
+        result.response = AuthToken.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<PortalUser>> getUserInfo() async {
+    var url = await coreApi.selfInfoUrl();
+
+    var result = ApiDTO<PortalUser>();
+    try {
+      var response = await coreApi.getRequest(url);
+
+      if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
+        result.response = PortalUser.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> setPhone(Map body) async {
+    var url = await coreApi.setPhoneUrl();
+
+    var result = ApiDTO();
+    try {
+      var response = await coreApi.postRequest(url, body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
+        result.response = AuthToken.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> sendSms(Map body) async {
+    var url = await coreApi.sendSmsUrl();
+
+    var result = ApiDTO();
+    try {
+      var response = await coreApi.postRequest(url, body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
+        result.response = AuthToken.fromJson(responseJson['response']);
+      } else {
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> passwordRecovery(String email) async {
+    var url = await coreApi.passwordRecoveryUrl();
+
+    var result = ApiDTO();
+
+    var body = {'email': email};
+
+    try {
+      var response = await coreApi.postRequest(url, body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO> sendRegistrationType() async {
+    var url = await coreApi.sendRegistrationTypeUrl();
+
+    var result = ApiDTO();
+
+    // TODO: IosProjects = 0, AndroidProjects = 1
+    var type = Platform.isAndroid ? 1 : 0;
+
+    var body = {'type': type};
+
+    try {
+      var response = await coreApi.postRequest(url, body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
+        result.response = responseJson['response'];
+      } else {
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
   }
 }

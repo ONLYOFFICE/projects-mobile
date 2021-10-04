@@ -32,21 +32,38 @@
 
 class AuthToken {
   AuthToken({
-    this.token,
     this.expires,
+    this.phoneNoise,
+    this.sms,
+    this.tfa,
+    this.tfaKey,
+    this.token,
   });
-  String token;
+
+  bool tfa;
+  bool sms;
   String expires;
+  String phoneNoise;
+  String token;
+  String tfaKey;
 
   AuthToken.fromJson(Map<String, dynamic> json) {
-    token = json['response']['token'];
-    expires = json['response']['expires'];
+    expires = json['expires'];
+    phoneNoise = json['phoneNoise'];
+    sms = json['sms'];
+    token = json['token'];
+    tfa = json['tfa'];
+    tfaKey = json['tfaKey'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['token'] = this.token;
-    data['expires'] = this.expires;
+    final data = <String, dynamic>{};
+    data['token'] = token;
+    data['sms'] = sms;
+    data['expires'] = expires;
+    data['phoneNoise'] = phoneNoise;
+    data['tfa'] = tfa;
+    data['tfaKey'] = tfaKey;
 
     return data;
   }

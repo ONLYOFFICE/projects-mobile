@@ -32,26 +32,89 @@
 
 import 'dart:async';
 
-import 'package:only_office_mobile/data/api/authentication_api.dart';
-import 'package:only_office_mobile/data/models/authDTO.dart';
-import 'package:only_office_mobile/data/models/user.dart';
-import 'package:only_office_mobile/internal/locator.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/api/authentication_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/auth_token.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/domain/dialogs.dart';
+import 'package:projects/internal/locator.dart';
 
-class AuthenticationService {
-  AuthApi _api = locator<AuthApi>();
+class AuthService {
+  final AuthApi _api = locator<AuthApi>();
 
-  StreamController<User> userController = StreamController<User>();
+  Future<ApiDTO<PortalUser>> getSelfInfo() async {
+    var authResponse = await _api.getUserInfo();
 
-  Future<bool> login(String email, String pass, String portalName) async {
-    AuthDTO authResponse = await _api.loginByUsername(email, pass, portalName);
+    var result = authResponse.response != null;
 
-    var tokenReceived = authResponse.authToken != null;
-
-    if (tokenReceived) {
-      userController.add(new User(id: 111, name: 'bill', username: 'gates'));
-    } else {
-      userController.addError(authResponse.error);
+    if (!result) {
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
-    return tokenReceived;
+    return authResponse;
+  }
+
+  Future<bool> checkAuthorization() async {
+    var authResponse = await _api.getUserInfo();
+
+    if (authResponse.response == null) {
+      if (authResponse.error.message.toLowerCase().contains('unauthorized'))
+        return false;
+      else
+        await Get.find<ErrorDialog>().show(authResponse.error.message);
+    }
+    return true;
+  }
+
+  Future<ApiDTO<AuthToken>> login(String email, String pass) async {
+    var authResponse = await _api.loginByUsername(email, pass);
+
+    var tokenReceived = authResponse.response != null;
+
+    if (!tokenReceived) {
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
+    }
+    return authResponse;
+  }
+
+  Future<ApiDTO<AuthToken>> confirmTFACode(
+      String email, String pass, String code) async {
+    var authResponse = await _api.confirmTFACode(email, pass, code);
+
+    var tokenReceived = authResponse.response != null;
+
+    if (!tokenReceived) {
+      var errorText;
+      if (authResponse?.error?.message != 'Server error')
+        errorText = authResponse?.error?.message;
+      await Get.find<ErrorDialog>().show(errorText ?? '');
+    }
+    return authResponse;
+  }
+
+  Future passwordRecovery(String email) async {
+    var response = await _api.passwordRecovery(email);
+
+    var success = response.response != null;
+
+    if (!success) {
+      await Get.find<ErrorDialog>().show(response.error.message);
+      return null;
+    } else {
+      return response;
+    }
+  }
+
+  Future sendRegistrationType() async {
+    var response = await _api.sendRegistrationType();
+
+    var success = response.response != null;
+
+    if (!success) {
+      await Get.find<ErrorDialog>().show(response.error.message);
+      return null;
+    } else {
+      return response;
+    }
   }
 }

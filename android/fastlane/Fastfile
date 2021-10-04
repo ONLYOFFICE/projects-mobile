@@ -1,0 +1,129 @@
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+fastlane_require 'dotenv'
+Dotenv.load '.env.secret'
+
+default_platform(:android)
+skip_docs
+
+platform :android do
+  version_name = '1.0'
+  version_code = 1
+  increase_version_code = nil
+
+  before_all do
+    read_version
+  end
+  
+  desc "Read Flutter app version info from local(pubspec.yaml)"
+  lane :read_version do
+    version_name = flutter_version()["version_name"]
+    version_code = flutter_version()["version_code"]
+    increase_version_code = version_code.to_i + 1
+  end
+
+  desc "Fetch Flutter packages"
+  lane :get_packages do
+    Dir.chdir "../.." do
+      sh("flutter", "packages", "get")
+    end
+  end
+
+  desc "Cleanup build"
+  lane :cleanup do
+    Dir.chdir "../.." do
+      sh("flutter", "clean")
+    end
+  end
+
+  desc "Build the application as APK files for all platforms"
+  lane :make_apk do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "apk", "--split-per-abi", "--release", "--build-name=#{version_name}", "--build-number=#{increase_version_code}")
+    end
+  end
+
+  desc "Build the application as Bundle file"
+  lane :make_appbundle do
+    Dir.chdir "../.." do
+      sh("flutter", "build", "appbundle", "--release", "--build-name=#{version_name}", "--build-number=#{increase_version_code}")
+    end
+  end
+
+  desc "Increment build number"
+  lane :increment_build do |options|
+    # RegExr for increasing build number. e.g version: 1.0+1 > version: 1.0+2
+    increase_pubspec_build_number = 's/^(version:\\s+\d+\.\d+\+)(\d+)$/$1.(' + "#{increase_version_code}" + ')/e'
+    Dir.chdir "../.." do
+      sh("perl", "-i", "-pe", increase_pubspec_build_number, "pubspec.yaml") # Bump pubspec's build number
+    end
+  end
+
+  desc "Runs all the tests"
+  lane :test do
+    gradle(task: "test")
+  end
+
+  desc "Submit to Play Market"
+  lane :upload_playmarket do
+    upload_to_play_store(
+      track: 'internal',
+      aab: '../build/app/outputs/bundle/release/app-release.aab',
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true
+    )
+  end
+
+  desc "Submit to Play Market via CI"
+  lane :ci do
+    # get the last commit comments from Git history
+    # and creates our changelog
+    change_log = changelog_from_git_commits(
+      pretty: "- %s",
+      date_format: "short",
+      match_lightweight_tag: false,
+      merge_commit_filtering: "exclude_merges"
+    )
+
+    # Build artifacts and upload to store
+    get_packages
+    cleanup
+    increment_build
+    make_apk
+    make_appbundle
+    upload_playmarket
+
+    git_commit(
+      path: "../pubspec.yaml",
+      message: "Version bumped to v#{version_name}(#{increase_version_code})",
+    )
+
+    # create a local tag with the new version
+    add_git_tag(
+      tag: "android/v#{version_name}-#{increase_version_code}",
+      build_number: increase_version_code
+    )
+
+    # push changes
+    push_to_git_remote
+
+    if ENV["TELEGRAM_PROJECTS_ANDROID_MESSAGE"]
+      begin
+        telegram(
+          token: ENV['TELEGRAM_BOT_TOKEN'],
+          chat_id: ENV['TELEGRAM_CHAT_ID'],
+          parse_mode: 'Markdown',
+          text: ENV["TELEGRAM_PROJECTS_ANDROID_MESSAGE"] % [version_number: "#{version_name}", build_number: "#{increase_version_code}", change_log: "#{change_log}"]
+        )
+      rescue => ex
+        UI.error(ex)
+      end
+    end
+  
+  end
+
+end
