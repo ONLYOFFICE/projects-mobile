@@ -61,7 +61,6 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
   Widget build(BuildContext context) {
     final target = Get.arguments['target'];
     final int initialFolderId = Get.arguments['initialFolderId'];
-    final refreshCalback = Get.arguments['refreshCalback'];
     final String mode = Get.arguments['mode'];
 
     controller.initialSetup();
@@ -69,7 +68,6 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = 1;
-    controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
     var scrollController = ScrollController();
@@ -109,7 +107,6 @@ class MoveFolderContentView extends StatelessWidget {
     final target = Get.arguments['target'];
     final int initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
-    final refreshCalback = Get.arguments['refreshCalback'];
     final String mode = Get.arguments['mode'];
 
     controller.setupFolder(
@@ -118,7 +115,6 @@ class MoveFolderContentView extends StatelessWidget {
     controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = foldersCount + 1;
-    controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
     var scrollController = ScrollController();
@@ -159,7 +155,6 @@ class DocumentsMoveSearchView extends StatelessWidget {
     final target = Get.arguments['target'];
     final int initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
-    final refreshCalback = Get.arguments['refreshCalback'];
     final String folderName = Get.arguments['folderName'];
     final String mode = Get.arguments['mode'];
 
@@ -168,7 +163,6 @@ class DocumentsMoveSearchView extends StatelessWidget {
     controller.setupOptions(target, initialFolderId);
 
     controller.foldersCount = foldersCount + 1;
-    controller.refreshCalback = refreshCalback;
     controller.mode = mode;
 
     var scrollController = ScrollController();
@@ -305,7 +299,6 @@ class _Title extends StatelessWidget {
                         'currentFolder': controller.currentFolder,
                         'initialFolderId': controller.initialFolderId,
                         'foldersCount': controller.foldersCount,
-                        'refreshCalback': controller.refreshCalback,
                       });
                 },
                 child: AppIcon(
@@ -461,7 +454,6 @@ Future _moveFolder(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
     MessagesHandler.showSnackBar(context: context, text: tr('folderMoved'));
   }
@@ -475,7 +467,6 @@ Future _copyFolder(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
     MessagesHandler.showSnackBar(context: context, text: tr('folderCopied'));
   }
@@ -489,7 +480,6 @@ Future _moveFile(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
     MessagesHandler.showSnackBar(context: context, text: tr('fileMoved'));
   }
@@ -503,7 +493,6 @@ Future _copyFile(
 
   if (success) {
     Get.close(controller.foldersCount);
-    if (controller.refreshCalback != null) controller.refreshCalback();
 
     MessagesHandler.showSnackBar(context: context, text: tr('fileCopied'));
   }
@@ -511,7 +500,6 @@ Future _copyFile(
 
 Future _cancel(DocumentsMoveOrCopyController controller) async {
   Get.close(controller.foldersCount);
-  if (controller.refreshCalback != null) controller.refreshCalback();
 }
 
 bool _isRoot(element) {

@@ -221,8 +221,6 @@ void _onFilePopupMenuSelected(
 
       if (success) {
         MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
-        Future.delayed(const Duration(milliseconds: 500),
-            () => controller.refreshContent());
       }
       break;
     default:
@@ -259,7 +257,6 @@ void _renameFile(
             MessagesHandler.showSnackBar(
                 context: context, text: tr('fileRenamed'));
             Get.back();
-            await controller.refreshContent();
           }
         } else
           Get.back();

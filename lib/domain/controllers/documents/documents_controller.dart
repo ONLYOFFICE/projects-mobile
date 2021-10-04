@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 
+import 'package:event_hub/event_hub.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -105,6 +106,10 @@ class DocumentsController extends GetxController {
     paginationController.pullDownEnabled = true;
 
     portalInfoController.setup();
+
+    locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
+      refreshContent();
+    });
   }
 
   Future<void> refreshContent() async {
@@ -215,16 +220,16 @@ class DocumentsController extends GetxController {
       folderId: element.id.toString(),
       newTitle: newName,
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
-
-  void downloadFolder() {}
 
   Future<bool> deleteFolder(Folder element) async {
     var result = await _api.deleteFolder(
       folderId: element.id.toString(),
     );
+
+    locator<EventHub>().fire('needToRefreshDocuments');
 
     return result != null;
   }
@@ -234,6 +239,8 @@ class DocumentsController extends GetxController {
       fileId: element.id.toString(),
     );
 
+    locator<EventHub>().fire('needToRefreshDocuments');
+
     return result != null;
   }
 
@@ -242,7 +249,7 @@ class DocumentsController extends GetxController {
       fileId: element.id.toString(),
       newTitle: newName,
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 

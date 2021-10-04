@@ -95,10 +95,6 @@ class FolderCell extends StatelessWidget {
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
-                      // const PopupMenuItem(
-                      //   value: 'download',
-                      //   child: Text('Download'),
-                      // ),
                       if (!(controller is DiscussionsDocumentsController))
                         PopupMenuItem(
                           value: 'copy',
@@ -158,7 +154,6 @@ class MoveFolderCell extends StatelessWidget {
           'currentFolder': element,
           'initialFolderId': controller.initialFolderId,
           'foldersCount': controller.foldersCount,
-          'refreshCalback': controller.refreshCalback,
         });
       },
       child: Container(
@@ -259,16 +254,12 @@ void _onFolderPopupMenuSelected(
             'folderId': selectedFolder.id
           });
       break;
-    case 'download':
-      controller.downloadFolder();
-      break;
     case 'copy':
       Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
         'initialFolderId': controller.currentFolder,
-        'refreshCalback': controller.refreshContent
       });
       break;
     case 'move':
@@ -277,7 +268,6 @@ void _onFolderPopupMenuSelected(
         'mode': 'moveFolder',
         'target': selectedFolder.id,
         'initialFolderId': controller.currentFolder,
-        'refreshCalback': controller.refreshContent
       });
 
       break;
