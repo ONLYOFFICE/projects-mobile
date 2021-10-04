@@ -445,6 +445,11 @@
 	"acceptTask": "Accept task",
 	"noAdress": "No address associated with hostname",
 	"authenticationFailed": "User authentication failed",
-	"reply": "Ответить",
-	"addComment": "Add comment..."
+	"reply": "Reply",
+	"addComment": "Add comment...",
+	"statusOpen": "Open",
+	"statusClosed": "Closed",
+	"statusPaused": "Paused",
+	"taskStatusOpen": "Open",
+	"taskStatusClosed": "Closed"
 }

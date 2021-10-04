@@ -53,7 +53,7 @@ class PortalUserItem extends StatelessWidget {
     return InkWell(
       onTap: () {
         userController.onTap();
-        onTapFunction(userController);
+        if (onTapFunction != null) onTapFunction();
       },
       child: Container(
         height: 48,

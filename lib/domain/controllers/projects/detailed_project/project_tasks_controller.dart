@@ -121,14 +121,16 @@ class ProjectTasksController extends GetxController {
     var team = await _projectService.getProjectTeam(_projectId.toString());
 
     fabIsVisible.value =
-        (team.any((element) => element.id == _selfId) || _canCreate()) &&
+        (team.any((element) => element.id == _selfId) && _canCreate()) &&
             _projectDetailed.status != ProjectStatusCode.closed.index;
   }
 
-  bool _canCreate() =>
-      (_projectDetailed.status != ProjectStatusCode.closed.index) &&
-      (_userController.user.isAdmin ||
-          _userController.user.isOwner ||
-          (_userController.user.listAdminModules != null &&
-              _userController.user.listAdminModules.contains('projects')));
+  bool _canCreate() => _projectDetailed.security['canCreateTask'];
+  // (_projectDetailed.status != ProjectStatusCode.closed.index) &&
+  // _projectDetailed.security['canCreateTask'] &&
+  // !_userController.user.isVisitor &&
+  // (_userController.user.isAdmin ||
+  //     _userController.user.isOwner ||
+  //     (_userController.user.listAdminModules != null &&
+  //         _userController.user.listAdminModules.contains('projects')));
 }
