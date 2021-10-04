@@ -80,7 +80,7 @@ class ProjectTeamController extends GetxController {
       }
     }
 
-    if (_projectDetailed?.security['canEditTeam']) {
+    if (_projectDetailed != null && _projectDetailed.security['canEditTeam']) {
       fabIsVisible.value = true;
     } else {
       if (selfUser.isAdmin ||
