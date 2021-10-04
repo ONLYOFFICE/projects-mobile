@@ -64,10 +64,11 @@ class _AppBarMenu extends StatelessWidget {
             child:
                 Text(task.isSubscribed ? tr('unfollowTask') : tr('followTask')),
           ),
-          PopupMenuItem(
-            value: 'copyTask',
-            child: Text(tr('copyTask')),
-          ),
+          if (controller.canEdit)
+            PopupMenuItem(
+              value: 'copyTask',
+              child: Text(tr('copyTask')),
+            ),
           if (task.canDelete)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
