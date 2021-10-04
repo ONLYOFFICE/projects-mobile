@@ -95,23 +95,22 @@ class FolderCell extends StatelessWidget {
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
-                      if (!(controller is DiscussionsDocumentsController))
+                      if (controller.canCopy)
                         PopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
-                      if (_isRoot(element) &&
-                          !(controller is DiscussionsDocumentsController))
+                      if (_isRoot(element) && controller.canMove)
                         PopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
-                      if (_isRoot(element))
+                      if (_isRoot(element) && controller.canRename)
                         PopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
                         ),
-                      if (_isRoot(element))
+                      if (_isRoot(element) && controller.canDelete)
                         PopupMenuItem(
                           value: 'delete',
                           child: Text(

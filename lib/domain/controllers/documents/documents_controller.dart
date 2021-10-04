@@ -56,6 +56,7 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 class DocumentsController extends GetxController {
   final _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
+  final _userController = Get.find<UserController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;
@@ -89,6 +90,11 @@ class DocumentsController extends GetxController {
 
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
+
+  bool get canCopy => !_userController.user.isVisitor;
+  bool get canMove => !_userController.user.isVisitor;
+  bool get canRename => !_userController.user.isVisitor;
+  bool get canDelete => !_userController.user.isVisitor;
 
   DocumentsController(
     DocumentsFilterController filterController,

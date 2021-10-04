@@ -56,6 +56,8 @@ class DiscussionsDocumentsController extends GetxController {
   final _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
 
+  final _userController = Get.find<UserController>();
+
   var hasFilters = false.obs;
   var loaded = false.obs;
   var nothingFound = false.obs;
@@ -85,6 +87,11 @@ class DiscussionsDocumentsController extends GetxController {
 
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
+
+  bool get canCopy => false;
+  bool get canMove => false;
+  bool get canRename => false;
+  bool get canDelete => !_userController.user.isVisitor;
 
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
@@ -142,15 +149,6 @@ class DiscussionsDocumentsController extends GetxController {
 
     return result != null;
   }
-
-  // Future<bool> renameFile(PortalFile element, String newName) async {
-  //   var result = await _api.renameFile(
-  //     fileId: element.id.toString(),
-  //     newTitle: newName,
-  //   );
-
-  //   return result != null;
-  // }
 
   Future<void> downloadFile(String viewUrl) async {
     final _downloadService = locator<DownloadService>();
