@@ -33,7 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
+
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
