@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
+
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
