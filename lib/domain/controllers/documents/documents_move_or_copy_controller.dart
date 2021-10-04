@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -27,7 +28,6 @@ class DocumentsMoveOrCopyController extends GetxController {
   int initialFolderId;
 
   int foldersCount = 0;
-  Function refreshCalback;
 
   String mode;
 
@@ -169,7 +169,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -178,7 +178,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -187,7 +187,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
@@ -196,7 +196,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-
+    locator<EventHub>().fire('needToRefreshDocuments');
     return result != null;
   }
 
