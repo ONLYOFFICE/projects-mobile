@@ -12,37 +12,20 @@ class FiltersButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 24,
-      child: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          AppIcon(
-            width: 24,
-            height: 24,
-            icon: SvgIcons.preferences,
-            color: Get.theme.colors().primary,
-          ),
-          Positioned(
-              top: 0,
-              right: 0,
-              child: Obx(
-                () => controler.filterController.hasFilters == true
-                    ? Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 2,
-                            color: Colors.white,
-                          ),
-                          color: Get.theme.colors().lightSecondary,
-                          shape: BoxShape.circle,
-                        ),
-                      )
-                    : const SizedBox(),
-              )),
-        ],
+    return SizedBox(
+      child: Obx(
+        () => AppIcon(
+          width: 24,
+          height: 24,
+          icon: controler.filterController.hasFilters == false
+              ? SvgIcons.preferences
+              : Get.theme.brightness == Brightness.dark
+                  ? SvgIcons.preferences_active_dark_theme
+                  : SvgIcons.preferences_active,
+          color: controler.filterController.hasFilters == false
+              ? Get.theme.colors().primary
+              : null,
+        ),
       ),
     );
   }

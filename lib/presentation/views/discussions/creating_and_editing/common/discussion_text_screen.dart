@@ -4,38 +4,47 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class NewDiscussionTextScreen extends StatelessWidget {
-  const NewDiscussionTextScreen({Key key}) : super(key: key);
+  const NewDiscussionTextScreen({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final DiscussionActionsController controller;
 
   @override
   Widget build(BuildContext context) {
-    DiscussionActionsController controller = Get.arguments['controller'];
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: tr('text'),
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
-        onLeadingPressed: () => controller.leaveTextView(),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: controller.confirmText)
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
-        child: TextField(
-          controller: controller.textController.value,
-          autofocus: true,
-          maxLines: null,
-          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
-          decoration: InputDecoration.collapsed(
-              hintText: tr('discussionText'),
-              hintStyle: TextStyleHelper.subtitle1()),
+    final platformController = Get.find<PlatformController>();
+
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leaveTextView();
+        return false;
+      },
+      child: Scaffold(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
+        appBar: StyledAppBar(
+          backgroundColor:
+              platformController.isMobile ? null : Get.theme.colors().surface,
+          titleText: tr('text'),
+          backButtonIcon: Get.put(PlatformController()).isMobile
+              ? const Icon(Icons.arrow_back_rounded)
+              : const Icon(Icons.close),
+          onLeadingPressed: controller.leaveTextView,
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: controller.confirmText)
+          ],
+        ),
+        body: HtmlTextEditor(
+          initialText: controller.text.value,
+          textController: controller.textController,
+          hintText: tr('discussionText'),
         ),
       ),
     );

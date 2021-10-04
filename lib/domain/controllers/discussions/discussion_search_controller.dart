@@ -20,13 +20,11 @@ class DiscussionSearchController extends BaseController {
   var searchInputController = TextEditingController();
 
   @override
-  String get screenName => tr('discussionsSearch');
-
-  @override
   RxList get itemList => _paginationController.data;
 
   @override
   void onInit() {
+    screenName = tr('discussionsSearch');
     paginationController.startIndex = 0;
     _paginationController.loadDelegate =
         () => _performSearch(needToClear: false);

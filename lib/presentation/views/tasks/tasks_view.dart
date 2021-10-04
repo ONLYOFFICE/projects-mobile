@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -18,7 +19,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/tasks/task_cell.dart';
+import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
@@ -27,7 +28,9 @@ class TasksView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<TasksController>();
-    controller.loadTasks(preset: PresetTaskFilters.saved);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      controller.loadTasks(preset: PresetTaskFilters.saved);
+    });
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
@@ -36,23 +39,28 @@ class TasksView extends StatelessWidget {
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Get.theme.backgroundColor,
-      floatingActionButton: Obx(() => AnimatedPadding(
-          padding: EdgeInsets.only(
-              bottom: controller.fabIsRaised.value == true ? 48 : 0),
-          duration: const Duration(milliseconds: 100),
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
-              onPressed: () => Get.find<NavigationController>().to(
-                  const NewTaskView(),
-                  arguments: {'projectDetailed': null}),
-              child: AppIcon(icon: SvgIcons.add_fab)))),
+            onPressed: () => Get.find<NavigationController>()
+                .to(const NewTaskView(), arguments: {'projectDetailed': null}),
+            child: AppIcon(
+              icon: SvgIcons.add_fab,
+              color: Get.theme.colors().onPrimarySurface,
+            ),
+          ),
+        ),
+      ),
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
           builder: (_, value, __) => StyledAppBar(
             showBackButton: false,
-            titleText: tr('tasks'),
+            titleText: controller.screenName,
             elevation: value,
             actions: [
               IconButton(
@@ -75,29 +83,31 @@ class TasksView extends StatelessWidget {
               ),
               const SizedBox(width: 4),
             ],
-            bottom: TasksHeader(),
+            bottom: TasksHeader(controller: controller),
           ),
         ),
       ),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
+          if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
             return const ListLoadingSkeleton();
-          if (controller.loaded.value == true &&
+          if (controller.loaded.value &&
+              controller.taskStatusesLoaded.value &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value) {
             return Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.task_not_created),
+                    icon: SvgIcons.task_not_created,
                     text: tr('noTasksCreated',
                         args: [tr('tasks').toLowerCase()])));
           }
-          if (controller.loaded.value == true &&
+          if (controller.loaded.value &&
+              controller.taskStatusesLoaded.value &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: AppIcon(icon: SvgIcons.not_found),
+                  icon: SvgIcons.not_found,
                   text:
                       tr('noTasksMatching', args: [tr('tasks').toLowerCase()])),
             );
@@ -121,11 +131,10 @@ class TasksView extends StatelessWidget {
 }
 
 class TasksHeader extends StatelessWidget {
-  TasksHeader({
-    Key key,
-  }) : super(key: key);
+  TasksHeader({Key key, @required this.controller}) : super(key: key);
 
-  final controller = Get.find<TasksController>();
+  final controller;
+  // = Get.find<TasksController>();
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +181,8 @@ class TasksHeader extends StatelessWidget {
                     Obx(
                       () => Text(
                         controller.sortController.currentSortTitle.value,
-                        style: TextStyleHelper.projectsSorting,
+                        style: TextStyleHelper.projectsSorting
+                            .copyWith(color: Get.theme.colors().primary),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -181,18 +191,18 @@ class TasksHeader extends StatelessWidget {
                               'ascending')
                           ? AppIcon(
                               icon: SvgIcons.sorting_4_ascend,
+                              color: Get.theme.colors().primary,
                               width: 20,
                               height: 20,
-                              color: Get.theme.colors().primary,
                             )
                           : Transform(
                               alignment: Alignment.center,
                               transform: Matrix4.rotationX(math.pi),
                               child: AppIcon(
                                 icon: SvgIcons.sorting_4_ascend,
+                                color: Get.theme.colors().primary,
                                 width: 20,
                                 height: 20,
-                                color: Get.theme.colors().primary,
                               ),
                             ),
                     ),

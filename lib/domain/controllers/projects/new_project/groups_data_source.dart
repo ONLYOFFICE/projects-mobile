@@ -15,11 +15,11 @@ class GroupsDataSource extends GetxController {
 
   void onLoading() async {
     refreshController.loadComplete();
-    _loadGroups();
+    await _loadGroups();
     refreshController.loadComplete();
   }
 
-  void _loadGroups({bool needToClear = false}) async {
+  Future _loadGroups({bool needToClear = false}) async {
     if (needToClear) groupsList.clear();
 
     var result;
@@ -45,7 +45,7 @@ class GroupsDataSource extends GetxController {
   Future getGroups({bool needToClear}) async {
     _clear();
     loaded.value = false;
-    _loadGroups(needToClear: true);
+    await _loadGroups(needToClear: true);
     loaded.value = true;
   }
 }

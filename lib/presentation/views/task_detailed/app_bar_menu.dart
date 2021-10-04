@@ -10,14 +10,19 @@ class _AppBarMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (value) => _onSelected(value, controller),
+      onSelected: (value) => _onSelected(context, value, controller),
       itemBuilder: (context) {
         return [
+          if (controller.canEdit && task.responsibles.isEmpty)
+            PopupMenuItem(
+              value: 'accept',
+              child: Text(tr('acceptTask')),
+            ),
           PopupMenuItem(
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
-          if (task.canEdit)
+          if (controller.canEdit)
             PopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
@@ -27,10 +32,11 @@ class _AppBarMenu extends StatelessWidget {
             child:
                 Text(task.isSubscribed ? tr('unfollowTask') : tr('followTask')),
           ),
-          PopupMenuItem(
-            value: 'copyTask',
-            child: Text(tr('copyTask')),
-          ),
+          if (controller.canEdit)
+            PopupMenuItem(
+              value: 'copyTask',
+              child: Text(tr('copyTask')),
+            ),
           if (task.canDelete)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
@@ -44,16 +50,20 @@ class _AppBarMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(value, TaskItemController controller) async {
+void _onSelected(context, value, TaskItemController controller) async {
   var task = controller.task.value;
   switch (value) {
+    case 'accept':
+      await controller.accept(context);
+      break;
+
     case 'copyLink':
       controller.copyLink(taskId: task.id, projectId: task.projectOwner.id);
       break;
 
     case 'editTask':
-      Get.find<NavigationController>().to(const TaskEditingView(),
-          arguments: {'task': controller.task.value});
+      Get.find<NavigationController>()
+          .to(TaskEditingView(task: controller.task.value));
       break;
 
     case 'followTask':
@@ -77,15 +87,13 @@ void _onSelected(value, TaskItemController controller) async {
             // ignore: unawaited_futures
             Get.find<TasksController>().loadTasks();
 
-            //TODO refactoring needed
-            try {
-              // ignore: unawaited_futures
-              Get.find<ProjectDetailsController>().refreshData();
-            } catch (e) {
-              debugPrint(e);
-            }
+            locator<EventHub>().fire('needToRefreshProjects');
+
             Get.back();
             Get.back();
+
+            MessagesHandler.showSnackBar(
+                context: context, text: tr('taskDeleted'));
           } else {
             print('ERROR');
           }

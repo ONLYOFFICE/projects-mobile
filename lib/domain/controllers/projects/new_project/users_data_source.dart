@@ -21,7 +21,7 @@ class UsersDataSource extends GetxController {
 
   var isSearchResult = false.obs;
 
-  var withoutSelf = false;
+  // var withoutSelf_remove = false;
   PortalUserItemController selfUserItem;
 
   RefreshController refreshController = RefreshController();
@@ -54,7 +54,10 @@ class UsersDataSource extends GetxController {
     loaded.value = true;
   }
 
-  Future _loadUsers({bool needToClear = false}) async {
+  Future _loadUsers({
+    bool needToClear = false,
+    bool withoutSelf = false,
+  }) async {
     nothingFound.value = false;
 
     if (needToClear) usersList.clear();
@@ -82,7 +85,7 @@ class UsersDataSource extends GetxController {
 
     if (withoutSelf) {
       usersList
-          .removeWhere((element) => selfUserItem.portalUser.id == element.id);
+          .removeWhere((element) => selfUserItem?.portalUser?.id == element.id);
     }
 
     usersList.removeWhere((element) =>
@@ -110,10 +113,10 @@ class UsersDataSource extends GetxController {
     nothingFound.value = false;
   }
 
-  Future getProfiles({bool needToClear}) async {
+  Future getProfiles({bool needToClear, withoutSelf = false}) async {
     _clear();
     loaded.value = false;
-    await _loadUsers(needToClear: true);
+    await _loadUsers(needToClear: needToClear, withoutSelf: withoutSelf);
     loaded.value = true;
   }
 

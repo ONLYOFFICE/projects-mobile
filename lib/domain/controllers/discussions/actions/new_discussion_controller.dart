@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:darq/darq.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
@@ -11,15 +13,14 @@ import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_snackbar.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class NewDiscussionController extends GetxController
@@ -48,7 +49,7 @@ class NewDiscussionController extends GetxController
   @override
   RxString text = ''.obs;
   @override
-  var textController = TextEditingController().obs;
+  var textController = HtmlEditorController();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _userSearchController = TextEditingController();
@@ -106,22 +107,23 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void confirmText() {
-    text.value = textController.value.text;
+  void confirmText() async {
+    text.value = await textController.getText();
     Get.back();
   }
 
   @override
-  void leaveTextView() {
-    if (textController.value.text == text.value) {
+  void leaveTextView() async {
+    var t = await textController.getText();
+
+    if (t == text.value) {
       Get.back();
     } else {
-      Get.dialog(StyledAlertDialog(
+      await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          textController.value.text = text.value;
           Get.back();
           Get.back();
         },
@@ -162,8 +164,7 @@ class NewDiscussionController extends GetxController
   @override
   void setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
-    await _usersDataSource.getProfiles(needToClear: true);
-    _usersDataSource.withoutSelf = false;
+    await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
   }
 
   Future<void> _getSelectedSubscribers() async {
@@ -259,8 +260,8 @@ class NewDiscussionController extends GetxController
         discussionsController.loadDiscussions();
         if (specifiedProjectId != null) {
           try {
-            // ignore: unawaited_futures
-            Get.find<ProjectDetailsController>().refreshData();
+            locator<EventHub>().fire('needToRefreshProjects');
+
             // ignore: unawaited_futures
             Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
           } catch (e) {
@@ -270,14 +271,14 @@ class NewDiscussionController extends GetxController
 
         Get.back();
         // ignore: unawaited_futures
-        ScaffoldMessenger.of(context).showSnackBar(styledSnackBar(
+        MessagesHandler.showSnackBar(
             context: context,
             text: tr('discussionCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
               return Get.find<NavigationController>().to(DiscussionDetailed(),
                   arguments: {'discussion': createdDiss});
-            }));
+            });
       }
     }
   }

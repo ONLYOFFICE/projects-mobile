@@ -9,6 +9,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 
 class SubtaskDetailedView extends StatelessWidget {
   const SubtaskDetailedView({Key key}) : super(key: key);
@@ -23,38 +24,41 @@ class SubtaskDetailedView extends StatelessWidget {
         return Scaffold(
           appBar: StyledAppBar(
             actions: [
-              PopupMenuButton(
-                icon: const Icon(Icons.more_vert, size: 26),
-                offset: const Offset(0, 25),
-                onSelected: (value) => _onSelected(context, value, controller),
-                itemBuilder: (context) {
-                  return [
-                    if (_subtask.canEdit && _subtask.responsible == null)
-                      PopupMenuItem(
-                        value: 'accept',
-                        child: Text(tr('accept')),
-                      ),
-                    if (_subtask.canEdit)
-                      PopupMenuItem(
-                        value: 'edit',
-                        child: Text(tr('edit')),
-                      ),
-                    PopupMenuItem(
-                      value: 'copy',
-                      child: Text(tr('copy')),
-                    ),
-                    if (_subtask.canEdit)
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Text(
-                          tr('delete'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().colorError),
+              if (_subtask.canEdit || controller.canCreateSubtask)
+                PopupMenuButton(
+                  icon: const Icon(Icons.more_vert, size: 26),
+                  offset: const Offset(0, 25),
+                  onSelected: (value) =>
+                      _onSelected(context, value, controller),
+                  itemBuilder: (context) {
+                    return [
+                      if (controller.canEdit && _subtask.responsible == null)
+                        PopupMenuItem(
+                          value: 'accept',
+                          child: Text(tr('acceptSubtask')),
                         ),
-                      ),
-                  ];
-                },
-              )
+                      if (controller.canEdit)
+                        PopupMenuItem(
+                          value: 'edit',
+                          child: Text(tr('edit')),
+                        ),
+                      if (controller.canCreateSubtask)
+                        PopupMenuItem(
+                          value: 'copy',
+                          child: Text(tr('copy')),
+                        ),
+                      if (_subtask.canEdit)
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text(
+                            tr('delete'),
+                            style: TextStyleHelper.subtitle1(
+                                color: Get.theme.colors().colorError),
+                          ),
+                        ),
+                    ];
+                  },
+                )
             ],
           ),
           body: SingleChildScrollView(
@@ -66,20 +70,7 @@ class SubtaskDetailedView extends StatelessWidget {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        SizedBox(
-                          width: 56,
-                          child: Checkbox(
-                            value: _subtask.status == 2,
-                            activeColor: const Color(0xFF666666),
-                            onChanged: (value) {
-                              controller.updateSubtaskStatus(
-                                context: context,
-                                taskId: _subtask.taskId,
-                                subtaskId: _subtask.id,
-                              );
-                            },
-                          ),
-                        ),
+                        SubtaskCheckBox(subtaskController: controller),
                         Obx(() => Expanded(
                               child: Text(_subtask.title,
                                   style: controller.subtask.value.status == 2
@@ -94,14 +85,14 @@ class SubtaskDetailedView extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    const StyledDivider(leftPadding: 56)
+                    const StyledDivider(leftPadding: 72)
                   ],
                 ),
                 const SizedBox(height: 10),
                 Row(
                   children: [
                     SizedBox(
-                        width: 56,
+                        width: 72,
                         child: AppIcon(
                             icon: SvgIcons.person,
                             color:
@@ -161,7 +152,7 @@ void _onSelected(context, value, SubtaskController controller) {
         'taskId': controller.subtask.value.taskId,
         'projectId': controller.parentTask.projectOwner.id,
         'forEditing': true,
-        'subtask': controller.subtask.value,
+        'itemController': controller,
       });
       break;
     case 'copy':
@@ -173,6 +164,7 @@ void _onSelected(context, value, SubtaskController controller) {
       break;
     case 'delete':
       controller.deleteSubtask(
+        context: context,
         taskId: controller.subtask.value.taskId,
         subtaskId: controller.subtask.value.id,
         closePage: true,

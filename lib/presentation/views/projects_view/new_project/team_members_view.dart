@@ -34,9 +34,14 @@ class TeamMembersSelectionView extends StatelessWidget {
 
     controller.setupUsersSelection();
 
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
@@ -62,7 +67,7 @@ class TeamMembersSelectionView extends StatelessWidget {
             );
           }
           if (usersDataSource.nothingFound.value == true) {
-            return const NothingFound();
+            return Column(children: [const NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&

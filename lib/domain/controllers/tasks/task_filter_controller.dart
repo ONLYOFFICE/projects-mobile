@@ -64,6 +64,9 @@ class TaskFilterController extends BaseFilterController {
   }
 
   @override
+  Future<void> restoreFilters() async => await _getSavedFilters();
+
+  @override
   String get filtersTitle =>
       plural('tasksFilterConfirm', suitableResultCount.value);
 
@@ -362,8 +365,11 @@ class TaskFilterController extends BaseFilterController {
     _selfId ??= await Get.find<UserController>().getUserId();
 
     if (preset == PresetTaskFilters.myTasks) {
+      _statusFilter = '&status=1';
+
       await _getMyTasks();
     } else if (preset == PresetTaskFilters.upcomming) {
+      _statusFilter = '&status=1';
       var startDate = formatter.format(DateTime.now());
       var stopDate =
           formatter.format(DateTime.now().add(const Duration(days: 7)));

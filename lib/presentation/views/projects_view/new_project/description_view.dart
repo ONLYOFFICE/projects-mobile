@@ -11,10 +11,15 @@ class NewProjectDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller =
-        Get.arguments['controller']; //Get.find<NewProjectController>();
+    var controller = Get.arguments['controller'];
+    final platformController = Get.find<PlatformController>();
+
     return Scaffold(
+      backgroundColor:
+          platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('description'),
         leading: IconButton(
             icon: Get.put(PlatformController()).isMobile

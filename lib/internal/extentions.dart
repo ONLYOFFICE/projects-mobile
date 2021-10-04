@@ -13,15 +13,14 @@ extension CustomList<T> on List<T> {
 }
 
 String formatedDateFromString({DateTime now, String stringDate}) {
-  var date = DateTime.parse(stringDate);
+  var date = DateTime.tryParse(stringDate.split('T')[0]);
 
   if (now.year == date.year) {
-    // final formatter = DateFormat('d MMM');
     final formatter = DateFormat.MMMMd(Get.locale.languageCode);
     return formatter.format(date);
   } else {
     final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
-    // final formatter = DateFormat('d MMM yyy');
+
     return formatter.format(date);
   }
 }

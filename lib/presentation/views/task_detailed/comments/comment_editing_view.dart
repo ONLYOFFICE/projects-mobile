@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/comments/comment_editing_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
+import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/task_detailed/comments/comment_text_field.dart';
 
 class CommentEditingView extends StatelessWidget {
   const CommentEditingView({Key key}) : super(key: key);
@@ -21,19 +21,30 @@ class CommentEditingView extends StatelessWidget {
       itemController: itemController,
     ));
 
-    return Scaffold(
-      appBar: StyledAppBar(
-        titleText: tr('taskEditing'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.done_rounded),
-            onPressed: () async => controller.confirm(),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leavePage();
+        return false;
+      },
+      child: Scaffold(
+        appBar: StyledAppBar(
+          titleText: tr('commentEditing'),
+          onLeadingPressed: controller.leavePage,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.done_rounded),
+              onPressed: () async => controller.confirm(),
+            ),
+          ],
+        ),
+        body: Obx(
+          () => HtmlTextEditor(
+            hintText: tr('replyText'),
+            hasError: controller.setTitleError.value,
+            initialText: commentBody,
+            textController: controller.textController,
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: CommentTextField(controller: controller),
+        ),
       ),
     );
   }

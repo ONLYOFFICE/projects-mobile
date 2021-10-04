@@ -163,7 +163,7 @@ class TextStyleHelper {
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 14,
-    color: Get.theme.colors().onSurface,
+    color: Get.theme.colors().onSurface.withOpacity(0.6),
   );
 
   static const subHeaderStyle = TextStyle(

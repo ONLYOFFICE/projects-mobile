@@ -26,6 +26,11 @@ mixin PasscodeScreenMixin on StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AdaptiveSize.updateScreenSize(
+      height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+    );
+
     return WillPopScope(
       onWillPop: () async {
         if (hasBackButton) onBackPressed();
@@ -39,7 +44,7 @@ mixin PasscodeScreenMixin on StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: hasBackButton ? h(114) : h(170)),
+              SizedBox(height: hasBackButton ? 114.h : 170.h),
               Text(title,
                   textAlign: TextAlign.center,
                   style: TextStyleHelper.headline6(

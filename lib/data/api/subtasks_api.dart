@@ -16,12 +16,14 @@ class SubtasksApi {
 
     try {
       var response = await _coreApi.putRequest(url, body: data);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -36,12 +38,14 @@ class SubtasksApi {
 
     try {
       var response = await _coreApi.deleteRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -55,12 +59,14 @@ class SubtasksApi {
 
     try {
       var response = await _coreApi.postRequest(url, {});
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -74,12 +80,14 @@ class SubtasksApi {
 
     try {
       var response = await _coreApi.postRequest(url, data);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -98,12 +106,14 @@ class SubtasksApi {
     var result = ApiDTO();
     try {
       var response = await _coreApi.putRequest(url, body: data);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -124,12 +134,14 @@ class SubtasksApi {
     var result = ApiDTO();
     try {
       var response = await _coreApi.putRequest(url, body: data);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

@@ -1,19 +1,19 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
@@ -45,13 +45,11 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   void initState() {
     super.initState();
 
-    discussionsController = Get.put(ProjectDiscussionsController(
-        projectDetailed.id, projectDetailed.title));
+    discussionsController =
+        Get.put(ProjectDiscussionsController(projectDetailed));
 
-    projectController =
-        Get.put(ProjectDetailsController(Get.arguments['projectDetailed']));
-
-    projectController.setup();
+    projectController = Get.find<ProjectDetailsController>();
+    projectController.setup(Get.arguments['projectDetailed']);
 
     documentsController.setupFolder(
         folderName: projectDetailed.title,
@@ -79,48 +77,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
     return Obx(
       () => Scaffold(
-        floatingActionButton: Visibility(
-          visible: _activeIndex.value == 2 ||
-              _activeIndex.value == 1 ||
-              _activeIndex.value == 5,
-          child: StyledFloatingActionButton(
-            onPressed: () {
-              if (_activeIndex.value == 2)
-                projectController.createNewMilestone();
-              if (_activeIndex.value == 5)
-                projectController.manageTeamMembers();
-              if (_activeIndex.value == 1) projectController.createTask();
-            },
-            child: Obx(() {
-              switch (_activeIndex.value) {
-                case 2:
-                  return AppIcon(
-                    icon: SvgIcons.add_milestone,
-                    width: 32,
-                    height: 32,
-                  );
-                  break;
-
-                case 5:
-                  return AppIcon(
-                    icon: SvgIcons.fab_user,
-                    width: 32,
-                    height: 32,
-                  );
-                  break;
-                default:
-                  return const Icon(Icons.add_rounded);
-              }
-            }),
-            // _activeIndex.value == 2
-            // ? AppIcon(
-            //     icon: SvgIcons.add_milestone,
-            //     width: 32,
-            //     height: 32,
-            //   )
-            // : const Icon(Icons.add_rounded),
-          ),
-        ),
         appBar: StyledAppBar(
           actions: [
             projectDetailed.canEdit
@@ -169,7 +125,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         ),
         body: TabBarView(controller: _tabController, children: [
           ProjectOverview(
-              projectDetailed: projectDetailed, tabController: _tabController),
+              projectController: projectController,
+              tabController: _tabController),
           ProjectTaskScreen(projectDetailed: projectDetailed),
           ProjectMilestonesScreen(projectDetailed: projectDetailed),
           ProjectDiscussionsScreen(controller: discussionsController),
@@ -178,7 +135,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             folderName: projectDetailed.title,
             documentsController: documentsController,
           ),
-          ProjectTeamView(projectDetailed: projectDetailed),
+          ProjectTeamView(
+              projectDetailed: projectDetailed,
+              fabAction: projectController.manageTeamMembers),
         ]),
       ),
     );
@@ -195,7 +154,7 @@ class _ProjectContextMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (value) => _onSelected(value, controller),
+      onSelected: (value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
         return [
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
@@ -225,7 +184,7 @@ class _ProjectContextMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(value, controller) async {
+void _onSelected(value, controller, context) async {
   switch (value) {
     case 'copyLink':
       controller.copyLink();
@@ -251,10 +210,13 @@ void _onSelected(value, controller) async {
         onAcceptTap: () async {
           var result = await controller.deleteProject();
           if (result != null) {
-            // ignore: unawaited_futures
-            Get.find<ProjectsController>(tag: 'ProjectsView').loadProjects();
             Get.back();
             Get.back();
+            MessagesHandler.showSnackBar(
+              context: context,
+              text: tr('projectDeleted'),
+            );
+            locator<EventHub>().fire('needToRefreshProjects');
           } else {
             print('ERROR');
           }

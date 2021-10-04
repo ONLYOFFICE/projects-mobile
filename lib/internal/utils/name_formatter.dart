@@ -9,4 +9,10 @@ class NameFormatter {
 
     return '${user.firstName.substring(0, 1)}. ${user.lastName}';
   }
+
+  static String formateDisplayName(String displayName) {
+    var splited = displayName.split(' ');
+    if (splited.length != 2) return displayName;
+    return '${splited[1][0]}. ${splited[0]}';
+  }
 }

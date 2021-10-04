@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -6,6 +7,7 @@ import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/data/services/milestone_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -13,7 +15,6 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
-import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 
 class NewMilestoneController extends GetxController {
   final _api = locator<MilestoneService>();
@@ -27,7 +28,7 @@ class NewMilestoneController extends GetxController {
   int get selectedProjectId => _selectedProjectId;
   DateTime get dueDate => _dueDate;
 
-  final teamController = Get.find<ProjectTeamController>();
+  var teamController;
 
   RxString slectedProjectTitle = ''.obs;
   RxString slectedMilestoneTitle = ''.obs;
@@ -53,14 +54,12 @@ class NewMilestoneController extends GetxController {
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
 
-      teamController.projectId = projectDetailed.id;
+      teamController = Get.find<ProjectTeamController>()
+        ..setup(projectDetailed: projectDetailed, withoutVisitors: true);
+
       await teamController.getTeam();
 
-      var projectTeamDataSource = Get.put(ProjectTeamController());
-      projectTeamDataSource.projectId = projectDetailed.id;
-      await projectTeamDataSource.getTeam();
-
-      for (var user in projectTeamDataSource.usersList) {
+      for (var user in teamController.usersList) {
         teamMembers.add(user);
       }
     }
@@ -191,7 +190,12 @@ class NewMilestoneController extends GetxController {
 
     var success = await _api.createMilestone(
         projectId: _selectedProjectId, milestone: milestone);
-    if (success) Get.back();
+    if (success) {
+      MessagesHandler.showSnackBar(
+          context: context, text: tr('milestoneCreated'));
+      locator<EventHub>().fire('needToRefreshProjects');
+      Get.back();
+    }
   }
 
   void discard() {
@@ -218,14 +222,12 @@ class NewMilestoneController extends GetxController {
   void setKeyMilestone(value) => keyMilestone.value = value;
   void enableRemindBeforeDueDate(value) => remindBeforeDueDate.value = value;
 
-  void onProjectTilePressed() {
-    Get.find<NavigationController>()
-        .to(const SelectProjectView(), arguments: {'controller': this});
-  }
-
   void onDueDateTilePressed() {
-    Get.find<NavigationController>().to(const SelectDateView(),
-        arguments: {'controller': this, 'startDate': false});
+    Get.find<NavigationController>().to(const SelectDateView(), arguments: {
+      'controller': this,
+      'startDate': false,
+      'initialDate': _dueDate
+    });
   }
 
   void enableNotification(bool value) {

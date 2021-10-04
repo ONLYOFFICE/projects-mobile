@@ -40,7 +40,6 @@ class _DescriptionTileState extends State<DescriptionTile>
     _controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
     _iconTurns = _controller.drive(_halfTween.chain(_turnsTween));
-    // _controller.value = 1;
   }
 
   @override
@@ -68,7 +67,10 @@ class _DescriptionTileState extends State<DescriptionTile>
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isSelected = widget.controller.descriptionText.value.isNotEmpty;
+        bool _isNotEmpty = widget.controller.descriptionText.value.isNotEmpty;
+        var _color = _isNotEmpty
+            ? Get.theme.colors().onBackground
+            : Get.theme.colors().onBackground.withOpacity(0.4);
         var text = widget.controller.descriptionText.value;
         var textSize = _textSize(text, TextStyleHelper.subtitle1());
 
@@ -88,20 +90,16 @@ class _DescriptionTileState extends State<DescriptionTile>
                       SizedBox(
                           width: 72,
                           child: AppIcon(
-                              icon: SvgIcons.description,
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6))),
+                              icon: SvgIcons.description, color: _color)),
                       Expanded(
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                              vertical: _isSelected ? 10 : 18),
+                              vertical: _isNotEmpty ? 10 : 18),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              if (_isSelected)
+                              if (_isNotEmpty)
                                 Text('${tr('description')}:',
                                     style: TextStyleHelper.caption(
                                         color: Get.theme
@@ -110,31 +108,25 @@ class _DescriptionTileState extends State<DescriptionTile>
                                             .withOpacity(0.75))),
                               Flexible(
                                 child: Text(
-                                    _isSelected ? text : tr('addDescription'),
+                                    _isNotEmpty ? text : tr('addDescription'),
                                     style: TextStyleHelper.subtitle1(
-                                        color: _isSelected
-                                            ? Get.theme.colors().onBackground
-                                            : Get.theme
-                                                .colors()
-                                                .onSurface
-                                                .withOpacity(0.4))),
+                                        color: _color)),
                               ),
                             ],
                           ),
                         ),
                       ),
-                      if (_needToExpand(textSize.width))
+                      if (_needToExpand(textSize.width, text))
                         Padding(
-                          padding: const EdgeInsets.only(left: 5, right: 3),
+                          padding: const EdgeInsets.only(left: 5, right: 5),
                           child: IconButton(
                             icon: RotationTransition(
                               turns: _iconTurns,
-                              child: Icon(Icons.arrow_forward_ios_rounded,
-                                  size: 20,
-                                  color: Get.theme
-                                      .colors()
-                                      .onSurface
-                                      .withOpacity(0.6)),
+                              child: Icon(
+                                Icons.navigate_next,
+                                size: 24,
+                                color: Get.theme.colors().onBackground,
+                              ),
                             ),
                             onPressed: changeExpansion,
                           ),
@@ -161,8 +153,9 @@ Size _textSize(String text, TextStyle style) {
   return textPainter.size;
 }
 
-bool _needToExpand(double size) {
+bool _needToExpand(double size, String text) {
   var freeSize = Get.width - 72 - 59;
+  if ('\n'.allMatches(text).length + 1 > 1) return true;
   if (freeSize > size) return false;
   return true;
 }

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -21,10 +22,8 @@ class ProjectsController extends BaseController {
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   PaginationController _paginationController;
-  PaginationController get paginationController => _paginationController;
 
-  @override
-  String get screenName => tr('projects');
+  PaginationController get paginationController => _paginationController;
 
   @override
   RxList get itemList => _paginationController.data;
@@ -37,16 +36,13 @@ class ProjectsController extends BaseController {
 
   final _userController = Get.find<UserController>();
 
-  bool fabIsVisible() {
-    if (_userController.user == null) return false;
-
-    return _userController.user.isAdmin || _userController.user.isOwner;
-  }
+  var fabIsVisible = false.obs;
 
   ProjectsController(
     ProjectsFilterController filterController,
     PaginationController paginationController,
   ) {
+    screenName = tr('projects');
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;
@@ -57,8 +53,23 @@ class ProjectsController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    _userController.getUserInfo();
+    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      loadProjects();
+    });
+    _userController
+        .getUserInfo()
+        .then((value) => fabIsVisible.value = canCreateNewProject);
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
+      fabIsVisible.value = data ? false : canCreateNewProject;
+    });
   }
+
+  bool get canCreateNewProject =>
+      _userController.user.isAdmin ||
+      _userController.user.isOwner ||
+      (_userController.user.listAdminModules != null &&
+          _userController.user.listAdminModules.contains('projects')) ||
+      _userController.securityInfo.canCreateProject;
 
   @override
   void showSearch() {
@@ -70,7 +81,9 @@ class ProjectsController extends BaseController {
   }
 
   Future<void> refreshData() async {
+    loaded.value = false;
     await _getProjects(needToClear: true);
+    loaded.value = true;
   }
 
   Future<void> loadProjects({PresetProjectFilters preset}) async {

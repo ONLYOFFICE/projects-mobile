@@ -115,7 +115,8 @@ class _DocsTitle extends StatelessWidget {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -123,6 +124,7 @@ class _DocsTitle extends StatelessWidget {
               () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
                       width: 20,
                       height: 20,
                     )
@@ -131,6 +133,7 @@ class _DocsTitle extends StatelessWidget {
                       transform: Matrix4.rotationX(math.pi),
                       child: AppIcon(
                         icon: SvgIcons.sorting_4_ascend,
+                        color: Get.theme.colors().primary,
                         width: 20,
                         height: 20,
                       ),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
+import 'package:projects/internal/utils/html_parser.dart';
 import 'package:projects/presentation/shared/status_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -48,20 +49,7 @@ class DiscussionOverview extends StatelessWidget {
                         style: TextStyleHelper.headline6(
                             color: Get.theme.colors().onSurface))),
                 const SizedBox(height: 22),
-                Obx(() => Align(
-                      // otherwise it will take up the entire width
-                      alignment: Alignment.centerLeft,
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 72, right: 16),
-                        child: StatusButton(
-                          text: controller.status.value == 1
-                              ? tr('archived')
-                              : tr('open'),
-                          onPressed: () async =>
-                              controller.tryChangingStatus(context),
-                        ),
-                      ),
-                    )),
+                _DiscussionStatus(controller: controller),
                 const SizedBox(height: 16),
                 InfoTile(
                   caption: '${tr('description')}:',
@@ -69,11 +57,12 @@ class DiscussionOverview extends StatelessWidget {
                       icon: SvgIcons.description,
                       color: const Color(0xff707070)),
                   subtitleWidget: ReadMoreText(
-                    discussion.text,
+                    parseHtml(discussion.text),
                     trimLines: 3,
                     colorClickableText: Colors.pink,
                     style: TextStyleHelper.body1,
                     trimMode: TrimMode.Line,
+                    delimiter: ' ',
                     trimCollapsedText: tr('showMore'),
                     trimExpandedText: tr('showLess'),
                     moreStyle:
@@ -84,12 +73,15 @@ class DiscussionOverview extends StatelessWidget {
                 ),
                 const SizedBox(height: 21),
                 InfoTile(
-                    icon: AppIcon(
-                        icon: SvgIcons.project, color: const Color(0xff707070)),
-                    caption: '${tr('project')}:',
-                    subtitle: discussion.project.title,
-                    subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Get.theme.colors().links)),
+                  icon: AppIcon(
+                      icon: SvgIcons.project, color: const Color(0xff707070)),
+                  caption: '${tr('project')}:',
+                  subtitle: discussion.project.title,
+                  subtitleStyle: TextStyleHelper.subtitle1(
+                    color: Get.theme.colors().links,
+                  ),
+                  onTap: controller.toProjectOverview,
+                ),
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)
                   InfoTile(
@@ -108,6 +100,33 @@ class DiscussionOverview extends StatelessWidget {
           );
         }
       },
+    );
+  }
+}
+
+class _DiscussionStatus extends StatelessWidget {
+  const _DiscussionStatus({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final DiscussionItemController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Align(
+        // otherwise it will take up the entire width
+        alignment: Alignment.centerLeft,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 72, right: 16),
+          child: StatusButton(
+            canEdit: controller.discussion.value.canEdit,
+            text: controller.status.value == 1 ? tr('archived') : tr('open'),
+            onPressed: () async => controller.tryChangingStatus(context),
+          ),
+        ),
+      ),
     );
   }
 }

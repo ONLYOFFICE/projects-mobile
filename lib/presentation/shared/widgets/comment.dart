@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
@@ -9,8 +10,8 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
+import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
-import 'package:simple_html_css/simple_html_css.dart';
 
 class Comment extends StatelessWidget {
   final int taskId;
@@ -32,7 +33,7 @@ class Comment extends StatelessWidget {
       if (taskId != null) {
         controller = Get.put(
           TaskCommentItemController(taskId: taskId, comment: comment.obs),
-          tag: '${comment.commentId} ${comment.commentBody}',
+          tag: comment.hashCode.toString(),
           permanent: false,
         );
       } else {
@@ -41,62 +42,56 @@ class Comment extends StatelessWidget {
             discussionId: discussionId,
             comment: comment.obs,
           ),
-          tag: '${comment.commentId} ${comment.commentBody}',
+          tag: comment.hashCode.toString(),
           permanent: false,
         );
       }
 
-      return Container(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 4),
-              child: _CommentAuthor(comment: comment, controller: controller),
-            ),
-            const SizedBox(height: 28),
-            Obx(
-              () {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: HTML.toRichText(
-                        context,
-                        controller.comment.value.commentBody,
-                        defaultTextStyle: TextStyleHelper.body2(
-                          color: Get.theme.colors().onSurface,
-                        ),
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: _CommentAuthor(comment: comment, controller: controller),
+          ),
+          const SizedBox(height: 28),
+          Obx(
+            () {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: HtmlWidget(
+                      controller.comment.value.commentBody,
+                    ),
+                  ),
+                  if (comment.isResponsePermissions) const SizedBox(height: 5),
+                  if (comment.isResponsePermissions)
+                    GestureDetector(
+                      onTap: () {
+                        return Get.find<NavigationController>()
+                            .toScreen(const ReplyCommentView(), arguments: {
+                          'comment': controller.comment.value,
+                          'discussionId': discussionId,
+                          'taskId': taskId,
+                        });
+                      },
+                      child: Text(
+                        tr('reply'),
+                        style: TextStyleHelper.caption(
+                            color: Get.theme.colors().primary),
                       ),
                     ),
-                    if (comment.isResponsePermissions)
-                      const SizedBox(height: 5),
-                    if (comment.isResponsePermissions)
-                      GestureDetector(
-                        onTap: () {
-                          return Get.find<NavigationController>()
-                              .to(const ReplyCommentView(), arguments: {
-                            'comment': controller.comment.value,
-                            'discussionId': discussionId,
-                            'taskId': taskId,
-                          });
-                        },
-                        child: Text(
-                          'Ответить',
-                          style: TextStyleHelper.caption(
-                              color: Get.theme.colors().primary),
-                        ),
-                      ),
-                  ],
-                );
-              },
-            ),
-          ],
-        ),
+                ],
+              );
+            },
+          ),
+        ],
       );
     }
-    return const _DeletedComment();
+    if (comment.show) return const _DeletedComment();
+    return const SizedBox();
   }
 }
 
@@ -111,73 +106,70 @@ class _CommentAuthor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          SizedBox(
-            width: 40,
-            height: 40,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: CustomNetworkImage(
-                image: comment.userAvatarPath,
-                fit: BoxFit.cover,
-              ),
+    return Row(
+      children: [
+        SizedBox(
+          width: 40,
+          height: 40,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: CustomNetworkImage(
+              image: comment.userAvatarPath,
+              defaultImage: const DefaultAvatar(),
+              fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(comment.userFullName, style: TextStyleHelper.projectTitle),
-                Text(comment.timeStampStr,
-                    style: TextStyleHelper.caption(
-                        color:
-                            Get.theme.colors().onBackground.withOpacity(0.6))),
-              ],
-            ),
+        ),
+        const SizedBox(width: 16),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(comment.userFullName, style: TextStyleHelper.projectTitle),
+              Text(comment.timeStampStr,
+                  style: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.6))),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 7),
-            child: SizedBox(
-              width: 60,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 35),
-                child: PopupMenuButton(
-                  onSelected: (value) =>
-                      _onSelected(value, context, controller),
-                  icon: Icon(Icons.more_vert_rounded,
-                      size: 25,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                  itemBuilder: (context) {
-                    return [
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 7),
+          child: SizedBox(
+            width: 60,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 35),
+              child: PopupMenuButton(
+                onSelected: (value) => _onSelected(value, context, controller),
+                icon: Icon(Icons.more_vert_rounded,
+                    size: 25,
+                    color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                itemBuilder: (context) {
+                  return [
+                    PopupMenuItem(
+                      value: 'Copy link',
+                      child: Text(tr('copyLink')),
+                    ),
+                    if (comment.isEditPermissions)
                       PopupMenuItem(
-                        value: 'Copy link',
-                        child: Text(tr('copyLink')),
+                        value: 'Edit',
+                        child: Text(tr('edit')),
                       ),
-                      if (comment.isEditPermissions)
-                        PopupMenuItem(
-                          value: 'Edit',
-                          child: Text(tr('edit')),
+                    if (comment.isEditPermissions)
+                      PopupMenuItem(
+                        value: 'Delete',
+                        child: Text(
+                          tr('delete'),
+                          style: TextStyleHelper.subtitle1(
+                              color: Get.theme.colors().colorError),
                         ),
-                      if (comment.isEditPermissions)
-                        PopupMenuItem(
-                          value: 'Delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError),
-                          ),
-                        ),
-                    ];
-                  },
-                ),
+                      ),
+                  ];
+                },
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

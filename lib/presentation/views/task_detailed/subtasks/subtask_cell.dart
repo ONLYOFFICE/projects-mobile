@@ -6,6 +6,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
 class SubtaskCell extends StatelessWidget {
@@ -20,8 +21,9 @@ class SubtaskCell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var subtaskController = Get.put(
-        SubtaskController(subtask: subtask, parentTask: parentTask),
-        tag: subtask.id.toString());
+      SubtaskController(subtask: subtask, parentTask: parentTask),
+      tag: subtask.hashCode.toString(),
+    );
 
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
@@ -36,20 +38,7 @@ class SubtaskCell extends StatelessWidget {
             Obx(
               () => Row(
                 children: [
-                  SizedBox(
-                    width: 52,
-                    child: Checkbox(
-                      value: subtaskController.subtask.value.status == 2,
-                      activeColor: const Color(0xFF666666),
-                      onChanged: (value) {
-                        subtaskController.updateSubtaskStatus(
-                          context: context,
-                          taskId: subtaskController.subtask.value.taskId,
-                          subtaskId: subtaskController.subtask.value.id,
-                        );
-                      },
-                    ),
-                  ),
+                  SubtaskCheckBox(subtaskController: subtaskController),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,37 +67,42 @@ class SubtaskCell extends StatelessWidget {
                       ],
                     ),
                   ),
-                  SizedBox(
-                    width: 52,
-                    child: PopupMenuButton(
-                      onSelected: (value) =>
-                          _onSelected(context, value, subtaskController),
-                      itemBuilder: (context) {
-                        return [
-                          if (subtask.canEdit && subtask.responsible == null)
-                            PopupMenuItem(
-                                value: 'acceptSubtask',
-                                child: Text(tr('acceptSubtask'),
-                                    style: TextStyleHelper.subtitle1())),
-                          PopupMenuItem(
-                              value: 'copySubtask',
-                              child: Text(tr('copySubtask'),
-                                  style: TextStyleHelper.subtitle1())),
-                          if (subtask.canEdit)
-                            PopupMenuItem(
-                                value: 'delete',
-                                child: Text(tr('delete'),
-                                    style: TextStyleHelper.subtitle1(
-                                        color: Get.theme.colors().colorError))),
-                        ];
-                      },
+                  if (subtaskController.subtask.value.canEdit ||
+                      subtaskController.canCreateSubtask)
+                    SizedBox(
+                      width: 52,
+                      child: PopupMenuButton(
+                        onSelected: (value) =>
+                            _onSelected(context, value, subtaskController),
+                        itemBuilder: (context) {
+                          return [
+                            if (subtaskController.canEdit &&
+                                subtask.responsible == null)
+                              PopupMenuItem(
+                                  value: 'acceptSubtask',
+                                  child: Text(tr('acceptSubtask'),
+                                      style: TextStyleHelper.subtitle1())),
+                            if (subtaskController.canCreateSubtask)
+                              PopupMenuItem(
+                                  value: 'copySubtask',
+                                  child: Text(tr('copySubtask'),
+                                      style: TextStyleHelper.subtitle1())),
+                            if (subtask.canEdit)
+                              PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(tr('delete'),
+                                      style: TextStyleHelper.subtitle1(
+                                          color:
+                                              Get.theme.colors().colorError))),
+                          ];
+                        },
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
             const SizedBox(height: 6),
-            const Divider(indent: 56, thickness: 1, height: 1)
+            const Divider(indent: 72, thickness: 1, height: 1)
           ],
         ),
       ),
@@ -131,8 +125,10 @@ void _onSelected(context, value, SubtaskController controller) async {
       break;
     case 'delete':
       controller.deleteSubtask(
-          taskId: controller.subtask.value.taskId,
-          subtaskId: controller.subtask.value.id);
+        context: context,
+        taskId: controller.subtask.value.taskId,
+        subtaskId: controller.subtask.value.id,
+      );
       break;
     default:
   }

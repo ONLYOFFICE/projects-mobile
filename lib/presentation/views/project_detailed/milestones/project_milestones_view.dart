@@ -12,8 +12,12 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
+
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 
 class ProjectMilestonesScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -25,8 +29,45 @@ class ProjectMilestonesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<MilestonesDataSource>();
-    controller.setup(projectDetailed.id);
+    controller.setup(projectDetailed: projectDetailed);
+    return Stack(
+      children: [
+        _Content(controller: controller),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 16, bottom: 24),
+            child: Obx(
+              () => Visibility(
+                visible: controller.fabIsVisible.value,
+                child: StyledFloatingActionButton(
+                  onPressed: () => Get.find<NavigationController>().to(
+                      const NewMilestoneView(),
+                      arguments: {'projectDetailed': projectDetailed}),
+                  child: AppIcon(
+                    icon: SvgIcons.fab_milestone,
+                    color: Get.theme.colors().onPrimarySurface,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
 
+class _Content extends StatelessWidget {
+  const _Content({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final MilestonesDataSource controller;
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,7 +80,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.milestone_not_created),
+                    icon: SvgIcons.milestone_not_created,
                     text: tr('noMilestonesCreated',
                         args: [tr('milestones').toLowerCase()])),
               ),
@@ -50,7 +91,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: AppIcon(icon: SvgIcons.not_found),
+                    icon: SvgIcons.not_found,
                     text: tr('noMilestonesMatching',
                         args: [tr('milestones').toLowerCase()])),
               ),
@@ -110,7 +151,8 @@ class Header extends StatelessWidget {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting,
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),

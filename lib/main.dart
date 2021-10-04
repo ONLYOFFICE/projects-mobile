@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -5,7 +7,7 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
-import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/internal/dev_http_overrides.dart';
 
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -13,7 +15,9 @@ import 'package:projects/presentation/shared/theme/theme_service.dart';
 import 'package:projects/internal/locator.dart';
 
 void main() async {
+  HttpOverrides.global = DevHttpOverrides();
   setupLocator();
+  setupGetX();
   await GetStorage.init();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
@@ -37,8 +41,14 @@ void main() async {
 }
 
 List<Locale> supportedLocales() => [
+      const Locale('de'),
       const Locale('en'),
+      const Locale('es'),
+      const Locale('fr'),
+      const Locale('it'),
+      const Locale('pt'),
       const Locale('ru'),
+      const Locale('zh'),
     ];
 
 Future<String> _getInitPage() async {
@@ -48,14 +58,33 @@ Future<String> _getInitPage() async {
   var storage = locator<SecureStorage>();
   var passcode = await storage.getString('passcode');
 
-  var loginController = Get.put(LoginController());
+  var _isLoggedIn = await isAuthorized();
 
-  if (passcode != null) return 'PasscodeScreen';
-  if (await loginController.isLoggedIn) return 'NavigationView';
-  return 'PortalView';
+  if (passcode != null && _isLoggedIn) return '/PasscodeScreen';
+
+  return '/MainView';
 }
 
-class App extends StatelessWidget {
+Future<bool> isAuthorized() async {
+  var _secureStorage = locator<SecureStorage>();
+  var expirationDate = await _secureStorage.getString('expires');
+  var token = await _secureStorage.getString('token');
+  var portalName = await _secureStorage.getString('portalName');
+
+  if (expirationDate == null ||
+      expirationDate.isEmpty ||
+      token == null ||
+      token.isEmpty ||
+      portalName == null ||
+      portalName.isEmpty) return false;
+
+  var expiration = DateTime.parse(expirationDate);
+  if (expiration.isBefore(DateTime.now())) return false;
+
+  return true;
+}
+
+class App extends GetMaterialApp {
   final String initialPage;
 
   App({Key key, this.initialPage}) : super(key: key);

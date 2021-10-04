@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/status.dart';
@@ -7,9 +9,15 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_status_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
+import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/name_formatter.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/task_status_bottom_sheet.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
@@ -22,10 +30,30 @@ class TaskItemController extends GetxController {
   var task = PortalTask().obs;
   var status = Status().obs;
 
-  var loaded = true.obs;
+  var loaded = false.obs;
+  var isStatusLoaded = false.obs;
   var refreshController = RefreshController();
 
-  RxString statusImageString = ''.obs;
+  set setLoaded(bool value) => loaded.value = value;
+
+  final TaskStatusHandler _statusHandler = TaskStatusHandler();
+
+  bool get canEdit => task.value.canEdit && task.value.status != 2;
+
+  Color get getStatusBGColor =>
+      _statusHandler.getBackgroundColor(status.value, task.value.canEdit);
+
+  Color get getStatusTextColor =>
+      _statusHandler.getTextColor(status.value, task.value.canEdit);
+
+  String get displayName {
+    if (task.value.responsibles.isEmpty) return tr('noResponsible');
+    if (task.value.responsibles.length > 1)
+      return plural('responsibles', task.value.responsibles.length);
+    return NameFormatter.formateDisplayName(
+        task.value.responsibles[0].displayName);
+  }
+
   // to show overview screen without loading
   RxBool firstReload = true.obs;
 
@@ -40,22 +68,29 @@ class TaskItemController extends GetxController {
   get getActualCommentCount {
     if (task?.value?.comments == null) return null;
     var count = 0;
-    for (var item in task?.value?.comments) {
-      if (!item.inactive) count++;
-    }
+    for (var item in task?.value?.comments) if (!item.inactive) count++;
     return count;
   }
 
-  TaskItemController(PortalTask task) {
-    this.task.value = task;
-    initTaskStatus(task);
+  TaskItemController(PortalTask portalTask) {
+    task.value = portalTask;
   }
 
   void copyLink({@required taskId, @required projectId}) async {
     // ignore: omit_local_variable_types
     String link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
-    print(link);
     await Clipboard.setData(ClipboardData(text: link));
+  }
+
+  Future accept(context) async {
+    var controller = Get.put(TaskEditingController(task: task.value));
+    controller.addResponsible(
+      PortalUserItemController(
+        isSelected: true.obs,
+        portalUser: Get.find<UserController>().user,
+      ),
+    );
+    await controller.acceptTask(context);
   }
 
   Future copyTask({PortalTask taskk}) async {
@@ -97,34 +132,66 @@ class TaskItemController extends GetxController {
     // return copiedTask;
   }
 
-  void initTaskStatus(PortalTask task) {
+  Future<void> initTaskStatus(PortalTask portalTask) async {
+    isStatusLoaded.value = false;
     var statusesController = Get.find<TaskStatusesController>();
-    status.value = statusesController.getTaskStatus(task);
-    statusImageString.value =
-        statusesController.decodeImageString(status.value.image);
+    Status receivedStatus = await statusesController.getTaskStatus(portalTask);
+    if (receivedStatus != null && !receivedStatus.isNull) {
+      status.value = receivedStatus;
+      isStatusLoaded.value = true;
+    }
   }
 
   Future reloadTask({bool showLoading = false}) async {
     if (showLoading) loaded.value = false;
     var t = await _api.getTaskByID(id: task.value.id);
-    if (t != null) task.value = t;
+    if (t != null) {
+      task.value = t;
+      await initTaskStatus(task.value);
+    }
     if (showLoading) loaded.value = true;
   }
 
-  void tryChangingStatus(context) {
-    if (task.value.canEdit) {
+  void openStatuses(context) {
+    if (task.value.canEdit && isStatusLoaded.isTrue)
       showsStatusesBS(context: context, taskItemController: this);
+  }
+
+  Future<void> tryChangingStatus({
+    int id,
+    int newStatusId,
+    int newStatusType,
+  }) async {
+    if (newStatusId == status?.value?.id) return;
+
+    if (newStatusType == 2 &&
+        task.value.status != newStatusType &&
+        task.value.hasOpenSubtasks) {
+      await Get.dialog(StyledAlertDialog(
+        titleText: tr('closingTask'),
+        contentText: tr('closingTaskWithActiveSubtasks'),
+        acceptText: tr('closeTask').toUpperCase(),
+        onAcceptTap: () async {
+          await _changeTaskStatus(
+              id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+          Get.back();
+        },
+      ));
+    } else {
+      await _changeTaskStatus(
+          id: id, newStatusId: newStatusId, newStatusType: newStatusType);
     }
   }
 
-  Future updateTaskStatus({int id, int newStatusId, int newStatusType}) async {
+  Future _changeTaskStatus({int id, int newStatusId, int newStatusType}) async {
     loaded.value = false;
     var t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
+
     if (t != null) {
       var newTask = PortalTask.fromJson(t);
       task.value = newTask;
-      initTaskStatus(newTask);
+      await initTaskStatus(newTask);
     }
     loaded.value = true;
   }

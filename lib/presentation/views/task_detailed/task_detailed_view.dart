@@ -1,11 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
@@ -39,7 +41,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
     super.initState();
     controller = Get.arguments['controller'];
     controller.firstReload.value = true;
-    controller.reloadTask();
+    // to get full info about task
+    controller.reloadTask().then((value) => controller.setLoaded = true);
     _tabController = TabController(vsync: this, length: 4);
 
     documentsController.entityType = 'task';
@@ -65,11 +68,12 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            IconButton(
+            if (controller.canEdit)
+              IconButton(
                 icon: const Icon(Icons.edit_outlined),
-                onPressed: () => Get.find<NavigationController>().to(
-                    const TaskEditingView(),
-                    arguments: {'task': controller.task.value})),
+                onPressed: () => Get.find<NavigationController>()
+                    .to(TaskEditingView(task: controller.task.value)),
+              ),
             _AppBarMenu(controller: controller)
           ],
           bottom: SizedBox(
@@ -100,7 +104,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          TasksOverviewScreen(taskController: controller),
+          TaskOverviewScreen(taskController: controller),
           SubtasksView(controller: controller),
           EntityDocumentsView(
             folderId: controller.task.value.id,

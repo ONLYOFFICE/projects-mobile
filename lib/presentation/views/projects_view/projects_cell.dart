@@ -1,14 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -102,7 +102,7 @@ class ProjectIcon extends StatelessWidget {
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.05),
+                    color: color.withOpacity(0.1),
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -183,8 +183,6 @@ class _SecondColumn extends StatelessWidget {
             },
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
             children: [
               Obx(() {
                 var color = itemController.canEdit.value == true
@@ -200,7 +198,9 @@ class _SecondColumn extends StatelessWidget {
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
-                    item.responsible.displayName.replaceAll(' ', '\u00A0'),
+                    NameFormatter.formateDisplayName(
+                      item.responsible.displayName,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
@@ -236,13 +236,14 @@ class _ThirdColumn extends StatelessWidget {
             AppIcon(
                 icon: SvgIcons.check_square,
                 color: Get.theme.colors().onSurface),
+            const SizedBox(width: 3),
             Text(
               item.taskCount.toString(),
-              style: TextStyleHelper.projectCompleatedTasks,
+              style: TextStyleHelper.projectCompleatedTasks.copyWith(
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
+              ),
             ),
-            const SizedBox(
-              width: 16,
-            )
+            const SizedBox(width: 16)
           ],
         ),
       ],
@@ -293,15 +294,13 @@ void showsStatusesBS({context, itemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await itemController.updateStatus(
+                        var success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
                         );
+                        if (success) {
+                          locator<EventHub>().fire('needToRefreshProjects');
+                        }
                         Get.back();
-                        await Get.find<ProjectsController>(tag: 'ProjectsView')
-                            .loadProjects();
-                        await Get.find<ProjectDetailsController>()
-                            .refreshData();
-                        await Get.find<DashboardController>().refreshData();
                       },
                       child: StatusTile(
                           title: _statusesController.getStatusName(i),

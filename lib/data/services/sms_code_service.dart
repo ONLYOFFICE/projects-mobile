@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
@@ -23,7 +24,7 @@ class SmsCodeService {
     if (success) {
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }
@@ -41,7 +42,7 @@ class SmsCodeService {
     if (success) {
       return result.response;
     } else {
-      await ErrorDialog.show(result.error);
+      await Get.find<ErrorDialog>().show(result.error.message);
       return null;
     }
   }

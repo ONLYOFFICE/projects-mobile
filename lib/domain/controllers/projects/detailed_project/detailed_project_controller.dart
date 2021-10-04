@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -14,10 +16,9 @@ import 'package:projects/domain/controllers/projects/base_project_editor_control
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/presentation/views/new_task/new_task_view.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -45,41 +46,57 @@ class ProjectDetailsController extends BaseProjectEditorController {
   var milestoneCount = (-1).obs;
   var currentTab = -1.obs;
 
-  ProjectDetailsController(this.projectDetailed);
+  bool markedToDelete = false;
 
-  ProjectDetailed projectDetailed;
-  ProjectDetailed get projectData => projectDetailed;
+  ProjectDetailed _projectDetailed;
 
-  // PortalUserItemController selfUserItem;
+  StreamSubscription _subscription;
+  ProjectDetailed get projectData => _projectDetailed;
+
   final _userController = Get.find<UserController>();
 
-  @override
-  void onInit() {
+  ProjectDetailsController() {
     _userController.getUserInfo().whenComplete(() => {
           selfUserItem =
               PortalUserItemController(portalUser: _userController.user),
         });
 
-    super.onInit();
+    _subscription =
+        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (markedToDelete) {
+        _subscription.cancel();
+        return;
+      }
+
+      refreshData();
+    });
+  }
+
+  @override
+  void onClose() {
+    _subscription.cancel();
+    super.onClose();
   }
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<void> setup() async {
-    await setupDetailedParams();
+  Future<void> setup(projectDetailed) async {
+    _projectDetailed = projectDetailed;
+
+    await fillProjectInfo();
 
     final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
 
     creationDateText.value =
-        formatter.format(DateTime.parse(projectDetailed.created));
+        formatter.format(DateTime.parse(_projectDetailed.created));
 
     await _projectService
-        .getProjectById(projectId: projectDetailed.id)
+        .getProjectById(projectId: _projectDetailed.id)
         .then((value) => {
-              projectDetailed = value,
-              setupDetailedParams(),
+              _projectDetailed = value,
+              fillProjectInfo(),
               if (value?.tags != null)
                 {
                   tags.addAll(value.tags),
@@ -87,64 +104,53 @@ class ProjectDetailsController extends BaseProjectEditorController {
                 }
             });
 
-    tasksCount.value = projectDetailed.taskCountTotal;
+    tasksCount.value = _projectDetailed.taskCountTotal;
 
     await _docApi
-        .getFilesByParams(folderId: projectDetailed.projectFolder)
+        .getFilesByParams(folderId: _projectDetailed.projectFolder)
         .then((value) => docsCount.value = value.files.length);
 
     await locator<MilestoneService>()
         .milestonesByFilter(
-          projectId: projectDetailed.id.toString(),
+          projectId: _projectDetailed.id.toString(),
         )
         .then((value) => {
               if (value != null) {milestoneCount.value = value.length}
             });
   }
 
-  Future<void> setupDetailedParams() async {
-    teamMembersCount.value = projectDetailed.participantCount;
+  Future<void> fillProjectInfo() async {
+    teamMembersCount.value = _projectDetailed.participantCount;
 
-    var tream = Get.find<ProjectTeamController>();
-
-    tream.projectId = projectDetailed.id;
+    var tream = Get.find<ProjectTeamController>()
+      ..setup(projectDetailed: _projectDetailed);
     var usersList = await tream.getTeam().then((value) => tream.usersList);
 
     teamMembers.clear();
     teamMembers.addAll(usersList);
     teamMembers.removeWhere(
-        (element) => element.portalUser.id == projectDetailed.responsible.id);
+        (element) => element.portalUser.id == _projectDetailed.responsible.id);
 
     statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(projectDetailed.status)]);
+        args: [ProjectStatus.toName(_projectDetailed.status)]);
 
-    projectTitleText.value = projectDetailed.title;
-    descriptionText.value = projectDetailed.description;
-    managerText.value = projectDetailed.responsible.displayName;
+    projectTitleText.value = _projectDetailed.title;
+    descriptionText.value = _projectDetailed.description;
+    managerText.value = _projectDetailed.responsible.displayName;
 
-    milestoneCount.value = projectDetailed.milestoneCount;
+    milestoneCount.value = _projectDetailed.milestoneCount;
   }
 
   Future<void> refreshData() async {
     loaded.value = false;
-    projectDetailed =
-        await _projectService.getProjectById(projectId: projectDetailed.id);
+    _projectDetailed =
+        await _projectService.getProjectById(projectId: _projectDetailed.id);
     loaded.value = true;
 
-    await setup();
+    await setup(_projectDetailed);
   }
 
-  void createNewMilestone() {
-    Get.find<NavigationController>().to(const NewMilestoneView(),
-        arguments: {'projectDetailed': projectDetailed});
-  }
-
-  void createTask() {
-    Get.find<NavigationController>().to(const NewTaskView(),
-        arguments: {'projectDetailed': projectDetailed});
-  }
-
-  Future<void> manageTeamMembers() async {
+  Future manageTeamMembers() async {
     selectedProjectManager.value = projectData.responsible;
 
     selectedTeamMembers.clear();
@@ -159,21 +165,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> copyLink() async {}
 
   Future deleteProject() async {
-    return await _projectService.deleteProject(projectId: projectDetailed.id);
+    markedToDelete = true;
+    return await _projectService.deleteProject(projectId: _projectDetailed.id);
   }
 
-  Future updateStatus({int newStatusId}) async {
-    var t = await _projectService.updateProjectStatus(
-        projectId: projectDetailed.id,
-        newStatus: ProjectStatus.toLiteral(newStatusId));
-
-    if (t != null) {
-      projectDetailed.status = t.status;
-    }
-  }
+  Future<bool> updateStatus({int newStatusId}) async =>
+      Get.find<ProjectStatusesController>().updateStatus(
+          newStatusId: newStatusId, projectData: _projectDetailed);
 
   Future followProject() async {
-    await _projectService.followProject(projectId: projectDetailed.id);
+    await _projectService.followProject(projectId: _projectDetailed.id);
     await refreshData();
   }
 

@@ -41,11 +41,14 @@ class _CodeViewState extends State<CodeView> {
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Column(
                   children: [
+                    //TODO fix dark theme icon
                     AppIcon(
+                      hasDarkVersion: true,
                       icon: PngIcons.code_light,
+                      darkThemeIcon: PngIcons.code_dark,
                       isPng: true,
                       height: 200,
-                      width: 200,
+                      // width: 200,
                     ),
                     SizedBox(height: Get.height * 0.0347),
                     Text(tr('tfaTitle'),

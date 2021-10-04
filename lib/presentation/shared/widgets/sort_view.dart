@@ -14,7 +14,7 @@ class SortView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Get.theme.colors().onPrimarySurface,
+        color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(12), topRight: Radius.circular(12)),
       ),
@@ -91,9 +91,11 @@ class SortTile extends StatelessWidget {
             ),
             if (_selected)
               AppIcon(
-                  icon: sortController.isSortAscending.value == true
-                      ? SvgIcons.up_arrow
-                      : SvgIcons.down_arrow)
+                icon: sortController.isSortAscending.value == true
+                    ? SvgIcons.up_arrow
+                    : SvgIcons.down_arrow,
+                color: Get.theme.colors().primary,
+              )
           ],
         ),
       ),

@@ -9,18 +9,18 @@ class ProjectsWithPresets {
   static var _activeProjectsController;
 
   static ProjectsController get myProjectsController {
-    _setupMyProjects();
+    _myProjectsController ?? _setupMyProjects();
     return _myProjectsController;
   }
 
   static ProjectsController get folowedProjectsController {
-    _setupMyFolowedProjects();
-    return _myProjectsController;
+    _folowedProjectsController ?? _setupMyFolowedProjects();
+    return _folowedProjectsController;
   }
 
   static ProjectsController get activeProjectsController {
-    _setupActiveProjects();
-    return _myProjectsController;
+    _activeProjectsController ?? _setupActiveProjects();
+    return _activeProjectsController;
   }
 
   static void _setupMyProjects() async {

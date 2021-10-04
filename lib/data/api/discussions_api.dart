@@ -51,9 +51,9 @@ class DiscussionsApi {
     var result = PageDTO<List<Discussion>>();
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.total = responseJson['total'];
         {
           result.response = (responseJson['response'] as List)
@@ -61,7 +61,9 @@ class DiscussionsApi {
               .toList();
         }
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -76,12 +78,14 @@ class DiscussionsApi {
 
     try {
       var response = await coreApi.postRequest(url, newDiss.toJson());
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -96,12 +100,14 @@ class DiscussionsApi {
 
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -118,12 +124,14 @@ class DiscussionsApi {
       var body = discussion.toJson();
 
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -140,12 +148,14 @@ class DiscussionsApi {
       var body = {'status': newStatus};
 
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -162,12 +172,14 @@ class DiscussionsApi {
       var body = {};
 
       var response = await coreApi.putRequest(url, body: body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -182,12 +194,14 @@ class DiscussionsApi {
 
     try {
       var response = await coreApi.deleteRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -13,12 +14,24 @@ class AuthService {
   Future<ApiDTO<PortalUser>> getSelfInfo() async {
     var authResponse = await _api.getUserInfo();
 
-    var tokenReceived = authResponse.response != null;
+    var result = authResponse.response != null;
 
-    if (!tokenReceived) {
-      await ErrorDialog.show(authResponse.error);
+    if (!result) {
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
     return authResponse;
+  }
+
+  Future<bool> checkAuthorization() async {
+    var authResponse = await _api.getUserInfo();
+
+    if (authResponse.response == null) {
+      if (authResponse.error.message.toLowerCase().contains('unauthorized'))
+        return false;
+      else
+        await Get.find<ErrorDialog>().show(authResponse.error.message);
+    }
+    return true;
   }
 
   Future<ApiDTO<AuthToken>> login(String email, String pass) async {
@@ -27,7 +40,7 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await ErrorDialog.show(authResponse.error);
+      await Get.find<ErrorDialog>().show(authResponse.error.message);
     }
     return authResponse;
   }
@@ -39,7 +52,10 @@ class AuthService {
     var tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await ErrorDialog.show(authResponse.error);
+      var errorText;
+      if (authResponse?.error?.message != 'Server error')
+        errorText = authResponse?.error?.message;
+      await Get.find<ErrorDialog>().show(errorText ?? '');
     }
     return authResponse;
   }
@@ -50,7 +66,7 @@ class AuthService {
     var success = response.response != null;
 
     if (!success) {
-      await ErrorDialog.show(response.error);
+      await Get.find<ErrorDialog>().show(response.error.message);
       return null;
     } else {
       return response;
@@ -63,7 +79,7 @@ class AuthService {
     var success = response.response != null;
 
     if (!success) {
-      await ErrorDialog.show(response.error);
+      await Get.find<ErrorDialog>().show(response.error.message);
       return null;
     } else {
       return response;

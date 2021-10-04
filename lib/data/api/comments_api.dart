@@ -16,14 +16,16 @@ class CommentsApi {
 
     try {
       var response = await coreApi.getRequest(url);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalComment.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -43,12 +45,14 @@ class CommentsApi {
     try {
       var body = {'content': content};
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = PortalComment.fromJson(responseJson);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -68,12 +72,14 @@ class CommentsApi {
     try {
       var body = {'content': content};
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = PortalComment.fromJson(responseJson);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -94,12 +100,14 @@ class CommentsApi {
     try {
       var body = {'content': content, 'parentId': parentId};
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = PortalComment.fromJson(responseJson);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -120,12 +128,14 @@ class CommentsApi {
     try {
       var body = {'content': content, 'parentId': parentId};
       var response = await coreApi.postRequest(url, body);
-      final Map responseJson = json.decode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = PortalComment.fromJson(responseJson);
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -139,15 +149,15 @@ class CommentsApi {
 
     var result = ApiDTO();
 
-    Map responseJson;
-
     try {
       var response = await coreApi.deleteRequest(url);
-      responseJson = json.decode(response.body);
       if (response.statusCode == 200) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -187,12 +197,13 @@ class CommentsApi {
       var body = {'content': content, 'commentid': commentId};
       var response = await coreApi.putRequest(url, body: body);
 
-      final Map responseJson = json.decode(response.body);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
+        var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError.fromJson(responseJson['error']);
+        result.error = CustomError(
+            message: json.decode(response.body)['error']['message'] ??
+                response.reasonPhrase);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

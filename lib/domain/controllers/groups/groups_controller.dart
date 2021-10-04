@@ -12,13 +12,11 @@ class GroupsController extends BaseController {
   @override
   RxList itemList = [].obs;
 
-  @override
-  String get screenName => tr('groups');
-
   PaginationController paginationController;
 
   @override
   void onInit() {
+    screenName = tr('groups');
     paginationController =
         Get.put(PaginationController(), tag: 'GroupsController');
 
