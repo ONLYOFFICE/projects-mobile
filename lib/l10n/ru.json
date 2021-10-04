@@ -441,5 +441,15 @@
 	"taskUpdated": "Задача обновлена",
 	"projectUpdated": "Проект обновлен",
 	"discussionUpdated": "Обсуждение обновлено",
-	"commentEditing": "Редактирование комментария"
+	"commentEditing": "Редактирование комментария",
+	"acceptTask": "Принять задачу",
+	"noAdress": "Отсутствует адрес, связанный с именем хоста",
+	"authenticationFailed": "Не удалось выполнить проверку подлинности пользователя",
+	"reply": "Ответить",
+	"addComment": "Добавить комментарий...",
+	"statusOpen": "Открыт",
+	"statusClosed": "Закрыт",
+	"statusPaused": "Приостановлен",
+	"taskStatusOpen": "Открыта",
+	"taskStatusClosed": "Закрыта"
 }

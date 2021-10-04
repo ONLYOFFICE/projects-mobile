@@ -441,5 +441,15 @@
 	"taskUpdated": "La tâche a été mise à jour",
 	"projectUpdated": "Le projet a été mis à jour",
 	"discussionUpdated": "La discussion a été mise à jour",
-	"commentEditing": "Modifier le commentaire"
+	"commentEditing": "Modifier le commentaire",
+	"acceptTask": "Accepter la tâche",
+	"noAdress": "Aucune adresse associée au nom de l'hôte",
+	"authenticationFailed": "L'authentification de l'utilisateur a échoué",
+	"reply": "Répondre",
+	"addComment": "Ajouter un commentaire...",
+	"statusOpen": "Ouvert",
+	"statusClosed": "Fermé",
+	"statusPaused": "En pause",
+	"taskStatusOpen": "Ouverte",
+	"taskStatusClosed": "Fermée"
 }

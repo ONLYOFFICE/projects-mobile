@@ -39,13 +39,13 @@ class ProjectStatus {
   static String toName(int status) {
     switch (status) {
       case 0:
-        return tr('open');
+        return tr('statusOpen');
         break;
       case 1:
-        return tr('closed');
+        return tr('statusClosed');
         break;
       case 2:
-        return tr('paused');
+        return tr('statusPaused');
         break;
       default:
         return 'n/a';

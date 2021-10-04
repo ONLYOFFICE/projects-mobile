@@ -441,5 +441,15 @@
 	"taskUpdated": "Tarea se ha actualizado",
 	"projectUpdated": "Proyecto se ha actualizado",
 	"discussionUpdated": "Discusión se ha actualizado",
-	"commentEditing": "Edición de comentarios"
+	"commentEditing": "Edición de comentarios",
+	"acceptTask": "Aceptar tarea",
+	"noAdress": "No hay dirección asociada al nombre de host",
+	"authenticationFailed": "Error de autenticación de usuario",
+	"reply": "Responder",
+	"addComment": "Añadir comentario...",
+	"statusOpen": "Abierto",
+	"statusClosed": "Cerrado",
+	"statusPaused": "En pausa",
+	"taskStatusOpen": "Abierta",
+	"taskStatusClosed": "Cerrada"
 }

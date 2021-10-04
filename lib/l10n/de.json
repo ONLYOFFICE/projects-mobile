@@ -441,5 +441,15 @@
 	"taskUpdated": "Die Aufgabe wurde aktualisiert",
 	"projectUpdated": "Das Projekt wurde aktualisiert",
 	"discussionUpdated": "Die Diskussion wurde aktualisiert",
-	"commentEditing": "Bearbeitung eines Kommentars"
+	"commentEditing": "Bearbeitung eines Kommentars",
+	"acceptTask": "Aufgabe annehmen",
+	"noAdress": "Keine Adresse mit dem Hostname",
+	"authenticationFailed": "Authentifizierung fehlgeschlagen",
+	"reply": "Antworten",
+	"addComment": "Kommentar hinzufügen...",
+	"statusOpen": "Offen",
+	"statusClosed": "Abgeschlossen",
+	"statusPaused": "Pausiert",
+	"taskStatusOpen": "Offen",
+	"taskStatusClosed": "Abgeschlossen"
 }
