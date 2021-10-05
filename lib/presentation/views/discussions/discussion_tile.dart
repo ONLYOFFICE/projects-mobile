@@ -102,9 +102,7 @@ class _DiscussionInfo extends StatelessWidget {
                 TextSpan(text: formatedDate(discussion.created)),
                 const TextSpan(text: ' • '),
                 TextSpan(
-                  text: NameFormatter.formateDisplayName(
-                    discussion.createdBy.displayName,
-                  ),
+                  text: NameFormatter.formateName(discussion.createdBy),
                 )
               ],
             ),

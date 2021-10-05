@@ -50,8 +50,7 @@ class TaskItemController extends GetxController {
     if (task.value.responsibles.isEmpty) return tr('noResponsible');
     if (task.value.responsibles.length > 1)
       return plural('responsibles', task.value.responsibles.length);
-    return NameFormatter.formateDisplayName(
-        task.value.responsibles[0].displayName);
+    return NameFormatter.formateName(task.value.responsibles[0]);
   }
 
   // to show overview screen without loading

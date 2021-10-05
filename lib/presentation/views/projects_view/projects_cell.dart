@@ -197,10 +197,7 @@ class _SecondColumn extends StatelessWidget {
                   style: TextStyleHelper.caption(
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
-                child: Text(
-                    NameFormatter.formateDisplayName(
-                      item.responsible.displayName,
-                    ),
+                child: Text(NameFormatter.formateName(item.responsible),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
