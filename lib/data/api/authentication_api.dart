@@ -57,7 +57,7 @@ class AuthApi {
             // ignore: avoid_dynamic_calls
             AuthToken.fromJson(json.decode(response.body)['response']);
       } else {
-        result.error = CustomError.fromJson(json.decode(response.body));
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
