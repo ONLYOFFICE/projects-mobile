@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -223,6 +224,8 @@ class TaskItemController extends GetxController {
       var newTask = PortalTask.fromJson(t);
       task.value = newTask;
       await initTaskStatus(newTask);
+
+      locator<EventHub>().fire('needToRefreshTasks');
     }
     loaded.value = true;
   }
