@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -52,7 +53,7 @@ class DiscussionsApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.total = responseJson['total'];
         {
@@ -61,9 +62,7 @@ class DiscussionsApi {
               .toList();
         }
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -79,13 +78,11 @@ class DiscussionsApi {
     try {
       var response = await coreApi.postRequest(url, newDiss.toJson());
 
-      if (response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -101,13 +98,11 @@ class DiscussionsApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -125,13 +120,11 @@ class DiscussionsApi {
 
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -149,13 +142,11 @@ class DiscussionsApi {
 
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -173,13 +164,11 @@ class DiscussionsApi {
 
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -195,13 +184,11 @@ class DiscussionsApi {
     try {
       var response = await coreApi.deleteRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Discussion.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

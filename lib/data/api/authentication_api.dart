@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -19,12 +20,7 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 500) {
-        var message = json.decode(response.body)['error']['message'];
-        result.error = CustomError(message: message);
-        return result;
-      }
-      if (response.statusCode == 201) {
+      if (response is http.Response) {
         result.response =
             // ignore: avoid_dynamic_calls
             AuthToken.fromJson(json.decode(response.body)['response']);
@@ -55,13 +51,11 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -77,13 +71,11 @@ class AuthApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = PortalUser.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -99,13 +91,11 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -121,13 +111,11 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = AuthToken.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -146,13 +134,11 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -174,13 +160,11 @@ class AuthApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

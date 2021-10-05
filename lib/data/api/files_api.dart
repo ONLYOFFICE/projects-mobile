@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -12,22 +13,20 @@ class FilesApi {
   var coreApi = locator<CoreApi>();
 
   Future<ApiDTO<List<PortalFile>>> getTaskFiles({int taskId}) async {
-    var url = await coreApi.getTaskFiles(taskId: taskId);
+    var url = await coreApi.getTaskFilesUrl(taskId: taskId);
 
     var result = ApiDTO<List<PortalFile>>();
 
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalFile.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -83,7 +82,7 @@ class FilesApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         if (entityType != null && entityType == 'task') {
           var taskFiles = (responseJson['response'] as List)
@@ -95,9 +94,7 @@ class FilesApi {
         } else
           result.response = FoldersResponse.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -105,75 +102,6 @@ class FilesApi {
 
     return result;
   }
-
-  //  Future<ApiDTO<FoldersResponse>> getMessageFiles({
-  //   int startIndex,
-  //   String query,
-  //   String sortBy,
-  //   String sortOrder,
-  //   int folderId,
-  //   String typeFilter,
-  //   String authorFilter,
-  //   String entityType,
-  // }) async {
-  //    // project/message/1234/files
-  //   var url = await coreApi.getFilesBaseUrl();
-
-  //   if (entityType != null && entityType == 'task') {
-  //     url = await coreApi.getEntityFilesUrl(entityId: folderId.toString());
-  //     url += '?entityType=task';
-  //   } else {
-  //     if (folderId != null)
-  //       url += '${folderId.toString()}?';
-  //     else
-  //       url += '@projects?';
-  //   }
-
-  //   if (query != null) {
-  //     url += '&filterBy=title&filterOp=contains&filterValue=$query';
-  //   }
-
-  //   if (startIndex != null) {
-  //     url += '&Count=25&StartIndex=$startIndex';
-  //   }
-
-  //   if (typeFilter != null) {
-  //     url += typeFilter;
-  //   }
-  //   if (authorFilter != null) {
-  //     url += authorFilter;
-  //   }
-
-  //   if (sortBy != null &&
-  //       sortBy.isNotEmpty &&
-  //       sortOrder != null &&
-  //       sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
-
-  //   var result = ApiDTO<FoldersResponse>();
-
-  //   try {
-  //     var response = await coreApi.getRequest(url);
-  //     final Map responseJson = json.decode(response.body);
-
-  //     if (response.statusCode == 200) {
-  //       if (entityType != null && entityType == 'task') {
-  //         var taskFiles = (responseJson['response'] as List)
-  //             .map((i) => PortalFile.fromJson(i))
-  //             .toList();
-
-  //         result.response = FoldersResponse();
-  //         result.response.files = taskFiles;
-  //       } else
-  //         result.response = FoldersResponse.fromJson(responseJson['response']);
-  //     } else {
-  //       result.error = CustomError(message: json.decode(response.body)['error']['message'] ?? response.reasonPhrase);
-  //     }
-  //   } catch (e) {
-  //     result.error = CustomError(message: e.toString());
-  //   }
-
-  //   return result;
-  // }
 
   Future<ApiDTO<Folder>> renameFolder(
       {String folderId, String newTitle}) async {
@@ -185,13 +113,11 @@ class FilesApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Folder.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -210,13 +136,11 @@ class FilesApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = PortalFile.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -232,13 +156,11 @@ class FilesApi {
     try {
       var response = await coreApi.deleteRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -254,13 +176,11 @@ class FilesApi {
     try {
       var response = await coreApi.deleteRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -294,14 +214,12 @@ class FilesApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -335,14 +253,12 @@ class FilesApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0]);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
