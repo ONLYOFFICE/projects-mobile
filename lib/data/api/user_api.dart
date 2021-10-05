@@ -37,6 +37,7 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
+import 'package:http/http.dart' as http;
 
 class UserApi {
   var coreApi = locator<CoreApi>();
@@ -48,15 +49,13 @@ class UserApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response != null) {
+      if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalUser.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -87,7 +86,7 @@ class UserApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
         result.total = responseJson['total'];
         {
@@ -96,9 +95,7 @@ class UserApi {
               .toList();
         }
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

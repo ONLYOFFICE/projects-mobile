@@ -31,6 +31,7 @@
  */
 
 import 'dart:typed_data';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -52,7 +53,7 @@ class DownloadApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         result.response = response.bodyBytes;
       } else {}
     } catch (e) {
@@ -74,7 +75,7 @@ class DownloadApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         result.response = response.bodyBytes;
       } else {}
     } catch (e) {
