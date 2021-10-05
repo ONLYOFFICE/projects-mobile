@@ -88,6 +88,7 @@ void _onSelected(context, value, TaskItemController controller) async {
             Get.find<TasksController>().loadTasks();
 
             locator<EventHub>().fire('needToRefreshProjects');
+            locator<EventHub>().fire('needToRefreshTasks');
 
             Get.back();
             Get.back();

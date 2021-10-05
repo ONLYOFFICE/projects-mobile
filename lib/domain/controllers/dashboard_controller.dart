@@ -34,6 +34,10 @@ class DashboardController extends GetxController {
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       refreshProjectsData();
     });
+
+    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+      refreshData();
+    });
   }
 
   Future<void> refreshData() async {
