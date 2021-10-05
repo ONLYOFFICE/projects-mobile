@@ -54,8 +54,8 @@ platform :android do
 
   desc "Increment build number"
   lane :increment_build do |options|
-    # RegExr for increasing build number. e.g version: 1.0+1 > version: 1.0+2
-    increase_pubspec_build_number = 's/^(version:\\s+\d+\.\d+\+)(\d+)$/$1.(' + "#{increase_version_code}" + ')/e'
+    # RegExr for increasing build number. e.g version: 1.0.0+1 > version: 1.0.0+2
+    increase_pubspec_build_number = 's/^(version:\\s+\d+\.\d+\.\d+\+)(\d+)$/$1.(' + "#{increase_version_code}" + ')/e'
     Dir.chdir "../.." do
       sh("perl", "-i", "-pe", increase_pubspec_build_number, "pubspec.yaml") # Bump pubspec's build number
     end
