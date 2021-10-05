@@ -71,7 +71,7 @@ class ErrorDialog extends GetxController {
         onAcceptTap: () => {
               Get.back(),
               dialogIsShown = false,
-              if (_blockingErrors[error] != null)
+              if (_blockingErrors[error.toLowerCase()] != null)
                 {
                   Get.find<LoginController>().logout(),
                   dialogIsShown = false,
@@ -96,12 +96,13 @@ class ErrorDialog extends GetxController {
 }
 
 Map _blockingErrors = {
-  'Forbidden': 'Forbidden',
-  'Payment required': 'Payment required',
-  'The paid period is over': 'The paid period is over',
-  'Access to the Projects module is Forbidden':
+  'unauthorized': 'unauthorized',
+  'forbidden': 'Forbidden',
+  'payment required': 'Payment required',
+  'the paid period is over': 'The paid period is over',
+  'access to the projects module is forbidden':
       'Access to the Projects module is Forbidden',
-  'Contact the portal administrator for access to the Projects module.':
+  'contact the portal administrator for access to the projects module.':
       'Contact the portal administrator for access to the Projects module.',
 };
 
