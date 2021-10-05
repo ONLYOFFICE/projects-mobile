@@ -73,13 +73,6 @@ class ProjectTeamController extends GetxController {
     await _userController.getUserInfo();
     var selfUser = _userController.user;
 
-    for (var element in usersList) {
-      if (element.id == selfUser.id) {
-        fabIsVisible.value = true;
-        break;
-      }
-    }
-
     if (_projectDetailed != null && _projectDetailed.security['canEditTeam']) {
       fabIsVisible.value = true;
     } else {

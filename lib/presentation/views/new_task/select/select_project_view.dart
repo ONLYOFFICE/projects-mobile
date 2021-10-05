@@ -22,6 +22,7 @@ class SelectProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
+
     var projectsController = ProjectsWithPresets.myProjectsController;
 
     var userController = Get.find<UserController>();
@@ -29,14 +30,16 @@ class SelectProjectView extends StatelessWidget {
     if (userController.user.isAdmin ||
         userController.user.isOwner ||
         (userController.user.listAdminModules != null &&
-            userController.user.listAdminModules.contains('projects')) ||
-        ((controller is NewTaskController) &&
+            userController.user.listAdminModules.contains('projects'))) {
+      projectsController = ProjectsWithPresets.activeProjectsController;
+    } else if (((controller is NewTaskController) &&
             userController.securityInfo.canCreateTask) ||
         ((controller is DiscussionActionsController) &&
-            userController.securityInfo.canCreateMessage) ||
-        ((controller is NewMilestoneController) &&
-            userController.securityInfo.canCreateMilestone)) {
-      projectsController = ProjectsWithPresets.activeProjectsController;
+            userController.securityInfo.canCreateMessage)) {
+      projectsController = ProjectsWithPresets.myMembershipProjectController;
+    } else if (((controller is NewMilestoneController) &&
+        userController.securityInfo.canCreateMilestone)) {
+      projectsController = ProjectsWithPresets.myManagedProjectController;
     }
 
     var searchController =
@@ -137,7 +140,6 @@ class ProjectList extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Icon(Icons.check_rounded)
                 ],
               ),
             ),
@@ -145,7 +147,5 @@ class ProjectList extends StatelessWidget {
         );
       },
     );
-    // },
-    // );
   }
 }

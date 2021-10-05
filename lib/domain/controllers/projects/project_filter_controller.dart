@@ -210,16 +210,31 @@ class ProjectsFilterController extends BaseFilterController {
   Future<void> setupPreset(PresetProjectFilters preset) async {
     _selfId ??= await Get.find<UserController>().getUserId();
 
-    if (preset == PresetProjectFilters.myProjects) {
-      await _getMyProjects();
-    } else if (preset == PresetProjectFilters.myFollowedProjects) {
-      _statusFilter = '&status=open';
-      _otherFilter = '&follow=true';
-    } else if (preset == PresetProjectFilters.active) {
-      _statusFilter = '&status=open';
-    } else if (preset == PresetProjectFilters.saved) {
-      await _getSavedFilters();
+    switch (preset) {
+      case PresetProjectFilters.myProjects:
+        await _getMyProjects();
+        break;
+      case PresetProjectFilters.myFollowedProjects:
+        _statusFilter = '&status=open';
+        _otherFilter = '&follow=true';
+        break;
+      case PresetProjectFilters.active:
+        _statusFilter = '&status=open';
+        break;
+      case PresetProjectFilters.saved:
+        await _getSavedFilters();
+        break;
+      case PresetProjectFilters.myMembership:
+        _statusFilter = '&status=open';
+        _teamMemberFilter = '&participant=$_selfId';
+        break;
+      case PresetProjectFilters.myManaged:
+        _statusFilter = '&status=open';
+        _projectManagerFilter = '&manager=$_selfId';
+        break;
+      default:
     }
+
     hasFilters.value = _hasFilters;
   }
 
@@ -283,4 +298,11 @@ class ProjectsFilterController extends BaseFilterController {
   }
 }
 
-enum PresetProjectFilters { active, myProjects, myFollowedProjects, saved }
+enum PresetProjectFilters {
+  active,
+  myProjects,
+  myFollowedProjects,
+  saved,
+  myMembership,
+  myManaged
+}

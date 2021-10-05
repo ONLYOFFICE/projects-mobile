@@ -7,6 +7,8 @@ class ProjectsWithPresets {
   static var _myProjectsController;
   static var _folowedProjectsController;
   static var _activeProjectsController;
+  static var _myMembershipProjectController;
+  static var _myManagedProjectController;
 
   static ProjectsController get myProjectsController {
     _myProjectsController ?? _setupMyProjects();
@@ -21,6 +23,16 @@ class ProjectsWithPresets {
   static ProjectsController get activeProjectsController {
     _activeProjectsController ?? _setupActiveProjects();
     return _activeProjectsController;
+  }
+
+  static ProjectsController get myMembershipProjectController {
+    _myMembershipProjectController ?? _setupMyMembershipProjects();
+    return _myMembershipProjectController;
+  }
+
+  static ProjectsController get myManagedProjectController {
+    _myManagedProjectController ?? _setupMyManagedProjects();
+    return _myManagedProjectController;
   }
 
   static void _setupMyProjects() async {
@@ -70,5 +82,35 @@ class ProjectsWithPresets {
     _filterController
         .setupPreset(PresetProjectFilters.active)
         .then((value) => _activeProjectsController.loadProjects());
+  }
+
+  static void _setupMyMembershipProjects() {
+    final _filterController =
+        Get.put(ProjectsFilterController(), tag: 'myMembership');
+
+    _myMembershipProjectController = Get.put(
+        ProjectsController(
+          _filterController,
+          Get.put(PaginationController(), tag: 'myMembership'),
+        ),
+        tag: 'myMembership');
+    _filterController
+        .setupPreset(PresetProjectFilters.myMembership)
+        .then((value) => _myMembershipProjectController.loadProjects());
+  }
+
+  static void _setupMyManagedProjects() {
+    final _filterController =
+        Get.put(ProjectsFilterController(), tag: 'myManaged');
+
+    _myManagedProjectController = Get.put(
+        ProjectsController(
+          _filterController,
+          Get.put(PaginationController(), tag: 'myManaged'),
+        ),
+        tag: 'myManaged');
+    _filterController
+        .setupPreset(PresetProjectFilters.myManaged)
+        .then((value) => _myManagedProjectController.loadProjects());
   }
 }
