@@ -71,13 +71,13 @@ class EntityDocumentsView extends StatelessWidget {
       controller: documentsController,
       scrollController: scrollController,
       appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 0),
+        preferredSize: const Size(double.infinity, 50),
         child: ValueListenableBuilder(
           valueListenable: elevation,
           builder: (_, value, __) => StyledAppBar(
-            // title: _DocsTitle(controller: documentsController),
+            title: _DocsTitle(controller: documentsController),
             showBackButton: false,
-            titleHeight: 0,
+            titleHeight: 50,
             elevation: value,
           ),
         ),
