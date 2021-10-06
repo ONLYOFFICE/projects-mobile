@@ -32,8 +32,6 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
-import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
@@ -65,7 +63,6 @@ class ProjectTasksController extends GetxController {
   int _projectId;
 
   String _selfId;
-  final _projectService = locator<ProjectService>();
   final _userController = Get.find<UserController>();
 
   var fabIsVisible = false.obs;
@@ -118,19 +115,8 @@ class ProjectTasksController extends GetxController {
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
 
-    var team = await _projectService.getProjectTeam(_projectId.toString());
-
-    fabIsVisible.value =
-        (team.any((element) => element.id == _selfId) && _canCreate()) &&
-            _projectDetailed.status != ProjectStatusCode.closed.index;
+    fabIsVisible.value = _canCreate();
   }
 
   bool _canCreate() => _projectDetailed.security['canCreateTask'];
-  // (_projectDetailed.status != ProjectStatusCode.closed.index) &&
-  // _projectDetailed.security['canCreateTask'] &&
-  // !_userController.user.isVisitor &&
-  // (_userController.user.isAdmin ||
-  //     _userController.user.isOwner ||
-  //     (_userController.user.listAdminModules != null &&
-  //         _userController.user.listAdminModules.contains('projects')));
 }

@@ -333,6 +333,7 @@ class NewTaskController extends GetxController
           });
 
       locator<EventHub>().fire('needToRefreshProjects');
+      locator<EventHub>().fire('needToRefreshTasks');
     }
   }
 

@@ -34,6 +34,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -84,10 +85,10 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication';
 
-  Future<String> copyTask({@required int copyFrom}) async =>
+  Future<String> copyTaskUrl({@required int copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
 
-  Future<String> copySubtask({
+  Future<String> copySubtaskUrl({
     @required int taskId,
     @required int subtaskId,
   }) async =>
@@ -99,19 +100,19 @@ class CoreApi {
   Future<String> deleteCommentUrl({String commentId}) async =>
       '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
-  Future<String> deleteTask({int taskId}) async =>
+  Future<String> deleteTaskUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
   Future<String> deleteMessageUrl({int id}) async =>
       '${await getPortalURI()}/api/$version/project/message/$id';
 
-  Future<String> deleteSubtask({
+  Future<String> deleteSubtaskUrl({
     @required int taskId,
     @required int subtaskId,
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
-  Future<String> getTaskFiles({int taskId}) async =>
+  Future<String> getTaskFilesUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
 
   Future<String> getEntityFilesUrl({String entityId}) async =>
@@ -126,10 +127,11 @@ class CoreApi {
   Future<String> discussionDetailedUrl({int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId';
 
-  Future<String> milestonesByFilter() async =>
+  Future<String> milestonesByFilterUrl() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
 
-  Future<String> getTaskLink({@required taskId, @required projectId}) async =>
+  Future<String> getTaskLinkUrl(
+          {@required taskId, @required projectId}) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#';
 
   Future<String> getDiscussionCommentLink({
@@ -188,7 +190,7 @@ class CoreApi {
   Future<String> statusesUrl() async =>
       '${await getPortalURI()}/api/$version/project/status';
 
-  Future<String> subscribeTask({int taskId}) async =>
+  Future<String> subscribeTaskUrl({int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
 
   Future<String> subscribeToMessage({int messageId}) async =>
@@ -217,7 +219,7 @@ class CoreApi {
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
 
-  Future<String> updateTask({@required int taskId}) async =>
+  Future<String> updateTaskUrl({@required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
   Future<String> updateTaskStatusUrl({int taskId}) async =>
@@ -261,15 +263,24 @@ class CoreApi {
   Future<String> getProjectSecurityinfoUrl() async =>
       '${await getPortalURI()}/api/$version/project/securityinfo';
 
-  Future<http.Response> getRequest(String url) async {
+  Future<dynamic> getRequest(String url) async {
     debugPrint(url);
     var headers = await getHeaders();
     var request = client.get(Uri.parse(url), headers: headers);
     final response = await request;
-    return response;
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response;
+    } else {
+      var error;
+      if (response.headers['content-type'].contains('json'))
+        error = json.decode(response.body)['error']['message'];
+
+      return CustomError(message: error ?? response.reasonPhrase);
+    }
   }
 
-  Future<http.Response> postRequest(String url, Map body) async {
+  Future<dynamic> postRequest(String url, Map body) async {
     debugPrint(url);
     var headers = await getHeaders();
     var request = client.post(
@@ -277,11 +288,20 @@ class CoreApi {
       headers: headers,
       body: jsonEncode(body),
     );
+
     final response = await request;
-    return response;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response;
+    } else {
+      var error;
+      if (response.headers['content-type'].contains('json'))
+        error = json.decode(response.body)['error']['message'];
+
+      return CustomError(message: error ?? response.reasonPhrase);
+    }
   }
 
-  Future<http.Response> putRequest(String url, {Map body = const {}}) async {
+  Future<dynamic> putRequest(String url, {Map body = const {}}) async {
     print(url);
     var headers = await getHeaders();
     var request = client.put(
@@ -290,10 +310,18 @@ class CoreApi {
       body: body.isEmpty ? null : jsonEncode(body),
     );
     final response = await request;
-    return response;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response;
+    } else {
+      var error;
+      if (response.headers['content-type'].contains('json'))
+        error = json.decode(response.body)['error']['message'];
+
+      return CustomError(message: error ?? response.reasonPhrase);
+    }
   }
 
-  Future<http.Response> deleteRequest(String url) async {
+  Future<dynamic> deleteRequest(String url) async {
     print(url);
     var headers = await getHeaders();
     var request = client.delete(
@@ -301,7 +329,15 @@ class CoreApi {
       headers: headers,
     );
     final response = await request;
-    return response;
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return response;
+    } else {
+      var error;
+      if (response.headers['content-type'].contains('json'))
+        error = json.decode(response.body)['error']['message'];
+
+      return CustomError(message: error ?? response.reasonPhrase);
+    }
   }
 
   Future<String> getPortalURI() async {

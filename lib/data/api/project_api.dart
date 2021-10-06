@@ -31,6 +31,7 @@
  */
 
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/folow_project.dart';
@@ -55,15 +56,13 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => Project.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -129,7 +128,7 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.total = responseJson['total'];
 
@@ -137,9 +136,7 @@ class ProjectApi {
             .map((i) => ProjectDetailed.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -155,15 +152,13 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         {
           var responseJson = json.decode(response.body);
           result.response = ProjectDetailed.fromJson(responseJson['response']);
         }
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -178,15 +173,13 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => Status.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -201,15 +194,13 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => ProjectTag.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -232,15 +223,13 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => ProjectTag.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -258,13 +247,11 @@ class ProjectApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = ProjectDetailed.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -283,13 +270,11 @@ class ProjectApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -305,15 +290,13 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalUser.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -330,13 +313,11 @@ class ProjectApi {
     try {
       var response = await coreApi.deleteRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = PortalUser.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -355,13 +336,11 @@ class ProjectApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = ProjectDetailed.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -378,13 +357,11 @@ class ProjectApi {
     try {
       var response = await coreApi.putRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = FollowProject.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -403,13 +380,11 @@ class ProjectApi {
     try {
       var response = await coreApi.postRequest(url, body);
 
-      if (response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = ProjectTag.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -429,15 +404,13 @@ class ProjectApi {
     try {
       var response = await coreApi.putRequest(url, body: body);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
             .map((i) => PortalUser.fromJson(i))
             .toList();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -453,13 +426,11 @@ class ProjectApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = SecrityInfo.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
