@@ -441,5 +441,15 @@
 	"taskUpdated": "任务已更新了",
 	"projectUpdated": "项目已更新了",
 	"discussionUpdated": "讨论已更新了",
-	"commentEditing": "评论的编辑"
+	"commentEditing": "评论的编辑",
+	"acceptTask": "接受任务",
+	"noAdress": "没有与主机名相关的地址",
+	"authenticationFailed": "用户认证失败",
+	"reply": "回复",
+	"addComment": "添加评论...",
+	"statusOpen": "打开的",
+	"statusClosed": "关闭的",
+	"statusPaused": "暂停的",
+	"taskStatusOpen": "进行中",
+	"taskStatusClosed": "已结束"
 }

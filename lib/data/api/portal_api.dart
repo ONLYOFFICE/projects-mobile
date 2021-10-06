@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
@@ -51,14 +52,12 @@ class PortalApi {
     try {
       var response = await coreApi.getRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
         result.response = Capabilities.fromJson(responseJson['response']);
         await coreApi.savePortalName();
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       var error;

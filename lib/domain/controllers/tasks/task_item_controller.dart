@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,8 +83,7 @@ class TaskItemController extends GetxController {
     if (task.value.responsibles.isEmpty) return tr('noResponsible');
     if (task.value.responsibles.length > 1)
       return plural('responsibles', task.value.responsibles.length);
-    return NameFormatter.formateDisplayName(
-        task.value.responsibles[0].displayName);
+    return NameFormatter.formateName(task.value.responsibles[0]);
   }
 
   // to show overview screen without loading
@@ -224,6 +224,8 @@ class TaskItemController extends GetxController {
       var newTask = PortalTask.fromJson(t);
       task.value = newTask;
       await initTaskStatus(newTask);
+
+      locator<EventHub>().fire('needToRefreshTasks');
     }
     loaded.value = true;
   }
