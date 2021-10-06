@@ -71,13 +71,48 @@ class EntityDocumentsView extends StatelessWidget {
       controller: documentsController,
       scrollController: scrollController,
       appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 50),
+        preferredSize: const Size(double.infinity, 0),
         child: ValueListenableBuilder(
           valueListenable: elevation,
           builder: (_, value, __) => StyledAppBar(
-            title: _DocsTitle(controller: documentsController),
+            // title: _DocsTitle(controller: documentsController),
             showBackButton: false,
-            titleHeight: 50,
+            titleHeight: 0,
+            elevation: value,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class TaskDocumentsView extends StatelessWidget {
+  final String folderName;
+  final int folderId;
+  final DocumentsController documentsController;
+
+  TaskDocumentsView(
+      {Key key, this.folderName, this.folderId, this.documentsController})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var scrollController = ScrollController();
+    var elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(
+        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+
+    return DocumentsScreen(
+      controller: documentsController,
+      scrollController: scrollController,
+      appBar: PreferredSize(
+        preferredSize: const Size(double.infinity, 0),
+        child: ValueListenableBuilder(
+          valueListenable: elevation,
+          builder: (_, value, __) => StyledAppBar(
+            showBackButton: false,
+            titleHeight: 0,
             elevation: value,
           ),
         ),
