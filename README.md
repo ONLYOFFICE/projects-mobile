@@ -1,22 +1,31 @@
 [![License](https://img.shields.io/badge/License-GNU%20AGPL%20V3-green.svg?style=flat)](https://www.gnu.org/licenses/agpl-3.0.en.html) ![Platforms](https://img.shields.io/badge/Platforms-Android-lightgrey.svg)
 ![Release](https://img.shields.io/badge/Release-v1.0-blue.svg?style=flat)
+
+# ONLYOFFICE Projects for Android
+
 ## Overview
 
-ONLYOFFICE Projects is an app created for everyone who wants to bring ease to project communication, keep up team productivity, get quick access to the assignments, and control progress.
+ONLYOFFICE Projects is a free project management app created for everyone who wants to bring ease to team communication and planning, boost productivity, get quick access to the assignments, and control progress.
 
 Use this app to:
-* Create, browse and manage tasks, subtasks and milestones;
-* Assign and reassign the responsible team members;
-* Search through tasks with multiple filters;
-* Communicate via project discussions and comments on tasks;
+* Create, browse and manage projects, tasks, subtasks, and milestones.
+* Change project status, set priorities, start and due dates. 
+* Assign and reassign the responsible team members.
+* Search through tasks with multiple filters.
+* Access work documents attached to projects.
+* Communicate via project discussions and comments on tasks.
 
-Avalible at [Google Play](https://play.google.com/store/apps/details?id=com.onlyoffice.projects).
+The app provides access to the Projects module within [ONLYOFFICE Workspace](https://www.onlyoffice.com/workspace.aspx) (available either as a cloud service or a self-hosted solution). To start task management on mobile devices, users need to connect the app to their ONLYOFFICE account.
+
+ONLYOFFICE Projects app for Android-based devices is avalible on [Google Play](https://play.google.com/store/apps/details?id=com.onlyoffice.projects).
 
 ## Licensing
-ONLYOFFICE Projects for Mobile is released under AGPLv3 license. See the LICENSE file for more information.
-## User Feedback and Support
 
-If you have any problems with or questions about ONLYOFFICE Projects for Mobile, please visit our official forum to find answers to your questions: [dev.onlyoffice.org][1] or you can ask and answer ONLYOFFICE development questions on [Stack Overflow][2].
+ONLYOFFICE Projects app for Android is released under the AGPLv3 license. See the LICENSE file for more information.
 
-  [1]: http://dev.onlyoffice.org
+## User feedback and support
+
+If you face issues or have any questions about the app, please visit our official forum at [forum.onlyoffice.com][1] or get answers to ONLYOFFICE development questions on [Stack Overflow][2].
+
+  [1]: https://forum.onlyoffice.com
   [2]: http://stackoverflow.com/questions/tagged/onlyoffice
