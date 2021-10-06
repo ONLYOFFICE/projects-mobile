@@ -114,7 +114,7 @@ class _Content extends StatelessWidget {
                       shrinkWrap: true,
                       itemBuilder: (c, i) => PortalUserItem(
                           userController: projectTeamDataSource.usersList[i],
-                          onTapFunction: () => {
+                          onTapFunction: (value) => {
                                 Get.find<NavigationController>().toScreen(
                                     const ProfileScreen(),
                                     arguments: {

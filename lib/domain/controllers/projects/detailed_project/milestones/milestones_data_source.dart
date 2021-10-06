@@ -31,9 +31,7 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
@@ -49,8 +47,6 @@ class MilestonesDataSource extends GetxController {
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
-
-  List<PortalUser> _team;
 
   ProjectDetailed _projectDetailed;
 
@@ -117,15 +113,7 @@ class MilestonesDataSource extends GetxController {
     await _userController.getUserInfo();
     _selfId ??= await _userController.getUserId();
     fabIsVisible.value = _canCreate();
-    // (projectDetailed != null
-    //         ? projectDetailed.responsible.id == _selfId || _canCreate()
-    //         : _canCreate()) &&
-    //     _projectDetailed?.status != ProjectStatusCode.closed.index;
   }
 
-  bool _canCreate() => _projectDetailed.security['canCreateTask'];
-  // _userController.user.isAdmin ||
-  // _userController.user.isOwner ||
-  // (_userController.user.listAdminModules != null &&
-  //     _userController.user.listAdminModules.contains('projects'));
+  bool _canCreate() => _projectDetailed.security['canCreateMilestone'];
 }

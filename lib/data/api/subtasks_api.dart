@@ -31,6 +31,7 @@
  */
 
 import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -49,13 +50,11 @@ class SubtasksApi {
     try {
       var response = await _coreApi.putRequest(url, body: data);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -65,19 +64,17 @@ class SubtasksApi {
 
   Future<ApiDTO> deleteSubTask({int taskId, int subtaskId}) async {
     var url =
-        await _coreApi.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
+        await _coreApi.deleteSubtaskUrl(taskId: taskId, subtaskId: subtaskId);
     var result = ApiDTO();
 
     try {
       var response = await _coreApi.deleteRequest(url);
 
-      if (response.statusCode == 200) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -86,19 +83,18 @@ class SubtasksApi {
   }
 
   Future<ApiDTO> copySubtask({int taskId, int subtaskId}) async {
-    var url = await _coreApi.copySubtask(taskId: taskId, subtaskId: subtaskId);
+    var url =
+        await _coreApi.copySubtaskUrl(taskId: taskId, subtaskId: subtaskId);
     var result = ApiDTO();
 
     try {
       var response = await _coreApi.postRequest(url, {});
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -113,13 +109,11 @@ class SubtasksApi {
     try {
       var response = await _coreApi.postRequest(url, data);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -139,13 +133,11 @@ class SubtasksApi {
     try {
       var response = await _coreApi.putRequest(url, body: data);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -167,13 +159,11 @@ class SubtasksApi {
     try {
       var response = await _coreApi.putRequest(url, body: data);
 
-      if (response.statusCode == 200 || response.statusCode == 201) {
+      if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = Subtask.fromJson(responseJson['response']);
       } else {
-        result.error = CustomError(
-            message: json.decode(response.body)['error']['message'] ??
-                response.reasonPhrase);
+        result.error = (response as CustomError);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
