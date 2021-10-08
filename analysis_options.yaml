@@ -8,3 +8,4 @@ linter:
     cascade_invocations: false
     lines_longer_than_80_chars: false
     prefer_typing_uninitialized_variables: false
+    directives_ordering: false
