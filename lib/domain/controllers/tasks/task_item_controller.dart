@@ -46,7 +46,6 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
@@ -153,8 +152,7 @@ class TaskItemController extends GetxController {
     var copiedTask =
         await _api.copyTask(copyFrom: task.value.id, newTask: newTask);
 
-    // ignore: unawaited_futures
-    Get.find<TasksController>().loadTasks();
+    locator<EventHub>().fire('needToRefreshTasks');
 
     var newTaskController =
         Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());

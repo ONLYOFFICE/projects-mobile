@@ -59,9 +59,11 @@ class TasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TasksController>();
+    var controller = Get.find<TasksController>()
+      ..setupPreset(PresetTaskFilters.saved);
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      controller.loadTasks(preset: PresetTaskFilters.saved);
+      controller.loadTasks();
     });
 
     var scrollController = ScrollController();
@@ -166,7 +168,6 @@ class TasksHeader extends StatelessWidget {
   TasksHeader({Key key, @required this.controller}) : super(key: key);
 
   final controller;
-  // = Get.find<TasksController>();
 
   @override
   Widget build(BuildContext context) {

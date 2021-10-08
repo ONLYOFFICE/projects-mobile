@@ -111,7 +111,7 @@ class MilestonesDataSource extends GetxController {
     loadMilestones();
 
     await _userController.getUserInfo();
-    _selfId ??= await _userController.getUserId();
+    _selfId = await _userController.getUserId();
     fabIsVisible.value = _canCreate();
   }
 

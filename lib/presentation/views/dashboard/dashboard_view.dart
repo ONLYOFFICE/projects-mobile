@@ -47,12 +47,17 @@ import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var dashboardController = Get.put(DashboardController());
+    var dashboardController = Get.find<DashboardController>()..setup();
+
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      dashboardController.loadContent();
+    });
 
     return Scaffold(
       backgroundColor: Get.theme.colors().background,
@@ -63,31 +68,37 @@ class DashboardView extends StatelessWidget {
         elevation: 0,
         showBackButton: false,
       ),
-      body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-        controller: dashboardController.scrollController,
-        children: <Widget>[
-          DashboardCardView(
-            overline: tr('tasks'),
-            controller: dashboardController.myTaskController,
-          ),
-          DashboardCardView(
-            overline: tr('tasks'),
-            controller: dashboardController.upcomingTaskscontroller,
-          ),
-          DashboardCardView(
-            overline: tr('projects'),
-            controller: dashboardController.myProjectsController,
-          ),
-          DashboardCardView(
-            overline: tr('projects'),
-            controller: dashboardController.folowedProjectsController,
-          ),
-          DashboardCardView(
-            overline: tr('projects'),
-            controller: dashboardController.activeProjectsController,
-          ),
-        ],
+      body: SmartRefresher(
+        enablePullDown: true,
+        controller: dashboardController.refreshController,
+        onLoading: dashboardController.onLoading,
+        onRefresh: dashboardController.onRefresh,
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          controller: dashboardController.scrollController,
+          children: <Widget>[
+            DashboardCardView(
+              overline: tr('tasks'),
+              controller: dashboardController.myTaskController,
+            ),
+            DashboardCardView(
+              overline: tr('tasks'),
+              controller: dashboardController.upcomingTaskscontroller,
+            ),
+            DashboardCardView(
+              overline: tr('projects'),
+              controller: dashboardController.myProjectsController,
+            ),
+            DashboardCardView(
+              overline: tr('projects'),
+              controller: dashboardController.folowedProjectsController,
+            ),
+            DashboardCardView(
+              overline: tr('projects'),
+              controller: dashboardController.activeProjectsController,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -105,10 +116,6 @@ class DashboardCardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      controller.refreshData();
-    });
-
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 8),
       width: double.maxFinite,
@@ -349,41 +356,23 @@ class ProjectCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.showAll.value == true
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (controller.loaded.value)
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => ProjectCell(
-                          item: controller.paginationController.data[i]),
-                      itemCount: controller.paginationController.data.length,
-                    ),
-                  ]),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (controller.loaded.value)
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => i < 2
-                          ? ProjectCell(
-                              item: controller.paginationController.data[i])
-                          : const SizedBox(),
-                      itemCount: controller.paginationController.data.length,
-                    ),
-                  ]),
-              ],
-            ),
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (controller.loaded.value)
+            Column(children: [
+              ListView.builder(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (c, i) => i < 2
+                    ? ProjectCell(item: controller.paginationController.data[i])
+                    : const SizedBox(),
+                itemCount: controller.paginationController.data.length,
+              ),
+            ]),
+        ],
+      ),
     );
   }
 }

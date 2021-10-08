@@ -46,7 +46,6 @@ import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
@@ -317,9 +316,7 @@ class NewTaskController extends GetxController
 
     var createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
-      var tasksController = Get.find<TasksController>();
-      // ignore: unawaited_futures
-      tasksController.loadTasks();
+      locator<EventHub>().fire('needToRefreshTasks');
       Get.back();
       MessagesHandler.showSnackBar(
           context: context,

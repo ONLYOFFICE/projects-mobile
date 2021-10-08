@@ -68,13 +68,17 @@ class NavigationController extends GetxController {
   }
 
   void showMoreView() {
+    if (onMoreView.value != true)
+      locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
+
     onMoreView.value = true;
-    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
   }
 
   void hideMoreView() {
+    if (onMoreView.value != false)
+      locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
+
     onMoreView.value = false;
-    locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
   }
 
   void changeTabIndex(int index) {

@@ -41,9 +41,9 @@ import 'package:projects/internal/locator.dart';
 
 class UserController extends GetxController {
   final _api = locator<AuthService>();
-  PortalUser user;
   var lock = Lock();
 
+  PortalUser user;
   SecrityInfo securityInfo;
 
   Future getUserInfo() async {
@@ -64,5 +64,10 @@ class UserController extends GetxController {
       await getUserInfo();
     }
     return user.id;
+  }
+
+  void clear() {
+    user = null;
+    securityInfo = null;
   }
 }

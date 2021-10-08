@@ -91,7 +91,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
       milestoneResponsible['other'] = '';
@@ -112,7 +112,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _taskResponsibleFilter = '';
     if (filter == 'me') {
       taskResponsible['other'] = '';

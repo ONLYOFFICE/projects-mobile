@@ -49,7 +49,7 @@ import 'package:projects/presentation/views/discussions/discussions_search_view.
 
 class DiscussionsController extends BaseController {
   final _api = locator<DiscussionsService>();
-
+  final projectsWithPresets = locator<ProjectsWithPresets>();
   PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
 
@@ -143,15 +143,15 @@ class DiscussionsController extends BaseController {
         selfUser.isOwner ||
         (selfUser.listAdminModules != null &&
             selfUser.listAdminModules.contains('projects'))) {
-      if (ProjectsWithPresets.activeProjectsController.itemList.isEmpty)
-        await ProjectsWithPresets.activeProjectsController.loadProjects();
+      if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
+        await projectsWithPresets.activeProjectsController.loadProjects();
       fabVisibility =
-          ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+          projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (ProjectsWithPresets.myProjectsController.itemList.isEmpty)
-        await ProjectsWithPresets.myProjectsController.loadProjects();
+      if (projectsWithPresets.myProjectsController.itemList.isEmpty)
+        await projectsWithPresets.myProjectsController.loadProjects();
       fabVisibility =
-          ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+          projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor) fabVisibility = false;
 

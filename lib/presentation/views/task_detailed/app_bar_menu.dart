@@ -116,9 +116,6 @@ void _onSelected(context, value, TaskItemController controller) async {
         onAcceptTap: () async {
           var result = await controller.deleteTask(taskId: task.id);
           if (result) {
-            // ignore: unawaited_futures
-            Get.find<TasksController>().loadTasks();
-
             locator<EventHub>().fire('needToRefreshProjects');
             locator<EventHub>().fire('needToRefreshTasks');
 

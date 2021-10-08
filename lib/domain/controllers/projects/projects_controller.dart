@@ -55,6 +55,8 @@ class ProjectsController extends BaseController {
 
   PaginationController _paginationController;
 
+  PresetProjectFilters _preset;
+
   PaginationController get paginationController => _paginationController;
 
   @override
@@ -118,12 +120,16 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  Future<void> loadProjects({PresetProjectFilters preset}) async {
+  void setupPreset(PresetProjectFilters preset) {
+    _preset = preset;
+  }
+
+  Future<void> loadProjects() async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    if (preset != null) {
+    if (_preset != null) {
       await _filterController
-          .setupPreset(preset)
+          .setupPreset(_preset)
           .then((value) => _getProjects(needToClear: true));
     } else {
       await _getProjects(needToClear: true);

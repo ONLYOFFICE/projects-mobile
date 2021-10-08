@@ -48,9 +48,13 @@ import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
+  final projectsWithPresets = locator<ProjectsWithPresets>();
+
   PaginationController _paginationController;
 
   final _userController = Get.find<UserController>();
+
+  PresetTaskFilters _preset;
   PaginationController get paginationController => _paginationController;
 
   final taskStatusesController = Get.find<TaskStatusesController>();
@@ -90,6 +94,11 @@ class TasksController extends BaseController {
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
+
+    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+      refreshData();
+    });
+
     loaded.value = true;
   }
 
@@ -102,12 +111,16 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  Future loadTasks({PresetTaskFilters preset}) async {
+  void setupPreset(PresetTaskFilters preset) {
+    _preset = preset;
+  }
+
+  Future loadTasks() async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    if (preset != null) {
+    if (_preset != null) {
       await _filterController
-          .setupPreset(preset)
+          .setupPreset(_preset)
           .then((value) => _getTasks(needToClear: true));
     } else {
       await _getTasks(needToClear: true);
@@ -149,15 +162,15 @@ class TasksController extends BaseController {
         selfUser.isOwner ||
         (selfUser.listAdminModules != null &&
             selfUser.listAdminModules.contains('projects'))) {
-      if (ProjectsWithPresets.activeProjectsController.itemList.isEmpty)
-        await ProjectsWithPresets.activeProjectsController.loadProjects();
+      // if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
+      //   await projectsWithPresets.activeProjectsController.loadProjects();
       fabVisibility =
-          ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+          projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (ProjectsWithPresets.myProjectsController.itemList.isEmpty)
-        await ProjectsWithPresets.myProjectsController.loadProjects();
+      // if (projectsWithPresets.myProjectsController.itemList.isEmpty)
+      //   await projectsWithPresets.myProjectsController.loadProjects();
       fabVisibility =
-          ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+          projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor) fabVisibility = false;
 

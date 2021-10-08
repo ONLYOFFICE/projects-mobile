@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/projects/project_search_controller.d
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -55,7 +56,9 @@ class SelectProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
 
-    var projectsController = ProjectsWithPresets.myProjectsController;
+    var projectsWithPresets = locator<ProjectsWithPresets>();
+
+    var projectsController = projectsWithPresets.myProjectsController;
 
     var userController = Get.find<UserController>();
 
@@ -63,15 +66,15 @@ class SelectProjectView extends StatelessWidget {
         userController.user.isOwner ||
         (userController.user.listAdminModules != null &&
             userController.user.listAdminModules.contains('projects'))) {
-      projectsController = ProjectsWithPresets.activeProjectsController;
+      projectsController = projectsWithPresets.activeProjectsController;
     } else if (((controller is NewTaskController) &&
             userController.securityInfo.canCreateTask) ||
         ((controller is DiscussionActionsController) &&
             userController.securityInfo.canCreateMessage)) {
-      projectsController = ProjectsWithPresets.myMembershipProjectController;
+      projectsController = projectsWithPresets.myMembershipProjectController;
     } else if (((controller is NewMilestoneController) &&
         userController.securityInfo.canCreateMilestone)) {
-      projectsController = ProjectsWithPresets.myManagedProjectController;
+      projectsController = projectsWithPresets.myManagedProjectController;
     }
 
     var searchController =

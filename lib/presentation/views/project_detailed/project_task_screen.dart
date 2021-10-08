@@ -160,8 +160,7 @@ class Header extends StatelessWidget {
     this.controller,
   }) : super(key: key);
 
-  final controller; // = Get.find<ProjectTasksController>();
-
+  final controller;
   @override
   Widget build(BuildContext context) {
     var options = Column(

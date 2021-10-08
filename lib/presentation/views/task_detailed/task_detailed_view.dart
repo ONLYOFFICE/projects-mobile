@@ -38,7 +38,6 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';

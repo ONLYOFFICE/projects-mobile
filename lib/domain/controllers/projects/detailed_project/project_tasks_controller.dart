@@ -48,8 +48,7 @@ class ProjectTasksController extends GetxController {
   final _sortController =
       Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
-  final _filterController =
-      Get.put(TaskFilterController(), tag: 'ProjectTasksController');
+  final _filterController = Get.find<TaskFilterController>();
 
   ProjectDetailed _projectDetailed;
 
@@ -113,7 +112,7 @@ class ProjectTasksController extends GetxController {
     loadTasks();
 
     await _userController.getUserInfo();
-    _selfId ??= await _userController.getUserId();
+    _selfId = await _userController.getUserId();
 
     fabIsVisible.value = _canCreate();
   }
