@@ -69,14 +69,14 @@ class NavigationController extends GetxController {
 
   void showMoreView() {
     if (onMoreView.value != true)
-      locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
+      locator<EventHub>().fire('moreViewVisibilityChanged', true);
 
     onMoreView.value = true;
   }
 
   void hideMoreView() {
     if (onMoreView.value != false)
-      locator<EventHub>().fire('moreViewVisibilityChanged', onMoreView.value);
+      locator<EventHub>().fire('moreViewVisibilityChanged', false);
 
     onMoreView.value = false;
   }

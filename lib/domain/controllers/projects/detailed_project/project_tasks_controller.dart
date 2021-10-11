@@ -61,7 +61,6 @@ class ProjectTasksController extends GetxController {
 
   int _projectId;
 
-  String _selfId;
   final _userController = Get.find<UserController>();
 
   var fabIsVisible = false.obs;
@@ -112,7 +111,6 @@ class ProjectTasksController extends GetxController {
     loadTasks();
 
     await _userController.getUserInfo();
-    _selfId = await _userController.getUserId();
 
     fabIsVisible.value = _canCreate();
   }

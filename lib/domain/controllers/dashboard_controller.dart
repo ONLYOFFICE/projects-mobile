@@ -36,7 +36,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
 import 'package:projects/internal/locator.dart';

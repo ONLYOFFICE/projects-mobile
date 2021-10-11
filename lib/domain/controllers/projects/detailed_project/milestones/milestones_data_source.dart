@@ -62,7 +62,6 @@ class MilestonesDataSource extends GetxController {
 
   int _projectId;
 
-  String _selfId;
   final _userController = Get.find<UserController>();
 
   var fabIsVisible = false.obs;
@@ -111,7 +110,6 @@ class MilestonesDataSource extends GetxController {
     loadMilestones();
 
     await _userController.getUserInfo();
-    _selfId = await _userController.getUserId();
     fabIsVisible.value = _canCreate();
   }
 

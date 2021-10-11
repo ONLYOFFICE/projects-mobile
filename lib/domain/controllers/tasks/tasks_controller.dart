@@ -162,13 +162,13 @@ class TasksController extends BaseController {
         selfUser.isOwner ||
         (selfUser.listAdminModules != null &&
             selfUser.listAdminModules.contains('projects'))) {
-      // if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
-      //   await projectsWithPresets.activeProjectsController.loadProjects();
+      if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
+        await projectsWithPresets.activeProjectsController.loadProjects();
       fabVisibility =
           projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      // if (projectsWithPresets.myProjectsController.itemList.isEmpty)
-      //   await projectsWithPresets.myProjectsController.loadProjects();
+      if (projectsWithPresets.myProjectsController.itemList.isEmpty)
+        await projectsWithPresets.myProjectsController.loadProjects();
       fabVisibility =
           projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
