@@ -34,10 +34,12 @@ import 'package:get/get.dart';
 
 import 'package:projects/data/models/tag_itemDTO.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectTagsController extends GetxController {
   final _api = locator<ProjectService>();
+  final _userController = Get.find<UserController>()..getUserInfo();
 
   var usersList = [].obs;
   var loaded = true.obs;
@@ -49,6 +51,8 @@ class ProjectTagsController extends GetxController {
   RxList<String> projectDetailedTags = <String>[].obs;
 
   var _projController;
+
+  var fabIsVisible = false.obs;
 
   void onLoading() async {}
 
@@ -72,6 +76,11 @@ class ProjectTagsController extends GetxController {
         tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
       }
     }
+
+    fabIsVisible.value = _userController.user.isAdmin ||
+        _userController.user.isOwner ||
+        (_userController.user.listAdminModules != null &&
+            _userController.user.listAdminModules.contains('projects'));
 
     loaded.value = true;
   }
