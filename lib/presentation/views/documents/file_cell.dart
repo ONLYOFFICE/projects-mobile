@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/security.dart';
 
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -48,12 +49,12 @@ import 'package:projects/presentation/views/documents/documents_move_or_copy_vie
 class FileCell extends StatelessWidget {
   final int index;
 
-  final PortalFile element;
+  final PortalFile entity;
   final controller;
 
   const FileCell({
     Key key,
-    @required this.element,
+    @required this.entity,
     @required this.index,
     @required this.controller,
   }) : super(key: key);
@@ -100,13 +101,13 @@ class FileCell extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Flexible(
-                  child: Text(element.title.replaceAll(' ', '\u00A0'),
+                  child: Text(entity.title.replaceAll(' ', '\u00A0'),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyleHelper.projectTitle),
                 ),
                 Text(
-                    '${formatedDate(element.updated)} • ${element.contentLength} • ${element.updatedBy.displayName}',
+                    '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.updatedBy.displayName}',
                     style: TextStyleHelper.caption(
                         color: Get.theme.colors().onSurface.withOpacity(0.6))),
               ],
@@ -118,7 +119,7 @@ class FileCell extends StatelessWidget {
               padding: const EdgeInsets.only(left: 10),
               child: PopupMenuButton(
                 onSelected: (value) => {
-                  _onFilePopupMenuSelected(value, element, context, controller)
+                  _onFilePopupMenuSelected(value, entity, context, controller)
                 },
                 icon: Icon(Icons.more_vert,
                     color: Get.theme.colors().onSurface.withOpacity(0.5)),
@@ -136,22 +137,22 @@ class FileCell extends StatelessWidget {
                       value: 'download',
                       child: Text(tr('download')),
                     ),
-                    if (controller.canCopy)
+                    if (Security.files.canEdit(entity))
                       PopupMenuItem(
                         value: 'copy',
                         child: Text(tr('copy')),
                       ),
-                    if (controller.canMove)
+                    if (Security.files.canEdit(entity))
                       PopupMenuItem(
                         value: 'move',
                         child: Text(tr('move')),
                       ),
-                    if (controller.canRename)
+                    if (Security.files.canEdit(entity))
                       PopupMenuItem(
                         value: 'rename',
                         child: Text(tr('rename')),
                       ),
-                    if (controller.canDelete)
+                    if (Security.files.canDelete(entity))
                       PopupMenuItem(
                         value: 'delete',
                         child: Text(

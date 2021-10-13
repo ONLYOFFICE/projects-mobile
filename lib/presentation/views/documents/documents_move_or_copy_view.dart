@@ -32,8 +32,8 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
-import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/security.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -405,35 +405,35 @@ class MoveDocumentsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 TextButton(
-                  onPressed: () => _cancel(controller),
+                  onPressed: () => Get.close(controller.foldersCount),
                   child: Text(tr('cancel').toUpperCase(),
                       style: TextStyleHelper.button()),
                 ),
                 if (controller.mode == 'moveFolder' &&
-                    !_isRoot(controller.currentFolder))
+                    !Security.documents.isRoot(controller.currentFolder))
                   TextButton(
-                    onPressed: () => _moveFolder(controller, context),
+                    onPressed: controller.moveFolder,
                     child: Text(tr('moveFolderHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFolder' &&
-                    !_isRoot(controller.currentFolder))
+                    !Security.documents.isRoot(controller.currentFolder))
                   TextButton(
-                    onPressed: () => _copyFolder(controller, context),
+                    onPressed: controller.copyFolder,
                     child: Text(tr('copyFolderHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'moveFile' &&
-                    !_isRoot(controller.currentFolder))
+                    !Security.documents.isRoot(controller.currentFolder))
                   TextButton(
-                    onPressed: () => _moveFile(controller, context),
+                    onPressed: controller.moveFile,
                     child: Text(tr('moveFileHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFile' &&
-                    !_isRoot(controller.currentFolder))
+                    !Security.documents.isRoot(controller.currentFolder))
                   TextButton(
-                    onPressed: () => _copyFile(controller, context),
+                    onPressed: controller.copyFile,
                     child: Text(tr('copyFileHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
@@ -444,64 +444,4 @@ class MoveDocumentsScreen extends StatelessWidget {
       ),
     );
   }
-}
-
-Future _moveFolder(
-  DocumentsMoveOrCopyController controller,
-  BuildContext context,
-) async {
-  var success = await controller.moveFolder();
-
-  if (success) {
-    Get.close(controller.foldersCount);
-
-    MessagesHandler.showSnackBar(context: context, text: tr('folderMoved'));
-  }
-}
-
-Future _copyFolder(
-  DocumentsMoveOrCopyController controller,
-  BuildContext context,
-) async {
-  var success = await controller.copyFolder();
-
-  if (success) {
-    Get.close(controller.foldersCount);
-
-    MessagesHandler.showSnackBar(context: context, text: tr('folderCopied'));
-  }
-}
-
-Future _moveFile(
-  DocumentsMoveOrCopyController controller,
-  BuildContext context,
-) async {
-  var success = await controller.moveFile();
-
-  if (success) {
-    Get.close(controller.foldersCount);
-
-    MessagesHandler.showSnackBar(context: context, text: tr('fileMoved'));
-  }
-}
-
-Future _copyFile(
-  DocumentsMoveOrCopyController controller,
-  BuildContext context,
-) async {
-  var success = await controller.copyFile();
-
-  if (success) {
-    Get.close(controller.foldersCount);
-
-    MessagesHandler.showSnackBar(context: context, text: tr('fileCopied'));
-  }
-}
-
-Future _cancel(DocumentsMoveOrCopyController controller) async {
-  Get.close(controller.foldersCount);
-}
-
-bool _isRoot(element) {
-  return element == null || (element.parentId != null && element.parentId != 0);
 }

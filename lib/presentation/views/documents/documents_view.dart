@@ -216,11 +216,11 @@ class DocumentsScreen extends StatelessWidget {
                 var element = controller.paginationController.data[index];
                 return element is Folder
                     ? FolderCell(
-                        element: element,
+                        entity: element,
                         controller: controller,
                       )
                     : FileCell(
-                        element: element,
+                        entity: element,
                         index: index,
                         controller: controller,
                       );
