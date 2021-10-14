@@ -70,14 +70,20 @@ class PortalUserItem extends StatelessWidget {
                 child: Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
-                    CircleAvatar(
-                      radius: 20.0,
-                      backgroundColor: Get.theme.colors().bgDescription,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Obx(() {
-                          return userController.avatar.value;
-                        }),
+                    Opacity(
+                      opacity: userController.portalUser.status ==
+                              UserStatus.Terminated
+                          ? 0.4
+                          : 1.0,
+                      child: CircleAvatar(
+                        radius: 20.0,
+                        backgroundColor: Get.theme.colors().bgDescription,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Obx(() {
+                            return userController.avatar.value;
+                          }),
+                        ),
                       ),
                     ),
                     if (userController.portalUser.status ==
