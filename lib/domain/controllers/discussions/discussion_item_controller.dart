@@ -64,15 +64,21 @@ class DiscussionItemController extends GetxController {
 
   var loaded = true.obs;
   var refreshController = RefreshController();
+  var subscribersRefreshController = RefreshController();
+  var commentsRefreshController = RefreshController();
   var selfId;
 
-  RxString statusImageString = ''.obs;
+  var statusImageString = ''.obs;
   // to show overview screen without loading
-  RxBool firstReload = true.obs;
+  var firstReload = true.obs;
+
+  var fabIsVisible = false.obs;
 
   DiscussionItemController(Discussion discussion) {
     this.discussion.value = discussion;
     status.value = discussion.status;
+
+    fabIsVisible.value = discussion.canEdit && discussion.status == 0;
   }
 
   var commentsListController = ScrollController();

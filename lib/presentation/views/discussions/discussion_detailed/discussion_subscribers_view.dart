@@ -61,7 +61,7 @@ class DiscussionSubscribersView extends StatelessWidget {
           return Stack(
             children: [
               SmartRefresher(
-                controller: controller.refreshController,
+                controller: controller.subscribersRefreshController,
                 onRefresh: controller.onRefresh,
                 child: ListView.separated(
                   itemCount: discussion.subscribers.length,
@@ -120,12 +120,17 @@ class DiscussionSubscribersView extends StatelessWidget {
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
-                  child: StyledFloatingActionButton(
-                    onPressed: () =>
-                        controller.toSubscribersManagingScreen(context),
-                    child: AppIcon(
-                      icon: SvgIcons.add_fab,
-                      color: Get.theme.colors().onPrimarySurface,
+                  child: Obx(
+                    () => Visibility(
+                      visible: controller.fabIsVisible.value,
+                      child: StyledFloatingActionButton(
+                        onPressed: () =>
+                            controller.toSubscribersManagingScreen(context),
+                        child: AppIcon(
+                          icon: SvgIcons.add_fab,
+                          color: Get.theme.colors().onPrimarySurface,
+                        ),
+                      ),
                     ),
                   ),
                 ),

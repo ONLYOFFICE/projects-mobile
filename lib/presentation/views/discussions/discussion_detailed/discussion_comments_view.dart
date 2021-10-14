@@ -56,7 +56,7 @@ class DiscussionCommentsView extends StatelessWidget {
             return Stack(
               children: [
                 SmartRefresher(
-                  controller: controller.refreshController,
+                  controller: controller.commentsRefreshController,
                   onRefresh: controller.onRefresh,
                   child: ListView.separated(
                     controller: controller.commentsListController,
