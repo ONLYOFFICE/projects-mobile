@@ -135,8 +135,15 @@ class TextStyleHelper {
         color: color);
   }
 
-  static const headerStyle = TextStyle(
-      fontFamily: 'Roboto', fontSize: 20, fontWeight: FontWeight.w500);
+  static TextStyle headerStyle({Color color}) {
+    return TextStyle(
+      color: color,
+      fontFamily: 'Roboto',
+      fontWeight: FontWeight.w500,
+      fontSize: 20,
+      letterSpacing: 0.15,
+    );
+  }
 
   static TextStyle overline({Color color}) {
     return TextStyle(

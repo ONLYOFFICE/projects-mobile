@@ -327,7 +327,8 @@ class Title extends StatelessWidget {
             child: Obx(
               () => Text(
                 controller.screenName.value,
-                style: TextStyleHelper.headerStyle,
+                style: TextStyleHelper.headerStyle(
+                    color: Get.theme.colors().onSurface),
               ),
             ),
           ),

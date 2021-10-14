@@ -108,7 +108,11 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? PreferredSize(
               preferredSize: Size.fromHeight(titleHeight), child: title)
           : titleText != null
-              ? Text(titleText)
+              ? Text(
+                  titleText,
+                  style: TextStyleHelper.headerStyle(
+                      color: Get.theme.colors().onSurface),
+                )
               : null,
       bottom: bottom == null
           ? null

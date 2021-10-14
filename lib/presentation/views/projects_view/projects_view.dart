@@ -153,7 +153,8 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Text(
               controller.screenName,
-              style: TextStyleHelper.headerStyle,
+              style: TextStyleHelper.headerStyle(
+                  color: Get.theme.colors().onSurface),
             ),
           ),
           Row(
