@@ -202,7 +202,6 @@ class DocumentsMoveOrCopyController extends GetxController {
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-    locator<EventHub>().fire('needToRefreshDocuments');
 
     if (result != null) {
       Get.close(foldersCount);
@@ -210,6 +209,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       MessagesHandler.showSnackBar(
           context: Get.context, text: tr('folderMoved'));
     }
+    locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFolder() async {
@@ -217,7 +217,6 @@ class DocumentsMoveOrCopyController extends GetxController {
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-    locator<EventHub>().fire('needToRefreshDocuments');
 
     if (result != null) {
       Get.close(foldersCount);
@@ -225,6 +224,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       MessagesHandler.showSnackBar(
           context: Get.context, text: tr('folderCopied'));
     }
+    locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future moveFile() async {
@@ -232,12 +232,13 @@ class DocumentsMoveOrCopyController extends GetxController {
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-    locator<EventHub>().fire('needToRefreshDocuments');
+
     if (result != null) {
       Get.close(foldersCount);
 
       MessagesHandler.showSnackBar(context: Get.context, text: tr('fileMoved'));
     }
+    locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFile() async {
@@ -245,7 +246,6 @@ class DocumentsMoveOrCopyController extends GetxController {
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
-    locator<EventHub>().fire('needToRefreshDocuments');
 
     if (result != null) {
       Get.close(foldersCount);
@@ -253,6 +253,7 @@ class DocumentsMoveOrCopyController extends GetxController {
       MessagesHandler.showSnackBar(
           context: Get.context, text: tr('fileCopied'));
     }
+    locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   void setupOptions(int targetId, int initial) {

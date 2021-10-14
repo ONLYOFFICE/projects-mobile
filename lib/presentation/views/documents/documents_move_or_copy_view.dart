@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/security.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -411,28 +410,28 @@ class MoveDocumentsScreen extends StatelessWidget {
                       style: TextStyleHelper.button()),
                 ),
                 if (controller.mode == 'moveFolder' &&
-                    !Security.documents.isRoot(controller.currentFolder))
+                    controller.currentFolder != null)
                   TextButton(
                     onPressed: controller.moveFolder,
                     child: Text(tr('moveFolderHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFolder' &&
-                    !Security.documents.isRoot(controller.currentFolder))
+                    controller.currentFolder != null)
                   TextButton(
                     onPressed: controller.copyFolder,
                     child: Text(tr('copyFolderHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'moveFile' &&
-                    !Security.documents.isRoot(controller.currentFolder))
+                    controller.currentFolder != null)
                   TextButton(
                     onPressed: controller.moveFile,
                     child: Text(tr('moveFileHere').toUpperCase(),
                         style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFile' &&
-                    !Security.documents.isRoot(controller.currentFolder))
+                    controller.currentFolder != null)
                   TextButton(
                     onPressed: controller.copyFile,
                     child: Text(tr('copyFileHere').toUpperCase(),

@@ -29,14 +29,14 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
+import 'package:synchronized/synchronized.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/internal/locator.dart';
 
 class PortalInfoController extends GetxController {
   final _coreApi = locator<CoreApi>();
-
+  var lock = Lock();
   String _portalName;
   String _portalUri;
   Map _headers;
@@ -47,9 +47,7 @@ class PortalInfoController extends GetxController {
 
   @override
   void onInit() async {
-    _portalUri ??= await _coreApi.getPortalURI();
-    _headers ??= await _coreApi.getHeaders();
-    _portalName ??= _portalUri.replaceFirst('https://', '');
+    await setup();
 
     super.onInit();
   }
@@ -61,8 +59,10 @@ class PortalInfoController extends GetxController {
   }
 
   Future<void> setup() async {
-    _portalUri ??= await _coreApi.getPortalURI();
-    _headers ??= await _coreApi.getHeaders();
-    _portalName ??= _portalUri.replaceFirst('https://', '');
+    await lock.synchronized(() async {
+      _portalUri ??= await _coreApi.getPortalURI();
+      _headers ??= await _coreApi.getHeaders();
+      _portalName ??= _portalUri.replaceFirst('https://', '');
+    });
   }
 }

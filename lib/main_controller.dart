@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -40,6 +42,7 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/splash_view.dart';
@@ -76,6 +79,8 @@ class MainController extends GetxController {
 
     subscriptions
         .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
+      Get.find<UserController>().getUserInfo();
+      Get.find<PortalInfoController>().setup();
       setupMainPage();
       await Get.offAll(() => MainView());
     }));
