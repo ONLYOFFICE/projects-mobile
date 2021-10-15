@@ -70,7 +70,7 @@ class SubtasksView extends StatelessWidget {
                 ),
               if (_task.subtasks.isNotEmpty)
                 SmartRefresher(
-                  controller: controller.refreshController,
+                  controller: controller.subtaskRefreshController,
                   onRefresh: () => controller.reloadTask(showLoading: true),
                   child: ListView.builder(
                     itemCount: _task.subtasks.length,
