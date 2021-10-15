@@ -60,15 +60,17 @@ class ProjectsDashboardMoreView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
-      floatingActionButton: Visibility(
-        visible: controller.fabIsVisible.value,
-        child: StyledFloatingActionButton(
-          onPressed: () => controller.createNewProject(),
-          child: AppIcon(
-            icon: SvgIcons.fab_project,
-            width: 32,
-            height: 32,
-            color: Get.theme.colors().onPrimarySurface,
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
+          child: StyledFloatingActionButton(
+            onPressed: () => controller.createNewProject(),
+            child: AppIcon(
+              icon: SvgIcons.fab_project,
+              width: 32,
+              height: 32,
+              color: Get.theme.colors().onPrimarySurface,
+            ),
           ),
         ),
       ),
