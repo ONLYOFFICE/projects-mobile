@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -204,9 +205,9 @@ class SubtaskEditingController extends GetxController
         _subtask = editedSubtask;
 
         subtaskController.subtask.value = editedSubtask;
-        // ignore: unawaited_futures
-        Get.find<TaskItemController>(tag: editedSubtask.taskId.toString())
-            .reloadTask();
+
+        locator<EventHub>()
+            .fire('needToRefreshParentTask', [editedSubtask.taskId]);
 
         Get.back();
       }

@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -72,11 +73,10 @@ class NewTaskCommentController extends NewCommentController {
           await _api.addTaskComment(content: text, taskId: idFrom);
       if (newComment != null) {
         _textController.clear();
-        var taskController =
-            Get.find<TaskItemController>(tag: idFrom.toString());
 
-        await taskController.reloadTask(showLoading: false);
-        taskController.scrollToLastComment();
+        locator<EventHub>().fire('needToRefreshParentTask', [idFrom]);
+        locator<EventHub>().fire('scrollToLastComment', [idFrom]);
+
         Get.back();
         MessagesHandler.showSnackBar(
             context: context, text: tr('commentCreated'));
@@ -98,10 +98,9 @@ class NewTaskCommentController extends NewCommentController {
       );
       if (newComment != null) {
         _textController.clear();
-        var taskController =
-            Get.find<TaskItemController>(tag: idFrom.toString());
-        // ignore: unawaited_futures
-        taskController.reloadTask(showLoading: true);
+
+        locator<EventHub>().fire('needToRefreshParentTask', [idFrom, true]);
+
         Get.back();
         MessagesHandler.showSnackBar(
             context: context, text: tr('commentCreated'));

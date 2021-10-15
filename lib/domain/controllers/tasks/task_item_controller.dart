@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
@@ -92,26 +94,38 @@ class TaskItemController extends GetxController {
 
   var commentsListController = ScrollController();
 
-  void scrollToLastComment() {
-    commentsListController
-        .jumpTo(commentsListController.position.maxScrollExtent);
+  TaskItemController(PortalTask portalTask) {
+    task.value = portalTask;
+
+    locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+      if ((data as List).isNotEmpty && data[0] == task.value.id) {
+        var showLoading = (data as List).length > 1 ? data[1] : false;
+        await reloadTask(showLoading: showLoading);
+      }
+    });
+
+    locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+      if ((data as List).isNotEmpty && data[0] == task.value.id) {
+        scrollToLastComment();
+      }
+    });
   }
 
-  // ignore: always_declare_return_types
-  get getActualCommentCount {
+  void scrollToLastComment() {
+    if (commentsListController.hasClients)
+      commentsListController
+          .jumpTo(commentsListController.position.maxScrollExtent);
+  }
+
+  dynamic get getActualCommentCount {
     if (task?.value?.comments == null) return null;
     var count = 0;
     for (var item in task?.value?.comments) if (!item.inactive) count++;
     return count;
   }
 
-  TaskItemController(PortalTask portalTask) {
-    task.value = portalTask;
-  }
-
   void copyLink({@required taskId, @required projectId}) async {
-    // ignore: omit_local_variable_types
-    String link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
+    var link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
     await Clipboard.setData(ClipboardData(text: link));
   }
 
@@ -126,12 +140,10 @@ class TaskItemController extends GetxController {
     await controller.acceptTask(context);
   }
 
-  Future copyTask({PortalTask taskk}) async {
-    // ignore: omit_local_variable_types
-    List<String> responsibleIds = [];
+  Future copyTask({PortalTask portalTask}) async {
+    var responsibleIds = <String>[];
 
-    // ignore: omit_local_variable_types
-    PortalTask taskFrom = taskk ?? task.value;
+    var taskFrom = portalTask ?? task.value;
 
     for (var item in taskFrom.responsibles) responsibleIds.add(item.id);
 
@@ -161,7 +173,6 @@ class TaskItemController extends GetxController {
 
     Get.find<NavigationController>()
         .to(TaskDetailedView(), arguments: {'controller': newTaskController});
-    // return copiedTask;
   }
 
   Future<void> initTaskStatus(PortalTask portalTask) async {

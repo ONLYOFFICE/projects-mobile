@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -184,7 +185,8 @@ class NewSubtaskController extends GetxController
             Get.find<TaskItemController>(tag: taskId.toString());
 
         Get.back();
-        await taskController.reloadTask(showLoading: true);
+        locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
+
         MessagesHandler.showSnackBar(
             context: Get.context,
             text: tr('subtaskCreated'),
