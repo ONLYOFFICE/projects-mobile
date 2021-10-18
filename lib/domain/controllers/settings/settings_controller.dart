@@ -156,7 +156,6 @@ class SettingsController extends GetxController {
   }
 
   void onHelpPressed() async {
-    // TODO REPLACE
     await launch(Const.Urls.help);
   }
 
