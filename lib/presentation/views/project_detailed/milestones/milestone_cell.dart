@@ -227,7 +227,7 @@ class _MilestoneIcon extends StatelessWidget {
         Obx(() {
           var color = itemController.milestone.value.canEdit
               ? Get.theme.colors().primary
-              : Get.theme.colors().background;
+              : Get.theme.colors().onBackground;
           return Container(
             width: 48,
             child: Stack(
