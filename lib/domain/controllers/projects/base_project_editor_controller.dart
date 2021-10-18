@@ -84,7 +84,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   @override
   void onInit() {
-    _userController.getUserInfo().whenComplete(() => {
+    _userController.getUserInfo().then((value) => {
           selfUserItem =
               PortalUserItemController(portalUser: _userController.user),
         });
