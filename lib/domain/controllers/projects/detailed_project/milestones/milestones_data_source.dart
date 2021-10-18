@@ -113,5 +113,8 @@ class MilestonesDataSource extends GetxController {
     fabIsVisible.value = _canCreate();
   }
 
-  bool _canCreate() => _projectDetailed.security['canCreateMilestone'];
+  bool _canCreate() {
+    if (_projectDetailed == null) return false;
+    return _projectDetailed.security['canCreateMilestone'];
+  }
 }
