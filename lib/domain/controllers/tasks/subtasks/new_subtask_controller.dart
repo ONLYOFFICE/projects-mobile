@@ -114,7 +114,7 @@ class NewSubtaskController extends GetxController
       if (element.portalUser.id != user.id) element.isSelected.value = false;
     });
     responsibles.clear();
-    if (user.isSelected == true) {
+    if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(

@@ -41,6 +41,8 @@ abstract class DiscussionActionsController {
   var selectedProjectTitle;
   RxList subscribers;
 
+  List get allUsersList;
+
   FocusNode get titleFocus => FocusNode();
   TextEditingController _titleController;
   TextEditingController _userSearchController;

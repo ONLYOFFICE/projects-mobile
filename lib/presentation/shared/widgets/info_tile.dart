@@ -124,11 +124,11 @@ class InfoTileWithButton extends StatelessWidget {
               ],
             ),
           ),
-          InkWell(
+          InkResponse(
             onTap: onTapFunction,
             child: Icon(
               iconData,
-              color: Colors.blue,
+              color: Get.theme.colors().onBackground.withOpacity(0.6),
             ),
           ),
           const SizedBox(width: 23),

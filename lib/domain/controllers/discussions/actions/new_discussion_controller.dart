@@ -95,6 +95,11 @@ class NewDiscussionController extends GetxController
   FocusNode get titleFocus => _titleFocus;
 
   @override
+  List get allUsersList => _usersDataSource.usersList
+      .where((element) => !subscribers.contains(element))
+      .toList();
+
+  @override
   RxList subscribers = [].obs;
   // to track changes
   List _previusSelectedSubscribers = [];

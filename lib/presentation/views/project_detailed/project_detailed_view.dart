@@ -118,7 +118,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                         EditProjectView(projectDetailed: projectDetailed),
                         arguments: {'projectDetailed': projectDetailed}))
                 : const SizedBox(),
-            _ProjectContextMenu(controller: projectController)
+            if (!projectController.projectData.security['isInTeam'] ||
+                projectController.projectData.canDelete)
+              _ProjectContextMenu(controller: projectController)
           ],
           bottom: SizedBox(
             height: 40,

@@ -117,10 +117,7 @@ class _Content extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                   icon: SvgIcons.task_not_created,
-                  text: tr(
-                    'noTasksCreated',
-                    args: [tr('tasks').toLowerCase()],
-                  ),
+                  text: tr('noTasksCreated'),
                 ),
               ),
             ),
@@ -130,9 +127,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noTasksMatching',
-                        args: [tr('tasks').toLowerCase()])),
+                    icon: SvgIcons.not_found, text: tr('noTasksMatching')),
               ),
             ),
           if (controller.loaded.value == true &&
