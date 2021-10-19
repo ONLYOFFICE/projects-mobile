@@ -54,7 +54,7 @@ class PortalUserItemController extends GetxController {
   }
 
   final PortalUser portalUser;
-  var isSelected;
+  RxBool isSelected;
   var selectionMode = UserSelectionMode.None.obs;
 
   Rx<Uint8List> avatarData = Uint8List.fromList([]).obs;
