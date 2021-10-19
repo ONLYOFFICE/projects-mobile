@@ -56,8 +56,6 @@ class ProjectOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var projectController = Get.find<ProjectDetailsController>();
-
     return Obx(
       () {
         if (projectController.loaded.value == true) {
@@ -122,7 +120,7 @@ class ProjectOverview extends StatelessWidget {
                       tabController.animateTo(5);
                     },
                     caption: tr('team'),
-                    iconData: Icons.arrow_forward_ios_rounded,
+                    iconData: Icons.navigate_next,
                     subtitle: plural(
                         'members', projectController.teamMembersCount.value),
                     subtitleStyle: TextStyleHelper.subtitle1(

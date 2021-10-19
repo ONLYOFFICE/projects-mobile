@@ -96,8 +96,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.project_not_created,
-                  text: tr('noProjectsCreated',
-                      args: [tr('projects').toLowerCase()])),
+                  text: tr('noProjectsCreated')),
             );
           }
           if (controller.loaded.value == true &&
@@ -105,9 +104,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: SvgIcons.not_found,
-                  text: tr('noProjectsMatching',
-                      args: [tr('projects').toLowerCase()])),
+                  icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
             );
           }
           return PaginationListView(

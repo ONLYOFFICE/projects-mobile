@@ -221,8 +221,7 @@ class _DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.documents_not_created,
-                    text: tr('noDocumentsCreated',
-                        args: [tr('documents').toLowerCase()])));
+                    text: tr('noDocumentsCreated')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
@@ -230,9 +229,7 @@ class _DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noDocumentsMatching',
-                        args: [tr('documents').toLowerCase()])));
+                    icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isNotEmpty) {
@@ -362,8 +359,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                 child: Center(
                   child: EmptyScreen(
                       icon: SvgIcons.documents_not_created,
-                      text: tr('noDocumentsCreated',
-                          args: [tr('documents').toLowerCase()])),
+                      text: tr('noDocumentsCreated')),
                 ),
               ),
             if (controller.loaded.value == true &&

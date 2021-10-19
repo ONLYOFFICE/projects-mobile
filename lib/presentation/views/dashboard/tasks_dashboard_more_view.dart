@@ -108,17 +108,14 @@ class TasksDashboardMoreView extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated',
-                        args: [tr('tasks').toLowerCase()])));
+                    text: tr('noTasksCreated')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: SvgIcons.not_found,
-                  text:
-                      tr('noTasksMatching', args: [tr('tasks').toLowerCase()])),
+                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
             );
           }
           return PaginationListView(
