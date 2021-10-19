@@ -48,10 +48,6 @@ class UserController extends GetxController {
 
   Future getUserInfo() async {
     await lock.synchronized(() async {
-      if (user != null && user.id != null) {
-        return;
-      }
-
       var data = await _api.getSelfInfo();
       user = data.response;
 
