@@ -61,7 +61,14 @@ class NewDiscussionController extends GetxController
   final specifiedProjectId;
   final specifiedProjectTitle;
   NewDiscussionController(
-      {this.specifiedProjectId, this.specifiedProjectTitle});
+      {this.specifiedProjectId, this.specifiedProjectTitle}) {
+    if (specifiedProjectId != null) {
+      _selectedProjectId = specifiedProjectId;
+      selectedProjectTitle.value = specifiedProjectTitle;
+    }
+
+    addTeam();
+  }
 
   final _api = locator<DiscussionsService>();
   var _selectedProjectId;
@@ -115,10 +122,7 @@ class NewDiscussionController extends GetxController
   @override
   void onInit() {
     _titleFocus.requestFocus();
-    if (specifiedProjectId != null) {
-      _selectedProjectId = specifiedProjectId;
-      selectedProjectTitle.value = specifiedProjectTitle;
-    }
+
     super.onInit();
   }
 
@@ -142,12 +146,14 @@ class NewDiscussionController extends GetxController
   }
 
   void addTeam() {
+    if (_selectedProjectId == null) return;
+
     var team = Get.find<ProjectTeamController>()
       ..setup(projectId: _selectedProjectId);
 
     team.getTeam().then((value) {
       for (var item in team.usersList) {
-        item.selectionMode.value = UserSelectionMode.Single;
+        item.selectionMode.value = UserSelectionMode.Multiple;
         addSubscriber(item);
       }
 
