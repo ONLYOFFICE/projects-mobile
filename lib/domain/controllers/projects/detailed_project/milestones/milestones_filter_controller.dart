@@ -53,6 +53,8 @@ class MilestonesFilterController extends BaseFilterController {
   String _statusFilter = '';
 
   String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
+  set milestoneResponsibleFilter(String value) =>
+      _milestoneResponsibleFilter = value;
   String get taskResponsibleFilter => _taskResponsibleFilter;
 
   String get statusFilter => _statusFilter;
