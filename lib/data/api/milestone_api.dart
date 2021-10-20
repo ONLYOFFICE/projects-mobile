@@ -65,8 +65,10 @@ class MilestoneApi {
         sortOrder != null &&
         sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
-    if (milestoneResponsibleFilter != null) {
-      url += milestoneResponsibleFilter;
+    if (milestoneResponsibleFilter != null &&
+        milestoneResponsibleFilter != '') {
+      url +=
+          '&filterBy=Name&filterOp=contains&filterValue=$milestoneResponsibleFilter';
     }
     if (taskResponsibleFilter != null) {
       url += taskResponsibleFilter;
