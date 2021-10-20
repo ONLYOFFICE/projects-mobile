@@ -58,22 +58,12 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 
 class NewDiscussionController extends GetxController
     implements DiscussionActionsController {
-  final specifiedProjectId;
-  final specifiedProjectTitle;
-  NewDiscussionController(
-      {this.specifiedProjectId, this.specifiedProjectTitle}) {
-    if (specifiedProjectId != null) {
-      _selectedProjectId = specifiedProjectId;
-      selectedProjectTitle.value = specifiedProjectTitle;
-    }
-
-    addTeam();
-  }
-
   final _api = locator<DiscussionsService>();
-  var _selectedProjectId;
 
+  var _selectedProjectId;
   int get selectedProjectId => _selectedProjectId;
+
+  bool _projectIsLocked = false;
 
   // final _userController = Get.find<UserController>();
   final _userService = locator<UserService>();
@@ -109,8 +99,7 @@ class NewDiscussionController extends GetxController
 
   @override
   RxList subscribers = [].obs;
-  // to track changes
-  List _previusSelectedSubscribers = [];
+  List _previusSelectedSubscribers = []; // to track changes
 
   @override
   var selectProjectError = false.obs; //RxBool
@@ -118,6 +107,17 @@ class NewDiscussionController extends GetxController
   var setTitleError = false.obs;
   @override
   var setTextError = false.obs;
+
+  NewDiscussionController({projectId, projectTitle}) {
+    if (projectId != null) {
+      _selectedProjectId = projectId;
+      selectedProjectTitle.value = projectTitle;
+
+      _projectIsLocked = true;
+
+      addTeam();
+    }
+  }
 
   @override
   void onInit() {
@@ -131,7 +131,7 @@ class NewDiscussionController extends GetxController
 
   @override
   void changeProjectSelection({var id, String title}) {
-    if (specifiedProjectId != null) return;
+    if (_projectIsLocked) return;
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
@@ -146,8 +146,6 @@ class NewDiscussionController extends GetxController
   }
 
   void addTeam() {
-    if (_selectedProjectId == null) return;
-
     var team = Get.find<ProjectTeamController>()
       ..setup(projectId: _selectedProjectId);
 
@@ -162,7 +160,7 @@ class NewDiscussionController extends GetxController
   }
 
   void removeProjectSelection() {
-    if (specifiedProjectId != null) return;
+    if (_projectIsLocked) return;
     _selectedProjectId = null;
     selectedProjectTitle.value = '';
   }
@@ -319,7 +317,7 @@ class NewDiscussionController extends GetxController
         var discussionsController = Get.find<DiscussionsController>();
         // ignore: unawaited_futures
         discussionsController.loadDiscussions();
-        if (specifiedProjectId != null) {
+        if (_projectIsLocked) {
           try {
             locator<EventHub>().fire('needToRefreshProjects');
 
@@ -345,7 +343,7 @@ class NewDiscussionController extends GetxController
   }
 
   void discardDiscussion() {
-    if ((_selectedProjectId != null && specifiedProjectId == null) ||
+    if ((_selectedProjectId != null && !_projectIsLocked) ||
         title.isNotEmpty ||
         subscribers.isNotEmpty ||
         text.isNotEmpty) {
