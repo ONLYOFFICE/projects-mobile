@@ -146,6 +146,8 @@ class NewDiscussionController extends GetxController
   }
 
   void addTeam() {
+    if (_selectedProjectId == null) return;
+
     var team = Get.find<ProjectTeamController>()
       ..setup(projectId: _selectedProjectId);
 
