@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
@@ -46,6 +47,8 @@ class MilestonesDataSource extends GetxController {
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
+
+  final searchTextEditingController = TextEditingController();
 
   ProjectDetailed _projectDetailed;
 
@@ -112,4 +115,15 @@ class MilestonesDataSource extends GetxController {
   bool _canCreate() => _projectDetailed == null
       ? false
       : _projectDetailed.security['canCreateMilestone'];
+
+  void filterMilestones(String searchText) {
+    _filterController.milestoneResponsibleFilter = searchText;
+    loadMilestones();
+  }
+
+  void clearFilter() {
+    searchTextEditingController.clear();
+    _filterController.milestoneResponsibleFilter = '';
+    loadMilestones();
+  }
 }
