@@ -58,6 +58,8 @@ class NewDiscussionScreen extends StatelessWidget {
       specifiedProjectTitle: projectTitle,
     ));
 
+    if (projectId != null) controller.addTeam();
+
     return WillPopScope(
       onWillPop: () async {
         controller.discardDiscussion();

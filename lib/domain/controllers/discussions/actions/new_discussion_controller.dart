@@ -51,6 +51,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_di
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
@@ -131,10 +132,25 @@ class NewDiscussionController extends GetxController
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
       selectProjectError.value = false;
+
+      subscribers.clear();
+      addTeam();
     } else {
       removeProjectSelection();
     }
     Get.back();
+  }
+
+  void addTeam() {
+    var team = Get.find<ProjectTeamController>()
+      ..setup(projectId: _selectedProjectId);
+
+    team.getTeam().then((value) {
+      for (var item in team.usersList) {
+        item.selectionMode.value = UserSelectionMode.Single;
+        addSubscriber(item);
+      }
+    });
   }
 
   void removeProjectSelection() {
@@ -223,7 +239,7 @@ class NewDiscussionController extends GetxController
       {fromUsersDataSource = false}) {
     user.onTap();
 
-    if (user.isSelected.value == true) {
+    if (user.isSelected.value == true && !subscribers.contains(user)) {
       subscribers.add(user);
     } else {
       subscribers.removeWhere(
