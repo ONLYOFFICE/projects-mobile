@@ -150,6 +150,8 @@ class NewDiscussionController extends GetxController
         item.selectionMode.value = UserSelectionMode.Single;
         addSubscriber(item);
       }
+
+      _previusSelectedSubscribers = subscribers;
     });
   }
 
