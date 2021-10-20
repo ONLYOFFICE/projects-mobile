@@ -83,23 +83,25 @@ class ProjectManagerSelectionView extends StatelessWidget {
       body: Obx(
         () {
           if (controller.usersLoaded.value &&
-              usersDataSource.usersList.isNotEmpty &&
+              usersDataSource.usersWithoutVisitors.isNotEmpty &&
               !usersDataSource.isSearchResult.value) {
             return UsersDefault(
               selfUserItem: controller.selfUserItem,
               usersDataSource: usersDataSource,
               onTapFunction: controller.changePMSelection,
+              withoutGuests: true,
             );
           }
           if (usersDataSource.nothingFound.value == true) {
             return Column(children: [const NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersList.isNotEmpty &&
+              usersDataSource.usersWithoutVisitors.isNotEmpty &&
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
               onTapFunction: controller.changePMSelection,
+              withoutVisitors: true,
             );
           }
           return const ListLoadingSkeleton();
@@ -114,12 +116,17 @@ class UsersSearchResult extends StatelessWidget {
     Key key,
     @required this.usersDataSource,
     @required this.onTapFunction,
+    this.withoutVisitors = false,
   }) : super(key: key);
   final Function onTapFunction;
-  final usersDataSource;
+  final UsersDataSource usersDataSource;
+  final bool withoutVisitors;
 
   @override
   Widget build(BuildContext context) {
+    var users = withoutVisitors
+        ? usersDataSource.usersWithoutVisitors
+        : usersDataSource.usersList;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -131,11 +138,11 @@ class UsersSearchResult extends StatelessWidget {
             onLoading: usersDataSource.onLoading,
             child: ListView.builder(
               itemBuilder: (c, i) => PortalUserItem(
-                userController: usersDataSource.usersList[i],
+                userController: users[i],
                 onTapFunction: onTapFunction,
               ),
               itemExtent: 65.0,
-              itemCount: usersDataSource.usersList.length,
+              itemCount: users.length,
             ),
           ),
         )
@@ -150,13 +157,18 @@ class UsersDefault extends StatelessWidget {
     @required this.selfUserItem,
     @required this.usersDataSource,
     @required this.onTapFunction,
+    this.withoutGuests = false,
   }) : super(key: key);
   final Function onTapFunction;
   final PortalUserItemController selfUserItem;
   final usersDataSource;
+  final bool withoutGuests;
 
   @override
   Widget build(BuildContext context) {
+    var users = withoutGuests
+        ? usersDataSource.usersWithoutVisitors
+        : usersDataSource.usersList;
     return SmartRefresher(
       enablePullDown: false,
       enablePullUp: usersDataSource.pullUpEnabled,
@@ -193,10 +205,9 @@ class UsersDefault extends StatelessWidget {
               physics: const ScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (c, i) => PortalUserItem(
-                  userController: usersDataSource.usersList[i],
-                  onTapFunction: onTapFunction),
+                  userController: users[i], onTapFunction: onTapFunction),
               itemExtent: 65.0,
-              itemCount: usersDataSource.usersList.length,
+              itemCount: users.length,
             )
           ]),
         ],

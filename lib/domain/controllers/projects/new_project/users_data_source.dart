@@ -41,7 +41,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersDataSource extends GetxController {
   final _api = locator<UserService>();
-  var usersList = [].obs;
+  RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
   var loaded = true.obs;
   var searchInputController = TextEditingController();
 
@@ -66,6 +66,9 @@ class UsersDataSource extends GetxController {
   var selfIsVisible = true.obs;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
+
+  RxList<PortalUserItemController> get usersWithoutVisitors =>
+      RxList.from(usersList.where((user) => !user.portalUser.isVisitor));
 
   void onLoading() async {
     _startIndex += 25;

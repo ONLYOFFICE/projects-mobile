@@ -71,7 +71,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
         appBar: StyledAppBar(
           backgroundColor:
               platformController.isMobile ? null : Get.theme.colors().surface,
-          // titleText: 'Select subscribers',
+
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
               : const Icon(Icons.close),
@@ -129,78 +129,76 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                 onLoading: usersDataSource.onLoading,
                 enablePullUp: usersDataSource.pullUpEnabled,
                 child: ListView.separated(
-                  itemCount: usersDataSource.usersList.length,
-                  padding: const EdgeInsets.symmetric(vertical: 13),
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const SizedBox(height: 24);
-                  },
-                  itemBuilder: (BuildContext context, int index) {
-                    return Obx(
-                      () => CheckboxListTile(
-                        value:
-                            usersDataSource.usersList[index].isSelected == true,
-                        activeColor: Get.theme.colors().primary,
-                        onChanged: (value) {
-                          controller.addSubscriber(
-                            usersDataSource.usersList[index],
-                            fromUsersDataSource: true,
-                          );
-                        },
-                        contentPadding:
-                            const EdgeInsets.only(left: 16, right: 9),
-                        title: Row(
-                          children: [
-                            SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: CircleAvatar(
-                                radius: 20.0,
-                                backgroundColor:
-                                    Get.theme.colors().bgDescription,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Obx(() {
-                                    return usersDataSource
-                                        .usersList[index].avatar.value;
-                                  }),
+                    itemCount: usersDataSource.usersList.length,
+                    padding: const EdgeInsets.symmetric(vertical: 13),
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const SizedBox(height: 24),
+                    itemBuilder: (BuildContext context, int index) {
+                      return Obx(
+                        () => CheckboxListTile(
+                          value:
+                              usersDataSource.usersList[index].isSelected.value,
+                          activeColor: Get.theme.colors().primary,
+                          onChanged: (value) {
+                            controller.addSubscriber(
+                              usersDataSource.usersList[index],
+                              fromUsersDataSource: true,
+                            );
+                          },
+                          contentPadding:
+                              const EdgeInsets.only(left: 16, right: 9),
+                          title: Row(
+                            children: [
+                              SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: CircleAvatar(
+                                  radius: 20.0,
+                                  backgroundColor:
+                                      Get.theme.colors().bgDescription,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child: Obx(() {
+                                      return usersDataSource
+                                          .usersList[index].avatar.value;
+                                    }),
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 16),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    usersDataSource
-                                        .usersList[index].displayName,
-                                    maxLines: 2,
-                                    style: TextStyleHelper.subtitle1(
-                                        color: Get.theme.colors().onSurface),
-                                  ),
-                                  if (usersDataSource
-                                          .usersList[index].portalUser.title !=
-                                      null)
+                              const SizedBox(width: 16),
+                              Flexible(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
                                     Text(
                                       usersDataSource
-                                          .usersList[index].portalUser.title,
+                                          .usersList[index].displayName,
                                       maxLines: 2,
-                                      style: TextStyleHelper.caption(
-                                          color: Get.theme
-                                              .colors()
-                                              .onSurface
-                                              .withOpacity(0.6)),
+                                      style: TextStyleHelper.subtitle1(
+                                          color: Get.theme.colors().onSurface),
                                     ),
-                                  const SizedBox(width: 10),
-                                ],
+                                    if (usersDataSource.usersList[index]
+                                            .portalUser.title !=
+                                        null)
+                                      Text(
+                                        usersDataSource
+                                            .usersList[index].portalUser.title,
+                                        maxLines: 2,
+                                        style: TextStyleHelper.caption(
+                                            color: Get.theme
+                                                .colors()
+                                                .onSurface
+                                                .withOpacity(0.6)),
+                                      ),
+                                    const SizedBox(width: 10),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                ),
+                      );
+                    }),
               );
             }
             if (usersDataSource.nothingFound.value == true) {

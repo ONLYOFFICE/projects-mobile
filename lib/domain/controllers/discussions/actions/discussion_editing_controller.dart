@@ -195,7 +195,7 @@ class DiscussionEditingController extends GetxController
 
   Future<void> _getSelectedSubscribers() async {
     for (var i = 0; i < _usersDataSource.usersList.length; i++) {
-      PortalUserItemController user = _usersDataSource.usersList[i];
+      var user = _usersDataSource.usersList[i];
       user.selectionMode.value = UserSelectionMode.Multiple;
       var found = false;
 
