@@ -69,7 +69,7 @@ class NewDiscussionController extends GetxController
   final _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
   var selectedGroups = <PortalGroupItemController>[];
-  var _manualSelectedPersons = [];
+  final _manualSelectedPersons = [];
 
   @override
   RxString title = ''.obs;
@@ -155,12 +155,13 @@ class NewDiscussionController extends GetxController
       ..setup(projectId: _selectedProjectId);
 
     team.getTeam().then((value) {
-      _team = team.usersList.value;
+      // ignore: invalid_use_of_protected_member
+      _team = List.of(team.usersList.value);
       for (var item in team.usersList) {
         item.selectionMode.value = UserSelectionMode.Multiple;
         addSubscriber(item);
       }
-
+      // ignore: invalid_use_of_protected_member
       _previusSelectedSubscribers = List.of(subscribers.value);
     });
   }
@@ -199,10 +200,10 @@ class NewDiscussionController extends GetxController
 
   @override
   void confirmSubscribersSelection() {
-    _usersDataSource.usersList.value.forEach((user) {
-      if (!subscribers.contains(user) && user.isSelected.value)
+    for (var user in _usersDataSource.usersList) {
+      if (!subscribers.any((it) => it.id == user.id) && user.isSelected.value)
         subscribers.add(user);
-    });
+    }
 
     // ignore: invalid_use_of_protected_member
     _previusSelectedSubscribers = List.of(subscribers.value);
@@ -240,19 +241,19 @@ class NewDiscussionController extends GetxController
 
   void saveManualSelectedPersons() {
     _manualSelectedPersons.clear();
-    _usersDataSource.usersList.value.forEach((user) {
-      if (user.isSelected.value && !_team.contains(user)) {
+    for (var user in _usersDataSource.usersList) {
+      if (user.isSelected.value && !_team.any((it) => it.id == user.id)) {
         _manualSelectedPersons.add(user);
       }
-    });
+    }
   }
 
   void restoreManualSelectedPersons() {
-    _manualSelectedPersons.forEach((manual) {
-      _usersDataSource.usersList.value.forEach((user) {
+    for (var manual in _manualSelectedPersons) {
+      for (var user in _usersDataSource.usersList) {
         if (user.id == manual.id) user.isSelected.value = true;
-      });
-    });
+      }
+    }
   }
 
   Future<void> _getSelectedSubscribers() async {
