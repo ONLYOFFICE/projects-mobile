@@ -82,7 +82,8 @@ class MilestoneApi {
     if (projectId != null && projectId.isNotEmpty)
       url += '&projectid=$projectId';
 
-    if (query != null && query.isNotEmpty) url += query;
+    if (query != null && query.isNotEmpty)
+      url += '&filterBy=Name&filterOp=contains&filterValue=$query';
 
     var result = ApiDTO<List<Milestone>>();
     try {
