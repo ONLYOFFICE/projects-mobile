@@ -32,6 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 
@@ -55,6 +56,7 @@ class ProjectTeamController extends GetxController {
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
   bool _withoutVisitors = false;
+  bool _withoutBlocked = false;
   var fabIsVisible = false.obs;
 
   ProjectDetailed _projectDetailed;
@@ -81,6 +83,7 @@ class ProjectTeamController extends GetxController {
 
     for (var element in result) {
       if (_withoutVisitors && element.isVisitor) continue;
+      if (_withoutBlocked && element.status == UserStatus.Terminated) continue;
 
       var portalUser = PortalUserItemController(portalUser: element);
       portalUser.selectionMode.value = selectionMode;
@@ -137,8 +140,10 @@ class ProjectTeamController extends GetxController {
   void setup(
       {ProjectDetailed projectDetailed,
       bool withoutVisitors = false,
+      bool withoutBlocked = false,
       projectId}) {
     _withoutVisitors = withoutVisitors;
+    _withoutBlocked = withoutBlocked;
     _projectId = projectId ?? projectDetailed.id;
     _projectDetailed = projectDetailed;
   }

@@ -216,7 +216,9 @@ class NewTaskController extends GetxController
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
-          projectId: _selectedProjectId, withoutVisitors: true);
+          projectId: _selectedProjectId,
+          withoutVisitors: true,
+          withoutBlocked: true);
 
       await teamController
           .getTeam()
