@@ -109,7 +109,8 @@ class SubtaskCell extends StatelessWidget {
                         itemBuilder: (context) {
                           return [
                             if (subtaskController.canEdit &&
-                                subtask.responsible == null)
+                                subtaskController.subtask.value.responsible ==
+                                    null)
                               PopupMenuItem(
                                   value: 'acceptSubtask',
                                   child: Text(tr('acceptSubtask'),
