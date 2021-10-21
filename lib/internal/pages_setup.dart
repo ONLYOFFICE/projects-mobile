@@ -58,7 +58,7 @@ import 'package:projects/presentation/views/new_task/select/select_date_view.dar
 
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/description_view.dart';
