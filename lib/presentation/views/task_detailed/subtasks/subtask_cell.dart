@@ -115,7 +115,8 @@ class SubtaskCell extends StatelessWidget {
                                   value: 'acceptSubtask',
                                   child: Text(tr('acceptSubtask'),
                                       style: TextStyleHelper.subtitle1())),
-                            if (subtaskController.canCreateSubtask)
+                            if (subtaskController.canCreateSubtask &&
+                                subtaskController.subtask.value.status == 1)
                               PopupMenuItem(
                                   value: 'copySubtask',
                                   child: Text(tr('copySubtask'),
