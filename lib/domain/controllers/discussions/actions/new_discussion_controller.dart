@@ -51,26 +51,25 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_di
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class NewDiscussionController extends GetxController
     implements DiscussionActionsController {
-  final specifiedProjectId;
-  final specifiedProjectTitle;
-  NewDiscussionController(
-      {this.specifiedProjectId, this.specifiedProjectTitle});
-
   final _api = locator<DiscussionsService>();
-  var _selectedProjectId;
 
+  var _selectedProjectId;
   int get selectedProjectId => _selectedProjectId;
+
+  bool _projectIsLocked = false;
 
   // final _userController = Get.find<UserController>();
   final _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
   var selectedGroups = <PortalGroupItemController>[];
+  final _manualSelectedPersons = [];
 
   @override
   RxString title = ''.obs;
@@ -96,13 +95,13 @@ class NewDiscussionController extends GetxController
 
   @override
   List get allUsersList => _usersDataSource.usersList
-      .where((element) => !subscribers.contains(element))
+      .where((element) => !subscribers.any((it) => it.id == element.id))
       .toList();
 
+  var _team = [];
   @override
   RxList subscribers = [].obs;
-  // to track changes
-  List _previusSelectedSubscribers = [];
+  List _previusSelectedSubscribers = []; // to track changes
 
   @override
   var selectProjectError = false.obs; //RxBool
@@ -111,13 +110,21 @@ class NewDiscussionController extends GetxController
   @override
   var setTextError = false.obs;
 
+  NewDiscussionController({projectId, projectTitle}) {
+    if (projectId != null) {
+      _selectedProjectId = projectId;
+      selectedProjectTitle.value = projectTitle;
+
+      _projectIsLocked = true;
+
+      addTeam();
+    }
+  }
+
   @override
   void onInit() {
     _titleFocus.requestFocus();
-    if (specifiedProjectId != null) {
-      _selectedProjectId = specifiedProjectId;
-      selectedProjectTitle.value = specifiedProjectTitle;
-    }
+
     super.onInit();
   }
 
@@ -126,19 +133,39 @@ class NewDiscussionController extends GetxController
 
   @override
   void changeProjectSelection({var id, String title}) {
-    if (specifiedProjectId != null) return;
+    if (_projectIsLocked) return;
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
       selectProjectError.value = false;
+
+      saveManualSelectedPersons();
+      subscribers.clear();
+      addTeam();
     } else {
       removeProjectSelection();
     }
     Get.back();
   }
 
+  void addTeam() {
+    if (_selectedProjectId == null) return;
+
+    var team = Get.find<ProjectTeamController>()
+      ..setup(projectId: _selectedProjectId);
+
+    team.getTeam().then((value) {
+      _team = List.of(team.usersList);
+      for (var item in team.usersList) {
+        item.selectionMode.value = UserSelectionMode.Multiple;
+        addSubscriber(item);
+      }
+      _previusSelectedSubscribers = List.of(subscribers);
+    });
+  }
+
   void removeProjectSelection() {
-    if (specifiedProjectId != null) return;
+    if (_projectIsLocked) return;
     _selectedProjectId = null;
     selectedProjectTitle.value = '';
   }
@@ -171,16 +198,19 @@ class NewDiscussionController extends GetxController
 
   @override
   void confirmSubscribersSelection() {
-    // ignore: invalid_use_of_protected_member
-    _previusSelectedSubscribers = List.of(subscribers.value);
+    for (var user in _usersDataSource.usersList) {
+      if (!subscribers.any((it) => it.id == user.id) && user.isSelected.value)
+        subscribers.add(user);
+    }
+
+    _previusSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
     Get.back();
   }
 
   @override
   void leaveSubscribersSelectionView() {
-    // ignore: invalid_use_of_protected_member
-    if (listEquals(_previusSelectedSubscribers, subscribers.value)) {
+    if (listEquals(_previusSelectedSubscribers, subscribers)) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -202,6 +232,24 @@ class NewDiscussionController extends GetxController
   void setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
     await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
+    restoreManualSelectedPersons();
+  }
+
+  void saveManualSelectedPersons() {
+    _manualSelectedPersons.clear();
+    for (var user in _usersDataSource.usersList) {
+      if (user.isSelected.value && !_team.any((it) => it.id == user.id)) {
+        _manualSelectedPersons.add(user);
+      }
+    }
+  }
+
+  void restoreManualSelectedPersons() {
+    for (var manual in _manualSelectedPersons) {
+      for (var user in _usersDataSource.usersList) {
+        if (user.id == manual.id) user.isSelected.value = true;
+      }
+    }
   }
 
   Future<void> _getSelectedSubscribers() async {
@@ -223,7 +271,8 @@ class NewDiscussionController extends GetxController
       {fromUsersDataSource = false}) {
     user.onTap();
 
-    if (user.isSelected.value == true) {
+    if (user.isSelected.value == true &&
+        !subscribers.any((it) => it.id == user.id)) {
       subscribers.add(user);
     } else {
       subscribers.removeWhere(
@@ -295,7 +344,7 @@ class NewDiscussionController extends GetxController
         var discussionsController = Get.find<DiscussionsController>();
         // ignore: unawaited_futures
         discussionsController.loadDiscussions();
-        if (specifiedProjectId != null) {
+        if (_projectIsLocked) {
           try {
             locator<EventHub>().fire('needToRefreshProjects');
 
@@ -321,7 +370,7 @@ class NewDiscussionController extends GetxController
   }
 
   void discardDiscussion() {
-    if ((_selectedProjectId != null && specifiedProjectId == null) ||
+    if ((_selectedProjectId != null && !_projectIsLocked) ||
         title.isNotEmpty ||
         subscribers.isNotEmpty ||
         text.isNotEmpty) {
