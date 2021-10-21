@@ -48,7 +48,6 @@ import 'package:projects/presentation/views/documents/entity_documents_view.dart
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
-import 'package:projects/presentation/views/task_detailed/task_team.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 part 'app_bar_menu.dart';
@@ -67,7 +66,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   var _activeIndex = 0.obs;
   TaskItemController controller;
   final documentsController = Get.find<DocumentsController>();
-  final tabsAmount = 5;
+  final tabsAmount = 4;
 
   @override
   void initState() {
@@ -134,10 +133,6 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                       title: tr('comments'),
                       currentTab: _activeIndex.value == 3,
                       count: controller.getActualCommentCount),
-                  CustomTab(
-                      title: tr('team'),
-                      currentTab: _activeIndex.value == 4,
-                      count: controller.task.value.responsibles.length),
                 ]),
           ),
         ),
@@ -151,7 +146,6 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
             documentsController: documentsController,
           ),
           TaskCommentsView(controller: controller),
-          TaskTeamView(controller: controller),
         ]),
       ),
     );

@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -51,36 +52,42 @@ class TaskTeamView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (controller.task.value.responsibles != null &&
-          controller.task.value.responsibles.isNotEmpty)
-        return Column(
-          children: [
-            ListView.builder(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (c, i) => PortalUserItem(
-                  userController: PortalUserItemController(
-                      portalUser: controller.task.value.responsibles[i],
-                      isSelected: false.obs),
-                  onTapFunction: (value) => {
-                        Get.find<NavigationController>()
-                            .toScreen(const ProfileScreen(), arguments: {
-                          'portalUser': controller.task.value.responsibles[i]
-                        })
-                      }),
-              itemExtent: 65.0,
-              itemCount: controller.task.value.responsibles.length,
-            )
-          ],
-        );
-      else
-        return Center(
-          child: EmptyScreen(
-            icon: SvgIcons.not_found,
-            text: tr('noPeopleMatching'),
-          ),
-        );
-    });
+    return Scaffold(
+      appBar: StyledAppBar(
+        showBackButton: true,
+        titleText: tr('assignedTo'),
+      ),
+      body: Obx(() {
+        if (controller.task.value.responsibles != null &&
+            controller.task.value.responsibles.isNotEmpty)
+          return Column(
+            children: [
+              ListView.builder(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (c, i) => PortalUserItem(
+                    userController: PortalUserItemController(
+                        portalUser: controller.task.value.responsibles[i],
+                        isSelected: false.obs),
+                    onTapFunction: (value) => {
+                          Get.find<NavigationController>()
+                              .toScreen(const ProfileScreen(), arguments: {
+                            'portalUser': controller.task.value.responsibles[i]
+                          })
+                        }),
+                itemExtent: 65.0,
+                itemCount: controller.task.value.responsibles.length,
+              )
+            ],
+          );
+        else
+          return Center(
+            child: EmptyScreen(
+              icon: SvgIcons.not_found,
+              text: tr('noPeopleMatching'),
+            ),
+          );
+      }),
+    );
   }
 }
