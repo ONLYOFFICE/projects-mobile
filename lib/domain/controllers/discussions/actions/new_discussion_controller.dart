@@ -161,7 +161,7 @@ class NewDiscussionController extends GetxController
         addSubscriber(item);
       }
 
-      _previusSelectedSubscribers = subscribers.value;
+      _previusSelectedSubscribers = List.of(subscribers.value);
     });
   }
 
