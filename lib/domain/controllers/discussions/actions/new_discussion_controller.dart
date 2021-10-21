@@ -69,6 +69,7 @@ class NewDiscussionController extends GetxController
   final _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
   var selectedGroups = <PortalGroupItemController>[];
+  var _manualSelectedPersons = [];
 
   @override
   RxString title = ''.obs;
@@ -97,6 +98,7 @@ class NewDiscussionController extends GetxController
       .where((element) => !subscribers.contains(element))
       .toList();
 
+  var _team = [];
   @override
   RxList subscribers = [].obs;
   List _previusSelectedSubscribers = []; // to track changes
@@ -137,6 +139,7 @@ class NewDiscussionController extends GetxController
       _selectedProjectId = id;
       selectProjectError.value = false;
 
+      saveManualSelectedPersons();
       subscribers.clear();
       addTeam();
     } else {
@@ -152,12 +155,13 @@ class NewDiscussionController extends GetxController
       ..setup(projectId: _selectedProjectId);
 
     team.getTeam().then((value) {
+      _team = team.usersList.value;
       for (var item in team.usersList) {
         item.selectionMode.value = UserSelectionMode.Multiple;
         addSubscriber(item);
       }
 
-      _previusSelectedSubscribers = subscribers;
+      _previusSelectedSubscribers = subscribers.value;
     });
   }
 
@@ -195,6 +199,11 @@ class NewDiscussionController extends GetxController
 
   @override
   void confirmSubscribersSelection() {
+    _usersDataSource.usersList.value.forEach((user) {
+      if (!subscribers.contains(user) && user.isSelected.value)
+        subscribers.add(user);
+    });
+
     // ignore: invalid_use_of_protected_member
     _previusSelectedSubscribers = List.of(subscribers.value);
     clearUserSearch();
@@ -226,6 +235,24 @@ class NewDiscussionController extends GetxController
   void setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
     await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
+    restoreManualSelectedPersons();
+  }
+
+  void saveManualSelectedPersons() {
+    _manualSelectedPersons.clear();
+    _usersDataSource.usersList.value.forEach((user) {
+      if (user.isSelected.value && !_team.contains(user)) {
+        _manualSelectedPersons.add(user);
+      }
+    });
+  }
+
+  void restoreManualSelectedPersons() {
+    _manualSelectedPersons.forEach((manual) {
+      _usersDataSource.usersList.value.forEach((user) {
+        if (user.id == manual.id) user.isSelected.value = true;
+      });
+    });
   }
 
   Future<void> _getSelectedSubscribers() async {

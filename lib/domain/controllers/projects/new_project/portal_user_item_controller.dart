@@ -105,4 +105,11 @@ class PortalUserItemController extends GetxController {
       Get.find<NavigationController>().toScreen(const ProfileScreen(),
           arguments: {'portalUser': portalUser});
   }
+
+  @override
+  bool operator ==(other) {
+    if (id == other.id) return true;
+
+    return false;
+  }
 }
