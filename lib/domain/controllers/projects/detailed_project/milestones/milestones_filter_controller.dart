@@ -52,9 +52,8 @@ class MilestonesFilterController extends BaseFilterController {
   String _deadlineFilter = '';
   String _statusFilter = '';
 
-  String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
   String get taskResponsibleFilter => _taskResponsibleFilter;
-
+  String get milestoneResponsibleFilter => _taskResponsibleFilter;
   String get statusFilter => _statusFilter;
   String get deadlineFilter => _deadlineFilter;
 
@@ -220,7 +219,7 @@ class MilestonesFilterController extends BaseFilterController {
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
+      milestoneResponsibleFilter: _milestoneResponsibleFilter,
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,

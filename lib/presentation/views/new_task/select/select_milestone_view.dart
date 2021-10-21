@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class SelectMilestoneView extends StatefulWidget {
@@ -70,9 +71,21 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
       backgroundColor:
           platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        titleText: tr('selectMilestone'),
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
+        titleText: tr('selectMilestone'),
+        backButtonIcon: Get.put(PlatformController()).isMobile
+            ? const Icon(Icons.arrow_back_rounded)
+            : const Icon(Icons.close),
+        bottomHeight: 44,
+        bottom: SearchField(
+          // TODO: add translate for key 'searchMilestone'
+          hintText: tr('searchMilestone'),
+          controller: _milestoneController.searchTextEditingController,
+          showClearIcon: true,
+          onSubmitted: _milestoneController.loadMilestonesWithFilterByName,
+          onClearPressed: _milestoneController.clearSearchAndReloadMilestones,
+        ),
       ),
       body: Column(
         children: [

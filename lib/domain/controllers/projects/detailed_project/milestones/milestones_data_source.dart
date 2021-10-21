@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
@@ -46,6 +47,10 @@ class MilestonesDataSource extends GetxController {
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
+
+  final searchTextEditingController = TextEditingController();
+
+  var searchQuery = '';
 
   ProjectDetailed _projectDetailed;
 
@@ -88,6 +93,7 @@ class MilestonesDataSource extends GetxController {
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
+      query: searchQuery,
     );
 
     paginationController.total.value = result.length;
@@ -112,4 +118,21 @@ class MilestonesDataSource extends GetxController {
   bool _canCreate() => _projectDetailed == null
       ? false
       : _projectDetailed.security['canCreateMilestone'];
+
+  void loadMilestonesWithFilterByName(String searchText) {
+    searchQuery = searchText;
+    loadMilestones();
+  }
+
+  void clearSearchAndReloadMilestones() {
+    searchTextEditingController.clear();
+    searchQuery = '';
+    loadMilestones();
+  }
+
+  @override
+  void onClose() {
+    searchTextEditingController.dispose();
+    super.onClose();
+  }
 }
