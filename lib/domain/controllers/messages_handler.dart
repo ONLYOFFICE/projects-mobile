@@ -95,58 +95,65 @@ SnackBar _styledSnackBar({
   return SnackBar(
     content: StatefulBuilder(
       builder: (context, setState) {
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Flexible(
-                child: Text(text,
-                    style: TextStyleHelper.body2(color: lightColors.surface))),
-            if (buttonText != null && buttonText.isNotEmpty && !wasPressed)
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() => wasPressed = true);
-                    return buttonOnTap();
-                  },
-                  child: SizedBox(
-                    height: 16,
-                    child: Center(
-                      child: Text(
-                        buttonText,
-                        style: TextStyleHelper.button(
-                                color:
-                                    Get.theme.colors().primary.withOpacity(0.5))
-                            .copyWith(height: 1),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            if (showOkButton && !wasPressed)
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() => wasPressed = true);
-                    ScaffoldMessenger.maybeOf(context).removeCurrentSnackBar();
-                  },
-                  child: SizedBox(
-                    height: 16,
-                    width: 65,
-                    child: Center(
-                      child: Text(tr('ok'),
+        return Container(
+          height: 48,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                  child: Text(text,
+                      style:
+                          TextStyleHelper.body2(color: lightColors.surface))),
+              if (buttonText != null && buttonText.isNotEmpty && !wasPressed)
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => wasPressed = true);
+                      return buttonOnTap();
+                    },
+                    child: SizedBox(
+                      height: 16,
+                      child: Center(
+                        child: Text(
+                          buttonText,
                           style: TextStyleHelper.button(
                                   color: Get.theme
                                       .colors()
                                       .primary
                                       .withOpacity(0.5))
-                              .copyWith(height: 1)),
+                              .copyWith(height: 1),
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ),
-          ],
+              if (showOkButton && !wasPressed)
+                Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() => wasPressed = true);
+                      ScaffoldMessenger.maybeOf(context)
+                          .removeCurrentSnackBar();
+                    },
+                    child: SizedBox(
+                      height: 16,
+                      width: 65,
+                      child: Center(
+                        child: Text(tr('ok'),
+                            style: TextStyleHelper.button(
+                                    color: Get.theme
+                                        .colors()
+                                        .primary
+                                        .withOpacity(0.5))
+                                .copyWith(height: 1)),
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
     ),
