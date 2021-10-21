@@ -95,7 +95,7 @@ class NewDiscussionController extends GetxController
 
   @override
   List get allUsersList => _usersDataSource.usersList
-      .where((element) => !subscribers.contains(element))
+      .where((element) => !subscribers.any((it) => it.id == element.id))
       .toList();
 
   var _team = [];
@@ -155,14 +155,12 @@ class NewDiscussionController extends GetxController
       ..setup(projectId: _selectedProjectId);
 
     team.getTeam().then((value) {
-      // ignore: invalid_use_of_protected_member
-      _team = List.of(team.usersList.value);
+      _team = List.of(team.usersList);
       for (var item in team.usersList) {
         item.selectionMode.value = UserSelectionMode.Multiple;
         addSubscriber(item);
       }
-      // ignore: invalid_use_of_protected_member
-      _previusSelectedSubscribers = List.of(subscribers.value);
+      _previusSelectedSubscribers = List.of(subscribers);
     });
   }
 
@@ -205,16 +203,14 @@ class NewDiscussionController extends GetxController
         subscribers.add(user);
     }
 
-    // ignore: invalid_use_of_protected_member
-    _previusSelectedSubscribers = List.of(subscribers.value);
+    _previusSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
     Get.back();
   }
 
   @override
   void leaveSubscribersSelectionView() {
-    // ignore: invalid_use_of_protected_member
-    if (listEquals(_previusSelectedSubscribers, subscribers.value)) {
+    if (listEquals(_previusSelectedSubscribers, subscribers)) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -275,7 +271,8 @@ class NewDiscussionController extends GetxController
       {fromUsersDataSource = false}) {
     user.onTap();
 
-    if (user.isSelected.value == true && !subscribers.contains(user)) {
+    if (user.isSelected.value == true &&
+        !subscribers.any((it) => it.id == user.id)) {
       subscribers.add(user);
     } else {
       subscribers.removeWhere(
