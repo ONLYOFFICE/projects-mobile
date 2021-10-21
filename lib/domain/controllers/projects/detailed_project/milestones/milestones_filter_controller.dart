@@ -48,12 +48,23 @@ class MilestonesFilterController extends BaseFilterController {
   Function applyFiltersDelegate;
 
   String _taskResponsibleFilter = '';
-  String milestoneResponsibleFilter = '';
+  String _milestoneResponsibleFilter = '';
   String _deadlineFilter = '';
   String _statusFilter = '';
+  String _additionalQueryFilter = '';
+
+  String get additionalQueryFilter => _additionalQueryFilter;
+  set additionalQueryFilter(String additionalQueryFilter) {
+    if (additionalQueryFilter.isEmpty) {
+      _additionalQueryFilter = '';
+    } else {
+      _additionalQueryFilter =
+          '&filterBy=Name&filterOp=contains&filterValue=$additionalQueryFilter';
+    }
+  }
 
   String get taskResponsibleFilter => _taskResponsibleFilter;
-
+  String get milestoneResponsibleFilter => _taskResponsibleFilter;
   String get statusFilter => _statusFilter;
   String get deadlineFilter => _deadlineFilter;
 
@@ -62,7 +73,7 @@ class MilestonesFilterController extends BaseFilterController {
   set projectId(String value) => _projectId = value;
 
   bool get _hasFilters =>
-      milestoneResponsibleFilter.isNotEmpty ||
+      _milestoneResponsibleFilter.isNotEmpty ||
       _taskResponsibleFilter.isNotEmpty ||
       _deadlineFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
@@ -91,12 +102,12 @@ class MilestonesFilterController extends BaseFilterController {
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
-    milestoneResponsibleFilter = '';
+    _milestoneResponsibleFilter = '';
     if (filter == 'me') {
       milestoneResponsible['other'] = '';
       milestoneResponsible['me'] = !milestoneResponsible['me'];
       if (milestoneResponsible['me'])
-        milestoneResponsibleFilter = '&manager=$_selfId';
+        _milestoneResponsibleFilter = '&manager=$_selfId';
     }
     if (filter == 'other') {
       milestoneResponsible['me'] = false;
@@ -104,7 +115,7 @@ class MilestonesFilterController extends BaseFilterController {
         milestoneResponsible['other'] = '';
       } else {
         milestoneResponsible['other'] = newValue['displayName'];
-        milestoneResponsibleFilter = '&milestoneResponsible=${newValue["id"]}';
+        _milestoneResponsibleFilter = '&milestoneResponsible=${newValue["id"]}';
       }
     }
     getSuitableResultCount();
@@ -219,7 +230,7 @@ class MilestonesFilterController extends BaseFilterController {
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
+      milestoneResponsibleFilter: _milestoneResponsibleFilter,
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
@@ -251,7 +262,7 @@ class MilestonesFilterController extends BaseFilterController {
 
     suitableResultCount.value = -1;
 
-    milestoneResponsibleFilter = '';
+    _milestoneResponsibleFilter = '';
     _taskResponsibleFilter = '';
     _deadlineFilter = '';
     _statusFilter = '';
@@ -284,7 +295,7 @@ class MilestonesFilterController extends BaseFilterController {
       {
         'milestoneResponsible': {
           'buttons': milestoneResponsible,
-          'value': milestoneResponsibleFilter
+          'value': _milestoneResponsibleFilter
         },
         'taskResponsible': {
           'buttons': taskResponsible,
@@ -324,7 +335,7 @@ class MilestonesFilterController extends BaseFilterController {
       try {
         milestoneResponsible =
             Map.from(savedFilters['milestoneResponsible']['buttons']).obs;
-        milestoneResponsibleFilter =
+        _milestoneResponsibleFilter =
             savedFilters['milestoneResponsible']['value'];
 
         taskResponsible =

@@ -65,10 +65,8 @@ class MilestoneApi {
         sortOrder != null &&
         sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
-    if (milestoneResponsibleFilter != null &&
-        milestoneResponsibleFilter != '') {
-      url +=
-          '&filterBy=Name&filterOp=contains&filterValue=$milestoneResponsibleFilter';
+    if (milestoneResponsibleFilter != null) {
+      url += milestoneResponsibleFilter;
     }
     if (taskResponsibleFilter != null) {
       url += taskResponsibleFilter;
@@ -84,7 +82,7 @@ class MilestoneApi {
     if (projectId != null && projectId.isNotEmpty)
       url += '&projectid=$projectId';
 
-    if (query != null) url += '&FilterValue=$query';
+    if (query != null && query.isNotEmpty) url += query;
 
     var result = ApiDTO<List<Milestone>>();
     try {

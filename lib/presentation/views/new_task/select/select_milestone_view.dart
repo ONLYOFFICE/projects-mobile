@@ -83,8 +83,8 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
           hintText: tr('searchMilestone'),
           controller: _milestoneController.searchTextEditingController,
           showClearIcon: true,
-          onSubmitted: _milestoneController.filterMilestones,
-          onClearPressed: _milestoneController.clearFilter,
+          onSubmitted: _milestoneController.loadMilestonesWithFilterByName,
+          onClearPressed: _milestoneController.clearSearchAndReloadMilestones,
         ),
       ),
       body: Column(

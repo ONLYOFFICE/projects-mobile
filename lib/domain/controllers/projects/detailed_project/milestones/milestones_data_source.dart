@@ -91,6 +91,7 @@ class MilestonesDataSource extends GetxController {
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
+      query: _filterController.additionalQueryFilter,
     );
 
     paginationController.total.value = result.length;
@@ -116,14 +117,20 @@ class MilestonesDataSource extends GetxController {
       ? false
       : _projectDetailed.security['canCreateMilestone'];
 
-  void filterMilestones(String searchText) {
-    _filterController.milestoneResponsibleFilter = searchText;
+  void loadMilestonesWithFilterByName(String searchText) {
+    _filterController.additionalQueryFilter = searchText;
     loadMilestones();
   }
 
-  void clearFilter() {
+  void clearSearchAndReloadMilestones() {
     searchTextEditingController.clear();
-    _filterController.milestoneResponsibleFilter = '';
+    _filterController.additionalQueryFilter = '';
     loadMilestones();
+  }
+
+  @override
+  void onClose() {
+    searchTextEditingController.dispose();
+    super.onClose();
   }
 }
