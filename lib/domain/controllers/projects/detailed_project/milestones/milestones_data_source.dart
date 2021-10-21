@@ -50,6 +50,8 @@ class MilestonesDataSource extends GetxController {
 
   final searchTextEditingController = TextEditingController();
 
+  var searchQuery = '';
+
   ProjectDetailed _projectDetailed;
 
   MilestonesSortController get sortController => _sortController;
@@ -91,7 +93,7 @@ class MilestonesDataSource extends GetxController {
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
-      query: _filterController.additionalQueryFilter,
+      query: searchQuery,
     );
 
     paginationController.total.value = result.length;
@@ -118,13 +120,13 @@ class MilestonesDataSource extends GetxController {
       : _projectDetailed.security['canCreateMilestone'];
 
   void loadMilestonesWithFilterByName(String searchText) {
-    _filterController.additionalQueryFilter = searchText;
+    searchQuery = searchText;
     loadMilestones();
   }
 
   void clearSearchAndReloadMilestones() {
     searchTextEditingController.clear();
-    _filterController.additionalQueryFilter = '';
+    searchQuery = '';
     loadMilestones();
   }
 
