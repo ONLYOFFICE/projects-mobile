@@ -59,9 +59,11 @@ class TasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TasksController>();
+    var controller = Get.find<TasksController>()
+      ..setupPreset(PresetTaskFilters.saved);
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      controller.loadTasks(preset: PresetTaskFilters.saved);
+      controller.loadTasks();
     });
 
     var scrollController = ScrollController();
@@ -130,8 +132,7 @@ class TasksView extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated',
-                        args: [tr('tasks').toLowerCase()])));
+                    text: tr('noTasksCreated')));
           }
           if (controller.loaded.value &&
               controller.taskStatusesLoaded.value &&
@@ -139,9 +140,7 @@ class TasksView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: SvgIcons.not_found,
-                  text:
-                      tr('noTasksMatching', args: [tr('tasks').toLowerCase()])),
+                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
             );
           }
           return PaginationListView(
@@ -166,7 +165,6 @@ class TasksHeader extends StatelessWidget {
   TasksHeader({Key key, @required this.controller}) : super(key: key);
 
   final controller;
-  // = Get.find<TasksController>();
 
   @override
   Widget build(BuildContext context) {

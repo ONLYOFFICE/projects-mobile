@@ -113,8 +113,7 @@ class _Content extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: SvgIcons.milestone_not_created,
-                    text: tr('noMilestonesCreated',
-                        args: [tr('milestones').toLowerCase()])),
+                    text: tr('noMilestonesCreated')),
               ),
             ),
           if (controller.loaded.value == true &&
@@ -123,9 +122,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noMilestonesMatching',
-                        args: [tr('milestones').toLowerCase()])),
+                    icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
               ),
             ),
           if (controller.loaded.value == true &&

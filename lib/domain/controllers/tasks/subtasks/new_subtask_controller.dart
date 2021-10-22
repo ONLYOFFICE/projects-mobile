@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -82,7 +83,8 @@ class NewSubtaskController extends GetxController
 
   void setupResponsibleSelection([int projectId]) async {
     if (teamController.usersList.isEmpty) {
-      teamController.setup(projectId: projectId, withoutVisitors: true);
+      teamController.setup(
+          projectId: projectId, withoutVisitors: true, withoutBlocked: true);
 
       await teamController
           .getTeam()
@@ -113,7 +115,7 @@ class NewSubtaskController extends GetxController
       if (element.portalUser.id != user.id) element.isSelected.value = false;
     });
     responsibles.clear();
-    if (user.isSelected == true) {
+    if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(
@@ -184,7 +186,8 @@ class NewSubtaskController extends GetxController
             Get.find<TaskItemController>(tag: taskId.toString());
 
         Get.back();
-        await taskController.reloadTask(showLoading: true);
+        locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
+
         MessagesHandler.showSnackBar(
             context: Get.context,
             text: tr('subtaskCreated'),

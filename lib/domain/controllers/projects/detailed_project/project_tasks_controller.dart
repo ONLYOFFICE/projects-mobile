@@ -35,7 +35,6 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 
@@ -48,8 +47,7 @@ class ProjectTasksController extends GetxController {
   final _sortController =
       Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
-  final _filterController =
-      Get.put(TaskFilterController(), tag: 'ProjectTasksController');
+  final _filterController = Get.find<TaskFilterController>();
 
   ProjectDetailed _projectDetailed;
 
@@ -61,9 +59,6 @@ class ProjectTasksController extends GetxController {
   var hasFilters = false.obs;
 
   int _projectId;
-
-  String _selfId;
-  final _userController = Get.find<UserController>();
 
   var fabIsVisible = false.obs;
 
@@ -111,9 +106,6 @@ class ProjectTasksController extends GetxController {
 
 // ignore: unawaited_futures
     loadTasks();
-
-    await _userController.getUserInfo();
-    _selfId ??= await _userController.getUserId();
 
     fabIsVisible.value = _canCreate();
   }

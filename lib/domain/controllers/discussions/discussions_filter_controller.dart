@@ -104,7 +104,7 @@ class DiscussionsFilterController extends BaseFilterController {
   set projectId(String value) => _projectId = value;
 
   void changeAuthor(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _authorFilter = '';
     switch (filter) {
       case 'me':
@@ -127,7 +127,7 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> changeStatus(String filter, [newValue = false]) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _statusFilter = '';
     if (filter == 'open') {
       status['archived'] = false;
@@ -301,7 +301,7 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> setupPreset(PresetDiscussionFilters preset) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
 
     if (preset == PresetDiscussionFilters.myDiscussions) {
       _authorFilter = '&participant=$_selfId';

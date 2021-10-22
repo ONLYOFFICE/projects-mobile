@@ -192,8 +192,7 @@ class DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.documents_not_created,
-                    text: tr('noDocumentsCreated',
-                        args: [tr('documents').toLowerCase()])));
+                    text: tr('noDocumentsCreated')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
@@ -201,9 +200,7 @@ class DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noDocumentsMatching',
-                        args: [tr('documents').toLowerCase()])));
+                    icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
           }
           return PaginationListView(
             paginationController: controller.paginationController,
@@ -216,11 +213,11 @@ class DocumentsScreen extends StatelessWidget {
                 var element = controller.paginationController.data[index];
                 return element is Folder
                     ? FolderCell(
-                        element: element,
+                        entity: element,
                         controller: controller,
                       )
                     : FileCell(
-                        element: element,
+                        entity: element,
                         index: index,
                         controller: controller,
                       );
@@ -248,7 +245,8 @@ class DocsTitle extends StatelessWidget {
             child: Obx(
               () => Text(
                 controller.screenName.value,
-                style: TextStyleHelper.headerStyle,
+                style: TextStyleHelper.headerStyle(
+                    color: Get.theme.colors().onSurface),
               ),
             ),
           ),

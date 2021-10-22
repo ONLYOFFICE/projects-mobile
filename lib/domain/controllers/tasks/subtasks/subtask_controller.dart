@@ -31,13 +31,13 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
@@ -85,10 +85,8 @@ class SubtaskController extends GetxController {
   }) async {
     var result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
-      var taskItemController =
-          Get.find<TaskItemController>(tag: taskId.toString());
       MessagesHandler.showSnackBar(context: context, text: tr('subtaskCopied'));
-      await taskItemController.reloadTask();
+      locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
     }
   }
 
@@ -100,9 +98,8 @@ class SubtaskController extends GetxController {
   }) async {
     var result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
-      var taskItemController =
-          Get.find<TaskItemController>(tag: taskId.toString());
-      await taskItemController.reloadTask();
+      locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
+
       MessagesHandler.showSnackBar(context: context, text: 'Subtask deleted');
       if (closePage) Get.back();
     }

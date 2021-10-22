@@ -45,6 +45,7 @@ import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
@@ -307,6 +308,7 @@ class LoginController extends GetxController {
 
     locator<EventHub>().fire('logoutSuccess');
     Get.find<PortalInfoController>().logout();
+    Get.find<UserController>().clear();
   }
 
   @override

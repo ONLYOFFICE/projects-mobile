@@ -140,10 +140,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                         usersDataSource: usersDataSource,
                       ),
                     _UsersCategoryText(text: tr('allUsers')),
-                    _AllUsers(
-                      usersDataSource: usersDataSource,
-                      controller: controller,
-                    ),
+                    _AllUsers(controller: controller),
                   ],
                 ),
               );
@@ -196,11 +193,9 @@ class _UsersCategoryText extends StatelessWidget {
 class _AllUsers extends StatelessWidget {
   const _AllUsers({
     Key key,
-    @required this.usersDataSource,
     @required this.controller,
   }) : super(key: key);
 
-  final UsersDataSource usersDataSource;
   final DiscussionActionsController controller;
 
   @override
@@ -210,20 +205,19 @@ class _AllUsers extends StatelessWidget {
         (context, index) => Padding(
           padding: const EdgeInsets.only(top: 24),
           child: UserSelectionTile(
-            image: usersDataSource.usersList[index].portalUser.avatar ??
-                usersDataSource.usersList[index].avatarMedium ??
-                usersDataSource.usersList[index].portalUser.avatarSmall,
-            value: usersDataSource.usersList[index].isSelected == true,
+            image: controller.allUsersList[index].portalUser.avatar ??
+                controller.allUsersList[index].avatarMedium ??
+                controller.allUsersList[index].portalUser.avatarSmall,
+            value: controller.allUsersList[index].isSelected == true,
             onChanged: (value) {
-              // controller.subscribers[index].onTap();
-              controller.addSubscriber(usersDataSource.usersList[index],
+              controller.addSubscriber(controller.allUsersList[index],
                   fromUsersDataSource: false);
             },
-            displayName: usersDataSource.usersList[index].displayName,
-            caption: usersDataSource.usersList[index].portalUser.title,
+            displayName: controller.allUsersList[index].displayName,
+            caption: controller.allUsersList[index].portalUser.title,
           ),
         ),
-        childCount: usersDataSource.usersList.length,
+        childCount: controller.allUsersList.length,
       ),
     );
   }
@@ -252,7 +246,6 @@ class _SubscribedUsers extends StatelessWidget {
                   controller.subscribers[index].portalUser.avatarSmall,
               value: controller.subscribers[index].isSelected == true,
               onChanged: (value) {
-                // controller.subscribers[index].onTap();
                 controller.addSubscriber(controller.subscribers[index],
                     fromUsersDataSource: false);
               },

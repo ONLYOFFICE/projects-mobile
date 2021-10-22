@@ -39,6 +39,7 @@ import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -196,40 +197,63 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
-  Future<bool> moveFolder() async {
+  Future moveFolder() async {
     var result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
+
+    if (result != null) {
+      Get.close(foldersCount);
+
+      MessagesHandler.showSnackBar(
+          context: Get.context, text: tr('folderMoved'));
+    }
     locator<EventHub>().fire('needToRefreshDocuments');
-    return result != null;
   }
 
-  Future<bool> copyFolder() async {
+  Future copyFolder() async {
     var result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
+
+    if (result != null) {
+      Get.close(foldersCount);
+
+      MessagesHandler.showSnackBar(
+          context: Get.context, text: tr('folderCopied'));
+    }
     locator<EventHub>().fire('needToRefreshDocuments');
-    return result != null;
   }
 
-  Future<bool> moveFile() async {
+  Future moveFile() async {
     var result = await _api.moveDocument(
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
+
+    if (result != null) {
+      Get.close(foldersCount);
+
+      MessagesHandler.showSnackBar(context: Get.context, text: tr('fileMoved'));
+    }
     locator<EventHub>().fire('needToRefreshDocuments');
-    return result != null;
   }
 
-  Future<bool> copyFile() async {
+  Future copyFile() async {
     var result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder.id.toString(),
     );
+
+    if (result != null) {
+      Get.close(foldersCount);
+
+      MessagesHandler.showSnackBar(
+          context: Get.context, text: tr('fileCopied'));
+    }
     locator<EventHub>().fire('needToRefreshDocuments');
-    return result != null;
   }
 
   void setupOptions(int targetId, int initial) {

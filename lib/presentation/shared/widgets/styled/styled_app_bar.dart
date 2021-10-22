@@ -100,16 +100,19 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
-      textTheme: TextTheme(
-          headline6:
-              TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+      toolbarTextStyle:
+          TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
       actions: actions,
       // ignore: prefer_if_null_operators
       title: title != null
           ? PreferredSize(
               preferredSize: Size.fromHeight(titleHeight), child: title)
           : titleText != null
-              ? Text(titleText)
+              ? Text(
+                  titleText,
+                  style: TextStyleHelper.headerStyle(
+                      color: Get.theme.colors().onSurface),
+                )
               : null,
       bottom: bottom == null
           ? null

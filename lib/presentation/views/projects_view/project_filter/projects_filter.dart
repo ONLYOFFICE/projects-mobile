@@ -56,8 +56,8 @@ class ProjectsFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterController =
-        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
+    ProjectsFilterController filterController =
+        Get.arguments['filterController'];
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
@@ -93,11 +93,10 @@ class ProjectsFilterScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12.5),
-                  const _Status(),
-                  const _ProjectManager(),
-                  const _TeamMember(),
-                  const _Other(),
-                  // const SizedBox(height: 60),
+                  _Status(filterController: filterController),
+                  _ProjectManager(filterController: filterController),
+                  _TeamMember(filterController: filterController),
+                  _Other(filterController: filterController),
                 ],
               ),
             ),

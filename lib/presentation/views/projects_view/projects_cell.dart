@@ -55,9 +55,6 @@ class ProjectCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // var itemController =
-    //     Get.put(ProjectCellController(item), tag: item.id.toString());
-
     var itemController = Get.find<ProjectCellController>();
     itemController.setup(item);
 
@@ -84,12 +81,12 @@ class ProjectCell extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        _SecondColumn(
+                        _Content(
                           item: item,
                           itemController: itemController,
                         ),
                         const SizedBox(width: 8),
-                        _ThirdColumn(
+                        _Suffix(
                           item: item,
                           controller: itemController,
                         ),
@@ -174,11 +171,11 @@ class ProjectIcon extends StatelessWidget {
   }
 }
 
-class _SecondColumn extends StatelessWidget {
+class _Content extends StatelessWidget {
   final ProjectDetailed item;
   final ProjectCellController itemController;
 
-  const _SecondColumn({
+  const _Content({
     Key key,
     @required this.item,
     @required this.itemController,
@@ -243,8 +240,8 @@ class _SecondColumn extends StatelessWidget {
   }
 }
 
-class _ThirdColumn extends StatelessWidget {
-  const _ThirdColumn({
+class _Suffix extends StatelessWidget {
+  const _Suffix({
     Key key,
     @required this.item,
     @required this.controller,

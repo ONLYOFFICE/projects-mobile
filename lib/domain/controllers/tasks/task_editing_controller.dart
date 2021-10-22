@@ -289,7 +289,9 @@ class TaskEditingController extends GetxController
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
-          projectId: task.projectOwner.id, withoutVisitors: true);
+          projectId: task.projectOwner.id,
+          withoutVisitors: true,
+          withoutBlocked: true);
 
       await teamController
           .getTeam()

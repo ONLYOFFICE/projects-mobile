@@ -72,6 +72,7 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
+import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
@@ -107,10 +108,12 @@ import 'package:projects/domain/controllers/projects/project_sort_controller.dar
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
@@ -120,6 +123,9 @@ import 'package:projects/main_controller.dart';
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
+  locator.registerLazySingleton(() => ProjectsWithPresets());
+  locator.registerLazySingleton(() => TasksWithPresets());
+
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => CommentsApi());
@@ -165,24 +171,27 @@ void setupGetX() {
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
   Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
+
+  Get.create(() => DashboardController());
+
   Get.create(
     () => DiscussionsController(
       Get.find<DiscussionsFilterController>(),
-      Get.put(PaginationController(), tag: 'DiscussionsController'),
+      Get.find<PaginationController>(),
     ),
   );
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
-  Get.lazyPut(() => TaskFilterController(), fenix: true);
+  Get.create<TaskFilterController>(() => TaskFilterController());
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
 
-  Get.lazyPut(
-      () => TasksController(
-            Get.find<TaskFilterController>(),
-            Get.put(PaginationController(), tag: 'TasksController'),
-          ),
-      fenix: true);
+  Get.create<TasksController>(
+    () => TasksController(
+      Get.find<TaskFilterController>(),
+      Get.find<PaginationController>(),
+    ),
+  );
 
   Get.lazyPut(() => TasksSortController(), fenix: true);
   Get.lazyPut(
@@ -196,7 +205,7 @@ void setupGetX() {
 
   Get.lazyPut(() => ProjectStatusesController(), fenix: true);
   Get.lazyPut(() => ProjectTasksController(), fenix: true);
-  Get.lazyPut(() => ProjectsFilterController(), fenix: true);
+
   Get.lazyPut(() => MilestonesDataSource(), fenix: true);
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);
@@ -234,13 +243,13 @@ void setupGetX() {
   Get.create<ProjectCellController>(() => ProjectCellController());
   Get.create<NewTaskController>(() => NewTaskController());
   Get.create<ProjectEditController>(() => ProjectEditController());
-
-  Get.lazyPut(
-      () => ProjectsController(
-            Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
-            Get.put(PaginationController(), tag: 'ProjectsView'),
-          ),
-      tag: 'ProjectsView');
+  Get.create(() => ProjectsFilterController());
+  Get.create(
+    () => ProjectsController(
+      Get.find<ProjectsFilterController>(),
+      Get.find<PaginationController>(),
+    ),
+  );
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
   Get.create<ProjectDetailsController>(() => ProjectDetailsController());

@@ -30,45 +30,20 @@
  *
  */
 
-part of '../projects_filter.dart';
+enum EntityAccess {
+  none,
+  readWrite,
+  read,
+  restrict,
+}
 
-class _Other extends StatelessWidget {
-  final ProjectsFilterController filterController;
-  const _Other({Key key, this.filterController}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => FiltersRow(
-        title: tr('other'),
-        options: <Widget>[
-          FilterElement(
-            title: tr('followed'),
-            titleColor: Get.theme.colors().onSurface,
-            isSelected: filterController.other['followed'],
-            onTap: () => filterController.changeOther('followed'),
-          ),
-          FilterElement(
-            title: filterController.other['withTag'].isEmpty
-                ? tr('withTag')
-                : filterController.other['withTag'],
-            isSelected: filterController.other['withTag'].isNotEmpty,
-            cancelButtonEnabled: filterController.other['withTag'].isNotEmpty,
-            onTap: () async {
-              var selectedTag = await Get.find<NavigationController>()
-                  .toScreen(const SelectTagScreen());
-              await filterController.changeOther('withTag', selectedTag);
-            },
-            onCancelTap: () => filterController.changeOther('withTag', null),
-          ),
-          FilterElement(
-            title: tr('withoutTag'),
-            titleColor: Get.theme.colors().onSurface,
-            isSelected: filterController.other['withoutTag'],
-            onTap: () => filterController.changeOther('withoutTag'),
-          ),
-        ],
-      ),
-    );
-  }
+enum FolderType {
+  unknown,
+  cloudCommon,
+  cloudBunch,
+  cloudTrash,
+  cloudUser,
+  cloudShare,
+  cloudProjects,
+  deviceDocuments,
 }

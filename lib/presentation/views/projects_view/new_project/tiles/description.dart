@@ -113,7 +113,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
             children: [
               AnimatedSize(
                 duration: const Duration(milliseconds: 250),
-                vsync: this,
+                // vsync: this,
                 child: SizedBox(
                   height: _height,
                   child: Row(

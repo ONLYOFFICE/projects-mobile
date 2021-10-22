@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -85,9 +86,9 @@ class TaskCommentItemController extends GetxController
             await _api.deleteComment(commentId: comment.value.commentId);
         if (response != null) {
           Get.back();
-          // ignore: unawaited_futures
-          Get.find<TaskItemController>(tag: taskId.toString())
-              .reloadTask(showLoading: true);
+
+          locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
+
           MessagesHandler.showSnackBar(
             context: context,
             text: tr('commentDeleted'),

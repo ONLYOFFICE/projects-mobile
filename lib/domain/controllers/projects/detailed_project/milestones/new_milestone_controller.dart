@@ -87,7 +87,10 @@ class NewMilestoneController extends GetxController {
       needToSelectProject.value = false;
 
       teamController = Get.find<ProjectTeamController>()
-        ..setup(projectDetailed: projectDetailed, withoutVisitors: true);
+        ..setup(
+            projectDetailed: projectDetailed,
+            withoutVisitors: true,
+            withoutBlocked: true);
 
       await teamController.getTeam();
 

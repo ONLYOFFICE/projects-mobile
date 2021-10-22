@@ -90,7 +90,7 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> changeProjectManager(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _projectManagerFilter = '';
     if (filter == 'me') {
       projectManager['other'] = '';
@@ -110,7 +110,7 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> changeTeamMember(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _teamMemberFilter = '';
     if (filter == 'me') {
       teamMember['other'] = '';
@@ -240,11 +240,12 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> setupPreset(PresetProjectFilters preset) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
 
     switch (preset) {
       case PresetProjectFilters.myProjects:
-        await _getMyProjects();
+        _statusFilter = '&status=open';
+        _teamMemberFilter = '&participant=$_selfId';
         break;
       case PresetProjectFilters.myFollowedProjects:
         _statusFilter = '&status=open';
@@ -295,12 +296,6 @@ class ProjectsFilterController extends BaseFilterController {
     status = {'active': true, 'paused': false, 'closed': false}.obs;
   }
 
-  Future<void> _getMyProjects() async {
-    _selfId ??= await Get.find<UserController>().getUserId();
-    _statusFilter = '&status=open';
-    _teamMemberFilter = '&participant=$_selfId';
-  }
-
   Future<void> _getSavedFilters() async {
     var savedFilters = await _storage.read('projectFilters');
 
@@ -325,7 +320,8 @@ class ProjectsFilterController extends BaseFilterController {
         await loadFilters();
       }
     } else {
-      await _getMyProjects();
+      _statusFilter = '&status=open';
+      _teamMemberFilter = '&participant=$_selfId';
     }
   }
 }

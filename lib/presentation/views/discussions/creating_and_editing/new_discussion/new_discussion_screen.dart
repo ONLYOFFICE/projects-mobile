@@ -54,8 +54,8 @@ class NewDiscussionScreen extends StatelessWidget {
     } catch (_) {}
 
     var controller = Get.put(NewDiscussionController(
-      specifiedProjectId: projectId,
-      specifiedProjectTitle: projectTitle,
+      projectId: projectId,
+      projectTitle: projectTitle,
     ));
 
     return WillPopScope(

@@ -34,9 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
@@ -55,13 +53,7 @@ class SelectProjectScreen extends StatelessWidget {
   final searchFieldController = TextEditingController();
   final searchController = Get.put(ProjectSearchController());
 
-  final _projectsController = Get.put(
-    ProjectsController(
-      Get.put(ProjectsFilterController(), tag: 'ProjectsBottomSheet'),
-      Get.put(PaginationController(), tag: 'ProjectsBottomSheet'),
-    ),
-    tag: 'ProjectsBottomSheet',
-  );
+  final _projectsController = Get.find<ProjectsController>();
 
   void onSelect(ProjectDetailed project) {
     Get.back(result: {

@@ -39,8 +39,13 @@ import 'package:projects/domain/controllers/projects/projects_with_presets.dart'
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardController extends GetxController {
+  RefreshController refreshController = RefreshController();
+  final projectsWithPresets = locator<ProjectsWithPresets>();
+  final tasksWithPresets = locator<TasksWithPresets>();
+
   var screenName = tr('dashboard').obs;
   TasksController _myTaskController;
   TasksController _upcomingTaskscontroller;
@@ -50,12 +55,13 @@ class DashboardController extends GetxController {
   ProjectsController _activeProjectsController;
   var scrollController = ScrollController();
 
-  DashboardController() {
-    _myProjectsController = ProjectsWithPresets.myProjectsController;
-    _folowedProjectsController = ProjectsWithPresets.folowedProjectsController;
-    _activeProjectsController = ProjectsWithPresets.activeProjectsController;
-    _myTaskController = TasksWithPresets.myTasksController;
-    _upcomingTaskscontroller = TasksWithPresets.upcomingTasksController;
+  Future setup() async {
+    _myTaskController = tasksWithPresets.myTasksController;
+    _upcomingTaskscontroller = tasksWithPresets.upcomingTasksController;
+
+    _myProjectsController = projectsWithPresets.myProjectsController;
+    _folowedProjectsController = projectsWithPresets.folowedProjectsController;
+    _activeProjectsController = projectsWithPresets.activeProjectsController;
 
     myTaskController.screenName = tr('myTasks');
     upcomingTaskscontroller.screenName = tr('upcomingTasks');
@@ -72,15 +78,34 @@ class DashboardController extends GetxController {
     });
   }
 
-  Future<void> refreshData() async {
-    await myTaskController.refreshData();
-    await upcomingTaskscontroller.refreshData();
+  void onRefresh() async {
+    refreshData();
+    refreshProjectsData();
+    refreshController.refreshCompleted();
   }
 
-  Future<void> refreshProjectsData() async {
-    await myProjectsController.loadProjects();
-    await folowedProjectsController.loadProjects();
-    await activeProjectsController.loadProjects();
+  void onLoading() async {
+    loadContent();
+    refreshController.loadComplete();
+  }
+
+  void loadContent() {
+    myTaskController.loadTasks();
+    upcomingTaskscontroller.loadTasks();
+    myProjectsController.loadProjects();
+    folowedProjectsController.loadProjects();
+    activeProjectsController.loadProjects();
+  }
+
+  void refreshData() {
+    myTaskController.refreshData();
+    upcomingTaskscontroller.refreshData();
+  }
+
+  void refreshProjectsData() {
+    myProjectsController.refreshData();
+    folowedProjectsController.refreshData();
+    activeProjectsController.refreshData();
   }
 
   TasksController get myTaskController => _myTaskController;

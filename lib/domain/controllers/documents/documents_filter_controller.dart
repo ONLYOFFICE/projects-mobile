@@ -83,7 +83,7 @@ class DocumentsFilterController extends BaseFilterController {
   Future<void> restoreFilters() async => await _getSavedFilters();
 
   Future<void> changeAuthorFilter(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _authorFilter = '';
 
     switch (filter) {

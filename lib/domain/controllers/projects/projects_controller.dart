@@ -55,6 +55,8 @@ class ProjectsController extends BaseController {
 
   PaginationController _paginationController;
 
+  PresetProjectFilters _preset;
+
   PaginationController get paginationController => _paginationController;
 
   @override
@@ -88,20 +90,20 @@ class ProjectsController extends BaseController {
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       loadProjects();
     });
-    _userController
-        .getUserInfo()
-        .then((value) => fabIsVisible.value = canCreateNewProject);
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) {
-      fabIsVisible.value = data ? false : canCreateNewProject;
+    getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
+    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+      fabIsVisible.value = data ? false : await getFabVisibility();
     });
   }
 
-  bool get canCreateNewProject =>
-      _userController.user.isAdmin ||
-      _userController.user.isOwner ||
-      (_userController.user.listAdminModules != null &&
-          _userController.user.listAdminModules.contains('projects')) ||
-      _userController.securityInfo.canCreateProject;
+  Future<bool> getFabVisibility() async {
+    await _userController.getUserInfo();
+    return _userController.user.isAdmin ||
+        _userController.user.isOwner ||
+        (_userController.user.listAdminModules != null &&
+            _userController.user.listAdminModules.contains('projects')) ||
+        _userController.securityInfo.canCreateProject;
+  }
 
   @override
   void showSearch() {
@@ -118,12 +120,16 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  Future<void> loadProjects({PresetProjectFilters preset}) async {
+  void setupPreset(PresetProjectFilters preset) {
+    _preset = preset;
+  }
+
+  Future<void> loadProjects() async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    if (preset != null) {
+    if (_preset != null) {
       await _filterController
-          .setupPreset(preset)
+          .setupPreset(_preset)
           .then((value) => _getProjects(needToClear: true));
     } else {
       await _getProjects(needToClear: true);

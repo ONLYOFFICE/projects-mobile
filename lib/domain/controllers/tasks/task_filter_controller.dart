@@ -109,7 +109,7 @@ class TaskFilterController extends BaseFilterController {
   set projectId(String value) => _projectId = value;
 
   void changeResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _responsibleFilter = '';
 
     switch (filter) {
@@ -158,7 +158,7 @@ class TaskFilterController extends BaseFilterController {
   }
 
   Future<void> changeCreator(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _creatorFilter = '';
     if (filter == 'me') {
       creator['other'] = '';
@@ -394,27 +394,36 @@ class TaskFilterController extends BaseFilterController {
   }
 
   Future<void> setupPreset(PresetTaskFilters preset) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
 
-    if (preset == PresetTaskFilters.myTasks) {
-      _statusFilter = '&status=1';
+    switch (preset) {
+      case PresetTaskFilters.myTasks:
+        _statusFilter = '&status=1';
 
-      await _getMyTasks();
-    } else if (preset == PresetTaskFilters.upcomming) {
-      _statusFilter = '&status=1';
-      var startDate = formatter.format(DateTime.now());
-      var stopDate =
-          formatter.format(DateTime.now().add(const Duration(days: 7)));
-      _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
-    } else if (preset == PresetTaskFilters.last) {
-      var startDate = formatter.format(DateTime.now());
-      var stopDate =
-          formatter.format(DateTime.now().add(const Duration(days: 7)));
+        _responsibleFilter = '&participant=$_selfId';
+        responsible['me'] = true;
+        break;
+      case PresetTaskFilters.upcomming:
+        _statusFilter = '&status=1';
+        var startDate = formatter.format(DateTime.now());
+        var stopDate =
+            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+        _responsibleFilter = '&participant=$_selfId';
+        responsible['me'] = true;
+        break;
+      case PresetTaskFilters.last:
+        var startDate = formatter.format(DateTime.now());
+        var stopDate =
+            formatter.format(DateTime.now().add(const Duration(days: 7)));
 
-      _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
-    } else if (preset == PresetTaskFilters.saved) {
-      await _getSavedFilters();
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+        break;
+      case PresetTaskFilters.saved:
+        await _getSavedFilters();
+        break;
     }
+
     hasFilters.value = _hasFilters;
   }
 
@@ -463,12 +472,6 @@ class TaskFilterController extends BaseFilterController {
     }.obs;
   }
 
-  Future<void> _getMyTasks() async {
-    _selfId ??= await Get.find<UserController>().getUserId();
-    _responsibleFilter = '&participant=$_selfId';
-    responsible['me'] = true;
-  }
-
   Future<void> _getSavedFilters() async {
     var savedFilters = await _storage.read('taskFilters', returnCopy: true);
 
@@ -506,7 +509,9 @@ class TaskFilterController extends BaseFilterController {
         await loadFilters();
       }
     } else {
-      await _getMyTasks();
+      _statusFilter = '&status=1';
+      _responsibleFilter = '&participant=$_selfId';
+      responsible['me'] = true;
     }
   }
 }

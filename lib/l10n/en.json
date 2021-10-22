@@ -451,5 +451,6 @@
 	"statusClosed": "Closed",
 	"statusPaused": "Paused",
 	"taskStatusOpen": "Open",
-	"taskStatusClosed": "Closed"
+	"taskStatusClosed": "Closed",
+	"searchMilestone": "Search for milstone..."
 }

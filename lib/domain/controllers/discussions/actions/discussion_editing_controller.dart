@@ -99,6 +99,11 @@ class DiscussionEditingController extends GetxController
   var selectedGroups = <PortalGroupItemController>[];
 
   @override
+  List get allUsersList => _usersDataSource.usersList
+      .where((element) => !subscribers.contains(element))
+      .toList();
+
+  @override
   var textController = HtmlEditorController();
 
   final TextEditingController _titleController = TextEditingController();
@@ -184,13 +189,13 @@ class DiscussionEditingController extends GetxController
 
   @override
   void setupSubscribersSelection() async {
-    await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
+    await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
   }
 
   Future<void> _getSelectedSubscribers() async {
     for (var i = 0; i < _usersDataSource.usersList.length; i++) {
-      PortalUserItemController user = _usersDataSource.usersList[i];
+      var user = _usersDataSource.usersList[i];
       user.selectionMode.value = UserSelectionMode.Multiple;
       var found = false;
 

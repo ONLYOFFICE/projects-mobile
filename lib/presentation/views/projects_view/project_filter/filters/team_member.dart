@@ -33,12 +33,11 @@
 part of '../projects_filter.dart';
 
 class _TeamMember extends StatelessWidget {
-  const _TeamMember({Key key}) : super(key: key);
+  final ProjectsFilterController filterController;
+  const _TeamMember({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController =
-        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
         title: tr('teamMember'),

@@ -37,7 +37,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -60,18 +59,11 @@ class ProjectsView extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectsController controller;
 
-    try {
-      controller = Get.find<ProjectsController>(tag: 'ProjectsView');
-    } catch (_) {
-      controller = Get.put(
-          ProjectsController(
-            Get.put(ProjectsFilterController(), tag: 'ProjectsView'),
-            Get.put(PaginationController(), tag: 'ProjectsView'),
-          ),
-          tag: 'ProjectsView');
-    }
+    controller = Get.find<ProjectsController>()
+      ..setupPreset(PresetProjectFilters.saved);
+
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      controller.loadProjects(preset: PresetProjectFilters.saved);
+      controller.loadProjects();
     });
 
     var scrollController = ScrollController();
@@ -118,8 +110,7 @@ class ProjectsView extends StatelessWidget {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.project_not_created,
-                  text: tr('noProjectsCreated',
-                      args: [tr('projects').toLowerCase()])),
+                  text: tr('noProjectsCreated')),
             );
           }
           if (controller.loaded.value == true &&
@@ -127,9 +118,7 @@ class ProjectsView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: SvgIcons.not_found,
-                  text: tr('noProjectsMatching',
-                      args: [tr('projects').toLowerCase()])),
+                  icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
             );
           }
           return PaginationListView(
@@ -161,7 +150,8 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Text(
               controller.screenName,
-              style: TextStyleHelper.headerStyle,
+              style: TextStyleHelper.headerStyle(
+                  color: Get.theme.colors().onSurface),
             ),
           ),
           Row(
@@ -182,8 +172,12 @@ class _Title extends StatelessWidget {
               const SizedBox(width: 24),
               InkResponse(
                 onTap: () async => {
-                  Get.find<NavigationController>()
-                      .toScreen(const ProjectsFilterScreen())
+                  Get.find<NavigationController>().toScreen(
+                      const ProjectsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {
+                        'filterController': controller.filterController
+                      })
                 },
                 child: FiltersButton(controler: controller),
               ),

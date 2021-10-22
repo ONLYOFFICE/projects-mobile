@@ -52,9 +52,8 @@ class MilestonesFilterController extends BaseFilterController {
   String _deadlineFilter = '';
   String _statusFilter = '';
 
-  String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
   String get taskResponsibleFilter => _taskResponsibleFilter;
-
+  String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
   String get statusFilter => _statusFilter;
   String get deadlineFilter => _deadlineFilter;
 
@@ -91,7 +90,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
       milestoneResponsible['other'] = '';
@@ -112,7 +111,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _taskResponsibleFilter = '';
     if (filter == 'me') {
       taskResponsible['other'] = '';
@@ -220,7 +219,7 @@ class MilestonesFilterController extends BaseFilterController {
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
-      milestoneResponsibleFilter: milestoneResponsibleFilter,
+      milestoneResponsibleFilter: _milestoneResponsibleFilter,
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,

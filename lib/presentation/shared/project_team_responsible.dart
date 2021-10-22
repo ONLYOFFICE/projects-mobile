@@ -58,12 +58,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(tr('selectResponsible')),
-          ],
-        ),
+        titleText: tr('selectResponsible'),
         bottom: SearchField(
           hintText: tr('usersSearch'),
           onSubmitted: (value) => controller.teamController.searchUsers(value),
