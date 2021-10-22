@@ -182,7 +182,12 @@ class SvgIcons {
   static const String no_internet_dark =
       'lib/assets/images/icons/empty_state/no_internet_dark.svg';
 
-  static const String blocked = 'lib/assets/images/icons/blocked.svg';
+  static const String userBlocked =
+      'lib/assets/images/icons/user_atributes/blocked.svg';
+  static const String userAdmin =
+      'lib/assets/images/icons/user_atributes/admin.svg';
+  static const String userVisitor =
+      'lib/assets/images/icons/user_atributes/visitor.svg';
 }
 
 class PngIcons {

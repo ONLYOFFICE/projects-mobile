@@ -44,9 +44,9 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/user_selection_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
@@ -204,20 +204,15 @@ class _AllUsers extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) => Padding(
           padding: const EdgeInsets.only(top: 24),
-          child: UserSelectionTile(
-            image: controller.allUsersList[index].portalUser.avatar ??
-                controller.allUsersList[index].avatarMedium ??
-                controller.allUsersList[index].portalUser.avatarSmall,
-            value: controller.allUsersList[index].isSelected == true,
-            onChanged: (value) {
-              controller.addSubscriber(controller.allUsersList[index],
-                  fromUsersDataSource: false);
+          child: PortalUserItem(
+            userController: controller.otherUsers[index],
+            onTapFunction: (value) => {
+              controller.addSubscriber(controller.otherUsers[index],
+                  fromUsersDataSource: false)
             },
-            displayName: controller.allUsersList[index].displayName,
-            caption: controller.allUsersList[index].portalUser.title,
           ),
         ),
-        childCount: controller.allUsersList.length,
+        childCount: controller.otherUsers.length,
       ),
     );
   }
@@ -240,17 +235,11 @@ class _SubscribedUsers extends StatelessWidget {
         (_, index) {
           return Padding(
             padding: const EdgeInsets.only(top: 24),
-            child: UserSelectionTile(
-              image: controller.subscribers[index].portalUser.avatar ??
-                  controller.subscribers[index].avatarMedium ??
-                  controller.subscribers[index].portalUser.avatarSmall,
-              value: controller.subscribers[index].isSelected == true,
-              onChanged: (value) {
-                controller.addSubscriber(controller.subscribers[index],
-                    fromUsersDataSource: false);
+            child: PortalUserItem(
+              userController: controller.subscribers[index],
+              onTapFunction: (value) => {
+                controller.removeSubscriber(controller.subscribers[index]),
               },
-              displayName: controller.subscribers[index].displayName,
-              caption: controller.subscribers[index].portalUser.title,
             ),
           );
         },

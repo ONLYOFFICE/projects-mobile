@@ -86,17 +86,35 @@ class PortalUserItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (userController.portalUser.status ==
-                        UserStatus.Terminated)
+                    if (userController.portalUser.status == null ||
+                        userController.portalUser.status ==
+                            UserStatus.Terminated)
                       Positioned(
-                        bottom: 0,
-                        right: 15,
-                        child: AppIcon(
-                          icon: SvgIcons.blocked,
-                          width: 16,
-                          height: 16,
-                        ),
-                      ),
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userBlocked,
+                              width: 16,
+                              height: 16)),
+                    if ((userController.portalUser.isAdmin ||
+                            userController.portalUser.isOwner) &&
+                        userController.portalUser.status !=
+                            UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userAdmin, width: 16, height: 16)),
+                    if (userController.portalUser.isVisitor &&
+                        userController.portalUser.status !=
+                            UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userVisitor,
+                              width: 16,
+                              height: 16)),
                   ],
                 ),
               ),

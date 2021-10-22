@@ -40,6 +40,7 @@ import 'package:darq/darq.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
@@ -94,13 +95,13 @@ class NewDiscussionController extends GetxController
   FocusNode get titleFocus => _titleFocus;
 
   @override
-  List get allUsersList => _usersDataSource.usersList
-      .where((element) => !subscribers.any((it) => it.id == element.id))
-      .toList();
+  RxList<PortalUserItemController> otherUsers =
+      <PortalUserItemController>[].obs;
 
   var _team = [];
   @override
-  RxList subscribers = [].obs;
+  RxList<PortalUserItemController> subscribers =
+      <PortalUserItemController>[].obs;
   List _previusSelectedSubscribers = []; // to track changes
 
   @override
@@ -157,8 +158,12 @@ class NewDiscussionController extends GetxController
     team.getTeam().then((value) {
       _team = List.of(team.usersList);
       for (var item in team.usersList) {
-        item.selectionMode.value = UserSelectionMode.Multiple;
-        addSubscriber(item);
+        if (item.portalUser.status != null &&
+            item.portalUser.status != UserStatus.Terminated) {
+          item.selectionMode.value = UserSelectionMode.Multiple;
+          item.isSelected.value = true;
+          addSubscriber(item);
+        }
       }
       _previusSelectedSubscribers = List.of(subscribers);
     });
@@ -218,7 +223,7 @@ class NewDiscussionController extends GetxController
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          subscribers.value = List.of(_previusSelectedSubscribers);
+          subscribers.value = RxList.from(_previusSelectedSubscribers);
           clearUserSearch();
           Get.back();
           Get.back();
@@ -231,7 +236,7 @@ class NewDiscussionController extends GetxController
   @override
   void setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
-    await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
+    await _usersDataSource.getProfiles(needToClear: true);
     restoreManualSelectedPersons();
   }
 
@@ -253,6 +258,9 @@ class NewDiscussionController extends GetxController
   }
 
   Future<void> _getSelectedSubscribers() async {
+    _usersDataSource.usersList
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
+
     for (var element in _usersDataSource.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
@@ -269,14 +277,14 @@ class NewDiscussionController extends GetxController
   @override
   void addSubscriber(PortalUserItemController user,
       {fromUsersDataSource = false}) {
-    user.onTap();
-
     if (user.isSelected.value == true &&
         !subscribers.any((it) => it.id == user.id)) {
       subscribers.add(user);
+      user.isSelected.value = true;
     } else {
       subscribers.removeWhere(
           (element) => user.portalUser.id == element.portalUser.id);
+      user.isSelected.value = false;
     }
   }
 
@@ -387,5 +395,10 @@ class NewDiscussionController extends GetxController
     } else {
       Get.back();
     }
+  }
+
+  @override
+  void removeSubscriber(PortalUserItemController user) {
+    // TODO: implement removeSubscriber
   }
 }
