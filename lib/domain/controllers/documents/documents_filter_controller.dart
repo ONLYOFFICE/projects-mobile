@@ -49,11 +49,17 @@ class DocumentsFilterController extends BaseFilterController {
   String _authorFilter = '';
   String _searchSettingsFilter = '';
 
+  String _savedTypeFilter = '';
+  String _savedAuthorFilter = '';
+  String _savedSearchSettingsFilter = '';
+
   RxMap contentTypes;
-
   RxMap searchSettings;
-
   RxMap author;
+
+  Map _savedContentTypes;
+  Map _savedSearchSettings;
+  Map _savedAuthor;
 
   String get typeFilter => _typeFilter;
   String get authorFilter => _authorFilter;
@@ -80,10 +86,26 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    contentTypes = RxMap.from(_savedContentTypes);
+    author = RxMap.from(_savedAuthor);
+    searchSettings = RxMap.from(_savedSearchSettings);
+
+    _typeFilter = _savedTypeFilter;
+    _authorFilter = _savedAuthorFilter;
+    _searchSettingsFilter = _savedSearchSettingsFilter;
+
+    hasFilters.value = _hasFilters;
+
+    if (applyFiltersDelegate != null) applyFiltersDelegate();
+
+// _getSavedFilters();
+  }
 
   Future<void> changeAuthorFilter(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
+    _savedAuthorFilter = _authorFilter;
+    _savedAuthor = Map.from(author);
     _authorFilter = '';
 
     switch (filter) {
@@ -136,6 +158,8 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   Future<void> changeContentTypeFilter(String filter) async {
+    _savedTypeFilter = _typeFilter;
+    _savedContentTypes = Map.from(contentTypes);
     _typeFilter = '';
 
     var newValue = !contentTypes[filter];
@@ -221,11 +245,19 @@ class DocumentsFilterController extends BaseFilterController {
     author['groups'] = '';
     author['no'] = false;
 
+    _savedAuthor = Map.from(author);
+    _savedContentTypes = Map.from(contentTypes);
+    _savedSearchSettings = Map.from(searchSettings);
+
     suitableResultCount.value = -1;
 
     _typeFilter = '';
     _authorFilter = '';
     _searchSettingsFilter = '';
+
+    _savedTypeFilter = '';
+    _savedAuthorFilter = '';
+    _savedSearchSettingsFilter = '';
 
     getSuitableResultCount();
   }
@@ -233,6 +265,15 @@ class DocumentsFilterController extends BaseFilterController {
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+
+    _savedAuthor = Map.from(author);
+    _savedContentTypes = Map.from(contentTypes);
+    _savedSearchSettings = Map.from(searchSettings);
+
+    _savedTypeFilter = typeFilter;
+    _savedAuthorFilter = authorFilter;
+    _savedSearchSettingsFilter = searchSettingsFilter;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
@@ -272,6 +313,10 @@ class DocumentsFilterController extends BaseFilterController {
       'groups': '',
       'no': false,
     }.obs;
+
+    _savedAuthor = Map.from(author);
+    _savedContentTypes = Map.from(contentTypes);
+    _savedSearchSettings = Map.from(searchSettings);
   }
 
   // UNUSED
