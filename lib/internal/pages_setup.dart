@@ -50,7 +50,7 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/com
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/new_task/select/select_milestone_view.dart';

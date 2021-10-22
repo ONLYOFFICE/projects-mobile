@@ -30,7 +30,7 @@
  *
  */
 
-part of '../documents_filter.dart';
+part of '../documents_filter_screen.dart';
 
 class _SearchSettings extends StatelessWidget {
   final filterController;
