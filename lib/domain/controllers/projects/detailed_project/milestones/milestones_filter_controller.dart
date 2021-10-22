@@ -52,6 +52,11 @@ class MilestonesFilterController extends BaseFilterController {
   String _deadlineFilter = '';
   String _statusFilter = '';
 
+  String _savedTaskResponsibleFilter = '';
+  String _savedMilestoneResponsibleFilter = '';
+  String _savedDeadlineFilter = '';
+  String _savedStatusFilter = '';
+
   String get taskResponsibleFilter => _taskResponsibleFilter;
   String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
   String get statusFilter => _statusFilter;
@@ -72,8 +77,29 @@ class MilestonesFilterController extends BaseFilterController {
   RxMap deadline;
   RxMap status;
 
+  Map _savedeMilestoneResponsible;
+  Map _savedTaskResponsible;
+  Map _savedDeadline;
+  Map _savedStatus;
+
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    milestoneResponsible = RxMap.from(_savedeMilestoneResponsible);
+    taskResponsible = RxMap.from(_savedTaskResponsible);
+    deadline = RxMap.from(_savedDeadline);
+    status = RxMap.from(_savedStatus);
+
+    _taskResponsibleFilter = _savedTaskResponsibleFilter;
+    _milestoneResponsibleFilter = _savedMilestoneResponsibleFilter;
+    _deadlineFilter = _savedDeadlineFilter;
+    _statusFilter = _savedStatusFilter;
+
+    hasFilters.value = _hasFilters;
+
+    if (applyFiltersDelegate != null) applyFiltersDelegate();
+
+    // await _getSavedFilters();
+  }
 
   @override
   String get filtersTitle =>
@@ -90,13 +116,14 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
+    _savedeMilestoneResponsible = Map.from(milestoneResponsible);
     _selfId = await Get.find<UserController>().getUserId();
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
       milestoneResponsible['other'] = '';
       milestoneResponsible['me'] = !milestoneResponsible['me'];
       if (milestoneResponsible['me'])
-        _milestoneResponsibleFilter = '&manager=$_selfId';
+        _milestoneResponsibleFilter = '&milestoneResponsible=$_selfId';
     }
     if (filter == 'other') {
       milestoneResponsible['me'] = false;
@@ -111,6 +138,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
+    _savedTaskResponsible = Map.from(taskResponsible);
     _selfId = await Get.find<UserController>().getUserId();
     _taskResponsibleFilter = '';
     if (filter == 'me') {
@@ -134,6 +162,7 @@ class MilestonesFilterController extends BaseFilterController {
 
   Future<void> changeDeadline(String filter,
       {DateTime start, DateTime stop}) async {
+    _savedDeadline = Map.from(deadline);
     _deadlineFilter = '';
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
@@ -182,6 +211,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   void changeStatus(String filter, [newValue = '']) async {
+    _savedStatus = Map.from(status);
     _statusFilter = '';
     switch (filter) {
       case 'active':
@@ -219,7 +249,7 @@ class MilestonesFilterController extends BaseFilterController {
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
-      milestoneResponsibleFilter: _milestoneResponsibleFilter,
+      milestoneResponsibleFilter: milestoneResponsibleFilter,
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
@@ -249,6 +279,11 @@ class MilestonesFilterController extends BaseFilterController {
       'stopDate': DateTime.now()
     };
 
+    _savedeMilestoneResponsible = Map.from(milestoneResponsible);
+    _savedTaskResponsible = Map.from(taskResponsible);
+    _savedDeadline = Map.from(deadline);
+    _savedStatus = Map.from(status);
+
     suitableResultCount.value = -1;
 
     _milestoneResponsibleFilter = '';
@@ -256,12 +291,27 @@ class MilestonesFilterController extends BaseFilterController {
     _deadlineFilter = '';
     _statusFilter = '';
 
+    _savedTaskResponsibleFilter = '';
+    _savedMilestoneResponsibleFilter = '';
+    _savedDeadlineFilter = '';
+    _savedStatusFilter = '';
+
     getSuitableResultCount();
   }
 
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+    _savedDeadline = Map.from(deadline);
+    _savedStatus = Map.from(status);
+    _savedTaskResponsible = Map.from(taskResponsible);
+    _savedeMilestoneResponsible = Map.from(milestoneResponsible);
+
+    _savedTaskResponsibleFilter = _taskResponsibleFilter;
+    _savedMilestoneResponsibleFilter = _milestoneResponsibleFilter;
+    _savedDeadlineFilter = _deadlineFilter;
+    _savedStatusFilter = _statusFilter;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
@@ -312,6 +362,10 @@ class MilestonesFilterController extends BaseFilterController {
       }
     }.obs;
     status = {'active': false, 'paused': false, 'closed': false}.obs;
+    _savedeMilestoneResponsible = Map.from(milestoneResponsible);
+    _savedTaskResponsible = Map.from(taskResponsible);
+    _savedDeadline = Map.from(deadline);
+    _savedStatus = Map.from(status);
   }
 
   // UNUSED
