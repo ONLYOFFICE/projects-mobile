@@ -172,7 +172,7 @@ class SubtaskEditingController extends GetxController
     if (responsible != _previousResponsibleId ||
         _titleController.text != _previousTitle) {
       Get.dialog(Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
+        margin: const EdgeInsets.symmetric(horizontal: 24),
         child: StyledAlertDialog(
           titleText: tr('discardChanges'),
           contentText: tr('lostOnLeaveWarning'),
