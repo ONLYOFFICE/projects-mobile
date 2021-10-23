@@ -80,10 +80,15 @@ class SelectDiscussionSubscribers extends StatelessWidget {
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(tr('selectSubscribers')),
+                Text(
+                  tr('selectSubscribers'),
+                  style: TextStyleHelper.headerStyle(
+                      color: Get.theme.colors().onSurface),
+                ),
                 if (controller.subscribers.isNotEmpty)
                   Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption())
+                      style: TextStyleHelper.caption(
+                          color: Get.theme.colors().onSurface))
               ],
             ),
           ),
