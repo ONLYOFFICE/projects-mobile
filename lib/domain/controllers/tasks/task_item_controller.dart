@@ -44,6 +44,7 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_status_handler.dart';
@@ -192,6 +193,20 @@ class TaskItemController extends GetxController {
       task.value = t;
       await initTaskStatus(task.value);
     }
+
+    var team = Get.find<ProjectTeamController>()
+      ..setup(projectId: task.value.projectOwner.id);
+
+    await team.getTeam();
+    var responsibles = team.usersList
+        .where((user) =>
+            task.value.responsibles.any((element) => user.id == element.id))
+        .toList();
+    task.value.responsibles.clear();
+    for (var user in responsibles) {
+      task.value.responsibles.add(user.portalUser);
+    }
+
     if (showLoading) loaded.value = true;
   }
 
