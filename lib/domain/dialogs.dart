@@ -64,25 +64,29 @@ class ErrorDialog extends GetxController {
 
     var error = queue.first;
 
-    await Get.dialog(SingleButtonDialog(
+    await Get.dialog(
+      SingleButtonDialog(
         titleText: tr('error'),
         contentText: _customErrors[error] ?? error,
         acceptText: tr('ok'),
         onAcceptTap: () => {
-              Get.back(),
+          Get.back(),
+          dialogIsShown = false,
+          if (_blockingErrors[error.toLowerCase()] != null)
+            {
+              Get.find<LoginController>().logout(),
               dialogIsShown = false,
-              if (_blockingErrors[error.toLowerCase()] != null)
-                {
-                  Get.find<LoginController>().logout(),
-                  dialogIsShown = false,
-                  queue.clear(),
-                }
-              else
-                {
-                  queue.removeFirst(),
-                  processQueue(),
-                }
-            }));
+              queue.clear(),
+            }
+          else
+            {
+              queue.removeFirst(),
+              processQueue(),
+            }
+        },
+      ),
+      barrierDismissible: false,
+    );
   }
 
   void addToQueue(String message) {
