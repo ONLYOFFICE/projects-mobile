@@ -54,6 +54,12 @@ class RemoteConfigService {
           .linkPrivacyPolicy: 'https://help.onlyoffice.com/products/files/doceditor.aspx?fileid=5048502&doc=SXhWMEVzSEYxNlVVaXJJeUVtS0kyYk14YWdXTEFUQmRWL250NllHNUFGbz0_IjUwNDg1MDIi0'
     });
 
+    // Using zero duration to force fetching from remote server.
+    await _remoteConfig.setConfigSettings(RemoteConfigSettings(
+      fetchTimeout: const Duration(seconds: 10),
+      minimumFetchInterval: Duration.zero,
+    ));
+
     // Fetch remote values
     await _remoteConfig.fetchAndActivate();
 
