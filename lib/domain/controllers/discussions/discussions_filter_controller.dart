@@ -58,6 +58,12 @@ class DiscussionsFilterController extends BaseFilterController {
   String _creationDateFilter = '';
   String _otherFilter = '';
 
+  String _savedAuthorFilter = '';
+  String _savedStatusFilter = '';
+  String _savedProjectFilter = '';
+  String _savedCreationDateFilter = '';
+  String _savedOtherFilter = '';
+
   String get authorFilter => _authorFilter;
   String get statusFilter => _statusFilter;
   String get projectFilter => _projectFilter;
@@ -75,14 +81,16 @@ class DiscussionsFilterController extends BaseFilterController {
       _otherFilter.isNotEmpty;
 
   RxMap author;
-
   RxMap status;
-
   RxMap creationDate;
-
   RxMap project;
-
   RxMap other;
+
+  Map _savedAuthor;
+  Map _savedStatus;
+  Map _savedCreationDate;
+  Map _savedProject;
+  Map _savedOther;
 
   @override
   void onInit() async {
@@ -91,7 +99,20 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    author = RxMap.from(_savedAuthor);
+    project = RxMap.from(_savedProject);
+    status = RxMap.from(_savedStatus);
+    creationDate = RxMap.from(_savedCreationDate);
+    other = RxMap.from(_savedOther);
+
+    _authorFilter = _savedAuthorFilter;
+    _creationDateFilter = _savedCreationDateFilter;
+    _statusFilter = _savedStatusFilter;
+    _projectFilter = _savedProjectFilter;
+    _savedOtherFilter = _otherFilter = _savedOtherFilter;
+    await _getSavedFilters();
+  }
 
   @override
   String get filtersTitle =>
@@ -105,6 +126,8 @@ class DiscussionsFilterController extends BaseFilterController {
 
   void changeAuthor(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
+    _savedAuthor = Map.from(author);
+    _savedAuthorFilter = _authorFilter;
     _authorFilter = '';
     switch (filter) {
       case 'me':
@@ -128,6 +151,8 @@ class DiscussionsFilterController extends BaseFilterController {
 
   Future<void> changeStatus(String filter, [newValue = false]) async {
     _selfId = await Get.find<UserController>().getUserId();
+    _savedStatus = Map.from(status);
+    _savedStatusFilter = _statusFilter;
     _statusFilter = '';
     if (filter == 'open') {
       status['archived'] = false;
@@ -143,6 +168,8 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   void changeProject(String filter, [newValue = '']) async {
+    _savedProject = Map.from(project);
+    _savedProjectFilter = _projectFilter;
     _projectFilter = '';
     switch (filter) {
       case 'my':
@@ -187,6 +214,8 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   void changeOther(String filter, [newValue]) {
+    _savedOther = Map.from(other);
+    _savedOtherFilter = _otherFilter;
     _otherFilter = '';
     switch (filter) {
       case 'subscribed':
@@ -203,6 +232,8 @@ class DiscussionsFilterController extends BaseFilterController {
     DateTime start,
     DateTime stop,
   }) async {
+    _savedCreationDate = Map.from(creationDate);
+    _savedCreationDateFilter = _creationDateFilter;
     _creationDateFilter = '';
 
     if (filter == 'today') {
@@ -281,6 +312,12 @@ class DiscussionsFilterController extends BaseFilterController {
       'stopDate': DateTime.now()
     };
 
+    _savedAuthor = Map.from(author);
+    _savedProject = Map.from(project);
+    _savedStatus = Map.from(status);
+    _savedCreationDate = Map.from(creationDate);
+    _savedOther = Map.from(other);
+
     acceptedFilters.value = '';
     suitableResultCount.value = -1;
 
@@ -290,12 +327,31 @@ class DiscussionsFilterController extends BaseFilterController {
     _otherFilter = '';
     _creationDateFilter = '';
 
+    _savedAuthorFilter = '';
+    _savedStatusFilter = '';
+    _savedProjectFilter = '';
+    _savedCreationDateFilter = '';
+    _savedOtherFilter = '';
+
     getSuitableResultCount();
   }
 
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+
+    _savedAuthor = Map.from(author);
+    _savedProject = Map.from(project);
+    _savedStatus = Map.from(status);
+    _savedCreationDate = Map.from(creationDate);
+    _savedOther = Map.from(other);
+
+    _savedAuthorFilter = _authorFilter;
+    _savedCreationDateFilter = _creationDateFilter;
+    _savedStatusFilter = _statusFilter;
+    _savedProjectFilter = _projectFilter;
+    _savedOtherFilter = _otherFilter;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
     await saveFilters();
   }
@@ -357,6 +413,12 @@ class DiscussionsFilterController extends BaseFilterController {
       }
     }.obs;
     other = {'subscribed': false}.obs;
+
+    _savedAuthor = Map.from(author);
+    _savedProject = Map.from(project);
+    _savedStatus = Map.from(status);
+    _savedCreationDate = Map.from(creationDate);
+    _savedOther = Map.from(other);
   }
 
   Future<void> _getSavedFilters() async {
@@ -387,6 +449,18 @@ class DiscussionsFilterController extends BaseFilterController {
         _otherFilter = savedFilters['other']['value'];
 
         hasFilters.value = savedFilters['hasFilters'];
+
+        _savedAuthor = Map.from(author);
+        _savedProject = Map.from(project);
+        _savedStatus = Map.from(status);
+        _savedCreationDate = Map.from(creationDate);
+        _savedOther = Map.from(other);
+
+        _savedAuthorFilter = _authorFilter;
+        _savedCreationDateFilter = _creationDateFilter;
+        _savedStatusFilter = _statusFilter;
+        _savedProjectFilter = _projectFilter;
+        _savedOtherFilter = _otherFilter;
       } catch (e) {
         printWarning('Discussions filter loading error: $e');
         await loadFilters();
