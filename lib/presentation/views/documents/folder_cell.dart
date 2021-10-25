@@ -281,8 +281,6 @@ void _onFolderPopupMenuSelected(
       if (success) {
         MessagesHandler.showSnackBar(
             context: context, text: tr('folderDeleted'));
-        Future.delayed(const Duration(milliseconds: 500),
-            () => controller.refreshContent());
       }
       break;
     default:
