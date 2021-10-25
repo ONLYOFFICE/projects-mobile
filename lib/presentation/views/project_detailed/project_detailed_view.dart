@@ -91,6 +91,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       vsync: this,
       length: 6,
     );
+
+    documentsController.filesCount.listen((count) {
+      projectController.docsCount.value = count;
+    });
   }
 
   @override
