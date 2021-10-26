@@ -121,6 +121,7 @@ class _PortalInputViewState extends State<PortalInputView> {
                         ),
                         SizedBox(height: Get.height * 0.222),
                         const PrivacyAndTermsFooter(),
+                        const SizedBox(height: 36),
                       ],
                     ),
                   ),
