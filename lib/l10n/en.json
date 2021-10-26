@@ -452,5 +452,13 @@
 	"statusPaused": "Paused",
 	"taskStatusOpen": "Open",
 	"taskStatusClosed": "Closed",
-	"searchMilestone": "Search for milstone..."
+	"searchMilestone": "Search for milstone...",
+
+	"privacyAndTermsFooter": {
+		"privacyPolicy": "Privacy Policy",
+		"termsOfService": "Terms of Service",
+		"footer": "By continuing you accept",
+		"and": "and",
+		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicy @:privacyAndTermsFooter.and @:privacyAndTermsFooter.termsOfService"
+	}
 }

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -52,13 +53,13 @@ class PrivacyAndTermsFooter extends StatelessWidget {
           color: Get.theme.colors().onSurface.withOpacity(0.6),
         ),
         children: [
-          const TextSpan(text: 'By continuing you accept the '),
+          TextSpan(text: tr('privacyAndTermsFooter.footer')),
           TextSpan(
             style: TextStyle(
               decoration: TextDecoration.underline,
               color: Theme.of(context).colors().links,
             ),
-            text: 'Privacy Policy',
+            text: ' ${tr('privacyAndTermsFooter.privacyPolicy')}',
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launch(
@@ -67,13 +68,13 @@ class PrivacyAndTermsFooter extends StatelessWidget {
                 );
               },
           ),
-          const TextSpan(text: ' and '),
+          TextSpan(text: ' ${tr('privacyAndTermsFooter.and')}'),
           TextSpan(
             style: TextStyle(
               decoration: TextDecoration.underline,
               color: Theme.of(context).colors().links,
             ),
-            text: 'Terms of Service',
+            text: ' ${tr('privacyAndTermsFooter.termsOfService')}',
             recognizer: TapGestureRecognizer()
               ..onTap = () {
                 launch(
