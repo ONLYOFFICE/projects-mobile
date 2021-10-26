@@ -58,22 +58,6 @@ class _Documents {
             _userController.user.isAdmin) ||
         (!isRoot(folder) && _userController.user.id == folder.createdBy?.id);
   }
-
-  bool canEdit(folder) {
-    if (_userController.user.isVisitor) return false;
-
-    if (folder.access == EntityAccess.read.index ||
-        folder.access == EntityAccess.restrict.index) {
-      return false;
-    }
-
-    if (folder.access == EntityAccess.none.index ||
-        folder.access == EntityAccess.readWrite.index) {
-      return true;
-    }
-
-    return false;
-  }
 }
 
 class _Files {
