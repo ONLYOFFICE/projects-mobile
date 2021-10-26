@@ -97,8 +97,9 @@ class MainController extends GetxController {
     super.onInit();
   }
 
-  void setupMainPage() {
-    if (noInternet.isTrue) return;
+  Future<void> setupMainPage() async {
+    var connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) return;
 
     isAuthorized().then((isAuthorized) {
       return {
