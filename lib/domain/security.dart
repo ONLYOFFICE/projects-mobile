@@ -89,20 +89,4 @@ class _Files {
             _userController.user.isAdmin) ||
         (_userController.user.id == file.createdBy?.id);
   }
-
-  bool canEdit(file) {
-    if (_userController.user.isVisitor) return false;
-
-    if (file.access == EntityAccess.read.index ||
-        file.access == EntityAccess.restrict.index) {
-      return false;
-    }
-
-    if (file.access == EntityAccess.none.index ||
-        file.access == EntityAccess.readWrite.index) {
-      return true;
-    }
-
-    return false;
-  }
 }

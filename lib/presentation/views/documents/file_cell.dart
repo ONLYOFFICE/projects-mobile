@@ -137,21 +137,19 @@ class FileCell extends StatelessWidget {
                       value: 'download',
                       child: Text(tr('download')),
                     ),
-                    if (Security.files.canEdit(entity))
-                      PopupMenuItem(
-                        value: 'copy',
-                        child: Text(tr('copy')),
-                      ),
-                    if (Security.files.canEdit(entity))
+                    PopupMenuItem(
+                      value: 'copy',
+                      child: Text(tr('copy')),
+                    ),
+                    if (Security.files.canDelete(entity))
                       PopupMenuItem(
                         value: 'move',
                         child: Text(tr('move')),
                       ),
-                    if (Security.files.canEdit(entity))
-                      PopupMenuItem(
-                        value: 'rename',
-                        child: Text(tr('rename')),
-                      ),
+                    PopupMenuItem(
+                      value: 'rename',
+                      child: Text(tr('rename')),
+                    ),
                     if (Security.files.canDelete(entity))
                       PopupMenuItem(
                         value: 'delete',
