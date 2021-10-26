@@ -31,15 +31,15 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -120,27 +120,7 @@ class _PortalInputViewState extends State<PortalInputView> {
                           ),
                         ),
                         SizedBox(height: Get.height * 0.222),
-                        Text(
-                          tr('appDescription'),
-                          textAlign: TextAlign.center,
-                          style: TextStyleHelper.body2(
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6)),
-                        ),
-                        HtmlWidget(
-                          '''
-                            <center>
-                            By continuing you accept the <a href="${RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy)}">Privacy Policy</a> and <a href="${RemoteConfigService.getString(RemoteConfigService.Keys.linkTermsOfService)}">Terms of Service</a>.
-                            </center>
-                          ''',
-                          textStyle: TextStyleHelper.body2(
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6)),
-                        )
+                        const PrivacyAndTermsFooter(),
                       ],
                     ),
                   ),
