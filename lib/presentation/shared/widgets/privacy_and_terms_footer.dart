@@ -46,6 +46,46 @@ class PrivacyAndTermsFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fullText = tr('privacyAndTermsFooter.total');
+    final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
+    final textTermsOfService =
+        tr('privacyAndTermsFooter.termsOfServiceWithLink');
+    final beforeText =
+        fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
+    final betweenText = fullText.substring(
+        fullText.indexOf(textPrivacyPolicy) + textPrivacyPolicy.length,
+        fullText.indexOf(textTermsOfService));
+    final afterText = fullText.substring(
+        fullText.indexOf(textTermsOfService) + textTermsOfService.length);
+
+    final textSpanPrivacyPolicy = TextSpan(
+      style: TextStyle(
+        decoration: TextDecoration.underline,
+        color: Theme.of(context).colors().links,
+      ),
+      text: '$textPrivacyPolicy',
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          launch(
+            RemoteConfigService.getString(
+                RemoteConfigService.Keys.linkPrivacyPolicy),
+          );
+        },
+    );
+    final textSpanTermsOfService = TextSpan(
+      style: TextStyle(
+        decoration: TextDecoration.underline,
+        color: Theme.of(context).colors().links,
+      ),
+      text: '$textTermsOfService',
+      recognizer: TapGestureRecognizer()
+        ..onTap = () {
+          launch(
+            RemoteConfigService.getString(
+                RemoteConfigService.Keys.linkTermsOfService),
+          );
+        },
+    );
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
@@ -53,36 +93,11 @@ class PrivacyAndTermsFooter extends StatelessWidget {
           color: Get.theme.colors().onSurface.withOpacity(0.6),
         ),
         children: [
-          TextSpan(text: tr('privacyAndTermsFooter.footer')),
-          TextSpan(
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              color: Theme.of(context).colors().links,
-            ),
-            text: ' ${tr('privacyAndTermsFooter.privacyPolicy')}',
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                launch(
-                  RemoteConfigService.getString(
-                      RemoteConfigService.Keys.linkPrivacyPolicy),
-                );
-              },
-          ),
-          TextSpan(text: ' ${tr('privacyAndTermsFooter.and')}'),
-          TextSpan(
-            style: TextStyle(
-              decoration: TextDecoration.underline,
-              color: Theme.of(context).colors().links,
-            ),
-            text: ' ${tr('privacyAndTermsFooter.termsOfService')}',
-            recognizer: TapGestureRecognizer()
-              ..onTap = () {
-                launch(
-                  RemoteConfigService.getString(
-                      RemoteConfigService.Keys.linkTermsOfService),
-                );
-              },
-          ),
+          TextSpan(text: beforeText),
+          textSpanPrivacyPolicy,
+          TextSpan(text: betweenText),
+          textSpanTermsOfService,
+          TextSpan(text: afterText),
         ],
       ),
     );

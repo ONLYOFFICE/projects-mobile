@@ -455,10 +455,8 @@
 	"searchMilestone": "Search for milstone...",
 
 	"privacyAndTermsFooter": {
-		"privacyPolicy": "Privacy Policy",
-		"termsOfService": "Terms of Service",
-		"footer": "By continuing you accept",
-		"and": "and",
-		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicy @:privacyAndTermsFooter.and @:privacyAndTermsFooter.termsOfService"
+		"privacyPolicyWithLink": "Privacy Policy",
+		"termsOfServiceWithLink": "Terms of Service",
+		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
 	}
 }
