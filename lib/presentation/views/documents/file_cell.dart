@@ -107,7 +107,7 @@ class FileCell extends StatelessWidget {
                       style: TextStyleHelper.projectTitle),
                 ),
                 Text(
-                    '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.updatedBy.displayName}',
+                    '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.createdBy.displayName}',
                     style: TextStyleHelper.caption(
                         color: Get.theme.colors().onSurface.withOpacity(0.6))),
               ],
