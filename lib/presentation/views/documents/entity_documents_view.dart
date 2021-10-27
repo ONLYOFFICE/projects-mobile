@@ -211,52 +211,54 @@ class _DocsTitle extends StatelessWidget {
       ),
     );
 
-    return Visibility(
-      visible: controller.itemList.isNotEmpty ||
-          controller.filterController.hasFilters.value == true,
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: sortButton,
-            ),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                InkResponse(
-                  onTap: () {
-                    Get.find<NavigationController>().to(DocumentsSearchView(),
-                        preventDuplicates: false,
-                        arguments: {
-                          'folderName': controller.screenName.value,
-                          'folderId': controller.currentFolder,
-                          'entityType': controller.entityType,
-                        });
-                  },
-                  child: AppIcon(
-                    width: 24,
-                    height: 24,
-                    icon: SvgIcons.search,
-                    color: Get.theme.colors().primary,
+    return Obx(
+      () => Visibility(
+        visible: controller.itemList.isNotEmpty ||
+            controller.filterController.hasFilters.value == true,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: sortButton,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  InkResponse(
+                    onTap: () {
+                      Get.find<NavigationController>().to(DocumentsSearchView(),
+                          preventDuplicates: false,
+                          arguments: {
+                            'folderName': controller.screenName.value,
+                            'folderId': controller.currentFolder,
+                            'entityType': controller.entityType,
+                          });
+                    },
+                    child: AppIcon(
+                      width: 24,
+                      height: 24,
+                      icon: SvgIcons.search,
+                      color: Get.theme.colors().primary,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 24),
-                InkResponse(
-                  onTap: () async => Get.find<NavigationController>().toScreen(
-                      const DocumentsFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {
-                        'filterController': controller.filterController
-                      }),
-                  child: FiltersButton(controler: controller),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 24),
+                  InkResponse(
+                    onTap: () async => Get.find<NavigationController>()
+                        .toScreen(const DocumentsFilterScreen(),
+                            preventDuplicates: false,
+                            arguments: {
+                          'filterController': controller.filterController
+                        }),
+                    child: FiltersButton(controler: controller),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
