@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
@@ -135,6 +136,8 @@ class LoginView extends StatelessWidget {
                       //     ? LoginSources(
                       //         capabilities: controller.capabilities.providers)
                       //     : const SizedBox(height: 15.0),
+                      SizedBox(height: Get.height * 0.18),
+                      const PrivacyAndTermsFooter(),
                     ],
                   ),
                 ),

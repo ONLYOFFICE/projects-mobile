@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
@@ -38,6 +39,7 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -118,15 +120,8 @@ class _PortalInputViewState extends State<PortalInputView> {
                           ),
                         ),
                         SizedBox(height: Get.height * 0.222),
-                        Text(
-                          tr('appDescription'),
-                          textAlign: TextAlign.center,
-                          style: TextStyleHelper.body2(
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6)),
-                        ),
+                        const PrivacyAndTermsFooter(),
+                        const SizedBox(height: 36),
                       ],
                     ),
                   ),
