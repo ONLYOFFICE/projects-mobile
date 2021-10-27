@@ -40,6 +40,7 @@ import 'package:launch_review/launch_review.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:projects/data/services/device_info_service.dart';
 import 'package:projects/data/services/package_info_service.dart';
+import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/settings_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -185,8 +186,15 @@ class SettingsController extends GetxController {
     );
   }
 
-  Future<void> onUserAgreementPressed() async =>
-      await launch(Const.Urls.userAgreement);
+  Future<void> onTermsOfServicePressed() async => await launch(
+        RemoteConfigService.getString(
+            RemoteConfigService.Keys.linkTermsOfService),
+      );
+
+  Future<void> onPrivacyPolicyPressed() async => await launch(
+        RemoteConfigService.getString(
+            RemoteConfigService.Keys.linkPrivacyPolicy),
+      );
 
   Future<void> onAnalyticsPressed() async =>
       Get.find<NavigationController>().toScreen(const AnalyticsScreen());
