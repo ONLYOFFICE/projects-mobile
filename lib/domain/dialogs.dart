@@ -101,6 +101,7 @@ class ErrorDialog extends GetxController {
 
 Map _blockingErrors = {
   'unauthorized': 'unauthorized',
+  'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
   'the paid period is over': 'The paid period is over',

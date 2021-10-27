@@ -97,6 +97,13 @@ class MainController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    for (var item in subscriptions) {
+      item.cancel();
+    }
+  }
+
   Future<void> setupMainPage() async {
     var connection = await Connectivity().checkConnectivity();
     if (connection == ConnectivityResult.none) return;

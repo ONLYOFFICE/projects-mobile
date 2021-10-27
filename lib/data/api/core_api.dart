@@ -273,7 +273,8 @@ class CoreApi {
       return response;
     } else {
       var error;
-      if (response.headers['content-type'].contains('json'))
+      if (response.headers['content-type'] != null &&
+          response.headers['content-type'].contains('json'))
         error = json.decode(response.body)['error']['message'];
 
       return CustomError(message: error ?? response.reasonPhrase);
@@ -294,7 +295,8 @@ class CoreApi {
       return response;
     } else {
       var error;
-      if (response.headers['content-type'].contains('json'))
+      if (response.headers['content-type'] != null &&
+          response.headers['content-type'].contains('json'))
         error = json.decode(response.body)['error']['message'];
 
       return CustomError(message: error ?? response.reasonPhrase);
@@ -314,7 +316,8 @@ class CoreApi {
       return response;
     } else {
       var error;
-      if (response.headers['content-type'].contains('json'))
+      if (response.headers['content-type'] != null &&
+          response.headers['content-type'].contains('json'))
         error = json.decode(response.body)['error']['message'];
 
       return CustomError(message: error ?? response.reasonPhrase);
@@ -333,7 +336,8 @@ class CoreApi {
       return response;
     } else {
       var error;
-      if (response.headers['content-type'].contains('json'))
+      if (response.headers['content-type'] != null &&
+          response.headers['content-type'].contains('json'))
         error = json.decode(response.body)['error']['message'];
 
       return CustomError(message: error ?? response.reasonPhrase);

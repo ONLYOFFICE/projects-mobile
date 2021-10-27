@@ -398,7 +398,5 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void removeSubscriber(PortalUserItemController user) {
-    // TODO: implement removeSubscriber
-  }
+  void removeSubscriber(PortalUserItemController user) {}
 }
