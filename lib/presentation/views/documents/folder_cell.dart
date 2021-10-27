@@ -96,17 +96,19 @@ class FolderCell extends StatelessWidget {
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
-                      PopupMenuItem(
-                        value: 'copy',
-                        child: Text(tr('copy')),
-                      ),
+                      if (Security.documents.canEdit(entity))
+                        PopupMenuItem(
+                          value: 'copy',
+                          child: Text(tr('copy')),
+                        ),
                       if (!Security.documents.isRoot(entity) &&
                           Security.documents.canDelete(entity))
                         PopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
-                      if (!Security.documents.isRoot(entity))
+                      if (!Security.documents.isRoot(entity) &&
+                          Security.documents.canEdit(entity))
                         PopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),

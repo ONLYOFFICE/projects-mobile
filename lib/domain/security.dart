@@ -46,6 +46,22 @@ class _Documents {
     return element.parentId == null || element.parentId == 0;
   }
 
+  bool canEdit(folder) {
+    if (_userController.user.isVisitor) return false;
+
+    if (folder.access == EntityAccess.read.index ||
+        folder.access == EntityAccess.restrict.index) {
+      return false;
+    }
+
+    if (folder.access == EntityAccess.none.index ||
+        folder.access == EntityAccess.readWrite.index) {
+      return true;
+    }
+
+    return false;
+  }
+
   bool canDelete(folder) {
     if (_userController.user.isVisitor) return false;
 
