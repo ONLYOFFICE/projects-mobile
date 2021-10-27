@@ -39,6 +39,8 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchController extends GetxController {
+  static const PAGINATION_LENGTH = 25;
+
   final _api = locator<ProjectService>();
   final onlyMyProjects;
 
@@ -69,10 +71,10 @@ class ProjectSearchController extends GetxController {
   }
 
   void onLoading() async {
-    _startIndex += 25;
+    _startIndex += PAGINATION_LENGTH;
     if (_startIndex >= _totalProjects) {
       refreshController.loadComplete();
-      _startIndex -= 25;
+      _startIndex -= PAGINATION_LENGTH;
       return;
     }
     _performSearch();
