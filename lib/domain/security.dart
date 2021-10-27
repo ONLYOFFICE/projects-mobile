@@ -63,6 +63,22 @@ class _Documents {
 class _Files {
   final _userController = Get.find<UserController>();
 
+  bool canEdit(file) {
+    if (_userController.user.isVisitor) return false;
+
+    if (file.access == EntityAccess.read.index ||
+        file.access == EntityAccess.restrict.index) {
+      return false;
+    }
+
+    if (file.access == EntityAccess.none.index ||
+        file.access == EntityAccess.readWrite.index) {
+      return true;
+    }
+
+    return false;
+  }
+
   bool canDelete(file) {
     if (_userController.user.isVisitor) return false;
 
