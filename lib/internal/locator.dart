@@ -170,9 +170,11 @@ void setupGetX() {
   Get.lazyPut(() => PlatformController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
-  Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
 
   Get.create(() => DashboardController());
+
+  Get.create<DiscussionsFilterController>(() => DiscussionsFilterController());
+  Get.create<PaginationController>(() => PaginationController());
 
   Get.create(
     () => DiscussionsController(
@@ -216,7 +218,6 @@ void setupGetX() {
   Get.create<NewMilestoneController>(() => NewMilestoneController());
 
   Get.create<DocumentsFilterController>(() => DocumentsFilterController());
-  Get.create<PaginationController>(() => PaginationController());
 
   Get.create<ProjectsSortController>(() => ProjectsSortController());
   Get.create<DocumentsSortController>(() => DocumentsSortController());
