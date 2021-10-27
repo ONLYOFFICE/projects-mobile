@@ -35,7 +35,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 class RemoteConfigService {
   RemoteConfigService._privateConstructor();
 
-  static RemoteConfig remoteConfigPackingProperty = null;
+  static RemoteConfig remoteConfigPackingProperty;
 
   static RemoteConfig get _remoteConfig {
     return remoteConfigPackingProperty ??= RemoteConfig.instance;
@@ -48,10 +48,10 @@ class RemoteConfigService {
   static Future<RemoteConfig> initialize() async {
     // Setup defaults
     await _remoteConfig.setDefaults(<String, dynamic>{
-      RemoteConfigService.Keys
-          .linkTermsOfService: 'https://help.onlyoffice.com/products/files/doceditor.aspx?fileid=5048471&doc=bXJ6UmJacDVnVDMxV01oMHhrUlpwaGFBcXJUUUE3VHRuTGZrRUF5a1NKVT0_IjUwNDg0NzEi0',
-      RemoteConfigService.Keys
-          .linkPrivacyPolicy: 'https://help.onlyoffice.com/products/files/doceditor.aspx?fileid=5048502&doc=SXhWMEVzSEYxNlVVaXJJeUVtS0kyYk14YWdXTEFUQmRWL250NllHNUFGbz0_IjUwNDg1MDIi0'
+      RemoteConfigService.Keys.linkTermsOfService:
+          'https://help.onlyoffice.com/products/files/doceditor.aspx?fileid=5048471&doc=bXJ6UmJacDVnVDMxV01oMHhrUlpwaGFBcXJUUUE3VHRuTGZrRUF5a1NKVT0_IjUwNDg0NzEi0',
+      RemoteConfigService.Keys.linkPrivacyPolicy:
+          'https://help.onlyoffice.com/products/files/doceditor.aspx?fileid=5048502&doc=SXhWMEVzSEYxNlVVaXJJeUVtS0kyYk14YWdXTEFUQmRWL250NllHNUFGbz0_IjUwNDg1MDIi0'
     });
 
     // Using zero duration to force fetching from remote server.
@@ -60,11 +60,12 @@ class RemoteConfigService {
       minimumFetchInterval: Duration.zero,
     ));
 
-    // Fetch remote values
-    await _remoteConfig.fetchAndActivate();
-
     return _remoteConfig;
   }
+
+// Fetch remote values
+  static Future<void> fetchAndActivate() async =>
+      await _remoteConfig.fetchAndActivate();
 
   /// Gets the value for a given key as a bool.
   static bool getBool(String key) {
@@ -90,7 +91,6 @@ class RemoteConfigService {
   static RemoteConfigValue getValue(String key) {
     return _remoteConfig.getValue(key);
   }
-
 }
 
 class _RemoteConfigKeys {

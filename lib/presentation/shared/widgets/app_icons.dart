@@ -182,7 +182,7 @@ class SvgIcons {
   static const String no_internet =
       'lib/assets/images/icons/empty_state/no_internet.svg';
   static const String no_internet_dark =
-      'lib/assets/images/icons/empty_state/no_internet_dark.svg';
+      'lib/assets/images/icons/empty_state/no_internet.svg';
 
   static const String userBlocked =
       'lib/assets/images/icons/user_atributes/blocked.svg';

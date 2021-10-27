@@ -46,6 +46,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
     final textTermsOfService =

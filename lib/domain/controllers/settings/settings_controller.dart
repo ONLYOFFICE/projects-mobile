@@ -73,6 +73,9 @@ class SettingsController extends GetxController {
   @override
   void onInit() async {
     loaded.value = false;
+
+    // ignore: unawaited_futures
+    RemoteConfigService.fetchAndActivate();
     var isPassEnable = await _service.isPasscodeEnable;
     isPasscodeEnable = isPassEnable.obs;
 
