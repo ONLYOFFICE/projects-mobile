@@ -163,24 +163,9 @@ class DiscussionsDocumentsView extends StatelessWidget {
   }
 }
 
-class _DocsTitle extends StatefulWidget {
+class _DocsTitle extends StatelessWidget {
   const _DocsTitle({Key key, @required this.controller}) : super(key: key);
   final controller;
-
-  @override
-  State<_DocsTitle> createState() => _DocsTitleState();
-}
-
-class _DocsTitleState extends State<_DocsTitle> {
-  @override
-  void initState() {
-    super.initState();
-
-    widget.controller.itemList.listen((count) {
-      if (count != null && count.length != 0 && mounted) setState(() {});
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var sortButton = Container(
@@ -188,9 +173,7 @@ class _DocsTitleState extends State<_DocsTitle> {
       child: InkResponse(
         onTap: () {
           Get.bottomSheet(
-            SortView(
-                sortOptions:
-                    DocumentsSortOption(controller: widget.controller)),
+            SortView(sortOptions: DocumentsSortOption(controller: controller)),
             isScrollControlled: true,
           );
         },
@@ -198,15 +181,14 @@ class _DocsTitleState extends State<_DocsTitle> {
           children: <Widget>[
             Obx(
               () => Text(
-                widget.controller.sortController.currentSortTitle.value,
+                controller.sortController.currentSortTitle.value,
                 style: TextStyleHelper.projectsSorting
                     .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
             Obx(
-              () => (widget.controller.sortController.currentSortOrder ==
-                      'ascending')
+              () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
                       color: Get.theme.colors().primary,
@@ -230,8 +212,8 @@ class _DocsTitleState extends State<_DocsTitle> {
     );
 
     return Visibility(
-      visible: widget.controller.itemList.isNotEmpty ||
-          widget.controller.filterController.hasFilters.value == true,
+      visible: controller.itemList.isNotEmpty ||
+          controller.filterController.hasFilters.value == true,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Row(
@@ -250,9 +232,9 @@ class _DocsTitleState extends State<_DocsTitle> {
                     Get.find<NavigationController>().to(DocumentsSearchView(),
                         preventDuplicates: false,
                         arguments: {
-                          'folderName': widget.controller.screenName.value,
-                          'folderId': widget.controller.currentFolder,
-                          'entityType': widget.controller.entityType,
+                          'folderName': controller.screenName.value,
+                          'folderId': controller.currentFolder,
+                          'entityType': controller.entityType,
                         });
                   },
                   child: AppIcon(
@@ -268,9 +250,9 @@ class _DocsTitleState extends State<_DocsTitle> {
                       const DocumentsFilterScreen(),
                       preventDuplicates: false,
                       arguments: {
-                        'filterController': widget.controller.filterController
+                        'filterController': controller.filterController
                       }),
-                  child: FiltersButton(controler: widget.controller),
+                  child: FiltersButton(controler: controller),
                 ),
               ],
             ),
