@@ -49,30 +49,20 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 
 part 'status_image.dart';
 
-class TaskCell extends StatefulWidget {
+class TaskCell extends StatelessWidget {
   final PortalTask task;
-  const TaskCell({Key key, this.task}) : super(key: key);
-
-  @override
-  _TaskCellState createState() => _TaskCellState();
-}
-
-class _TaskCellState extends State<TaskCell> {
-  TaskItemController itemController;
-
-  @override
-  void initState() {
-    itemController = Get.put(
-      TaskItemController(widget.task),
-      tag: widget.task.id.toString(),
-    );
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) async => await itemController.initTaskStatus(widget.task));
-    super.initState();
-  }
+  TaskCell({Key key, this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    TaskItemController itemController = Get.put(
+      TaskItemController(task),
+      tag: task.id.toString(),
+    );
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async => await itemController.initTaskStatus(task),
+    );
+
     return InkWell(
       onTap: () => Get.find<NavigationController>()
           .to(TaskDetailedView(), arguments: {'controller': itemController}),
