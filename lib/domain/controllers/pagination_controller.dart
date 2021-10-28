@@ -35,7 +35,6 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationController extends GetxController {
-  static const PAGINATION_LENGTH = 25;
   RxList data = [].obs;
   RefreshController refreshController = RefreshController();
   var startIndex = 0;
@@ -55,10 +54,10 @@ class PaginationController extends GetxController {
   }
 
   void onLoading() async {
-    startIndex += PAGINATION_LENGTH;
+    startIndex += 25;
     if (startIndex >= total.value) {
       refreshController.loadComplete();
-      startIndex -= PAGINATION_LENGTH;
+      startIndex -= 25;
       return;
     }
     await loadDelegate();
