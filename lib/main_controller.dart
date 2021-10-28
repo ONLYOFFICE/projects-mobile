@@ -70,6 +70,21 @@ class MainController extends GetxController {
         .checkConnectivity()
         .then((value) => {noInternet.value = value == ConnectivityResult.none});
 
+    _setupSubscriptions();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  void _setupSubscriptions() {
+    if (subscriptions.isNotEmpty) {
+      for (var item in subscriptions) {
+        item.cancel();
+      }
+    }
+
     subscriptions.add(Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -90,18 +105,6 @@ class MainController extends GetxController {
       setupMainPage();
       await Get.offAll(() => MainView());
     }));
-  }
-
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  @override
-  void onClose() {
-    for (var item in subscriptions) {
-      item.cancel();
-    }
   }
 
   Future<void> setupMainPage() async {
