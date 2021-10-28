@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 
@@ -52,6 +53,7 @@ import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -114,10 +116,13 @@ class _Content extends StatelessWidget {
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value)
             Expanded(
-              child: Center(
-                child: EmptyScreen(
-                  icon: SvgIcons.task_not_created,
-                  text: tr('noTasksCreated'),
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: Center(
+                  child: EmptyScreen(
+                    icon: SvgIcons.task_not_created,
+                    text: tr('noTasksCreated'),
+                  ),
                 ),
               ),
             ),
@@ -125,9 +130,12 @@ class _Content extends StatelessWidget {
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value)
             Expanded(
-              child: Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                ),
               ),
             ),
           if (controller.loaded.value == true &&

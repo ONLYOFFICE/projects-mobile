@@ -142,18 +142,24 @@ class DiscussionsList extends StatelessWidget {
         return const ListLoadingSkeleton();
       } else {
         if (controller.paginationController.data.isEmpty && hasFilters)
-          return Center(
-            child: EmptyScreen(
-              icon: SvgIcons.not_found,
-              text: tr('noDiscussionsMatching'),
+          return PaginationListView(
+            paginationController: controller.paginationController,
+            child: Center(
+              child: EmptyScreen(
+                icon: SvgIcons.not_found,
+                text: tr('noDiscussionsMatching'),
+              ),
             ),
           );
 
         if (controller.paginationController.data.isEmpty)
-          return Center(
-            child: EmptyScreen(
-              icon: SvgIcons.comments_not_created,
-              text: tr('noDiscussionsCreated'),
+          return PaginationListView(
+            paginationController: controller.paginationController,
+            child: Center(
+              child: EmptyScreen(
+                icon: SvgIcons.comments_not_created,
+                text: tr('noDiscussionsCreated'),
+              ),
             ),
           );
 

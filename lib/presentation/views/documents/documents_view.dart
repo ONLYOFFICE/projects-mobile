@@ -181,26 +181,36 @@ class DocumentsScreen extends StatelessWidget {
             return const ListLoadingSkeleton();
           if (controller.loaded.value == true &&
               controller.nothingFound.value == true) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('notFound')));
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.not_found, text: tr('notFound'))),
+            );
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value &&
               controller.searchMode.value == false) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.documents_not_created,
-                    text: tr('noDocumentsCreated')));
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.documents_not_created,
+                      text: tr('noDocumentsCreated'))),
+            );
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value &&
               controller.searchMode.value == false) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.not_found,
+                      text: tr('noDocumentsMatching'))),
+            );
           }
           return PaginationListView(
             paginationController: controller.paginationController,

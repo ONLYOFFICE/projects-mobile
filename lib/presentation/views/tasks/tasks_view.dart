@@ -53,6 +53,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TasksView extends StatelessWidget {
   const TasksView({Key key}) : super(key: key);
@@ -129,18 +130,24 @@ class TasksView extends StatelessWidget {
               controller.taskStatusesLoaded.value &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated')));
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.task_not_created,
+                      text: tr('noTasksCreated'))),
+            );
           }
           if (controller.loaded.value &&
               controller.taskStatusesLoaded.value &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
-            return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+            return PaginationListView(
+              paginationController: controller.paginationController,
+              child: Center(
+                child: EmptyScreen(
+                    icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+              ),
             );
           }
           return PaginationListView(

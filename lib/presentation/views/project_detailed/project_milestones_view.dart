@@ -110,19 +110,26 @@ class _Content extends StatelessWidget {
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value)
             Expanded(
-              child: Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.milestone_not_created,
-                    text: tr('noMilestonesCreated')),
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.milestone_not_created,
+                      text: tr('noMilestonesCreated')),
+                ),
               ),
             ),
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value)
             Expanded(
-              child: Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
+              child: PaginationListView(
+                paginationController: controller.paginationController,
+                child: Center(
+                  child: EmptyScreen(
+                      icon: SvgIcons.not_found,
+                      text: tr('noMilestonesMatching')),
+                ),
               ),
             ),
           if (controller.loaded.value == true &&
