@@ -87,15 +87,11 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   Future<void> restoreFilters() async {
-    contentTypes = RxMap.from(_savedContentTypes);
-    author = RxMap.from(_savedAuthor);
-    searchSettings = RxMap.from(_savedSearchSettings);
-
-    _typeFilter = _savedTypeFilter;
-    _authorFilter = _savedAuthorFilter;
-    _searchSettingsFilter = _savedSearchSettingsFilter;
+    _restorePreviousState();
 
     hasFilters.value = _hasFilters;
+
+    suitableResultCount.value = -1;
 
     if (applyFiltersDelegate != null) applyFiltersDelegate();
 
@@ -228,6 +224,8 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
+    _savePreviousState();
+
     contentTypes['folders'] = false;
     contentTypes['documents'] = false;
     contentTypes['presentations'] = false;
@@ -245,19 +243,9 @@ class DocumentsFilterController extends BaseFilterController {
     author['groups'] = '';
     author['no'] = false;
 
-    _savedAuthor = Map.from(author);
-    _savedContentTypes = Map.from(contentTypes);
-    _savedSearchSettings = Map.from(searchSettings);
-
-    suitableResultCount.value = -1;
-
     _typeFilter = '';
     _authorFilter = '';
     _searchSettingsFilter = '';
-
-    _savedTypeFilter = '';
-    _savedAuthorFilter = '';
-    _savedSearchSettingsFilter = '';
 
     getSuitableResultCount();
   }
@@ -266,13 +254,9 @@ class DocumentsFilterController extends BaseFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    _savedAuthor = Map.from(author);
-    _savedContentTypes = Map.from(contentTypes);
-    _savedSearchSettings = Map.from(searchSettings);
+    _savePreviousState();
 
-    _savedTypeFilter = typeFilter;
-    _savedAuthorFilter = authorFilter;
-    _savedSearchSettingsFilter = searchSettingsFilter;
+    suitableResultCount.value = -1;
 
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
@@ -347,5 +331,25 @@ class DocumentsFilterController extends BaseFilterController {
     } else {
       await loadFilters();
     }
+  }
+
+  void _savePreviousState() {
+    _savedAuthor = Map.from(author);
+    _savedContentTypes = Map.from(contentTypes);
+    _savedSearchSettings = Map.from(searchSettings);
+
+    _savedTypeFilter = typeFilter;
+    _savedAuthorFilter = authorFilter;
+    _savedSearchSettingsFilter = searchSettingsFilter;
+  }
+
+  void _restorePreviousState() {
+    contentTypes = RxMap.from(_savedContentTypes);
+    author = RxMap.from(_savedAuthor);
+    searchSettings = RxMap.from(_savedSearchSettings);
+
+    _typeFilter = _savedTypeFilter;
+    _authorFilter = _savedAuthorFilter;
+    _searchSettingsFilter = _savedSearchSettingsFilter;
   }
 }
