@@ -103,7 +103,7 @@ class _Content extends StatelessWidget {
         return SmartRefresher(
             enablePullDown: false,
             enablePullUp: projectTeamDataSource.pullUpEnabled,
-            controller: projectTeamDataSource.refreshController,
+            controller: projectTeamDataSource.getRefreshController(),
             onLoading: projectTeamDataSource.onLoading,
             child: ListView(
               children: <Widget>[

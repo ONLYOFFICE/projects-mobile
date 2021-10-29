@@ -62,15 +62,20 @@ class TaskCommentsView extends StatelessWidget {
             children: [
               if (comments.isEmpty)
                 Expanded(
-                  child: EmptyScreen(
-                    icon: SvgIcons.comments_not_created,
-                    text: tr('noCommentsCreated'),
+                  child: SmartRefresher(
+                    controller: controller.getCommentsRefreshController(),
+                    onRefresh: () async =>
+                        await controller.reloadTask(showLoading: true),
+                    child: EmptyScreen(
+                      icon: SvgIcons.comments_not_created,
+                      text: tr('noCommentsCreated'),
+                    ),
                   ),
                 ),
               if (comments.isNotEmpty)
                 Expanded(
                   child: SmartRefresher(
-                    controller: controller.commentsRefreshController,
+                    controller: controller.getCommentsRefreshController(),
                     onRefresh: () async =>
                         await controller.reloadTask(showLoading: true),
                     child: ListView.separated(

@@ -62,15 +62,19 @@ class SubtasksView extends StatelessWidget {
           return Stack(
             children: [
               if (_task.subtasks.isEmpty)
-                Center(
-                  child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noSubtasksCreated'),
+                SmartRefresher(
+                  controller: controller.getSubtaskRefreshController(),
+                  onRefresh: () => controller.reloadTask(showLoading: true),
+                  child: Center(
+                    child: EmptyScreen(
+                      icon: SvgIcons.task_not_created,
+                      text: tr('noSubtasksCreated'),
+                    ),
                   ),
                 ),
               if (_task.subtasks.isNotEmpty)
                 SmartRefresher(
-                  controller: controller.subtaskRefreshController,
+                  controller: controller.getSubtaskRefreshController(),
                   onRefresh: () => controller.reloadTask(showLoading: true),
                   child: ListView.builder(
                     itemCount: _task.subtasks.length,

@@ -48,7 +48,13 @@ class ProjectTeamController extends GetxController {
   var loaded = true.obs;
   var nothingFound = false.obs;
   var _startIndex = 0;
-  RefreshController refreshController = RefreshController();
+
+  RefreshController _refreshController = RefreshController();
+  RefreshController getRefreshController() {
+    _refreshController = RefreshController();
+    return _refreshController;
+  }
+
   var totalProfiles;
   var _projectId;
   var isSearchResult = false.obs;
@@ -66,12 +72,12 @@ class ProjectTeamController extends GetxController {
   Future onLoading() async {
     _startIndex += 25;
     if (_startIndex >= totalProfiles) {
-      refreshController.loadComplete();
+      _refreshController.loadComplete();
       _startIndex -= 25;
       return;
     }
     await _loadTeam();
-    refreshController.loadComplete();
+    _refreshController.loadComplete();
   }
 
   Future _loadTeam({bool needToClear = false}) async {
