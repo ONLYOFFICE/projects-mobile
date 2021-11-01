@@ -87,7 +87,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   Future<void> restoreFilters() async {
-    _restorePreviousState();
+    _restoreState();
 
     hasFilters.value = _hasFilters;
 
@@ -224,7 +224,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    _savePreviousState();
+    _saveState();
 
     contentTypes['folders'] = false;
     contentTypes['documents'] = false;
@@ -254,7 +254,7 @@ class DocumentsFilterController extends BaseFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    _savePreviousState();
+    _saveState();
 
     suitableResultCount.value = -1;
 
@@ -333,7 +333,7 @@ class DocumentsFilterController extends BaseFilterController {
     }
   }
 
-  void _savePreviousState() {
+  void _saveState() {
     _savedAuthor = Map.from(author);
     _savedContentTypes = Map.from(contentTypes);
     _savedSearchSettings = Map.from(searchSettings);
@@ -343,7 +343,7 @@ class DocumentsFilterController extends BaseFilterController {
     _savedSearchSettingsFilter = searchSettingsFilter;
   }
 
-  void _restorePreviousState() {
+  void _restoreState() {
     contentTypes = RxMap.from(_savedContentTypes);
     author = RxMap.from(_savedAuthor);
     searchSettings = RxMap.from(_savedSearchSettings);
