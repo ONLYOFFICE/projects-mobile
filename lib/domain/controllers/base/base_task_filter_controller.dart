@@ -30,38 +30,28 @@
  *
  */
 
-part of '../tasks_filter.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 
-class _Creator extends StatelessWidget {
-  final BaseTaskFilterController filterController;
-  const _Creator({Key key, this.filterController}) : super(key: key);
+abstract class BaseTaskFilterController extends BaseFilterController {
+  String get responsibleFilter;
+  String get creatorFilter;
+  String get projectFilter;
+  String get milestoneFilter;
+  String get statusFilter;
+  String get deadlineFilter;
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => FiltersRow(
-        title: tr('creator'),
-        options: <Widget>[
-          FilterElement(
-              title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.creator['me'],
-              onTap: () => filterController.changeCreator('me')),
-          FilterElement(
-            title: filterController.creator['other'].isEmpty
-                ? tr('otherUser')
-                : filterController.creator['other'],
-            isSelected: filterController.creator['other'].isNotEmpty,
-            cancelButtonEnabled: filterController.creator['other'].isNotEmpty,
-            onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
-              filterController.changeCreator('other', newUser);
-            },
-            onCancelTap: () => filterController.changeCreator('other', null),
-          ),
-        ],
-      ),
-    );
-  }
+  RxMap responsible;
+  RxMap creator;
+  RxMap project;
+  RxMap milestone;
+  RxMap status;
+  RxMap deadline;
+
+  void changeResponsible(String filter, [newValue = '']);
+  void changeCreator(String filter, [newValue = '']);
+  void changeProject(String filter, [newValue = '']);
+  void changeMilestone(String filter, [newValue]);
+  void changeStatus(String filter, [newValue]);
+  void changeDeadline(String filter, {DateTime start, DateTime stop});
 }

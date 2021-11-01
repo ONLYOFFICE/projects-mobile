@@ -100,6 +100,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
@@ -186,6 +187,8 @@ void setupGetX() {
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
   Get.create<TaskFilterController>(() => TaskFilterController());
+  Get.lazyPut<ProjectTaskFilterController>(() => ProjectTaskFilterController(),
+      fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
 
   Get.create<TasksController>(

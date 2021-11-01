@@ -33,7 +33,7 @@
 part of '../tasks_filter.dart';
 
 class _DueDate extends StatelessWidget {
-  final TaskFilterController filterController;
+  final BaseTaskFilterController filterController;
   const _DueDate({Key key, this.filterController}) : super(key: key);
 
   @override
@@ -80,7 +80,7 @@ Future selectDateRange(
     ),
   );
   if (pickedRange != null) {
-    await filterController.changeDeadline('custom',
+    filterController.changeDeadline('custom',
         start: pickedRange.start, stop: pickedRange.end);
   }
 }
