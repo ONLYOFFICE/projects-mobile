@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
@@ -52,6 +54,8 @@ class MilestonesDataSource extends GetxController {
   final searchTextEditingController = TextEditingController();
 
   String searchQuery = '';
+
+  Timer? _searchDebounce;
 
   ProjectDetailed? _projectDetailed;
 
@@ -121,8 +125,13 @@ class MilestonesDataSource extends GetxController {
       _projectDetailed == null ? false : _projectDetailed!.security!['canCreateMilestone'] as bool;
 
   void loadMilestonesWithFilterByName(String searchText) {
-    searchQuery = searchText;
-    loadMilestones();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (searchQuery != searchText) {
+        searchQuery = searchText;
+        await loadMilestones();
+      }
+    });
   }
 
   void clearSearchAndReloadMilestones() {

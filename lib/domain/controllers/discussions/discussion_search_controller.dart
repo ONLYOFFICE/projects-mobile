@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -49,6 +51,8 @@ class DiscussionSearchController extends BaseController {
 
   final _paginationController = PaginationController<Discussion>();
   PaginationController<Discussion> get paginationController => _paginationController;
+  String _searchQuery = '';
+  Timer? _searchDebounce;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -65,18 +69,25 @@ class DiscussionSearchController extends BaseController {
   }
 
   void newSearch(String query, {bool needToClear = true}) async {
-    _query = query.toLowerCase();
-    loaded.value = false;
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      _query = query.toLowerCase();
 
-    if (needToClear) paginationController.startIndex = 0;
+      if (_searchQuery != _query) {
+        _searchQuery = _query;
+        loaded.value = false;
 
-    if (query == null || query.isEmpty) {
-      clearSearch();
-    } else {
-      await _performSearch(needToClear: needToClear);
-    }
+        if (needToClear) paginationController.startIndex = 0;
 
-    loaded.value = true;
+        if (query == null || query.isEmpty) {
+          clearSearch();
+        } else {
+          await _performSearch(needToClear: needToClear);
+        }
+
+        loaded.value = true;
+      }
+    });
   }
 
   Future<void> _performSearch({bool needToClear = true}) async {

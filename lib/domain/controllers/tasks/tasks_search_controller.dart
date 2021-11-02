@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -52,6 +54,9 @@ class TasksSearchController extends BaseController {
 
   TextEditingController searchInputController = TextEditingController();
 
+  String _searchQuery = '';
+  Timer? _searchDebounce;
+
   @override
   void onInit() {
     screenName = tr('tasksSearch');
@@ -64,19 +69,26 @@ class TasksSearchController extends BaseController {
   @override
   RxList get itemList => _paginationController.data;
 
-  Future<void> newSearch(String query, {bool needToClear = true}) async {
-    _query = query.toLowerCase();
-    loaded.value = false;
+  void newSearch(String query, {bool needToClear = true}) async {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      _query = query.toLowerCase();
+      if (_searchQuery != query) {
+        _searchQuery = query;
 
-    if (needToClear) paginationController.startIndex = 0;
+        loaded.value = false;
 
-    if (query == null || query.isEmpty) {
-      clearSearch();
-    } else {
-      await _performSearch(needToClear: needToClear);
-    }
+        if (needToClear) paginationController.startIndex = 0;
 
-    loaded.value = true;
+        if (query == null || query.isEmpty) {
+          clearSearch();
+        } else {
+          await _performSearch(needToClear: needToClear);
+        }
+
+        loaded.value = true;
+      }
+    });
   }
 
   Future<void> _performSearch({bool needToClear = true}) async {

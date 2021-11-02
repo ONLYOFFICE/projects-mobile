@@ -69,9 +69,8 @@ class UsersSearchBar extends StatelessWidget {
               controller: controller.searchInputController,
               decoration:
                   InputDecoration.collapsed(hintText: tr('usersSearch')),
-              onSubmitted: (value) {
-                controller.searchUsers(value);
-              },
+              onSubmitted: controller.searchUsers,
+              onChanged: controller.searchUsers,
             ),
           ),
           InkWell(

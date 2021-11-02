@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
@@ -54,6 +56,8 @@ class UsersDataSource extends GetxController {
   UserSelectionMode selectionMode = UserSelectionMode.Single;
 
   RxBool isSearchResult = false.obs;
+
+  Timer? _searchDebounce;
 
   // var withoutSelf_remove = false;
   PortalUserItemController? selfUserItem;
@@ -84,11 +88,16 @@ class UsersDataSource extends GetxController {
   }
 
   void searchUsers(String query) {
-    loaded.value = false;
-    _query = query;
-    _startIndex = 0;
-    _loadUsers(needToClear: true);
-    loaded.value = true;
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_query != query) {
+        loaded.value = false;
+        _query = query;
+        _startIndex = 0;
+        await _loadUsers(needToClear: true);
+        loaded.value = true;
+      }
+    });
   }
 
   Future _loadUsers({

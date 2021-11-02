@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:event_hub/event_hub.dart';
@@ -71,6 +72,8 @@ class DocumentsController extends GetxController {
   set entityType(String? value) => {_entityType = value, _filterController.entityType = value};
 
   late PaginationController _paginationController;
+  Timer? _searchDebounce;
+
   PaginationController get paginationController => _paginationController;
   RxList get itemList => _paginationController.data;
 
@@ -184,10 +187,15 @@ class DocumentsController extends GetxController {
   }
 
   void newSearch(String query) {
-    _query = query;
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
-    _performSearch();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_query != query) {
+        _query = query;
+        paginationController.startIndex = 0;
+        paginationController.data.clear();
+        _performSearch();
+      }
+    });
   }
 
   Future<void> setupSearchMode({String? folderName, int? folderId}) async {

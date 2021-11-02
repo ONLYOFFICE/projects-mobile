@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
@@ -54,10 +56,11 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   TextEditingController searchInputController = TextEditingController();
 
-  String? _query;
+  String _query = '';
 
   int? initialFolderId;
 
+  Timer? _searchDebounce;
   int foldersCount = 0;
 
   String? mode;
@@ -169,10 +172,15 @@ class DocumentsMoveOrCopyController extends GetxController {
   }
 
   void newSearch(String query) {
-    _query = query;
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
-    _performSearch();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_query != query) {
+        _query = query;
+        paginationController.startIndex = 0;
+        paginationController.data.clear();
+        _performSearch();
+      }
+    });
   }
 
   Future<void> setupSearchMode({String? folderName, Folder? folder}) async {

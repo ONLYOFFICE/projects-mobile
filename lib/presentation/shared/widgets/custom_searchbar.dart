@@ -61,6 +61,7 @@ class CustomSearchBar extends StatelessWidget {
               decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
               onSubmitted:
                   searchFunction ?? controller.newSearch as Function(String)?,
+              onChanged: searchFunction ?? controller.newSearch as Function(String)?,
             ),
           ),
           InkResponse(

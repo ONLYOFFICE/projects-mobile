@@ -80,10 +80,10 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
             : const Icon(Icons.close),
         bottomHeight: 44,
         bottom: SearchField(
-          // TODO: add translate for key 'searchMilestone'
           hintText: tr('searchMilestone'),
           controller: _milestoneController.searchTextEditingController,
           showClearIcon: true,
+          onChanged: _milestoneController.loadMilestonesWithFilterByName,
           onSubmitted: _milestoneController.loadMilestonesWithFilterByName,
           onClearPressed: _milestoneController.clearSearchAndReloadMilestones,
         ),

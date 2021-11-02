@@ -102,6 +102,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                       hintText: tr('usersSearch'),
                       onSubmitted: usersDataSource.searchUsers,
                       showClearIcon: usersDataSource.isSearchResult.value == true,
+                      onChanged: usersDataSource.searchUsers,
                       onClearPressed: controller.clearUserSearch,
                       controller: controller.userSearchController,
                     ),
