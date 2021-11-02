@@ -279,7 +279,23 @@ class MobileLayout extends StatelessWidget {
     var navigationController = Get.find<NavigationController>();
     return Obx(
       () => Scaffold(
-        body: pages[navigationController.tabIndex.value],
+        body: Stack(
+          children: [
+            pages[navigationController.tabIndex.value],
+            if (navigationController.onMoreView.value)
+              GestureDetector(
+                onVerticalDragDown: (details) =>
+                    Get.find<NavigationController>()
+                        .changeTabIndex(navigationController.tabIndex.value),
+                onTap: () => Get.find<NavigationController>()
+                    .changeTabIndex(navigationController.tabIndex.value),
+                child: Container(
+                  padding: const EdgeInsets.all(0),
+                  color: Colors.transparent,
+                ),
+              ),
+          ],
+        ),
         bottomNavigationBar: SizedBox(
           height: navigationController.onMoreView.value ? 300 : 56,
           child: Column(
