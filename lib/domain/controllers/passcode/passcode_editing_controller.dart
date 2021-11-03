@@ -30,8 +30,10 @@
  *
  */
 
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/passcode_service.dart';
+import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/settings/passcode/edit/edit_passcode_screen2.dart';
 
@@ -61,7 +63,7 @@ class PasscodeEditingController extends GetxController {
     }
   }
 
-  void addNumberToPasscodeCheck(int number) {
+  void addNumberToPasscodeCheck(int number) async {
     if (_passcodeCheck.length < 4) {
       passcodeCheckFailed.value = false;
       _passcodeCheck += number.toString();
@@ -69,12 +71,33 @@ class PasscodeEditingController extends GetxController {
     }
     if (_passcodeCheck.length == 4) {
       if (_passcode == _passcodeCheck) {
-        _service.setPasscode(_passcode);
+        await _service.setPasscode(_passcode);
+        try {
+          // update code in main passcode controller
+          Get.find<PasscodeCheckingController>().onInit();
+          // ignore: empty_catches
+        } catch (_) {}
         _onPasscodeSaved();
       } else {
+        await HapticFeedback.mediumImpact();
+        _handleIncorrectPasscodeEntering();
         passcodeCheckFailed.value = true;
       }
     }
+  }
+
+  void _handleIncorrectPasscodeEntering() async {
+    passcodeCheckFailed.value = true;
+    _clearPasscodeCheck(clearError: false);
+    await Future.delayed(const Duration(milliseconds: 1700)).then((value) {
+      if (passcodeCheckFailed.isTrue) _clearPasscodeCheck();
+    });
+  }
+
+  void _clearPasscodeCheck({bool clearError = true}) {
+    if (clearError) passcodeCheckFailed.value = false;
+    _passcodeCheck = '';
+    passcodeCheckLen.value = 0;
   }
 
   void deletePasscodeCheckNumber() {
