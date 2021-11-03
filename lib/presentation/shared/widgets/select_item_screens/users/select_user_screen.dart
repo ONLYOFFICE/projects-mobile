@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/base/base_search_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/users/user_search_controller.dart';
 import 'package:projects/domain/controllers/users/users_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
