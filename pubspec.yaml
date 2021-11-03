@@ -44,7 +44,7 @@ dependencies:
   # read more button
   readmore: ^2.0.0
   # bottom sheet with dynamic size
-  bottom_sheet: ^0.0.1-dev.8
+  bottom_sheet: ^1.0.4
   darq: ^1.1.1
   # to open app in App Stores //need to replace
   launch_review: ^3.0.1
