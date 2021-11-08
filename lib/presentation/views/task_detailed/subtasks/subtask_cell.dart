@@ -78,7 +78,8 @@ class SubtaskCell extends StatelessWidget {
                         Text(subtask.title,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: subtaskController.subtask.value.status == 2
+                            style: subtaskController.subtask.value.status ==
+                                    SubtaskStatus.CLOSED
                                 ? TextStyleHelper.subtitle1(
                                         color: const Color(0xff9C9C9C))
                                     .copyWith(
@@ -89,13 +90,13 @@ class SubtaskCell extends StatelessWidget {
                                     .subtask.value.responsible?.displayName ??
                                 tr('nobody'),
                             style: TextStyleHelper.caption(
-                                color:
-                                    subtaskController.subtask.value.status == 2
-                                        ? const Color(0xffc2c2c2)
-                                        : Get.theme
-                                            .colors()
-                                            .onBackground
-                                            .withOpacity(0.6))),
+                                color: subtaskController.subtask.value.status ==
+                                        SubtaskStatus.CLOSED
+                                    ? const Color(0xffc2c2c2)
+                                    : Get.theme
+                                        .colors()
+                                        .onBackground
+                                        .withOpacity(0.6))),
                       ],
                     ),
                   ),
@@ -115,7 +116,9 @@ class SubtaskCell extends StatelessWidget {
                                   value: 'acceptSubtask',
                                   child: Text(tr('acceptSubtask'),
                                       style: TextStyleHelper.subtitle1())),
-                            if (subtaskController.canCreateSubtask)
+                            if (subtaskController.canCreateSubtask &&
+                                subtaskController.subtask.value.status ==
+                                    SubtaskStatus.OPEN)
                               PopupMenuItem(
                                   value: 'copySubtask',
                                   child: Text(tr('copySubtask'),
