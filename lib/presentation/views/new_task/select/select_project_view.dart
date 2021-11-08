@@ -109,8 +109,7 @@ class SelectProjectView extends StatelessWidget {
             searchController.searchResult.isNotEmpty) {
           return SmartRefresher(
             enablePullDown: false,
-            enablePullUp: searchController.searchResult.length >=
-                ProjectSearchController.PAGINATION_LENGTH,
+            enablePullUp: searchController.pullUpEnabled,
             controller: searchController.refreshController,
             onLoading: searchController.onLoading,
             child: ListView.separated(

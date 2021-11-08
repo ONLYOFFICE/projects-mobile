@@ -57,6 +57,8 @@ class ProjectSearchController extends GetxController {
   var _query;
   var _selfId;
 
+  bool get pullUpEnabled => searchResult.length >= PAGINATION_LENGTH;
+
   RefreshController refreshController = RefreshController();
 
   var _totalProjects;
