@@ -452,5 +452,6 @@
 	"statusPaused": "Paused",
 	"taskStatusOpen": "Open",
 	"taskStatusClosed": "Closed",
-	"searchMilestone": "Search for milstone..."
+	"searchMilestone": "Search for milstone...",
+	"tfaWrongCode": "Wrong code!"
 }
