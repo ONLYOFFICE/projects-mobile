@@ -57,7 +57,7 @@ class PaginationListView<T> extends StatelessWidget {
         ),
         enablePullDown: paginationController.pullDownEnabled,
         enablePullUp: paginationController.pullUpEnabled,
-        controller: paginationController.getRefreshController(),
+        controller: paginationController.refreshController,
         onRefresh: paginationController.onRefresh,
         onLoading: paginationController.onLoading,
         child: child);

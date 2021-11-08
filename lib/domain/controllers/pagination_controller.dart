@@ -37,7 +37,13 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class PaginationController extends GetxController {
   static const PAGINATION_LENGTH = 25;
   RxList data = [].obs;
+
   RefreshController _refreshController = RefreshController();
+  RefreshController get refreshController {
+    _refreshController = RefreshController();
+    return _refreshController;
+  }
+
   var startIndex = 0;
   var total = 0.obs;
 
@@ -68,10 +74,5 @@ class PaginationController extends GetxController {
   void setup() {
     total.value = 0;
     startIndex = 0;
-  }
-
-  RefreshController getRefreshController() {
-    _refreshController = RefreshController();
-    return _refreshController;
   }
 }

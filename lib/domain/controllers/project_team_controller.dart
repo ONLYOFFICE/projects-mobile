@@ -50,7 +50,7 @@ class ProjectTeamController extends GetxController {
   var _startIndex = 0;
 
   RefreshController _refreshController = RefreshController();
-  RefreshController getRefreshController() {
+  RefreshController get refreshController {
     _refreshController = RefreshController();
     return _refreshController;
   }

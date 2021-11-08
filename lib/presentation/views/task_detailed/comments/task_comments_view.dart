@@ -63,7 +63,7 @@ class TaskCommentsView extends StatelessWidget {
               if (comments.isEmpty)
                 Expanded(
                   child: SmartRefresher(
-                    controller: controller.getCommentsRefreshController(),
+                    controller: controller.commentsRefreshController,
                     onRefresh: () async =>
                         await controller.reloadTask(showLoading: true),
                     child: EmptyScreen(
@@ -75,7 +75,7 @@ class TaskCommentsView extends StatelessWidget {
               if (comments.isNotEmpty)
                 Expanded(
                   child: SmartRefresher(
-                    controller: controller.getCommentsRefreshController(),
+                    controller: controller.commentsRefreshController,
                     onRefresh: () async =>
                         await controller.reloadTask(showLoading: true),
                     child: ListView.separated(

@@ -82,7 +82,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             return SmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled,
-              controller: controller.teamController.getRefreshController(),
+              controller: controller.teamController.refreshController,
               onLoading: controller.teamController.onLoading,
               child: ListView(
                 children: <Widget>[
@@ -111,7 +111,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             return SmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled,
-              controller: controller.teamController.getRefreshController(),
+              controller: controller.teamController.refreshController,
               onLoading: controller.teamController.onLoading,
               child: ListView(
                 children: <Widget>[
