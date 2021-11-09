@@ -97,7 +97,9 @@ class PortalDiscussionsView extends StatelessWidget {
                           })),
               const SizedBox(width: 3),
             ],
-            bottom: DiscussionsHeader(),
+            bottom: DiscussionsHeader(
+              controller: controller,
+            ),
           ),
         ),
       ),

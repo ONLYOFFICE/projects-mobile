@@ -45,7 +45,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';

@@ -33,7 +33,7 @@
 part of '../tasks_filter.dart';
 
 class _Responsible extends StatelessWidget {
-  final TaskFilterController filterController;
+  final BaseTaskFilterController filterController;
   const _Responsible({Key key, this.filterController}) : super(key: key);
 
   @override

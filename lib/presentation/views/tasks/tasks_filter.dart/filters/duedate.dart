@@ -33,7 +33,7 @@
 part of '../tasks_filter.dart';
 
 class _DueDate extends StatelessWidget {
-  final TaskFilterController filterController;
+  final BaseTaskFilterController filterController;
   const _DueDate({Key key, this.filterController}) : super(key: key);
 
   @override
@@ -80,3 +80,4 @@ class _DueDate extends StatelessWidget {
     );
   }
 }
+
