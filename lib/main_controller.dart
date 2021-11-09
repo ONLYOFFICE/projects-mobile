@@ -94,16 +94,16 @@ class MainController extends GetxController {
 
     subscriptions
         .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
+      Get.offAll(() => MainView());
       Get.find<UserController>().getUserInfo();
       Get.find<PortalInfoController>().setup();
       setupMainPage();
-      await Get.offAll(() => MainView());
     }));
 
     subscriptions
         .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       setupMainPage();
-      await Get.offAll(() => MainView());
+      Get.offAll(() => MainView());
     }));
   }
 
@@ -117,13 +117,11 @@ class MainController extends GetxController {
           {
             if (!(mainPage.value is NavigationView))
               {
-                // ignore: unnecessary_cast
                 mainPage.value = navigationView,
               }
           }
         else if (!(mainPage.value is PortalInputView))
           {
-            // ignore: unnecessary_cast
             mainPage.value = portalInputView,
           }
       };

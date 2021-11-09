@@ -43,25 +43,10 @@ import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.da
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
-class PortalInputView extends StatefulWidget {
+class PortalInputView extends StatelessWidget {
   PortalInputView({Key key}) : super(key: key);
 
-  @override
-  _PortalInputViewState createState() => _PortalInputViewState();
-}
-
-class _PortalInputViewState extends State<PortalInputView> {
-  LoginController controller;
-
-  @override
-  void initState() {
-    controller = Get.find<LoginController>();
-    try {
-      controller.onClose();
-    } catch (_) {}
-
-    super.initState();
-  }
+  final LoginController controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
