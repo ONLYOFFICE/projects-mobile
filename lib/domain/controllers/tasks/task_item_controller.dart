@@ -38,6 +38,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
@@ -120,8 +121,17 @@ class TaskItemController extends GetxController {
 
   dynamic get getActualCommentCount {
     if (task?.value?.comments == null) return null;
+    return countCommentsAndReplies(task?.value?.comments);
+  }
+
+  int countCommentsAndReplies(List<PortalComment> comments) {
     var count = 0;
-    for (var item in task?.value?.comments) if (!item.inactive) count++;
+    if (comments.isNotEmpty)
+      for (var comment in comments) {
+        count += countCommentsAndReplies(comment.commentList);
+        if (!comment.inactive) count++;
+      }
+
     return count;
   }
 
