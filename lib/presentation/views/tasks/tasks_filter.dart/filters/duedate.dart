@@ -81,20 +81,3 @@ class _DueDate extends StatelessWidget {
   }
 }
 
-Future selectDateRange(
-  BuildContext context, {
-  TaskFilterController filterController,
-}) async {
-  var pickedRange = await showStyledDateRangePicker(
-    context: context,
-    initialDateRange: DateTimeRange(
-      start: filterController.deadline['custom']['startDate'],
-      end: filterController.deadline['custom']['stopDate'],
-    ),
-  );
-  if (pickedRange != null) {
-    filterController.changeDeadline('custom',
-        start: pickedRange.start, stop: pickedRange.end);
-  }
-}
-
