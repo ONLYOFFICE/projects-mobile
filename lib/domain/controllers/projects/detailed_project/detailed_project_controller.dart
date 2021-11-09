@@ -80,10 +80,12 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   bool markedToDelete = false;
 
-  ProjectDetailed _projectDetailed;
+  final Rx<ProjectDetailed> _projectDetailed = ProjectDetailed().obs;
 
   StreamSubscription _subscription;
-  ProjectDetailed get projectData => _projectDetailed;
+  StreamSubscription _projectDetailedsubscription;
+
+  ProjectDetailed get projectData => _projectDetailed.value;
 
   final _userController = Get.find<UserController>();
 
@@ -107,7 +109,13 @@ class ProjectDetailsController extends BaseProjectEditorController {
   @override
   void onClose() {
     _subscription.cancel();
+    _projectDetailedsubscription.cancel();
     super.onClose();
+  }
+
+  void addProjectDetailsListeners(void Function() listenerFunction) {
+    _projectDetailedsubscription =
+        _projectDetailed.listen((p0) => listenerFunction());
   }
 
   String decodeImageString(String image) {
@@ -115,19 +123,19 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   Future<void> setup(projectDetailed) async {
-    _projectDetailed = projectDetailed;
+    _projectDetailed.value = projectDetailed;
 
     await fillProjectInfo();
 
     final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
 
     creationDateText.value =
-        formatter.format(DateTime.parse(_projectDetailed.created));
+        formatter.format(DateTime.parse(_projectDetailed.value.created));
 
     await _projectService
-        .getProjectById(projectId: _projectDetailed.id)
+        .getProjectById(projectId: _projectDetailed.value.id)
         .then((value) => {
-              _projectDetailed = value,
+              _projectDetailed.value = value,
               fillProjectInfo(),
               if (value?.tags != null)
                 {
@@ -136,15 +144,15 @@ class ProjectDetailsController extends BaseProjectEditorController {
                 }
             });
 
-    tasksCount.value = _projectDetailed.taskCountTotal;
+    tasksCount.value = _projectDetailed.value.taskCountTotal;
 
     await _docApi
-        .getFilesByParams(folderId: _projectDetailed.projectFolder)
+        .getFilesByParams(folderId: _projectDetailed.value.projectFolder)
         .then((value) => docsCount.value = value.files.length);
 
     await locator<MilestoneService>()
         .milestonesByFilter(
-          projectId: _projectDetailed.id.toString(),
+          projectId: _projectDetailed.value.id.toString(),
         )
         .then((value) => {
               if (value != null) {milestoneCount.value = value.length}
@@ -152,35 +160,35 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   Future<void> fillProjectInfo() async {
-    teamMembersCount.value = _projectDetailed.participantCount;
+    teamMembersCount.value = _projectDetailed.value.participantCount;
 
     var tream = Get.find<ProjectTeamController>()
-      ..setup(projectDetailed: _projectDetailed);
+      ..setup(projectDetailed: _projectDetailed.value);
     // ignore: unawaited_futures
     tream.getTeam().then((value) => {
           teamMembers.clear(),
           teamMembers.addAll(tream.usersList),
           teamMembers.removeWhere((element) =>
-              element.portalUser.id == _projectDetailed.responsible.id),
+              element.portalUser.id == _projectDetailed.value.responsible.id),
         });
 
     statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed.status)]);
+        args: [ProjectStatus.toName(_projectDetailed.value.status)]);
 
-    projectTitleText.value = _projectDetailed.title;
-    descriptionText.value = _projectDetailed.description;
-    managerText.value = _projectDetailed.responsible.displayName;
+    projectTitleText.value = _projectDetailed.value.title;
+    descriptionText.value = _projectDetailed.value.description;
+    managerText.value = _projectDetailed.value.responsible.displayName;
 
-    milestoneCount.value = _projectDetailed.milestoneCount;
+    milestoneCount.value = _projectDetailed.value.milestoneCount;
   }
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed =
-        await _projectService.getProjectById(projectId: _projectDetailed.id);
+    _projectDetailed.value = await _projectService.getProjectById(
+        projectId: _projectDetailed.value.id);
     loaded.value = true;
 
-    await setup(_projectDetailed);
+    await setup(_projectDetailed.value);
   }
 
   Future manageTeamMembers() async {
@@ -199,15 +207,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future deleteProject() async {
     markedToDelete = true;
-    return await _projectService.deleteProject(projectId: _projectDetailed.id);
+    return await _projectService.deleteProject(
+        projectId: _projectDetailed.value.id);
   }
 
   Future<bool> updateStatus({int newStatusId}) async =>
       Get.find<ProjectStatusesController>().updateStatus(
-          newStatusId: newStatusId, projectData: _projectDetailed);
+          newStatusId: newStatusId, projectData: _projectDetailed.value);
 
   Future followProject() async {
-    await _projectService.followProject(projectId: _projectDetailed.id);
+    await _projectService.followProject(projectId: _projectDetailed.value.id);
     await refreshData();
   }
 

@@ -69,8 +69,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
 
-  var projectController;
-  var discussionsController;
+  ProjectDetailsController projectController;
+  ProjectDiscussionsController discussionsController;
   final documentsController = Get.find<DocumentsController>();
 
   @override
@@ -91,6 +91,14 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       vsync: this,
       length: 6,
     );
+
+    projectController.addProjectDetailsListeners(() {
+      projectDetailed = projectController.projectData;
+      discussionsController.setup(projectDetailed);
+      documentsController.setupFolder(
+          folderName: projectDetailed.title,
+          folderId: projectDetailed.projectFolder);
+    });
 
     documentsController.filesCount.listen((count) {
       projectController.docsCount.value = count;
@@ -115,12 +123,15 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            projectDetailed.canEdit
+            projectController.projectData.canEdit
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
                     onPressed: () => Get.find<NavigationController>().to(
-                        EditProjectView(projectDetailed: projectDetailed),
-                        arguments: {'projectDetailed': projectDetailed}))
+                            EditProjectView(
+                                projectDetailed: projectController.projectData),
+                            arguments: {
+                              'projectDetailed': projectController.projectData
+                            }))
                 : const SizedBox(),
             if (!projectController.projectData.security['isInTeam'] ||
                 projectController.projectData.canDelete)
@@ -165,16 +176,17 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ProjectOverview(
               projectController: projectController,
               tabController: _tabController),
-          ProjectTaskScreen(projectDetailed: projectDetailed),
-          ProjectMilestonesScreen(projectDetailed: projectDetailed),
+          ProjectTaskScreen(projectDetailed: projectController.projectData),
+          ProjectMilestonesScreen(
+              projectDetailed: projectController.projectData),
           ProjectDiscussionsScreen(controller: discussionsController),
           EntityDocumentsView(
-            folderId: projectDetailed.projectFolder,
-            folderName: projectDetailed.title,
+            folderId: projectController.projectData.projectFolder,
+            folderName: projectController.projectData.title,
             documentsController: documentsController,
           ),
           ProjectTeamView(
-              projectDetailed: projectDetailed,
+              projectDetailed: projectController.projectData,
               fabAction: projectController.manageTeamMembers),
         ]),
       ),
