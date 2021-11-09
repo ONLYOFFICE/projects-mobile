@@ -99,6 +99,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           folderName: projectDetailed.title,
           folderId: projectDetailed.projectFolder);
     });
+
+    documentsController.filesCount.listen((count) {
+      projectController.docsCount.value = count;
+    });
   }
 
   @override

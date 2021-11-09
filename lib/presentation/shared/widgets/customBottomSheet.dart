@@ -47,14 +47,18 @@ void showCustomBottomSheet({
   var heightWithoutStatusBar = _getMaxHeight(context);
 
   await showStickyFlexibleBottomSheet(
-    context: context,
-    headerBuilder: headerBuilder,
-    builder: builder,
-    headerHeight: headerHeight,
-    decoration: decoration,
-    initHeight: initHeight ?? heightWithoutStatusBar - 0.1,
-    maxHeight: maxHeight ?? heightWithoutStatusBar,
-  );
+      context: context,
+      headerBuilder: headerBuilder,
+      bodyBuilder: builder,
+      headerHeight: headerHeight,
+      decoration: decoration,
+      initHeight: initHeight ?? heightWithoutStatusBar - 0.1,
+      maxHeight: maxHeight ?? initHeight,
+      anchors: [
+        0,
+        initHeight ?? heightWithoutStatusBar - 0.1,
+        maxHeight ?? initHeight
+      ]);
 }
 
 double _getMaxHeight(context) {

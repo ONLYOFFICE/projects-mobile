@@ -70,6 +70,21 @@ class MainController extends GetxController {
         .checkConnectivity()
         .then((value) => {noInternet.value = value == ConnectivityResult.none});
 
+    _setupSubscriptions();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  void _setupSubscriptions() {
+    if (subscriptions.isNotEmpty) {
+      for (var item in subscriptions) {
+        item.cancel();
+      }
+    }
+
     subscriptions.add(Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -92,13 +107,9 @@ class MainController extends GetxController {
     }));
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  void setupMainPage() {
-    if (noInternet.isTrue) return;
+  Future<void> setupMainPage() async {
+    var connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) return;
 
     isAuthorized().then((isAuthorized) {
       return {

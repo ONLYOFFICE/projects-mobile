@@ -164,12 +164,13 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     var tream = Get.find<ProjectTeamController>()
       ..setup(projectDetailed: _projectDetailed.value);
-    var usersList = await tream.getTeam().then((value) => tream.usersList);
-
-    teamMembers.clear();
-    teamMembers.addAll(usersList);
-    teamMembers.removeWhere((element) =>
-        element.portalUser.id == _projectDetailed.value.responsible.id);
+    // ignore: unawaited_futures
+    tream.getTeam().then((value) => {
+          teamMembers.clear(),
+          teamMembers.addAll(tream.usersList),
+          teamMembers.removeWhere((element) =>
+              element.portalUser.id == _projectDetailed.value.responsible.id),
+        });
 
     statusText.value = tr('projectStatus',
         args: [ProjectStatus.toName(_projectDetailed.value.status)]);
