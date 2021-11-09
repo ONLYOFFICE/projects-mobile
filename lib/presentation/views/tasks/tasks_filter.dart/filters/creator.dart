@@ -33,7 +33,7 @@
 part of '../tasks_filter.dart';
 
 class _Creator extends StatelessWidget {
-  final TaskFilterController filterController;
+  final BaseTaskFilterController filterController;
   const _Creator({Key key, this.filterController}) : super(key: key);
 
   @override
@@ -56,7 +56,7 @@ class _Creator extends StatelessWidget {
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());
-              await filterController.changeCreator('other', newUser);
+              filterController.changeCreator('other', newUser);
             },
             onCancelTap: () => filterController.changeCreator('other', null),
           ),

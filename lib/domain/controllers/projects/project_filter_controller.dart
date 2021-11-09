@@ -67,9 +67,7 @@ class ProjectsFilterController extends BaseFilterController {
 
   RxMap projectManager;
   RxMap teamMember;
-
   RxMap other;
-
   RxMap status;
 
   @override
@@ -81,7 +79,12 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
+
+    await _getSavedFilters();
+  }
 
   @override
   void onInit() async {
@@ -208,6 +211,8 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
+    await saveFilters();
+
     projectManager['me'] = false;
     projectManager['other'] = '';
 
@@ -222,8 +227,6 @@ class ProjectsFilterController extends BaseFilterController {
     status['paused'] = false;
     status['closed'] = false;
 
-    suitableResultCount.value = -1;
-
     _projectManagerFilter = '';
     _teamMemberFilter = '';
     _otherFilter = '';
@@ -235,8 +238,11 @@ class ProjectsFilterController extends BaseFilterController {
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
-    await saveFilters();
+    suitableResultCount.value = -1;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
+
+    await saveFilters();
   }
 
   Future<void> setupPreset(PresetProjectFilters preset) async {
@@ -277,12 +283,15 @@ class ProjectsFilterController extends BaseFilterController {
       'projectFilters',
       {
         'projectManager': {
-          'buttons': projectManager,
+          'buttons': Map.from(projectManager),
           'value': _projectManagerFilter
         },
-        'teamMember': {'buttons': teamMember, 'value': _teamMemberFilter},
-        'other': {'buttons': other, 'value': _otherFilter},
-        'status': {'buttons': status, 'value': _statusFilter},
+        'teamMember': {
+          'buttons': Map.from(teamMember),
+          'value': _teamMemberFilter
+        },
+        'other': {'buttons': Map.from(other), 'value': _otherFilter},
+        'status': {'buttons': Map.from(status), 'value': _statusFilter},
         'hasFilters': _hasFilters,
       },
     );
@@ -301,17 +310,20 @@ class ProjectsFilterController extends BaseFilterController {
 
     if (savedFilters != null) {
       try {
-        projectManager =
-            Map.from(savedFilters['projectManager']['buttons']).obs;
+        projectManager.value =
+            Map<String, Object>.from(savedFilters['projectManager']['buttons']);
         _projectManagerFilter = savedFilters['projectManager']['value'];
 
-        teamMember = Map.from(savedFilters['teamMember']['buttons']).obs;
+        teamMember.value =
+            Map<String, Object>.from(savedFilters['teamMember']['buttons']);
         _teamMemberFilter = savedFilters['teamMember']['value'];
 
-        other = Map.from(savedFilters['other']['buttons']).obs;
+        other.value =
+            Map<String, Object>.from(savedFilters['other']['buttons']);
         _otherFilter = savedFilters['other']['value'];
 
-        status = Map.from(savedFilters['status']['buttons']).obs;
+        status.value =
+            Map<String, bool>.from(savedFilters['status']['buttons']);
         _statusFilter = savedFilters['status']['value'];
 
         hasFilters.value = savedFilters['hasFilters'];

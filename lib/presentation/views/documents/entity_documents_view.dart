@@ -48,7 +48,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 
 class EntityDocumentsView extends StatelessWidget {
   final String folderName;

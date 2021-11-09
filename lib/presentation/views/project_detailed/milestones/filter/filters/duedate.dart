@@ -30,7 +30,7 @@
  *
  */
 
-part of '../milestones_filter.dart';
+part of '../milestone_filter_screen.dart';
 
 class _DueDate extends StatelessWidget {
   const _DueDate({Key key}) : super(key: key);

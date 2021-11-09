@@ -30,41 +30,28 @@
  *
  */
 
-part of '../milestone_filter_screen.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 
-class _MilestoneResponsible extends StatelessWidget {
-  const _MilestoneResponsible({Key key}) : super(key: key);
+abstract class BaseTaskFilterController extends BaseFilterController {
+  String get responsibleFilter;
+  String get creatorFilter;
+  String get projectFilter;
+  String get milestoneFilter;
+  String get statusFilter;
+  String get deadlineFilter;
 
-  @override
-  Widget build(BuildContext context) {
-    var filterController = Get.find<MilestonesFilterController>();
-    return Obx(
-      () => FiltersRow(
-        title: tr('responsible'),
-        options: <Widget>[
-          FilterElement(
-              title: tr('me'),
-              titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.milestoneResponsible['me'],
-              onTap: () => filterController.changeResponsible('me')),
-          FilterElement(
-            title: filterController.milestoneResponsible['other'].isEmpty
-                ? tr('otherUser')
-                : filterController.milestoneResponsible['other'],
-            isSelected:
-                filterController.milestoneResponsible['other'].isNotEmpty,
-            cancelButtonEnabled:
-                filterController.milestoneResponsible['other'].isNotEmpty,
-            onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
-              await filterController.changeResponsible('other', newUser);
-            },
-            onCancelTap: () =>
-                filterController.changeResponsible('other', null),
-          ),
-        ],
-      ),
-    );
-  }
+  RxMap responsible;
+  RxMap creator;
+  RxMap project;
+  RxMap milestone;
+  RxMap status;
+  RxMap deadline;
+
+  void changeResponsible(String filter, [newValue = '']);
+  void changeCreator(String filter, [newValue = '']);
+  void changeProject(String filter, [newValue = '']);
+  void changeMilestone(String filter, [newValue]);
+  void changeStatus(String filter, [newValue]);
+  void changeDeadline(String filter, {DateTime start, DateTime stop});
 }

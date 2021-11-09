@@ -49,11 +49,17 @@ class DocumentsFilterController extends BaseFilterController {
   String _authorFilter = '';
   String _searchSettingsFilter = '';
 
+  String _currentAppliedTypeFilter = '';
+  String _currentAppliedAuthorFilter = '';
+  String _currentAppliedSearchSettingsFilter = '';
+
   RxMap contentTypes;
-
   RxMap searchSettings;
-
   RxMap author;
+
+  Map _currentAppliedContentTypes;
+  Map _currentAppliedSearchSettings;
+  Map _currentApplieddAuthor;
 
   String get typeFilter => _typeFilter;
   String get authorFilter => _authorFilter;
@@ -80,10 +86,22 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    _restoreFilterState();
+
+    hasFilters.value = _hasFilters;
+
+    suitableResultCount.value = -1;
+
+    if (applyFiltersDelegate != null) applyFiltersDelegate();
+
+// _getSavedFilters();
+  }
 
   Future<void> changeAuthorFilter(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
+    _currentAppliedAuthorFilter = _authorFilter;
+    _currentApplieddAuthor = Map.from(author);
     _authorFilter = '';
 
     switch (filter) {
@@ -136,6 +154,8 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   Future<void> changeContentTypeFilter(String filter) async {
+    _currentAppliedTypeFilter = _typeFilter;
+    _currentAppliedContentTypes = Map.from(contentTypes);
     _typeFilter = '';
 
     var newValue = !contentTypes[filter];
@@ -204,6 +224,8 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
+    _updateFilterState();
+
     contentTypes['folders'] = false;
     contentTypes['documents'] = false;
     contentTypes['presentations'] = false;
@@ -221,8 +243,6 @@ class DocumentsFilterController extends BaseFilterController {
     author['groups'] = '';
     author['no'] = false;
 
-    suitableResultCount.value = -1;
-
     _typeFilter = '';
     _authorFilter = '';
     _searchSettingsFilter = '';
@@ -233,6 +253,11 @@ class DocumentsFilterController extends BaseFilterController {
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+
+    _updateFilterState();
+
+    suitableResultCount.value = -1;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
@@ -272,6 +297,12 @@ class DocumentsFilterController extends BaseFilterController {
       'groups': '',
       'no': false,
     }.obs;
+
+    _currentApplieddAuthor = Map.from(author);
+    _currentAppliedContentTypes = Map.from(contentTypes);
+    _currentAppliedSearchSettings = Map.from(searchSettings);
+
+    _updateFilterState();
   }
 
   // UNUSED
@@ -302,5 +333,25 @@ class DocumentsFilterController extends BaseFilterController {
     } else {
       await loadFilters();
     }
+  }
+
+  void _updateFilterState() {
+    _currentApplieddAuthor = Map.from(author);
+    _currentAppliedContentTypes = Map.from(contentTypes);
+    _currentAppliedSearchSettings = Map.from(searchSettings);
+
+    _currentAppliedTypeFilter = typeFilter;
+    _currentAppliedAuthorFilter = authorFilter;
+    _currentAppliedSearchSettingsFilter = searchSettingsFilter;
+  }
+
+  void _restoreFilterState() {
+    contentTypes = RxMap.from(_currentAppliedContentTypes);
+    author = RxMap.from(_currentApplieddAuthor);
+    searchSettings = RxMap.from(_currentAppliedSearchSettings);
+
+    _typeFilter = _currentAppliedTypeFilter;
+    _authorFilter = _currentAppliedAuthorFilter;
+    _searchSettingsFilter = _currentAppliedSearchSettingsFilter;
   }
 }
