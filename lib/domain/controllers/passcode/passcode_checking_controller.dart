@@ -64,6 +64,13 @@ class PasscodeCheckingController extends GetxController {
     if (isFingerprintEnable) await useFingerprint();
   }
 
+  // update code in main passcode controller
+  void updatePasscode() async {
+    _correctPasscode = await _service.getPasscode;
+    await _getFingerprintAvailability();
+    if (isFingerprintEnable) await useFingerprint();
+  }
+
   Future<void> useFingerprint() async {
     try {
       var didAuthenticate = await _authService.authenticate();
