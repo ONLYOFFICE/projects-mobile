@@ -60,8 +60,21 @@ class _DueDate extends StatelessWidget {
           FilterElement(
               title: tr('customPeriod'),
               isSelected: filterController.deadline['custom']['selected'],
-              onTap: () =>
-                  selectDateRange(context, filterController: filterController)),
+              onTap: () async {
+                var pickedRange =
+                    await Get.find<NavigationController>().toScreen(
+                  StyledDateRangePickerDialog(
+                    initialDateRange: DateTimeRange(
+                      start: filterController.deadline['custom']['startDate'],
+                      end: filterController.deadline['custom']['stopDate'],
+                    ),
+                  ),
+                );
+                if (pickedRange != null) {
+                  await filterController.changeDeadline('custom',
+                      start: pickedRange.start, stop: pickedRange.end);
+                }
+              }),
         ],
       ),
     );
@@ -84,3 +97,4 @@ Future selectDateRange(
         start: pickedRange.start, stop: pickedRange.end);
   }
 }
+

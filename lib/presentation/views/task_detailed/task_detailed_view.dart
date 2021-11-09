@@ -48,7 +48,6 @@ import 'package:projects/presentation/views/documents/entity_documents_view.dart
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
-import 'package:projects/presentation/views/task_detailed/task_team.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 part 'app_bar_menu.dart';
@@ -65,24 +64,27 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   TabController _tabController;
   // ignore: prefer_final_fields
   var _activeIndex = 0.obs;
-  TaskItemController controller;
+  TaskItemController taskItemController;
   final documentsController = Get.find<DocumentsController>();
-  final tabsAmount = 5;
+  final tabsAmount = 4;
 
   @override
   void initState() {
     super.initState();
-    controller = Get.arguments['controller'];
-    controller.firstReload.value = true;
+    taskItemController = Get.arguments['controller'];
+    taskItemController.firstReload.value = true;
+
     // to get full info about task
-    controller.reloadTask().then((value) => controller.setLoaded = true);
+    taskItemController
+        .reloadTask()
+        .then((value) => taskItemController.setLoaded = true);
 
     _tabController = TabController(vsync: this, length: tabsAmount);
 
     documentsController.entityType = 'task';
     documentsController.setupFolder(
-        folderId: controller.task.value.id,
-        folderName: controller.task.value.title);
+        folderId: taskItemController.task.value.id,
+        folderName: taskItemController.task.value.title);
   }
 
   @override
@@ -102,13 +104,13 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            if (controller.canEdit)
+            if (taskItemController.canEdit)
               IconButton(
                 icon: const Icon(Icons.edit_outlined),
                 onPressed: () => Get.find<NavigationController>()
-                    .to(TaskEditingView(task: controller.task.value)),
+                    .to(TaskEditingView(task: taskItemController.task.value)),
               ),
-            _AppBarMenu(controller: controller)
+            _AppBarMenu(controller: taskItemController)
           ],
           bottom: SizedBox(
             height: 40,
@@ -125,33 +127,29 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                   CustomTab(
                       title: tr('subtasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: controller.task.value?.subtasks?.length),
+                      count: taskItemController.task.value?.subtasks?.length),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 2,
-                      count: controller.task.value?.files?.length),
+                      count: taskItemController.task.value?.files?.length),
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex.value == 3,
-                      count: controller.getActualCommentCount),
-                  CustomTab(
-                      title: tr('team'),
-                      currentTab: _activeIndex.value == 4,
-                      count: controller.task.value.responsibles.length),
+                      count: taskItemController.getActualCommentCount),
                 ]),
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
           TaskOverviewScreen(
-              taskController: controller, tabController: _tabController),
-          SubtasksView(controller: controller),
+              taskController: taskItemController,
+              tabController: _tabController),
+          SubtasksView(controller: taskItemController),
           TaskDocumentsView(
-            folderId: controller.task.value.id,
-            folderName: controller.task.value.title,
+            folderId: taskItemController.task.value.id,
+            folderName: taskItemController.task.value.title,
             documentsController: documentsController,
           ),
-          TaskCommentsView(controller: controller),
-          TaskTeamView(controller: controller),
+          TaskCommentsView(controller: taskItemController),
         ]),
       ),
     );

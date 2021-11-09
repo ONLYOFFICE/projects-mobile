@@ -451,5 +451,12 @@
 	"statusClosed": "Fermé",
 	"statusPaused": "En pause",
 	"taskStatusOpen": "Ouverte",
-	"taskStatusClosed": "Fermée"
+	"taskStatusClosed": "Fermée",
+	"searchMilestone": "Recherche de jalon...",
+
+	"privacyAndTermsFooter": {
+		"privacyPolicyWithLink": "Politique de confidentialité",
+		"termsOfServiceWithLink": "Conditions d'utilisation",
+		"total": "En continuant, vous acceptez @:privacyAndTermsFooter.privacyPolicyWithLink et @:privacyAndTermsFooter.termsOfServiceWithLink"
+	}
 }

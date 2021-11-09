@@ -33,6 +33,7 @@
 import 'dart:collection';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
@@ -64,25 +65,34 @@ class ErrorDialog extends GetxController {
 
     var error = queue.first;
 
-    await Get.dialog(SingleButtonDialog(
-        titleText: tr('error'),
-        contentText: _customErrors[error] ?? error,
-        acceptText: tr('ok'),
-        onAcceptTap: () => {
-              Get.back(),
-              dialogIsShown = false,
-              if (_blockingErrors[error.toLowerCase()] != null)
-                {
-                  Get.find<LoginController>().logout(),
-                  dialogIsShown = false,
-                  queue.clear(),
-                }
-              else
-                {
-                  queue.removeFirst(),
-                  processQueue(),
-                }
-            }));
+    await Get.dialog(
+      WillPopScope(
+        onWillPop: () {
+          return Future.value(false);
+        },
+        child: SingleButtonDialog(
+          titleText: tr('error'),
+          contentText: _customErrors[error] ?? error,
+          acceptText: tr('ok'),
+          onAcceptTap: () => {
+            Get.back(),
+            dialogIsShown = false,
+            if (_blockingErrors[error.toLowerCase()] != null)
+              {
+                Get.find<LoginController>().logout(),
+                dialogIsShown = false,
+                queue.clear(),
+              }
+            else
+              {
+                queue.removeFirst(),
+                processQueue(),
+              }
+          },
+        ),
+      ),
+      barrierDismissible: false,
+    );
   }
 
   void addToQueue(String message) {
@@ -97,6 +107,7 @@ class ErrorDialog extends GetxController {
 
 Map _blockingErrors = {
   'unauthorized': 'unauthorized',
+  'bad gateway': 'Bad Gateway',
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
   'the paid period is over': 'The paid period is over',

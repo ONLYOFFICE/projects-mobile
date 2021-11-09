@@ -207,30 +207,34 @@ class Header extends StatelessWidget {
       ),
     );
 
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              sortButton,
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async => Get.find<NavigationController>()
-                          .toScreen(const MilestoneFilterScreen()),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
+    return Visibility(
+      visible: controller.itemList.isNotEmpty ||
+          controller.filterController.hasFilters.value == true,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                sortButton,
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () async => Get.find<NavigationController>()
+                            .toScreen(const MilestoneFilterScreen()),
+                        child: FiltersButton(controler: controller),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

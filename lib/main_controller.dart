@@ -70,6 +70,21 @@ class MainController extends GetxController {
         .checkConnectivity()
         .then((value) => {noInternet.value = value == ConnectivityResult.none});
 
+    _setupSubscriptions();
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
+
+  void _setupSubscriptions() {
+    if (subscriptions.isNotEmpty) {
+      for (var item in subscriptions) {
+        item.cancel();
+      }
+    }
+
     subscriptions.add(Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) {
@@ -79,26 +94,22 @@ class MainController extends GetxController {
 
     subscriptions
         .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
+      Get.offAll(() => MainView());
       Get.find<UserController>().getUserInfo();
       Get.find<PortalInfoController>().setup();
       setupMainPage();
-      await Get.offAll(() => MainView());
     }));
 
     subscriptions
         .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       setupMainPage();
-      await Get.offAll(() => MainView());
+      Get.offAll(() => MainView());
     }));
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
-  void setupMainPage() {
-    if (noInternet.isTrue) return;
+  Future<void> setupMainPage() async {
+    var connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) return;
 
     isAuthorized().then((isAuthorized) {
       return {
@@ -106,13 +117,11 @@ class MainController extends GetxController {
           {
             if (!(mainPage.value is NavigationView))
               {
-                // ignore: unnecessary_cast
                 mainPage.value = navigationView,
               }
           }
         else if (!(mainPage.value is PortalInputView))
           {
-            // ignore: unnecessary_cast
             mainPage.value = portalInputView,
           }
       };

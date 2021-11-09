@@ -387,6 +387,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       var element = controller.paginationController.data[index];
+                      if (controller.target == element.id)
+                        return const SizedBox();
                       return element is Folder
                           ? MoveFolderCell(
                               element: element,

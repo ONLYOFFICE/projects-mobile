@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/status_button.dart';
@@ -41,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/views/task_detailed/task_team.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
@@ -146,7 +148,8 @@ class TaskOverviewScreen extends StatelessWidget {
                 if (task.responsibles != null && task.responsibles.isNotEmpty)
                   InfoTile(
                       onTap: () {
-                        tabController.animateTo(4);
+                        Get.find<NavigationController>()
+                            .toScreen(TaskTeamView(controller: taskController));
                       },
                       icon: AppIcon(
                           icon: SvgIcons.person,
@@ -163,7 +166,8 @@ class TaskOverviewScreen extends StatelessWidget {
                                   .onBackground
                                   .withOpacity(0.6)),
                           onPressed: () {
-                            tabController.animateTo(4);
+                            Get.find<NavigationController>().toScreen(
+                                TaskTeamView(controller: taskController));
                           })),
                 const SizedBox(height: 20),
                 InfoTile(
