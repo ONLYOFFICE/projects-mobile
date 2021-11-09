@@ -47,7 +47,8 @@ class EnterCurrentPasscodeScreen extends StatelessWidget
   final VoidCallback onPass;
   final VoidCallback onBack;
 
-  final passcodeCheckingController = Get.put(PasscodeCheckingController());
+  final passcodeCheckingController = Get.find<PasscodeCheckingController>()
+    ..setup(canUseFingerprint: false);
 
   @override
   String get title => tr('enterCurrentPasscode');
@@ -62,7 +63,8 @@ class EnterCurrentPasscodeScreen extends StatelessWidget
   String get errorText => tr('incorrectPIN');
 
   @override
-  void onBackPressed() => onBack != null ? onBack() : Get.back();
+  void onBackPressed() =>
+      onBack != null ? onBack() : passcodeCheckingController.leave();
 
   @override
   void onDeletePressed() => passcodeCheckingController.deleteNumber();
