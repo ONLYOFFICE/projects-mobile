@@ -33,13 +33,12 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_client_helper/http_client_helper.dart';
 import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class CoreApi {
-  var client = http.Client();
   final _secureStorage = locator<SecureStorage>();
   String _portalName;
 
@@ -213,10 +212,8 @@ class CoreApi {
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
-  Future<String> updateSubtaskStatus({
-    @required int taskId,
-    @required int subtaskId,
-  }) async =>
+  Future<String> updateSubtaskStatus(
+          {@required int taskId, @required int subtaskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
 
   Future<String> updateTaskUrl({@required int taskId}) async =>
@@ -263,10 +260,17 @@ class CoreApi {
   Future<String> getProjectSecurityinfoUrl() async =>
       '${await getPortalURI()}/api/$version/project/securityinfo';
 
+  var cancellationToken = CancellationToken();
+
   Future<dynamic> getRequest(String url) async {
     debugPrint(url);
     var headers = await getHeaders();
-    var request = client.get(Uri.parse(url), headers: headers);
+    var request = HttpClientHelper.get(Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: const Duration(seconds: 5),
+        headers: headers);
     final response = await request;
 
     if (response.statusCode == 200 || response.statusCode == 201) {
@@ -284,8 +288,12 @@ class CoreApi {
   Future<dynamic> postRequest(String url, Map body) async {
     debugPrint(url);
     var headers = await getHeaders();
-    var request = client.post(
+    var request = HttpClientHelper.post(
       Uri.parse(url),
+      cancelToken: cancellationToken,
+      timeRetry: const Duration(milliseconds: 100),
+      retries: 3,
+      timeLimit: const Duration(seconds: 5),
       headers: headers,
       body: jsonEncode(body),
     );
@@ -306,8 +314,12 @@ class CoreApi {
   Future<dynamic> putRequest(String url, {Map body = const {}}) async {
     print(url);
     var headers = await getHeaders();
-    var request = client.put(
+    var request = HttpClientHelper.put(
       Uri.parse(url),
+      cancelToken: cancellationToken,
+      timeRetry: const Duration(milliseconds: 100),
+      retries: 3,
+      timeLimit: const Duration(seconds: 5),
       headers: headers,
       body: body.isEmpty ? null : jsonEncode(body),
     );
@@ -327,8 +339,12 @@ class CoreApi {
   Future<dynamic> deleteRequest(String url) async {
     print(url);
     var headers = await getHeaders();
-    var request = client.delete(
+    var request = HttpClientHelper.delete(
       Uri.parse(url),
+      cancelToken: cancellationToken,
+      timeRetry: const Duration(milliseconds: 100),
+      retries: 3,
+      timeLimit: const Duration(seconds: 5),
       headers: headers,
     );
     final response = await request;
@@ -356,7 +372,6 @@ class CoreApi {
       await savePortalName();
     }
 
-    //TODO return Uri instead of string Uri.parse(_portalName)
     return _portalName;
   }
 

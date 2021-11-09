@@ -123,14 +123,14 @@ import 'package:projects/main_controller.dart';
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
+  locator.registerLazySingleton(() => CoreApi());
+
   locator.registerLazySingleton(() => ProjectsWithPresets());
   locator.registerLazySingleton(() => TasksWithPresets());
-
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => CommentsApi());
   locator.registerLazySingleton(() => CommentsService());
-  locator.registerLazySingleton(() => CoreApi());
   locator.registerLazySingleton(() => DiscussionsApi());
   locator.registerLazySingleton(() => DiscussionItemService());
   locator.registerLazySingleton(() => DiscussionsService());

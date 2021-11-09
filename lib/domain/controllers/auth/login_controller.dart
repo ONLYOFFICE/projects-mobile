@@ -35,6 +35,8 @@ import 'dart:async';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -58,10 +60,10 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  TextEditingController _portalAdressController;
+  TextEditingController portalAdressController = TextEditingController();
   TextEditingController _emailController;
   TextEditingController _passwordController;
-  TextEditingController get portalAdressController => _portalAdressController;
+
   TextEditingController get emailController => _emailController;
   TextEditingController get passwordController => _passwordController;
 
@@ -80,7 +82,8 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    _portalAdressController = TextEditingController();
+    GetIt.instance.resetLazySingleton<CoreApi>();
+
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
 
@@ -187,21 +190,15 @@ class LoginController extends GetxController {
 
     if (result.response.token != null) {
       await saveToken(result);
-      // need to save the token to send the device type
-      if (await sendRegistrationType()) {
-        setState(ViewState.Idle);
-        clearInputFields();
-        await AnalyticsService.shared.logEvent(
-            AnalyticsService.Events.loginPortal, {
-          AnalyticsService.Params.Key.portal:
-              await _secureStorage.getString('portalName')
-        });
-        locator<EventHub>().fire('loginSuccess');
-        return true;
-      } else {
-        // if the device type has not been sent, the token must be deleted
-        await logout();
-      }
+      await sendRegistrationType();
+      setState(ViewState.Idle);
+      clearInputFields();
+      await AnalyticsService.shared.logEvent(
+          AnalyticsService.Events.loginPortal, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName')
+      });
+      locator<EventHub>().fire('loginSuccess');
     } else if (result.response.tfa) {
       setState(ViewState.Idle);
       await Get.to(() => CodeView());
@@ -212,30 +209,26 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
-    _portalAdressController.text =
-        _portalAdressController.text.removeAllWhitespace;
+    portalAdressController.text =
+        portalAdressController.text.removeAllWhitespace;
 
-    if (!_portalAdressController.text.isURL) {
+    if (!portalAdressController.text.isURL) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
-      _portalAdressController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _portalAdressController.text.length),
+      portalAdressController.selection = TextSelection.fromPosition(
+        TextPosition(offset: portalAdressController.text.length),
       );
     } else {
       setState(ViewState.Busy);
 
       var _capabilities =
-          await _portalService.portalCapabilities(_portalAdressController.text);
+          await _portalService.portalCapabilities(portalAdressController.text);
 
       if (_capabilities != null) {
         capabilities = _capabilities;
         setState(ViewState.Idle);
         await Get.to(() => LoginView());
-      } else {
-        // to prevent socket exception
-        _portalAdressController.dispose();
-        _portalAdressController = TextEditingController();
       }
 
       setState(ViewState.Idle);
@@ -265,26 +258,6 @@ class LoginController extends GetxController {
     state.value = viewState;
   }
 
-  Future<bool> get isLoggedIn async => !await isTokenExpired();
-
-  Future<bool> isTokenExpired() async {
-    var expirationDate = await _secureStorage.getString('expires');
-    var token = await _secureStorage.getString('token');
-    var portalName = await _secureStorage.getString('portalName');
-
-    if (expirationDate == null ||
-        expirationDate.isEmpty ||
-        token == null ||
-        token.isEmpty ||
-        portalName == null ||
-        portalName.isEmpty) return true;
-
-    var expiration = DateTime.parse(expirationDate);
-    if (expiration.isBefore(DateTime.now())) return true;
-
-    return false;
-  }
-
   Future<bool> sendRegistrationType() async {
     var result = await _authService.sendRegistrationType();
     return result != null;
@@ -292,6 +265,9 @@ class LoginController extends GetxController {
 
   Future<void> logout() async {
     var storage = locator<Storage>();
+    var coreApi = locator<CoreApi>();
+
+    coreApi.cancellationToken?.cancel();
 
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
@@ -308,18 +284,19 @@ class LoginController extends GetxController {
 
   @override
   void onClose() {
-    // clearInputFields();z
-    _clearErrors();
+    // clearInputFields();
+    clearErrors();
     super.onClose();
   }
 
   void clearInputFields() {
-    _portalAdressController.clear();
+    portalAdressController.clear();
     _emailController.clear();
     _passwordController.clear();
+    clearErrors();
   }
 
-  void _clearErrors() {
+  void clearErrors() {
     portalFieldError.value = false;
     emailFieldError.value = false;
     passwordFieldError.value = false;
