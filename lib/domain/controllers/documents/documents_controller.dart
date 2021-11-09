@@ -83,6 +83,7 @@ class DocumentsController extends GetxController {
   var screenName = tr('documents').obs;
 
   RxList get itemList => _paginationController.data;
+  RxInt filesCount = RxInt(-1);
 
   DocumentsSortController _sortController;
   DocumentsSortController get sortController => _sortController;
@@ -170,7 +171,10 @@ class DocumentsController extends GetxController {
 
     if (result.folders != null)
       paginationController.data.addAll(result.folders);
-    if (result.files != null) paginationController.data.addAll(result.files);
+    if (result.files != null) {
+      paginationController.data.addAll(result.files);
+      filesCount.value = result.files.length;
+    }
 
     screenName.value = _screenName ?? tr('documents');
   }

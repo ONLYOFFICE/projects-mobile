@@ -451,5 +451,12 @@
 	"statusClosed": "Cerrado",
 	"statusPaused": "En pausa",
 	"taskStatusOpen": "Abierta",
-	"taskStatusClosed": "Cerrada"
+	"taskStatusClosed": "Cerrada",
+	"searchMilestone": "Buscar hito...",
+
+	"privacyAndTermsFooter": {
+		"privacyPolicyWithLink": "Política de privacidad",
+		"termsOfServiceWithLink": "Términos del servicio",
+		"total": "Al continuar, aceptas @:privacyAndTermsFooter.privacyPolicyWithLink y @:privacyAndTermsFooter.termsOfServiceWithLink"
+	}
 }

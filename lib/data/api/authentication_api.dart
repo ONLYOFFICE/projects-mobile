@@ -33,6 +33,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:projects/data/enums/platforms.dart';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -184,8 +185,8 @@ class AuthApi {
 
     var result = ApiDTO();
 
-    // TODO: IosProjects = 0, AndroidProjects = 1
-    var type = Platform.isAndroid ? 1 : 0;
+    var type =
+        Platform.isAndroid ? Platforms.AndroidProjects : Platforms.IosProjects;
 
     var body = {'type': type};
 

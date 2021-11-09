@@ -102,20 +102,15 @@ class LoginController extends GetxController {
       }
       if (result.response.token != null) {
         await saveToken(result);
-        // need to save the token to send the device type
-        if (await sendRegistrationType()) {
-          setState(ViewState.Idle);
-          clearInputFields();
-          await AnalyticsService.shared.logEvent(
-              AnalyticsService.Events.loginPortal, {
-            AnalyticsService.Params.Key.portal:
-                await _secureStorage.getString('portalName')
-          });
-          locator<EventHub>().fire('loginSuccess');
-        } else {
-          // if the device type has not been sent, the token must be deleted
-          await logout();
-        }
+        await sendRegistrationType();
+        setState(ViewState.Idle);
+        clearInputFields();
+        await AnalyticsService.shared.logEvent(
+            AnalyticsService.Events.loginPortal, {
+          AnalyticsService.Params.Key.portal:
+              await _secureStorage.getString('portalName')
+        });
+        locator<EventHub>().fire('loginSuccess');
       } else if (result.response.tfa == true) {
         _email = email;
         _pass = password;

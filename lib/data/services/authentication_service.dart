@@ -116,7 +116,6 @@ class AuthService {
     var success = response.response != null;
 
     if (!success) {
-      await Get.find<ErrorDialog>().show(response.error.message);
       return null;
     } else {
       return response;

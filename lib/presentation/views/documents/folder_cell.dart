@@ -102,7 +102,7 @@ class FolderCell extends StatelessWidget {
                           child: Text(tr('copy')),
                         ),
                       if (!Security.documents.isRoot(entity) &&
-                          Security.documents.canEdit(entity))
+                          Security.documents.canDelete(entity))
                         PopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
@@ -281,8 +281,6 @@ void _onFolderPopupMenuSelected(
       if (success) {
         MessagesHandler.showSnackBar(
             context: context, text: tr('folderDeleted'));
-        Future.delayed(const Duration(milliseconds: 500),
-            () => controller.refreshContent());
       }
       break;
     default:

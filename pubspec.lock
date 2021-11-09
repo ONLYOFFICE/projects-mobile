@@ -56,7 +56,7 @@ packages:
       name: bottom_sheet
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.1-dev.8"
+    version: "1.0.4"
   build:
     dependency: transitive
     description:
@@ -392,7 +392,7 @@ packages:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.6.0"
+    version: "1.8.0"
   firebase_core_platform_interface:
     dependency: transitive
     description:
@@ -407,6 +407,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
+  firebase_remote_config:
+    dependency: "direct main"
+    description:
+      name: firebase_remote_config
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.11.0+2"
+  firebase_remote_config_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_remote_config_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.0+7"
   fixnum:
     dependency: transitive
     description:
@@ -1104,13 +1118,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  surf_lint_rules:
-    dependency: transitive
-    description:
-      name: surf_lint_rules
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.2-dev.5"
   synchronized:
     dependency: transitive
     description:

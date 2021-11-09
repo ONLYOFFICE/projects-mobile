@@ -18,7 +18,7 @@
 	"documents": "Documentos",
 	"document": "Documento",
 	"milestones": "Marcos",
-	"milestone": "Marcos",
+	"milestone": "Marco",
 	"more": "Mais",
 	"settings": "Configurações",
 	"tasks": "Tarefas",
@@ -451,5 +451,12 @@
 	"statusClosed": "Fechado",
 	"statusPaused": "Pausado",
 	"taskStatusOpen": "Aberto",
-	"taskStatusClosed": "Fechado"
+	"taskStatusClosed": "Fechado",
+	"searchMilestone": "Busca de marco...",
+
+	"privacyAndTermsFooter": {
+		"privacyPolicyWithLink": "Política de privacidade",
+		"termsOfServiceWithLink": "Termos de serviço",
+		"total": "Continuando você aceita @:privacyAndTermsFooter.privacyPolicyWithLink e @:privacyAndTermsFooter.termsOfServiceWithLink"
+	}
 }
