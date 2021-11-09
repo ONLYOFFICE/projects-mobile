@@ -140,50 +140,48 @@ class DiscussionsList extends StatelessWidget {
     } catch (_) {}
 
     return Obx(() {
-      if (controller.loaded == false) {
+      if (!controller.loaded.value) {
         return const ListLoadingSkeleton();
-      } else {
-        if (controller.paginationController.data.isEmpty && hasFilters)
-          return PaginationListView(
-            paginationController: controller.paginationController,
-            child: Center(
-              child: EmptyScreen(
-                icon: SvgIcons.not_found,
-                text: tr('noDiscussionsMatching'),
-              ),
-            ),
-          );
-
-        if (controller.paginationController.data.isEmpty)
-          return PaginationListView(
-            paginationController: controller.paginationController,
-            child: Center(
-              child: EmptyScreen(
-                icon: SvgIcons.comments_not_created,
-                text: tr('noDiscussionsCreated'),
-              ),
-            ),
-          );
-
-        return PaginationListView(
-          paginationController: controller.paginationController,
-          child: ListView.separated(
-            itemCount: controller.paginationController.data.length,
-            padding: const EdgeInsets.only(bottom: 65),
-            controller: scrollController,
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 12);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return DiscussionTile(
-                discussion: controller.paginationController.data[index],
-                onTap: () => controller
-                    .toDetailed(controller.paginationController.data[index]),
-              );
-            },
-          ),
-        );
       }
+      return PaginationListView(
+          paginationController: controller.paginationController,
+          child: (() {
+            if (controller.loaded.value &&
+                controller.paginationController.data.isEmpty &&
+                hasFilters)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.not_found,
+                  text: tr('noDiscussionsMatching'),
+                ),
+              );
+
+            if (controller.loaded.value &&
+                controller.paginationController.data.isEmpty)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.comments_not_created,
+                  text: tr('noDiscussionsCreated'),
+                ),
+              );
+            if (controller.loaded.value &&
+                controller.paginationController.data.isNotEmpty)
+              return ListView.separated(
+                itemCount: controller.paginationController.data.length,
+                padding: const EdgeInsets.only(bottom: 65),
+                controller: scrollController,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 12);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return DiscussionTile(
+                    discussion: controller.paginationController.data[index],
+                    onTap: () => controller.toDetailed(
+                        controller.paginationController.data[index]),
+                  );
+                },
+              );
+          }()));
     });
   }
 }

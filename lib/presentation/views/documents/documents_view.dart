@@ -177,63 +177,56 @@ class DocumentsScreen extends StatelessWidget {
       appBar: appBar,
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
-          if (controller.loaded.value == true &&
-              controller.nothingFound.value == true) {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.not_found, text: tr('notFound'))),
-            );
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value &&
-              controller.searchMode.value == false) {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.documents_not_created,
-                      text: tr('noDocumentsCreated'))),
-            );
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value &&
-              controller.searchMode.value == false) {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.not_found,
-                      text: tr('noDocumentsMatching'))),
-            );
-          }
+          if (!controller.loaded.value) return const ListLoadingSkeleton();
+
           return PaginationListView(
-            paginationController: controller.paginationController,
-            child: ListView.separated(
-              controller: scrollController,
-              itemCount: controller.paginationController.data.length,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(height: 10),
-              itemBuilder: (BuildContext context, int index) {
-                var element = controller.paginationController.data[index];
-                return element is Folder
-                    ? FolderCell(
-                        entity: element,
-                        controller: controller,
-                      )
-                    : FileCell(
-                        entity: element,
-                        index: index,
-                        controller: controller,
-                      );
-              },
-            ),
-          );
+              paginationController: controller.paginationController,
+              child: (() {
+                if (controller.loaded.value && controller.nothingFound.value) {
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.not_found, text: tr('notFound')));
+                }
+                if (controller.loaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    !controller.filterController.hasFilters.value &&
+                    !controller.searchMode.value) {
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.documents_not_created,
+                          text: tr('noDocumentsCreated')));
+                }
+                if (controller.loaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    controller.filterController.hasFilters.value &&
+                    !controller.searchMode.value) {
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.not_found,
+                          text: tr('noDocumentsMatching')));
+                }
+                if (controller.loaded.value &&
+                    controller.paginationController.data.isNotEmpty)
+                  return ListView.separated(
+                    controller: scrollController,
+                    itemCount: controller.paginationController.data.length,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (BuildContext context, int index) {
+                      var element = controller.paginationController.data[index];
+                      return element is Folder
+                          ? FolderCell(
+                              entity: element,
+                              controller: controller,
+                            )
+                          : FileCell(
+                              entity: element,
+                              index: index,
+                              controller: controller,
+                            );
+                    },
+                  );
+              }()));
         },
       ),
     );

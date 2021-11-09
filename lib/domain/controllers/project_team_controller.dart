@@ -83,6 +83,8 @@ class ProjectTeamController extends GetxController {
   Future _loadTeam({bool needToClear = false}) async {
     var result = await _api.getProjectTeam(_projectId.toString());
 
+    if (result == null) return;
+
     totalProfiles = result.length;
 
     if (needToClear) usersList.clear();

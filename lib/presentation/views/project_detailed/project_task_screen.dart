@@ -36,7 +36,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 
@@ -53,7 +52,6 @@ import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed projectDetailed;
@@ -109,48 +107,44 @@ class _Content extends StatelessWidget {
     return Obx(
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+        children: [
           Header(controller: controller),
-          if (controller.loaded.value == false) const ListLoadingSkeleton(),
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value)
-            Expanded(
+          (() {
+            if (!controller.loaded.value) return const ListLoadingSkeleton();
+
+            return Expanded(
               child: PaginationListView(
                 paginationController: controller.paginationController,
-                child: Center(
-                  child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated'),
-                  ),
-                ),
+                child: (() {
+                  if (controller.loaded.value &&
+                      controller.paginationController.data.isEmpty &&
+                      !controller.filterController.hasFilters.value)
+                    return Center(
+                      child: EmptyScreen(
+                        icon: SvgIcons.task_not_created,
+                        text: tr('noTasksCreated'),
+                      ),
+                    );
+                  if (controller.loaded.value &&
+                      controller.paginationController.data.isEmpty &&
+                      controller.filterController.hasFilters.value)
+                    return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.not_found,
+                          text: tr('noTasksMatching')),
+                    );
+                  if (controller.loaded.value &&
+                      controller.paginationController.data.isNotEmpty)
+                    return ListView.builder(
+                      itemBuilder: (c, i) => TaskCell(
+                          task: controller.paginationController.data[i]),
+                      itemExtent: 72.0,
+                      itemCount: controller.paginationController.data.length,
+                    );
+                }()),
               ),
-            ),
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value)
-            Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-                ),
-              ),
-            ),
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isNotEmpty)
-            Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: ListView.builder(
-                  itemBuilder: (c, i) =>
-                      TaskCell(task: controller.paginationController.data[i]),
-                  itemExtent: 72.0,
-                  itemCount: controller.paginationController.data.length,
-                ),
-              ),
-            ),
+            );
+          }()),
         ],
       ),
     );

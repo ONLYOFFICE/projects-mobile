@@ -141,6 +141,9 @@ class TasksController extends BaseController {
       deadlineFilter: _filterController.deadlineFilter,
       // query: 'задача',
     );
+
+    if (result == null) return;
+
     paginationController.total.value = result?.total;
 
     if (needToClear) paginationController.data.clear();
