@@ -49,17 +49,17 @@ class DocumentsFilterController extends BaseFilterController {
   String _authorFilter = '';
   String _searchSettingsFilter = '';
 
-  String _savedTypeFilter = '';
-  String _savedAuthorFilter = '';
-  String _savedSearchSettingsFilter = '';
+  String _currentAppliedTypeFilter = '';
+  String _currentAppliedAuthorFilter = '';
+  String _currentAppliedSearchSettingsFilter = '';
 
   RxMap contentTypes;
   RxMap searchSettings;
   RxMap author;
 
-  Map _savedContentTypes;
-  Map _savedSearchSettings;
-  Map _savedAuthor;
+  Map _currentAppliedContentTypes;
+  Map _currentAppliedSearchSettings;
+  Map _currentApplieddAuthor;
 
   String get typeFilter => _typeFilter;
   String get authorFilter => _authorFilter;
@@ -87,7 +87,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   Future<void> restoreFilters() async {
-    _restoreState();
+    _restoreFilterState();
 
     hasFilters.value = _hasFilters;
 
@@ -100,8 +100,8 @@ class DocumentsFilterController extends BaseFilterController {
 
   Future<void> changeAuthorFilter(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
-    _savedAuthorFilter = _authorFilter;
-    _savedAuthor = Map.from(author);
+    _currentAppliedAuthorFilter = _authorFilter;
+    _currentApplieddAuthor = Map.from(author);
     _authorFilter = '';
 
     switch (filter) {
@@ -154,8 +154,8 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   Future<void> changeContentTypeFilter(String filter) async {
-    _savedTypeFilter = _typeFilter;
-    _savedContentTypes = Map.from(contentTypes);
+    _currentAppliedTypeFilter = _typeFilter;
+    _currentAppliedContentTypes = Map.from(contentTypes);
     _typeFilter = '';
 
     var newValue = !contentTypes[filter];
@@ -224,7 +224,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    _saveState();
+    _updateFilterState();
 
     contentTypes['folders'] = false;
     contentTypes['documents'] = false;
@@ -254,7 +254,7 @@ class DocumentsFilterController extends BaseFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    _saveState();
+    _updateFilterState();
 
     suitableResultCount.value = -1;
 
@@ -298,9 +298,11 @@ class DocumentsFilterController extends BaseFilterController {
       'no': false,
     }.obs;
 
-    _savedAuthor = Map.from(author);
-    _savedContentTypes = Map.from(contentTypes);
-    _savedSearchSettings = Map.from(searchSettings);
+    _currentApplieddAuthor = Map.from(author);
+    _currentAppliedContentTypes = Map.from(contentTypes);
+    _currentAppliedSearchSettings = Map.from(searchSettings);
+
+    _updateFilterState();
   }
 
   // UNUSED
@@ -333,23 +335,23 @@ class DocumentsFilterController extends BaseFilterController {
     }
   }
 
-  void _saveState() {
-    _savedAuthor = Map.from(author);
-    _savedContentTypes = Map.from(contentTypes);
-    _savedSearchSettings = Map.from(searchSettings);
+  void _updateFilterState() {
+    _currentApplieddAuthor = Map.from(author);
+    _currentAppliedContentTypes = Map.from(contentTypes);
+    _currentAppliedSearchSettings = Map.from(searchSettings);
 
-    _savedTypeFilter = typeFilter;
-    _savedAuthorFilter = authorFilter;
-    _savedSearchSettingsFilter = searchSettingsFilter;
+    _currentAppliedTypeFilter = typeFilter;
+    _currentAppliedAuthorFilter = authorFilter;
+    _currentAppliedSearchSettingsFilter = searchSettingsFilter;
   }
 
-  void _restoreState() {
-    contentTypes = RxMap.from(_savedContentTypes);
-    author = RxMap.from(_savedAuthor);
-    searchSettings = RxMap.from(_savedSearchSettings);
+  void _restoreFilterState() {
+    contentTypes = RxMap.from(_currentAppliedContentTypes);
+    author = RxMap.from(_currentApplieddAuthor);
+    searchSettings = RxMap.from(_currentAppliedSearchSettings);
 
-    _typeFilter = _savedTypeFilter;
-    _authorFilter = _savedAuthorFilter;
-    _searchSettingsFilter = _savedSearchSettingsFilter;
+    _typeFilter = _currentAppliedTypeFilter;
+    _authorFilter = _currentAppliedAuthorFilter;
+    _searchSettingsFilter = _currentAppliedSearchSettingsFilter;
   }
 }

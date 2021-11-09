@@ -56,12 +56,12 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   String _statusFilter = '';
   String _deadlineFilter = '';
 
-  String _savedResponsibleFilter = '';
-  String _savedCreatorFilter = '';
-  String _savedProjectFilter = '';
-  String _savedMilestoneFilter = '';
-  String _savedStatusFilter = '';
-  String _savedDeadlineFilter = '';
+  String _currentAppliedResponsibleFilter = '';
+  String _currentAppliedCreatorFilter = '';
+  String _currentAppliedProjectFilter = '';
+  String _currentAppliedMilestoneFilter = '';
+  String _currentAppliedStatusFilter = '';
+  String _currentAppliedDeadlineFilter = '';
 
   @override
   String get responsibleFilter => _responsibleFilter;
@@ -87,12 +87,12 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       _milestoneFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
 
-  Map _savedResponsible;
-  Map _savedCreator;
-  Map _savedProject;
-  Map _savedMilestone;
-  Map _savedStatus;
-  Map _savedDeadline;
+  Map _currentAppliedResponsible;
+  Map _currentAppliedCreator;
+  Map _currentAppliedProject;
+  Map _currentAppliedMilestone;
+  Map _currentAppliedStatus;
+  Map _currentAppliedDeadline;
 
   @override
   void onInit() async {
@@ -104,7 +104,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   Future<void> restoreFilters() async {
     suitableResultCount.value = -1;
 
-    _restoreState();
+    _restoreFilterState();
 
     hasFilters.value = _hasFilters;
   }
@@ -363,14 +363,14 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    _saveState();
+    _updateFilterState();
 
     if (applyFiltersDelegate != null) applyFiltersDelegate();
   }
 
   @override
   void resetFilters() async {
-    _saveState();
+    _updateFilterState();
 
     responsible['me'] = false;
     responsible['other'] = '';
@@ -448,7 +448,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
 
   @override
   Future<void> loadFilters() async {
-    responsible = {'me': true, 'other': '', 'groups': '', 'no': false}.obs;
+    responsible = {'me': '', 'other': '', 'groups': '', 'no': false}.obs;
     creator = {'me': false, 'other': ''}.obs;
     project = {
       'my': false,
@@ -469,44 +469,42 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       }
     }.obs;
 
-    _selfId = await Get.find<UserController>().getUserId();
-    _responsibleFilter = '&participant=$_selfId';
+    // _selfId = await Get.find<UserController>().getUserId();
+    // _responsibleFilter = '&participant=$_selfId';
 
-    _saveState();
-
-    getSuitableResultCount();
+    _updateFilterState();
   }
 
-  void _saveState() {
-    _savedResponsible = Map.from(responsible);
-    _savedCreator = Map.from(creator);
-    _savedProject = Map.from(project);
-    _savedMilestone = Map.from(milestone);
-    _savedStatus = Map.from(status);
-    _savedDeadline = Map.from(deadline);
+  void _updateFilterState() {
+    _currentAppliedResponsible = Map.from(responsible);
+    _currentAppliedCreator = Map.from(creator);
+    _currentAppliedProject = Map.from(project);
+    _currentAppliedMilestone = Map.from(milestone);
+    _currentAppliedStatus = Map.from(status);
+    _currentAppliedDeadline = Map.from(deadline);
 
-    _savedResponsibleFilter = _responsibleFilter;
-    _savedCreatorFilter = _creatorFilter;
-    _savedProjectFilter = _projectFilter;
-    _savedMilestoneFilter = _milestoneFilter;
-    _savedStatusFilter = _statusFilter;
-    _savedDeadlineFilter = _deadlineFilter;
+    _currentAppliedResponsibleFilter = _responsibleFilter;
+    _currentAppliedCreatorFilter = _creatorFilter;
+    _currentAppliedProjectFilter = _projectFilter;
+    _currentAppliedMilestoneFilter = _milestoneFilter;
+    _currentAppliedStatusFilter = _statusFilter;
+    _currentAppliedDeadlineFilter = _deadlineFilter;
   }
 
-  void _restoreState() {
-    responsible = RxMap.from(_savedResponsible);
-    creator = RxMap.from(_savedCreator);
-    project = RxMap.from(_savedProject);
-    milestone = RxMap.from(_savedMilestone);
-    status = RxMap.from(_savedStatus);
-    deadline = RxMap.from(_savedDeadline);
+  void _restoreFilterState() {
+    responsible = RxMap.from(_currentAppliedResponsible);
+    creator = RxMap.from(_currentAppliedCreator);
+    project = RxMap.from(_currentAppliedProject);
+    milestone = RxMap.from(_currentAppliedMilestone);
+    status = RxMap.from(_currentAppliedStatus);
+    deadline = RxMap.from(_currentAppliedDeadline);
 
-    _responsibleFilter = _savedResponsibleFilter;
-    _creatorFilter = _savedCreatorFilter;
-    _projectFilter = _savedProjectFilter;
-    _milestoneFilter = _savedMilestoneFilter;
-    _statusFilter = _savedStatusFilter;
-    _deadlineFilter = _savedDeadlineFilter;
+    _responsibleFilter = _currentAppliedResponsibleFilter;
+    _creatorFilter = _currentAppliedCreatorFilter;
+    _projectFilter = _currentAppliedProjectFilter;
+    _milestoneFilter = _currentAppliedMilestoneFilter;
+    _statusFilter = _currentAppliedStatusFilter;
+    _deadlineFilter = _currentAppliedDeadlineFilter;
   }
 
   @override
