@@ -41,6 +41,11 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
+class SubtaskStatus {
+  static const OPEN = 1;
+  static const CLOSED = 2;
+}
+
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();
   Rx<Subtask> subtask;
@@ -51,9 +56,10 @@ class SubtaskController extends GetxController {
     this.subtask = subtask.obs;
   }
 
-  bool get canEdit => subtask.value.canEdit && parentTask.status != 2;
+  bool get canEdit =>
+      subtask.value.canEdit && parentTask.status != SubtaskStatus.CLOSED;
   bool get canCreateSubtask =>
-      parentTask.canCreateSubtask && parentTask.status != 2;
+      parentTask.canCreateSubtask && parentTask.status != SubtaskStatus.CLOSED;
 
   void acceptSubtask(
     context, {
@@ -113,7 +119,7 @@ class SubtaskController extends GetxController {
     if (subtask.value.canEdit) {
       var newStatus;
 
-      if (subtask.value.status == 1)
+      if (subtask.value.status == SubtaskStatus.OPEN)
         newStatus = 'closed';
       else
         newStatus = 'open';

@@ -61,10 +61,7 @@ class ProjectDiscussionsController extends GetxController {
   var fabIsVisible = false.obs;
 
   ProjectDiscussionsController(ProjectDetailed projectDetailed) {
-    _projectDetailed = projectDetailed;
-    projectId = projectDetailed.id;
-    projectTitle = projectDetailed.title;
-
+    setup(projectDetailed);
     _sortController.updateSortDelegate =
         () async => await loadProjectDiscussions();
 
@@ -72,6 +69,12 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.refreshDelegate =
         () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
+  }
+
+  void setup(ProjectDetailed projectDetailed) {
+    _projectDetailed = projectDetailed;
+    projectId = projectDetailed.id;
+    projectTitle = projectDetailed.title;
 
     fabIsVisible.value = _canCreate();
   }

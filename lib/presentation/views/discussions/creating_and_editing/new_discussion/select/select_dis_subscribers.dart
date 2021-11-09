@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectDiscussionSubscribers extends StatelessWidget {
@@ -79,10 +80,15 @@ class SelectDiscussionSubscribers extends StatelessWidget {
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(tr('selectSubscribers')),
+                Text(
+                  tr('selectSubscribers'),
+                  style: TextStyleHelper.headerStyle(
+                      color: Get.theme.colors().onSurface),
+                ),
                 if (controller.subscribers.isNotEmpty)
                   Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption())
+                      style: TextStyleHelper.caption(
+                          color: Get.theme.colors().onSurface))
               ],
             ),
           ),
@@ -134,69 +140,13 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                     separatorBuilder: (BuildContext context, int index) =>
                         const SizedBox(height: 24),
                     itemBuilder: (BuildContext context, int index) {
-                      return Obx(
-                        () => CheckboxListTile(
-                          value:
-                              usersDataSource.usersList[index].isSelected.value,
-                          activeColor: Get.theme.colors().primary,
-                          onChanged: (value) {
-                            controller.addSubscriber(
+                      return PortalUserItem(
+                        userController: usersDataSource.usersList[index],
+                        onTapFunction: (value) => {
+                          controller.addSubscriber(
                               usersDataSource.usersList[index],
-                              fromUsersDataSource: true,
-                            );
-                          },
-                          contentPadding:
-                              const EdgeInsets.only(left: 16, right: 9),
-                          title: Row(
-                            children: [
-                              SizedBox(
-                                height: 40,
-                                width: 40,
-                                child: CircleAvatar(
-                                  radius: 20.0,
-                                  backgroundColor:
-                                      Get.theme.colors().bgDescription,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: Obx(() {
-                                      return usersDataSource
-                                          .usersList[index].avatar.value;
-                                    }),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Flexible(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      usersDataSource
-                                          .usersList[index].displayName,
-                                      maxLines: 2,
-                                      style: TextStyleHelper.subtitle1(
-                                          color: Get.theme.colors().onSurface),
-                                    ),
-                                    if (usersDataSource.usersList[index]
-                                            .portalUser.title !=
-                                        null)
-                                      Text(
-                                        usersDataSource
-                                            .usersList[index].portalUser.title,
-                                        maxLines: 2,
-                                        style: TextStyleHelper.caption(
-                                            color: Get.theme
-                                                .colors()
-                                                .onSurface
-                                                .withOpacity(0.6)),
-                                      ),
-                                    const SizedBox(width: 10),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              fromUsersDataSource: true)
+                        },
                       );
                     }),
               );

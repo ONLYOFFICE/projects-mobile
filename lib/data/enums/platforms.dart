@@ -30,45 +30,7 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
-import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-
-abstract class DiscussionActionsController {
-  RxString text;
-  RxString title;
-  var selectedProjectTitle;
-  RxList<PortalUserItemController> subscribers;
-  RxList<PortalUserItemController> otherUsers;
-
-  FocusNode get titleFocus => FocusNode();
-  TextEditingController _titleController;
-  TextEditingController _userSearchController;
-  TextEditingController get titleController => _titleController;
-  TextEditingController get userSearchController => _userSearchController;
-  var textController;
-
-  var setTitleError;
-  var setTextError;
-  var selectProjectError;
-
-  void setupSubscribersSelection();
-  void addSubscriber(PortalUserItemController user,
-      {fromUsersDataSource = false});
-  void removeSubscriber(PortalUserItemController user);
-
-  void changeTitle(String newText);
-  void changeProjectSelection();
-
-  void clearUserSearch();
-  void confirmText();
-  void leaveTextView();
-  void confirmSubscribersSelection();
-  void leaveSubscribersSelectionView();
-
-  void confirmGroupSelection();
-  void selectGroupMembers(PortalGroupItemController group);
-
-  DiscussionActionsController();
+class Platforms {
+  static const int IosProjects = 0;
+  static const int AndroidProjects = 1;
 }

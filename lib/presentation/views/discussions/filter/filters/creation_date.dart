@@ -55,31 +55,27 @@ class _CreatingDate extends StatelessWidget {
           FilterElement(
               title: tr('customPeriod'),
               isSelected: filterController.creationDate['custom']['selected'],
-              onTap: () =>
-                  selectDateRange(context, filterController: filterController)),
+              onTap: () async {
+                var pickedRange =
+                    await Get.find<NavigationController>().toScreen(
+                  StyledDateRangePickerDialog(
+                    initialDateRange: DateTimeRange(
+                      start: filterController.creationDate['custom']
+                          ['startDate'],
+                      end: filterController.creationDate['custom']['stopDate'],
+                    ),
+                  ),
+                );
+                if (pickedRange != null) {
+                  await filterController.changeCreationDate(
+                    'custom',
+                    start: pickedRange.start,
+                    stop: pickedRange.end,
+                  );
+                }
+              }),
         ],
       ),
-    );
-  }
-}
-
-Future selectDateRange(
-  BuildContext context, {
-  DiscussionsFilterController filterController,
-}) async {
-  var pickedRange = await showStyledDateRangePicker(
-    context: context,
-    initialDateRange: DateTimeRange(
-      start: filterController.creationDate['custom']['startDate'],
-      end: filterController.creationDate['custom']['stopDate'],
-    ),
-  );
-
-  if (pickedRange != null) {
-    await filterController.changeCreationDate(
-      'custom',
-      start: pickedRange.start,
-      stop: pickedRange.end,
     );
   }
 }

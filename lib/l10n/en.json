@@ -452,5 +452,12 @@
 	"statusPaused": "Paused",
 	"taskStatusOpen": "Open",
 	"taskStatusClosed": "Closed",
-	"searchMilestone": "Search for milstone..."
+	"searchMilestone": "Search for milestone...",
+
+	"privacyAndTermsFooter": {
+		"privacyPolicyWithLink": "Privacy Policy",
+		"termsOfServiceWithLink": "Terms of Service",
+		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
+	},
+"tfaWrongCode": "Wrong code!"
 }
