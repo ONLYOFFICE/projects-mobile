@@ -448,7 +448,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
 
   @override
   Future<void> loadFilters() async {
-    responsible = {'me': '', 'other': '', 'groups': '', 'no': false}.obs;
+    responsible = {'me': false, 'other': '', 'groups': '', 'no': false}.obs;
     creator = {'me': false, 'other': ''}.obs;
     project = {
       'my': false,
