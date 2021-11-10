@@ -103,6 +103,7 @@ class ProjectTeamController extends GetxController {
 
   Future getTeam({bool needToClear = true}) async {
     loaded.value = false;
+
     await _loadTeam(needToClear: needToClear);
 
     if (_projectDetailed?.status == ProjectStatusCode.closed.index) {
@@ -113,21 +114,24 @@ class ProjectTeamController extends GetxController {
     }
 
     var _userController = Get.find<UserController>();
-    await _userController.getUserInfo();
-    var selfUser = _userController.user;
+    await _userController.getUserInfo().then((ret) {
+      if (ret == false) return;
+      var selfUser = _userController.user;
 
-    if (_projectDetailed != null && _projectDetailed.security['canEditTeam']) {
-      fabIsVisible.value = true;
-    } else {
-      if (selfUser.isAdmin ||
-          selfUser.isOwner ||
-          (selfUser.listAdminModules != null &&
-              selfUser.listAdminModules.contains('projects'))) {
+      if (_projectDetailed != null &&
+          _projectDetailed.security['canEditTeam']) {
         fabIsVisible.value = true;
+      } else {
+        if (selfUser.isAdmin ||
+            selfUser.isOwner ||
+            (selfUser.listAdminModules != null &&
+                selfUser.listAdminModules.contains('projects'))) {
+          fabIsVisible.value = true;
+        }
       }
-    }
 
-    if (selfUser.isVisitor) fabIsVisible.value = false;
+      if (selfUser.isVisitor) fabIsVisible.value = false;
+    });
 
     loaded.value = true;
   }

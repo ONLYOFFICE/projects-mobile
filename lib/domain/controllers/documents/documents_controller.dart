@@ -100,10 +100,10 @@ class DocumentsController extends GetxController {
     _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => await refreshContent();
     sortController.updateSortDelegate = () async => await refreshContent();
-    paginationController.loadDelegate = () async => await _getDocuments();
-    paginationController.refreshDelegate = () async => await refreshContent();
+    _paginationController.loadDelegate = () async => await _getDocuments();
+    _paginationController.refreshDelegate = () async => await refreshContent();
 
-    paginationController.pullDownEnabled = true;
+    _paginationController.pullDownEnabled = true;
 
     portalInfoController.setup();
 
@@ -145,15 +145,16 @@ class DocumentsController extends GetxController {
     _currentFolderId = null;
 
     _filterController.folderId = null;
-    paginationController.startIndex = 0;
-    if (paginationController.data.isNotEmpty) paginationController.data.clear();
+    _paginationController.startIndex = 0;
+    //if (_paginationController.data.isNotEmpty)
+    _paginationController.data.clear();
   }
 
   Future _getDocuments() async {
     var result = await _api.getFilesByParams(
       folderId: _currentFolderId,
       query: _query,
-      startIndex: paginationController.startIndex,
+      startIndex: _paginationController.startIndex,
       sortBy: sortController.currentSortfilter,
       sortOrder: sortController.currentSortOrder,
       typeFilter: _filterController.typeFilter,
@@ -161,21 +162,23 @@ class DocumentsController extends GetxController {
       entityType: _entityType,
     );
 
-    if (result == null) return;
+    if (result == null) return Future.value(false);
 
-    paginationController.total.value = result.total;
+    _paginationController.total.value = result.total;
 
     if (_currentFolderId != null && result.current != null)
       _screenName = result.current.title;
 
     if (result.folders != null)
-      paginationController.data.addAll(result.folders);
+      _paginationController.data.addAll(result.folders);
     if (result.files != null) {
-      paginationController.data.addAll(result.files);
+      _paginationController.data.addAll(result.files);
       filesCount.value = result.files.length;
     }
 
     screenName.value = _screenName ?? tr('documents');
+
+    return Future.value(true);
   }
 
   void clearSearch() {
@@ -184,14 +187,14 @@ class DocumentsController extends GetxController {
     searchInputController.clear();
     nothingFound.value = false;
 
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
+    _paginationController.startIndex = 0;
+    _paginationController.data.clear();
   }
 
   void newSearch(query) {
     _query = query;
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
+    _paginationController.startIndex = 0;
+    _paginationController.data.clear();
     _performSearch();
   }
 
@@ -209,7 +212,7 @@ class DocumentsController extends GetxController {
 
     await _getDocuments();
 
-    if (paginationController.data.isEmpty) {
+    if (_paginationController.data.isEmpty) {
       nothingFound.value = true;
     }
 

@@ -46,18 +46,20 @@ class UserController extends GetxController {
   PortalUser user;
   SecrityInfo securityInfo;
 
-  Future getUserInfo() async {
+  Future<bool> getUserInfo() async {
     await lock.synchronized(() async {
       var data = await _api.getSelfInfo();
+      if (data.response == null) return Future.value(false);
       user = data.response;
 
       securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
     });
+    return Future.value(true);
   }
 
   Future<String> getUserId() async {
     if (user == null || user.id == null) {
-      await getUserInfo();
+      if (!await getUserInfo()) return null;
     }
     return user.id;
   }

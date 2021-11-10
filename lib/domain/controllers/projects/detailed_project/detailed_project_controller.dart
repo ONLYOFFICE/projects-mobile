@@ -80,7 +80,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   bool markedToDelete = false;
 
-  final Rx<ProjectDetailed> _projectDetailed = ProjectDetailed().obs;
+  final _projectDetailed = ProjectDetailed().obs;
 
   StreamSubscription _subscription;
   StreamSubscription _projectDetailedsubscription;
@@ -134,29 +134,33 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     await _projectService
         .getProjectById(projectId: _projectDetailed.value.id)
-        .then((value) => {
-              _projectDetailed.value = value,
-              fillProjectInfo(),
-              if (value?.tags != null)
-                {
-                  tags.addAll(value.tags),
-                  tagsText.value = value.tags.join(', '),
-                }
-            });
+        .then(
+      (value) {
+        if (value == null) return;
+        _projectDetailed.value = value;
+        fillProjectInfo();
+        if (value?.tags != null) {
+          tags.addAll(value.tags);
+          tagsText.value = value.tags.join(', ');
+        }
+      },
+    );
 
     tasksCount.value = _projectDetailed.value.taskCountTotal;
 
     await _docApi
         .getFilesByParams(folderId: _projectDetailed.value.projectFolder)
-        .then((value) => docsCount.value = value.files.length);
+        .then(
+      (value) {
+        if (value != null) docsCount.value = value.files.length;
+      },
+    );
 
     await locator<MilestoneService>()
-        .milestonesByFilter(
-          projectId: _projectDetailed.value.id.toString(),
-        )
-        .then((value) => {
-              if (value != null) {milestoneCount.value = value.length}
-            });
+        .milestonesByFilter(projectId: _projectDetailed.value.id.toString())
+        .then((value) {
+      if (value != null) milestoneCount.value = value.length;
+    });
   }
 
   Future<void> fillProjectInfo() async {
@@ -184,11 +188,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed.value = await _projectService.getProjectById(
-        projectId: _projectDetailed.value.id);
-    loaded.value = true;
 
-    await setup(_projectDetailed.value);
+    await _projectService
+        .getProjectById(projectId: _projectDetailed.value.id)
+        .then((projDetailed) {
+      if (projDetailed == null) return;
+      _projectDetailed.value = projDetailed;
+      setup(_projectDetailed.value);
+    });
+
+    loaded.value = true;
   }
 
   Future manageTeamMembers() async {

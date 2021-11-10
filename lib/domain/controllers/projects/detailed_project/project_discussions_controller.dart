@@ -90,18 +90,22 @@ class ProjectDiscussionsController extends GetxController {
     loaded.value = true;
   }
 
-  Future _getDiscussions({needToClear = false}) async {
+  Future<bool> _getDiscussions({needToClear = false}) async {
     var result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: projectId.toString(),
     );
+    if (result == null) return Future.value(false);
+
     paginationController.total.value = result.total;
 
     if (needToClear) paginationController.data.clear();
 
     paginationController.data.addAll(result.response);
+
+    return Future.value(true);
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()

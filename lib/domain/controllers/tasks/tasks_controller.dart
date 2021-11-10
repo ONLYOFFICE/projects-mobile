@@ -117,6 +117,7 @@ class TasksController extends BaseController {
 
   Future loadTasks() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
     if (_preset != null) {
       await _filterController
@@ -125,10 +126,11 @@ class TasksController extends BaseController {
     } else {
       await _getTasks(needToClear: true);
     }
+
     loaded.value = true;
   }
 
-  Future _getTasks({needToClear = false}) async {
+  Future<bool> _getTasks({needToClear = false}) async {
     var result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
@@ -142,14 +144,14 @@ class TasksController extends BaseController {
       // query: 'задача',
     );
 
-    if (result == null) return;
+    if (result == null) return Future.value(false);
 
     paginationController.total.value = result?.total;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result.response);
     expandedCardView.value = paginationController.data.isNotEmpty;
+
+    return Future.value(true);
   }
 
   @override
