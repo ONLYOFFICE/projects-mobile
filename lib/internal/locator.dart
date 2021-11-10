@@ -260,8 +260,7 @@ void setupGetX() {
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
   Get.lazyPut(() => MainController(), fenix: true);
-  Get.lazyPut(() => PasscodeCheckingController(canUseFingerprint: true),
-      fenix: true);
+  Get.lazyPut(() => PasscodeCheckingController(), fenix: true);
   Get.lazyPut(() => LoginController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
 

@@ -273,6 +273,8 @@ class CoreApi {
         headers: headers);
     final response = await request;
 
+    if (response == null) return CustomError(message: 'Invalid response');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response;
     } else {
@@ -299,6 +301,9 @@ class CoreApi {
     );
 
     final response = await request;
+
+    if (response == null) return CustomError(message: 'Invalid response');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response;
     } else {
@@ -324,6 +329,9 @@ class CoreApi {
       body: body.isEmpty ? null : jsonEncode(body),
     );
     final response = await request;
+
+    if (response == null) return CustomError(message: 'Invalid response');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response;
     } else {
@@ -348,6 +356,9 @@ class CoreApi {
       headers: headers,
     );
     final response = await request;
+
+    if (response == null) return CustomError(message: 'Invalid response');
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       return response;
     } else {

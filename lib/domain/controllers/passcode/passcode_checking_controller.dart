@@ -39,9 +39,11 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/main_view.dart';
 
 class PasscodeCheckingController extends GetxController {
-  PasscodeCheckingController({this.canUseFingerprint = false});
+  void setup({canUseFingerprint = false}) {
+    _canUseFingerprint = canUseFingerprint;
+  }
 
-  final bool canUseFingerprint;
+  bool _canUseFingerprint;
 
   final _service = locator<PasscodeService>();
   final _authService = locator<LocalAuthenticationService>();
@@ -149,7 +151,7 @@ class PasscodeCheckingController extends GetxController {
 
   Future<void> _getFingerprintAvailability() async {
     loaded.value = false;
-    if (!canUseFingerprint) {
+    if (!_canUseFingerprint) {
       isFingerprintAvailable = false;
       isFingerprintEnable = false;
     } else {

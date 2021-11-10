@@ -37,7 +37,6 @@ import 'package:projects/domain/controllers/base/base_task_filter_controller.dar
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
