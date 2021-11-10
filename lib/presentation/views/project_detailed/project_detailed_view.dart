@@ -81,24 +81,18 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         Get.put(ProjectDiscussionsController(projectDetailed));
 
     projectController = Get.find<ProjectDetailsController>();
-    projectController.setup(Get.arguments['projectDetailed']);
-
-    documentsController.setupFolder(
-        folderName: projectDetailed.title,
-        folderId: projectDetailed.projectFolder);
-
-    _tabController = TabController(
-      vsync: this,
-      length: 6,
-    );
-
-    projectController.addProjectDetailsListeners(() {
+    projectController.setup(projectDetailed).then((value) {
       projectDetailed = projectController.projectData;
       discussionsController.setup(projectDetailed);
       documentsController.setupFolder(
           folderName: projectDetailed.title,
           folderId: projectDetailed.projectFolder);
     });
+
+    _tabController = TabController(
+      vsync: this,
+      length: 6,
+    );
 
     documentsController.filesCount.listen((count) {
       projectController.docsCount.value = count;

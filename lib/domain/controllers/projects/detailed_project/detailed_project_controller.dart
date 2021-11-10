@@ -81,11 +81,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
   bool markedToDelete = false;
 
   final _projectDetailed = ProjectDetailed().obs;
+  ProjectDetailed get projectData => _projectDetailed.value;
 
   StreamSubscription _subscription;
-  StreamSubscription _projectDetailedsubscription;
-
-  ProjectDetailed get projectData => _projectDetailed.value;
 
   final _userController = Get.find<UserController>();
 
@@ -109,13 +107,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   @override
   void onClose() {
     _subscription.cancel();
-    _projectDetailedsubscription.cancel();
     super.onClose();
-  }
-
-  void addProjectDetailsListeners(void Function() listenerFunction) {
-    _projectDetailedsubscription =
-        _projectDetailed.listen((p0) => listenerFunction());
   }
 
   String decodeImageString(String image) {

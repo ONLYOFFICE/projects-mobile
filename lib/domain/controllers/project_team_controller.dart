@@ -80,10 +80,10 @@ class ProjectTeamController extends GetxController {
     _refreshController.loadComplete();
   }
 
-  Future _loadTeam({bool needToClear = false}) async {
+  Future<bool> _loadTeam({bool needToClear = false}) async {
     var result = await _api.getProjectTeam(_projectId.toString());
 
-    if (result == null) return;
+    if (result == null) return Future.value(false);
 
     totalProfiles = result.length;
 
@@ -99,6 +99,8 @@ class ProjectTeamController extends GetxController {
     }
 
     nothingFound.value = usersList.isEmpty;
+
+    return Future.value(true);
   }
 
   Future getTeam({bool needToClear = true}) async {
