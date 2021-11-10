@@ -84,3 +84,45 @@ class StatusTile extends StatelessWidget {
     );
   }
 }
+
+class StatusTileTablet extends StatelessWidget {
+  final String title;
+  final Widget icon;
+  final bool selected;
+
+  const StatusTileTablet(
+      {Key key, this.icon, this.title, this.selected = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    BoxDecoration _selectedDecoration() {
+      return BoxDecoration(
+          color: const Color(0xff81C4FF).withOpacity(0.2),
+          borderRadius: BorderRadius.circular(6));
+    }
+
+    return Container(
+      height: 36,
+      decoration: selected ? _selectedDecoration() : null,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 48, child: icon),
+                Flexible(
+                    child: Text(title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyleHelper.body2())),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
