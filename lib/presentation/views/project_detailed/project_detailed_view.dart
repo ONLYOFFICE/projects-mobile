@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -64,45 +63,38 @@ class ProjectDetailedView extends StatefulWidget {
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  // ignore: prefer_final_fields
-  RxInt _activeIndex = 0.obs;
+  final RxInt _activeIndex = 0.obs;
 
-  ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
-
-  ProjectDetailsController projectController;
-  ProjectDiscussionsController discussionsController;
-  final documentsController = Get.find<DocumentsController>();
+  final ProjectDetailsController projectController =
+      Get.find<ProjectDetailsController>();
+  final DocumentsController documentsController =
+      Get.find<DocumentsController>();
 
   @override
   void initState() {
-    super.initState();
-
-    discussionsController =
-        Get.put(ProjectDiscussionsController(projectDetailed));
-
-    projectController = Get.find<ProjectDetailsController>();
-    projectController.setup(Get.arguments['projectDetailed']);
+    ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
 
     documentsController.setupFolder(
         folderName: projectDetailed.title,
         folderId: projectDetailed.projectFolder);
+
+    documentsController.filesCount.listen((count) {
+      projectController.docsCount.value = count;
+    });
+
+    projectController.setup(projectDetailed).then((value) {
+      projectDetailed = projectController.projectData;
+      documentsController.setupFolder(
+          folderName: projectDetailed.title,
+          folderId: projectDetailed.projectFolder);
+    });
 
     _tabController = TabController(
       vsync: this,
       length: 6,
     );
 
-    projectController.addProjectDetailsListeners(() {
-      projectDetailed = projectController.projectData;
-      discussionsController.setup(projectDetailed);
-      documentsController.setupFolder(
-          folderName: projectDetailed.title,
-          folderId: projectDetailed.projectFolder);
-    });
-
-    documentsController.filesCount.listen((count) {
-      projectController.docsCount.value = count;
-    });
+    super.initState();
   }
 
   @override
@@ -179,7 +171,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ProjectTaskScreen(projectDetailed: projectController.projectData),
           ProjectMilestonesScreen(
               projectDetailed: projectController.projectData),
-          ProjectDiscussionsScreen(controller: discussionsController),
+          ProjectDiscussionsScreen(
+              projectDetailed: projectController.projectData),
           EntityDocumentsView(
             folderId: projectController.projectData.projectFolder,
             folderName: projectController.projectData.title,

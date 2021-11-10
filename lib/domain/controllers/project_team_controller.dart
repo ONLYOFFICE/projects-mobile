@@ -80,10 +80,10 @@ class ProjectTeamController extends GetxController {
     _refreshController.loadComplete();
   }
 
-  Future _loadTeam({bool needToClear = false}) async {
+  Future<bool> _loadTeam({bool needToClear = false}) async {
     var result = await _api.getProjectTeam(_projectId.toString());
 
-    if (result == null) return;
+    if (result == null) return Future.value(false);
 
     totalProfiles = result.length;
 
@@ -99,10 +99,13 @@ class ProjectTeamController extends GetxController {
     }
 
     nothingFound.value = usersList.isEmpty;
+
+    return Future.value(true);
   }
 
   Future getTeam({bool needToClear = true}) async {
     loaded.value = false;
+
     await _loadTeam(needToClear: needToClear);
 
     if (_projectDetailed?.status == ProjectStatusCode.closed.index) {
@@ -113,21 +116,24 @@ class ProjectTeamController extends GetxController {
     }
 
     var _userController = Get.find<UserController>();
-    await _userController.getUserInfo();
-    var selfUser = _userController.user;
+    await _userController.getUserInfo().then((ret) {
+      if (ret == false) return;
+      var selfUser = _userController.user;
 
-    if (_projectDetailed != null && _projectDetailed.security['canEditTeam']) {
-      fabIsVisible.value = true;
-    } else {
-      if (selfUser.isAdmin ||
-          selfUser.isOwner ||
-          (selfUser.listAdminModules != null &&
-              selfUser.listAdminModules.contains('projects'))) {
+      if (_projectDetailed != null &&
+          _projectDetailed.security['canEditTeam']) {
         fabIsVisible.value = true;
+      } else {
+        if (selfUser.isAdmin ||
+            selfUser.isOwner ||
+            (selfUser.listAdminModules != null &&
+                selfUser.listAdminModules.contains('projects'))) {
+          fabIsVisible.value = true;
+        }
       }
-    }
 
-    if (selfUser.isVisitor) fabIsVisible.value = false;
+      if (selfUser.isVisitor) fabIsVisible.value = false;
+    });
 
     loaded.value = true;
   }

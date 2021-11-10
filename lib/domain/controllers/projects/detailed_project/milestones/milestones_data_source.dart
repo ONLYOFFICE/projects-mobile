@@ -84,7 +84,7 @@ class MilestonesDataSource extends GetxController {
     loaded.value = true;
   }
 
-  Future _getMilestones({needToClear = false}) async {
+  Future<bool> _getMilestones({needToClear = false}) async {
     var result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -95,12 +95,13 @@ class MilestonesDataSource extends GetxController {
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );
+    if (result == null) return Future.value(false);
 
     paginationController.total.value = result.length;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result);
+
+    return Future.value(true);
   }
 
   Future<void> setup({ProjectDetailed projectDetailed, int projectId}) async {

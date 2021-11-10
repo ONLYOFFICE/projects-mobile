@@ -55,8 +55,9 @@ class TaskCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var itemController = Get.put(
-      TaskItemController(task),
+    var itemController = TaskItemController(task);
+    Get.put(
+      itemController,
       tag: task.id.toString(),
     );
     WidgetsBinding.instance.addPostFrameCallback(
