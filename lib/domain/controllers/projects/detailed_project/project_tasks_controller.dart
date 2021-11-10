@@ -66,21 +66,24 @@ class ProjectTasksController extends GetxController {
     _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate =
-        () async => await _getTasks(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
   }
 
   RxList get itemList => paginationController.data;
 
+  Future<void> refreshData() async {
+    loaded.value = false;
+    if (await _getTasks(needToClear: true)) loaded.value = true;
+  }
+
   Future loadTasks() async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    await _getTasks(needToClear: true);
-    loaded.value = true;
+    if (await _getTasks(needToClear: true)) loaded.value = true;
   }
 
-  Future _getTasks({needToClear = false}) async {
+  Future<bool> _getTasks({needToClear = false}) async {
     var result = await _api.getTasksByParams(
         startIndex: paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
@@ -92,13 +95,13 @@ class ProjectTasksController extends GetxController {
         deadlineFilter: _filterController.deadlineFilter,
         projectId: _projectId.toString());
 
-    if (result == null) return;
+    if (result == null) return Future.value(false);
 
     paginationController.total.value = result.total;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result.response);
+
+    return Future.value(true);
   }
 
   Future<void> setup(ProjectDetailed projectDetailed) async {
