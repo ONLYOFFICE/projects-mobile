@@ -61,32 +61,31 @@ class SubtasksView extends StatelessWidget {
         if (controller.loaded.value == true) {
           return Stack(
             children: [
-              if (_task.subtasks.isEmpty)
-                SmartRefresher(
-                  controller: controller.subtaskRefreshController,
-                  onRefresh: () => controller.reloadTask(showLoading: true),
-                  child: Center(
-                    child: EmptyScreen(
-                      icon: SvgIcons.task_not_created,
-                      text: tr('noSubtasksCreated'),
-                    ),
-                  ),
-                ),
-              if (_task.subtasks.isNotEmpty)
-                SmartRefresher(
-                  controller: controller.subtaskRefreshController,
-                  onRefresh: () => controller.reloadTask(showLoading: true),
-                  child: ListView.builder(
-                    itemCount: _task.subtasks.length,
-                    padding: const EdgeInsets.only(top: 6, bottom: 50),
-                    itemBuilder: (BuildContext context, int index) {
-                      return SubtaskCell(
-                        subtask: _task.subtasks[index],
-                        parentTask: _task,
-                      );
-                    },
-                  ),
-                ),
+              SmartRefresher(
+                controller: controller.subtaskRefreshController,
+                onRefresh: () => controller.reloadTask(showLoading: true),
+                child: (() {
+                  if (_task.subtasks.isEmpty)
+                    return Center(
+                      child: EmptyScreen(
+                        icon: SvgIcons.task_not_created,
+                        text: tr('noSubtasksCreated'),
+                      ),
+                    );
+
+                  if (_task.subtasks.isNotEmpty)
+                    return ListView.builder(
+                      itemCount: _task.subtasks.length,
+                      padding: const EdgeInsets.only(top: 6, bottom: 50),
+                      itemBuilder: (BuildContext context, int index) {
+                        return SubtaskCell(
+                          subtask: _task.subtasks[index],
+                          parentTask: _task,
+                        );
+                      },
+                    );
+                }()),
+              ),
               if (controller?.task?.value?.canCreateSubtask == true &&
                   controller?.task?.value?.status != 2)
                 _FAB(task: _task),
