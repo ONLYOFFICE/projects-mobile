@@ -50,12 +50,7 @@ class AuthService {
     final result = authResponse.response != null;
 
     if (!result) {
-      var errorText = '';
-      if (authResponse.error?.message == 'Server error') {
-        errorText = tr('tfaWrongCode');
-      }
-      await Get.find<ErrorDialog>()
-          .show(errorText == '' ? authResponse.error!.message : errorText);
+      await Get.find<ErrorDialog>().show(authResponse.error?.message ?? '');
     }
     return authResponse;
   }
@@ -92,17 +87,15 @@ class AuthService {
     required String pass,
     required String code,
   }) async {
-    final authResponse =
-        await _api.confirmTFACode(email: email, pass: pass, code: code);
+    final authResponse = await _api.confirmTFACode(email: email, pass: pass, code: code);
 
     final tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      String? errorText;
-      if (authResponse.error?.message != 'Server error') {
-        errorText = authResponse.error?.message;
-      }
-      await Get.find<ErrorDialog>().show(errorText ?? '');
+      var errorText = '';
+      if (authResponse.error?.message == 'Server error') errorText = tr('tfaWrongCode');
+      await Get.find<ErrorDialog>()
+          .show(errorText == '' ? authResponse.error?.message ?? '' : errorText);
     }
     return authResponse;
   }
