@@ -81,8 +81,7 @@ class ProjectTasksController extends GetxController {
   Future loadTasks() async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    await _getTasks(needToClear: true);
-    loaded.value = true;
+    if (await _getTasks(needToClear: true)) loaded.value = true;
   }
 
   Future<bool> _getTasks({needToClear = false}) async {

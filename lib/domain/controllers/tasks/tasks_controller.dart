@@ -107,8 +107,7 @@ class TasksController extends BaseController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    await _getTasks(needToClear: true);
-    loaded.value = true;
+    if (await _getTasks(needToClear: true)) loaded.value = true;
   }
 
   void setupPreset(PresetTaskFilters preset) {
@@ -120,11 +119,7 @@ class TasksController extends BaseController {
 
     paginationController.startIndex = 0;
     if (_preset != null) {
-      await _filterController
-          .setupPreset(_preset)
-          .then((value) => _getTasks(needToClear: true));
-    } else {
-      await _getTasks(needToClear: true);
+      await _filterController.setupPreset(_preset);
     }
 
     loaded.value = true;
