@@ -72,7 +72,13 @@ class ProjectOverview extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              ProjectStatusButton(projectController: projectController),
+              Padding(
+                padding: const EdgeInsets.only(left: 72),
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ProjectStatusButton(
+                        projectController: projectController)),
+              ),
               const SizedBox(height: 20),
               if (projectController.descriptionText != null &&
                   projectController.descriptionText.isNotEmpty)
@@ -160,63 +166,52 @@ class ProjectStatusButton extends StatelessWidget {
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
     bool canEdit = projectController.projectData.canEdit;
-    return Padding(
-      padding: const EdgeInsets.only(left: 72),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return OutlinedButton(
+      onPressed: canEdit
+          ? () => {
+                showStatuses(
+                    context: context, itemController: projectController),
+              }
+          : null,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+          if (canEdit)
+            return const Color(0xff81C4FF).withOpacity(0.2);
+          else
+            return Get.theme.colors().bgDescription;
+        }),
+        side: MaterialStateProperty.resolveWith((_) {
+          return const BorderSide(color: Colors.transparent, width: 0);
+        }),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          OutlinedButton(
-            onPressed: canEdit
-                ? () => {
-                      showsStatusesBS(
-                          context: context, itemController: projectController),
-                    }
-                : null,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                if (canEdit)
-                  return const Color(0xff81C4FF).withOpacity(0.2);
-                else
-                  return Get.theme.colors().bgDescription;
-              }),
-              side: MaterialStateProperty.resolveWith((_) {
-                return const BorderSide(color: Colors.transparent, width: 0);
-              }),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
-                    child: Obx(
-                      () => Text(
-                        projectController.statusText.value,
-                        style: TextStyleHelper.subtitle2(
-                          color: canEdit
-                              ? Get.theme.colors().primary
-                              : Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.75),
-                        ),
-                      ),
-                    ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+              child: Obx(
+                () => Text(
+                  projectController.statusText.value,
+                  style: TextStyleHelper.subtitle2(
+                    color: canEdit
+                        ? Get.theme.colors().primary
+                        : Get.theme.colors().onBackground.withOpacity(0.75),
                   ),
                 ),
-                const SizedBox(width: 5),
-                if (canEdit)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Get.theme.colors().primary,
-                      size: 19,
-                    ),
-                  )
-              ],
+              ),
             ),
           ),
+          const SizedBox(width: 5),
+          if (canEdit)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Get.theme.colors().primary,
+                size: 19,
+              ),
+            )
         ],
       ),
     );
