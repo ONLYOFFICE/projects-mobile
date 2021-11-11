@@ -124,10 +124,8 @@ class MainController extends GetxController {
     subscriptions
         .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       mainPage.value = portalInputView;
-      3000
-          .milliseconds
-          .delay()
-          .then((_) => GetIt.instance.resetLazySingleton<CoreApi>());
+
+      GetIt.instance.resetLazySingleton<CoreApi>();
       await Get.offAll(() => MainView());
     }));
   }

@@ -74,7 +74,7 @@ class ProjectsController extends BaseController {
 
   var fabIsVisible = false.obs;
 
-  var _withoutFAB = false;
+  var _withFAB = true;
 
   StreamSubscription fabSubscription;
   StreamSubscription refreshSubscription;
@@ -97,6 +97,10 @@ class ProjectsController extends BaseController {
         locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       loadProjects();
     });
+    _userController.loaded.listen((_loaded) async => {
+          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
+        });
+
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
     fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged',
         (dynamic data) async {
@@ -105,7 +109,7 @@ class ProjectsController extends BaseController {
   }
 
   Future<bool> getFabVisibility() async {
-    if (_withoutFAB) return false;
+    if (!_withFAB) return false;
     await _userController.getUserInfo();
     return _userController.user.isAdmin ||
         _userController.user.isOwner ||
@@ -136,9 +140,9 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  void setup(PresetProjectFilters preset, {withoutFAB = false}) {
+  void setup(PresetProjectFilters preset, {withFAB = true}) {
     _preset = preset;
-    _withoutFAB = withoutFAB;
+    _withFAB = withFAB;
   }
 
   Future<void> loadProjects() async {

@@ -91,6 +91,9 @@ class TasksController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
+    _userController.loaded.listen((_loaded) async =>
+        {if (_loaded) fabIsVisible.value = await getFabVisibility()});
+
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });

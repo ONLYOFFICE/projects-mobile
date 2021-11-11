@@ -77,7 +77,7 @@ class ProjectsWithPresets {
           Get.find<PaginationController>(),
         ),
         tag: '_myProjectsController')
-      ..setup(PresetProjectFilters.myProjects, withoutFAB: true);
+      ..setup(PresetProjectFilters.myProjects, withFAB: false);
     await _myProjectsController.loadProjects();
   }
 
@@ -88,7 +88,7 @@ class ProjectsWithPresets {
           Get.find<PaginationController>(),
         ),
         tag: '_folowedProjectsController')
-      ..setup(PresetProjectFilters.myFollowedProjects, withoutFAB: true);
+      ..setup(PresetProjectFilters.myFollowedProjects, withFAB: false);
     await _folowedProjectsController.loadProjects();
   }
 
@@ -99,7 +99,7 @@ class ProjectsWithPresets {
           Get.find<PaginationController>(),
         ),
         tag: '_activeProjectsController')
-      ..setup(PresetProjectFilters.active, withoutFAB: true);
+      ..setup(PresetProjectFilters.active, withFAB: false);
     await _activeProjectsController.loadProjects();
   }
 
@@ -110,7 +110,7 @@ class ProjectsWithPresets {
           Get.find<PaginationController>(),
         ),
         tag: '_myMembershipProjectController')
-      ..setup(PresetProjectFilters.myMembership, withoutFAB: true);
+      ..setup(PresetProjectFilters.myMembership, withFAB: false);
     await _myMembershipProjectController.loadProjects();
   }
 
@@ -121,7 +121,7 @@ class ProjectsWithPresets {
           Get.find<PaginationController>(),
         ),
         tag: '_myManagedProjectController')
-      ..setup(PresetProjectFilters.myManaged, withoutFAB: true);
+      ..setup(PresetProjectFilters.myManaged, withFAB: false);
     await _myManagedProjectController.loadProjects();
   }
 }

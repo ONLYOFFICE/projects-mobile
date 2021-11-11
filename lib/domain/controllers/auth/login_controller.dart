@@ -35,7 +35,6 @@ import 'dart:async';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -82,8 +81,6 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    GetIt.instance.resetLazySingleton<CoreApi>();
-
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
 

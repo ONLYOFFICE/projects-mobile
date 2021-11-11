@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -83,6 +84,15 @@ class DashboardController extends GetxController {
   void onRefresh() async {
     refreshData();
     refreshProjectsData();
+
+    // update the user data in case of changing user rights on the server side
+    Get.find<UserController>()
+      ..clear()
+      // ignore: unawaited_futures
+      ..getUserInfo()
+      // ignore: unawaited_futures
+      ..getSecurityInfo();
+
     refreshController.refreshCompleted();
   }
 
