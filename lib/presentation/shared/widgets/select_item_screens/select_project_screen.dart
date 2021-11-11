@@ -106,7 +106,11 @@ class SelectProjectScreen extends StatelessWidget {
                   )
                 : Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(tr('selectProject')),
+                    child: Text(
+                      tr('selectProject'),
+                      style: TextStyleHelper.headerStyle(
+                          color: Get.theme.colors().onSurface),
+                    ),
                   ),
           ),
         ),
