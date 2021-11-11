@@ -84,7 +84,7 @@ class ProjectDiscussionsController extends GetxController {
     loaded.value = false;
 
     //await _getDiscussions(needToClear: true);
-    locator<EventHub>().fire('needToRefreshDetails');
+    locator<EventHub>().fire('needToRefreshDetails', _projectDetailed.id);
 
     loaded.value = true;
   }

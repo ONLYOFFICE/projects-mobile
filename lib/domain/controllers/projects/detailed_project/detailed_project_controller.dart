@@ -102,6 +102,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
+        if (data != _projectDetailed.value.id) return;
+
         refreshData();
       },
     );
@@ -113,6 +115,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           _refreshDetailsSubscription.cancel();
           return;
         }
+
+        if (data != _projectDetailed.value.id) return;
 
         refreshProjectDetails();
       },
