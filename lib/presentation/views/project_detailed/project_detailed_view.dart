@@ -65,8 +65,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   TabController _tabController;
   final RxInt _activeIndex = 0.obs;
 
-  ProjectDetailsController projectController;
-  final documentsController = Get.find<DocumentsController>();
+  final ProjectDetailsController projectController =
+      Get.find<ProjectDetailsController>();
+  final DocumentsController documentsController =
+      Get.find<DocumentsController>();
 
   @override
   void initState() {
@@ -80,7 +82,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       projectController.docsCount.value = count;
     });
 
-    projectController = Get.find<ProjectDetailsController>();
     projectController.setup(projectDetailed).then((value) {
       projectDetailed = projectController.projectData;
       documentsController.setupFolder(

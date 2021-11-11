@@ -107,7 +107,10 @@ class TasksController extends BaseController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    if (await _getTasks(needToClear: true)) loaded.value = true;
+
+    await _getTasks(needToClear: true);
+
+    loaded.value = true;
   }
 
   void setupPreset(PresetTaskFilters preset) {

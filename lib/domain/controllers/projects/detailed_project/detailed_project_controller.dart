@@ -84,6 +84,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   ProjectDetailed get projectData => _projectDetailed.value;
 
   StreamSubscription _refreshProjectsSubscription;
+  StreamSubscription _refreshDetailsSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -104,11 +105,24 @@ class ProjectDetailsController extends BaseProjectEditorController {
         refreshData();
       },
     );
+
+    _refreshDetailsSubscription = locator<EventHub>().on(
+      'needToRefreshDetails',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshDetailsSubscription.cancel();
+          return;
+        }
+
+        refreshProjectDetails();
+      },
+    );
   }
 
   @override
   void onClose() {
     _refreshProjectsSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
     super.onClose();
   }
 
@@ -127,6 +141,12 @@ class ProjectDetailsController extends BaseProjectEditorController {
       tagsText.value = ret.tags.join(', ');
     }
 
+    tasksCount.value = _projectDetailed.value.taskCountTotal;
+
+    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
+    creationDateText.value =
+        formatter.format(DateTime.parse(_projectDetailed.value.created));
+
     return Future.value(true);
   }
 
@@ -134,12 +154,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
     _projectDetailed.value = projectDetailed;
 
     await refreshProjectDetails();
-
-    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
-    creationDateText.value =
-        formatter.format(DateTime.parse(_projectDetailed.value.created));
-
-    tasksCount.value = _projectDetailed.value.taskCountTotal;
 
     await _docApi
         .getFilesByParams(folderId: _projectDetailed.value.projectFolder)

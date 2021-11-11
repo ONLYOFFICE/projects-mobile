@@ -83,8 +83,8 @@ class ProjectDiscussionsController extends GetxController {
   Future<void> refreshData() async {
     loaded.value = false;
 
-    await _getDiscussions(needToClear: true);
-    locator<EventHub>().fire('needToRefreshProjects');
+    //await _getDiscussions(needToClear: true);
+    locator<EventHub>().fire('needToRefreshDetails');
 
     loaded.value = true;
   }

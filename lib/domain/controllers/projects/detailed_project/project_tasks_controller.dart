@@ -76,8 +76,8 @@ class ProjectTasksController extends GetxController {
   Future<void> refreshData() async {
     loaded.value = false;
 
-    await _getTasks(needToClear: true);
-    locator<EventHub>().fire('needToRefreshProjects');
+    //await _getTasks(needToClear: true);
+    locator<EventHub>().fire('needToRefreshDetails');
 
     loaded.value = true;
   }
