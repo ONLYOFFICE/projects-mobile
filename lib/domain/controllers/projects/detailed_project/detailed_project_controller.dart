@@ -83,7 +83,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   final _projectDetailed = ProjectDetailed().obs;
   ProjectDetailed get projectData => _projectDetailed.value;
 
-  StreamSubscription _subscription;
+  StreamSubscription _refreshProjectsSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -93,20 +93,22 @@ class ProjectDetailsController extends BaseProjectEditorController {
               PortalUserItemController(portalUser: _userController.user),
         });
 
-    _subscription =
-        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (markedToDelete) {
-        _subscription.cancel();
-        return;
-      }
+    _refreshProjectsSubscription = locator<EventHub>().on(
+      'needToRefreshProjects',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshProjectsSubscription.cancel();
+          return;
+        }
 
-      refreshData();
-    });
+        refreshData();
+      },
+    );
   }
 
   @override
   void onClose() {
-    _subscription.cancel();
+    _refreshProjectsSubscription.cancel();
     super.onClose();
   }
 
@@ -114,29 +116,28 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return utf8.decode(base64.decode(image));
   }
 
+  Future<bool> refreshProjectDetails() async {
+    var ret = await _projectService.getProjectById(
+        projectId: _projectDetailed.value.id);
+
+    if (ret != null) _projectDetailed.value = ret;
+    await fillProjectInfo();
+    if (ret?.tags != null) {
+      tags.addAll(ret.tags);
+      tagsText.value = ret.tags.join(', ');
+    }
+
+    return Future.value(true);
+  }
+
   Future<void> setup(projectDetailed) async {
     _projectDetailed.value = projectDetailed;
 
-    await fillProjectInfo();
+    await refreshProjectDetails();
 
     final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
-
     creationDateText.value =
         formatter.format(DateTime.parse(_projectDetailed.value.created));
-
-    await _projectService
-        .getProjectById(projectId: _projectDetailed.value.id)
-        .then(
-      (value) {
-        if (value == null) return;
-        _projectDetailed.value = value;
-        fillProjectInfo();
-        if (value?.tags != null) {
-          tags.addAll(value.tags);
-          tagsText.value = value.tags.join(', ');
-        }
-      },
-    );
 
     tasksCount.value = _projectDetailed.value.taskCountTotal;
 
@@ -181,13 +182,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> refreshData() async {
     loaded.value = false;
 
-    await _projectService
-        .getProjectById(projectId: _projectDetailed.value.id)
-        .then((projDetailed) {
-      if (projDetailed == null) return;
-      _projectDetailed.value = projDetailed;
-      setup(_projectDetailed.value);
-    });
+    await setup(_projectDetailed.value);
 
     loaded.value = true;
   }

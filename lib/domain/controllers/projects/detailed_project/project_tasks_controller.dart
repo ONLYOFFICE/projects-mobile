@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -74,14 +75,20 @@ class ProjectTasksController extends GetxController {
 
   Future<void> refreshData() async {
     loaded.value = false;
+
     await _getTasks(needToClear: true);
+    locator<EventHub>().fire('needToRefreshProjects');
+
     loaded.value = true;
   }
 
   Future loadTasks() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
-    if (await _getTasks(needToClear: true)) loaded.value = true;
+    await _getTasks(needToClear: true);
+
+    loaded.value = true;
   }
 
   Future<bool> _getTasks({needToClear = false}) async {

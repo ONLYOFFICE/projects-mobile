@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -64,22 +63,14 @@ class ProjectDetailedView extends StatefulWidget {
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
-  // ignore: prefer_final_fields
-  RxInt _activeIndex = 0.obs;
-
-  ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
+  final RxInt _activeIndex = 0.obs;
 
   ProjectDetailsController projectController;
-  ProjectDiscussionsController discussionsController;
   final documentsController = Get.find<DocumentsController>();
 
   @override
   void initState() {
-    super.initState();
-
-    discussionsController =
-        Get.put(ProjectDiscussionsController(projectDetailed));
-    discussionsController.setup(projectDetailed);
+    ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
 
     documentsController.setupFolder(
         folderName: projectDetailed.title,
@@ -92,7 +83,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     projectController = Get.find<ProjectDetailsController>();
     projectController.setup(projectDetailed).then((value) {
       projectDetailed = projectController.projectData;
-      discussionsController.setup(projectDetailed);
       documentsController.setupFolder(
           folderName: projectDetailed.title,
           folderId: projectDetailed.projectFolder);
@@ -102,6 +92,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       vsync: this,
       length: 6,
     );
+
+    super.initState();
   }
 
   @override
@@ -178,7 +170,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ProjectTaskScreen(projectDetailed: projectController.projectData),
           ProjectMilestonesScreen(
               projectDetailed: projectController.projectData),
-          ProjectDiscussionsScreen(controller: discussionsController),
+          ProjectDiscussionsScreen(
+              projectDetailed: projectController.projectData),
           EntityDocumentsView(
             folderId: projectController.projectData.projectFolder,
             folderName: projectController.projectData.title,
