@@ -54,26 +54,8 @@ class NavigationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _pages = [
-      const DashboardView(),
-      const TasksView(),
-      const ProjectsView(),
-      const MoreView(),
-      const SelfProfileScreen(),
-      const PortalDiscussionsView(),
-      const PortalDocumentsView(),
-    ];
-
-    var _tabletPages = [
-      const DashboardView(),
-      const TasksView(),
-      const ProjectsView(),
-      const PortalDiscussionsView(),
-      const PortalDocumentsView(),
-      const SelfProfileScreen(),
-      const SettingsScreen(),
-      const MoreView(),
-    ];
+    var mobileLayout = MobileLayout();
+    var tabletLayout = TabletLayout();
 
     return GetBuilder<NavigationController>(
       builder: (controller) {
@@ -86,9 +68,9 @@ class NavigationView extends StatelessWidget {
         }
 
         if (platformController.isMobile) {
-          return MobileLayout(pages: _pages);
+          return mobileLayout;
         } else {
-          return TabletLayout(tabletPages: _tabletPages);
+          return tabletLayout;
         }
       },
     );
@@ -97,11 +79,21 @@ class NavigationView extends StatelessWidget {
 
 class TabletLayout extends StatelessWidget {
   final Widget contentView;
-  final tabletPages;
-  const TabletLayout({Key key, this.contentView, this.tabletPages})
-      : super(key: key);
+
+  TabletLayout({Key key, this.contentView}) : super(key: key);
 
   final double _iconSize = 34;
+
+  final _tabletPages = [
+    const DashboardView(),
+    const TasksView(),
+    const ProjectsView(),
+    const PortalDiscussionsView(),
+    const PortalDocumentsView(),
+    const SelfProfileScreen(),
+    const SettingsScreen(),
+    const MoreView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +251,7 @@ class TabletLayout extends StatelessWidget {
           ),
           Expanded(
             child: contentView ??
-                Obx(() => tabletPages[controller.tabIndex.value]),
+                Obx(() => _tabletPages[controller.tabIndex.value]),
           ),
         ],
       ),
@@ -268,22 +260,31 @@ class TabletLayout extends StatelessWidget {
 }
 
 class MobileLayout extends StatelessWidget {
-  final pages;
   final double iconSize = 24;
 
   MobileLayout({
     Key key,
-    @required this.pages,
   }) : super(key: key);
+
+  final _pages = [
+    const DashboardView(),
+    const TasksView(),
+    const ProjectsView(),
+    const MoreView(),
+    const SelfProfileScreen(),
+    const PortalDiscussionsView(),
+    const PortalDocumentsView(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     var navigationController = Get.find<NavigationController>();
+
     return Obx(
       () => Scaffold(
         body: Stack(
           children: [
-            pages[navigationController.tabIndex.value],
+            _pages[navigationController.tabIndex.value],
             if (navigationController.onMoreView.value)
               GestureDetector(
                 onVerticalDragDown: (details) =>

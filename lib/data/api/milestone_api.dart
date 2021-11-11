@@ -41,8 +41,6 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class MilestoneApi {
-  var coreApi = locator<CoreApi>();
-
   Future<ApiDTO<List<Milestone>>> milestonesByFilter({
     int startIndex,
     String sortBy,
@@ -54,7 +52,7 @@ class MilestoneApi {
     String deadlineFilter,
     String query,
   }) async {
-    var url = await coreApi.milestonesByFilterUrl();
+    var url = await locator<CoreApi>().milestonesByFilterUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
@@ -87,7 +85,7 @@ class MilestoneApi {
 
     var result = ApiDTO<List<Milestone>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -115,7 +113,7 @@ class MilestoneApi {
     String deadlineFilter,
     String query,
   }) async {
-    var url = await coreApi.milestonesByFilterUrl();
+    var url = await locator<CoreApi>().milestonesByFilterUrl();
 
     if (startIndex != null) {
       url += '?Count=25&StartIndex=$startIndex';
@@ -149,7 +147,7 @@ class MilestoneApi {
 
     var result = PageDTO<List<Milestone>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -169,13 +167,13 @@ class MilestoneApi {
 
   Future<ApiDTO<Map<String, dynamic>>> createMilestone(
       {int projectId, NewMilestoneDTO milestone}) async {
-    var url = await coreApi.createMilestoneUrl(projectId.toString());
+    var url = await locator<CoreApi>().createMilestoneUrl(projectId.toString());
 
     var result = ApiDTO<Map<String, dynamic>>();
     var body = milestone.toJson();
 
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

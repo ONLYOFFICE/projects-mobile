@@ -91,7 +91,6 @@ class ProfileController extends GetxController {
       acceptText: tr('logOut').toUpperCase(),
       acceptColor: Get.theme.colors().primary,
       onAcceptTap: () async {
-        Get.back();
         await Get.find<LoginController>().logout();
       },
     ));

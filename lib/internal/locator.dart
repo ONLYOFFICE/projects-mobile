@@ -108,7 +108,6 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
@@ -171,8 +170,6 @@ void setupGetX() {
   Get.lazyPut(() => PlatformController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
-
-  Get.create(() => DashboardController());
 
   Get.create<DiscussionsFilterController>(() => DiscussionsFilterController());
   Get.create<PaginationController>(() => PaginationController());
@@ -248,12 +245,6 @@ void setupGetX() {
   Get.create<NewTaskController>(() => NewTaskController());
   Get.create<ProjectEditController>(() => ProjectEditController());
   Get.create(() => ProjectsFilterController());
-  Get.create(
-    () => ProjectsController(
-      Get.find<ProjectsFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
   Get.create<ProjectDetailsController>(() => ProjectDetailsController());

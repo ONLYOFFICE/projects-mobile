@@ -43,15 +43,13 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class AuthApi {
-  var coreApi = locator<CoreApi>();
-
   Future<ApiDTO<AuthToken>> loginByUsername(String email, String pass) async {
-    var url = await coreApi.authUrl();
+    var url = await locator<CoreApi>().authUrl();
     var body = {'userName': email, 'password': pass};
 
     var result = ApiDTO<AuthToken>();
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         result.response =
@@ -72,7 +70,7 @@ class AuthApi {
     String pass,
     String code,
   ) async {
-    var url = await coreApi.tfaUrl(code);
+    var url = await locator<CoreApi>().tfaUrl(code);
     var body = {
       'userName': email,
       'password': pass,
@@ -82,7 +80,7 @@ class AuthApi {
 
     var result = ApiDTO<AuthToken>();
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -98,11 +96,11 @@ class AuthApi {
   }
 
   Future<ApiDTO<PortalUser>> getUserInfo() async {
-    var url = await coreApi.selfInfoUrl();
+    var url = await locator<CoreApi>().selfInfoUrl();
 
     var result = ApiDTO<PortalUser>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -118,11 +116,11 @@ class AuthApi {
   }
 
   Future<ApiDTO> setPhone(Map body) async {
-    var url = await coreApi.setPhoneUrl();
+    var url = await locator<CoreApi>().setPhoneUrl();
 
     var result = ApiDTO();
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -138,11 +136,11 @@ class AuthApi {
   }
 
   Future<ApiDTO> sendSms(Map body) async {
-    var url = await coreApi.sendSmsUrl();
+    var url = await locator<CoreApi>().sendSmsUrl();
 
     var result = ApiDTO();
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -158,14 +156,14 @@ class AuthApi {
   }
 
   Future<ApiDTO> passwordRecovery(String email) async {
-    var url = await coreApi.passwordRecoveryUrl();
+    var url = await locator<CoreApi>().passwordRecoveryUrl();
 
     var result = ApiDTO();
 
     var body = {'email': email};
 
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -181,7 +179,7 @@ class AuthApi {
   }
 
   Future<ApiDTO> sendRegistrationType() async {
-    var url = await coreApi.sendRegistrationTypeUrl();
+    var url = await locator<CoreApi>().sendRegistrationTypeUrl();
 
     var result = ApiDTO();
 
@@ -191,7 +189,7 @@ class AuthApi {
     var body = {'type': type};
 
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

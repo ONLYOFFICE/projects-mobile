@@ -35,7 +35,6 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/internal/locator.dart';
 
 class PortalInfoController extends GetxController {
-  final _coreApi = locator<CoreApi>();
   var lock = Lock();
   String _portalName;
   String _portalUri;
@@ -60,8 +59,8 @@ class PortalInfoController extends GetxController {
 
   Future<void> setup() async {
     await lock.synchronized(() async {
-      _portalUri ??= await _coreApi.getPortalURI();
-      _headers ??= await _coreApi.getHeaders();
+      _portalUri ??= await locator<CoreApi>().getPortalURI();
+      _headers ??= await locator<CoreApi>().getHeaders();
       _portalName ??= _portalUri.replaceFirst('https://', '');
     });
   }

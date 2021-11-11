@@ -265,9 +265,8 @@ class LoginController extends GetxController {
 
   Future<void> logout() async {
     var storage = locator<Storage>();
-    var coreApi = locator<CoreApi>();
 
-    coreApi.cancellationToken?.cancel();
+    locator<CoreApi>().cancellationToken?.cancel();
 
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
@@ -277,9 +276,10 @@ class LoginController extends GetxController {
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
 
-    locator<EventHub>().fire('logoutSuccess');
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();
+
+    locator<EventHub>().fire('logoutSuccess');
   }
 
   @override

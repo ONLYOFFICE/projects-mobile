@@ -44,7 +44,7 @@ class ErrorDialog extends GetxController {
   bool dialogIsShown = false;
 
   Future<void> show(String message) async {
-    addToQueue(message);
+    if (message.isNotEmpty) addToQueue(message);
 
     // ignore: unawaited_futures
     processQueue();

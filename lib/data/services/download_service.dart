@@ -42,7 +42,6 @@ import 'package:projects/internal/locator.dart';
 
 class DownloadService {
   final DownloadApi _api = locator<DownloadApi>();
-  var coreApi = locator<CoreApi>();
 
   Future<Uint8List> downloadImage(String url) async {
     var projects = await _api.downloadImage(url);
@@ -66,7 +65,7 @@ class DownloadService {
     var path = dir.path;
     print(path);
 
-    var headers = await coreApi.getHeaders();
+    var headers = await locator<CoreApi>().getHeaders();
     FlutterDownloader.registerCallback(downloadCallback);
 
     final taskId = await FlutterDownloader.enqueue(

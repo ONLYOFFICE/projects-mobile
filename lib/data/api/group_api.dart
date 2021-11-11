@@ -40,14 +40,12 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class GroupApi {
-  var coreApi = locator<CoreApi>();
-
   Future<ApiDTO<List<PortalGroup>>> getAllGroups() async {
-    var url = await coreApi.allGroups();
+    var url = await locator<CoreApi>().allGroups();
 
     var result = ApiDTO<List<PortalGroup>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -68,7 +66,7 @@ class GroupApi {
     int startIndex,
     String query,
   }) async {
-    var url = await coreApi.allGroups();
+    var url = await locator<CoreApi>().allGroups();
 
     if (startIndex != null) {
       url += '?Count=25&StartIndex=$startIndex';
@@ -80,7 +78,7 @@ class GroupApi {
 
     var result = PageDTO<List<PortalGroup>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

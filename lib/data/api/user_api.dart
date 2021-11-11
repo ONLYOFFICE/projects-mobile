@@ -40,14 +40,12 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:http/http.dart' as http;
 
 class UserApi {
-  var coreApi = locator<CoreApi>();
-
   Future<ApiDTO<List<PortalUser>>> getAllProfiles() async {
-    var url = await coreApi.allProfiles();
+    var url = await locator<CoreApi>().allProfiles();
 
     var result = ApiDTO<List<PortalUser>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
@@ -69,7 +67,7 @@ class UserApi {
     String query,
     String groupId,
   }) async {
-    var url = await coreApi.allProfiles();
+    var url = await locator<CoreApi>().allProfiles();
     url += '/filter?';
 
     if (startIndex != null) {
@@ -84,7 +82,7 @@ class UserApi {
 
     var result = PageDTO<List<PortalUser>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         final Map responseJson = json.decode(response.body);

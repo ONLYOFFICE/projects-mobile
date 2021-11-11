@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -41,6 +42,10 @@ import 'package:projects/internal/locator.dart';
 class CoreApi {
   final _secureStorage = locator<SecureStorage>();
   String _portalName;
+
+  final int timeout = 30;
+
+  var cancellationToken = CancellationToken();
 
   Future<Map<String, String>> getHeaders() async {
     var token = await getToken();
@@ -260,114 +265,144 @@ class CoreApi {
   Future<String> getProjectSecurityinfoUrl() async =>
       '${await getPortalURI()}/api/$version/project/securityinfo';
 
-  var cancellationToken = CancellationToken();
-
   Future<dynamic> getRequest(String url) async {
-    debugPrint(url);
-    var headers = await getHeaders();
-    var request = HttpClientHelper.get(Uri.parse(url),
-        cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
-        timeLimit: const Duration(seconds: 5),
-        headers: headers);
-    final response = await request;
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.get(Uri.parse(url),
+          cancelToken: cancellationToken,
+          timeRetry: const Duration(milliseconds: 100),
+          retries: 3,
+          timeLimit: Duration(seconds: timeout),
+          headers: headers);
+      final response = await request;
 
-    if (response == null) return CustomError(message: 'Invalid response');
+      if (response == null) return CustomError(message: '');
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'] != null &&
-          response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
 
-      return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
   Future<dynamic> postRequest(String url, Map body) async {
-    debugPrint(url);
-    var headers = await getHeaders();
-    var request = HttpClientHelper.post(
-      Uri.parse(url),
-      cancelToken: cancellationToken,
-      timeRetry: const Duration(milliseconds: 100),
-      retries: 3,
-      timeLimit: const Duration(seconds: 5),
-      headers: headers,
-      body: jsonEncode(body),
-    );
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.post(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+        body: jsonEncode(body),
+      );
 
-    final response = await request;
+      final response = await request;
 
-    if (response == null) return CustomError(message: 'Invalid response');
+      if (response == null) return CustomError(message: '');
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'] != null &&
-          response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
 
-      return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
   Future<dynamic> putRequest(String url, {Map body = const {}}) async {
-    print(url);
-    var headers = await getHeaders();
-    var request = HttpClientHelper.put(
-      Uri.parse(url),
-      cancelToken: cancellationToken,
-      timeRetry: const Duration(milliseconds: 100),
-      retries: 3,
-      timeLimit: const Duration(seconds: 5),
-      headers: headers,
-      body: body.isEmpty ? null : jsonEncode(body),
-    );
-    final response = await request;
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.put(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+        body: body.isEmpty ? null : jsonEncode(body),
+      );
+      final response = await request;
 
-    if (response == null) return CustomError(message: 'Invalid response');
+      if (response == null) return CustomError(message: '');
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'] != null &&
-          response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
 
-      return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
   Future<dynamic> deleteRequest(String url) async {
-    print(url);
-    var headers = await getHeaders();
-    var request = HttpClientHelper.delete(
-      Uri.parse(url),
-      cancelToken: cancellationToken,
-      timeRetry: const Duration(milliseconds: 100),
-      retries: 3,
-      timeLimit: const Duration(seconds: 5),
-      headers: headers,
-    );
-    final response = await request;
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.delete(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+      );
+      final response = await request;
 
-    if (response == null) return CustomError(message: 'Invalid response');
+      if (response == null) return CustomError(message: '');
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'] != null &&
-          response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
 
-      return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
