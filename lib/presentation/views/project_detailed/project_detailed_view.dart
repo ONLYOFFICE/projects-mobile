@@ -79,6 +79,15 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
     discussionsController =
         Get.put(ProjectDiscussionsController(projectDetailed));
+    discussionsController.setup(projectDetailed);
+
+    documentsController.setupFolder(
+        folderName: projectDetailed.title,
+        folderId: projectDetailed.projectFolder);
+
+    documentsController.filesCount.listen((count) {
+      projectController.docsCount.value = count;
+    });
 
     projectController = Get.find<ProjectDetailsController>();
     projectController.setup(projectDetailed).then((value) {
@@ -93,10 +102,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       vsync: this,
       length: 6,
     );
-
-    documentsController.filesCount.listen((count) {
-      projectController.docsCount.value = count;
-    });
   }
 
   @override

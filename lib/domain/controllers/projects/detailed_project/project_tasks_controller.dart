@@ -110,11 +110,9 @@ class ProjectTasksController extends GetxController {
     _projectDetailed = projectDetailed;
     _projectId = projectDetailed.id;
     _filterController.projectId = _projectId.toString();
-
-// ignore: unawaited_futures
-    loadTasks();
-
     fabIsVisible.value = _canCreate();
+
+    await loadTasks();
   }
 
   bool _canCreate() => _projectDetailed.security['canCreateTask'];
