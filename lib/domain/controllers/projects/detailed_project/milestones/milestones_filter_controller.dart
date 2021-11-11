@@ -107,8 +107,6 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
-    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible);
-    _currentAppliedMilestoneResponsibleFilter = _milestoneResponsibleFilter;
     _selfId = await Get.find<UserController>().getUserId();
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
@@ -130,8 +128,6 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
-    _currentAppliedTaskResponsible = Map.from(taskResponsible);
-    _currentAppliedResponsibleFilter = _taskResponsibleFilter;
     _selfId = await Get.find<UserController>().getUserId();
     _taskResponsibleFilter = '';
     if (filter == 'me') {
@@ -155,8 +151,6 @@ class MilestonesFilterController extends BaseFilterController {
 
   Future<void> changeDeadline(String filter,
       {DateTime start, DateTime stop}) async {
-    _currentAppliedDeadline = Map.from(deadline);
-    _currentAppliedDeadlineFilter = _deadlineFilter;
     _deadlineFilter = '';
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
@@ -205,8 +199,6 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   void changeStatus(String filter, [newValue = '']) async {
-    _currentAppliedStatus = Map.from(status);
-    _currentAppliedStatusFilter = _statusFilter;
     _statusFilter = '';
     switch (filter) {
       case 'active':
@@ -255,8 +247,6 @@ class MilestonesFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    _updateFilterState();
-
     milestoneResponsible['me'] = false;
     milestoneResponsible['other'] = '';
 

@@ -370,8 +370,6 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
 
   @override
   void resetFilters() async {
-    _updateFilterState();
-
     responsible['me'] = false;
     responsible['other'] = '';
     responsible['groups'] = '';

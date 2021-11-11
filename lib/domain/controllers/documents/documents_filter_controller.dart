@@ -100,8 +100,6 @@ class DocumentsFilterController extends BaseFilterController {
 
   Future<void> changeAuthorFilter(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
-    _currentAppliedAuthorFilter = _authorFilter;
-    _currentApplieddAuthor = Map.from(author);
     _authorFilter = '';
 
     switch (filter) {
@@ -154,8 +152,6 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   Future<void> changeContentTypeFilter(String filter) async {
-    _currentAppliedTypeFilter = _typeFilter;
-    _currentAppliedContentTypes = Map.from(contentTypes);
     _typeFilter = '';
 
     var newValue = !contentTypes[filter];
@@ -224,8 +220,6 @@ class DocumentsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    _updateFilterState();
-
     contentTypes['folders'] = false;
     contentTypes['documents'] = false;
     contentTypes['presentations'] = false;
