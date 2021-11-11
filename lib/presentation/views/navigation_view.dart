@@ -54,9 +54,6 @@ class NavigationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var mobileLayout = MobileLayout();
-    var tabletLayout = TabletLayout();
-
     return GetBuilder<NavigationController>(
       builder: (controller) {
         PlatformController platformController;
@@ -68,9 +65,10 @@ class NavigationView extends StatelessWidget {
         }
 
         if (platformController.isMobile) {
-          return mobileLayout;
+          //TODO: navigation on more screen is brocken if return premade instance
+          return MobileLayout();
         } else {
-          return tabletLayout;
+          return TabletLayout();
         }
       },
     );

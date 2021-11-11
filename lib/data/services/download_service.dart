@@ -65,7 +65,7 @@ class DownloadService {
     var path = dir.path;
     print(path);
 
-    var headers = await locator<CoreApi>().getHeaders();
+    var headers = await locator.get<CoreApi>().getHeaders();
     FlutterDownloader.registerCallback(downloadCallback);
 
     final taskId = await FlutterDownloader.enqueue(

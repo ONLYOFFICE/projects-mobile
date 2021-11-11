@@ -263,7 +263,7 @@ class LoginController extends GetxController {
   Future<void> logout() async {
     var storage = locator<Storage>();
 
-    locator<CoreApi>().cancellationToken?.cancel();
+    locator.get<CoreApi>().cancellationToken?.cancel();
 
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');

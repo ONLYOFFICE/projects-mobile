@@ -98,7 +98,7 @@ class MainController extends GetxController {
       if (result == ConnectivityResult.none) {
         Get.to(const NoInternetScreen());
 
-        locator<CoreApi>().cancellationToken?.cancel();
+        locator.get<CoreApi>().cancellationToken?.cancel();
       } else {
         GetIt.instance.resetLazySingleton<CoreApi>();
         if (isSessionStarted)

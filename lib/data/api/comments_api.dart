@@ -41,12 +41,12 @@ import 'package:projects/data/models/from_api/error.dart';
 
 class CommentsApi {
   Future<ApiDTO<List<PortalComment>>> getTaskComments({int taskId}) async {
-    var url = await locator<CoreApi>().taskComments(taskId: taskId);
+    var url = await locator.get<CoreApi>().taskComments(taskId: taskId);
 
     var result = ApiDTO<List<PortalComment>>();
 
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -67,13 +67,13 @@ class CommentsApi {
     int taskId,
     String content,
   }) async {
-    var url = await locator<CoreApi>().addTaskCommentUrl(taskId: taskId);
+    var url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
 
     var result = ApiDTO<PortalComment>();
 
     try {
       var body = {'content': content};
-      var response = await locator<CoreApi>().postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -93,13 +93,13 @@ class CommentsApi {
     String content,
   }) async {
     var url =
-        await locator<CoreApi>().addMessageCommentUrl(messageId: messageId);
+        await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
 
     var result = ApiDTO<PortalComment>();
 
     try {
       var body = {'content': content};
-      var response = await locator<CoreApi>().postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -119,13 +119,13 @@ class CommentsApi {
     String content,
     String parentId,
   }) async {
-    var url = await locator<CoreApi>().addTaskCommentUrl(taskId: taskId);
+    var url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
 
     var result = ApiDTO<PortalComment>();
 
     try {
       var body = {'content': content, 'parentId': parentId};
-      var response = await locator<CoreApi>().postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -146,13 +146,13 @@ class CommentsApi {
     String parentId,
   }) async {
     var url =
-        await locator<CoreApi>().addMessageCommentUrl(messageId: messageId);
+        await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
 
     var result = ApiDTO<PortalComment>();
 
     try {
       var body = {'content': content, 'parentId': parentId};
-      var response = await locator<CoreApi>().postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -168,12 +168,13 @@ class CommentsApi {
   }
 
   Future<ApiDTO> deleteComment({String commentId}) async {
-    var url = await locator<CoreApi>().deleteCommentUrl(commentId: commentId);
+    var url =
+        await locator.get<CoreApi>().deleteCommentUrl(commentId: commentId);
 
     var result = ApiDTO();
 
     try {
-      var response = await locator<CoreApi>().deleteRequest(url);
+      var response = await locator.get<CoreApi>().deleteRequest(url);
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
         result.response = responseJson['response'];
@@ -191,32 +192,33 @@ class CommentsApi {
     projectId,
     commentId,
   }) async {
-    return await locator<CoreApi>().getDiscussionCommentLink(
-      discussionId: discussionId,
-      projectId: projectId,
-      commentId: commentId,
-    );
+    return await locator.get<CoreApi>().getDiscussionCommentLink(
+          discussionId: discussionId,
+          projectId: projectId,
+          commentId: commentId,
+        );
   }
 
   Future<String> getTaskCommentLink({taskId, projectId, commentId}) async {
-    return await locator<CoreApi>().getTaskCommentLink(
-      taskId: taskId,
-      projectId: projectId,
-      commentId: commentId,
-    );
+    return await locator.get<CoreApi>().getTaskCommentLink(
+          taskId: taskId,
+          projectId: projectId,
+          commentId: commentId,
+        );
   }
 
   Future<ApiDTO> updateComment({
     String commentId,
     String content,
   }) async {
-    var url = await locator<CoreApi>().updateCommentUrl(commentId: commentId);
+    var url =
+        await locator.get<CoreApi>().updateCommentUrl(commentId: commentId);
 
     var result = ApiDTO();
 
     try {
       var body = {'content': content, 'commentid': commentId};
-      var response = await locator<CoreApi>().putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

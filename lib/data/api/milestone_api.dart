@@ -52,7 +52,7 @@ class MilestoneApi {
     String deadlineFilter,
     String query,
   }) async {
-    var url = await locator<CoreApi>().milestonesByFilterUrl();
+    var url = await locator.get<CoreApi>().milestonesByFilterUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
@@ -85,7 +85,7 @@ class MilestoneApi {
 
     var result = ApiDTO<List<Milestone>>();
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -113,7 +113,7 @@ class MilestoneApi {
     String deadlineFilter,
     String query,
   }) async {
-    var url = await locator<CoreApi>().milestonesByFilterUrl();
+    var url = await locator.get<CoreApi>().milestonesByFilterUrl();
 
     if (startIndex != null) {
       url += '?Count=25&StartIndex=$startIndex';
@@ -147,7 +147,7 @@ class MilestoneApi {
 
     var result = PageDTO<List<Milestone>>();
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -167,13 +167,14 @@ class MilestoneApi {
 
   Future<ApiDTO<Map<String, dynamic>>> createMilestone(
       {int projectId, NewMilestoneDTO milestone}) async {
-    var url = await locator<CoreApi>().createMilestoneUrl(projectId.toString());
+    var url =
+        await locator.get<CoreApi>().createMilestoneUrl(projectId.toString());
 
     var result = ApiDTO<Map<String, dynamic>>();
     var body = milestone.toJson();
 
     try {
-      var response = await locator<CoreApi>().postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

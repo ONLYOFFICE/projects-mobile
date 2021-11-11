@@ -43,12 +43,12 @@ import 'package:projects/data/models/from_api/error.dart';
 
 class FilesApi {
   Future<ApiDTO<List<PortalFile>>> getTaskFiles({int taskId}) async {
-    var url = await locator<CoreApi>().getTaskFilesUrl(taskId: taskId);
+    var url = await locator.get<CoreApi>().getTaskFilesUrl(taskId: taskId);
 
     var result = ApiDTO<List<PortalFile>>();
 
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -75,10 +75,11 @@ class FilesApi {
     String authorFilter,
     String entityType,
   }) async {
-    var url = await locator<CoreApi>().getFilesBaseUrl();
+    var url = await locator.get<CoreApi>().getFilesBaseUrl();
 
     if (entityType != null && entityType == 'task') {
-      url = await locator<CoreApi>()
+      url = await locator
+          .get<CoreApi>()
           .getEntityFilesUrl(entityId: folderId.toString());
       url += '?entityType=task';
     } else {
@@ -111,7 +112,7 @@ class FilesApi {
     var result = ApiDTO<FoldersResponse>();
 
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -136,13 +137,13 @@ class FilesApi {
 
   Future<ApiDTO<Folder>> renameFolder(
       {String folderId, String newTitle}) async {
-    var url = await locator<CoreApi>().getFolderByIdUrl(folderId: folderId);
+    var url = await locator.get<CoreApi>().getFolderByIdUrl(folderId: folderId);
     var body = {'title': newTitle};
 
     var result = ApiDTO<Folder>();
 
     try {
-      var response = await locator<CoreApi>().putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -159,13 +160,13 @@ class FilesApi {
 
   Future<ApiDTO<PortalFile>> renameFile(
       {String fileId, String newTitle}) async {
-    var url = await locator<CoreApi>().getFileByIdUrl(fileId: fileId);
+    var url = await locator.get<CoreApi>().getFileByIdUrl(fileId: fileId);
     var body = {'title': newTitle};
 
     var result = ApiDTO<PortalFile>();
 
     try {
-      var response = await locator<CoreApi>().putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -181,11 +182,11 @@ class FilesApi {
   }
 
   Future<ApiDTO> deleteFolder({String folderId}) async {
-    var url = await locator<CoreApi>().getFolderByIdUrl(folderId: folderId);
+    var url = await locator.get<CoreApi>().getFolderByIdUrl(folderId: folderId);
     var result = ApiDTO();
 
     try {
-      var response = await locator<CoreApi>().deleteRequest(url);
+      var response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -201,11 +202,11 @@ class FilesApi {
   }
 
   Future<ApiDTO> deleteFile({String fileId}) async {
-    var url = await locator<CoreApi>().getFileByIdUrl(fileId: fileId);
+    var url = await locator.get<CoreApi>().getFileByIdUrl(fileId: fileId);
     var result = ApiDTO();
 
     try {
-      var response = await locator<CoreApi>().deleteRequest(url);
+      var response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -225,7 +226,7 @@ class FilesApi {
     String targetFolder,
     String movingFile,
   }) async {
-    var url = await locator<CoreApi>().getMoveOpsUrl();
+    var url = await locator.get<CoreApi>().getMoveOpsUrl();
 
     var folderIds = [];
     if (movingFolder != null) folderIds.add(movingFolder.toString());
@@ -243,7 +244,7 @@ class FilesApi {
     var result = ApiDTO<MoveFolderResponse>();
 
     try {
-      var response = await locator<CoreApi>().putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -264,7 +265,7 @@ class FilesApi {
     String targetFolder,
     String copyingFile,
   }) async {
-    var url = await locator<CoreApi>().getCopyOpsUrl();
+    var url = await locator.get<CoreApi>().getCopyOpsUrl();
 
     var folderIds = [];
     if (copyingFolder != null) folderIds.add(copyingFolder.toString());
@@ -282,7 +283,7 @@ class FilesApi {
     var result = ApiDTO<MoveFolderResponse>();
 
     try {
-      var response = await locator<CoreApi>().putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

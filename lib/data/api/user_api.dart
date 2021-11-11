@@ -41,11 +41,11 @@ import 'package:http/http.dart' as http;
 
 class UserApi {
   Future<ApiDTO<List<PortalUser>>> getAllProfiles() async {
-    var url = await locator<CoreApi>().allProfiles();
+    var url = await locator.get<CoreApi>().allProfiles();
 
     var result = ApiDTO<List<PortalUser>>();
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
@@ -67,7 +67,7 @@ class UserApi {
     String query,
     String groupId,
   }) async {
-    var url = await locator<CoreApi>().allProfiles();
+    var url = await locator.get<CoreApi>().allProfiles();
     url += '/filter?';
 
     if (startIndex != null) {
@@ -82,7 +82,7 @@ class UserApi {
 
     var result = PageDTO<List<PortalUser>>();
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         final Map responseJson = json.decode(response.body);

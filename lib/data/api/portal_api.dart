@@ -45,16 +45,16 @@ class PortalApi {
   var secureStorage = locator<SecureStorage>();
 
   Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = locator<CoreApi>().capabilitiesUrl(portalName);
+    var url = locator.get<CoreApi>().capabilitiesUrl(portalName);
 
     var result = ApiDTO<Capabilities>();
     try {
-      var response = await locator<CoreApi>().getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
         result.response = Capabilities.fromJson(responseJson['response']);
-        await locator<CoreApi>().savePortalName();
+        await locator.get<CoreApi>().savePortalName();
       } else {
         result.error = (response as CustomError);
       }
