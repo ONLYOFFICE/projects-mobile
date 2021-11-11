@@ -42,7 +42,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardController extends GetxController {
-  RefreshController refreshController = RefreshController();
+  RefreshController refreshController;
   final projectsWithPresets = locator<ProjectsWithPresets>();
   final tasksWithPresets = locator<TasksWithPresets>();
 
@@ -68,6 +68,8 @@ class DashboardController extends GetxController {
     myProjectsController.screenName = tr('myProjects');
     folowedProjectsController.screenName = tr('projectsIFolow');
     activeProjectsController.screenName = tr('activeProjects');
+
+    refreshController = RefreshController();
 
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       refreshProjectsData();
