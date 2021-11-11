@@ -211,8 +211,6 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   void resetFilters() async {
-    await saveFilters();
-
     projectManager['me'] = false;
     projectManager['other'] = '';
 
