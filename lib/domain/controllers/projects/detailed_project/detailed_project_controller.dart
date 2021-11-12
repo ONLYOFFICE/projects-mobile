@@ -85,6 +85,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   StreamSubscription _refreshProjectsSubscription;
   StreamSubscription _refreshDetailsSubscription;
+  StreamSubscription _refreshMilestonesSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -121,12 +122,26 @@ class ProjectDetailsController extends BaseProjectEditorController {
         refreshProjectDetails();
       },
     );
+
+    _refreshMilestonesSubscription = locator<EventHub>().on(
+      'needToRefreshMilestones',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshDetailsSubscription.cancel();
+          return;
+        }
+
+        if (data.any((elem) => elem == _projectDetailed.value.id))
+          refreshProjectMilestones();
+      },
+    );
   }
 
   @override
   void onClose() {
     _refreshProjectsSubscription.cancel();
     _refreshDetailsSubscription.cancel();
+    _refreshMilestonesSubscription.cancel();
     super.onClose();
   }
 
@@ -154,10 +169,22 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return Future.value(true);
   }
 
+  Future<bool> refreshProjectMilestones() async {
+    var ret = await locator<MilestoneService>()
+        .milestonesByFilter(projectId: _projectDetailed.value.id.toString());
+
+    if (ret == null) return Future.value(false);
+
+    milestoneCount.value = ret.length;
+
+    return Future.value(true);
+  }
+
   Future<void> setup(projectDetailed) async {
     _projectDetailed.value = projectDetailed;
 
     await refreshProjectDetails();
+    await refreshProjectMilestones();
 
     await _docApi
         .getFilesByParams(folderId: _projectDetailed.value.projectFolder)
@@ -166,12 +193,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
         if (value != null) docsCount.value = value.files.length;
       },
     );
-
-    await locator<MilestoneService>()
-        .milestonesByFilter(projectId: _projectDetailed.value.id.toString())
-        .then((value) {
-      if (value != null) milestoneCount.value = value.length;
-    });
   }
 
   Future<void> fillProjectInfo() async {
