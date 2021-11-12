@@ -47,12 +47,23 @@ class DashboardController extends GetxController {
   final tasksWithPresets = locator<TasksWithPresets>();
 
   var screenName = tr('dashboard').obs;
+
   TasksController _myTaskController;
+  TasksController get myTaskController => _myTaskController;
+
   TasksController _upcomingTaskscontroller;
+  TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
 
   ProjectsController _myProjectsController;
+  ProjectsController get myProjectsController => _myProjectsController;
+
   ProjectsController _folowedProjectsController;
+  ProjectsController get folowedProjectsController =>
+      _folowedProjectsController;
+
   ProjectsController _activeProjectsController;
+  ProjectsController get activeProjectsController => _activeProjectsController;
+
   var scrollController = ScrollController();
 
   Future setup() async {
@@ -70,7 +81,7 @@ class DashboardController extends GetxController {
     activeProjectsController.screenName = tr('activeProjects');
 
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      refreshProjectsData();
+      if (data == 'all') refreshProjectsData();
     });
 
     locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
@@ -107,12 +118,4 @@ class DashboardController extends GetxController {
     folowedProjectsController.refreshData();
     activeProjectsController.refreshData();
   }
-
-  TasksController get myTaskController => _myTaskController;
-  TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
-
-  ProjectsController get myProjectsController => _myProjectsController;
-  ProjectsController get folowedProjectsController =>
-      _folowedProjectsController;
-  ProjectsController get activeProjectsController => _activeProjectsController;
 }

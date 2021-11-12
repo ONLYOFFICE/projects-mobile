@@ -81,6 +81,10 @@ class DiscussionsController extends BaseController {
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
+
+    locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+      if (data == 'all') await loadDiscussions();
+    });
   }
 
   @override
@@ -117,11 +121,14 @@ class DiscussionsController extends BaseController {
       otherFilter: _filterController.otherFilter,
       projectId: projectId,
     );
+
+    if (result == null) return Future.value(false);
+
     paginationController.total.value = result.total;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result.response);
+
+    return Future.value(true);
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()

@@ -59,7 +59,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 class DiscussionItemController extends GetxController {
   final _api = locator<DiscussionItemService>();
 
-  var discussion = Discussion().obs;
+  final Rx<Discussion> discussion = Discussion().obs;
   var status = 0.obs;
 
   var loaded = true.obs;
@@ -175,15 +175,10 @@ class DiscussionItemController extends GetxController {
             Get.back();
             MessagesHandler.showSnackBar(
                 context: context, text: tr('discussionDeleted'));
-            await Get.find<DiscussionsController>().loadDiscussions();
-            //TODO refactoring needed
-            try {
-              locator<EventHub>().fire('needToRefreshProjects');
-              // ignore: unawaited_futures
-              Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
-            } catch (e) {
-              printError(e);
-            }
+
+            locator<EventHub>()
+                .fire('needToRefreshDetails', discussion.value.project.id);
+            locator<EventHub>().fire('needToRefreshDiscussions', 'all');
           }
         } catch (e) {
           printError(e);

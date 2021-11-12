@@ -349,22 +349,12 @@ class NewDiscussionController extends GetxController
       );
 
       if (createdDiss != null) {
-        var discussionsController = Get.find<DiscussionsController>();
-        // ignore: unawaited_futures
-        discussionsController.loadDiscussions();
-        if (_projectIsLocked) {
-          try {
-            locator<EventHub>().fire('needToRefreshProjects');
-
-            // ignore: unawaited_futures
-            Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
-          } catch (e) {
-            debugPrint(e);
-          }
-        }
+        //if (_projectIsLocked) { // ???
+        locator<EventHub>().fire('needToRefreshDetails', _selectedProjectId);
+        locator<EventHub>().fire('needToRefreshDiscussions', 'all');
+        //}
 
         Get.back();
-        // ignore: unawaited_futures
         MessagesHandler.showSnackBar(
             context: context,
             text: tr('discussionCreated'),

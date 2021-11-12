@@ -88,8 +88,9 @@ class ProjectsController extends BaseController {
     paginationController.pullDownEnabled = true;
 
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      loadProjects();
+      if (data == 'all') loadProjects();
     });
+
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
