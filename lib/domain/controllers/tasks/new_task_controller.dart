@@ -326,7 +326,7 @@ class NewTaskController extends GetxController
 
     var createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
-      locator<EventHub>().fire('needToRefreshProjects', _selectedProjectId);
+      locator<EventHub>().fire('needToRefreshProjects', [_selectedProjectId]);
       locator<EventHub>().fire('needToRefreshTasks');
 
       Get.back();

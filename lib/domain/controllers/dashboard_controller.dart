@@ -81,7 +81,7 @@ class DashboardController extends GetxController {
     activeProjectsController.screenName = tr('activeProjects');
 
     locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (data == 'all') refreshProjectsData();
+      if (data.any((elem) => elem == 'all')) refreshProjectsData();
     });
 
     locator<EventHub>().on('needToRefreshTasks', (dynamic data) {

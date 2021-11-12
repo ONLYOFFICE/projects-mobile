@@ -103,9 +103,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
-        if (data != _projectDetailed.value.id) return;
-
-        refreshData();
+        if (data.any((elem) => elem == _projectDetailed.value.id))
+          refreshData();
       },
     );
 
@@ -117,9 +116,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
-        if (data != _projectDetailed.value.id) return;
-
-        refreshProjectDetails();
+        if (data.any((elem) => elem == _projectDetailed.value.id))
+          refreshProjectDetails();
       },
     );
 
