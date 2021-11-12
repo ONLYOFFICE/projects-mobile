@@ -33,10 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
@@ -93,10 +91,6 @@ class ProjectsController extends BaseController {
         loadProjects();
         return;
       }
-      for (var item in data) {
-        if (item is EditProjectDTO)
-          refreshSelectedProject(data[0], item); // TODO
-      }
     });
 
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
@@ -131,16 +125,6 @@ class ProjectsController extends BaseController {
 
   void setupPreset(PresetProjectFilters preset) {
     _preset = preset;
-  }
-
-  Future refreshSelectedProject(int id, EditProjectDTO proj) async {
-    loaded.value = false;
-
-    var index =
-        _paginationController.data.indexWhere((project) => project.id == id);
-    if (index != -1) _paginationController.data[index].title = proj.title;
-
-    loaded.value = true;
   }
 
   Future<void> loadProjects() async {

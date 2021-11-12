@@ -60,6 +60,7 @@ class TasksController extends BaseController {
   final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
   final loaded = false.obs;
+
   final taskStatusesLoaded = false.obs;
   TasksSortController get sortController => _sortController;
 

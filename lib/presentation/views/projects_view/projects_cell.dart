@@ -324,7 +324,8 @@ void showsStatusesBS({context, itemController}) async {
                           newStatusId: _statusesController.statuses[i],
                         );
                         if (success) {
-                          locator<EventHub>().fire('needToRefreshProjects');
+                          locator<EventHub>()
+                              .fire('needToRefreshProjects', ['all']);
                         }
                         Get.back();
                       },
