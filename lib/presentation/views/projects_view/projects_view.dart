@@ -61,14 +61,16 @@ class ProjectsView extends StatelessWidget {
   Widget build(BuildContext context) {
     ProjectsController controller;
 
-    controller = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController>(),
-        ),
-        tag: 'ProjectsView')
-      ..setup(PresetProjectFilters.saved);
+    controller = Get.isRegistered<ProjectsController>(tag: 'ProjectsView')
+        ? Get.find<ProjectsController>(tag: 'ProjectsView')
+        : Get.put(
+            ProjectsController(
+              Get.find<ProjectsFilterController>(),
+              Get.find<PaginationController>(),
+            ),
+            tag: 'ProjectsView');
 
+    controller.setup(PresetProjectFilters.saved);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       controller.loadProjects();
     });

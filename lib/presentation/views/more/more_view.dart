@@ -47,11 +47,10 @@ class MoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var portalUser;
-    try {
-      portalUser = Get.find<ProfileController>();
-    } catch (e) {
-      portalUser = Get.put(ProfileController(), permanent: true);
-    }
+
+    portalUser = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController(), permanent: true);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       portalUser.setup();
