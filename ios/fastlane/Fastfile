@@ -74,7 +74,7 @@ platform :ios do
     # Build artifacts and upload to store
     get_packages
     cleanup
-    # increment_build
+    increment_build
     make_app
 
     # build iOS app
