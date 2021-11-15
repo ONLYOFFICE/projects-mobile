@@ -111,6 +111,7 @@ class ProjectsController extends BaseController {
   Future<bool> getFabVisibility() async {
     if (!_withFAB) return false;
     await _userController.getUserInfo();
+    await _userController.getSecurityInfo();
     return _userController.user.isAdmin ||
         _userController.user.isOwner ||
         (_userController.user.listAdminModules != null &&
