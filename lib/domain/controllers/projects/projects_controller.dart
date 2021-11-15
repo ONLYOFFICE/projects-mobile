@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -71,6 +73,8 @@ class ProjectsController extends BaseController {
 
   var fabIsVisible = false.obs;
 
+  StreamSubscription _refreshProjectsSubscription;
+
   ProjectsController(
     ProjectsFilterController filterController,
     PaginationController paginationController,
@@ -86,7 +90,8 @@ class ProjectsController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    _refreshProjectsSubscription =
+        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (data.any((elem) => elem == 'all')) {
         loadProjects();
         return;
@@ -99,8 +104,14 @@ class ProjectsController extends BaseController {
     });
   }
 
+  @override
+  void onClose() {
+    _refreshProjectsSubscription.cancel();
+    super.onClose();
+  }
+
   Future<bool> getFabVisibility() async {
-    await _userController.getUserInfo();
+    if (!(await _userController.getUserInfo())) return Future.value(false);
     return _userController.user.isAdmin ||
         _userController.user.isOwner ||
         (_userController.user.listAdminModules != null &&

@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
@@ -66,6 +68,9 @@ class DashboardController extends GetxController {
 
   var scrollController = ScrollController();
 
+  StreamSubscription _refreshProjectsSubscription;
+  StreamSubscription _refreshTasksSubscription;
+
   Future setup() async {
     _myTaskController = tasksWithPresets.myTasksController;
     _upcomingTaskscontroller = tasksWithPresets.upcomingTasksController;
@@ -80,13 +85,22 @@ class DashboardController extends GetxController {
     folowedProjectsController.screenName = tr('projectsIFolow');
     activeProjectsController.screenName = tr('activeProjects');
 
-    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    _refreshProjectsSubscription =
+        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (data.any((elem) => elem == 'all')) refreshProjectsData();
     });
 
-    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription =
+        locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
     });
+  }
+
+  @override
+  void onClose() {
+    _refreshProjectsSubscription.cancel();
+    _refreshTasksSubscription.cancel();
+    super.onClose();
   }
 
   void onRefresh() async {

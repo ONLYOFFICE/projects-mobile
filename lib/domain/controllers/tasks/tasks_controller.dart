@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -69,6 +71,9 @@ class TasksController extends BaseController {
 
   var fabIsVisible = false.obs;
 
+  StreamSubscription _visibilityChangedSubscription;
+  StreamSubscription _refreshTasksSubscription;
+
   @override
   Future<void> onInit() async {
     await taskStatusesController
@@ -92,15 +97,24 @@ class TasksController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription = locator<EventHub>()
+        .on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
 
-    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription =
+        locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
     });
 
     loaded.value = true;
+  }
+
+  @override
+  void onClose() {
+    _visibilityChangedSubscription.cancel();
+    _refreshTasksSubscription.cancel();
+    super.onClose();
   }
 
   @override
@@ -160,7 +174,7 @@ class TasksController extends BaseController {
   Future<bool> getFabVisibility() async {
     var fabVisibility = false;
 
-    await _userController.getUserInfo();
+    if (!(await _userController.getUserInfo())) return Future.value(false);
     var selfUser = _userController.user;
     if (selfUser.isAdmin ||
         selfUser.isOwner ||

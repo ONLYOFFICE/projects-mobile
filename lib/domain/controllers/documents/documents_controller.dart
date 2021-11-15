@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:event_hub/event_hub.dart';
@@ -90,6 +91,8 @@ class DocumentsController extends GetxController {
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
+  StreamSubscription _refreshDocumentsSubscription;
+
   DocumentsController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -107,9 +110,16 @@ class DocumentsController extends GetxController {
 
     portalInfoController.setup();
 
-    locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
+    _refreshDocumentsSubscription =
+        locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
       refreshContent();
     });
+  }
+
+  @override
+  void onClose() {
+    _refreshDocumentsSubscription.cancel();
+    super.onClose();
   }
 
   Future<void> refreshContent() async {

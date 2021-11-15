@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -63,6 +65,9 @@ class DiscussionsController extends BaseController {
   RxBool loaded = false.obs;
   var fabIsVisible = false.obs;
 
+  StreamSubscription _visibilityChangedSubscription;
+  StreamSubscription _refreshDiscussionsSubscription;
+
   DiscussionsController(
     DiscussionsFilterController filterController,
     PaginationController paginationController,
@@ -78,13 +83,22 @@ class DiscussionsController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription = locator<EventHub>()
+        .on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
 
-    locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+    _refreshDiscussionsSubscription = locator<EventHub>()
+        .on('needToRefreshDiscussions', (dynamic data) async {
       if (data == 'all') await loadDiscussions();
     });
+  }
+
+  @override
+  void onClose() {
+    _visibilityChangedSubscription.cancel();
+    _refreshDiscussionsSubscription.cancel();
+    super.onClose();
   }
 
   @override

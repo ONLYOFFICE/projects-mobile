@@ -131,7 +131,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
-        if (data.any((elem) => elem == _projectDetailed.value.id))
+        if (data
+            .any((elem) => elem == _projectDetailed.value.id || elem == 'all'))
           refreshProjectMilestones();
       },
     );
