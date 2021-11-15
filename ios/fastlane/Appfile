@@ -1,0 +1,2 @@
+team_id ENV["TEAM_ID"] # Developer Portal Team ID
+itc_team_id ENV["ITC_TEAM_ID"] # App Store Connect Team ID
