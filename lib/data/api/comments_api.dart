@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -40,8 +41,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class CommentsApi {
-  Future<ApiDTO<List<PortalComment>>> getTaskComments(
-      {required int taskId}) async {
+  Future<ApiDTO<List<PortalComment>>> getTaskComments({required int taskId}) async {
     final url = await locator.get<CoreApi>().taskComments(taskId: taskId);
 
     final result = ApiDTO<List<PortalComment>>();
@@ -78,8 +78,7 @@ class CommentsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            PortalComment.fromJson(responseJson as Map<String, dynamic>);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -94,8 +93,7 @@ class CommentsApi {
     required int messageId,
     required String content,
   }) async {
-    final url =
-        await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
+    final url = await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
 
     final result = ApiDTO<PortalComment>();
 
@@ -105,8 +103,7 @@ class CommentsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            PortalComment.fromJson(responseJson as Map<String, dynamic>);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -132,8 +129,7 @@ class CommentsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            PortalComment.fromJson(responseJson as Map<String, dynamic>);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -149,8 +145,7 @@ class CommentsApi {
     required String content,
     required String parentId,
   }) async {
-    final url =
-        await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
+    final url = await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
 
     final result = ApiDTO<PortalComment>();
 
@@ -160,8 +155,7 @@ class CommentsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            PortalComment.fromJson(responseJson as Map<String, dynamic>);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -173,8 +167,7 @@ class CommentsApi {
   }
 
   Future<ApiDTO> deleteComment({required String commentId}) async {
-    final url =
-        await locator.get<CoreApi>().deleteCommentUrl(commentId: commentId);
+    final url = await locator.get<CoreApi>().deleteCommentUrl(commentId: commentId);
 
     final result = ApiDTO();
 
@@ -220,8 +213,7 @@ class CommentsApi {
     required String commentId,
     required String content,
   }) async {
-    final url =
-        await locator.get<CoreApi>().updateCommentUrl(commentId: commentId);
+    final url = await locator.get<CoreApi>().updateCommentUrl(commentId: commentId);
 
     final result = ApiDTO();
 
@@ -232,6 +224,34 @@ class CommentsApi {
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
+      } else {
+        result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<String>> uploadImage({required MultipartFile file}) async {
+    final url = await locator.get<CoreApi>().getUploadImagesUrl();
+
+    final result = ApiDTO<String>();
+
+    final request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields['name'] = 'upload';
+    request.fields['filename'] = file.filename ?? '';
+    request.headers['Authorization'] =
+        await locator.get<CoreApi>().getToken() ?? ''; //TODO nullcheck
+    request.files.add(file);
+
+    try {
+      final responseStream = await request.send();
+      final response = await http.Response.fromStream(responseStream);
+
+      if (response is http.Response) {
+        result.response = response.body;
       } else {
         result.error = response as CustomError;
       }

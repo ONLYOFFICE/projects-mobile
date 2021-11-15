@@ -36,6 +36,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
@@ -44,6 +45,7 @@ import 'package:projects/domain/controllers/discussions/actions/discussion_editi
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -59,6 +61,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 class DiscussionItemController extends GetxController {
   final DiscussionItemService _api = locator<DiscussionItemService>();
+  final portalUri = Get.find<PortalInfoController>().portalUri;
 
   final discussion = Discussion().obs;
   final status = 0.obs;
@@ -92,8 +95,7 @@ class DiscussionItemController extends GetxController {
   }
 
   void scrollToLastComment() {
-    commentsListController
-        .jumpTo(commentsListController.position.maxScrollExtent);
+    commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
   }
 
   bool get isSubscribed {
@@ -127,10 +129,24 @@ class DiscussionItemController extends GetxController {
       try {
         await Get.delete<DiscussionCommentItemController>();
         discussion.value = result;
+        discussion.value.comments = checkImagesSrc(discussion.value.comments);
         status.value = result.status!;
       } catch (_) {}
     }
+
     if (showLoading) loaded.value = true;
+  }
+
+  List<PortalComment> checkImagesSrc(List<PortalComment>? comments) {
+    if (comments == null || comments.isEmpty) return <PortalComment>[];
+
+    for (final item in comments) {
+      if (item.commentBody == null || item.commentBody!.isEmpty) continue;
+
+      item.commentBody = item.commentBody!.replaceAll('src="/storage', 'src="$portalUri/storage');
+      item.commentList = checkImagesSrc(item.commentList);
+    }
+    return comments;
   }
 
   Future<void> tryChangingStatus(BuildContext context) async {
@@ -143,8 +159,8 @@ class DiscussionItemController extends GetxController {
     final newStatusStr = newStatus == 1 ? 'archived' : 'open';
 
     try {
-      final result = await _api.updateMessageStatus(
-          id: discussion.value.id!, newStatus: newStatusStr);
+      final result =
+          await _api.updateMessageStatus(id: discussion.value.id!, newStatus: newStatusStr);
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status!;
@@ -187,8 +203,7 @@ class DiscussionItemController extends GetxController {
           if (result != null) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(
-                context: context, text: tr('discussionDeleted'));
+            MessagesHandler.showSnackBar(context: context, text: tr('discussionDeleted'));
             await Get.find<DiscussionsController>().loadDiscussions();
             //TODO refactoring needed
             try {
@@ -214,8 +229,7 @@ class DiscussionItemController extends GetxController {
     Get.find<NavigationController>().toScreen(
       const NewCommentView(),
       arguments: {
-        'controller':
-            Get.put(NewDiscussionCommentController(idFrom: discussion.value.id))
+        'controller': Get.put(NewDiscussionCommentController(idFrom: discussion.value.id))
       },
     );
   }

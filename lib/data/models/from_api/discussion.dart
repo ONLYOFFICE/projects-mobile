@@ -72,7 +72,7 @@ class Discussion {
   final bool? canReadFiles;
   List<PortalUser>? subscribers;
   final List<PortalFile>? files;
-  final List<PortalComment>? comments;
+  List<PortalComment>? comments;
   final Project? project;
   final dynamic description;
   final int? commentsCount;

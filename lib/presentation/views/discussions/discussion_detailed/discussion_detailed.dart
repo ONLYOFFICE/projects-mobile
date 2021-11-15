@@ -61,8 +61,9 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
-    final discussion = Get.arguments['discussion'] as Discussion;
-    controller = Get.put(DiscussionItemController(discussion));
+    final discussionItemController =
+        DiscussionItemController(Get.arguments['discussion'] as Discussion);
+    controller = Get.put(discussionItemController);
     controller.getDiscussionDetailed();
     super.initState();
   }

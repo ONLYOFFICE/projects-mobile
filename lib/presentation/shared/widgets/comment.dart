@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/comments/item_controller/abstract_co
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/task_comment_item_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
@@ -95,7 +96,8 @@ class Comment extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
                     child: HtmlWidget(
-                      controller.comment!.value.commentBody!,
+                      controller.comment?.value.commentBody ?? '',
+                      factoryBuilder: () => _HTMLWidgetFactory(),
                     ),
                   ),
                   if (comment.isResponsePermissions!) const SizedBox(height: 5),
@@ -123,6 +125,23 @@ class Comment extends StatelessWidget {
     }
     if (comment.show) return const _DeletedComment();
     return const SizedBox();
+  }
+}
+
+class _HTMLWidgetFactory extends WidgetFactory {
+  final _portalInfo = Get.find<PortalInfoController>();
+
+  @override
+  Widget? buildImage(BuildMetadata meta, ImageMetadata data) {
+    final url = meta.element.attributes['src'];
+    if (url != null && url.isNotEmpty && url.contains(_portalInfo.portalName!)) {
+      return Image.network(
+        url,
+        headers: _portalInfo.headers as Map<String, String>?,
+      );
+    }
+
+    return super.buildImage(meta, data);
   }
 }
 
