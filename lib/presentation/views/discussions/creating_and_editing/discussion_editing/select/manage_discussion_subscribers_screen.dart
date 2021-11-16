@@ -44,9 +44,9 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/user_selection_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
+import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
@@ -77,10 +77,15 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(tr('manageSubscribers')),
+                Text(
+                  tr('manageSubscribers'),
+                  style: TextStyleHelper.headerStyle(
+                      color: Get.theme.colors().onSurface),
+                ),
                 if (controller.subscribers.isNotEmpty)
                   Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption())
+                      style: TextStyleHelper.caption(
+                          color: Get.theme.colors().onSurface))
               ],
             ),
           ),
@@ -140,10 +145,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                         usersDataSource: usersDataSource,
                       ),
                     _UsersCategoryText(text: tr('allUsers')),
-                    _AllUsers(
-                      usersDataSource: usersDataSource,
-                      controller: controller,
-                    ),
+                    _AllUsers(controller: controller),
                   ],
                 ),
               );
@@ -196,11 +198,9 @@ class _UsersCategoryText extends StatelessWidget {
 class _AllUsers extends StatelessWidget {
   const _AllUsers({
     Key key,
-    @required this.usersDataSource,
     @required this.controller,
   }) : super(key: key);
 
-  final UsersDataSource usersDataSource;
   final DiscussionActionsController controller;
 
   @override
@@ -209,21 +209,15 @@ class _AllUsers extends StatelessWidget {
       delegate: SliverChildBuilderDelegate(
         (context, index) => Padding(
           padding: const EdgeInsets.only(top: 24),
-          child: UserSelectionTile(
-            image: usersDataSource.usersList[index].portalUser.avatar ??
-                usersDataSource.usersList[index].avatarMedium ??
-                usersDataSource.usersList[index].portalUser.avatarSmall,
-            value: usersDataSource.usersList[index].isSelected == true,
-            onChanged: (value) {
-              // controller.subscribers[index].onTap();
-              controller.addSubscriber(usersDataSource.usersList[index],
-                  fromUsersDataSource: false);
+          child: PortalUserItem(
+            userController: controller.otherUsers[index],
+            onTapFunction: (value) => {
+              controller.addSubscriber(controller.otherUsers[index],
+                  fromUsersDataSource: false)
             },
-            displayName: usersDataSource.usersList[index].displayName,
-            caption: usersDataSource.usersList[index].portalUser.title,
           ),
         ),
-        childCount: usersDataSource.usersList.length,
+        childCount: controller.otherUsers.length,
       ),
     );
   }
@@ -246,18 +240,11 @@ class _SubscribedUsers extends StatelessWidget {
         (_, index) {
           return Padding(
             padding: const EdgeInsets.only(top: 24),
-            child: UserSelectionTile(
-              image: controller.subscribers[index].portalUser.avatar ??
-                  controller.subscribers[index].avatarMedium ??
-                  controller.subscribers[index].portalUser.avatarSmall,
-              value: controller.subscribers[index].isSelected == true,
-              onChanged: (value) {
-                // controller.subscribers[index].onTap();
-                controller.addSubscriber(controller.subscribers[index],
-                    fromUsersDataSource: false);
+            child: PortalUserItem(
+              userController: controller.subscribers[index],
+              onTapFunction: (value) => {
+                controller.removeSubscriber(controller.subscribers[index]),
               },
-              displayName: controller.subscribers[index].displayName,
-              caption: controller.subscribers[index].portalUser.title,
             ),
           );
         },

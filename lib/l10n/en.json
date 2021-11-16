@@ -451,5 +451,13 @@
 	"statusClosed": "Closed",
 	"statusPaused": "Paused",
 	"taskStatusOpen": "Open",
-	"taskStatusClosed": "Closed"
+	"taskStatusClosed": "Closed",
+	"searchMilestone": "Search for milestone...",
+
+	"privacyAndTermsFooter": {
+		"privacyPolicyWithLink": "Privacy Policy",
+		"termsOfServiceWithLink": "Terms of Service",
+		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
+	},
+"tfaWrongCode": "Wrong code!"
 }

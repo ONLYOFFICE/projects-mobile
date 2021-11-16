@@ -35,12 +35,13 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/data/services/task/task_service.dart';
-import 'package:projects/domain/controllers/base/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/internal/utils/debug_print.dart';
 
-class TaskFilterController extends BaseFilterController {
+class TaskFilterController extends BaseTaskFilterController {
   final _api = locator<TaskService>();
   final _sortController = Get.find<TasksSortController>();
   final _storage = locator<Storage>();
@@ -58,11 +59,17 @@ class TaskFilterController extends BaseFilterController {
   String _statusFilter = '';
   String _deadlineFilter = '';
 
+  @override
   String get responsibleFilter => _responsibleFilter;
+  @override
   String get creatorFilter => _creatorFilter;
+  @override
   String get projectFilter => _projectFilter;
+  @override
   String get milestoneFilter => _milestoneFilter;
+  @override
   String get statusFilter => _statusFilter;
+  @override
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
@@ -76,18 +83,6 @@ class TaskFilterController extends BaseFilterController {
       _milestoneFilter.isNotEmpty ||
       _statusFilter.isNotEmpty;
 
-  RxMap responsible;
-
-  RxMap creator;
-
-  RxMap project;
-
-  RxMap milestone;
-
-  RxMap status;
-
-  RxMap deadline;
-
   @override
   void onInit() async {
     // await _storage.removeAll();
@@ -96,7 +91,12 @@ class TaskFilterController extends BaseFilterController {
   }
 
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
+
+    await _getSavedFilters();
+  }
 
   @override
   String get filtersTitle =>
@@ -108,8 +108,9 @@ class TaskFilterController extends BaseFilterController {
 
   set projectId(String value) => _projectId = value;
 
+  @override
   void changeResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _responsibleFilter = '';
 
     switch (filter) {
@@ -157,8 +158,9 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
-  Future<void> changeCreator(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+  @override
+  void changeCreator(String filter, [newValue = '']) async {
+    _selfId = await Get.find<UserController>().getUserId();
     _creatorFilter = '';
     if (filter == 'me') {
       creator['other'] = '';
@@ -177,6 +179,7 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
+  @override
   void changeProject(String filter, [newValue = '']) async {
     _projectFilter = '';
     switch (filter) {
@@ -221,6 +224,7 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
+  @override
   void changeMilestone(String filter, [newValue]) {
     _milestoneFilter = '';
     switch (filter) {
@@ -251,6 +255,7 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
+  @override
   void changeStatus(String filter, [newValue]) {
     _statusFilter = '';
     switch (filter) {
@@ -269,7 +274,8 @@ class TaskFilterController extends BaseFilterController {
     getSuitableResultCount();
   }
 
-  Future<void> changeDeadline(
+  @override
+  void changeDeadline(
     String filter, {
     DateTime start,
     DateTime stop,
@@ -381,7 +387,6 @@ class TaskFilterController extends BaseFilterController {
     };
 
     acceptedFilters.value = '';
-    suitableResultCount.value = -1;
 
     _responsibleFilter = '';
     _creatorFilter = '';
@@ -394,44 +399,56 @@ class TaskFilterController extends BaseFilterController {
   }
 
   Future<void> setupPreset(PresetTaskFilters preset) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
 
-    if (preset == PresetTaskFilters.myTasks) {
-      _statusFilter = '&status=1';
+    switch (preset) {
+      case PresetTaskFilters.myTasks:
+        _statusFilter = '&status=1';
 
-      await _getMyTasks();
-    } else if (preset == PresetTaskFilters.upcomming) {
-      _statusFilter = '&status=1';
-      var startDate = formatter.format(DateTime.now());
-      var stopDate =
-          formatter.format(DateTime.now().add(const Duration(days: 7)));
-      _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
-    } else if (preset == PresetTaskFilters.last) {
-      var startDate = formatter.format(DateTime.now());
-      var stopDate =
-          formatter.format(DateTime.now().add(const Duration(days: 7)));
+        _responsibleFilter = '&participant=$_selfId';
+        responsible['me'] = true;
+        break;
+      case PresetTaskFilters.upcomming:
+        _statusFilter = '&status=1';
+        var startDate = formatter.format(DateTime.now());
+        var stopDate =
+            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+        _responsibleFilter = '&participant=$_selfId';
+        responsible['me'] = true;
+        break;
+      case PresetTaskFilters.last:
+        var startDate = formatter.format(DateTime.now());
+        var stopDate =
+            formatter.format(DateTime.now().add(const Duration(days: 7)));
 
-      _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
-    } else if (preset == PresetTaskFilters.saved) {
-      await _getSavedFilters();
+        _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+        break;
+      case PresetTaskFilters.saved:
+        await _getSavedFilters();
+        break;
     }
+
     hasFilters.value = _hasFilters;
   }
 
   @override
   Future<void> saveFilters() async {
-    var dLine = deadline;
+    var dLine = Map.from(deadline);
 
     var dlineCustom = dateTimesToString(dLine['custom']);
 
     dLine['custom'] = dlineCustom;
 
     var map = {
-      'responsible': {'buttons': responsible, 'value': _responsibleFilter},
-      'creator': {'buttons': creator, 'value': _creatorFilter},
-      'project': {'buttons': project, 'value': _projectFilter},
-      'milestone': {'buttons': milestone, 'value': _milestoneFilter},
-      'status': {'buttons': status, 'value': _statusFilter},
+      'responsible': {
+        'buttons': Map.from(responsible),
+        'value': _responsibleFilter
+      },
+      'creator': {'buttons': Map.from(creator), 'value': _creatorFilter},
+      'project': {'buttons': Map.from(project), 'value': _projectFilter},
+      'milestone': {'buttons': Map.from(milestone), 'value': _milestoneFilter},
+      'status': {'buttons': Map.from(status), 'value': _statusFilter},
       'deadline': {'buttons': dLine, 'value': _deadlineFilter},
       'hasFilters': _hasFilters,
     };
@@ -463,33 +480,33 @@ class TaskFilterController extends BaseFilterController {
     }.obs;
   }
 
-  Future<void> _getMyTasks() async {
-    _selfId ??= await Get.find<UserController>().getUserId();
-    _responsibleFilter = '&participant=$_selfId';
-    responsible['me'] = true;
-  }
-
   Future<void> _getSavedFilters() async {
     var savedFilters = await _storage.read('taskFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
-        responsible = Map.from(savedFilters['responsible']['buttons']).obs;
+        responsible.value =
+            Map<String, Object>.from(savedFilters['responsible']['buttons']);
         _responsibleFilter = savedFilters['responsible']['value'];
 
-        creator = Map.from(savedFilters['creator']['buttons']).obs;
+        creator.value =
+            Map<String, Object>.from(savedFilters['creator']['buttons']);
         _creatorFilter = savedFilters['creator']['value'];
 
-        project = Map.from(savedFilters['project']['buttons']).obs;
+        project.value =
+            Map<String, Object>.from(savedFilters['project']['buttons']);
         _projectFilter = savedFilters['project']['value'];
 
-        milestone = Map.from(savedFilters['milestone']['buttons']).obs;
+        milestone.value =
+            Map<String, Object>.from(savedFilters['milestone']['buttons']);
         _milestoneFilter = savedFilters['milestone']['value'];
 
-        status = Map.from(savedFilters['status']['buttons']).obs;
+        status.value =
+            Map<String, bool>.from(savedFilters['status']['buttons']);
         _statusFilter = savedFilters['status']['value'];
 
-        var deadLineFilters = Map.from(savedFilters['deadline']['buttons']);
+        var deadLineFilters =
+            Map<String, Object>.from(savedFilters['deadline']['buttons']);
 
         var customDeadlineFilters = deadLineFilters['custom'];
 
@@ -498,15 +515,18 @@ class TaskFilterController extends BaseFilterController {
 
         deadLineFilters['custom'] = customDeadlineFilters;
 
-        deadline = deadLineFilters.obs;
+        deadline.value = deadLineFilters;
         _deadlineFilter ??= savedFilters['deadline']['value'];
 
         hasFilters.value = savedFilters['hasFilters'];
-      } catch (_) {
+      } catch (e) {
+        printWarning('Discussions filter loading error: $e');
         await loadFilters();
       }
     } else {
-      await _getMyTasks();
+      _statusFilter = '&status=1';
+      _responsibleFilter = '&participant=$_selfId';
+      responsible['me'] = true;
     }
   }
 }

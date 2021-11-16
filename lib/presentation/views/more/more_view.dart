@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -45,15 +46,14 @@ class MoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller;
-    try {
-      controller = Get.find<ProfileController>();
-    } catch (e) {
-      controller = Get.put(ProfileController(), permanent: true);
-    }
+    var portalUser;
+
+    portalUser = Get.isRegistered<ProfileController>()
+        ? Get.find<ProfileController>()
+        : Get.put(ProfileController(), permanent: true);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
-      controller.setup();
+      portalUser.setup();
     });
 
     return Container(
@@ -83,14 +83,46 @@ class MoreView extends StatelessWidget {
                     SizedBox(
                       height: 40,
                       width: 40,
-                      child: CircleAvatar(
-                        radius: 40.0,
-                        backgroundColor: Get.theme.colors().bgDescription,
-                        child: ClipOval(
-                          child: Obx(() {
-                            return controller.avatar.value;
-                          }),
-                        ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[
+                          CircleAvatar(
+                            radius: 40.0,
+                            backgroundColor: Get.theme.colors().bgDescription,
+                            child: ClipOval(
+                              child: Obx(() {
+                                return portalUser.avatar.value;
+                              }),
+                            ),
+                          ),
+                          if (portalUser.status.value == UserStatus.Terminated)
+                            Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: AppIcon(
+                                    icon: SvgIcons.userBlocked,
+                                    width: 16,
+                                    height: 16)),
+                          if ((portalUser.isAdmin.value ||
+                                  portalUser.isOwner.value) &&
+                              portalUser.status.value != UserStatus.Terminated)
+                            Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: AppIcon(
+                                    icon: SvgIcons.userAdmin,
+                                    width: 16,
+                                    height: 16)),
+                          if (portalUser.isVisitor.value &&
+                              portalUser.status.value != UserStatus.Terminated)
+                            Positioned(
+                                bottom: 0,
+                                right: 0,
+                                child: AppIcon(
+                                    icon: SvgIcons.userVisitor,
+                                    width: 16,
+                                    height: 16)),
+                        ],
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -100,7 +132,7 @@ class MoreView extends StatelessWidget {
                         children: [
                           Obx(() {
                             return Text(
-                              controller.username.value,
+                              portalUser.username.value,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleHelper.subtitle1(
@@ -109,7 +141,7 @@ class MoreView extends StatelessWidget {
                           }),
                           Obx(() {
                             return Text(
-                              controller.portalName.value,
+                              portalUser.portalName.value,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleHelper.body2(

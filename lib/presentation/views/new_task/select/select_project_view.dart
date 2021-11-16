@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
@@ -40,13 +41,16 @@ import 'package:projects/domain/controllers/projects/project_search_controller.d
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectView extends StatelessWidget {
   const SelectProjectView({Key key}) : super(key: key);
@@ -55,23 +59,23 @@ class SelectProjectView extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
 
-    var projectsController = ProjectsWithPresets.myProjectsController;
+    var projectsWithPresets = locator<ProjectsWithPresets>();
+
+    var projectsController = projectsWithPresets.myProjectsController;
 
     var userController = Get.find<UserController>();
 
-    if (userController.user.isAdmin ||
-        userController.user.isOwner ||
-        (userController.user.listAdminModules != null &&
-            userController.user.listAdminModules.contains('projects'))) {
-      projectsController = ProjectsWithPresets.activeProjectsController;
-    } else if (((controller is NewTaskController) &&
-            userController.securityInfo.canCreateTask) ||
-        ((controller is DiscussionActionsController) &&
-            userController.securityInfo.canCreateMessage)) {
-      projectsController = ProjectsWithPresets.myMembershipProjectController;
-    } else if (((controller is NewMilestoneController) &&
-        userController.securityInfo.canCreateMilestone)) {
-      projectsController = ProjectsWithPresets.myManagedProjectController;
+    if (userController.user != null &&
+        (userController.user.isAdmin ||
+            userController.user.isOwner ||
+            (userController.user.listAdminModules != null &&
+                userController.user.listAdminModules.contains('projects')))) {
+      projectsController = projectsWithPresets.activeProjectsController;
+    } else if (controller is NewTaskController ||
+        controller is DiscussionActionsController) {
+      projectsController = projectsWithPresets.myMembershipProjectController;
+    } else if (controller is NewMilestoneController) {
+      projectsController = projectsWithPresets.myManagedProjectController;
     }
 
     var searchController =
@@ -101,9 +105,20 @@ class SelectProjectView extends StatelessWidget {
       body: Obx(() {
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isNotEmpty) {
-          return ProjectList(
-            controller: controller,
-            projects: searchController.searchResult,
+          return SmartRefresher(
+            enablePullDown: false,
+            enablePullUp: searchController.pullUpEnabled,
+            controller: searchController.refreshController,
+            onLoading: searchController.onLoading,
+            child: ListView.separated(
+              itemCount: searchController.searchResult.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return const StyledDivider(leftPadding: 16, rightPadding: 16);
+              },
+              itemBuilder: (c, i) => _ProjectCell(
+                  item: searchController.searchResult[i],
+                  controller: controller),
+            ),
           );
         }
         if (searchController.switchToSearchView.value == true &&
@@ -113,9 +128,17 @@ class SelectProjectView extends StatelessWidget {
         }
         if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
-          return ProjectList(
-            projects: projectsController.paginationController.data,
-            controller: controller,
+          return PaginationListView(
+            paginationController: projectsController.paginationController,
+            child: ListView.separated(
+              itemCount: projectsController.paginationController.data.length,
+              separatorBuilder: (BuildContext context, int index) {
+                return const StyledDivider(leftPadding: 16, rightPadding: 16);
+              },
+              itemBuilder: (c, i) => _ProjectCell(
+                  item: projectsController.paginationController.data[i],
+                  controller: controller),
+            ),
           );
         }
         return const ListLoadingSkeleton();
@@ -124,60 +147,47 @@ class SelectProjectView extends StatelessWidget {
   }
 }
 
-class ProjectList extends StatelessWidget {
-  final List projects;
+class _ProjectCell extends StatelessWidget {
+  const _ProjectCell({Key key, @required this.item, @required this.controller})
+      : super(key: key);
+  final ProjectDetailed item;
   final controller;
-  const ProjectList({
-    Key key,
-    @required this.projects,
-    @required this.controller,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      itemCount: projects.length,
-      separatorBuilder: (BuildContext context, int index) {
-        return const StyledDivider(leftPadding: 16, rightPadding: 16);
-      },
-      itemBuilder: (BuildContext context, int index) {
-        return Material(
-          color: Get.find<PlatformController>().isMobile
-              ? Get.theme.colors().backgroundColor
-              : Get.theme.colors().surface,
-          child: InkWell(
-            onTap: () {
-              controller.changeProjectSelection(
-                  id: projects[index].id, title: projects[index].title);
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          projects[index].title,
-                          style: TextStyleHelper.projectTitle,
-                        ),
-                        Text(projects[index].responsible.displayName,
-                            style: TextStyleHelper.caption(
-                                    color: Get.theme
-                                        .colors()
-                                        .onSurface
-                                        .withOpacity(0.6))
-                                .copyWith(height: 1.667)),
-                      ],
+    return Material(
+      color: Get.find<PlatformController>().isMobile
+          ? Get.theme.colors().backgroundColor
+          : Get.theme.colors().surface,
+      child: InkWell(
+        onTap: () {
+          controller.changeProjectSelection(id: item.id, title: item.title);
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
+              Flexible(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.title,
+                      style: TextStyleHelper.projectTitle,
                     ),
-                  ),
-                ],
+                    Text(item.responsible.displayName,
+                        style: TextStyleHelper.caption(
+                                color: Get.theme
+                                    .colors()
+                                    .onSurface
+                                    .withOpacity(0.6))
+                            .copyWith(height: 1.667)),
+                  ],
+                ),
               ),
-            ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 }

@@ -48,9 +48,13 @@ import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 class TasksController extends BaseController {
   final _api = locator<TaskService>();
 
+  final projectsWithPresets = locator<ProjectsWithPresets>();
+
   PaginationController _paginationController;
 
   final _userController = Get.find<UserController>();
+
+  PresetTaskFilters _preset;
   PaginationController get paginationController => _paginationController;
 
   final taskStatusesController = Get.find<TaskStatusesController>();
@@ -63,6 +67,7 @@ class TasksController extends BaseController {
   TaskFilterController get filterController => _filterController;
 
   var fabIsVisible = false.obs;
+  var _withFAB = true;
 
   @override
   Future<void> onInit() async {
@@ -87,9 +92,18 @@ class TasksController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
+    _userController.loaded.listen((_loaded) async => {
+          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
+        });
+
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
+
+    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+      refreshData();
+    });
+
     loaded.value = true;
   }
 
@@ -102,12 +116,17 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  Future loadTasks({PresetTaskFilters preset}) async {
+  void setup(PresetTaskFilters preset, {withFAB = true}) {
+    _preset = preset;
+    _withFAB = withFAB;
+  }
+
+  Future loadTasks() async {
     loaded.value = false;
     paginationController.startIndex = 0;
-    if (preset != null) {
+    if (_preset != null) {
       await _filterController
-          .setupPreset(preset)
+          .setupPreset(_preset)
           .then((value) => _getTasks(needToClear: true));
     } else {
       await _getTasks(needToClear: true);
@@ -128,7 +147,7 @@ class TasksController extends BaseController {
       deadlineFilter: _filterController.deadlineFilter,
       // query: 'задача',
     );
-    paginationController.total.value = result.total;
+    paginationController.total.value = result?.total;
 
     if (needToClear) paginationController.data.clear();
 
@@ -141,23 +160,23 @@ class TasksController extends BaseController {
       Get.find<NavigationController>().to(const TasksSearchScreen());
 
   Future<bool> getFabVisibility() async {
+    if (!_withFAB) return false;
     var fabVisibility = false;
-
     await _userController.getUserInfo();
     var selfUser = _userController.user;
     if (selfUser.isAdmin ||
         selfUser.isOwner ||
         (selfUser.listAdminModules != null &&
             selfUser.listAdminModules.contains('projects'))) {
-      if (ProjectsWithPresets.activeProjectsController.itemList.isEmpty)
-        await ProjectsWithPresets.activeProjectsController.loadProjects();
+      if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
+        await projectsWithPresets.activeProjectsController.loadProjects();
       fabVisibility =
-          ProjectsWithPresets.activeProjectsController.itemList.isNotEmpty;
+          projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (ProjectsWithPresets.myProjectsController.itemList.isEmpty)
-        await ProjectsWithPresets.myProjectsController.loadProjects();
+      if (projectsWithPresets.myProjectsController.itemList.isEmpty)
+        await projectsWithPresets.myProjectsController.loadProjects();
       fabVisibility =
-          ProjectsWithPresets.myProjectsController.itemList.isNotEmpty;
+          projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor) fabVisibility = false;
 

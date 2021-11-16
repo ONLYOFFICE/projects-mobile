@@ -39,7 +39,8 @@ abstract class DiscussionActionsController {
   RxString text;
   RxString title;
   var selectedProjectTitle;
-  RxList subscribers;
+  RxList<PortalUserItemController> subscribers;
+  RxList<PortalUserItemController> otherUsers;
 
   FocusNode get titleFocus => FocusNode();
   TextEditingController _titleController;
@@ -55,6 +56,7 @@ abstract class DiscussionActionsController {
   void setupSubscribersSelection();
   void addSubscriber(PortalUserItemController user,
       {fromUsersDataSource = false});
+  void removeSubscriber(PortalUserItemController user);
 
   void changeTitle(String newText);
   void changeProjectSelection();

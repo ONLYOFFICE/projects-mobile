@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/status_button.dart';
@@ -41,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/views/task_detailed/task_team.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
@@ -48,9 +50,13 @@ part 'task.dart';
 
 class TaskOverviewScreen extends StatelessWidget {
   final TaskItemController taskController;
+  final TabController tabController;
 
-  const TaskOverviewScreen({Key key, @required this.taskController})
-      : super(key: key);
+  const TaskOverviewScreen({
+    Key key,
+    @required this.taskController,
+    @required this.tabController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +147,10 @@ class TaskOverviewScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                 if (task.responsibles != null && task.responsibles.isNotEmpty)
                   InfoTile(
+                      onTap: () {
+                        Get.find<NavigationController>()
+                            .toScreen(TaskTeamView(controller: taskController));
+                      },
                       icon: AppIcon(
                           icon: SvgIcons.person,
                           color: const Color(0xff707070)),
@@ -149,13 +159,16 @@ class TaskOverviewScreen extends StatelessWidget {
                           ? plural('responsibles', task.responsibles.length)
                           : task.responsibles[0].displayName,
                       suffix: IconButton(
-                          icon: Icon(Icons.arrow_forward_ios_rounded,
-                              size: 20,
+                          icon: Icon(Icons.navigate_next,
+                              size: 24,
                               color: Get.theme
                                   .colors()
-                                  .onSurface
+                                  .onBackground
                                   .withOpacity(0.6)),
-                          onPressed: () {})),
+                          onPressed: () {
+                            Get.find<NavigationController>().toScreen(
+                                TaskTeamView(controller: taskController));
+                          })),
                 const SizedBox(height: 20),
                 InfoTile(
                     caption: '${tr('createdBy')}:',

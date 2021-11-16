@@ -33,6 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -41,7 +42,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersDataSource extends GetxController {
   final _api = locator<UserService>();
-  var usersList = [].obs;
+  RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
   var loaded = true.obs;
   var searchInputController = TextEditingController();
 
@@ -66,6 +67,9 @@ class UsersDataSource extends GetxController {
   var selfIsVisible = true.obs;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
+
+  RxList<PortalUserItemController> get usersWithoutVisitors =>
+      RxList.from(usersList.where((user) => !user.portalUser.isVisitor));
 
   void onLoading() async {
     _startIndex += 25;
@@ -126,6 +130,9 @@ class UsersDataSource extends GetxController {
 
     selfIsVisible.value = !(selectedProjectManager != null &&
         selectedProjectManager.id == selfUserItem.portalUser.id);
+
+    usersList
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
     if (applyUsersSelection != null) {
       await applyUsersSelection();

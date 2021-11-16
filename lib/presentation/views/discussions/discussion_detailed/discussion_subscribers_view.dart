@@ -34,13 +34,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
-import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/views/profile/profile_screen.dart';
+import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscussionSubscribersView extends StatelessWidget {
@@ -61,7 +62,7 @@ class DiscussionSubscribersView extends StatelessWidget {
           return Stack(
             children: [
               SmartRefresher(
-                controller: controller.refreshController,
+                controller: controller.subscribersRefreshController,
                 onRefresh: controller.onRefresh,
                 child: ListView.separated(
                   itemCount: discussion.subscribers.length,
@@ -70,62 +71,36 @@ class DiscussionSubscribersView extends StatelessWidget {
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(height: 24);
                   },
-                  itemBuilder: (BuildContext context, int index) {
-                    return Row(
-                      children: [
-                        SizedBox(
-                          width: 40,
-                          height: 40,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CustomNetworkImage(
-                              image: discussion.subscribers[index].avatar ??
-                                  discussion.subscribers[index].avatarMedium ??
-                                  discussion.subscribers[index].avatarSmall,
-                              fit: BoxFit.contain,
-                              defaultImage: const DefaultAvatar(),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 16),
-                        Flexible(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                discussion.subscribers[index].displayName,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(
-                                    color: Get.theme.colors().onSurface),
-                              ),
-                              if (discussion.subscribers[index]?.title != null)
-                                Text(discussion.subscribers[index]?.title,
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyleHelper.caption(
-                                        color: Get.theme
-                                            .colors()
-                                            .onSurface
-                                            .withOpacity(0.6))),
-                            ],
-                          ),
-                        )
-                      ],
-                    );
-                  },
+                  itemBuilder: (BuildContext context, int index) =>
+                      PortalUserItem(
+                          userController: PortalUserItemController(
+                              portalUser: discussion.subscribers[index],
+                              isSelected: false.obs),
+                          onTapFunction: (value) => {
+                                Get.find<NavigationController>().toScreen(
+                                    const ProfileScreen(),
+                                    arguments: {
+                                      'portalUser':
+                                          discussion.subscribers[index]
+                                    })
+                              }),
                 ),
               ),
               Align(
                 alignment: Alignment.bottomRight,
                 child: Padding(
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
-                  child: StyledFloatingActionButton(
-                    onPressed: () =>
-                        controller.toSubscribersManagingScreen(context),
-                    child: AppIcon(
-                      icon: SvgIcons.add_fab,
-                      color: Get.theme.colors().onPrimarySurface,
+                  child: Obx(
+                    () => Visibility(
+                      visible: controller.fabIsVisible.value,
+                      child: StyledFloatingActionButton(
+                        onPressed: () =>
+                            controller.toSubscribersManagingScreen(context),
+                        child: AppIcon(
+                          icon: SvgIcons.add_fab,
+                          color: Get.theme.colors().onPrimarySurface,
+                        ),
+                      ),
                     ),
                   ),
                 ),

@@ -41,8 +41,8 @@ import 'package:projects/presentation/views/settings/passcode/passcode_keyboard_
 class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
   PasscodeScreen({Key key}) : super(key: key);
 
-  final passcodeCheckingController = Get.find<PasscodeCheckingController>();
-  // Get.put(PasscodeCheckingController(canUseFingerprint: true));
+  final passcodeCheckingController = Get.find<PasscodeCheckingController>()
+    ..setup(canUseFingerprint: true);
 
   @override
   String get title => tr('passcodeToUnlock');

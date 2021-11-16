@@ -55,6 +55,10 @@ class ProfileController extends GetxController {
   var portalName = ''.obs;
   var displayName = ''.obs;
   var email = ''.obs;
+  var status = (-1).obs;
+  RxBool isVisitor = false.obs;
+  RxBool isOwner = false.obs;
+  RxBool isAdmin = false.obs;
 
   // ignore: unnecessary_cast
   Rx<Widget> avatar = (AppIcon(
@@ -65,12 +69,17 @@ class ProfileController extends GetxController {
       .obs;
 
   Future<void> setup() async {
-    await userController.getUserInfo();
+    // ignore: unawaited_futures
+    userController.getUserInfo();
     await portalInfoController.setup();
 
     user.value = userController.user;
     portalName.value = portalInfoController.portalName;
     username.value = userController.user.displayName;
+    status.value = userController.user.status;
+    isVisitor.value = userController.user.isVisitor;
+    isOwner.value = userController.user.isOwner;
+    isAdmin.value = userController.user.isAdmin;
 
     email.value = userController.user.email;
     await loadAvatar();
@@ -82,7 +91,6 @@ class ProfileController extends GetxController {
       acceptText: tr('logOut').toUpperCase(),
       acceptColor: Get.theme.colors().primary,
       onAcceptTap: () async {
-        Get.back();
         await Get.find<LoginController>().logout();
       },
     ));

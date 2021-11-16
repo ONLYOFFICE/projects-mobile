@@ -30,13 +30,13 @@
  *
  */
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestonesDataSource extends GetxController {
@@ -47,6 +47,10 @@ class MilestonesDataSource extends GetxController {
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
+
+  final searchTextEditingController = TextEditingController();
+
+  var searchQuery = '';
 
   ProjectDetailed _projectDetailed;
 
@@ -61,9 +65,6 @@ class MilestonesDataSource extends GetxController {
   var hasFilters = false.obs;
 
   int _projectId;
-
-  String _selfId;
-  final _userController = Get.find<UserController>();
 
   var fabIsVisible = false.obs;
 
@@ -92,6 +93,7 @@ class MilestonesDataSource extends GetxController {
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
+      query: searchQuery,
     );
 
     paginationController.total.value = result.length;
@@ -110,10 +112,27 @@ class MilestonesDataSource extends GetxController {
     // ignore: unawaited_futures
     loadMilestones();
 
-    await _userController.getUserInfo();
-    _selfId ??= await _userController.getUserId();
     fabIsVisible.value = _canCreate();
   }
 
-  bool _canCreate() => _projectDetailed.security['canCreateMilestone'];
+  bool _canCreate() => _projectDetailed == null
+      ? false
+      : _projectDetailed.security['canCreateMilestone'];
+
+  void loadMilestonesWithFilterByName(String searchText) {
+    searchQuery = searchText;
+    loadMilestones();
+  }
+
+  void clearSearchAndReloadMilestones() {
+    searchTextEditingController.clear();
+    searchQuery = '';
+    loadMilestones();
+  }
+
+  @override
+  void onClose() {
+    searchTextEditingController.dispose();
+    super.onClose();
+  }
 }

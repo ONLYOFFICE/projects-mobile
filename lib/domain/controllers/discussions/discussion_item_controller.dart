@@ -64,15 +64,21 @@ class DiscussionItemController extends GetxController {
 
   var loaded = true.obs;
   var refreshController = RefreshController();
+  var subscribersRefreshController = RefreshController();
+  var commentsRefreshController = RefreshController();
   var selfId;
 
-  RxString statusImageString = ''.obs;
+  var statusImageString = ''.obs;
   // to show overview screen without loading
-  RxBool firstReload = true.obs;
+  var firstReload = true.obs;
+
+  var fabIsVisible = false.obs;
 
   DiscussionItemController(Discussion discussion) {
     this.discussion.value = discussion;
     status.value = discussion.status;
+
+    fabIsVisible.value = discussion.canEdit && discussion.status == 0;
   }
 
   var commentsListController = ScrollController();
@@ -95,8 +101,21 @@ class DiscussionItemController extends GetxController {
     return false;
   }
 
-  Future<void> onRefresh({bool showLoading = true}) async =>
-      await getDiscussionDetailed(showLoading: showLoading);
+  Future<void> onRefresh({bool showLoading = true}) async {
+    await getDiscussionDetailed(showLoading: showLoading);
+
+    // update the user data in case of changing user rights on the server side
+    Get.find<UserController>()
+      ..clear()
+      // ignore: unawaited_futures
+      ..getUserInfo()
+      // ignore: unawaited_futures
+      ..getSecurityInfo();
+
+    refreshController.refreshCompleted();
+    subscribersRefreshController.refreshCompleted();
+    commentsRefreshController.refreshCompleted();
+  }
 
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;

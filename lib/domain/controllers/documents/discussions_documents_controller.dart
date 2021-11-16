@@ -33,7 +33,7 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:external_app_launcher/external_app_launcher.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -177,17 +177,17 @@ class DiscussionsDocumentsController extends GetxController {
 
     if (await canLaunch(urlString)) {
       await launch(urlString);
-    } else {
-      await LaunchApp.openApp(
-        androidPackageName: Const.Identificators.documentsAndroidAppBundle,
-        iosUrlScheme: urlString,
-        appStoreLink: Const.Urls.appStoreDocuments,
-      );
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
         AnalyticsService.Params.Key.extension: extension(selectedFile.title)
       });
+    } else {
+      await LaunchReview.launch(
+        androidAppId: Const.Identificators.documentsAndroidAppBundle,
+        iOSAppId: Const.Identificators.documentsAppStore,
+        writeReview: false,
+      );
     }
   }
 }

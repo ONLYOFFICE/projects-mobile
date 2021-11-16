@@ -45,7 +45,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/filter/milestones_filter.dart';
+import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -113,8 +113,7 @@ class _Content extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                     icon: SvgIcons.milestone_not_created,
-                    text: tr('noMilestonesCreated',
-                        args: [tr('milestones').toLowerCase()])),
+                    text: tr('noMilestonesCreated')),
               ),
             ),
           if (controller.loaded.value == true &&
@@ -123,9 +122,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noMilestonesMatching',
-                        args: [tr('milestones').toLowerCase()])),
+                    icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
               ),
             ),
           if (controller.loaded.value == true &&
@@ -210,30 +207,34 @@ class Header extends StatelessWidget {
       ),
     );
 
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              sortButton,
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async => Get.find<NavigationController>()
-                          .toScreen(const MilestoneFilterScreen()),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
+    return Visibility(
+      visible: controller.itemList.isNotEmpty ||
+          controller.filterController.hasFilters.value == true,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                sortButton,
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () async => Get.find<NavigationController>()
+                            .toScreen(const MilestoneFilterScreen()),
+                        child: FiltersButton(controler: controller),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

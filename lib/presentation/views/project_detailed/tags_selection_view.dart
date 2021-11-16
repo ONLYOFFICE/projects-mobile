@@ -66,11 +66,16 @@ class TagsSelectionView extends StatelessWidget {
       floatingActionButton: AnimatedPadding(
         padding: const EdgeInsets.only(bottom: 0),
         duration: const Duration(milliseconds: 100),
-        child: StyledFloatingActionButton(
-          onPressed: () => showTagAddingDialog(controller),
-          child: Icon(
-            Icons.add_rounded,
-            color: Get.theme.colors().onPrimarySurface,
+        child: Obx(
+          () => Visibility(
+            visible: controller.fabIsVisible.value,
+            child: StyledFloatingActionButton(
+              onPressed: () => showTagAddingDialog(controller),
+              child: Icon(
+                Icons.add_rounded,
+                color: Get.theme.colors().onPrimarySurface,
+              ),
+            ),
           ),
         ),
       ),

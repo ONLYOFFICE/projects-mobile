@@ -33,13 +33,12 @@
 import 'dart:convert';
 
 import 'package:event_hub/event_hub.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:external_app_launcher/external_app_launcher.dart';
-
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/internal/constants.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -56,7 +55,6 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 class DocumentsController extends GetxController {
   final _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
-  final _userController = Get.find<UserController>();
 
   var hasFilters = false.obs;
   var loaded = false.obs;
@@ -84,17 +82,13 @@ class DocumentsController extends GetxController {
   var screenName = tr('documents').obs;
 
   RxList get itemList => _paginationController.data;
+  RxInt filesCount = RxInt(-1);
 
   DocumentsSortController _sortController;
   DocumentsSortController get sortController => _sortController;
 
   DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
-
-  bool get canCopy => !_userController.user.isVisitor;
-  bool get canMove => !_userController.user.isVisitor;
-  bool get canRename => !_userController.user.isVisitor;
-  bool get canDelete => !_userController.user.isVisitor;
 
   DocumentsController(
     DocumentsFilterController filterController,
@@ -176,7 +170,10 @@ class DocumentsController extends GetxController {
 
     if (result.folders != null)
       paginationController.data.addAll(result.folders);
-    if (result.files != null) paginationController.data.addAll(result.files);
+    if (result.files != null) {
+      paginationController.data.addAll(result.files);
+      filesCount.value = result.files.length;
+    }
 
     screenName.value = _screenName ?? tr('documents');
   }
@@ -286,17 +283,17 @@ class DocumentsController extends GetxController {
 
     if (await canLaunch(urlString)) {
       await launch(urlString);
-    } else {
-      await LaunchApp.openApp(
-        androidPackageName: Const.Identificators.documentsAndroidAppBundle,
-        iosUrlScheme: urlString,
-        appStoreLink: Const.Urls.appStoreDocuments,
-      );
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
         AnalyticsService.Params.Key.extension: extension(selectedFile.title)
       });
+    } else {
+      await LaunchReview.launch(
+        androidAppId: Const.Identificators.documentsAndroidAppBundle,
+        iOSAppId: Const.Identificators.documentsAppStore,
+        writeReview: false,
+      );
     }
   }
 }

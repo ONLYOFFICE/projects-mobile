@@ -60,7 +60,7 @@ class ProjectSearchView extends StatelessWidget {
               Expanded(
                 child: SmartRefresher(
                   enablePullDown: false,
-                  enablePullUp: controller.searchResult.length >= 25,
+                  enablePullUp: controller.pullUpEnabled,
                   controller: controller.refreshController,
                   onLoading: controller.onLoading,
                   child: ListView.builder(

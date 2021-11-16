@@ -33,10 +33,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/enums/user_status.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class PortalUserItem extends StatelessWidget {
   const PortalUserItem({
@@ -50,6 +52,7 @@ class PortalUserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user = userController.portalUser;
     return InkWell(
       onTap: () {
         userController.onTap();
@@ -62,14 +65,53 @@ class PortalUserItem extends StatelessWidget {
           children: [
             SizedBox(
               width: 72,
-              child: CircleAvatar(
-                radius: 20.0,
-                backgroundColor: Get.theme.colors().bgDescription,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Obx(() {
-                    return userController.avatar.value;
-                  }),
+              child: Container(
+                width: 40,
+                height: 40,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Opacity(
+                      opacity: user.status == UserStatus.Terminated ? 0.4 : 1.0,
+                      child: CircleAvatar(
+                        radius: 20.0,
+                        backgroundColor: Get.theme.colors().bgDescription,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Obx(() {
+                            return userController.avatar.value;
+                          }),
+                        ),
+                      ),
+                    ),
+                    if (user.status == null ||
+                        user.status == UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userBlocked,
+                              width: 16,
+                              height: 16)),
+                    if (((user.isAdmin != null && user.isAdmin) ||
+                            (user.isAdmin != null && user.isOwner)) &&
+                        user.status != UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userAdmin, width: 16, height: 16)),
+                    if (user.isVisitor != null &&
+                        user.isVisitor &&
+                        user.status != UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userVisitor,
+                              width: 16,
+                              height: 16)),
+                  ],
                 ),
               ),
             ),
@@ -87,8 +129,7 @@ class PortalUserItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                userController.portalUser.displayName
-                                    .replaceAll(' ', '\u00A0'),
+                                user.displayName.replaceAll(' ', '\u00A0'),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyleHelper.subtitle1(),
                               ),

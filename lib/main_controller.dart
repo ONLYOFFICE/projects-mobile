@@ -1,3 +1,5 @@
+// ignore_for_file: unawaited_futures
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -36,16 +38,20 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/splash_view.dart';
 import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
+import 'package:projects/presentation/views/no_internet_view.dart';
 
 class MainController extends GetxController {
   final _secureStorage = locator<SecureStorage>();
@@ -57,34 +63,20 @@ class MainController extends GetxController {
   // ignore: unnecessary_cast
   final portalInputView = PortalInputView() as Widget;
 
-  var noInternet = false.obs;
+  var noInternet = false;
+  var isSessionStarted = false;
   bool correctPasscodeChecked = false;
 
   var subscriptions = <StreamSubscription>[];
 
   MainController() {
-    Connectivity()
-        .checkConnectivity()
-        .then((value) => {noInternet.value = value == ConnectivityResult.none});
+    Connectivity().checkConnectivity().then((result) => {
+          noInternet = result == ConnectivityResult.none,
+          if (result == ConnectivityResult.none)
+            Get.to(const NoInternetScreen())
+        });
 
-    subscriptions.add(Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
-      noInternet.value = result == ConnectivityResult.none;
-      setupMainPage();
-    }));
-
-    subscriptions
-        .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
-      setupMainPage();
-      await Get.offAll(() => MainView());
-    }));
-
-    subscriptions
-        .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
-      setupMainPage();
-      await Get.offAll(() => MainView());
-    }));
+    _setupSubscriptions();
   }
 
   @override
@@ -92,8 +84,57 @@ class MainController extends GetxController {
     super.onInit();
   }
 
-  void setupMainPage() {
-    if (noInternet.isTrue) return;
+  void _setupSubscriptions() {
+    if (subscriptions.isNotEmpty) {
+      for (var item in subscriptions) {
+        item.cancel();
+      }
+    }
+
+    subscriptions.add(Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (noInternet == (result == ConnectivityResult.none)) return;
+      if (result == ConnectivityResult.none) {
+        Get.to(const NoInternetScreen());
+
+        locator.get<CoreApi>().cancellationToken?.cancel();
+      } else {
+        GetIt.instance.resetLazySingleton<CoreApi>();
+        if (isSessionStarted)
+          Get.back();
+        else
+          Get.offAll(() => MainView());
+      }
+      noInternet = result == ConnectivityResult.none;
+
+      setupMainPage();
+    }));
+
+    subscriptions
+        .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
+      mainPage.value = navigationView;
+      Get.offAll(() => MainView());
+      Get.find<UserController>().getUserInfo();
+      Get.find<UserController>().getSecurityInfo();
+
+      Get.find<PortalInfoController>().setup();
+    }));
+
+    subscriptions
+        .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
+      mainPage.value = portalInputView;
+
+      GetIt.instance.resetLazySingleton<CoreApi>();
+      await Get.offAll(() => MainView());
+    }));
+  }
+
+  Future<void> setupMainPage() async {
+    var connection = await Connectivity().checkConnectivity();
+    if (connection == ConnectivityResult.none) return;
+
+    isSessionStarted = true;
 
     isAuthorized().then((isAuthorized) {
       return {
@@ -101,13 +142,11 @@ class MainController extends GetxController {
           {
             if (!(mainPage.value is NavigationView))
               {
-                // ignore: unnecessary_cast
                 mainPage.value = navigationView,
               }
           }
         else if (!(mainPage.value is PortalInputView))
           {
-            // ignore: unnecessary_cast
             mainPage.value = portalInputView,
           }
       };

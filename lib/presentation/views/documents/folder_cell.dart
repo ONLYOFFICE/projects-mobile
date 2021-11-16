@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/security.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -51,11 +52,11 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 class FolderCell extends StatelessWidget {
   const FolderCell({
     Key key,
-    @required this.element,
+    @required this.entity,
     @required this.controller,
   }) : super(key: key);
 
-  final Folder element;
+  final Folder entity;
   final controller;
 
   @override
@@ -64,14 +65,14 @@ class FolderCell extends StatelessWidget {
       onTap: () {
         Get.find<NavigationController>().to(FolderContentView(),
             preventDuplicates: false,
-            arguments: {'folderName': element.title, 'folderId': element.id});
+            arguments: {'folderName': entity.title, 'folderId': entity.id});
       },
       child: Container(
         height: 72,
         child: Row(
           children: [
             const FolderCellAvatar(),
-            FolderCellTitle(element: element),
+            FolderCellTitle(element: entity),
             SizedBox(
               width: 60,
               child: Padding(
@@ -79,7 +80,7 @@ class FolderCell extends StatelessWidget {
                 child: PopupMenuButton(
                   onSelected: (value) => _onFolderPopupMenuSelected(
                     value,
-                    element,
+                    entity,
                     context,
                     controller,
                   ),
@@ -95,22 +96,25 @@ class FolderCell extends StatelessWidget {
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
-                      if (controller.canCopy)
+                      if (Security.documents.canEdit(entity))
                         PopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
-                      if (_isRoot(element) && controller.canMove)
+                      if (!Security.documents.isRoot(entity) &&
+                          Security.documents.canDelete(entity))
                         PopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
-                      if (_isRoot(element) && controller.canRename)
+                      if (!Security.documents.isRoot(entity) &&
+                          Security.documents.canEdit(entity))
                         PopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
                         ),
-                      if (_isRoot(element) && controller.canDelete)
+                      if (!Security.documents.isRoot(entity) &&
+                          Security.documents.canDelete(entity))
                         PopupMenuItem(
                           value: 'delete',
                           child: Text(
@@ -225,8 +229,6 @@ class FolderCellTitle extends StatelessWidget {
   }
 }
 
-bool _isRoot(element) => element.parentId != null && element.parentId != 0;
-
 void _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
@@ -279,8 +281,6 @@ void _onFolderPopupMenuSelected(
       if (success) {
         MessagesHandler.showSnackBar(
             context: context, text: tr('folderDeleted'));
-        Future.delayed(const Duration(milliseconds: 500),
-            () => controller.refreshContent());
       }
       break;
     default:

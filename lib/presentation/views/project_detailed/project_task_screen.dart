@@ -117,10 +117,7 @@ class _Content extends StatelessWidget {
               child: Center(
                 child: EmptyScreen(
                   icon: SvgIcons.task_not_created,
-                  text: tr(
-                    'noTasksCreated',
-                    args: [tr('tasks').toLowerCase()],
-                  ),
+                  text: tr('noTasksCreated'),
                 ),
               ),
             ),
@@ -130,9 +127,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noTasksMatching',
-                        args: [tr('tasks').toLowerCase()])),
+                    icon: SvgIcons.not_found, text: tr('noTasksMatching')),
               ),
             ),
           if (controller.loaded.value == true &&
@@ -160,8 +155,7 @@ class Header extends StatelessWidget {
     this.controller,
   }) : super(key: key);
 
-  final controller; // = Get.find<ProjectTasksController>();
-
+  final controller;
   @override
   Widget build(BuildContext context) {
     var options = Column(
@@ -230,34 +224,38 @@ class Header extends StatelessWidget {
       ),
     );
 
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              sortButton,
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async => Get.find<NavigationController>()
-                          .toScreen(const TasksFilterScreen(),
-                              preventDuplicates: false,
-                              arguments: {
-                            'filterController': controller.filterController
-                          }),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
+    return Visibility(
+      visible: controller.itemList.isNotEmpty ||
+          controller.filterController.hasFilters.value == true,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                sortButton,
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () async => Get.find<NavigationController>()
+                            .toScreen(const TasksFilterScreen(),
+                                preventDuplicates: false,
+                                arguments: {
+                              'filterController': controller.filterController
+                            }),
+                        child: FiltersButton(controler: controller),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

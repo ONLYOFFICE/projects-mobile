@@ -87,7 +87,10 @@ class NewMilestoneController extends GetxController {
       needToSelectProject.value = false;
 
       teamController = Get.find<ProjectTeamController>()
-        ..setup(projectDetailed: projectDetailed, withoutVisitors: true);
+        ..setup(
+            projectDetailed: projectDetailed,
+            withoutVisitors: true,
+            withoutBlocked: true);
 
       await teamController.getTeam();
 
@@ -255,11 +258,12 @@ class NewMilestoneController extends GetxController {
   void enableRemindBeforeDueDate(value) => remindBeforeDueDate.value = value;
 
   void onDueDateTilePressed() {
-    Get.find<NavigationController>().to(const SelectDateView(), arguments: {
-      'controller': this,
-      'startDate': false,
-      'initialDate': _dueDate
-    });
+    Get.find<NavigationController>().toScreen(const SelectDateView(),
+        arguments: {
+          'controller': this,
+          'startDate': false,
+          'initialDate': _dueDate
+        });
   }
 
   void enableNotification(bool value) {

@@ -52,9 +52,13 @@ class MilestonesFilterController extends BaseFilterController {
   String _deadlineFilter = '';
   String _statusFilter = '';
 
-  String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
-  String get taskResponsibleFilter => _taskResponsibleFilter;
+  String _currentAppliedResponsibleFilter = '';
+  String _currentAppliedMilestoneResponsibleFilter = '';
+  String _currentAppliedDeadlineFilter = '';
+  String _currentAppliedStatusFilter = '';
 
+  String get taskResponsibleFilter => _taskResponsibleFilter;
+  String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
   String get statusFilter => _statusFilter;
   String get deadlineFilter => _deadlineFilter;
 
@@ -73,8 +77,20 @@ class MilestonesFilterController extends BaseFilterController {
   RxMap deadline;
   RxMap status;
 
+  Map _currentAppliedMilestoneResponsible;
+  Map _currentAppliedTaskResponsible;
+  Map _currentAppliedDeadline;
+  Map _currentAppliedStatus;
+
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    _restoreFilterState();
+
+    hasFilters.value = _hasFilters;
+    suitableResultCount.value = -1;
+
+    // await _getSavedFilters();
+  }
 
   @override
   String get filtersTitle =>
@@ -91,13 +107,13 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
       milestoneResponsible['other'] = '';
       milestoneResponsible['me'] = !milestoneResponsible['me'];
       if (milestoneResponsible['me'])
-        _milestoneResponsibleFilter = '&manager=$_selfId';
+        _milestoneResponsibleFilter = '&milestoneResponsible=$_selfId';
     }
     if (filter == 'other') {
       milestoneResponsible['me'] = false;
@@ -112,7 +128,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
     _taskResponsibleFilter = '';
     if (filter == 'me') {
       taskResponsible['other'] = '';
@@ -250,8 +266,6 @@ class MilestonesFilterController extends BaseFilterController {
       'stopDate': DateTime.now()
     };
 
-    suitableResultCount.value = -1;
-
     _milestoneResponsibleFilter = '';
     _taskResponsibleFilter = '';
     _deadlineFilter = '';
@@ -263,7 +277,11 @@ class MilestonesFilterController extends BaseFilterController {
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+    suitableResultCount.value = -1;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
+
+    _updateFilterState();
   }
 
   // UNUSED
@@ -313,6 +331,12 @@ class MilestonesFilterController extends BaseFilterController {
       }
     }.obs;
     status = {'active': false, 'paused': false, 'closed': false}.obs;
+    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible);
+    _currentAppliedTaskResponsible = Map.from(taskResponsible);
+    _currentAppliedDeadline = Map.from(deadline);
+    _currentAppliedStatus = Map.from(status);
+
+    _updateFilterState();
   }
 
   // UNUSED
@@ -352,5 +376,29 @@ class MilestonesFilterController extends BaseFilterController {
     } else {
       await loadFilters();
     }
+  }
+
+  void _updateFilterState() {
+    _currentAppliedDeadline = Map.from(deadline);
+    _currentAppliedStatus = Map.from(status);
+    _currentAppliedTaskResponsible = Map.from(taskResponsible);
+    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible);
+
+    _currentAppliedResponsibleFilter = _taskResponsibleFilter;
+    _currentAppliedMilestoneResponsibleFilter = _milestoneResponsibleFilter;
+    _currentAppliedDeadlineFilter = _deadlineFilter;
+    _currentAppliedStatusFilter = _statusFilter;
+  }
+
+  void _restoreFilterState() {
+    milestoneResponsible = RxMap.from(_currentAppliedMilestoneResponsible);
+    taskResponsible = RxMap.from(_currentAppliedTaskResponsible);
+    deadline = RxMap.from(_currentAppliedDeadline);
+    status = RxMap.from(_currentAppliedStatus);
+
+    _taskResponsibleFilter = _currentAppliedResponsibleFilter;
+    _milestoneResponsibleFilter = _currentAppliedMilestoneResponsibleFilter;
+    _deadlineFilter = _currentAppliedDeadlineFilter;
+    _statusFilter = _currentAppliedStatusFilter;
   }
 }

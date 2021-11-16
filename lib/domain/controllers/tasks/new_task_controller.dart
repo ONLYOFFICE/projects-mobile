@@ -46,7 +46,6 @@ import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/abstract_task_actions_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
@@ -128,11 +127,19 @@ class NewTaskController extends GetxController
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
+      _clearState();
       needToSelectProject.value = false;
     } else {
       removeProjectSelection();
     }
     Get.back();
+  }
+
+  void _clearState() {
+    teamController.usersList.clear();
+    responsibles.clear();
+    _previusSelectedResponsibles.clear();
+    removeMilestoneSelection();
   }
 
   void removeProjectSelection() {
@@ -217,7 +224,9 @@ class NewTaskController extends GetxController
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
-          projectId: _selectedProjectId, withoutVisitors: true);
+          projectId: _selectedProjectId,
+          withoutVisitors: true,
+          withoutBlocked: true);
 
       await teamController
           .getTeam()
@@ -317,9 +326,7 @@ class NewTaskController extends GetxController
 
     var createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
-      var tasksController = Get.find<TasksController>();
-      // ignore: unawaited_futures
-      tasksController.loadTasks();
+      locator<EventHub>().fire('needToRefreshTasks');
       Get.back();
       MessagesHandler.showSnackBar(
           context: context,

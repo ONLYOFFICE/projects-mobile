@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -41,7 +42,6 @@ import 'package:projects/data/services/task/subtasks_service.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
@@ -91,7 +91,8 @@ class SubtaskEditingController extends GetxController
 
   void setupResponsibleSelection([int projectId]) async {
     if (teamController.usersList.isEmpty) {
-      teamController.setup(projectId: projectId, withoutVisitors: true);
+      teamController.setup(
+          projectId: projectId, withoutVisitors: true, withoutBlocked: true);
 
       await teamController
           .getTeam()
@@ -170,15 +171,18 @@ class SubtaskEditingController extends GetxController
 
     if (responsible != _previousResponsibleId ||
         _titleController.text != _previousTitle) {
-      Get.dialog(StyledAlertDialog(
-        titleText: tr('discardChanges'),
-        contentText: tr('lostOnLeaveWarning'),
-        acceptText: tr('delete').toUpperCase(),
-        onAcceptTap: () {
-          Get.back();
-          Get.back();
-        },
-        onCancelTap: Get.back,
+      Get.dialog(Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: StyledAlertDialog(
+          titleText: tr('discardChanges'),
+          contentText: tr('lostOnLeaveWarning'),
+          acceptText: tr('delete').toUpperCase(),
+          onAcceptTap: () {
+            Get.back();
+            Get.back();
+          },
+          onCancelTap: Get.back,
+        ),
       ));
     } else {
       Get.back();
@@ -204,9 +208,9 @@ class SubtaskEditingController extends GetxController
         _subtask = editedSubtask;
 
         subtaskController.subtask.value = editedSubtask;
-        // ignore: unawaited_futures
-        Get.find<TaskItemController>(tag: editedSubtask.taskId.toString())
-            .reloadTask();
+
+        locator<EventHub>()
+            .fire('needToRefreshParentTask', [editedSubtask.taskId]);
 
         Get.back();
       }

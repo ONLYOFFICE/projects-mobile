@@ -47,14 +47,12 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class ProjectApi {
-  var coreApi = locator<CoreApi>();
-
   Future<ApiDTO<List<Project>>> getProjects() async {
-    var url = await coreApi.projectsUrl();
+    var url = await locator.get<CoreApi>().projectsUrl();
 
     var result = ApiDTO<List<Project>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -96,7 +94,7 @@ class ProjectApi {
     String otherFilter,
     String statusFilter,
   }) async {
-    var url = await coreApi.projectsByParamsBaseUrl();
+    var url = await locator.get<CoreApi>().projectsByParamsBaseUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
@@ -126,7 +124,7 @@ class ProjectApi {
 
     var result = PageDTO<List<ProjectDetailed>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -146,11 +144,11 @@ class ProjectApi {
   }
 
   Future<ApiDTO<ProjectDetailed>> getProjectById({int projectId}) async {
-    var url = await coreApi.projectByIdUrl(projectId);
+    var url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
     var result = ApiDTO<ProjectDetailed>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         {
@@ -168,10 +166,10 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<Status>>> getStatuses() async {
-    var url = await coreApi.statusesUrl();
+    var url = await locator.get<CoreApi>().statusesUrl();
     var result = ApiDTO<List<Status>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -189,10 +187,10 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<ProjectTag>>> getProjectTags() async {
-    var url = await coreApi.projectTags();
+    var url = await locator.get<CoreApi>().projectTags();
     var result = ApiDTO<List<ProjectTag>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -213,7 +211,7 @@ class ProjectApi {
     int startIndex,
     String query,
   }) async {
-    var url = await coreApi.projectTags();
+    var url = await locator.get<CoreApi>().projectTags();
 
     if (query != null) url += '/search?tagName=$query';
 
@@ -221,7 +219,7 @@ class ProjectApi {
 
     var result = PageDTO<List<ProjectTag>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -239,13 +237,13 @@ class ProjectApi {
   }
 
   Future<ApiDTO<ProjectDetailed>> createProject({NewProjectDTO project}) async {
-    var url = await coreApi.createProjectUrl();
+    var url = await locator.get<CoreApi>().createProjectUrl();
 
     var result = ApiDTO<ProjectDetailed>();
     var body = project.toJson();
 
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -262,13 +260,13 @@ class ProjectApi {
 
   Future<ApiDTO<Map<String, dynamic>>> editProject(
       {EditProjectDTO project, int projectId}) async {
-    var url = await coreApi.projectByIdUrl(projectId);
+    var url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
     var result = ApiDTO<Map<String, dynamic>>();
     var body = project.toJson();
 
     try {
-      var response = await coreApi.putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -284,11 +282,11 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<PortalUser>>> getProjectTeam(String projectID) async {
-    var url = await coreApi.projectTeamUrl(projectID);
+    var url = await locator.get<CoreApi>().projectTeamUrl(projectID);
 
     var result = ApiDTO<List<PortalUser>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -306,12 +304,12 @@ class ProjectApi {
   }
 
   Future<ApiDTO<PortalUser>> deleteProject({int projectId}) async {
-    var url = await coreApi.projectByIDUrl(projectId);
+    var url = await locator.get<CoreApi>().projectByIDUrl(projectId);
 
     var result = ApiDTO<PortalUser>();
 
     try {
-      var response = await coreApi.deleteRequest(url);
+      var response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -328,13 +326,13 @@ class ProjectApi {
 
   Future<ApiDTO<ProjectDetailed>> updateProjectStatus(
       {int projectId, String newStatus}) async {
-    var url = await coreApi.updateProjectStatusUrl(projectId);
+    var url = await locator.get<CoreApi>().updateProjectStatusUrl(projectId);
 
     var result = ApiDTO<ProjectDetailed>();
     var body = {'status': newStatus};
 
     try {
-      var response = await coreApi.putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -350,12 +348,12 @@ class ProjectApi {
   }
 
   Future<ApiDTO<FollowProject>> followProject({int projectId}) async {
-    var url = await coreApi.followProjectUrl(projectId);
+    var url = await locator.get<CoreApi>().followProjectUrl(projectId);
 
     var result = ApiDTO<FollowProject>();
 
     try {
-      var response = await coreApi.putRequest(url);
+      var response = await locator.get<CoreApi>().putRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -371,14 +369,14 @@ class ProjectApi {
   }
 
   Future<ApiDTO<ProjectTag>> createTag({String name}) async {
-    var url = await coreApi.createTagUrl();
+    var url = await locator.get<CoreApi>().createTagUrl();
 
     var result = ApiDTO<ProjectTag>();
 
     var body = {'data': name};
 
     try {
-      var response = await coreApi.postRequest(url, body);
+      var response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -395,14 +393,14 @@ class ProjectApi {
 
   Future<ApiDTO<List<PortalUser>>> addToProjectTeam(
       String projectID, List<String> users) async {
-    var url = await coreApi.projectTeamUrl(projectID);
+    var url = await locator.get<CoreApi>().projectTeamUrl(projectID);
 
     var result = ApiDTO<List<PortalUser>>();
 
     var body = {'participants': users, 'notify': true};
 
     try {
-      var response = await coreApi.putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -420,11 +418,11 @@ class ProjectApi {
   }
 
   Future<ApiDTO<SecrityInfo>> getProjectSecurityinfo() async {
-    var url = await coreApi.getProjectSecurityinfoUrl();
+    var url = await locator.get<CoreApi>().getProjectSecurityinfoUrl();
 
     var result = ApiDTO<SecrityInfo>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

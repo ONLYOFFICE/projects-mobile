@@ -60,15 +60,17 @@ class ProjectsDashboardMoreView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
-      floatingActionButton: Visibility(
-        visible: controller.fabIsVisible(),
-        child: StyledFloatingActionButton(
-          onPressed: () => controller.createNewProject(),
-          child: AppIcon(
-            icon: SvgIcons.fab_project,
-            width: 32,
-            height: 32,
-            color: Get.theme.colors().onPrimarySurface,
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
+          child: StyledFloatingActionButton(
+            onPressed: () => controller.createNewProject(),
+            child: AppIcon(
+              icon: SvgIcons.fab_project,
+              width: 32,
+              height: 32,
+              color: Get.theme.colors().onPrimarySurface,
+            ),
           ),
         ),
       ),
@@ -94,8 +96,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.project_not_created,
-                  text: tr('noProjectsCreated',
-                      args: [tr('projects').toLowerCase()])),
+                  text: tr('noProjectsCreated')),
             );
           }
           if (controller.loaded.value == true &&
@@ -103,9 +104,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               controller.filterController.hasFilters.value) {
             return Center(
               child: EmptyScreen(
-                  icon: SvgIcons.not_found,
-                  text: tr('noProjectsMatching',
-                      args: [tr('projects').toLowerCase()])),
+                  icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
             );
           }
           return PaginationListView(
@@ -137,7 +136,8 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Text(
               controller.screenName,
-              style: TextStyleHelper.headerStyle,
+              style: TextStyleHelper.headerStyle(
+                  color: Get.theme.colors().onSurface),
             ),
           ),
           Row(

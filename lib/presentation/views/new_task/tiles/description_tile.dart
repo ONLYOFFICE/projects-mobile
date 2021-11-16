@@ -114,7 +114,7 @@ class _DescriptionTileState extends State<DescriptionTile>
             children: [
               AnimatedSize(
                 duration: const Duration(milliseconds: 250),
-                vsync: this,
+                // vsync: this,
                 child: SizedBox(
                   height: _height,
                   child: Row(

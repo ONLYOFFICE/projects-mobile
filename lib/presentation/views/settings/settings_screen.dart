@@ -113,12 +113,18 @@ class SettingsScreen extends StatelessWidget {
                     SettingTile(
                       text: tr('rateApp'),
                       icon: SvgIcons.rate_app,
+                      enableUnderline: true,
                       onTap: controller.onRateAppPressed,
                     ),
                     SettingTile(
-                      text: tr('userAgreement'),
-                      icon: SvgIcons.user_agreement,
-                      onTap: controller.onUserAgreementPressed,
+                      text: tr('privacyAndTermsFooter.privacyPolicyWithLink'),
+                      icon: SvgIcons.privacy_policy,
+                      onTap: controller.onPrivacyPolicyPressed,
+                    ),
+                    SettingTile(
+                      text: tr('privacyAndTermsFooter.termsOfServiceWithLink'),
+                      icon: SvgIcons.terms_of_service,
+                      onTap: controller.onTermsOfServicePressed,
                     ),
                     SettingTile(
                       text: tr('analytics'),

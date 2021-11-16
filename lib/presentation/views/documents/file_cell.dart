@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/security.dart';
 
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -48,124 +49,130 @@ import 'package:projects/presentation/views/documents/documents_move_or_copy_vie
 class FileCell extends StatelessWidget {
   final int index;
 
-  final PortalFile element;
+  final PortalFile entity;
   final controller;
 
   const FileCell({
     Key key,
-    @required this.element,
+    @required this.entity,
     @required this.index,
     @required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 72,
-      child: Row(
-        children: [
-          SizedBox(
-            width: 72,
-            child: Center(
-              child: Obx(() {
-                if (controller.paginationController.data[index].fileType == 7)
-                  return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
-                if (controller.paginationController.data[index].fileType == 5)
-                  return AppIcon(width: 20, height: 20, icon: SvgIcons.table);
+    return InkResponse(
+      onTap: () async {
+        await controller.openFile(entity);
+      },
+      child: Container(
+        height: 72,
+        child: Row(
+          children: [
+            SizedBox(
+              width: 72,
+              child: Center(
+                child: Obx(() {
+                  if (controller.paginationController.data[index].fileType == 7)
+                    return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
+                  if (controller.paginationController.data[index].fileType == 5)
+                    return AppIcon(width: 20, height: 20, icon: SvgIcons.table);
 
-                if (controller.paginationController.data[index].fileType == 1)
-                  return AppIcon(
-                    width: 20,
-                    height: 20,
-                    icon: SvgIcons.archive,
-                    color: Get.theme.colors().onSurface,
-                  );
-                if (controller.paginationController.data[index].fileType == 4)
-                  return AppIcon(width: 20, height: 20, icon: SvgIcons.image);
-                if (controller.paginationController.data[index].fileType == 6)
-                  return AppIcon(
-                      width: 20, height: 20, icon: SvgIcons.presentation);
+                  if (controller.paginationController.data[index].fileType == 1)
+                    return AppIcon(
+                      width: 20,
+                      height: 20,
+                      icon: SvgIcons.archive,
+                      color: Get.theme.colors().onSurface,
+                    );
+                  if (controller.paginationController.data[index].fileType == 4)
+                    return AppIcon(width: 20, height: 20, icon: SvgIcons.image);
+                  if (controller.paginationController.data[index].fileType == 6)
+                    return AppIcon(
+                        width: 20, height: 20, icon: SvgIcons.presentation);
 
-                return AppIcon(
-                    width: 20,
-                    height: 20,
-                    icon: SvgIcons.documents,
-                    color: Get.theme.colors().onSurface.withOpacity(0.6));
-              }),
-            ),
-          ),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Flexible(
-                  child: Text(element.title.replaceAll(' ', '\u00A0'),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyleHelper.projectTitle),
-                ),
-                Text(
-                    '${formatedDate(element.updated)} • ${element.contentLength} • ${element.updatedBy.displayName}',
-                    style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 60,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10),
-              child: PopupMenuButton(
-                onSelected: (value) => {
-                  _onFilePopupMenuSelected(value, element, context, controller)
-                },
-                icon: Icon(Icons.more_vert,
-                    color: Get.theme.colors().onSurface.withOpacity(0.5)),
-                itemBuilder: (context) {
-                  return [
-                    PopupMenuItem(
-                      value: 'open',
-                      child: Text(tr('open')),
-                    ),
-                    PopupMenuItem(
-                      value: 'copyLink',
-                      child: Text(tr('copyLink')),
-                    ),
-                    PopupMenuItem(
-                      value: 'download',
-                      child: Text(tr('download')),
-                    ),
-                    if (controller.canCopy)
-                      PopupMenuItem(
-                        value: 'copy',
-                        child: Text(tr('copy')),
-                      ),
-                    if (controller.canMove)
-                      PopupMenuItem(
-                        value: 'move',
-                        child: Text(tr('move')),
-                      ),
-                    if (controller.canRename)
-                      PopupMenuItem(
-                        value: 'rename',
-                        child: Text(tr('rename')),
-                      ),
-                    if (controller.canDelete)
-                      PopupMenuItem(
-                        value: 'delete',
-                        child: Text(
-                          tr('delete'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().colorError),
-                        ),
-                      ),
-                  ];
-                },
+                  return AppIcon(
+                      width: 20,
+                      height: 20,
+                      icon: SvgIcons.documents,
+                      color: Get.theme.colors().onSurface.withOpacity(0.6));
+                }),
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Flexible(
+                    child: Text(entity.title.replaceAll(' ', '\u00A0'),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyleHelper.projectTitle),
+                  ),
+                  Text(
+                      '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.createdBy.displayName}',
+                      style: TextStyleHelper.caption(
+                          color:
+                              Get.theme.colors().onSurface.withOpacity(0.6))),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 60,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: PopupMenuButton(
+                  onSelected: (value) => {
+                    _onFilePopupMenuSelected(value, entity, context, controller)
+                  },
+                  icon: Icon(Icons.more_vert,
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  itemBuilder: (context) {
+                    return [
+                      PopupMenuItem(
+                        value: 'open',
+                        child: Text(tr('open')),
+                      ),
+                      PopupMenuItem(
+                        value: 'copyLink',
+                        child: Text(tr('copyLink')),
+                      ),
+                      PopupMenuItem(
+                        value: 'download',
+                        child: Text(tr('download')),
+                      ),
+                      if (Security.files.canEdit(entity))
+                        PopupMenuItem(
+                          value: 'copy',
+                          child: Text(tr('copy')),
+                        ),
+                      if (Security.files.canDelete(entity))
+                        PopupMenuItem(
+                          value: 'move',
+                          child: Text(tr('move')),
+                        ),
+                      if (Security.files.canEdit(entity))
+                        PopupMenuItem(
+                          value: 'rename',
+                          child: Text(tr('rename')),
+                        ),
+                      if (Security.files.canDelete(entity))
+                        PopupMenuItem(
+                          value: 'delete',
+                          child: Text(
+                            tr('delete'),
+                            style: TextStyleHelper.subtitle1(
+                                color: Get.theme.colors().colorError),
+                          ),
+                        ),
+                    ];
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

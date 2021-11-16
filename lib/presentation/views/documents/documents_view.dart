@@ -51,7 +51,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class PortalDocumentsView extends StatelessWidget {
@@ -192,8 +192,7 @@ class DocumentsScreen extends StatelessWidget {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.documents_not_created,
-                    text: tr('noDocumentsCreated',
-                        args: [tr('documents').toLowerCase()])));
+                    text: tr('noDocumentsCreated')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
@@ -201,9 +200,7 @@ class DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.not_found,
-                    text: tr('noDocumentsMatching',
-                        args: [tr('documents').toLowerCase()])));
+                    icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
           }
           return PaginationListView(
             paginationController: controller.paginationController,
@@ -216,11 +213,11 @@ class DocumentsScreen extends StatelessWidget {
                 var element = controller.paginationController.data[index];
                 return element is Folder
                     ? FolderCell(
-                        element: element,
+                        entity: element,
                         controller: controller,
                       )
                     : FileCell(
-                        element: element,
+                        entity: element,
                         index: index,
                         controller: controller,
                       );
@@ -248,7 +245,8 @@ class DocsTitle extends StatelessWidget {
             child: Obx(
               () => Text(
                 controller.screenName.value,
-                style: TextStyleHelper.headerStyle,
+                style: TextStyleHelper.headerStyle(
+                    color: Get.theme.colors().onSurface),
               ),
             ),
           ),

@@ -56,12 +56,11 @@ class SelectProjectScreen extends StatelessWidget {
   final searchController = Get.put(ProjectSearchController());
 
   final _projectsController = Get.put(
-    ProjectsController(
-      Get.put(ProjectsFilterController(), tag: 'ProjectsBottomSheet'),
-      Get.put(PaginationController(), tag: 'ProjectsBottomSheet'),
-    ),
-    tag: 'ProjectsBottomSheet',
-  );
+      ProjectsController(
+        Get.find<ProjectsFilterController>(),
+        Get.find<PaginationController>(),
+      ),
+      tag: '7');
 
   void onSelect(ProjectDetailed project) {
     Get.back(result: {
@@ -107,7 +106,11 @@ class SelectProjectScreen extends StatelessWidget {
                   )
                 : Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(tr('selectProject')),
+                    child: Text(
+                      tr('selectProject'),
+                      style: TextStyleHelper.headerStyle(
+                          color: Get.theme.colors().onSurface),
+                    ),
                   ),
           ),
         ),
@@ -144,7 +147,7 @@ class SelectProjectScreen extends StatelessWidget {
               searchController.searchResult.isNotEmpty) {
             return SmartRefresher(
               enablePullDown: false,
-              enablePullUp: searchController.searchResult.length >= 25,
+              enablePullUp: searchController.pullUpEnabled,
               controller: searchController.refreshController,
               onLoading: searchController.onLoading,
               child: ListView.separated(

@@ -75,13 +75,9 @@ class DiscussionsFilterController extends BaseFilterController {
       _otherFilter.isNotEmpty;
 
   RxMap author;
-
   RxMap status;
-
   RxMap creationDate;
-
   RxMap project;
-
   RxMap other;
 
   @override
@@ -91,7 +87,12 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   @override
-  Future<void> restoreFilters() async => await _getSavedFilters();
+  Future<void> restoreFilters() async {
+    suitableResultCount.value = -1;
+    hasFilters.value = _hasFilters;
+
+    await _getSavedFilters();
+  }
 
   @override
   String get filtersTitle =>
@@ -104,7 +105,8 @@ class DiscussionsFilterController extends BaseFilterController {
   set projectId(String value) => _projectId = value;
 
   void changeAuthor(String filter, [newValue = '']) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
+
     _authorFilter = '';
     switch (filter) {
       case 'me':
@@ -127,7 +129,8 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> changeStatus(String filter, [newValue = false]) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
+
     _statusFilter = '';
     if (filter == 'open') {
       status['archived'] = false;
@@ -282,7 +285,6 @@ class DiscussionsFilterController extends BaseFilterController {
     };
 
     acceptedFilters.value = '';
-    suitableResultCount.value = -1;
 
     _authorFilter = '';
     _statusFilter = '';
@@ -296,18 +298,22 @@ class DiscussionsFilterController extends BaseFilterController {
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
+
     if (applyFiltersDelegate != null) applyFiltersDelegate();
+
     await saveFilters();
   }
 
   Future<void> setupPreset(PresetDiscussionFilters preset) async {
-    _selfId ??= await Get.find<UserController>().getUserId();
+    _selfId = await Get.find<UserController>().getUserId();
 
     if (preset == PresetDiscussionFilters.myDiscussions) {
       _authorFilter = '&participant=$_selfId';
+      author['me'] = true;
     } else if (preset == PresetDiscussionFilters.saved) {
       await _getSavedFilters();
     }
+
     hasFilters.value = _hasFilters;
   }
 
@@ -327,11 +333,11 @@ class DiscussionsFilterController extends BaseFilterController {
     await _storage.write(
       'discussionFilters',
       {
-        'author': {'buttons': author, 'value': _authorFilter},
-        'project': {'buttons': project, 'value': _projectFilter},
-        'status': {'buttons': status, 'value': _statusFilter},
+        'author': {'buttons': Map.from(author), 'value': _authorFilter},
+        'project': {'buttons': Map.from(project), 'value': _projectFilter},
+        'status': {'buttons': Map.from(status), 'value': _statusFilter},
         'creationDate': {'buttons': creation, 'value': _creationDateFilter},
-        'other': {'buttons': other, 'value': _otherFilter},
+        'other': {'buttons': Map.from(other), 'value': _otherFilter},
         'hasFilters': _hasFilters,
       },
     );
@@ -357,6 +363,14 @@ class DiscussionsFilterController extends BaseFilterController {
       }
     }.obs;
     other = {'subscribed': false}.obs;
+
+    _authorFilter = '';
+    _statusFilter = '';
+    _projectFilter = '';
+    _otherFilter = '';
+    _creationDateFilter = '';
+
+    hasFilters.value = _hasFilters;
   }
 
   Future<void> _getSavedFilters() async {
@@ -365,25 +379,29 @@ class DiscussionsFilterController extends BaseFilterController {
 
     if (savedFilters != null) {
       try {
-        author = Map.from(savedFilters['author']['buttons']).obs;
+        author.value =
+            Map<String, Object>.from(savedFilters['author']['buttons']);
         _authorFilter = savedFilters['author']['value'];
 
-        project = Map.from(savedFilters['project']['buttons']).obs;
+        project.value =
+            Map<String, Object>.from(savedFilters['project']['buttons']);
         _projectFilter = savedFilters['project']['value'];
 
-        status = Map.from(savedFilters['status']['buttons']).obs;
+        status.value =
+            Map<String, bool>.from(savedFilters['status']['buttons']);
         _statusFilter = savedFilters['status']['value'];
 
-        Map creation = savedFilters['creationDate']['buttons'];
+        Map creation =
+            Map<String, Object>.from(savedFilters['creationDate']['buttons']);
         creation['custom'] = {
           'selected': creation['custom']['selected'],
           'startDate': DateTime.parse(creation['custom']['startDate']),
           'stopDate': DateTime.parse(creation['custom']['stopDate']),
         };
-        creationDate = creation.obs;
+        creationDate.value = creation;
         _creationDateFilter = savedFilters['creationDate']['value'];
 
-        other = Map.from(savedFilters['other']['buttons']).obs;
+        other.value = Map<String, bool>.from(savedFilters['other']['buttons']);
         _otherFilter = savedFilters['other']['value'];
 
         hasFilters.value = savedFilters['hasFilters'];

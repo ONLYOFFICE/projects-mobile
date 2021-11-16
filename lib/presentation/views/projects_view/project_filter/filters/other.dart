@@ -33,12 +33,11 @@
 part of '../projects_filter.dart';
 
 class _Other extends StatelessWidget {
-  const _Other({Key key}) : super(key: key);
+  final ProjectsFilterController filterController;
+  const _Other({Key key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController =
-        Get.find<ProjectsFilterController>(tag: 'ProjectsView');
     return Obx(
       () => FiltersRow(
         title: tr('other'),
