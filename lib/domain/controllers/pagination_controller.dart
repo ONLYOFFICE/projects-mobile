@@ -32,6 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationController extends GetxController {
@@ -51,6 +52,14 @@ class PaginationController extends GetxController {
     startIndex = 0;
     await refreshDelegate();
     refreshController.refreshCompleted();
+
+    // update the user data in case of changing user rights on the server side
+    Get.find<UserController>()
+      ..clear()
+      // ignore: unawaited_futures
+      ..getUserInfo()
+      // ignore: unawaited_futures
+      ..getSecurityInfo();
   }
 
   void onLoading() async {

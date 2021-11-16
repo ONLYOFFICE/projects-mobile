@@ -46,19 +46,6 @@ class _Documents {
     return element.parentId == null || element.parentId == 0;
   }
 
-  bool canDelete(folder) {
-    if (_userController.user.isVisitor) return false;
-
-    if (folder.access == EntityAccess.restrict.index) return false;
-
-    if (isRoot(folder)) return false;
-
-    return folder.access == EntityAccess.none.index ||
-        (folder.rootFolderType == FolderType.cloudCommon.index &&
-            _userController.user.isAdmin) ||
-        (!isRoot(folder) && _userController.user.id == folder.createdBy?.id);
-  }
-
   bool canEdit(folder) {
     if (_userController.user.isVisitor) return false;
 
@@ -74,21 +61,23 @@ class _Documents {
 
     return false;
   }
+
+  bool canDelete(folder) {
+    if (_userController.user.isVisitor) return false;
+
+    if (folder.access == EntityAccess.restrict.index) return false;
+
+    if (isRoot(folder)) return false;
+
+    return folder.access == EntityAccess.none.index ||
+        (folder.rootFolderType == FolderType.cloudCommon.index &&
+            _userController.user.isAdmin) ||
+        (!isRoot(folder) && _userController.user.id == folder.createdBy?.id);
+  }
 }
 
 class _Files {
   final _userController = Get.find<UserController>();
-
-  bool canDelete(file) {
-    if (_userController.user.isVisitor) return false;
-
-    if (file.access == EntityAccess.restrict.index) return false;
-
-    return file.access == EntityAccess.none.index ||
-        (file.rootFolderType == FolderType.cloudCommon.index &&
-            _userController.user.isAdmin) ||
-        (_userController.user.id == file.createdBy?.id);
-  }
 
   bool canEdit(file) {
     if (_userController.user.isVisitor) return false;
@@ -104,5 +93,16 @@ class _Files {
     }
 
     return false;
+  }
+
+  bool canDelete(file) {
+    if (_userController.user.isVisitor) return false;
+
+    if (file.access == EntityAccess.restrict.index) return false;
+
+    return file.access == EntityAccess.none.index ||
+        (file.rootFolderType == FolderType.cloudCommon.index &&
+            _userController.user.isAdmin) ||
+        (_userController.user.id == file.createdBy?.id);
   }
 }

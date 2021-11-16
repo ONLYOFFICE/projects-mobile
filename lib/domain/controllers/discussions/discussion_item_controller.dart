@@ -101,8 +101,21 @@ class DiscussionItemController extends GetxController {
     return false;
   }
 
-  Future<void> onRefresh({bool showLoading = true}) async =>
-      await getDiscussionDetailed(showLoading: showLoading);
+  Future<void> onRefresh({bool showLoading = true}) async {
+    await getDiscussionDetailed(showLoading: showLoading);
+
+    // update the user data in case of changing user rights on the server side
+    Get.find<UserController>()
+      ..clear()
+      // ignore: unawaited_futures
+      ..getUserInfo()
+      // ignore: unawaited_futures
+      ..getSecurityInfo();
+
+    refreshController.refreshCompleted();
+    subscribersRefreshController.refreshCompleted();
+    commentsRefreshController.refreshCompleted();
+  }
 
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;

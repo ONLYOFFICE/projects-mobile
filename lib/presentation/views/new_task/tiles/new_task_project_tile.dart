@@ -40,9 +40,9 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 
-class ProjectTile extends StatelessWidget {
+class NewTaskProjectTile extends StatelessWidget {
   final TaskActionsController controller;
-  const ProjectTile({
+  const NewTaskProjectTile({
     Key key,
     @required this.controller,
   }) : super(key: key);
@@ -65,9 +65,10 @@ class ProjectTile extends StatelessWidget {
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const SelectProjectView(),
-              arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const SelectProjectView(), arguments: {
+            'controller': controller,
+          }),
         );
       },
     );

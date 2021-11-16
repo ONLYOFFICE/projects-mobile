@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -59,8 +60,16 @@ class TasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TasksController>()
-      ..setupPreset(PresetTaskFilters.saved);
+    var controller = Get.isRegistered<TasksController>(tag: 'TasksView')
+        ? Get.find<TasksController>(tag: 'TasksView')
+        : Get.put(
+            TasksController(
+              Get.find<TaskFilterController>(),
+              Get.find<PaginationController>(),
+            ),
+            tag: 'TasksView');
+
+    controller.setup(PresetTaskFilters.saved);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       controller.loadTasks();

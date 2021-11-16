@@ -30,7 +30,7 @@
  *
  */
 
-part of '../milestones_filter.dart';
+part of '../milestone_filter_screen.dart';
 
 class _TaskResponsible extends StatelessWidget {
   const _TaskResponsible({Key key}) : super(key: key);

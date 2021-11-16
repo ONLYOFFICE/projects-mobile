@@ -52,6 +52,7 @@ class PortalUserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var user = userController.portalUser;
     return InkWell(
       onTap: () {
         userController.onTap();
@@ -71,10 +72,7 @@ class PortalUserItem extends StatelessWidget {
                   alignment: Alignment.center,
                   children: <Widget>[
                     Opacity(
-                      opacity: userController.portalUser.status ==
-                              UserStatus.Terminated
-                          ? 0.4
-                          : 1.0,
+                      opacity: user.status == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
                         radius: 20.0,
                         backgroundColor: Get.theme.colors().bgDescription,
@@ -86,17 +84,33 @@ class PortalUserItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (userController.portalUser.status ==
-                        UserStatus.Terminated)
+                    if (user.status == null ||
+                        user.status == UserStatus.Terminated)
                       Positioned(
-                        bottom: 0,
-                        right: 15,
-                        child: AppIcon(
-                          icon: SvgIcons.blocked,
-                          width: 16,
-                          height: 16,
-                        ),
-                      ),
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userBlocked,
+                              width: 16,
+                              height: 16)),
+                    if (((user.isAdmin != null && user.isAdmin) ||
+                            (user.isAdmin != null && user.isOwner)) &&
+                        user.status != UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userAdmin, width: 16, height: 16)),
+                    if (user.isVisitor != null &&
+                        user.isVisitor &&
+                        user.status != UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userVisitor,
+                              width: 16,
+                              height: 16)),
                   ],
                 ),
               ),
@@ -115,8 +129,7 @@ class PortalUserItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                userController.portalUser.displayName
-                                    .replaceAll(' ', '\u00A0'),
+                                user.displayName.replaceAll(' ', '\u00A0'),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyleHelper.subtitle1(),
                               ),

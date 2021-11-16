@@ -41,9 +41,9 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';
+import 'package:projects/presentation/views/new_task/tiles/new_task_project_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/notify_responsibles.dart';
 import 'package:projects/presentation/views/new_task/tiles/priority_tile.dart';
-import 'package:projects/presentation/views/new_task/tiles/project_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/start_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
@@ -90,7 +90,7 @@ class NewTaskView extends StatelessWidget {
                   },
                   child: Column(
                     children: [
-                      ProjectTile(controller: controller),
+                      NewTaskProjectTile(controller: controller),
                       if (controller.selectedProjectTitle.value.isNotEmpty)
                         MilestoneTile(controller: controller),
                       if (controller.selectedProjectTitle.value.isNotEmpty)

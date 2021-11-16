@@ -72,7 +72,6 @@ import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
-import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
@@ -100,6 +99,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
@@ -107,12 +107,10 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
-import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
@@ -123,14 +121,14 @@ import 'package:projects/main_controller.dart';
 GetIt locator = GetIt.instance;
 
 void setupLocator() {
+  locator.registerLazySingleton(() => CoreApi());
+
   locator.registerLazySingleton(() => ProjectsWithPresets());
   locator.registerLazySingleton(() => TasksWithPresets());
-
   locator.registerLazySingleton(() => AuthApi());
   locator.registerLazySingleton(() => AuthService());
   locator.registerLazySingleton(() => CommentsApi());
   locator.registerLazySingleton(() => CommentsService());
-  locator.registerLazySingleton(() => CoreApi());
   locator.registerLazySingleton(() => DiscussionsApi());
   locator.registerLazySingleton(() => DiscussionItemService());
   locator.registerLazySingleton(() => DiscussionsService());
@@ -170,9 +168,9 @@ void setupGetX() {
   Get.lazyPut(() => PlatformController(), fenix: true);
   Get.lazyPut(() => CommentsController(), fenix: true);
   Get.lazyPut(() => DiscussionsSortController(), fenix: true);
-  Get.lazyPut(() => DiscussionsFilterController(), fenix: true);
 
-  Get.create(() => DashboardController());
+  Get.create<DiscussionsFilterController>(() => DiscussionsFilterController());
+  Get.create<PaginationController>(() => PaginationController());
 
   Get.create(
     () => DiscussionsController(
@@ -184,14 +182,9 @@ void setupGetX() {
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
   Get.create<TaskFilterController>(() => TaskFilterController());
+  Get.lazyPut<ProjectTaskFilterController>(() => ProjectTaskFilterController(),
+      fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
-
-  Get.create<TasksController>(
-    () => TasksController(
-      Get.find<TaskFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
 
   Get.lazyPut(() => TasksSortController(), fenix: true);
   Get.lazyPut(
@@ -216,7 +209,6 @@ void setupGetX() {
   Get.create<NewMilestoneController>(() => NewMilestoneController());
 
   Get.create<DocumentsFilterController>(() => DocumentsFilterController());
-  Get.create<PaginationController>(() => PaginationController());
 
   Get.create<ProjectsSortController>(() => ProjectsSortController());
   Get.create<DocumentsSortController>(() => DocumentsSortController());
@@ -244,20 +236,13 @@ void setupGetX() {
   Get.create<NewTaskController>(() => NewTaskController());
   Get.create<ProjectEditController>(() => ProjectEditController());
   Get.create(() => ProjectsFilterController());
-  Get.create(
-    () => ProjectsController(
-      Get.find<ProjectsFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
   Get.create<ProjectDetailsController>(() => ProjectDetailsController());
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
   Get.lazyPut(() => MainController(), fenix: true);
-  Get.lazyPut(() => PasscodeCheckingController(canUseFingerprint: true),
-      fenix: true);
+  Get.lazyPut(() => PasscodeCheckingController(), fenix: true);
   Get.lazyPut(() => LoginController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
 

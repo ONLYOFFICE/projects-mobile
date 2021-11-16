@@ -33,7 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
@@ -47,11 +47,11 @@ class ProjectTasksController extends GetxController {
   final _sortController =
       Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
-  final _filterController = Get.find<TaskFilterController>();
+  final _filterController = Get.find<ProjectTaskFilterController>();
 
   ProjectDetailed _projectDetailed;
 
-  TaskFilterController get filterController => _filterController;
+  ProjectTaskFilterController get filterController => _filterController;
   TasksSortController get sortController => _sortController;
 
   RxBool loaded = false.obs;

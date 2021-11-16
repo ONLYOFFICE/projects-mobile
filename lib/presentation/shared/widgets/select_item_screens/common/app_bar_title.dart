@@ -63,7 +63,11 @@ class _AppBarTitle extends StatelessWidget {
                 )
               : Align(
                   alignment: Alignment.centerLeft,
-                  child: Text(appBarText),
+                  child: Text(
+                    appBarText,
+                    style: TextStyleHelper.headerStyle(
+                        color: Get.theme.colors().onSurface),
+                  ),
                 ),
         ));
   }

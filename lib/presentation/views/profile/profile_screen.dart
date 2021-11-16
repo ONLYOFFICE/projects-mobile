@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -97,12 +98,48 @@ class SelfProfileScreen extends StatelessWidget {
             children: [
               const SizedBox(height: 32),
               Obx(
-                () => CircleAvatar(
-                  radius: 60.0,
-                  backgroundColor: Get.theme.colors().bgDescription,
-                  child: ClipRRect(
-                      borderRadius: BorderRadius.circular(60),
-                      child: profileController.avatar.value),
+                () => Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    Opacity(
+                      opacity: profileController.status.value ==
+                              UserStatus.Terminated
+                          ? 0.4
+                          : 1.0,
+                      child: CircleAvatar(
+                        radius: 60.0,
+                        backgroundColor: Get.theme.colors().bgDescription,
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(60),
+                            child: profileController.avatar.value),
+                      ),
+                    ),
+                    if (profileController.status.value == UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userBlocked,
+                              width: 32,
+                              height: 32)),
+                    if ((profileController.isAdmin.value ||
+                            profileController.isOwner.value) &&
+                        profileController.status.value != UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userAdmin, width: 32, height: 32)),
+                    if (profileController.isVisitor.value &&
+                        profileController.status.value != UserStatus.Terminated)
+                      Positioned(
+                          bottom: 0,
+                          right: 15,
+                          child: AppIcon(
+                              icon: SvgIcons.userVisitor,
+                              width: 32,
+                              height: 32)),
+                  ],
                 ),
               ),
               const SizedBox(height: 10),
@@ -167,21 +204,46 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 32),
-              Container(
-                decoration: const BoxDecoration(
-                    color: Colors.grey, shape: BoxShape.circle),
-                height: 120,
-                width: 120,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(80),
-                  child: CustomNetworkImage(
-                    image: portalUser?.avatar ??
-                        portalUser?.avatarMedium ??
-                        portalUser?.avatarSmall,
-                    defaultImage: const DefaultAvatar(),
-                    fit: BoxFit.contain,
+              Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Container(
+                    decoration: const BoxDecoration(
+                        color: Colors.grey, shape: BoxShape.circle),
+                    height: 120,
+                    width: 120,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(80),
+                      child: CustomNetworkImage(
+                        image: portalUser?.avatar ??
+                            portalUser?.avatarMedium ??
+                            portalUser?.avatarSmall,
+                        defaultImage: const DefaultAvatar(),
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
-                ),
+                  if (portalUser.status == UserStatus.Terminated)
+                    Positioned(
+                        bottom: 0,
+                        right: 15,
+                        child: AppIcon(
+                            icon: SvgIcons.userBlocked, width: 32, height: 32)),
+                  if ((portalUser.isAdmin || portalUser.isOwner) &&
+                      portalUser.status != UserStatus.Terminated)
+                    Positioned(
+                        bottom: 0,
+                        right: 15,
+                        child: AppIcon(
+                            icon: SvgIcons.userAdmin, width: 32, height: 32)),
+                  if (portalUser.isVisitor &&
+                      portalUser.status != UserStatus.Terminated)
+                    Positioned(
+                        bottom: 0,
+                        right: 15,
+                        child: AppIcon(
+                            icon: SvgIcons.userVisitor, width: 16, height: 16)),
+                ],
               ),
               const SizedBox(height: 10),
               Padding(
