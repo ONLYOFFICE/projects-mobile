@@ -27,6 +27,7 @@ Runner/GeneratedPluginRegistrant.*
 *.dSYM
 *.dSYM.zip
 *.ipa
+GoogleService-Info-prod.plist
 
 # Exceptions to above rules.
 !default.mode1v3
