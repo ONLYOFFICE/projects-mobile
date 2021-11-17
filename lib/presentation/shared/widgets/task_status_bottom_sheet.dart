@@ -108,6 +108,57 @@ void showsStatusesBS(
   );
 }
 
+Future<void> showsStatusesPM(
+    {context, TaskItemController taskItemController}) async {
+  var _statusesController = Get.find<TaskStatusesController>();
+  var items = <PopupMenuEntry<dynamic>>[
+    for (var i = 0; i < _statusesController.statuses.length; i++)
+      PopupMenuItem(
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        child: Expanded(
+          child: InkWell(
+            onTap: () async {
+              await taskItemController.tryChangingStatus(
+                  id: taskItemController.task.value.id,
+                  newStatusId: _statusesController.statuses[i].id,
+                  newStatusType: _statusesController.statuses[i].statusType);
+              Get.back();
+            },
+            child: StatusTileTablet(
+                title: _statusesController.statuses[i].title,
+                icon: StatusIcon(
+                  canEditTask: taskItemController.task.value.canEdit,
+                  status: _statusesController.statuses[i],
+                ),
+                selected: _statusesController.statuses[i].title ==
+                    taskItemController.status.value.title),
+          ),
+        ),
+      ),
+  ];
+
+// calculate the menu position, ofsset dy: 50
+  final offset = const Offset(0, 50);
+  final button = context.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext.findRenderObject() as RenderBox;
+  final position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(
+        offset,
+        ancestor: overlay,
+      ),
+      button.localToGlobal(
+        button.size.bottomRight(Offset.zero) + offset,
+        ancestor: overlay,
+      ),
+    ),
+    Offset.zero & overlay.size,
+  );
+
+  await showMenu(context: context, position: position, items: items);
+}
+
 double _getInititalSize({required int statusCount}) {
   final size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;

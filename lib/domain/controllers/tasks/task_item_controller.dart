@@ -45,6 +45,7 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
@@ -245,9 +246,13 @@ class TaskItemController extends GetxController {
     if (showLoading) loaded.value = true;
   }
 
-  void openStatuses(BuildContext context) {
+  Future<void> openStatuses(BuildContext context) async {
     if (task.value.canEdit! && isStatusLoaded.isTrue) {
-      showsStatusesBS(context: context, taskItemController: this);
+      if (Get.find<PlatformController>().isMobile) {
+        await showsStatusesBS(context: context, taskItemController: this);
+      } else {
+        await showsStatusesPM(context: context, taskItemController: this);
+      }
     }
   }
 

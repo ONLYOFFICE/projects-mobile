@@ -151,6 +151,11 @@ class SvgIcons {
   static const String presentation =
       'lib/assets/images/icons/folders/presentation.svg';
 
+  static const String archived_status =
+      'lib/assets/images/icons/discussion_statuses/archived.svg';
+  static const String open_status =
+      'lib/assets/images/icons/discussion_statuses/open.svg';
+
   static const String comments_not_created =
       'lib/assets/images/icons/empty_state/comments_not_created.svg';
   static const String comments_not_created_dark =

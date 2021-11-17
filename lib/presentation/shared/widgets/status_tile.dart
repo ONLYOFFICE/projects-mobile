@@ -98,7 +98,7 @@ class StatusTileTablet extends StatelessWidget {
   Widget build(BuildContext context) {
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: const Color(0xff81C4FF).withOpacity(0.2),
+          color: Get.theme.colors().bgDescription,
           borderRadius: BorderRadius.circular(6));
     }
 
