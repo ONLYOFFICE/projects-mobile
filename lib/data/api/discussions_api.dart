@@ -41,8 +41,6 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class DiscussionsApi {
-  var coreApi = locator<CoreApi>();
-
   Future<PageDTO<List<Discussion>>> getDiscussionsByParams({
     int startIndex,
     String query,
@@ -55,7 +53,7 @@ class DiscussionsApi {
     String projectId,
     String otherFilter,
   }) async {
-    var url = await coreApi.discussionsByParamsUrl();
+    var url = await locator.get<CoreApi>().discussionsByParamsUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
@@ -83,7 +81,7 @@ class DiscussionsApi {
 
     var result = PageDTO<List<Discussion>>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -104,11 +102,12 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO> addMessage({int projectId, NewDiscussionDTO newDiss}) async {
-    var url = await coreApi.addMessageUrl(projectId: projectId);
+    var url = await locator.get<CoreApi>().addMessageUrl(projectId: projectId);
     var result = ApiDTO();
 
     try {
-      var response = await coreApi.postRequest(url, newDiss.toJson());
+      var response =
+          await locator.get<CoreApi>().postRequest(url, newDiss.toJson());
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -124,11 +123,11 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO> getMessageDetailed({int id}) async {
-    var url = await coreApi.discussionDetailedUrl(messageId: id);
+    var url = await locator.get<CoreApi>().discussionDetailedUrl(messageId: id);
     var result = ApiDTO();
 
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -144,13 +143,13 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO> updateMessage({int id, NewDiscussionDTO discussion}) async {
-    var url = await coreApi.updateMessageUrl(messageId: id);
+    var url = await locator.get<CoreApi>().updateMessageUrl(messageId: id);
     var result = ApiDTO();
 
     try {
       var body = discussion.toJson();
 
-      var response = await coreApi.putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -166,13 +165,14 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO> updateMessageStatus({int id, String newStatus}) async {
-    var url = await coreApi.updateMessageStatusUrl(messageId: id);
+    var url =
+        await locator.get<CoreApi>().updateMessageStatusUrl(messageId: id);
     var result = ApiDTO();
 
     try {
       var body = {'status': newStatus};
 
-      var response = await coreApi.putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -188,13 +188,13 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO> subscribeToMessage({int id}) async {
-    var url = await coreApi.subscribeToMessage(messageId: id);
+    var url = await locator.get<CoreApi>().subscribeToMessage(messageId: id);
     var result = ApiDTO();
 
     try {
       var body = {};
 
-      var response = await coreApi.putRequest(url, body: body);
+      var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);
@@ -210,11 +210,11 @@ class DiscussionsApi {
   }
 
   Future<ApiDTO> deleteMessage({int id}) async {
-    var url = await coreApi.deleteMessageUrl(id: id);
+    var url = await locator.get<CoreApi>().deleteMessageUrl(id: id);
     var result = ApiDTO();
 
     try {
-      var response = await coreApi.deleteRequest(url);
+      var response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         var responseJson = json.decode(response.body);

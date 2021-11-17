@@ -292,7 +292,7 @@ class DueDateTile extends StatelessWidget {
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
             selectedIconColor: Get.theme.colors().onBackground,
             text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
-            caption: _isSelected ? tr('startDate') : null,
+            caption: _isSelected ? tr('dueDate') : null,
             isSelected: _isSelected,
             textColor: controller.needToSetDueDate.value
                 ? Get.theme.colors().colorError

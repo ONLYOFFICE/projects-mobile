@@ -40,6 +40,7 @@ class _UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var usersController = Get.find<UsersController>();
+    var currentUser = Get.find<UserController>();
 
     return Obx(
       () => PaginationListView(
@@ -48,6 +49,7 @@ class _UserList extends StatelessWidget {
           itemCount: usersController.paginationController.data.length,
           itemBuilder: (BuildContext context, int index) {
             PortalUser user = usersController.paginationController.data[index];
+            if (currentUser.user.id == user.id) return const SizedBox();
             return _UserTile(user: user);
           },
         ),

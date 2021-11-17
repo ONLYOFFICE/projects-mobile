@@ -30,18 +30,22 @@
  *
  */
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
+import 'package:http_client_helper/http_client_helper.dart';
 import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class CoreApi {
-  var client = http.Client();
   final _secureStorage = locator<SecureStorage>();
   String _portalName;
+
+  final int timeout = 30;
+
+  var cancellationToken = CancellationToken();
 
   Future<Map<String, String>> getHeaders() async {
     var token = await getToken();
@@ -213,10 +217,8 @@ class CoreApi {
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
-  Future<String> updateSubtaskStatus({
-    @required int taskId,
-    @required int subtaskId,
-  }) async =>
+  Future<String> updateSubtaskStatus(
+          {@required int taskId, @required int subtaskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
 
   Future<String> updateTaskUrl({@required int taskId}) async =>
@@ -264,79 +266,143 @@ class CoreApi {
       '${await getPortalURI()}/api/$version/project/securityinfo';
 
   Future<dynamic> getRequest(String url) async {
-    debugPrint(url);
-    var headers = await getHeaders();
-    var request = client.get(Uri.parse(url), headers: headers);
-    final response = await request;
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.get(Uri.parse(url),
+          cancelToken: cancellationToken,
+          timeRetry: const Duration(milliseconds: 100),
+          retries: 3,
+          timeLimit: Duration(seconds: timeout),
+          headers: headers);
+      final response = await request;
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+      if (response == null) return CustomError(message: '');
 
-      return CustomError(message: error ?? response.reasonPhrase);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
+
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
   Future<dynamic> postRequest(String url, Map body) async {
-    debugPrint(url);
-    var headers = await getHeaders();
-    var request = client.post(
-      Uri.parse(url),
-      headers: headers,
-      body: jsonEncode(body),
-    );
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.post(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+        body: jsonEncode(body),
+      );
 
-    final response = await request;
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+      final response = await request;
 
-      return CustomError(message: error ?? response.reasonPhrase);
+      if (response == null) return CustomError(message: '');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
+
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
   Future<dynamic> putRequest(String url, {Map body = const {}}) async {
-    print(url);
-    var headers = await getHeaders();
-    var request = client.put(
-      Uri.parse(url),
-      headers: headers,
-      body: body.isEmpty ? null : jsonEncode(body),
-    );
-    final response = await request;
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.put(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+        body: body.isEmpty ? null : jsonEncode(body),
+      );
+      final response = await request;
 
-      return CustomError(message: error ?? response.reasonPhrase);
+      if (response == null) return CustomError(message: '');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
+
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
   Future<dynamic> deleteRequest(String url) async {
-    print(url);
-    var headers = await getHeaders();
-    var request = client.delete(
-      Uri.parse(url),
-      headers: headers,
-    );
-    final response = await request;
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      return response;
-    } else {
-      var error;
-      if (response.headers['content-type'].contains('json'))
-        error = json.decode(response.body)['error']['message'];
+    try {
+      debugPrint(url);
+      var headers = await getHeaders();
+      var request = HttpClientHelper.delete(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeRetry: const Duration(milliseconds: 100),
+        retries: 3,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+      );
+      final response = await request;
 
-      return CustomError(message: error ?? response.reasonPhrase);
+      if (response == null) return CustomError(message: '');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        var error;
+        if (response.headers['content-type'] != null &&
+            response.headers['content-type'].contains('json'))
+          error = json.decode(response.body)['error']['message'];
+
+        return CustomError(message: error ?? response.reasonPhrase);
+      }
+    } on TimeoutException catch (_) {
+      return CustomError(message: '');
+    } on OperationCanceledError catch (_) {
+      return CustomError(message: '');
+    } catch (e) {
+      return CustomError(message: '');
     }
   }
 
@@ -352,7 +418,6 @@ class CoreApi {
       await savePortalName();
     }
 
-    //TODO return Uri instead of string Uri.parse(_portalName)
     return _portalName;
   }
 

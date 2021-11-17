@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/utils/adaptive_size.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -67,7 +66,10 @@ class TFASmsScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       SizedBox(height: h(24.71)),
-                      AppIcon(icon: SvgIcons.password_recovery),
+                      AppIcon(
+                        icon: SvgIcons.password_recovery,
+                        color: Get.theme.colors().onBackground,
+                      ),
                       SizedBox(height: h(11.54)),
                       Text(tr('tfaSMSTitle'),
                           style: TextStyleHelper.subtitle1(
@@ -119,8 +121,7 @@ class _CountrySelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: TextButton(
-              onPressed: () => Get.find<NavigationController>()
-                  .to(const SelectCountryScreen()),
+              onPressed: () => Get.to(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
                   controller?.deviceCountry?.value?.countryName ??

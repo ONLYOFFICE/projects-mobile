@@ -33,11 +33,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/base/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 
-import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
@@ -63,7 +62,7 @@ class TasksFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BaseFilterController filterController =
+    final BaseTaskFilterController filterController =
         Get.arguments['filterController'];
     final platformController = Get.find<PlatformController>();
 

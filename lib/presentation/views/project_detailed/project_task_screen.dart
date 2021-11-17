@@ -160,34 +160,38 @@ class Header extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _ProjectTasksSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async => Get.find<NavigationController>()
-                          .toScreen(const TasksFilterScreen(),
-                              preventDuplicates: false,
-                              arguments: {
-                            'filterController': controller.filterController
-                          }),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
+    return     return Visibility(
+      visible: controller.itemList.isNotEmpty ||
+          controller.filterController.hasFilters.value == true,
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                _ProjectTasksSortButton(controller: controller),
+                Container(
+                  child: Row(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: () async => Get.find<NavigationController>()
+                            .toScreen(const TasksFilterScreen(),
+                                preventDuplicates: false,
+                                arguments: {
+                              'filterController': controller.filterController
+                            }),
+                        child: FiltersButton(controler: controller),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

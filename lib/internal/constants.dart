@@ -61,6 +61,7 @@ class _ConstIdentificator {
   final projectsAndroidAppBundle = 'com.onlyoffice.projects';
   final projectsAppStore = '1353395928';
   final documentsAndroidAppBundle = 'com.onlyoffice.documents';
+  final documentsAppStore = '944896972';
   final tfa2GoogleAppStore = '388497605';
   final tfa2GooglePlayAppBundle = 'com.google.android.apps.authenticator2';
 }

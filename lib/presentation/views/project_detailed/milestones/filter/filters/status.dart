@@ -30,7 +30,7 @@
  *
  */
 
-part of '../milestones_filter.dart';
+part of '../milestone_filter_screen.dart';
 
 class _Status extends StatelessWidget {
   const _Status({Key key}) : super(key: key);

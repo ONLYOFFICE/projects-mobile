@@ -97,8 +97,10 @@ class SvgIcons {
   static const String rate_app = 'lib/assets/images/icons/rate_app.svg';
   static const String support = 'lib/assets/images/icons/support.svg';
   static const String feedback = 'lib/assets/images/icons/feedback.svg';
-  static const String user_agreement =
-      'lib/assets/images/icons/user_agreement.svg';
+  static const String terms_of_service =
+      'lib/assets/images/icons/terms_of_service.svg';
+  static const String privacy_policy =
+      'lib/assets/images/icons/privacy_policy.svg';
   static const String version = 'lib/assets/images/icons/version.svg';
 
   static const String due_date =
@@ -185,9 +187,14 @@ class SvgIcons {
   static const String no_internet =
       'lib/assets/images/icons/empty_state/no_internet.svg';
   static const String no_internet_dark =
-      'lib/assets/images/icons/empty_state/no_internet_dark.svg';
+      'lib/assets/images/icons/empty_state/no_internet.svg';
 
-  static const String blocked = 'lib/assets/images/icons/blocked.svg';
+  static const String userBlocked =
+      'lib/assets/images/icons/user_atributes/blocked.svg';
+  static const String userAdmin =
+      'lib/assets/images/icons/user_atributes/admin.svg';
+  static const String userVisitor =
+      'lib/assets/images/icons/user_atributes/visitor.svg';
 }
 
 class PngIcons {
