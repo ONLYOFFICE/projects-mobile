@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
@@ -107,6 +108,76 @@ Future<void> showsDiscussionStatusesBS({
       );
     },
   );
+}
+
+Future<void> showsDiscussionStatusesPM({
+  context,
+  DiscussionItemController controller,
+}) async {
+  var items = <PopupMenuEntry<dynamic>>[
+    PopupMenuItem(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: Expanded(
+        child: InkWell(
+          onTap: () async => controller.updateMessageStatus(0),
+          child: StatusTileTablet(
+            title: tr('open'),
+            selected: controller.status.value == 0,
+            icon: Center(
+              child: AppIcon(
+                icon: SvgIcons.open_status,
+                color: Get.theme.colors().primary,
+                height: 16,
+                width: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    PopupMenuItem(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: Expanded(
+        child: InkWell(
+          onTap: () async => controller.updateMessageStatus(1),
+          child: StatusTileTablet(
+            title: tr('archived'),
+            selected: controller.status.value == 1,
+            icon: Center(
+              child: AppIcon(
+                icon: SvgIcons.archived_status,
+                color: Get.theme.colors().primary,
+                height: 16,
+                width: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  ];
+
+// calculate the menu position, ofsset dy: 50
+  final offset = const Offset(0, 50);
+  final button = context.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext.findRenderObject() as RenderBox;
+  final position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(
+        offset,
+        ancestor: overlay,
+      ),
+      button.localToGlobal(
+        button.size.bottomRight(Offset.zero) + offset,
+        ancestor: overlay,
+      ),
+    ),
+    Offset.zero & overlay.size,
+  );
+
+  await showMenu(context: context, position: position, items: items);
 }
 
 double _getInititalSize() => 180 / Get.height;

@@ -57,7 +57,7 @@ class _Task extends StatelessWidget {
               StatusButton(
                 canEdit: taskController.task.value.canEdit,
                 text: taskController?.status?.value?.title ?? '',
-                onPressed: () => taskController.openStatuses(context),
+                onPressed: taskController.openStatuses,
               ),
             ],
           );

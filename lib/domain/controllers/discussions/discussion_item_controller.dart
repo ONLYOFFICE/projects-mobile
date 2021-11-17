@@ -43,6 +43,7 @@ import 'package:projects/domain/controllers/discussions/actions/discussion_editi
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -118,9 +119,13 @@ class DiscussionItemController extends GetxController {
     if (showLoading) loaded.value = true;
   }
 
-  void tryChangingStatus(context) async {
+  void tryChangingStatus(BuildContext context) async {
     if (discussion.value.canEdit) {
-      await showsDiscussionStatusesBS(context: context, controller: this);
+      if (Get.find<PlatformController>().isMobile) {
+        await showsDiscussionStatusesBS(context: context, controller: this);
+      } else {
+        await showsDiscussionStatusesPM(context: context, controller: this);
+      }
     }
   }
 

@@ -111,6 +111,7 @@ flutter:
     - lib/assets/images/images/
     - lib/assets/images/icons/tab_bar/
     - lib/assets/images/icons/project_statuses/
+    - lib/assets/images/icons/discussion_statuses/
     - lib/assets/images/icons/task_statuses/
     - lib/assets/images/icons/task_detailed/
     - lib/assets/images/icons/folders/

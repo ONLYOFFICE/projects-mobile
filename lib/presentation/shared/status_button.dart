@@ -38,7 +38,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class StatusButton extends StatelessWidget {
   final bool canEdit;
   final String text;
-  final Function() onPressed;
+  final Function(BuildContext) onPressed;
 
   const StatusButton({
     Key key,
@@ -50,7 +50,7 @@ class StatusButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: canEdit ? onPressed : null,
+      onPressed: canEdit ? () => onPressed(context) : null,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
           return canEdit
