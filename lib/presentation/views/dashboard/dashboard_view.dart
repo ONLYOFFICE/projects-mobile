@@ -53,7 +53,7 @@ class DashboardView extends StatelessWidget {
   const DashboardView({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var dashboardController = Get.find<DashboardController>()..setup();
+    var dashboardController = Get.put(DashboardController())..setup();
 
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       dashboardController.loadContent();

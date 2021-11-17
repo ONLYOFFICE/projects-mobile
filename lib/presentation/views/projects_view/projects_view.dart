@@ -38,6 +38,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -57,13 +58,21 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectsView extends StatelessWidget {
   const ProjectsView({Key key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     ProjectsController controller;
 
-    controller = Get.find<ProjectsController>()
-      ..setupPreset(PresetProjectFilters.saved);
+    controller = Get.isRegistered<ProjectsController>(tag: 'ProjectsView')
+        ? Get.find<ProjectsController>(tag: 'ProjectsView')
+        : Get.put(
+            ProjectsController(
+              Get.find<ProjectsFilterController>(),
+              Get.find<PaginationController>(),
+            ),
+            tag: 'ProjectsView');
 
+    controller.setup(PresetProjectFilters.saved);
     SchedulerBinding.instance.addPostFrameCallback((_) {
       controller.loadProjects();
     });

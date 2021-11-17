@@ -50,7 +50,7 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 
 class EntityDocumentsView extends StatelessWidget {
   final String folderName;
@@ -170,49 +170,55 @@ class _DocsTitle extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          _ProjectDocumentsSortButton(controller: controller),
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                InkResponse(
-                  onTap: () {
-                    Get.find<NavigationController>().to(DocumentsSearchView(),
-                        preventDuplicates: false,
-                        arguments: {
-                          'folderName': controller.screenName.value,
-                          'folderId': controller.currentFolder,
-                          'entityType': controller.entityType,
-                        });
-                  },
-                  child: AppIcon(
-                    width: 24,
-                    height: 24,
-                    icon: SvgIcons.search,
-                    color: Get.theme.colors().primary,
+     return Obx(
+      () => Visibility(
+        visible: controller.itemList.isNotEmpty ||
+            controller.filterController.hasFilters.value == true,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Expanded(
+                child: _ProjectDocumentsSortButton(controller: controller),
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  InkResponse(
+                    onTap: () {
+                      Get.find<NavigationController>().to(DocumentsSearchView(),
+                          preventDuplicates: false,
+                          arguments: {
+                            'folderName': controller.screenName.value,
+                            'folderId': controller.currentFolder,
+                            'entityType': controller.entityType,
+                          });
+                    },
+                    child: AppIcon(
+                      width: 24,
+                      height: 24,
+                      icon: SvgIcons.search,
+                      color: Get.theme.colors().primary,
+                    ),
                   ),
-                ),
-                const SizedBox(width: 24),
-                InkResponse(
-                  onTap: () async => Get.find<NavigationController>().toScreen(
-                      const DocumentsFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {
-                        'filterController': controller.filterController
-                      }),
-                  child: FiltersButton(controler: controller),
-                ),
-              ],
-            ),
+                  const SizedBox(width: 24),
+                  InkResponse(
+                    onTap: () async => Get.find<NavigationController>()
+                        .toScreen(const DocumentsFilterScreen(),
+                            preventDuplicates: false,
+                            arguments: {
+                          'filterController': controller.filterController
+                        }),
+                    child: FiltersButton(controler: controller),
+                  ),
+                ],
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -38,6 +38,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/enums/user_status.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/user_service.dart';
@@ -52,15 +53,6 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 
 class DiscussionEditingController extends GetxController
     implements DiscussionActionsController {
-  DiscussionEditingController({
-    this.id,
-    this.title,
-    this.text,
-    this.projectId,
-    this.selectedProjectTitle,
-    this.initialSubscribers,
-  });
-
   final int id;
   final int projectId;
   @override
@@ -70,7 +62,12 @@ class DiscussionEditingController extends GetxController
   @override
   RxString text;
   @override
-  RxList subscribers = [].obs;
+  RxList<PortalUserItemController> subscribers =
+      <PortalUserItemController>[].obs;
+
+  @override
+  RxList<PortalUserItemController> otherUsers =
+      <PortalUserItemController>[].obs;
 
   final initialSubscribers;
   List _previusSelectedSubscribers;
@@ -80,10 +77,11 @@ class DiscussionEditingController extends GetxController
   @override
   void onInit() {
     titleController.text = title.value;
-    // ignore: invalid_use_of_protected_member
+
     for (var item in initialSubscribers) {
-      subscribers.add(
-          PortalUserItemController(portalUser: item, isSelected: true.obs));
+      var pu = PortalUserItemController(portalUser: item, isSelected: true.obs);
+      pu.selectionMode.value = UserSelectionMode.Multiple;
+      subscribers.add(pu);
     }
     _previusSelectedSubscribers = List.from(subscribers);
     _previusText = text.value;
@@ -93,15 +91,9 @@ class DiscussionEditingController extends GetxController
 
   final DiscussionItemService _api = locator<DiscussionItemService>();
 
-  // final _userController = Get.find<UserController>();
   final _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
   var selectedGroups = <PortalGroupItemController>[];
-
-  @override
-  List get allUsersList => _usersDataSource.usersList
-      .where((element) => !subscribers.contains(element))
-      .toList();
 
   @override
   var textController = HtmlEditorController();
@@ -123,6 +115,17 @@ class DiscussionEditingController extends GetxController
   var setTitleError = false.obs;
   @override
   var setTextError = false.obs;
+
+  DiscussionEditingController({
+    this.id,
+    this.title,
+    this.text,
+    this.projectId,
+    this.selectedProjectTitle,
+    this.initialSubscribers,
+  }) {
+    _usersDataSource.selectionMode = UserSelectionMode.Multiple;
+  }
 
   @override
   void changeTitle(String newText) => title.value = newText;
@@ -194,21 +197,20 @@ class DiscussionEditingController extends GetxController
   }
 
   Future<void> _getSelectedSubscribers() async {
-    for (var i = 0; i < _usersDataSource.usersList.length; i++) {
-      var user = _usersDataSource.usersList[i];
+    _usersDataSource.usersList
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
+
+    otherUsers = RxList(_usersDataSource.usersList
+        .where((element) => !subscribers.any((it) => it.id == element.id))
+        .toList());
+
+    for (var user in _usersDataSource.usersList) {
+      if (subscribers.any((it) => it.id == user.id))
+        user.isSelected.value = true;
+    }
+
+    for (var user in otherUsers) {
       user.selectionMode.value = UserSelectionMode.Multiple;
-      var found = false;
-
-      for (var j = 0; j < subscribers.length; j++) {
-        if (subscribers[j].id == user.id) {
-          subscribers[j] = user;
-          found = true;
-          break;
-        }
-      }
-      _previusSelectedSubscribers = List.from(subscribers);
-
-      user.isSelected.value = found ? true : false;
     }
   }
 
@@ -216,24 +218,49 @@ class DiscussionEditingController extends GetxController
   void addSubscriber(PortalUserItemController user,
       {fromUsersDataSource = false}) {
     if (!fromUsersDataSource) {
-      if (user.isSelected.value == false) {
-        user.isSelected.value = true;
-        subscribers.add(user);
-      } else {
-        user.isSelected.value = false;
-        subscribers.removeWhere(
-            (element) => user.portalUser.id == element.portalUser.id);
-      }
+      user.isSelected.value = true;
+      otherUsers.removeWhere(
+          (element) => user.portalUser.id == element.portalUser.id);
+      subscribers.add(user);
+
+      sortLists();
     } else {
       // the items in usersDataSource have their own onTap functions,
       // so the value of IsSelected has already been changed
       if (user.isSelected.value == false) {
         subscribers.removeWhere(
             (element) => user.portalUser.id == element.portalUser.id);
+        sortLists();
       } else {
         subscribers.add(user);
+        sortLists();
       }
     }
+  }
+
+  @override
+  void removeSubscriber(PortalUserItemController user) {
+    user.isSelected.value = false;
+    subscribers
+        .removeWhere((element) => user.portalUser.id == element.portalUser.id);
+    otherUsers.add(user);
+    otherUsers
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
+    sortLists();
+  }
+
+  void sortLists() {
+    otherUsers.sort((a, b) {
+      return a.portalUser.displayName
+          .toLowerCase()
+          .compareTo(b.portalUser.displayName.toLowerCase());
+    });
+
+    subscribers.sort((a, b) {
+      return a.portalUser.displayName
+          .toLowerCase()
+          .compareTo(b.portalUser.displayName.toLowerCase());
+    });
   }
 
   @override

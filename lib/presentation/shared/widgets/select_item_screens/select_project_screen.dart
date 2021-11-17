@@ -34,7 +34,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_search_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
@@ -53,7 +55,12 @@ class SelectProjectScreen extends StatelessWidget {
   final searchFieldController = TextEditingController();
   final searchController = Get.put(ProjectSearchController());
 
-  final _projectsController = Get.find<ProjectsController>();
+  final _projectsController = Get.put(
+      ProjectsController(
+        Get.find<ProjectsFilterController>(),
+        Get.find<PaginationController>(),
+      ),
+      tag: '7');
 
   void onSelect(ProjectDetailed project) {
     Get.back(result: {
@@ -99,7 +106,11 @@ class SelectProjectScreen extends StatelessWidget {
                   )
                 : Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(tr('selectProject')),
+                    child: Text(
+                      tr('selectProject'),
+                      style: TextStyleHelper.headerStyle(
+                          color: Get.theme.colors().onSurface),
+                    ),
                   ),
           ),
         ),
@@ -136,7 +147,7 @@ class SelectProjectScreen extends StatelessWidget {
               searchController.searchResult.isNotEmpty) {
             return SmartRefresher(
               enablePullDown: false,
-              enablePullUp: searchController.searchResult.length >= 25,
+              enablePullUp: searchController.pullUpEnabled,
               controller: searchController.refreshController,
               onLoading: searchController.onLoading,
               child: ListView.separated(

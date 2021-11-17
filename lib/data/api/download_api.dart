@@ -39,19 +39,17 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/internal/locator.dart';
 
 class DownloadApi {
-  var coreApi = locator<CoreApi>();
-
   Future<ApiDTO<Uint8List>> downloadImage(String avatarUrl) async {
     var url = '';
     if (avatarUrl.toLowerCase().contains('http')) {
       url = avatarUrl;
     } else {
-      url = await coreApi.getPortalURI() + avatarUrl;
+      url = await locator.get<CoreApi>().getPortalURI() + avatarUrl;
     }
 
     var result = ApiDTO<Uint8List>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         result.response = response.bodyBytes;
@@ -68,12 +66,12 @@ class DownloadApi {
     if (docUrl.toLowerCase().contains('http')) {
       url = docUrl;
     } else {
-      url = await coreApi.getPortalURI() + docUrl;
+      url = await locator.get<CoreApi>().getPortalURI() + docUrl;
     }
 
     var result = ApiDTO<Uint8List>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         result.response = response.bodyBytes;

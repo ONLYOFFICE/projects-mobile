@@ -33,7 +33,7 @@
 part of '../tasks_filter.dart';
 
 class _DueDate extends StatelessWidget {
-  final TaskFilterController filterController;
+  final BaseTaskFilterController filterController;
   const _DueDate({Key key, this.filterController}) : super(key: key);
 
   @override
@@ -60,27 +60,23 @@ class _DueDate extends StatelessWidget {
           FilterElement(
               title: tr('customPeriod'),
               isSelected: filterController.deadline['custom']['selected'],
-              onTap: () =>
-                  selectDateRange(context, filterController: filterController)),
+              onTap: () async {
+                var pickedRange =
+                    await Get.find<NavigationController>().toScreen(
+                  StyledDateRangePickerDialog(
+                    initialDateRange: DateTimeRange(
+                      start: filterController.deadline['custom']['startDate'],
+                      end: filterController.deadline['custom']['stopDate'],
+                    ),
+                  ),
+                );
+                if (pickedRange != null) {
+                  await filterController.changeDeadline('custom',
+                      start: pickedRange.start, stop: pickedRange.end);
+                }
+              }),
         ],
       ),
     );
-  }
-}
-
-Future selectDateRange(
-  BuildContext context, {
-  TaskFilterController filterController,
-}) async {
-  var pickedRange = await showStyledDateRangePicker(
-    context: context,
-    initialDateRange: DateTimeRange(
-      start: filterController.deadline['custom']['startDate'],
-      end: filterController.deadline['custom']['stopDate'],
-    ),
-  );
-  if (pickedRange != null) {
-    await filterController.changeDeadline('custom',
-        start: pickedRange.start, stop: pickedRange.end);
   }
 }

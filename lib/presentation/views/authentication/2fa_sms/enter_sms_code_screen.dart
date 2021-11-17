@@ -74,7 +74,10 @@ class EnterSMSCodeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: h(24.71)),
-                  AppIcon(icon: SvgIcons.password_recovery),
+                  AppIcon(
+                    icon: SvgIcons.password_recovery,
+                    color: Get.theme.colors().onBackground,
+                  ),
                   SizedBox(height: h(20.74)),
                   Text(tr('enterSendedCode'),
                       style: TextStyleHelper.subtitle1(

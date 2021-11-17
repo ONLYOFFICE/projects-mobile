@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -49,7 +50,11 @@ class AuthService {
     var result = authResponse.response != null;
 
     if (!result) {
-      await Get.find<ErrorDialog>().show(authResponse.error.message);
+      var errorText = '';
+      if (authResponse?.error?.message == 'Server error')
+        errorText = tr('tfaWrongCode');
+      await Get.find<ErrorDialog>()
+          .show(errorText == '' ? authResponse.error.message : errorText);
     }
     return authResponse;
   }
@@ -111,7 +116,6 @@ class AuthService {
     var success = response.response != null;
 
     if (!success) {
-      await Get.find<ErrorDialog>().show(response.error.message);
       return null;
     } else {
       return response;

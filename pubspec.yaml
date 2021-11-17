@@ -13,7 +13,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.0+117
+version: 1.2.0+132
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -22,7 +22,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.17.0 
-  get: ^4.3.7
+  get: ^4.3.8
   get_it: ^7.2.0
   get_storage: ^2.0.3
   # for http requests
@@ -44,7 +44,7 @@ dependencies:
   # read more button
   readmore: ^2.0.0
   # bottom sheet with dynamic size
-  bottom_sheet: ^0.0.1-dev.8
+  bottom_sheet: ^1.0.4
   darq: ^1.1.1
   # to open app in App Stores //need to replace
   launch_review: ^3.0.1
@@ -61,14 +61,15 @@ dependencies:
   cached_network_image: ^3.0.0
   firebase_core: ^1.6.0
   firebase_analytics: ^8.3.2
-  
+  firebase_remote_config: ^0.11.0+1
+  http_client_helper: ^2.0.2
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
 
   path_provider: ^2.0.2
   flutter_downloader: ^1.6.1
-  external_app_launcher: ^2.0.0
   url_launcher: ^6.0.9
   # info about app version
   package_info: ^2.0.2
@@ -116,6 +117,7 @@ flutter:
     - lib/assets/images/icons/task_detailed/
     - lib/assets/images/icons/folders/
     - lib/assets/images/icons/empty_state/
+    - lib/assets/images/icons/user_atributes/
     - lib/assets/splash/
     - lib/l10n/
 

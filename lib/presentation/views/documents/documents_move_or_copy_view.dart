@@ -48,7 +48,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class DocumentsMoveOrCopyView extends StatelessWidget {
@@ -387,6 +387,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                     },
                     itemBuilder: (BuildContext context, int index) {
                       var element = controller.paginationController.data[index];
+                      if (controller.target == element.id)
+                        return const SizedBox();
                       return element is Folder
                           ? MoveFolderCell(
                               element: element,

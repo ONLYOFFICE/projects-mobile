@@ -45,13 +45,22 @@ class UserController extends GetxController {
 
   PortalUser user;
   SecrityInfo securityInfo;
+  var loaded = false.obs;
 
   Future getUserInfo() async {
     await lock.synchronized(() async {
+      if (user != null) return;
       var data = await _api.getSelfInfo();
       user = data.response;
+      loaded.value = securityInfo != null;
+    });
+  }
 
+  Future getSecurityInfo() async {
+    await lock.synchronized(() async {
       securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
+
+      loaded.value = user != null;
     });
   }
 
@@ -65,5 +74,6 @@ class UserController extends GetxController {
   void clear() {
     user = null;
     securityInfo = null;
+    loaded.value = false;
   }
 }

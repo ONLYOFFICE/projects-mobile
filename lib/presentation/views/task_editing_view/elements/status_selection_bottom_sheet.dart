@@ -114,6 +114,6 @@ Future<void> statusSelectionBS(
 }
 
 double _getInititalSize({int statusCount}) {
-  var size = (statusCount * 75) / Get.height;
+  var size = (statusCount * 55 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

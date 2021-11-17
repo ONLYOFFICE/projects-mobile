@@ -44,11 +44,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DiscussionsHeader extends StatelessWidget {
-  DiscussionsHeader({
-    Key key,
-  }) : super(key: key);
-
-  final controller = Get.find<DiscussionsController>();
+  final DiscussionsController controller;
+  DiscussionsHeader({Key key, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

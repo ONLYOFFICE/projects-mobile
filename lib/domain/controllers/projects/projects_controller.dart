@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -72,6 +74,11 @@ class ProjectsController extends BaseController {
 
   var fabIsVisible = false.obs;
 
+  var _withFAB = true;
+
+  StreamSubscription fabSubscription;
+  StreamSubscription refreshSubscription;
+
   ProjectsController(
     ProjectsFilterController filterController,
     PaginationController paginationController,
@@ -80,29 +87,43 @@ class ProjectsController extends BaseController {
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;
-    _filterController.applyFiltersDelegate =
-        () async => await _getProjects(needToClear: true);
+    _filterController.applyFiltersDelegate = () async => await loadProjects();
 
     paginationController.loadDelegate = () async => await _getProjects();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    refreshSubscription ??=
+        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       loadProjects();
     });
+    _userController.loaded.listen((_loaded) async => {
+          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
+        });
+
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged',
+        (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
   }
 
   Future<bool> getFabVisibility() async {
+    if (!_withFAB) return false;
     await _userController.getUserInfo();
+    await _userController.getSecurityInfo();
     return _userController.user.isAdmin ||
         _userController.user.isOwner ||
         (_userController.user.listAdminModules != null &&
             _userController.user.listAdminModules.contains('projects')) ||
         _userController.securityInfo.canCreateProject;
+  }
+
+  @override
+  void onClose() {
+    fabSubscription.cancel();
+    refreshSubscription.cancel();
+    super.onClose();
   }
 
   @override
@@ -120,8 +141,9 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  void setupPreset(PresetProjectFilters preset) {
+  void setup(PresetProjectFilters preset, {withFAB = true}) {
     _preset = preset;
+    _withFAB = withFAB;
   }
 
   Future<void> loadProjects() async {

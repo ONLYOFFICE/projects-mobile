@@ -412,6 +412,6 @@ void showsStatusesPM({BuildContext context, itemController}) async {
 }
 
 double _getInititalSize({int statusCount}) {
-  var size = ((statusCount * 75) + 16) / Get.height;
+  var size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

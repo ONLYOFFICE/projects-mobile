@@ -42,20 +42,19 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class PortalApi {
-  var coreApi = locator<CoreApi>();
   var secureStorage = locator<SecureStorage>();
 
   Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = coreApi.capabilitiesUrl(portalName);
+    var url = locator.get<CoreApi>().capabilitiesUrl(portalName);
 
     var result = ApiDTO<Capabilities>();
     try {
-      var response = await coreApi.getRequest(url);
+      var response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         final Map responseJson = json.decode(response.body);
         result.response = Capabilities.fromJson(responseJson['response']);
-        await coreApi.savePortalName();
+        await locator.get<CoreApi>().savePortalName();
       } else {
         result.error = (response as CustomError);
       }

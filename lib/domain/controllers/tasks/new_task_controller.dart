@@ -127,11 +127,19 @@ class NewTaskController extends GetxController
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
+      _clearState();
       needToSelectProject.value = false;
     } else {
       removeProjectSelection();
     }
     Get.back();
+  }
+
+  void _clearState() {
+    teamController.usersList.clear();
+    responsibles.clear();
+    _previusSelectedResponsibles.clear();
+    removeMilestoneSelection();
   }
 
   void removeProjectSelection() {
