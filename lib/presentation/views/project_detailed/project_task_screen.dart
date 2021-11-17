@@ -160,7 +160,7 @@ class Header extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    return     return Visibility(
+    return Visibility(
       visible: controller.itemList.isNotEmpty ||
           controller.filterController.hasFilters.value == true,
       child: Column(
