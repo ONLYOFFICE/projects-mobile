@@ -39,6 +39,8 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -294,14 +296,92 @@ class DocsBottom extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    var sortButton = Container(
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _DocumentsSortButton(controller: controller),
+              Container(
+                child: Row(
+                  children: <Widget>[
+                    Obx(
+                      () => Text(
+                        tr('total', args: [
+                          controller.paginationController.total.value.toString()
+                        ]),
+                        style: TextStyleHelper.body2(
+                          color: Get.theme.colors().onSurface.withOpacity(0.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _DocumentsSortButton({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: DocumentsSortOption(controller: controller)),
-            isScrollControlled: true,
-          );
+        onTap: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            await Get.bottomSheet(
+              SortView(
+                  sortOptions: DocumentsSortOption(controller: controller)),
+              isScrollControlled: true,
+            );
+          } else {
+            final options = [
+              SortTile(
+                sortParameter: 'dateandtime',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'create_on',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'AZ',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'type',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'size',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'author',
+                sortController: controller.sortController,
+              ),
+            ];
+            await showPopupMenu(
+              context: context,
+              options: options,
+              offset: const Offset(0, 30),
+            );
+          }
         },
         child: Row(
           children: <Widget>[
@@ -335,37 +415,6 @@ class DocsBottom extends StatelessWidget {
           ],
         ),
       ),
-    );
-
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              sortButton,
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Obx(
-                      () => Text(
-                        tr('total', args: [
-                          controller.paginationController.total.value.toString()
-                        ]),
-                        style: TextStyleHelper.body2(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

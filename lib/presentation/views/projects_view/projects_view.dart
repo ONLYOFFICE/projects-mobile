@@ -37,8 +37,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -194,30 +196,83 @@ class Bottom extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    var options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'title',
-          sortController: controller.sortController,
-        ),
-        const SizedBox(height: 20),
-      ],
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _ProjectsSortButton(controller: controller),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Obx(
+                  () => Text(
+                    tr('total', args: [
+                      controller.paginationController?.total?.value.toString()
+                    ]),
+                    style: TextStyleHelper.body2(
+                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+  }
+}
 
-    var sortButton = Container(
+class _ProjectsSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _ProjectsSortButton({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final controller;
+
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(
+        sortParameter: 'create_on',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'title',
+        sortController: controller.sortController,
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: options),
-            isScrollControlled: true,
-          );
+        onTap: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            final options = Column(
+              children: [
+                const SizedBox(height: 14.5),
+                const Divider(height: 9, thickness: 1),
+                ..._getSortTile(),
+                const SizedBox(height: 20),
+              ],
+            );
+
+            await Get.bottomSheet(
+              SortView(sortOptions: options),
+              isScrollControlled: true,
+            );
+          } else {
+            await showPopupMenu(
+              context: context,
+              options: _getSortTile(),
+              offset: const Offset(0, 40),
+            );
+          }
         },
         child: Row(
           children: <Widget>[
@@ -250,33 +305,6 @@ class Bottom extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          sortButton,
-          Container(
-            child: Row(
-              children: <Widget>[
-                Obx(
-                  () => Text(
-                    tr('total', args: [
-                      controller.paginationController?.total?.value.toString()
-                    ]),
-                    style: TextStyleHelper.body2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }
