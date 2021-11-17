@@ -39,6 +39,8 @@ import 'package:projects/domain/controllers/discussions/discussion_item_controll
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -164,21 +166,117 @@ class _DocsTitle extends StatelessWidget {
   final DocumentsController controller;
   @override
   Widget build(BuildContext context) {
-    final sortButton = Container(
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _ProjectDocumentsSortButton(controller: controller),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                InkResponse(
+                  onTap: () {
+                    Get.find<NavigationController>().to(DocumentsSearchView(),
+                        preventDuplicates: false,
+                        arguments: {
+                          'folderName': controller.screenName.value,
+                          'folderId': controller.currentFolder,
+                          'entityType': controller.entityType,
+                        });
+                  },
+                  child: AppIcon(
+                    width: 24,
+                    height: 24,
+                    icon: SvgIcons.search,
+                    color: Get.theme.colors().primary,
+                  ),
+                ),
+                const SizedBox(width: 24),
+                InkResponse(
+                  onTap: () async => Get.find<NavigationController>().toScreen(
+                      const DocumentsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {
+                        'filterController': controller.filterController
+                      }),
+                  child: FiltersButton(controler: controller),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProjectDocumentsSortButton extends StatelessWidget
+    with ShowPopupMenuMixin {
+  const _ProjectDocumentsSortButton({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: DocumentsSortOption(controller: controller)),
-            isScrollControlled: true,
-          );
+        onTap: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            await Get.bottomSheet(
+              SortView(
+                  sortOptions: DocumentsSortOption(controller: controller)),
+              isScrollControlled: true,
+            );
+          } else {
+            final options = [
+              SortTile(
+                sortParameter: 'dateandtime',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'create_on',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'AZ',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'type',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'size',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'author',
+                sortController: controller.sortController,
+              ),
+            ];
+
+            await showPopupMenu(
+              context: context,
+              options: options,
+              offset: const Offset(0, 30),
+            );
+          }
         },
         child: Row(
           children: <Widget>[
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -202,55 +300,6 @@ class _DocsTitle extends StatelessWidget {
                     ),
             ),
           ],
-        ),
-      ),
-    );
-
-    return Obx(
-      () => Visibility(
-        visible:
-            controller.itemList.isNotEmpty || controller.filterController.hasFilters.value == true,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: sortButton,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  InkResponse(
-                    onTap: () {
-                      Get.find<NavigationController>()
-                          .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                        'folderName': controller.screenName.value,
-                        'folderId': controller.currentFolder,
-                        'entityType': controller.entityType,
-                      });
-                    },
-                    child: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.search,
-                      color: Get.theme.colors().primary,
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  InkResponse(
-                    onTap: () async => Get.find<NavigationController>().toScreen(
-                        const DocumentsFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {'filterController': controller.filterController}),
-                    child: FiltersButton(controler: controller),
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );

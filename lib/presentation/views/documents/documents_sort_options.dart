@@ -42,36 +42,42 @@ class DocumentsSortOption extends StatelessWidget {
 
   final dynamic controller;
 
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(
+        sortParameter: 'dateandtime',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'create_on',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'AZ',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'type',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'size',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'author',
+        sortController: controller.sortController,
+      ),
+    ];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'dateandtime',
-          sortController: controller.sortController as BaseSortController,
-        ),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController as BaseSortController,
-        ),
-        SortTile(
-          sortParameter: 'AZ',
-          sortController: controller.sortController as BaseSortController,
-        ),
-        SortTile(
-          sortParameter: 'type',
-          sortController: controller.sortController as BaseSortController,
-        ),
-        SortTile(
-          sortParameter: 'size',
-          sortController: controller.sortController as BaseSortController,
-        ),
-        SortTile(
-          sortParameter: 'author',
-          sortController: controller.sortController as BaseSortController,
-        ),
+        ...getSortTile(),
         const SizedBox(height: 20),
       ],
     );

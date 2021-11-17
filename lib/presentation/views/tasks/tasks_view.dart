@@ -39,9 +39,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -174,19 +176,6 @@ class TasksHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(sortParameter: 'deadline', sortController: controller.sortController),
-        SortTile(sortParameter: 'priority', sortController: controller.sortController),
-        SortTile(sortParameter: 'create_on', sortController: controller.sortController),
-        SortTile(sortParameter: 'start_date', sortController: controller.sortController),
-        SortTile(sortParameter: 'title', sortController: controller.sortController),
-        SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
-        const SizedBox(height: 20)
-      ],
-    );
     return SizedBox(
       height: 44,
       child: Padding(
@@ -196,47 +185,13 @@ class TasksHeader extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.only(right: 4),
-              child: TextButton(
-                onPressed: () => Get.bottomSheet(
-                  SortView(sortOptions: options),
-                  isScrollControlled: true,
-                ),
-                child: Row(
-                  children: [
-                    Obx(
-                      () => Text(
-                        controller.sortController.currentSortTitle.value,
-                        style: TextStyleHelper.projectsSorting
-                            .copyWith(color: Get.theme.colors().primary),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Obx(
-                      () => (controller.sortController.currentSortOrder == 'ascending')
-                          ? AppIcon(
-                              icon: SvgIcons.sorting_4_ascend,
-                              color: Get.theme.colors().primary,
-                              width: 20,
-                              height: 20,
-                            )
-                          : Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationX(math.pi),
-                              child: AppIcon(
-                                icon: SvgIcons.sorting_4_ascend,
-                                color: Get.theme.colors().primary,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _TasksSortButton(controller: controller),
             ),
             Obx(
               () => Text(
-                tr('total', args: [controller.paginationController.total.value.toString()]),
+                tr('total', args: [
+                  controller.paginationController.total.value.toString()
+                ]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
@@ -244,6 +199,95 @@ class TasksHeader extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _TasksSortButton({
+    Key key,
+    @required this.controller,
+  }) : super(key: key);
+
+  final controller;
+
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(
+          sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'priority', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'create_on',
+          sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'start_date',
+          sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'title', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'sort_order',
+          sortController: controller.sortController),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        if (Get.find<PlatformController>().isMobile) {
+          var options = Column(
+            children: [
+              const SizedBox(height: 14.5),
+              const Divider(height: 9, thickness: 1),
+              ..._getSortTile(),
+              const SizedBox(height: 20)
+            ],
+          );
+
+          await Get.bottomSheet(
+            SortView(sortOptions: options),
+            isScrollControlled: true,
+          );
+        } else {
+          await showPopupMenu(
+            context: context,
+            options: _getSortTile(),
+            offset: const Offset(0, 40),
+          );
+        }
+      },
+      child: Row(
+        children: [
+          Obx(
+            () => Text(
+              controller.sortController.currentSortTitle.value,
+              style: TextStyleHelper.projectsSorting
+                  .copyWith(color: Get.theme.colors().primary),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Obx(
+            () => (controller.sortController.currentSortOrder == 'ascending')
+                ? AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  )
+                : Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationX(math.pi),
+                    child: AppIcon(
+                      icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
+                      width: 20,
+                      height: 20,
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }
