@@ -67,6 +67,7 @@ class TasksController extends BaseController {
   TaskFilterController get filterController => _filterController;
 
   var fabIsVisible = false.obs;
+  var _withFAB = true;
 
   @override
   Future<void> onInit() async {
@@ -91,8 +92,9 @@ class TasksController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    _userController.loaded.listen((_loaded) async =>
-        {if (_loaded) fabIsVisible.value = await getFabVisibility()});
+    _userController.loaded.listen((_loaded) async => {
+          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
+        });
 
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
@@ -114,8 +116,9 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  void setupPreset(PresetTaskFilters preset) {
+  void setup(PresetTaskFilters preset, {withFAB = true}) {
     _preset = preset;
+    _withFAB = withFAB;
   }
 
   Future loadTasks() async {
@@ -157,8 +160,8 @@ class TasksController extends BaseController {
       Get.find<NavigationController>().to(const TasksSearchScreen());
 
   Future<bool> getFabVisibility() async {
+    if (!_withFAB) return false;
     var fabVisibility = false;
-
     await _userController.getUserInfo();
     var selfUser = _userController.user;
     if (selfUser.isAdmin ||

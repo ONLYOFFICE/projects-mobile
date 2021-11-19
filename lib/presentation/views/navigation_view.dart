@@ -56,13 +56,9 @@ class NavigationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        PlatformController platformController;
-
-        try {
-          platformController = Get.find<PlatformController>();
-        } catch (e) {
-          platformController = Get.put(PlatformController(), permanent: true);
-        }
+        var platformController = Get.isRegistered<PlatformController>()
+            ? Get.find<PlatformController>()
+            : Get.put(PlatformController(), permanent: true);
 
         if (platformController.isMobile) {
           //TODO: navigation on more screen is brocken if return premade instance

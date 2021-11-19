@@ -111,7 +111,6 @@ import 'package:projects/domain/controllers/projects/projects_with_presets.dart'
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
-import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_with_presets.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
@@ -186,13 +185,6 @@ void setupGetX() {
   Get.lazyPut<ProjectTaskFilterController>(() => ProjectTaskFilterController(),
       fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
-
-  Get.create<TasksController>(
-    () => TasksController(
-      Get.find<TaskFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
 
   Get.lazyPut(() => TasksSortController(), fenix: true);
   Get.lazyPut(
