@@ -95,7 +95,7 @@ class ProjectSearchController extends GetxController {
         _query = query;
         if (onlyMyProjects) _query += '&participant=$_selfId';
         _startIndex = 0;
-        _performSearch();
+       await _performSearch();
       }
     });
   }
