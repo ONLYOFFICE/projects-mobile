@@ -36,7 +36,7 @@ import 'package:get/route_manager.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class StyledDateRangePickerDialog extends StatelessWidget {
-  const StyledDateRangePickerDialog({@required this.initialDateRange, Key key})
+  const StyledDateRangePickerDialog({required this.initialDateRange, Key? key})
       : super(key: key);
   final DateTimeRange initialDateRange;
 

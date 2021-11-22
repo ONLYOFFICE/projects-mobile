@@ -41,10 +41,10 @@ import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 
 class DiscussionProjectTile extends StatelessWidget {
-  final DiscussionActionsController controller;
+  final DiscussionActionsController? controller;
   final bool ignoring;
   const DiscussionProjectTile({
-    Key key,
+    Key? key,
     this.controller,
     this.ignoring = false,
   }) : super(key: key);
@@ -56,13 +56,13 @@ class DiscussionProjectTile extends StatelessWidget {
         ignoring: ignoring,
         child: NewItemTile(
           icon: SvgIcons.project,
-          text: controller.selectedProjectTitle.value.isNotEmpty
-              ? controller.selectedProjectTitle.value
+          text: controller!.selectedProjectTitle.value.isNotEmpty
+              ? controller!.selectedProjectTitle.value
               : tr('chooseProject'),
-          textColor: controller.selectProjectError == true
+          textColor: controller!.selectProjectError == true
               ? Get.theme.colors().colorError
               : null,
-          isSelected: controller.selectedProjectTitle.value.isNotEmpty,
+          isSelected: controller!.selectedProjectTitle.value.isNotEmpty,
           selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
           onTap: () => Get.find<NavigationController>().toScreen(
               const SelectProjectView(),

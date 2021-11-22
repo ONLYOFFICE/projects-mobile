@@ -39,29 +39,29 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class UserService {
-  final UserApi _api = locator<UserApi>();
+  final UserApi? _api = locator<UserApi>();
 
   var portalTask = PortalTask().obs;
 
-  Future<List<PortalUser>> getAllProfiles() async {
-    var profiles = await _api.getAllProfiles();
+  Future<List<PortalUser>?> getAllProfiles() async {
+    var profiles = await _api!.getAllProfiles();
 
     var success = profiles.response != null;
 
     if (success) {
       return profiles.response;
     } else {
-      await Get.find<ErrorDialog>().show(profiles.error.message);
+      await Get.find<ErrorDialog>().show(profiles.error!.message!);
       return null;
     }
   }
 
-  Future<PageDTO<List<PortalUser>>> getProfilesByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
+  Future<PageDTO<List<PortalUser>>?> getProfilesByExtendedFilter({
+    int? startIndex,
+    String? query,
+    String? groupId,
   }) async {
-    var profiles = await _api.getProfilesByExtendedFilter(
+    var profiles = await _api!.getProfilesByExtendedFilter(
       startIndex: startIndex,
       query: query,
       groupId: groupId,
@@ -72,7 +72,7 @@ class UserService {
     if (success) {
       return profiles;
     } else {
-      await Get.find<ErrorDialog>().show(profiles.error.message);
+      await Get.find<ErrorDialog>().show(profiles.error!.message!);
       return null;
     }
   }

@@ -63,9 +63,9 @@ class UserApi {
   }
 
   Future<PageDTO<List<PortalUser>>> getProfilesByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
+    int? startIndex,
+    String? query,
+    String? groupId,
   }) async {
     var url = await locator.get<CoreApi>().allProfiles();
     url += '/filter?';

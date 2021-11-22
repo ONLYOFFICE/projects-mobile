@@ -35,11 +35,11 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class CustomTab extends StatelessWidget {
-  final String title;
-  final int count;
-  final bool currentTab;
+  final String? title;
+  final int? count;
+  final bool? currentTab;
   const CustomTab({
-    Key key,
+    Key? key,
     this.title,
     this.count,
     this.currentTab,
@@ -51,9 +51,9 @@ class CustomTab extends StatelessWidget {
       height: 40,
       child: Row(
         children: [
-          Text(title),
-          if (count != null && count >= 0) const SizedBox(width: 8),
-          if (count != null && count >= 0)
+          Text(title!),
+          if (count != null && count! >= 0) const SizedBox(width: 8),
+          if (count != null && count! >= 0)
             Container(
               height: 21,
               decoration: BoxDecoration(

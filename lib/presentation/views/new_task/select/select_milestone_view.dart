@@ -46,7 +46,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 class SelectMilestoneView extends StatefulWidget {
   final selectedId;
   const SelectMilestoneView({
-    Key key,
+    Key? key,
     this.selectedId,
   }) : super(key: key);
 
@@ -138,13 +138,13 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
 
 class _None extends StatelessWidget {
   const _None({
-    Key key,
-    @required this.isSelected,
-    @required this.onTap,
+    Key? key,
+    required this.isSelected,
+    required this.onTap,
   }) : super(key: key);
 
   final bool isSelected;
-  final Function() onTap;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -170,10 +170,10 @@ class _None extends StatelessWidget {
 
 class _MilestoneSelectionTile extends StatelessWidget {
   const _MilestoneSelectionTile({
-    Key key,
-    @required this.milestone,
-    @required this.isSelected,
-    @required this.onTap,
+    Key? key,
+    required this.milestone,
+    required this.isSelected,
+    required this.onTap,
   }) : super(key: key);
 
   final bool isSelected;
@@ -197,10 +197,10 @@ class _MilestoneSelectionTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    milestone.title,
+                    milestone.title!,
                     style: TextStyleHelper.projectTitle,
                   ),
-                  Text(milestone.responsible.displayName,
+                  Text(milestone.responsible!.displayName!,
                       style: TextStyleHelper.caption(
                               color:
                                   Get.theme.colors().onSurface.withOpacity(0.6))

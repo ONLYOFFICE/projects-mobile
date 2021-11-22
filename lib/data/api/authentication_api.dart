@@ -66,8 +66,8 @@ class AuthApi {
   }
 
   Future<ApiDTO<AuthToken>> confirmTFACode(
-    String email,
-    String pass,
+    String? email,
+    String? pass,
     String code,
   ) async {
     var url = await locator.get<CoreApi>().tfaUrl(code);

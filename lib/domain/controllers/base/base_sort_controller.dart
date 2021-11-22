@@ -36,11 +36,11 @@ import 'package:get/get.dart';
 abstract class BaseSortController extends GetxController {
   RxString currentSortTitle = ''.obs;
   RxBool isSortAscending = true.obs;
-  Function updateSortDelegate;
+  Function? updateSortDelegate;
 
-  String currentSortfilter;
+  String? currentSortfilter;
 
-  void changeSort(String newSort) async {
+  void changeSort(String? newSort) async {
     if (newSort == currentSortfilter) {
       isSortAscending.value = !isSortAscending.value;
     } else {
@@ -50,7 +50,7 @@ abstract class BaseSortController extends GetxController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
 
     if (updateSortDelegate != null) {
-      updateSortDelegate();
+      updateSortDelegate!();
     }
   }
 

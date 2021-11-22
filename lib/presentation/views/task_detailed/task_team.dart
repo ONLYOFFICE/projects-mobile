@@ -46,8 +46,8 @@ class TaskTeamView extends StatelessWidget {
   final controller;
 
   const TaskTeamView({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

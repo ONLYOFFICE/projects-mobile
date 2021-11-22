@@ -36,18 +36,18 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/milestone_service.dart';
 
 class MilestonesController extends GetxController {
-  final MilestoneService _api = locator<MilestoneService>();
+  final MilestoneService? _api = locator<MilestoneService>();
 
-  PaginationController paginationController;
+  PaginationController? paginationController;
 
   @override
   void onInit() {
     paginationController =
         Get.put(PaginationController(), tag: 'MilestonesController');
 
-    paginationController.loadDelegate = () async => await _getMilestones();
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
+    paginationController!.loadDelegate = () async => await _getMilestones();
+    paginationController!.refreshDelegate = () async => await refreshData();
+    paginationController!.pullDownEnabled = true;
     super.onInit();
   }
 
@@ -57,26 +57,26 @@ class MilestonesController extends GetxController {
 
   Future getAllMilestones() async {
     loaded.value = false;
-    milestones.value = await _api.milestonesByFilter();
+    milestones.value = await (_api!.milestonesByFilter() as Future<List<dynamic>>);
     loaded.value = true;
   }
 
   Future getMilestones({bool needToClear = false}) async {
-    paginationController.startIndex = 0;
+    paginationController!.startIndex = 0;
     loaded.value = false;
     await _getMilestones();
     loaded.value = true;
   }
 
   Future _getMilestones({bool needToClear = false}) async {
-    var result = await _api.milestonesByFilterPaginated(
-      startIndex: paginationController.startIndex,
+    var result = await _api!.milestonesByFilterPaginated(
+      startIndex: paginationController!.startIndex,
     );
 
     if (result != null) {
-      paginationController.total.value = result.total;
-      if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response);
+      paginationController!.total.value = result.total!;
+      if (needToClear) paginationController!.data.clear();
+      paginationController!.data.addAll(result.response!);
     }
   }
 

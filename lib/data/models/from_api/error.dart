@@ -31,7 +31,7 @@
  */
 
 class CustomError {
-  String message;
+  String? message;
   CustomError({this.message});
 
   CustomError.fromJson(Map<String, dynamic> json) {

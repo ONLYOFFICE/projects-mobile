@@ -30,17 +30,18 @@
  *
  */
 
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/material.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/presentation/shared/widgets/comment.dart';
 
 class CommentsThread extends StatelessWidget {
   final PortalComment comment;
-  final int discussionId;
-  final int taskId;
+  final int? discussionId;
+  final int? taskId;
   const CommentsThread({
-    Key key,
-    @required this.comment,
+    Key? key,
+    required this.comment,
     this.discussionId,
     this.taskId,
   })  : assert(discussionId == null || taskId == null),
@@ -62,7 +63,7 @@ class CommentsThread extends StatelessWidget {
         for (var i = 0; i < visited.length; i++)
           Padding(
             padding: visited[i].comment.show
-                ? padding[visited[i].paddingLevel]
+                ? padding[visited[i].paddingLevel]!
                 : EdgeInsets.zero,
             child: Comment(
               comment: visited[i].comment,
@@ -81,22 +82,21 @@ List<_SortedComment> sortComments(PortalComment initComment) {
   visited.add(_SortedComment(initComment, 0));
 
   void dfs(PortalComment comment, paddingLevel) {
-    var a = visited.firstWhere(
+    var a = visited.firstWhereOrNull(
       (element) {
         return element.comment.commentId == comment.commentId;
       },
-      orElse: () => null,
     );
 
     if (a == null) {
       visited.add(_SortedComment(comment, paddingLevel));
-      for (var item in comment.commentList) {
+      for (var item in comment.commentList!) {
         dfs(item, 2);
       }
     }
   }
 
-  for (var comment in initComment.commentList) {
+  for (var comment in initComment.commentList!) {
     dfs(comment, 1);
   }
   return visited;

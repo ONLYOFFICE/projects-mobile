@@ -47,7 +47,7 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 class TasksDashboardMoreView extends StatelessWidget {
-  const TasksDashboardMoreView({Key key}) : super(key: key);
+  const TasksDashboardMoreView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class TasksDashboardMoreView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             showBackButton: true,
             titleText: controller.screenName,
             elevation: value,

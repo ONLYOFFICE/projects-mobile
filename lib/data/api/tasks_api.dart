@@ -32,7 +32,6 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter/widgets.dart';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/status.dart';
@@ -43,7 +42,7 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskApi {
-  Future<ApiDTO> addTask({NewTaskDTO newTask}) async {
+  Future<ApiDTO> addTask({required NewTaskDTO newTask}) async {
     var url =
         await locator.get<CoreApi>().addTaskUrl(projectId: newTask.projectId);
     var result = ApiDTO();
@@ -65,7 +64,7 @@ class TaskApi {
   }
 
   Future<ApiDTO> copyTask(
-      {@required int copyFrom, @required NewTaskDTO task}) async {
+      {required int? copyFrom, required NewTaskDTO task}) async {
     var url = await locator.get<CoreApi>().copyTaskUrl(copyFrom: copyFrom);
     var result = ApiDTO();
 
@@ -85,7 +84,7 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> getTaskByID({int id}) async {
+  Future<ApiDTO> getTaskByID({int? id}) async {
     var url = await locator.get<CoreApi>().taskByIdUrl(id);
     var result = ApiDTO();
 
@@ -105,7 +104,7 @@ class TaskApi {
     return result;
   }
 
-  Future<String> getTaskLink({@required taskId, @required projectId}) async {
+  Future<String> getTaskLink({required taskId, required projectId}) async {
     return await locator
         .get<CoreApi>()
         .getTaskLinkUrl(taskId: taskId, projectId: projectId);
@@ -134,19 +133,19 @@ class TaskApi {
   }
 
   Future<ApiDTO> updateTaskStatus(
-      {int taskId, int newStatusId, int newStatusType}) async {
+      {int? taskId, int? newStatusId, int? newStatusType}) async {
     var url = await locator.get<CoreApi>().updateTaskStatusUrl(taskId: taskId);
 
     var result = ApiDTO();
 
     var body = {'status': newStatusType, 'statusId': newStatusId};
-    Map responseJson;
+    Map? responseJson;
     try {
       var response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
         responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        result.response = responseJson!['response'];
       } else {
         result.error = (response as CustomError);
       }
@@ -156,18 +155,18 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> deleteTask({int taskId}) async {
+  Future<ApiDTO> deleteTask({int? taskId}) async {
     var url = await locator.get<CoreApi>().deleteTaskUrl(taskId: taskId);
 
     var result = ApiDTO();
 
-    Map responseJson;
+    Map? responseJson;
     try {
       var response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
         responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        result.response = responseJson!['response'];
       } else {
         result.error = (response as CustomError);
       }
@@ -177,7 +176,7 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> subscribeToTask({int taskId}) async {
+  Future<ApiDTO> subscribeToTask({int? taskId}) async {
     var url = await locator.get<CoreApi>().subscribeTaskUrl(taskId: taskId);
 
     var result = ApiDTO();
@@ -198,17 +197,17 @@ class TaskApi {
   }
 
   Future<PageDTO<List<PortalTask>>> getTasksByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    String responsibleFilter,
-    String creatorFilter,
-    String projectFilter,
-    String milestoneFilter,
-    String statusFilter,
-    String projectId,
-    String deadlineFilter,
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    String? responsibleFilter,
+    String? creatorFilter,
+    String? projectFilter,
+    String? milestoneFilter,
+    String? statusFilter,
+    String? projectId,
+    String? deadlineFilter,
   }) async {
     var url = await locator.get<CoreApi>().tasksByParamsrUrl();
 
@@ -273,7 +272,7 @@ class TaskApi {
     return result;
   }
 
-  Future updateTask({@required NewTaskDTO newTask}) async {
+  Future updateTask({required NewTaskDTO newTask}) async {
     var url = await locator.get<CoreApi>().updateTaskUrl(taskId: newTask.id);
     var result = ApiDTO();
 

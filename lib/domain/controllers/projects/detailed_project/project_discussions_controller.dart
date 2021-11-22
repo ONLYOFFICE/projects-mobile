@@ -31,6 +31,7 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 
@@ -43,14 +44,14 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/new
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class ProjectDiscussionsController extends GetxController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService? _api = locator<DiscussionsService>();
   var projectId;
   var projectTitle;
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'ProjectDiscussionsController');
 
-  ProjectDetailed _projectDetailed;
+  late ProjectDetailed _projectDetailed;
 
   PaginationController get paginationController => _paginationController;
 
@@ -76,10 +77,10 @@ class ProjectDiscussionsController extends GetxController {
     projectId = projectDetailed.id;
     projectTitle = projectDetailed.title;
 
-    fabIsVisible.value = _canCreate();
+    fabIsVisible.value = _canCreate()!;
   }
 
-  bool _canCreate() => _projectDetailed.security['canCreateMessage'];
+  bool? _canCreate() => _projectDetailed.security!['canCreateMessage'];
 
   RxList get itemList => paginationController.data;
 
@@ -91,17 +92,17 @@ class ProjectDiscussionsController extends GetxController {
   }
 
   Future _getDiscussions({needToClear = false}) async {
-    var result = await _api.getDiscussionsByParams(
+    var result = await (_api!.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: projectId.toString(),
-    );
-    paginationController.total.value = result.total;
+    ) as Future<PageDTO<List<Discussion>>>);
+    paginationController.total.value = result.total!;
 
     if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response);
+    paginationController.data.addAll(result.response!);
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()

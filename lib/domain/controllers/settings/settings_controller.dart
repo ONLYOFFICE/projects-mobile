@@ -55,17 +55,17 @@ import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
-  final _service = locator<SettingsService>();
-  final _packageInfoService = locator<PackageInfoService>();
-  final _deviceInfoService = locator<DeviceInfoService>();
-  final _storage = locator<Storage>();
+  final SettingsService? _service = locator<SettingsService>();
+  final PackageInfoService? _packageInfoService = locator<PackageInfoService>();
+  final DeviceInfoService? _deviceInfoService = locator<DeviceInfoService>();
+  final Storage? _storage = locator<Storage>();
 
-  String appVersion;
-  String buildNumber;
+  String? appVersion;
+  String? buildNumber;
 
   var loaded = false.obs;
   var currentTheme = ''.obs;
-  RxBool isPasscodeEnable;
+  late RxBool isPasscodeEnable;
   RxBool shareAnalytics = true.obs;
 
   String get versionAndBuildNumber => '$appVersion ($buildNumber)';
@@ -76,22 +76,22 @@ class SettingsController extends GetxController {
 
     // ignore: unawaited_futures
     RemoteConfigService.fetchAndActivate();
-    var isPassEnable = await _service.isPasscodeEnable;
+    var isPassEnable = await _service!.isPasscodeEnable;
     isPasscodeEnable = isPassEnable.obs;
 
-    appVersion = await _packageInfoService.version;
-    buildNumber = await _packageInfoService.buildNumber;
+    appVersion = await _packageInfoService!.version;
+    buildNumber = await _packageInfoService!.buildNumber;
 
-    var themeMode = await _storage.read('themeMode');
+    var themeMode = await _storage!.read('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await _storage.write(themeMode, themeMode);
+      await _storage!.write(themeMode, themeMode);
     }
 
-    var analytics = await _storage.read('shareAnalytics');
+    var analytics = await _storage!.read('shareAnalytics');
 
     if (analytics == null) {
-      await _storage.write('shareAnalytics', true);
+      await _storage!.write('shareAnalytics', true);
       shareAnalytics.value = true;
     } else {
       shareAnalytics.value = analytics;
@@ -107,7 +107,7 @@ class SettingsController extends GetxController {
 
   Future setTheme(String themeMode) async {
     currentTheme.value = themeMode;
-    await _storage.write('themeMode', themeMode);
+    await _storage!.write('themeMode', themeMode);
 
     await Get.dialog(StyledAlertDialog(
       titleText: tr('reloadDialogTitle'),
@@ -146,7 +146,7 @@ class SettingsController extends GetxController {
 
   Future<void> changeAnalyticsSharingEnability(bool value) async {
     try {
-      await _storage.write('shareAnalytics', value);
+      await _storage!.write('shareAnalytics', value);
       shareAnalytics.value = value;
     } catch (_) {
       await Get.find<ErrorDialog>().show(tr('error'));
@@ -164,8 +164,8 @@ class SettingsController extends GetxController {
   }
 
   void onSupportPressed(context) async {
-    var device = await _deviceInfoService.deviceInfo;
-    var os = await _deviceInfoService.osReleaseVersion;
+    var device = await _deviceInfoService!.deviceInfo;
+    var os = await _deviceInfoService!.osReleaseVersion;
 
     var body = '';
     body += '\n\n\n\n\n';
@@ -178,7 +178,7 @@ class SettingsController extends GetxController {
     var url =
         '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
 
-    await _service.openEmailApp(url, context);
+    await _service!.openEmailApp(url, context);
   }
 
   Future<void> onRateAppPressed() async {

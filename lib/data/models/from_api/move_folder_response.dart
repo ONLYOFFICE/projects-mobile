@@ -34,15 +34,15 @@ import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 
 class MoveFolderResponse {
-  String id;
-  int operation;
-  int progress;
-  String error;
-  String processed;
-  bool finished;
-  String url;
-  List<PortalFile> files;
-  List<Folder> folders;
+  String? id;
+  int? operation;
+  int? progress;
+  String? error;
+  String? processed;
+  bool? finished;
+  String? url;
+  List<PortalFile>? files;
+  List<Folder>? folders;
 
   MoveFolderResponse(
       {this.id,
@@ -66,13 +66,13 @@ class MoveFolderResponse {
     if (json['files'] != null) {
       files = <PortalFile>[];
       json['files'].forEach((v) {
-        files.add(PortalFile.fromJson(v));
+        files!.add(PortalFile.fromJson(v));
       });
     }
     if (json['folders'] != null) {
       folders = <Folder>[];
       json['folders'].forEach((v) {
-        folders.add(Folder.fromJson(v));
+        folders!.add(Folder.fromJson(v));
       });
     }
   }
@@ -87,10 +87,10 @@ class MoveFolderResponse {
     data['finished'] = finished;
     data['url'] = url;
     if (files != null) {
-      data['files'] = files.map((v) => v.toJson()).toList();
+      data['files'] = files!.map((v) => v.toJson()).toList();
     }
     if (folders != null) {
-      data['folders'] = folders.map((v) => v.toJson()).toList();
+      data['folders'] = folders!.map((v) => v.toJson()).toList();
     }
     return data;
   }

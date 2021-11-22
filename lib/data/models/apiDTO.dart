@@ -37,8 +37,8 @@ class ApiDTO<T> {
     this.response,
     this.error,
   });
-  T response;
-  CustomError error;
+  T? response;
+  CustomError? error;
 }
 
 class PageDTO<T> {
@@ -48,9 +48,9 @@ class PageDTO<T> {
     this.startIndex,
     this.total,
   });
-  T response;
-  CustomError error;
-  int startIndex;
+  T? response;
+  CustomError? error;
+  int? startIndex;
 
-  int total;
+  int? total;
 }

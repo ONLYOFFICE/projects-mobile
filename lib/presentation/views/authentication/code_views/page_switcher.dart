@@ -36,12 +36,12 @@ class _PageSwitcher extends StatelessWidget {
   final PageController pageController;
   final ValueNotifier page;
   _PageSwitcher({
-    Key key,
-    @required this.page,
-    @required this.pageController,
+    Key? key,
+    required this.page,
+    required this.pageController,
   }) : super(key: key);
 
-  double get _backButtonOpacity {
+  double? get _backButtonOpacity {
     if (page.value >= 1) return 1;
     if (page.value <= 0.6) return 0;
     var value = (page.value - 0.6) / 0.4;
@@ -83,15 +83,15 @@ class _PageSwitcher extends StatelessWidget {
             ]),
         child: ValueListenableBuilder(
           valueListenable: page,
-          builder: (_, value, __) {
+          builder: (_, dynamic value, __) {
             return Row(
               children: [
                 const SizedBox(width: 6),
                 AnimatedOpacity(
                   duration: const Duration(milliseconds: 100),
-                  opacity: _backButtonOpacity,
+                  opacity: _backButtonOpacity!,
                   child: TextButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (value >= 1)
                         return pageController.previousPage(
                             duration: _duration, curve: _curve);

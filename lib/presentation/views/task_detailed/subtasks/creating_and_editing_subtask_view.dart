@@ -43,15 +43,15 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
 
 class CreatingAndEditingSubtaskView extends StatelessWidget {
-  const CreatingAndEditingSubtaskView({Key key}) : super(key: key);
+  const CreatingAndEditingSubtaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     bool forEditing = Get.arguments['forEditing'];
 
     SubtaskActionController controller;
-    int taskId;
-    int projectId = Get.arguments['projectId'];
+    int? taskId;
+    int? projectId = Get.arguments['projectId'];
 
     if (forEditing) {
       var itemController = Get.arguments['itemController'];
@@ -94,7 +94,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                         SizedBox(
                           width: 56,
                           child: Icon(
-                            controller.status.value == 1
+                            controller.status!.value == 1
                                 ? Icons.check_box_outline_blank
                                 : Icons.check_box,
                             color: const Color(0xFF666666),
@@ -113,7 +113,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                                     hintText: tr('describeSubtask'),
                                     hintStyle: TextStyleHelper.subtitle1(
                                         color:
-                                            controller.setTiltleError.value ==
+                                            controller.setTiltleError!.value ==
                                                     true
                                                 ? Get.theme.colors().colorError
                                                 : Get.theme
@@ -136,8 +136,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                 onPointerDown: (_) {
                   if (!forEditing) {
                     if (controller.titleController.text.isNotEmpty &&
-                        controller.titleFocus.hasFocus)
-                      controller.titleFocus.unfocus();
+                        controller.titleFocus!.hasFocus)
+                      controller.titleFocus!.unfocus();
                   }
                 },
                 child: ResponsibleTile(

@@ -37,7 +37,7 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestoneSearchController extends BaseSearchController {
-  final _service = locator<MilestoneService>();
+  final MilestoneService? _service = locator<MilestoneService>();
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'MilestoneSearchController');
@@ -45,7 +45,7 @@ class MilestoneSearchController extends BaseSearchController {
   @override
   PaginationController get paginationController => _paginationController;
 
-  String _query;
+  String? _query;
 
   @override
   void onInit() {
@@ -60,7 +60,7 @@ class MilestoneSearchController extends BaseSearchController {
   }
 
   @override
-  Future search({needToClear = true, String query}) async {
+  Future search({needToClear = true, String? query}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;
@@ -75,8 +75,8 @@ class MilestoneSearchController extends BaseSearchController {
     loaded.value = true;
   }
 
-  Future _performSearch({needToClear = true, String query}) async {
-    var result = await _service.milestonesByFilterPaginated(
+  Future _performSearch({needToClear = true, String? query}) async {
+    var result = await _service!.milestonesByFilterPaginated(
       startIndex: paginationController.startIndex,
       query: query,
     );

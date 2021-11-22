@@ -42,19 +42,19 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProjectCellController extends GetxController {
   RefreshController refreshController = RefreshController();
 
-  void setup(ProjectDetailed project) {
+  void setup(ProjectDetailed? project) {
     _project = project;
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      isPrivate.value = project.isPrivate;
-      status.value = project.status;
-      canEdit.value = project.canEdit;
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      isPrivate.value = project!.isPrivate!;
+      status.value = project.status!;
+      canEdit.value = project.canEdit!;
     });
   }
 
   var _project;
 
-  ProjectDetailed get projectData => _project;
+  ProjectDetailed? get projectData => _project;
 
   var isPrivate = false.obs;
   var canEdit = false.obs;
@@ -70,7 +70,7 @@ class ProjectCellController extends GetxController {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<bool> updateStatus({int newStatusId}) async =>
+  Future<bool> updateStatus({int? newStatusId}) async =>
       Get.find<ProjectStatusesController>()
           .updateStatus(newStatusId: newStatusId, projectData: projectData);
 }

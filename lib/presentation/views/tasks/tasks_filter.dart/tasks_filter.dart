@@ -58,11 +58,11 @@ part 'filters/status.dart';
 part 'filters/duedate.dart';
 
 class TasksFilterScreen extends StatelessWidget {
-  const TasksFilterScreen({Key key}) : super(key: key);
+  const TasksFilterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final BaseTaskFilterController filterController =
+    final BaseTaskFilterController? filterController =
         Get.arguments['filterController'];
     final platformController = Get.find<PlatformController>();
 
@@ -71,7 +71,7 @@ class TasksFilterScreen extends StatelessWidget {
           platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         onLeadingPressed: () {
-          filterController.restoreFilters();
+          filterController!.restoreFilters();
           Get.back();
         },
         backgroundColor:
@@ -83,7 +83,7 @@ class TasksFilterScreen extends StatelessWidget {
             : const Icon(Icons.close),
         actions: [
           TextButton(
-              onPressed: () async => filterController.resetFilters(),
+              onPressed: () async => filterController!.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
                       color: Get.theme.colors().systemBlue))),
@@ -111,7 +111,7 @@ class TasksFilterScreen extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (filterController.suitableResultCount.value != -1)
+            if (filterController!.suitableResultCount.value != -1)
               return ConfirmFiltersButton(filterController: filterController);
             return const SizedBox();
           }),

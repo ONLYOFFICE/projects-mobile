@@ -42,8 +42,8 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 
 class TeamMembersTile extends StatelessWidget {
   const TeamMembersTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;

@@ -33,6 +33,7 @@
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 
@@ -43,7 +44,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamController extends GetxController {
-  final _api = locator<ProjectService>();
+  final ProjectService? _api = locator<ProjectService>();
   var usersList = <PortalUserItemController>[].obs;
   var loaded = true.obs;
   var nothingFound = false.obs;
@@ -59,7 +60,7 @@ class ProjectTeamController extends GetxController {
   bool _withoutBlocked = false;
   var fabIsVisible = false.obs;
 
-  ProjectDetailed _projectDetailed;
+  ProjectDetailed? _projectDetailed;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
@@ -75,14 +76,14 @@ class ProjectTeamController extends GetxController {
   }
 
   Future _loadTeam({bool needToClear = false}) async {
-    var result = await _api.getProjectTeam(_projectId.toString());
+    var result = await (_api!.getProjectTeam(_projectId.toString()) as Future<List<PortalUser>>);
 
     totalProfiles = result.length;
 
     if (needToClear) usersList.clear();
 
     for (var element in result) {
-      if (_withoutVisitors && element.isVisitor) continue;
+      if (_withoutVisitors && element.isVisitor!) continue;
       if (_withoutBlocked && element.status == UserStatus.Terminated) continue;
 
       var portalUser = PortalUserItemController(portalUser: element);
@@ -106,20 +107,20 @@ class ProjectTeamController extends GetxController {
 
     var _userController = Get.find<UserController>();
     await _userController.getUserInfo();
-    var selfUser = _userController.user;
+    var selfUser = _userController.user!;
 
-    if (_projectDetailed != null && _projectDetailed.security['canEditTeam']) {
+    if (_projectDetailed != null && _projectDetailed!.security!['canEditTeam']) {
       fabIsVisible.value = true;
     } else {
-      if (selfUser.isAdmin ||
-          selfUser.isOwner ||
+      if (selfUser.isAdmin! ||
+          selfUser.isOwner! ||
           (selfUser.listAdminModules != null &&
-              selfUser.listAdminModules.contains('projects'))) {
+              selfUser.listAdminModules!.contains('projects'))) {
         fabIsVisible.value = true;
       }
     }
 
-    if (selfUser.isVisitor) fabIsVisible.value = false;
+    if (selfUser.isVisitor!) fabIsVisible.value = false;
 
     loaded.value = true;
   }
@@ -132,19 +133,19 @@ class ProjectTeamController extends GetxController {
     }
     isSearchResult.value = true;
     searchResult.addAll(usersList.where((user) =>
-        user.displayName.toLowerCase().contains(query.toLowerCase())));
+        user.displayName!.toLowerCase().contains(query.toLowerCase())));
 
     nothingFound.value = searchResult.isEmpty;
   }
 
   void setup(
-      {ProjectDetailed projectDetailed,
+      {ProjectDetailed? projectDetailed,
       bool withoutVisitors = false,
       bool withoutBlocked = false,
       projectId}) {
     _withoutVisitors = withoutVisitors;
     _withoutBlocked = withoutBlocked;
-    _projectId = projectId ?? projectDetailed.id;
+    _projectId = projectId ?? projectDetailed!.id;
     _projectDetailed = projectDetailed;
   }
 }

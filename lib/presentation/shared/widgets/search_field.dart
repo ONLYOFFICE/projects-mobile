@@ -38,20 +38,20 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class SearchField extends StatelessWidget {
   final bool autofocus;
   final bool showClearIcon;
-  final Color color;
-  final double width;
+  final Color? color;
+  final double? width;
   final double height;
-  final String hintText;
-  final Widget suffixIcon;
+  final String? hintText;
+  final Widget? suffixIcon;
   final EdgeInsetsGeometry margin;
-  final TextEditingController controller;
-  final Function(String value) onChanged;
-  final Function(String value) onSubmitted;
-  final Function() onSuffixTap;
-  final Function() onClearPressed;
+  final TextEditingController? controller;
+  final Function(String value)? onChanged;
+  final Function(String value)? onSubmitted;
+  final Function()? onSuffixTap;
+  final Function()? onClearPressed;
 
   const SearchField({
-    Key key,
+    Key? key,
     this.autofocus = false,
     this.color,
     this.controller,

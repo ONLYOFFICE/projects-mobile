@@ -42,14 +42,14 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class CodeView extends StatefulWidget {
-  CodeView({Key key}) : super(key: key);
+  CodeView({Key? key}) : super(key: key);
 
   @override
   _CodeViewState createState() => _CodeViewState();
 }
 
 class _CodeViewState extends State<CodeView> {
-  var controller;
+  late var controller;
 
   var codeController;
 

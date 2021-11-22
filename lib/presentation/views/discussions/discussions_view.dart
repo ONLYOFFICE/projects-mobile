@@ -50,12 +50,12 @@ import 'package:projects/presentation/views/discussions/filter/discussions_filte
 import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
-  const PortalDiscussionsView({Key key}) : super(key: key);
+  const PortalDiscussionsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<DiscussionsController>();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
     });
 
@@ -70,7 +70,7 @@ class PortalDiscussionsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             titleHeight: 101,
             bottomHeight: 0,
             showBackButton: false,
@@ -125,16 +125,16 @@ class DiscussionsList extends StatelessWidget {
   final controller;
   final ScrollController scrollController;
   const DiscussionsList({
-    Key key,
-    @required this.controller,
-    @required this.scrollController,
+    Key? key,
+    required this.controller,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // a temporary solution for the discussion page in projects
     // where there are no filters yet
-    var hasFilters = false;
+    bool? hasFilters = false;
     try {
       hasFilters = controller?.filterController?.hasFilters?.value;
     } catch (_) {}
@@ -143,7 +143,7 @@ class DiscussionsList extends StatelessWidget {
       if (controller.loaded == false) {
         return const ListLoadingSkeleton();
       } else {
-        if (controller.paginationController.data.isEmpty && hasFilters)
+        if (controller.paginationController.data.isEmpty && hasFilters!)
           return Center(
             child: EmptyScreen(
               icon: SvgIcons.not_found,

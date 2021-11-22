@@ -38,7 +38,7 @@ import 'package:projects/internal/locator.dart';
 
 // currently not used. There is no way to search for groups using the api
 class GroupSearchController extends BaseSearchController {
-  final GroupService _service = locator<GroupService>();
+  final GroupService? _service = locator<GroupService>();
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'GroupSearchController');
@@ -46,7 +46,7 @@ class GroupSearchController extends BaseSearchController {
   @override
   PaginationController get paginationController => _paginationController;
 
-  String _query;
+  String? _query;
 
   @override
   void onInit() {
@@ -61,7 +61,7 @@ class GroupSearchController extends BaseSearchController {
   }
 
   @override
-  Future search({needToClear = true, String query}) async {
+  Future search({needToClear = true, String? query}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;
@@ -76,9 +76,9 @@ class GroupSearchController extends BaseSearchController {
     loaded.value = true;
   }
 
-  Future _performSearch({needToClear = true, String query}) async {
+  Future _performSearch({needToClear = true, String? query}) async {
     // now the result is incorrect
-    var result = await _service.getGroupsByExtendedFilter(
+    var result = await _service!.getGroupsByExtendedFilter(
       startIndex: paginationController.startIndex,
       query: query,
     );

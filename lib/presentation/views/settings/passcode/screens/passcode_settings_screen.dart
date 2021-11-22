@@ -41,7 +41,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class PasscodeSettingsScreen extends StatelessWidget {
-  const PasscodeSettingsScreen({Key key}) : super(key: key);
+  const PasscodeSettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

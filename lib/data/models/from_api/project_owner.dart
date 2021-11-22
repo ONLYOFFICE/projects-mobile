@@ -31,10 +31,10 @@
  */
 
 class ProjectOwner {
-  int id;
-  String title;
-  int status;
-  bool isPrivate;
+  int? id;
+  String? title;
+  int? status;
+  bool? isPrivate;
 
   ProjectOwner({this.id, this.title, this.status, this.isPrivate});
 

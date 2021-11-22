@@ -42,7 +42,7 @@ class AdaptiveSize {
   static double get heightK => screenHeight / designHeight;
   static double get widthK => screenWidth / designWidth;
 
-  static void updateScreenSize({double height, double width}) {
+  static void updateScreenSize({double? height, double? width}) {
     screenHeight = height ?? Get.height;
     screenWidth = width ?? Get.width;
   }

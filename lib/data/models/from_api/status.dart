@@ -31,17 +31,17 @@
  */
 
 class Status {
-  int statusType;
-  bool canChangeAvailable;
-  int id;
-  String image;
-  String imageType;
-  String title;
-  String description;
-  String color;
-  int order;
-  bool isDefault;
-  bool available;
+  int? statusType;
+  bool? canChangeAvailable;
+  int? id;
+  String? image;
+  String? imageType;
+  String? title;
+  String? description;
+  String? color;
+  int? order;
+  bool? isDefault;
+  bool? available;
 
   Status(
       {this.statusType,

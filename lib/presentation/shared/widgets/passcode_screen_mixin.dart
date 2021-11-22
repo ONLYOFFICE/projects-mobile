@@ -51,10 +51,10 @@ mixin PasscodeScreenMixin on StatelessWidget {
   final bool hasBackButton = true;
 
   final String title = tr('enterPasscode');
-  final String caption = null;
-  final String errorText = null;
+  final String? caption = null;
+  final String? errorText = null;
 
-  final Widget keyboardLastRow = null;
+  final Widget? keyboardLastRow = null;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +76,7 @@ mixin PasscodeScreenMixin on StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: hasBackButton ? 114.h : 170.h),
+              SizedBox(height: hasBackButton ? 114.h as double? : 170.h as double?),
               Text(title,
                   textAlign: TextAlign.center,
                   style: TextStyleHelper.headline6(
@@ -87,12 +87,12 @@ mixin PasscodeScreenMixin on StatelessWidget {
                     return Column(children: [
                       const Flexible(flex: 1, child: SizedBox(height: 16)),
                       if (hasError.isTrue)
-                        Text(errorText,
+                        Text(errorText!,
                             textAlign: TextAlign.center,
                             style: TextStyleHelper.subtitle1(
                                 color: Get.theme.colors().colorError)),
                       if (hasError.isFalse && caption != null)
-                        Text(caption,
+                        Text(caption!,
                             textAlign: TextAlign.center,
                             style: TextStyleHelper.subtitle1(
                                 color: Get.theme

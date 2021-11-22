@@ -49,9 +49,9 @@ import 'package:projects/presentation/views/projects_view/new_project/tiles/team
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
 
 class EditProjectView extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailed? projectDetailed;
 
-  const EditProjectView({Key key, @required this.projectDetailed})
+  const EditProjectView({Key? key, required this.projectDetailed})
       : super(
           key: key,
         );

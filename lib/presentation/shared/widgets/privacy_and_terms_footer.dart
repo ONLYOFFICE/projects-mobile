@@ -41,7 +41,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyAndTermsFooter extends StatelessWidget {
   const PrivacyAndTermsFooter({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

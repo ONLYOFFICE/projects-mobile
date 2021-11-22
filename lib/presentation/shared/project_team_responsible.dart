@@ -44,7 +44,7 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamResponsibleSelectionView extends StatelessWidget {
-  const ProjectTeamResponsibleSelectionView({Key key}) : super(key: key);
+  const ProjectTeamResponsibleSelectionView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

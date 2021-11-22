@@ -45,27 +45,27 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscussionSubscribersView extends StatelessWidget {
-  final DiscussionItemController controller;
+  final DiscussionItemController? controller;
   const DiscussionSubscribersView({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.value == false)
+        if (controller!.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
-          var discussion = controller.discussion.value;
+          var discussion = controller!.discussion.value;
           return Stack(
             children: [
               SmartRefresher(
-                controller: controller.subscribersRefreshController,
-                onRefresh: controller.onRefresh,
+                controller: controller!.subscribersRefreshController,
+                onRefresh: controller!.onRefresh,
                 child: ListView.separated(
-                  itemCount: discussion.subscribers.length,
+                  itemCount: discussion.subscribers!.length,
                   padding:
                       const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
                   separatorBuilder: (BuildContext context, int index) {
@@ -74,14 +74,14 @@ class DiscussionSubscribersView extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) =>
                       PortalUserItem(
                           userController: PortalUserItemController(
-                              portalUser: discussion.subscribers[index],
+                              portalUser: discussion.subscribers![index],
                               isSelected: false.obs),
                           onTapFunction: (value) => {
                                 Get.find<NavigationController>().toScreen(
                                     const ProfileScreen(),
                                     arguments: {
                                       'portalUser':
-                                          discussion.subscribers[index]
+                                          discussion.subscribers![index]
                                     })
                               }),
                 ),
@@ -92,10 +92,10 @@ class DiscussionSubscribersView extends StatelessWidget {
                   padding: const EdgeInsets.only(right: 16, bottom: 24),
                   child: Obx(
                     () => Visibility(
-                      visible: controller.fabIsVisible.value,
+                      visible: controller!.fabIsVisible.value,
                       child: StyledFloatingActionButton(
                         onPressed: () =>
-                            controller.toSubscribersManagingScreen(context),
+                            controller!.toSubscribersManagingScreen(context),
                         child: AppIcon(
                           icon: SvgIcons.add_fab,
                           color: Get.theme.colors().onPrimarySurface,

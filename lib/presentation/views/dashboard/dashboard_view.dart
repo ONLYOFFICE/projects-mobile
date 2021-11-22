@@ -50,12 +50,12 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardView extends StatelessWidget {
-  const DashboardView({Key key}) : super(key: key);
+  const DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var dashboardController = Get.put(DashboardController())..setup();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
+    SchedulerBinding.instance!.addPostFrameCallback((_) async {
       dashboardController.loadContent();
     });
 
@@ -105,11 +105,11 @@ class DashboardView extends StatelessWidget {
 }
 
 class DashboardCardView extends StatelessWidget {
-  final String overline;
+  final String? overline;
   final controller;
 
   DashboardCardView({
-    Key key,
+    Key? key,
     this.overline,
     this.controller,
   }) : super(key: key);
@@ -143,7 +143,7 @@ class DashboardCardView extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            overline.toUpperCase(),
+                            overline!.toUpperCase(),
                             style: TextStyleHelper.overline(
                               color:
                                   Get.theme.colors().onSurface.withOpacity(0.6),
@@ -240,7 +240,7 @@ class DashboardCardView extends StatelessWidget {
                                   children: [
                                     Text(
                                       tr('dashboardNoActive',
-                                          args: [overline.toLowerCase()]),
+                                          args: [overline!.toLowerCase()]),
                                       style: TextStyleHelper.subtitle1(
                                         color: Get.theme
                                             .colors()
@@ -313,7 +313,7 @@ class DashboardCardView extends StatelessWidget {
 }
 
 class Title extends StatelessWidget {
-  const Title({Key key, @required this.controller}) : super(key: key);
+  const Title({Key? key, required this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {
@@ -347,10 +347,10 @@ class Title extends StatelessWidget {
 
 //project content
 class ProjectCardContent extends StatelessWidget {
-  final ProjectsController controller;
+  final ProjectsController? controller;
 
   ProjectCardContent({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 
@@ -361,15 +361,15 @@ class ProjectCardContent extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          if (controller.loaded.value)
+          if (controller!.loaded.value)
             Column(children: [
               ListView.builder(
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (c, i) => i < 2
-                    ? ProjectCell(item: controller.paginationController.data[i])
+                    ? ProjectCell(item: controller!.paginationController!.data[i])
                     : const SizedBox(),
-                itemCount: controller.paginationController.data.length,
+                itemCount: controller!.paginationController!.data.length,
               ),
             ]),
         ],
@@ -380,29 +380,29 @@ class ProjectCardContent extends StatelessWidget {
 
 //task content
 class TaskCardContent extends StatelessWidget {
-  final TasksController controller;
+  final TasksController? controller;
 
   TaskCardContent({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.showAll.value == true
+      () => controller!.showAll.value == true
           ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                if (controller.loaded.value)
+                if (controller!.loaded.value)
                   Column(children: [
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => TaskCell(
-                          task: controller.paginationController.data[i]),
-                      itemCount: controller.paginationController.data.length,
+                          task: controller!.paginationController!.data[i]),
+                      itemCount: controller!.paginationController!.data.length,
                     ),
                   ]),
               ],
@@ -411,16 +411,16 @@ class TaskCardContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                if (controller.loaded.value)
+                if (controller!.loaded.value)
                   Column(children: [
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => i < 2
                           ? TaskCell(
-                              task: controller.paginationController.data[i])
+                              task: controller!.paginationController!.data[i])
                           : const SizedBox(),
-                      itemCount: controller.paginationController.data.length,
+                      itemCount: controller!.paginationController!.data.length,
                     ),
                   ]),
               ],

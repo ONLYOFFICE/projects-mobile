@@ -35,7 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class SplashView extends StatelessWidget {
-  const SplashView({Key key}) : super(key: key);
+  const SplashView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

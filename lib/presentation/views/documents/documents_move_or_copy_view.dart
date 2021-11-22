@@ -52,15 +52,15 @@ import 'package:projects/presentation/views/documents/filter/documents_filter_sc
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class DocumentsMoveOrCopyView extends StatelessWidget {
-  DocumentsMoveOrCopyView({Key key}) : super(key: key);
+  DocumentsMoveOrCopyView({Key? key}) : super(key: key);
 
   final controller = Get.find<DocumentsMoveOrCopyController>();
 
   @override
   Widget build(BuildContext context) {
     final target = Get.arguments['target'];
-    final int initialFolderId = Get.arguments['initialFolderId'];
-    final String mode = Get.arguments['mode'];
+    final int? initialFolderId = Get.arguments['initialFolderId'];
+    final String? mode = Get.arguments['mode'];
 
     controller.initialSetup();
 
@@ -82,7 +82,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: DocsBottom(controller: controller),
             showBackButton: true,
@@ -96,7 +96,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
 }
 
 class MoveFolderContentView extends StatelessWidget {
-  MoveFolderContentView({Key key}) : super(key: key);
+  MoveFolderContentView({Key? key}) : super(key: key);
 
   final controller = Get.find<DocumentsMoveOrCopyController>();
 
@@ -104,12 +104,12 @@ class MoveFolderContentView extends StatelessWidget {
   Widget build(BuildContext context) {
     final Folder currentFolder = Get.arguments['currentFolder'];
     final target = Get.arguments['target'];
-    final int initialFolderId = Get.arguments['initialFolderId'];
+    final int? initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
-    final String mode = Get.arguments['mode'];
+    final String? mode = Get.arguments['mode'];
 
     controller.setupFolder(
-        folderName: currentFolder.title, folder: currentFolder);
+        folderName: currentFolder.title!, folder: currentFolder);
 
     controller.setupOptions(target, initialFolderId);
 
@@ -129,7 +129,7 @@ class MoveFolderContentView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: DocsBottom(controller: controller),
             showBackButton: true,
@@ -144,18 +144,18 @@ class MoveFolderContentView extends StatelessWidget {
 }
 
 class DocumentsMoveSearchView extends StatelessWidget {
-  DocumentsMoveSearchView({Key key}) : super(key: key);
+  DocumentsMoveSearchView({Key? key}) : super(key: key);
 
   final controller = Get.find<DocumentsMoveOrCopyController>();
 
   @override
   Widget build(BuildContext context) {
-    final Folder currentFolder = Get.arguments['currentFolder'];
+    final Folder? currentFolder = Get.arguments['currentFolder'];
     final target = Get.arguments['target'];
-    final int initialFolderId = Get.arguments['initialFolderId'];
+    final int? initialFolderId = Get.arguments['initialFolderId'];
     final int foldersCount = Get.arguments['foldersCount'];
-    final String folderName = Get.arguments['folderName'];
-    final String mode = Get.arguments['mode'];
+    final String? folderName = Get.arguments['folderName'];
+    final String? mode = Get.arguments['mode'];
 
     controller.setupSearchMode(folderName: folderName, folder: currentFolder);
 
@@ -177,7 +177,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: CustomSearchBar(controller: controller),
             showBackButton: true,
             titleHeight: 50,
@@ -190,12 +190,12 @@ class DocumentsMoveSearchView extends StatelessWidget {
 
 class _DocumentsScreen extends StatelessWidget {
   const _DocumentsScreen({
-    Key key,
-    @required this.controller,
-    @required this.scrollController,
+    Key? key,
+    required this.controller,
+    required this.scrollController,
     this.appBar,
   }) : super(key: key);
-  final PreferredSizeWidget appBar;
+  final PreferredSizeWidget? appBar;
   final DocumentsMoveOrCopyController controller;
   final ScrollController scrollController;
 
@@ -215,8 +215,8 @@ class _DocumentsScreen extends StatelessWidget {
                     icon: SvgIcons.not_found, text: tr('notFound')));
           }
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value &&
+              controller.paginationController!.data.isEmpty &&
+              !controller.filterController!.hasFilters.value &&
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
@@ -224,24 +224,24 @@ class _DocumentsScreen extends StatelessWidget {
                     text: tr('noDocumentsCreated')));
           }
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value &&
+              controller.paginationController!.data.isEmpty &&
+              controller.filterController!.hasFilters.value &&
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
           }
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isNotEmpty) {
+              controller.paginationController!.data.isNotEmpty) {
             return PaginationListView(
               paginationController: controller.paginationController,
               child: ListView.separated(
-                itemCount: controller.paginationController.data.length,
+                itemCount: controller.paginationController!.data.length,
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(height: 10);
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  var element = controller.paginationController.data[index];
+                  var element = controller.paginationController!.data[index];
                   return MoveFolderCell(
                     element: element,
                     controller: controller,
@@ -258,7 +258,7 @@ class _DocumentsScreen extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({Key key, @required this.controller}) : super(key: key);
+  const _Title({Key? key, required this.controller}) : super(key: key);
 
   final DocumentsMoveOrCopyController controller;
   @override
@@ -325,12 +325,12 @@ class _Title extends StatelessWidget {
 
 class MoveDocumentsScreen extends StatelessWidget {
   const MoveDocumentsScreen({
-    Key key,
-    @required this.controller,
-    @required this.scrollController,
+    Key? key,
+    required this.controller,
+    required this.scrollController,
     this.appBar,
   }) : super(key: key);
-  final PreferredSizeWidget appBar;
+  final PreferredSizeWidget? appBar;
   final DocumentsMoveOrCopyController controller;
   final ScrollController scrollController;
 
@@ -352,8 +352,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                 ),
               ),
             if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value &&
+                controller.paginationController!.data.isEmpty &&
+                !controller.filterController!.hasFilters.value &&
                 controller.searchMode.value == false)
               Expanded(
                 child: Center(
@@ -363,8 +363,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                 ),
               ),
             if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value &&
+                controller.paginationController!.data.isEmpty &&
+                controller.filterController!.hasFilters.value &&
                 controller.searchMode.value == false)
               Expanded(
                 child: Center(
@@ -375,18 +375,18 @@ class MoveDocumentsScreen extends StatelessWidget {
                 ),
               ),
             if (controller.loaded.value == true &&
-                controller.paginationController.data.isNotEmpty)
+                controller.paginationController!.data.isNotEmpty)
               Expanded(
                 child: PaginationListView(
                   paginationController: controller.paginationController,
                   child: ListView.separated(
-                    itemCount: controller.paginationController.data.length,
+                    itemCount: controller.paginationController!.data.length,
                     controller: scrollController,
                     separatorBuilder: (BuildContext context, int index) {
                       return const SizedBox(height: 10);
                     },
                     itemBuilder: (BuildContext context, int index) {
-                      var element = controller.paginationController.data[index];
+                      var element = controller.paginationController!.data[index];
                       if (controller.target == element.id)
                         return const SizedBox();
                       return element is Folder

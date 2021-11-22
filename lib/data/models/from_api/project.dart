@@ -42,14 +42,14 @@ class Project {
     this.isPrivate,
     this.responsible,
   });
-  int id;
-  String description;
-  String title;
-  int status;
-  bool canEdit;
-  bool isPrivate;
+  int? id;
+  String? description;
+  String? title;
+  int? status;
+  bool? canEdit;
+  bool? isPrivate;
 
-  PortalUser responsible;
+  PortalUser? responsible;
 
   Project.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -40,10 +40,10 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class CommentEditingController extends GetxController {
-  final _api = locator<CommentsService>();
-  final String commentBody;
-  final String commentId;
-  final CommentItemController itemController;
+  final CommentsService? _api = locator<CommentsService>();
+  final String? commentBody;
+  final String? commentId;
+  final CommentItemController? itemController;
 
   CommentEditingController({
     this.commentBody,
@@ -69,12 +69,12 @@ class CommentEditingController extends GetxController {
       return;
     }
 
-    var result = await _api.updateComment(
+    var result = await _api!.updateComment(
       commentId: commentId,
       content: text,
     );
     if (result != null) {
-      itemController.comment.value.commentBody = result;
+      itemController!.comment!.value.commentBody = result;
       Get.back();
     } else {
       debugPrint(result);

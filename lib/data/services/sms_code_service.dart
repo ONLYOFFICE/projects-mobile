@@ -36,12 +36,12 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class SmsCodeService {
-  final _api = locator<AuthApi>();
+  final AuthApi? _api = locator<AuthApi>();
 
   Future setPhone({
-    String userName,
-    String password,
-    String mobilePhone,
+    String? userName,
+    String? password,
+    String? mobilePhone,
   }) async {
     var body = {
       'userName': userName,
@@ -49,32 +49,32 @@ class SmsCodeService {
       'mobilePhone': mobilePhone
     };
 
-    var result = await _api.setPhone(body);
+    var result = await _api!.setPhone(body);
 
     var success = result.response != null;
 
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message!);
       return null;
     }
   }
 
-  Future sendSms({String userName, String password}) async {
+  Future sendSms({String? userName, String? password}) async {
     var body = {
       'userName': userName,
       'password': password,
     };
 
-    var result = await _api.sendSms(body);
+    var result = await _api!.sendSms(body);
 
     var success = result.response != null;
 
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message!);
       return null;
     }
   }

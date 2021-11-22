@@ -50,7 +50,7 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectDiscussionSubscribers extends StatelessWidget {
-  const SelectDiscussionSubscribers({Key key}) : super(key: key);
+  const SelectDiscussionSubscribers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +85,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                   style: TextStyleHelper.headerStyle(
                       color: Get.theme.colors().onSurface),
                 ),
-                if (controller.subscribers.isNotEmpty)
-                  Text(plural('selected', controller.subscribers.length),
+                if (controller.subscribers!.isNotEmpty)
+                  Text(plural('selected', controller.subscribers!.length),
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onSurface))
               ],

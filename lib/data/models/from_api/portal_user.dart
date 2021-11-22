@@ -34,33 +34,33 @@ import 'package:projects/data/models/from_api/contact.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 
 class PortalUser {
-  String id;
-  String userName;
-  bool isVisitor;
-  String firstName;
-  String lastName;
-  String email;
-  String birthday;
-  String sex;
-  int status;
-  int activationStatus;
-  String terminated;
-  String department;
-  String workFrom;
-  String displayName;
-  String mobilePhone;
-  String title;
-  List<Contact> contacts;
-  List<PortalGroup> groups;
-  String avatarMedium;
-  String avatar;
-  bool isAdmin;
-  bool isLDAP;
-  bool isOwner;
-  bool isSSO;
-  String avatarSmall;
-  String profileUrl;
-  List<String> listAdminModules;
+  String? id;
+  String? userName;
+  bool? isVisitor;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? birthday;
+  String? sex;
+  int? status;
+  int? activationStatus;
+  String? terminated;
+  String? department;
+  String? workFrom;
+  String? displayName;
+  String? mobilePhone;
+  String? title;
+  List<Contact>? contacts;
+  List<PortalGroup>? groups;
+  String? avatarMedium;
+  String? avatar;
+  bool? isAdmin;
+  bool? isLDAP;
+  bool? isOwner;
+  bool? isSSO;
+  String? avatarSmall;
+  String? profileUrl;
+  List<String>? listAdminModules;
 
   PortalUser({
     this.id,
@@ -112,13 +112,13 @@ class PortalUser {
     if (json['contacts'] != null) {
       contacts = <Contact>[];
       json['contacts'].forEach((v) {
-        contacts.add(Contact.fromJson(v));
+        contacts!.add(Contact.fromJson(v));
       });
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
       json['groups'].forEach((v) {
-        groups.add(PortalGroup.fromJson(v));
+        groups!.add(PortalGroup.fromJson(v));
       });
     }
     avatarMedium = json['avatarMedium'];
@@ -132,7 +132,7 @@ class PortalUser {
     if (json['listAdminModules'] != null) {
       listAdminModules = <String>[];
       json['listAdminModules'].forEach((v) {
-        listAdminModules.add(v);
+        listAdminModules!.add(v);
       });
     }
   }
@@ -156,10 +156,10 @@ class PortalUser {
     data['mobilePhone'] = mobilePhone;
     data['title'] = title;
     if (contacts != null) {
-      data['contacts'] = contacts.map((v) => v.toJson()).toList();
+      data['contacts'] = contacts!.map((v) => v.toJson()).toList();
     }
     if (groups != null) {
-      data['groups'] = groups.map((v) => v.toJson()).toList();
+      data['groups'] = groups!.map((v) => v.toJson()).toList();
     }
     data['avatarMedium'] = avatarMedium;
     data['avatar'] = avatar;

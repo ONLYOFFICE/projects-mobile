@@ -35,7 +35,7 @@ part of '../documents_filter_screen.dart';
 class _SearchSettings extends StatelessWidget {
   final filterController;
 
-  const _SearchSettings({Key key, this.filterController}) : super(key: key);
+  const _SearchSettings({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

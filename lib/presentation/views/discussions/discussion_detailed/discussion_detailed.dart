@@ -45,7 +45,7 @@ import 'package:projects/presentation/views/discussions/widgets/app_bar_menu_but
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 
 class DiscussionDetailed extends StatefulWidget {
-  DiscussionDetailed({Key key}) : super(key: key);
+  DiscussionDetailed({Key? key}) : super(key: key);
 
   @override
   _DiscussionDetailedState createState() => _DiscussionDetailedState();
@@ -53,31 +53,31 @@ class DiscussionDetailed extends StatefulWidget {
 
 class _DiscussionDetailedState extends State<DiscussionDetailed>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
   int _activeIndex = 0;
-  DiscussionItemController controller;
+  DiscussionItemController? controller;
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
     var discussion = Get.arguments['discussion'];
     controller = Get.put(DiscussionItemController(discussion));
-    controller.getDiscussionDetailed();
+    controller!.getDiscussionDetailed();
     super.initState();
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
+    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController.addListener(() {
-      if (_tabController.indexIsChanging) {
+    _tabController!.addListener(() {
+      if (_tabController!.indexIsChanging) {
         setState(() {
-          _activeIndex = _tabController.index;
+          _activeIndex = _tabController!.index;
         });
       }
     });
@@ -99,16 +99,16 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex == 1,
-                      count: controller.discussion.value.commentsCount),
+                      count: controller!.discussion.value.commentsCount),
                   CustomTab(
                       title: tr('subscribers'),
                       currentTab: _activeIndex == 2,
                       count:
-                          controller?.discussion?.value?.subscribers?.length),
+                          controller?.discussion.value.subscribers?.length),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex == 3,
-                      count: controller?.discussion?.value?.files?.length),
+                      count: controller?.discussion.value.files?.length),
                   Tab(text: tr('overview')),
                 ]),
           ),
@@ -116,7 +116,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
         body: TabBarView(controller: _tabController, children: [
           DiscussionCommentsView(controller: controller),
           DiscussionSubscribersView(controller: controller),
-          DiscussionsDocumentsView(files: controller?.discussion?.value?.files),
+          DiscussionsDocumentsView(files: controller?.discussion.value.files),
           DiscussionOverview(controller: controller),
         ]),
       ),

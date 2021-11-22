@@ -31,11 +31,11 @@
  */
 
 class SecrityInfo {
-  bool canCreateProject;
-  bool canCreateTask;
-  bool canCreateMilestone;
-  bool canCreateMessage;
-  bool canCreateTimeSpend;
+  bool? canCreateProject;
+  bool? canCreateTask;
+  bool? canCreateMilestone;
+  bool? canCreateMessage;
+  bool? canCreateTimeSpend;
 
   SecrityInfo(
       {this.canCreateProject,

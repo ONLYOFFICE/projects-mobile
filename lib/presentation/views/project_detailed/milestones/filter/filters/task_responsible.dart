@@ -33,7 +33,7 @@
 part of '../milestone_filter_screen.dart';
 
 class _TaskResponsible extends StatelessWidget {
-  const _TaskResponsible({Key key}) : super(key: key);
+  const _TaskResponsible({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +45,15 @@ class _TaskResponsible extends StatelessWidget {
           FilterElement(
               title: tr('myTasks'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.taskResponsible['me'],
+              isSelected: filterController.taskResponsible!['me'],
               onTap: () => filterController.changeTasksResponsible('me')),
           FilterElement(
-            title: filterController.taskResponsible['other'].isEmpty
+            title: filterController.taskResponsible!['other'].isEmpty
                 ? tr('otherUser')
-                : filterController.taskResponsible['other'],
-            isSelected: filterController.taskResponsible['other'].isNotEmpty,
+                : filterController.taskResponsible!['other'],
+            isSelected: filterController.taskResponsible!['other'].isNotEmpty,
             cancelButtonEnabled:
-                filterController.taskResponsible['other'].isNotEmpty,
+                filterController.taskResponsible!['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());

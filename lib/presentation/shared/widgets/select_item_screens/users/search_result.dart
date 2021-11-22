@@ -34,8 +34,8 @@ part of 'select_user_screen.dart';
 
 class _SearchResult extends StatelessWidget {
   const _SearchResult({
-    Key key,
-    @required this.searchController,
+    Key? key,
+    required this.searchController,
   }) : super(key: key);
 
   final UserSearchController searchController;

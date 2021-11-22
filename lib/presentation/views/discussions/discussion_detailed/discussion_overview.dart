@@ -46,23 +46,23 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
 class DiscussionOverview extends StatelessWidget {
-  final DiscussionItemController controller;
+  final DiscussionItemController? controller;
   const DiscussionOverview({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.value == false)
+        if (controller!.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
-          var discussion = controller.discussion.value;
+          var discussion = controller!.discussion.value;
           return SmartRefresher(
-            controller: controller.refreshController,
-            onRefresh: controller.onRefresh,
+            controller: controller!.refreshController,
+            onRefresh: controller!.onRefresh,
             child: ListView(
               children: [
                 const SizedBox(height: 20),
@@ -77,7 +77,7 @@ class DiscussionOverview extends StatelessWidget {
                 ),
                 Padding(
                     padding: const EdgeInsets.only(left: 72, right: 16),
-                    child: Text(discussion.title,
+                    child: Text(discussion.title!,
                         style: TextStyleHelper.headline6(
                             color: Get.theme.colors().onSurface))),
                 const SizedBox(height: 22),
@@ -108,23 +108,23 @@ class DiscussionOverview extends StatelessWidget {
                   icon: AppIcon(
                       icon: SvgIcons.project, color: const Color(0xff707070)),
                   caption: '${tr('project')}:',
-                  subtitle: discussion.project.title,
+                  subtitle: discussion.project!.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
                     color: Get.theme.colors().links,
                   ),
-                  onTap: controller.toProjectOverview,
+                  onTap: controller!.toProjectOverview,
                 ),
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)
                   InfoTile(
                     caption: '${tr('creationDate')}:',
-                    subtitle: formatedDate(discussion.created),
+                    subtitle: formatedDate(discussion.created!),
                   ),
                 if (discussion.createdBy != null) const SizedBox(height: 20),
                 if (discussion.createdBy != null)
                   InfoTile(
                     caption: '${tr('createdBy')}:',
-                    subtitle: discussion.createdBy.displayName,
+                    subtitle: discussion.createdBy!.displayName,
                   ),
                 const SizedBox(height: 100),
               ],
@@ -138,11 +138,11 @@ class DiscussionOverview extends StatelessWidget {
 
 class _DiscussionStatus extends StatelessWidget {
   const _DiscussionStatus({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final DiscussionItemController controller;
+  final DiscussionItemController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -153,9 +153,9 @@ class _DiscussionStatus extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 72, right: 16),
           child: StatusButton(
-            canEdit: controller.discussion.value.canEdit,
-            text: controller.status.value == 1 ? tr('archived') : tr('open'),
-            onPressed: () async => controller.tryChangingStatus(context),
+            canEdit: controller!.discussion.value.canEdit,
+            text: controller!.status.value == 1 ? tr('archived') : tr('open'),
+            onPressed: () async => controller!.tryChangingStatus(context),
           ),
         ),
       ),

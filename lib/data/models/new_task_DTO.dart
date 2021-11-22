@@ -47,24 +47,24 @@ class NewTaskDTO {
     this.title,
   });
 
-  final String description;
-  final String priority;
-  final String title;
-  final int id;
-  final int milestoneid;
-  final int projectId;
-  final List<String> responsibles;
+  final String? description;
+  final String? priority;
+  final String? title;
+  final int? id;
+  final int? milestoneid;
+  final int? projectId;
+  final List<String?>? responsibles;
   // DateTime here but Iso8601String when sends to api
-  final DateTime deadline;
+  final DateTime? deadline;
   // DateTime here but Iso8601String when sends to api
-  final DateTime startDate;
+  final DateTime? startDate;
   // currently this is only used when copying
-  final bool copyFiles;
+  final bool? copyFiles;
   // currently this is only used when copying
-  final bool copySubtasks;
-  final bool notify;
+  final bool? copySubtasks;
+  final bool? notify;
   // currently this is only used when copying
-  final bool removeOld;
+  final bool? removeOld;
 
   factory NewTaskDTO.fromJson(Map<String, dynamic> json) => NewTaskDTO(
         description: json['description'],
@@ -87,17 +87,17 @@ class NewTaskDTO {
 
   Map<String, dynamic> toJson() => {
         'description': description,
-        'deadline': deadline != null ? deadline.toIso8601String() : null,
+        'deadline': deadline != null ? deadline!.toIso8601String() : null,
         'id': id,
         'priority': priority,
         'title': title,
         'milestoneid': milestoneid,
         'projectid': projectId,
         'responsibles': responsibles != null
-            ? List<dynamic>.from(responsibles.map((x) => x))
+            ? List<dynamic>.from(responsibles!.map((x) => x))
             : null,
         'notify': notify,
-        'startDate': startDate != null ? startDate.toIso8601String() : null,
+        'startDate': startDate != null ? startDate!.toIso8601String() : null,
         'copyFiles': copyFiles,
         'copySubtasks': copySubtasks,
         'removeOld': removeOld,

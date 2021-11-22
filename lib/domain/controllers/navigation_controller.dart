@@ -119,8 +119,8 @@ class NavigationController extends GetxController {
 
   Future toScreen(
     Widget widget, {
-    bool preventDuplicates,
-    Map<String, dynamic> arguments,
+    bool? preventDuplicates,
+    Map<String, dynamic>? arguments,
   }) async {
     if (Get.find<PlatformController>().isMobile) {
       return await Get.to(
@@ -139,7 +139,7 @@ class NavigationController extends GetxController {
   }
 
   void to(Widget widget,
-      {bool preventDuplicates, Map<String, dynamic> arguments}) {
+      {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
         () => widget,

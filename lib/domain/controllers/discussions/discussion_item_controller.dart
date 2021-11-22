@@ -57,7 +57,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class DiscussionItemController extends GetxController {
-  final _api = locator<DiscussionItemService>();
+  final DiscussionItemService? _api = locator<DiscussionItemService>();
 
   var discussion = Discussion().obs;
   var status = 0.obs;
@@ -76,9 +76,9 @@ class DiscussionItemController extends GetxController {
 
   DiscussionItemController(Discussion discussion) {
     this.discussion.value = discussion;
-    status.value = discussion.status;
+    status.value = discussion.status!;
 
-    fabIsVisible.value = discussion.canEdit && discussion.status == 0;
+    fabIsVisible.value = discussion.canEdit! && discussion.status == 0;
   }
 
   var commentsListController = ScrollController();
@@ -95,7 +95,7 @@ class DiscussionItemController extends GetxController {
   }
 
   bool get isSubscribed {
-    for (var item in discussion.value.subscribers) {
+    for (var item in discussion.value.subscribers!) {
       if (item.id == selfId) return true;
     }
     return false;
@@ -119,7 +119,7 @@ class DiscussionItemController extends GetxController {
 
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;
-    var result = await _api.getMessageDetailed(id: discussion.value.id);
+    var result = await _api!.getMessageDetailed(id: discussion.value.id);
 
     if (result != null) {
       try {
@@ -132,7 +132,7 @@ class DiscussionItemController extends GetxController {
   }
 
   void tryChangingStatus(context) async {
-    if (discussion.value.canEdit) {
+    if (discussion.value.canEdit!) {
       await showsDiscussionStatusesBS(context: context, controller: this);
     }
   }
@@ -141,17 +141,17 @@ class DiscussionItemController extends GetxController {
     var newStatusStr = newStatus == 1 ? 'archived' : 'open';
 
     try {
-      Discussion result = await _api.updateMessageStatus(
-          id: discussion.value.id, newStatus: newStatusStr);
+      Discussion? result = await (_api!.updateMessageStatus(
+          id: discussion.value.id, newStatus: newStatusStr) as Future<Discussion?>);
       if (result != null) {
         discussion.value.setStatus = result.status;
-        status.value = result.status;
+        status.value = result.status!;
         // ignore: unawaited_futures
         getDiscussionDetailed(showLoading: true);
         Get.back();
       }
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -164,13 +164,13 @@ class DiscussionItemController extends GetxController {
 
   Future<void> subscribeToMessageAction() async {
     try {
-      Discussion result =
-          await _api.subscribeToMessage(id: discussion.value.id);
+      Discussion? result =
+          await (_api!.subscribeToMessage(id: discussion.value.id) as Future<Discussion?>);
       if (result != null) {
         discussion.value.setSubscribers = result.subscribers;
       }
     } catch (e) {
-      debugPrint(e);
+      debugPrint(e.toString());
     }
   }
 
@@ -182,7 +182,7 @@ class DiscussionItemController extends GetxController {
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {
-          Discussion result = await _api.deleteMessage(id: discussion.value.id);
+          Discussion? result = await (_api!.deleteMessage(id: discussion.value.id) as Future<Discussion?>);
           if (result != null) {
             Get.back();
             Get.back();
@@ -227,10 +227,10 @@ class DiscussionItemController extends GetxController {
     var controller = Get.put(
       DiscussionEditingController(
         id: discussion.value.id,
-        title: discussion.value.title.obs,
-        text: discussion.value.text.obs,
-        projectId: discussion.value.project.id,
-        selectedProjectTitle: discussion.value.project.title.obs,
+        title: discussion.value.title!.obs,
+        text: discussion.value.text!.obs,
+        projectId: discussion.value.project!.id,
+        selectedProjectTitle: discussion.value.project!.title!.obs,
         initialSubscribers: discussion.value.subscribers,
       ),
     );
@@ -247,7 +247,7 @@ class DiscussionItemController extends GetxController {
   void toProjectOverview() async {
     var projectService = locator<ProjectService>();
     var project = await projectService.getProjectById(
-      projectId: discussion.value.projectOwner.id,
+      projectId: discussion.value.projectOwner!.id,
     );
     if (project != null)
       Get.find<NavigationController>().to(

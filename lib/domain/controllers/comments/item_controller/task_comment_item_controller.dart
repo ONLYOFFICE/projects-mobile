@@ -47,23 +47,23 @@ import 'package:projects/presentation/views/task_detailed/comments/comment_editi
 
 class TaskCommentItemController extends GetxController
     implements CommentItemController {
-  final _api = locator<CommentsService>();
+  final CommentsService? _api = locator<CommentsService>();
 
   @override
-  final Rx<PortalComment> comment;
-  final int taskId;
+  final Rx<PortalComment>? comment;
+  final int? taskId;
   TaskCommentItemController({this.comment, this.taskId});
 
   @override
   Future<void> copyLink(context) async {
     var projectId = Get.find<TaskItemController>(tag: taskId.toString())
         .task
-        .value
-        .projectOwner
+        .value!
+        .projectOwner!
         .id;
 
-    var link = await _api.getTaskCommentLink(
-      commentId: comment.value.commentId,
+    var link = await _api!.getTaskCommentLink(
+      commentId: comment!.value.commentId,
       taskId: taskId,
       projectId: projectId,
     );
@@ -83,7 +83,7 @@ class TaskCommentItemController extends GetxController
       onCancelTap: Get.back,
       onAcceptTap: () async {
         var response =
-            await _api.deleteComment(commentId: comment.value.commentId);
+            await _api!.deleteComment(commentId: comment!.value.commentId);
         if (response != null) {
           Get.back();
 
@@ -103,8 +103,8 @@ class TaskCommentItemController extends GetxController
   @override
   void toCommentEditingView() {
     Get.find<NavigationController>().to(const CommentEditingView(), arguments: {
-      'commentId': comment.value.commentId,
-      'commentBody': comment.value.commentBody,
+      'commentId': comment!.value.commentId,
+      'commentBody': comment!.value.commentBody,
       'itemController': this,
     });
   }

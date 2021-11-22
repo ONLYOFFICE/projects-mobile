@@ -39,8 +39,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class UsersSearchBar extends StatelessWidget {
   const UsersSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final UsersDataSource controller;

@@ -39,14 +39,14 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 
 class SelectDateView extends StatelessWidget {
   const SelectDateView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var controller = Get.arguments['controller'];
     bool startDate = Get.arguments['startDate'];
-    DateTime initialDate = Get.arguments['initialDate'];
+    DateTime? initialDate = Get.arguments['initialDate'];
 
     final platformController = Get.find<PlatformController>();
 

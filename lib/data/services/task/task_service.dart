@@ -30,7 +30,6 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -42,13 +41,13 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskService {
-  final TaskApi _api = locator<TaskApi>();
-  final SecureStorage _secureStorage = locator<SecureStorage>();
+  final TaskApi? _api = locator<TaskApi>();
+  final SecureStorage? _secureStorage = locator<SecureStorage>();
 
   var portalTask = PortalTask().obs;
 
-  Future addTask({NewTaskDTO newTask}) async {
-    var task = await _api.addTask(newTask: newTask);
+  Future addTask({required NewTaskDTO newTask}) async {
+    var task = await _api!.addTask(newTask: newTask);
 
     var success = task.response != null;
 
@@ -56,56 +55,56 @@ class TaskService {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.createEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
-      await Get.find<ErrorDialog>().show(task.error.message);
+      await Get.find<ErrorDialog>().show(task.error!.message!);
       return null;
     }
   }
 
-  Future getTaskByID({int id}) async {
-    var task = await _api.getTaskByID(id: id);
+  Future getTaskByID({int? id}) async {
+    var task = await _api!.getTaskByID(id: id);
 
     var success = task.response != null;
 
     if (success) {
       return task.response;
     } else {
-      await Get.find<ErrorDialog>().show(task.error.message);
+      await Get.find<ErrorDialog>().show(task.error!.message!);
       return null;
     }
   }
 
   Future getStatuses() async {
-    var statuses = await _api.getStatuses();
+    var statuses = await _api!.getStatuses();
 
     var success = statuses.response != null;
 
     if (success) {
       return statuses.response;
     } else {
-      await Get.find<ErrorDialog>().show(statuses.error.message);
+      await Get.find<ErrorDialog>().show(statuses.error!.message!);
       return null;
     }
   }
 
-  Future<PageDTO<List<PortalTask>>> getTasksByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    String responsibleFilter,
-    String creatorFilter,
-    String projectFilter,
-    String milestoneFilter,
-    String statusFilter,
-    String projectId,
-    String deadlineFilter,
+  Future<PageDTO<List<PortalTask>>?> getTasksByParams({
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    String? responsibleFilter,
+    String? creatorFilter,
+    String? projectFilter,
+    String? milestoneFilter,
+    String? statusFilter,
+    String? projectId,
+    String? deadlineFilter,
   }) async {
-    var projects = await _api.getTasksByParams(
+    var projects = await _api!.getTasksByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
@@ -124,14 +123,14 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error.message);
+      await Get.find<ErrorDialog>().show(projects.error!.message!);
       return null;
     }
   }
 
-  Future<PageDTO<List<PortalTask>>> searchTasks({
-    int startIndex,
-    String query,
+  Future<PageDTO<List<PortalTask>>?> searchTasks({
+    int? startIndex,
+    String? query,
     // String sortBy,
     // String sortOrder,
     // String responsibleFilter,
@@ -141,7 +140,7 @@ class TaskService {
     // String projectId,
     // String deadlineFilter,
   }) async {
-    var projects = await _api.getTasksByParams(
+    var projects = await _api!.getTasksByParams(
       startIndex: startIndex,
       query: query,
       // sortBy: sortBy,
@@ -159,13 +158,13 @@ class TaskService {
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error.message);
+      await Get.find<ErrorDialog>().show(projects.error!.message!);
       return null;
     }
   }
 
-  Future updateTask({@required NewTaskDTO newTask}) async {
-    var task = await _api.updateTask(newTask: newTask);
+  Future updateTask({required NewTaskDTO newTask}) async {
+    var task = await _api!.updateTask(newTask: newTask);
 
     var success = task.response != null;
 
@@ -173,7 +172,7 @@ class TaskService {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;

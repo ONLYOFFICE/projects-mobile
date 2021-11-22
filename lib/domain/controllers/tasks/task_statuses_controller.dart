@@ -41,7 +41,7 @@ import 'package:projects/internal/utils/debug_print.dart';
 import 'package:projects/internal/utils/image_decoder.dart';
 
 class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
+  final TaskService? _api = locator<TaskService>();
 
   RxList statuses = <Status>[].obs;
   RxList statusImagesDecoded = <String>[].obs;
@@ -52,10 +52,10 @@ class TaskStatusesController extends GetxController {
     await _updateStatuses(forceReload: true);
   }
 
-  Future _updateStatuses({bool forceReload = false}) async {
+  Future<void> _updateStatuses({bool forceReload = false}) async {
     if (forceReload || loaded.value != false) {
       loaded.value = false;
-      statuses.value = await _api.getStatuses();
+      statuses.value = await (_api!.getStatuses() as Future<List<dynamic>>);
       statusImagesDecoded.clear();
       for (var element in statuses) {
         statusImagesDecoded.add(decodeImageString(element.image));
@@ -64,10 +64,10 @@ class TaskStatusesController extends GetxController {
     }
   }
 
-  Future getTaskStatus(PortalTask task) async {
+  Future getTaskStatus(PortalTask? task) async {
     if (!loaded.isFalse) {
       var status;
-      status = await _findStatus(task);
+      status = await _findStatus(task!);
       if (status == null && !loaded.isFalse) {
         printWarning('TASK ID ${task.id} STATUS DIDNT FIND');
         await _updateStatuses();

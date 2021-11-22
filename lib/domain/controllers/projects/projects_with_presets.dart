@@ -37,35 +37,35 @@ import 'package:projects/domain/controllers/projects/project_filter_controller.d
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 
 class ProjectsWithPresets {
-  ProjectsController _myProjectsController;
-  ProjectsController _folowedProjectsController;
-  ProjectsController _activeProjectsController;
-  ProjectsController _myMembershipProjectController;
-  ProjectsController _myManagedProjectController;
+  ProjectsController? _myProjectsController;
+  ProjectsController? _folowedProjectsController;
+  ProjectsController? _activeProjectsController;
+  ProjectsController? _myMembershipProjectController;
+  ProjectsController? _myManagedProjectController;
 
   var lock = Lock();
 
-  ProjectsController get myProjectsController {
+  ProjectsController? get myProjectsController {
     _myProjectsController ?? _setupMyProjects();
     return _myProjectsController;
   }
 
-  ProjectsController get folowedProjectsController {
+  ProjectsController? get folowedProjectsController {
     _folowedProjectsController ?? _setupMyFolowedProjects();
     return _folowedProjectsController;
   }
 
-  ProjectsController get activeProjectsController {
+  ProjectsController? get activeProjectsController {
     _activeProjectsController ?? _setupActiveProjects();
     return _activeProjectsController;
   }
 
-  ProjectsController get myMembershipProjectController {
+  ProjectsController? get myMembershipProjectController {
     _myMembershipProjectController ?? _setupMyMembershipProjects();
     return _myMembershipProjectController;
   }
 
-  ProjectsController get myManagedProjectController {
+  ProjectsController? get myManagedProjectController {
     _myManagedProjectController ?? _setupMyManagedProjects();
     return _myManagedProjectController;
   }
@@ -76,9 +76,9 @@ class ProjectsWithPresets {
           Get.find<ProjectsFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_myProjectsController')
+        tag: '_myProjectsController')!
       ..setup(PresetProjectFilters.myProjects, withFAB: false);
-    await _myProjectsController.loadProjects();
+    await _myProjectsController!.loadProjects();
   }
 
   Future<void> _setupMyFolowedProjects() async {
@@ -87,9 +87,9 @@ class ProjectsWithPresets {
           Get.find<ProjectsFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_folowedProjectsController')
+        tag: '_folowedProjectsController')!
       ..setup(PresetProjectFilters.myFollowedProjects, withFAB: false);
-    await _folowedProjectsController.loadProjects();
+    await _folowedProjectsController!.loadProjects();
   }
 
   Future<void> _setupActiveProjects() async {
@@ -98,9 +98,9 @@ class ProjectsWithPresets {
           Get.find<ProjectsFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_activeProjectsController')
+        tag: '_activeProjectsController')!
       ..setup(PresetProjectFilters.active, withFAB: false);
-    await _activeProjectsController.loadProjects();
+    await _activeProjectsController!.loadProjects();
   }
 
   Future<void> _setupMyMembershipProjects() async {
@@ -109,9 +109,9 @@ class ProjectsWithPresets {
           Get.find<ProjectsFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_myMembershipProjectController')
+        tag: '_myMembershipProjectController')!
       ..setup(PresetProjectFilters.myMembership, withFAB: false);
-    await _myMembershipProjectController.loadProjects();
+    await _myMembershipProjectController!.loadProjects();
   }
 
   Future<void> _setupMyManagedProjects() async {
@@ -120,8 +120,8 @@ class ProjectsWithPresets {
           Get.find<ProjectsFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_myManagedProjectController')
+        tag: '_myManagedProjectController')!
       ..setup(PresetProjectFilters.myManaged, withFAB: false);
-    await _myManagedProjectController.loadProjects();
+    await _myManagedProjectController!.loadProjects();
   }
 }

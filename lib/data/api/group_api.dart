@@ -63,8 +63,8 @@ class GroupApi {
   }
 
   Future<PageDTO<List<PortalGroup>>> getProfilesByExtendedFilter({
-    int startIndex,
-    String query,
+    int? startIndex,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().allGroups();
 

@@ -51,7 +51,7 @@ import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
 part 'tiles/tile_with_switch.dart';
 
 class NewTaskView extends StatelessWidget {
-  const NewTaskView({Key key}) : super(key: key);
+  const NewTaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +84,7 @@ class NewTaskView extends StatelessWidget {
                 // unfocus title
                 Listener(
                   onPointerDown: (_) {
-                    if (controller.title.isNotEmpty &&
+                    if (controller.title!.isNotEmpty &&
                         controller.titleFocus.hasFocus)
                       controller.titleFocus.unfocus();
                   },
@@ -95,7 +95,7 @@ class NewTaskView extends StatelessWidget {
                         MilestoneTile(controller: controller),
                       if (controller.selectedProjectTitle.value.isNotEmpty)
                         ResponsibleTile(controller: controller),
-                      if (controller.responsibles.isNotEmpty)
+                      if (controller.responsibles!.isNotEmpty)
                         NotifyResponsiblesTile(controller: controller),
                       DescriptionTile(controller: controller),
                       GestureDetector(

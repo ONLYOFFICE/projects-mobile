@@ -42,11 +42,11 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/com
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
 
 class DiscussionEditingScreen extends StatelessWidget {
-  const DiscussionEditingScreen({Key key}) : super(key: key);
+  const DiscussionEditingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Discussion discussion;
+    Discussion? discussion;
 
     try {
       discussion = Get.arguments['discussion'];
@@ -54,11 +54,11 @@ class DiscussionEditingScreen extends StatelessWidget {
 
     var controller = Get.put(
       DiscussionEditingController(
-        id: discussion.id,
-        title: discussion.title.obs,
-        text: discussion.text.obs,
-        projectId: discussion.project.id,
-        selectedProjectTitle: discussion.project.title.obs,
+        id: discussion!.id,
+        title: discussion.title!.obs,
+        text: discussion.text!.obs,
+        projectId: discussion.project!.id,
+        selectedProjectTitle: discussion.project!.title!.obs,
         initialSubscribers: discussion.subscribers,
       ),
     );
@@ -84,7 +84,7 @@ class DiscussionEditingScreen extends StatelessWidget {
               DiscussionTitleTextField(controller: controller),
               Listener(
                 onPointerDown: (_) {
-                  if (controller.title.isNotEmpty &&
+                  if (controller.title!.isNotEmpty &&
                       controller.titleFocus.hasFocus)
                     controller.titleFocus.unfocus();
                 },

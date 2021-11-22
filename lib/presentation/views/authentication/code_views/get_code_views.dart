@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text2/flutter_masked_text2.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -45,7 +46,6 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:launch_review/launch_review.dart';
 
 part 'page_switcher.dart';
@@ -55,14 +55,14 @@ part 'steps/step3.dart';
 part 'steps/step4.dart';
 
 class GetCodeViews extends StatefulWidget {
-  const GetCodeViews({Key key}) : super(key: key);
+  const GetCodeViews({Key? key}) : super(key: key);
 
   @override
   _GetCodeViewsState createState() => _GetCodeViewsState();
 }
 
 class _GetCodeViewsState extends State<GetCodeViews> {
-  ValueNotifier<double> page = ValueNotifier<double>(0);
+  ValueNotifier<double?> page = ValueNotifier<double?>(0);
 
   final _pageController = PageController(keepPage: true);
   final _platformController = Get.find<PlatformController>();

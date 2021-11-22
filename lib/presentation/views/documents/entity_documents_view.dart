@@ -51,12 +51,12 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 
 class EntityDocumentsView extends StatelessWidget {
-  final String folderName;
-  final int folderId;
-  final DocumentsController documentsController;
+  final String? folderName;
+  final int? folderId;
+  final DocumentsController? documentsController;
 
   EntityDocumentsView(
-      {Key key, this.folderName, this.folderId, this.documentsController})
+      {Key? key, this.folderName, this.folderId, this.documentsController})
       : super(key: key);
 
   @override
@@ -74,7 +74,7 @@ class EntityDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 50),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: _DocsTitle(controller: documentsController),
             showBackButton: false,
             titleHeight: 50,
@@ -87,12 +87,12 @@ class EntityDocumentsView extends StatelessWidget {
 }
 
 class TaskDocumentsView extends StatelessWidget {
-  final String folderName;
-  final int folderId;
-  final DocumentsController documentsController;
+  final String? folderName;
+  final int? folderId;
+  final DocumentsController? documentsController;
 
   TaskDocumentsView(
-      {Key key, this.folderName, this.folderId, this.documentsController})
+      {Key? key, this.folderName, this.folderId, this.documentsController})
       : super(key: key);
 
   @override
@@ -110,7 +110,7 @@ class TaskDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 0),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             showBackButton: false,
             titleHeight: 0,
             elevation: value,
@@ -122,8 +122,8 @@ class TaskDocumentsView extends StatelessWidget {
 }
 
 class DiscussionsDocumentsView extends StatelessWidget {
-  final List<PortalFile> files;
-  DiscussionsDocumentsView({Key key, this.files}) : super(key: key);
+  final List<PortalFile>? files;
+  DiscussionsDocumentsView({Key? key, this.files}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +139,12 @@ class DiscussionsDocumentsView extends StatelessWidget {
     return Obx(
       () {
         if (discussionController.loaded.value == true) {
-          documentsController.setupFiles(files);
+          documentsController.setupFiles(files!);
           return PreferredSize(
             preferredSize: const Size(double.infinity, 101),
             child: ValueListenableBuilder(
               valueListenable: elevation,
-              builder: (_, value, __) => DocumentsScreen(
+              builder: (_, dynamic value, __) => DocumentsScreen(
                 controller: documentsController,
                 scrollController: scrollController,
                 appBar: StyledAppBar(
@@ -164,7 +164,7 @@ class DiscussionsDocumentsView extends StatelessWidget {
 }
 
 class _DocsTitle extends StatelessWidget {
-  const _DocsTitle({Key key, @required this.controller}) : super(key: key);
+  const _DocsTitle({Key? key, required this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {

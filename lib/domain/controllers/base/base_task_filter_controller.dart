@@ -34,24 +34,24 @@ import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 
 abstract class BaseTaskFilterController extends BaseFilterController {
-  String get responsibleFilter;
-  String get creatorFilter;
-  String get projectFilter;
-  String get milestoneFilter;
-  String get statusFilter;
+  String? get responsibleFilter;
+  String? get creatorFilter;
+  String? get projectFilter;
+  String? get milestoneFilter;
+  String? get statusFilter;
   String get deadlineFilter;
 
-  RxMap responsible;
-  RxMap creator;
-  RxMap project;
-  RxMap milestone;
-  RxMap status;
-  RxMap deadline;
+  late RxMap responsible;
+  late RxMap creator;
+  late RxMap project;
+  late RxMap milestone;
+  late RxMap status;
+  late RxMap deadline;
 
   void changeResponsible(String filter, [newValue = '']);
   void changeCreator(String filter, [newValue = '']);
   void changeProject(String filter, [newValue = '']);
   void changeMilestone(String filter, [newValue]);
   void changeStatus(String filter, [newValue]);
-  void changeDeadline(String filter, {DateTime start, DateTime stop});
+  void changeDeadline(String filter, {DateTime? start, DateTime? stop});
 }

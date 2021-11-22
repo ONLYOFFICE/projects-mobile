@@ -31,20 +31,20 @@
  */
 
 class PortalComment {
-  bool inactive;
-  bool isEditPermissions;
-  bool isRead;
-  bool isResponsePermissions;
+  bool? inactive;
+  bool? isEditPermissions;
+  bool? isRead;
+  bool? isResponsePermissions;
   dynamic attachments;
-  List<PortalComment> commentList;
-  String commentBody;
-  String commentId;
-  String timeStampStr;
-  String userAvatarPath;
-  String userFullName;
-  String userId;
-  String userPost;
-  String userProfileLink;
+  List<PortalComment>? commentList;
+  String? commentBody;
+  String? commentId;
+  String? timeStampStr;
+  String? userAvatarPath;
+  String? userFullName;
+  String? userId;
+  String? userPost;
+  String? userProfileLink;
 
   PortalComment({
     this.attachments,
@@ -95,14 +95,14 @@ class PortalComment {
         'isEditPermissions': isEditPermissions,
         'isResponsePermissions': isResponsePermissions,
         'timeStampStr': timeStampStr,
-        'commentList': List<dynamic>.from(commentList.map((x) => x.toJson())),
+        'commentList': List<dynamic>.from(commentList!.map((x) => x.toJson())),
         'attachments': attachments,
       };
 
   bool get hasDisplayedReplies {
-    for (var item in commentList) if (!item.inactive) return true;
+    for (var item in commentList!) if (!item.inactive!) return true;
     return false;
   }
 
-  bool get show => !inactive || hasDisplayedReplies;
+  bool get show => !inactive! || hasDisplayedReplies;
 }

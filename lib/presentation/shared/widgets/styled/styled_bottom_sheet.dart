@@ -35,12 +35,12 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class StyledButtomSheet extends StatelessWidget {
-  final double height;
-  final Widget title;
-  final List<Widget> actions;
-  final Widget content;
+  final double? height;
+  final Widget? title;
+  final List<Widget>? actions;
+  final Widget? content;
   const StyledButtomSheet({
-    Key key,
+    Key? key,
     this.height,
     this.title,
     this.actions,
@@ -77,11 +77,11 @@ class StyledButtomSheet extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              if (title != null) title,
-              if (actions != null) Row(children: actions),
+              if (title != null) title!,
+              if (actions != null) Row(children: actions!),
             ],
           ),
-          if (content != null) Expanded(child: content)
+          if (content != null) Expanded(child: content!)
         ],
       ),
     );

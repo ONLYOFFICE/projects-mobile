@@ -41,7 +41,7 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/com
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
 
 class NewDiscussionScreen extends StatelessWidget {
-  const NewDiscussionScreen({Key key}) : super(key: key);
+  const NewDiscussionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +79,7 @@ class NewDiscussionScreen extends StatelessWidget {
               DiscussionTitleTextField(controller: controller),
               Listener(
                 onPointerDown: (_) {
-                  if (controller.title.isNotEmpty &&
+                  if (controller.title!.isNotEmpty &&
                       controller.titleFocus.hasFocus)
                     controller.titleFocus.unfocus();
                 },

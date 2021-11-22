@@ -33,8 +33,8 @@
 part of '../discussions_filter_screen.dart';
 
 class _Author extends StatelessWidget {
-  final DiscussionsFilterController filterController;
-  const _Author({Key key, this.filterController}) : super(key: key);
+  final DiscussionsFilterController? filterController;
+  const _Author({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +45,20 @@ class _Author extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.author['me'],
-              onTap: () => filterController.changeAuthor(('me'))),
+              isSelected: filterController!.author['me'],
+              onTap: () => filterController!.changeAuthor(('me'))),
           FilterElement(
-            title: filterController.author['other'].isEmpty
+            title: filterController!.author['other'].isEmpty
                 ? tr('otherUser')
-                : filterController.author['other'],
-            isSelected: filterController.author['other'].isNotEmpty,
-            cancelButtonEnabled: filterController.author['other'].isNotEmpty,
+                : filterController!.author['other'],
+            isSelected: filterController!.author['other'].isNotEmpty,
+            cancelButtonEnabled: filterController!.author['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());
-              filterController.changeAuthor('other', newUser);
+              filterController!.changeAuthor('other', newUser);
             },
-            onCancelTap: () => filterController.changeAuthor('other', null),
+            onCancelTap: () => filterController!.changeAuthor('other', null),
           ),
         ],
       ),

@@ -38,6 +38,6 @@ class TagItemDTO {
     this.isSelected,
     this.tag,
   });
-  RxBool isSelected;
-  ProjectTag tag;
+  RxBool? isSelected;
+  ProjectTag? tag;
 }

@@ -42,15 +42,15 @@ import 'package:projects/data/models/from_api/error.dart';
 
 class MilestoneApi {
   Future<ApiDTO<List<Milestone>>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-    String deadlineFilter,
-    String query,
+    int? startIndex,
+    String? sortBy,
+    String? sortOrder,
+    String? projectId,
+    String? milestoneResponsibleFilter,
+    String? taskResponsibleFilter,
+    String? statusFilter,
+    String? deadlineFilter,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().milestonesByFilterUrl();
 
@@ -103,15 +103,15 @@ class MilestoneApi {
   }
 
   Future<PageDTO<List<Milestone>>> milestonesByFilterPaginated({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-    String deadlineFilter,
-    String query,
+    int? startIndex,
+    String? sortBy,
+    String? sortOrder,
+    String? projectId,
+    String? milestoneResponsibleFilter,
+    String? taskResponsibleFilter,
+    String? statusFilter,
+    String? deadlineFilter,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().milestonesByFilterUrl();
 
@@ -166,7 +166,7 @@ class MilestoneApi {
   }
 
   Future<ApiDTO<Map<String, dynamic>>> createMilestone(
-      {int projectId, NewMilestoneDTO milestone}) async {
+      {int? projectId, required NewMilestoneDTO milestone}) async {
     var url =
         await locator.get<CoreApi>().createMilestoneUrl(projectId.toString());
 

@@ -36,17 +36,17 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class InfoTile extends StatelessWidget {
-  final Widget icon;
-  final String caption;
-  final String subtitle;
-  final TextStyle captionStyle;
-  final TextStyle subtitleStyle;
-  final Widget subtitleWidget;
-  final Widget suffix;
-  final Function() onTap;
+  final Widget? icon;
+  final String? caption;
+  final String? subtitle;
+  final TextStyle? captionStyle;
+  final TextStyle? subtitleStyle;
+  final Widget? subtitleWidget;
+  final Widget? suffix;
+  final Function()? onTap;
 
   const InfoTile({
-    Key key,
+    Key? key,
     this.icon,
     this.caption,
     this.captionStyle,
@@ -69,18 +69,18 @@ class InfoTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (caption != null)
-                  Text(caption,
+                  Text(caption!,
                       style: captionStyle ?? TextStyleHelper.caption()),
-                if (subtitleWidget != null) subtitleWidget,
+                if (subtitleWidget != null) subtitleWidget!,
                 if (subtitleWidget == null && subtitle != null)
-                  Text(subtitle,
+                  Text(subtitle!,
                       style: subtitleStyle ??
                           TextStyleHelper.subtitle1(
                               color: Get.theme.colors().onSurface))
               ],
             ),
           ),
-          if (suffix != null) suffix,
+          if (suffix != null) suffix!,
           if (suffix == null) const SizedBox(width: 16),
         ],
       ),
@@ -89,16 +89,16 @@ class InfoTile extends StatelessWidget {
 }
 
 class InfoTileWithButton extends StatelessWidget {
-  final Widget icon;
-  final String caption;
-  final String subtitle;
-  final TextStyle captionStyle;
-  final TextStyle subtitleStyle;
-  final IconData iconData;
-  final Function() onTapFunction;
+  final Widget? icon;
+  final String? caption;
+  final String? subtitle;
+  final TextStyle? captionStyle;
+  final TextStyle? subtitleStyle;
+  final IconData? iconData;
+  final Function()? onTapFunction;
 
   const InfoTileWithButton({
-    Key key,
+    Key? key,
     this.icon,
     this.caption,
     this.captionStyle,
@@ -118,8 +118,8 @@ class InfoTileWithButton extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(caption, style: captionStyle ?? TextStyleHelper.caption()),
-                Text(subtitle,
+                Text(caption!, style: captionStyle ?? TextStyleHelper.caption()),
+                Text(subtitle!,
                     style: subtitleStyle ?? TextStyleHelper.subtitle1())
               ],
             ),

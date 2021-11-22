@@ -40,7 +40,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class CommentsApi {
-  Future<ApiDTO<List<PortalComment>>> getTaskComments({int taskId}) async {
+  Future<ApiDTO<List<PortalComment>>> getTaskComments({int? taskId}) async {
     var url = await locator.get<CoreApi>().taskComments(taskId: taskId);
 
     var result = ApiDTO<List<PortalComment>>();
@@ -64,8 +64,8 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addTaskComment({
-    int taskId,
-    String content,
+    int? taskId,
+    String? content,
   }) async {
     var url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
 
@@ -89,8 +89,8 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addMessageComment({
-    int messageId,
-    String content,
+    int? messageId,
+    String? content,
   }) async {
     var url =
         await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
@@ -115,9 +115,9 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addTaskReplyComment({
-    int taskId,
-    String content,
-    String parentId,
+    int? taskId,
+    String? content,
+    String? parentId,
   }) async {
     var url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
 
@@ -141,9 +141,9 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addMessageReplyComment({
-    int messageId,
-    String content,
-    String parentId,
+    int? messageId,
+    String? content,
+    String? parentId,
   }) async {
     var url =
         await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
@@ -167,7 +167,7 @@ class CommentsApi {
     return result;
   }
 
-  Future<ApiDTO> deleteComment({String commentId}) async {
+  Future<ApiDTO> deleteComment({String? commentId}) async {
     var url =
         await locator.get<CoreApi>().deleteCommentUrl(commentId: commentId);
 
@@ -208,8 +208,8 @@ class CommentsApi {
   }
 
   Future<ApiDTO> updateComment({
-    String commentId,
-    String content,
+    String? commentId,
+    String? content,
   }) async {
     var url =
         await locator.get<CoreApi>().updateCommentUrl(commentId: commentId);

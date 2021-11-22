@@ -39,93 +39,93 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionItemService {
-  final _api = locator<DiscussionsApi>();
-  final SecureStorage _secureStorage = locator<SecureStorage>();
+  final DiscussionsApi? _api = locator<DiscussionsApi>();
+  final SecureStorage? _secureStorage = locator<SecureStorage>();
 
-  Future getMessageDetailed({int id}) async {
-    var result = await _api.getMessageDetailed(id: id);
+  Future getMessageDetailed({int? id}) async {
+    var result = await _api!.getMessageDetailed(id: id);
     var success = result.response != null;
 
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message!);
       return null;
     }
   }
 
-  Future updateMessage({int id, NewDiscussionDTO discussion}) async {
-    var result = await _api.updateMessage(id: id, discussion: discussion);
-    var success = result.response != null;
-
-    if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
-      });
-      return result.response;
-    } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
-      return null;
-    }
-  }
-
-  Future updateMessageStatus({int id, String newStatus}) async {
-    var result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
+  Future updateMessage({int? id, required NewDiscussionDTO discussion}) async {
+    var result = await _api!.updateMessage(id: id, discussion: discussion);
     var success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message!);
       return null;
     }
   }
 
-  Future subscribeToMessage({int id}) async {
-    var result = await _api.subscribeToMessage(id: id);
+  Future updateMessageStatus({int? id, String? newStatus}) async {
+    var result = await _api!.updateMessageStatus(id: id, newStatus: newStatus);
     var success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message!);
       return null;
     }
   }
 
-  Future deleteMessage({int id}) async {
-    var result = await _api.deleteMessage(id: id);
+  Future subscribeToMessage({int? id}) async {
+    var result = await _api!.subscribeToMessage(id: id);
+    var success = result.response != null;
+
+    if (success) {
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage!.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
+      });
+      return result.response;
+    } else {
+      await Get.find<ErrorDialog>().show(result.error!.message!);
+      return null;
+    }
+  }
+
+  Future deleteMessage({int? id}) async {
+    var result = await _api!.deleteMessage(id: id);
     var success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.deleteEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message!);
       return null;
     }
   }

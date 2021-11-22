@@ -46,14 +46,14 @@ class AnalyticsService {
 
   // Private
   final FirebaseAnalytics _analytics = FirebaseAnalytics();
-  final _storage = locator<Storage>();
+  final Storage? _storage = locator<Storage>();
 
   FirebaseAnalyticsObserver getAnalyticsObserver() =>
       FirebaseAnalyticsObserver(analytics: _analytics);
 
   // Lifecycle Methods
-  Future<void> logEvent(String event, Map<String, Object> parameters) async {
-    var allowAnalytics = await _storage.read('shareAnalytics');
+  Future<void> logEvent(String event, Map<String, Object?> parameters) async {
+    var allowAnalytics = await _storage!.read('shareAnalytics');
 
     // Allow analytics by default
     if (allowAnalytics == null || allowAnalytics) {

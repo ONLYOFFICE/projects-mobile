@@ -41,8 +41,8 @@ class PaginationController extends GetxController {
   var startIndex = 0;
   var total = 0.obs;
 
-  Function refreshDelegate;
-  Function loadDelegate;
+  late Function refreshDelegate;
+  late Function loadDelegate;
 
   var pullDownEnabled = false;
   bool get pullUpEnabled =>

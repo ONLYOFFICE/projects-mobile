@@ -61,9 +61,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskItemController extends GetxController {
-  final _api = locator<TaskItemService>();
+  final TaskItemService? _api = locator<TaskItemService>();
 
-  var task = PortalTask().obs;
+  Rx<PortalTask?> task = PortalTask().obs;
   var status = Status().obs;
 
   var loaded = false.obs;
@@ -76,19 +76,19 @@ class TaskItemController extends GetxController {
 
   final TaskStatusHandler _statusHandler = TaskStatusHandler();
 
-  bool get canEdit => task.value.canEdit && task.value.status != 2;
+  bool get canEdit => task.value!.canEdit! && task.value!.status != 2;
 
   Color get getStatusBGColor =>
-      _statusHandler.getBackgroundColor(status.value, task.value.canEdit);
+      _statusHandler.getBackgroundColor(status.value, task.value!.canEdit!);
 
   Color get getStatusTextColor =>
-      _statusHandler.getTextColor(status.value, task.value.canEdit);
+      _statusHandler.getTextColor(status.value, task.value!.canEdit!);
 
-  String get displayName {
-    if (task.value.responsibles.isEmpty) return tr('noResponsible');
-    if (task.value.responsibles.length > 1)
-      return plural('responsibles', task.value.responsibles.length);
-    return NameFormatter.formateName(task.value.responsibles[0]);
+  String? get displayName {
+    if (task.value!.responsibles!.isEmpty) return tr('noResponsible');
+    if (task.value!.responsibles!.length > 1)
+      return plural('responsibles', task.value!.responsibles!.length);
+    return NameFormatter.formateName(task.value!.responsibles![0]!);
   }
 
   // to show overview screen without loading
@@ -96,18 +96,18 @@ class TaskItemController extends GetxController {
 
   var commentsListController = ScrollController();
 
-  TaskItemController(PortalTask portalTask) {
+  TaskItemController(PortalTask? portalTask) {
     task.value = portalTask;
 
     locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
-      if ((data as List).isNotEmpty && data[0] == task.value.id) {
-        var showLoading = (data as List).length > 1 ? data[1] : false;
+      if ((data as List).isNotEmpty && data[0] == task.value!.id) {
+        var showLoading = data.length > 1 ? data[1] : false;
         await reloadTask(showLoading: showLoading);
       }
     });
 
     locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
-      if ((data as List).isNotEmpty && data[0] == task.value.id) {
+      if ((data as List).isNotEmpty && data[0] == task.value!.id) {
         scrollToLastComment();
       }
     });
@@ -120,23 +120,26 @@ class TaskItemController extends GetxController {
   }
 
   dynamic get getActualCommentCount {
-    if (task?.value?.comments == null) return null;
-    return countCommentsAndReplies(task?.value?.comments);
+    if (task.value?.comments == null) {
+      return null;
+    } else {
+      return countCommentsAndReplies(task.value!.comments!);
+    }
   }
 
   int countCommentsAndReplies(List<PortalComment> comments) {
     var count = 0;
     if (comments.isNotEmpty)
       for (var comment in comments) {
-        count += countCommentsAndReplies(comment.commentList);
-        if (!comment.inactive) count++;
+        count += countCommentsAndReplies(comment.commentList!);
+        if (!comment.inactive!) count++;
       }
 
     return count;
   }
 
-  void copyLink({@required taskId, @required projectId}) async {
-    var link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
+  void copyLink({required taskId, required projectId}) async {
+    var link = await _api!.getTaskLink(taskId: taskId, projectId: projectId);
     await Clipboard.setData(ClipboardData(text: link));
   }
 
@@ -151,23 +154,23 @@ class TaskItemController extends GetxController {
     await controller.acceptTask(context);
   }
 
-  Future copyTask({PortalTask portalTask}) async {
-    var responsibleIds = <String>[];
+  Future copyTask({PortalTask? portalTask}) async {
+    var responsibleIds = <String?>[];
 
-    var taskFrom = portalTask ?? task.value;
+    var taskFrom = portalTask ?? task.value!;
 
-    for (var item in taskFrom.responsibles) responsibleIds.add(item.id);
+    for (var item in taskFrom.responsibles!) responsibleIds.add(item!.id);
 
     var newTask = NewTaskDTO(
       deadline:
-          taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline) : null,
+          taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline!) : null,
       startDate: taskFrom.startDate != null
-          ? DateTime.parse(taskFrom.startDate)
+          ? DateTime.parse(taskFrom.startDate!)
           : null,
       description: taskFrom.description,
       milestoneid: taskFrom.milestoneId,
       priority: taskFrom.priority == 1 ? 'high' : 'normal',
-      projectId: taskFrom.projectOwner.id,
+      projectId: taskFrom.projectOwner!.id,
       responsibles: responsibleIds,
       title: taskFrom.title,
       copyFiles: true,
@@ -175,7 +178,7 @@ class TaskItemController extends GetxController {
     );
 
     var copiedTask =
-        await _api.copyTask(copyFrom: task.value.id, newTask: newTask);
+        await _api!.copyTask(copyFrom: task.value!.id, newTask: newTask);
 
     locator<EventHub>().fire('needToRefreshTasks');
 
@@ -186,10 +189,11 @@ class TaskItemController extends GetxController {
         .to(TaskDetailedView(), arguments: {'controller': newTaskController});
   }
 
-  Future<void> initTaskStatus(PortalTask portalTask) async {
+  Future<void> initTaskStatus(PortalTask? portalTask) async {
     isStatusLoaded.value = false;
     var statusesController = Get.find<TaskStatusesController>();
-    Status receivedStatus = await statusesController.getTaskStatus(portalTask);
+    Status? receivedStatus = await (statusesController.getTaskStatus(portalTask)
+        as FutureOr<Status?>);
     if (receivedStatus != null && !receivedStatus.isNull) {
       status.value = receivedStatus;
       isStatusLoaded.value = true;
@@ -198,43 +202,43 @@ class TaskItemController extends GetxController {
 
   Future reloadTask({bool showLoading = false}) async {
     if (showLoading) loaded.value = false;
-    var t = await _api.getTaskByID(id: task.value.id);
+    var t = await _api!.getTaskByID(id: task.value!.id);
     if (t != null) {
       task.value = t;
       await initTaskStatus(task.value);
     }
 
     var team = Get.find<ProjectTeamController>()
-      ..setup(projectId: task.value.projectOwner.id);
+      ..setup(projectId: task.value!.projectOwner!.id);
 
     await team.getTeam();
     var responsibles = team.usersList
         .where((user) =>
-            task.value.responsibles.any((element) => user.id == element.id))
+            task.value!.responsibles!.any((element) => user.id == element!.id))
         .toList();
-    task.value.responsibles.clear();
+    task.value!.responsibles!.clear();
     for (var user in responsibles) {
-      task.value.responsibles.add(user.portalUser);
+      task.value!.responsibles!.add(user.portalUser);
     }
 
     if (showLoading) loaded.value = true;
   }
 
   void openStatuses(context) {
-    if (task.value.canEdit && isStatusLoaded.isTrue)
+    if (task.value!.canEdit! && isStatusLoaded.isTrue)
       showsStatusesBS(context: context, taskItemController: this);
   }
 
   Future<void> tryChangingStatus({
-    int id,
-    int newStatusId,
-    int newStatusType,
+    int? id,
+    int? newStatusId,
+    int? newStatusType,
   }) async {
-    if (newStatusId == status?.value?.id) return;
+    if (newStatusId == status.value.id) return;
 
     if (newStatusType == 2 &&
-        task.value.status != newStatusType &&
-        task.value.hasOpenSubtasks) {
+        task.value!.status != newStatusType &&
+        task.value!.hasOpenSubtasks) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('closingTask'),
         contentText: tr('closingTaskWithActiveSubtasks'),
@@ -251,9 +255,10 @@ class TaskItemController extends GetxController {
     }
   }
 
-  Future _changeTaskStatus({int id, int newStatusId, int newStatusType}) async {
+  Future _changeTaskStatus(
+      {int? id, int? newStatusId, int? newStatusType}) async {
     loaded.value = false;
-    var t = await _api.updateTaskStatus(
+    var t = await _api!.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
 
     if (t != null) {
@@ -266,13 +271,13 @@ class TaskItemController extends GetxController {
     loaded.value = true;
   }
 
-  Future deleteTask({@required int taskId}) async {
-    var r = await _api.deleteTask(taskId: taskId);
+  Future deleteTask({required int? taskId}) async {
+    var r = await _api!.deleteTask(taskId: taskId);
     return r != null;
   }
 
-  Future subscribeToTask({@required int taskId}) async {
-    var r = await _api.subscribeToTask(taskId: taskId);
+  Future subscribeToTask({required int? taskId}) async {
+    var r = await _api!.subscribeToTask(taskId: taskId);
     return r != null;
   }
 
@@ -285,7 +290,7 @@ class TaskItemController extends GetxController {
   void toProjectOverview() async {
     var projectService = locator<ProjectService>();
     var project = await projectService.getProjectById(
-      projectId: task.value.projectOwner.id,
+      projectId: task.value!.projectOwner!.id,
     );
     if (project != null)
       Get.find<NavigationController>().to(

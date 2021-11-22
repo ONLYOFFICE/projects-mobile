@@ -43,8 +43,8 @@ import 'package:projects/presentation/views/new_task/select/select_date_view.dar
 class DueDateTile extends StatelessWidget {
   final TaskActionsController controller;
   const DueDateTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -52,10 +52,10 @@ class DueDateTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isSelected = controller.dueDateText.value.isNotEmpty;
+        bool _isSelected = controller.dueDateText!.value.isNotEmpty;
         return NewItemTile(
           icon: SvgIcons.due_date,
-          text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
+          text: _isSelected ? controller.dueDateText!.value : tr('setDueDate'),
           caption: _isSelected ? '${tr('dueDate')}:' : null,
           isSelected: _isSelected,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),

@@ -35,7 +35,7 @@ part of '../documents_filter_screen.dart';
 class _Type extends StatelessWidget {
   final filterController;
 
-  const _Type({Key key, this.filterController}) : super(key: key);
+  const _Type({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

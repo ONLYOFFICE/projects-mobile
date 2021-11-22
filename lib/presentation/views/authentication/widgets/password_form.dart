@@ -39,7 +39,7 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class PasswordForm extends StatefulWidget {
-  PasswordForm({Key key}) : super(key: key);
+  PasswordForm({Key? key}) : super(key: key);
   @override
   _PasswordFormState createState() => _PasswordFormState();
 }

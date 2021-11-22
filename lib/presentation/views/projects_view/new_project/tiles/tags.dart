@@ -40,8 +40,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class TagsTile extends StatelessWidget {
   const TagsTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;

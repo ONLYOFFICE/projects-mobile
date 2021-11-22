@@ -42,10 +42,10 @@ import 'package:projects/presentation/shared/project_team_responsible.dart';
 class ResponsibleTile extends StatelessWidget {
   final controller;
   final bool enableUnderline;
-  final Widget suffixIcon;
+  final Widget? suffixIcon;
   const ResponsibleTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.enableUnderline = true,
     this.suffixIcon,
   }) : super(key: key);

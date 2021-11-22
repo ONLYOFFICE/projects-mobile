@@ -38,7 +38,7 @@ import 'package:projects/domain/controllers/projects/new_project/portal_group_it
 import 'package:projects/internal/locator.dart';
 
 class GroupsDataSource extends GetxController {
-  final _api = locator<GroupService>();
+  final GroupService? _api = locator<GroupService>();
   var groupsList = [].obs;
   var loaded = true.obs;
 
@@ -56,7 +56,7 @@ class GroupsDataSource extends GetxController {
 
     var result;
 
-    result = await _api.getAllGroups();
+    result = await _api!.getAllGroups();
 
     if (result.isEmpty) {
     } else {
@@ -74,7 +74,7 @@ class GroupsDataSource extends GetxController {
     groupsList.clear();
   }
 
-  Future getGroups({bool needToClear}) async {
+  Future getGroups({bool? needToClear}) async {
     _clear();
     loaded.value = false;
     await _loadGroups(needToClear: true);

@@ -42,7 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class MoreView extends StatelessWidget {
-  const MoreView({Key key}) : super(key: key);
+  const MoreView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +52,7 @@ class MoreView extends StatelessWidget {
         ? Get.find<ProfileController>()
         : Get.put(ProfileController(), permanent: true);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       portalUser.setup();
     });
 
@@ -177,10 +177,10 @@ class _MoreTile extends StatelessWidget {
   final Function() onTap;
 
   const _MoreTile({
-    Key key,
-    @required this.iconPath,
-    @required this.onTap,
-    @required this.text,
+    Key? key,
+    required this.iconPath,
+    required this.onTap,
+    required this.text,
   }) : super(key: key);
 
   @override

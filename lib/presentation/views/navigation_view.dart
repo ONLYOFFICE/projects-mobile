@@ -50,7 +50,7 @@ import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
 
 class NavigationView extends StatelessWidget {
-  NavigationView({Key key}) : super(key: key);
+  NavigationView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +72,9 @@ class NavigationView extends StatelessWidget {
 }
 
 class TabletLayout extends StatelessWidget {
-  final Widget contentView;
+  final Widget? contentView;
 
-  TabletLayout({Key key, this.contentView}) : super(key: key);
+  TabletLayout({Key? key, this.contentView}) : super(key: key);
 
   final double _iconSize = 34;
 
@@ -257,7 +257,7 @@ class MobileLayout extends StatelessWidget {
   final double iconSize = 24;
 
   MobileLayout({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   final _pages = [

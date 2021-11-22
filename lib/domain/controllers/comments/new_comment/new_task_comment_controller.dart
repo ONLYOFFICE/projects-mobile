@@ -42,14 +42,14 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewTaskCommentController extends NewCommentController {
-  final _api = locator<CommentsService>();
+  final CommentsService? _api = locator<CommentsService>();
 
   @override
   // ignore: overridden_fields
-  final int idFrom;
+  final int? idFrom;
   @override
   // ignore: overridden_fields
-  final String parentId;
+  final String? parentId;
 
   NewTaskCommentController({
     this.parentId,
@@ -68,8 +68,8 @@ class NewTaskCommentController extends NewCommentController {
       emptyTitleError();
     } else {
       setTitleError.value = false;
-      PortalComment newComment =
-          await _api.addTaskComment(content: text, taskId: idFrom);
+      PortalComment? newComment =
+          await (_api!.addTaskComment(content: text, taskId: idFrom) as Future<PortalComment?>);
       if (newComment != null) {
         _textController.clear();
 
@@ -90,11 +90,11 @@ class NewTaskCommentController extends NewCommentController {
       emptyTitleError();
     } else {
       setTitleError.value = false;
-      PortalComment newComment = await _api.addTaskReplyComment(
+      PortalComment? newComment = await (_api!.addTaskReplyComment(
         content: text,
         taskId: idFrom,
         parentId: parentId,
-      );
+      ) as Future<PortalComment?>);
       if (newComment != null) {
         _textController.clear();
 

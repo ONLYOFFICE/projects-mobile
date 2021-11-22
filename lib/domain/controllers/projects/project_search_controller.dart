@@ -32,6 +32,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -41,7 +43,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProjectSearchController extends GetxController {
   static const PAGINATION_LENGTH = 25;
 
-  final _api = locator<ProjectService>();
+  final ProjectService? _api = locator<ProjectService>();
   final onlyMyProjects;
 
   ProjectSearchController({this.onlyMyProjects = false});
@@ -54,7 +56,7 @@ class ProjectSearchController extends GetxController {
   // for select project view
   var switchToSearchView = false.obs;
   var _startIndex;
-  var _query;
+  late var _query;
   var _selfId;
 
   bool get pullUpEnabled => searchResult.length >= PAGINATION_LENGTH;
@@ -96,15 +98,15 @@ class ProjectSearchController extends GetxController {
     switchToSearchView.value = true;
     searchResult.clear();
 
-    var result = await _api.getProjectsByParams(
-        startIndex: _startIndex, query: _query.toLowerCase());
+    var result = await (_api!.getProjectsByParams(
+        startIndex: _startIndex, query: _query.toLowerCase()) as Future<PageDTO<List<ProjectDetailed>>>);
 
     _totalProjects = result.total;
 
-    if (result.response.isEmpty) {
+    if (result.response!.isEmpty) {
       nothingFound.value = true;
     } else {
-      searchResult.addAll(result.response);
+      searchResult.addAll(result.response!);
     }
     loaded.value = true;
   }

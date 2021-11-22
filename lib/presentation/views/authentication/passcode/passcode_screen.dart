@@ -39,7 +39,7 @@ import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart'
 import 'package:projects/presentation/views/settings/passcode/passcode_keyboard_items.dart';
 
 class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
-  PasscodeScreen({Key key}) : super(key: key);
+  PasscodeScreen({Key? key}) : super(key: key);
 
   final passcodeCheckingController = Get.find<PasscodeCheckingController>()
     ..setup(canUseFingerprint: true);

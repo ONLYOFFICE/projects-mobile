@@ -33,6 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -42,43 +44,43 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class DiscussionsFilterController extends BaseFilterController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService? _api = locator<DiscussionsService>();
   final _sortController = Get.find<DiscussionsSortController>();
-  final _storage = locator<Storage>();
+  final Storage? _storage = locator<Storage>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
   RxString acceptedFilters = ''.obs;
 
-  String _authorFilter = '';
-  String _statusFilter = '';
-  String _projectFilter = '';
-  String _creationDateFilter = '';
-  String _otherFilter = '';
+  String? _authorFilter = '';
+  String? _statusFilter = '';
+  String? _projectFilter = '';
+  String? _creationDateFilter = '';
+  String? _otherFilter = '';
 
-  String get authorFilter => _authorFilter;
-  String get statusFilter => _statusFilter;
-  String get projectFilter => _projectFilter;
-  String get creationDateFilter => _creationDateFilter;
-  String get otherFilter => _otherFilter;
+  String? get authorFilter => _authorFilter;
+  String? get statusFilter => _statusFilter;
+  String? get projectFilter => _projectFilter;
+  String? get creationDateFilter => _creationDateFilter;
+  String? get otherFilter => _otherFilter;
 
   var _selfId;
-  String _projectId;
+  String? _projectId;
 
   bool get _hasFilters =>
-      _authorFilter.isNotEmpty ||
-      _statusFilter.isNotEmpty ||
-      _projectFilter.isNotEmpty ||
-      _creationDateFilter.isNotEmpty ||
-      _otherFilter.isNotEmpty;
+      _authorFilter!.isNotEmpty ||
+      _statusFilter!.isNotEmpty ||
+      _projectFilter!.isNotEmpty ||
+      _creationDateFilter!.isNotEmpty ||
+      _otherFilter!.isNotEmpty;
 
-  RxMap author;
-  RxMap status;
-  RxMap creationDate;
-  RxMap project;
-  RxMap other;
+  late RxMap author;
+  late RxMap status;
+  late RxMap creationDate;
+  late RxMap project;
+  late RxMap other;
 
   @override
   void onInit() async {
@@ -203,8 +205,8 @@ class DiscussionsFilterController extends BaseFilterController {
 
   Future<void> changeCreationDate(
     String filter, {
-    DateTime start,
-    DateTime stop,
+    DateTime? start,
+    DateTime? stop,
   }) async {
     _creationDateFilter = '';
 
@@ -234,8 +236,8 @@ class DiscussionsFilterController extends BaseFilterController {
       creationDate['custom']['selected'] = !creationDate['custom']['selected'];
       creationDate['custom']['startDate'] = start;
       creationDate['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start).substring(0, 10);
-      var stopDate = formatter.format(stop).substring(0, 10);
+      var startDate = formatter.format(start!).substring(0, 10);
+      var stopDate = formatter.format(stop!).substring(0, 10);
       if (creationDate['custom']['selected'])
         _creationDateFilter = '&createdStart=$startDate&createdStop=$stopDate';
     }
@@ -247,7 +249,7 @@ class DiscussionsFilterController extends BaseFilterController {
   void getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
-    var result = await _api.getDiscussionsByParams(
+    var result = await (_api!.getDiscussionsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       authorFilter: _authorFilter,
@@ -256,9 +258,9 @@ class DiscussionsFilterController extends BaseFilterController {
       creationDateFilter: _creationDateFilter,
       otherFilter: _otherFilter,
       projectId: _projectId,
-    );
+    ) as Future<PageDTO<List<Discussion>>>);
 
-    suitableResultCount.value = result.response.length;
+    suitableResultCount.value = result.response!.length;
   }
 
   @override
@@ -299,7 +301,7 @@ class DiscussionsFilterController extends BaseFilterController {
   void applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
 
     await saveFilters();
   }
@@ -330,7 +332,7 @@ class DiscussionsFilterController extends BaseFilterController {
       'stopDate': stopDate,
     };
 
-    await _storage.write(
+    await _storage!.write(
       'discussionFilters',
       {
         'author': {'buttons': Map.from(author), 'value': _authorFilter},
@@ -375,7 +377,7 @@ class DiscussionsFilterController extends BaseFilterController {
 
   Future<void> _getSavedFilters() async {
     var savedFilters =
-        await _storage.read('discussionFilters', returnCopy: true);
+        await _storage!.read('discussionFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {

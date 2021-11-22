@@ -41,7 +41,7 @@ import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchView extends StatelessWidget {
-  ProjectSearchView({Key key}) : super(key: key);
+  ProjectSearchView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.put(ProjectSearchController());

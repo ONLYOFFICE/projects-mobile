@@ -33,8 +33,8 @@
 part of '../tasks_filter.dart';
 
 class _Creator extends StatelessWidget {
-  final BaseTaskFilterController filterController;
-  const _Creator({Key key, this.filterController}) : super(key: key);
+  final BaseTaskFilterController? filterController;
+  const _Creator({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +45,20 @@ class _Creator extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.creator['me'],
-              onTap: () => filterController.changeCreator('me')),
+              isSelected: filterController!.creator['me'],
+              onTap: () => filterController!.changeCreator('me')),
           FilterElement(
-            title: filterController.creator['other'].isEmpty
+            title: filterController!.creator['other'].isEmpty
                 ? tr('otherUser')
-                : filterController.creator['other'],
-            isSelected: filterController.creator['other'].isNotEmpty,
-            cancelButtonEnabled: filterController.creator['other'].isNotEmpty,
+                : filterController!.creator['other'],
+            isSelected: filterController!.creator['other'].isNotEmpty,
+            cancelButtonEnabled: filterController!.creator['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());
-              filterController.changeCreator('other', newUser);
+              filterController!.changeCreator('other', newUser);
             },
-            onCancelTap: () => filterController.changeCreator('other', null),
+            onCancelTap: () => filterController!.changeCreator('other', null),
           ),
         ],
       ),

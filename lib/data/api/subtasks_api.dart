@@ -40,7 +40,7 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/internal/locator.dart';
 
 class SubtasksApi {
-  Future<ApiDTO> acceptSubtask({int taskId, int subtaskId, Map data}) async {
+  Future<ApiDTO> acceptSubtask({int? taskId, int? subtaskId, required Map data}) async {
     var url = await locator
         .get<CoreApi>()
         .updateSubtask(taskId: taskId, subtaskId: subtaskId);
@@ -61,7 +61,7 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> deleteSubTask({int taskId, int subtaskId}) async {
+  Future<ApiDTO> deleteSubTask({int? taskId, int? subtaskId}) async {
     var url = await locator
         .get<CoreApi>()
         .deleteSubtaskUrl(taskId: taskId, subtaskId: subtaskId);
@@ -82,7 +82,7 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> copySubtask({int taskId, int subtaskId}) async {
+  Future<ApiDTO> copySubtask({int? taskId, int? subtaskId}) async {
     var url = await locator
         .get<CoreApi>()
         .copySubtaskUrl(taskId: taskId, subtaskId: subtaskId);
@@ -103,7 +103,7 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> createSubtask({int taskId, Map data}) async {
+  Future<ApiDTO> createSubtask({int? taskId, Map? data}) async {
     var url = await locator.get<CoreApi>().createSubtaskUrl(taskId: taskId);
     var result = ApiDTO();
 
@@ -123,9 +123,9 @@ class SubtasksApi {
   }
 
   Future<ApiDTO> updateSubtaskStatus({
-    int taskId,
-    int subtaskId,
-    Map data,
+    int? taskId,
+    int? subtaskId,
+    required Map data,
   }) async {
     var url = await locator
         .get<CoreApi>()
@@ -148,9 +148,9 @@ class SubtasksApi {
   }
 
   Future<ApiDTO> updateSubtask({
-    int taskId,
-    int subtaskId,
-    Map data,
+    int? taskId,
+    int? subtaskId,
+    required Map data,
   }) async {
     var url = await locator.get<CoreApi>().updateSubtask(
           taskId: taskId,

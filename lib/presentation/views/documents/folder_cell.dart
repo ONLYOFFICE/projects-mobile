@@ -51,9 +51,9 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 
 class FolderCell extends StatelessWidget {
   const FolderCell({
-    Key key,
-    @required this.entity,
-    @required this.controller,
+    Key? key,
+    required this.entity,
+    required this.controller,
   }) : super(key: key);
 
   final Folder entity;
@@ -78,7 +78,7 @@ class FolderCell extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PopupMenuButton(
-                  onSelected: (value) => _onFolderPopupMenuSelected(
+                  onSelected: (dynamic value) => _onFolderPopupMenuSelected(
                     value,
                     entity,
                     context,
@@ -137,9 +137,9 @@ class FolderCell extends StatelessWidget {
 
 class MoveFolderCell extends StatelessWidget {
   const MoveFolderCell({
-    Key key,
-    @required this.element,
-    @required this.controller,
+    Key? key,
+    required this.element,
+    required this.controller,
   }) : super(key: key);
 
   final Folder element;
@@ -174,7 +174,7 @@ class MoveFolderCell extends StatelessWidget {
 
 class FolderCellAvatar extends StatelessWidget {
   const FolderCellAvatar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -195,8 +195,8 @@ class FolderCellAvatar extends StatelessWidget {
 
 class FolderCellTitle extends StatelessWidget {
   const FolderCellTitle({
-    Key key,
-    @required this.element,
+    Key? key,
+    required this.element,
   }) : super(key: key);
 
   final Folder element;
@@ -209,14 +209,14 @@ class FolderCellTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            child: Text(element.title.replaceAll(' ', '\u00A0'),
+            child: Text(element.title!.replaceAll(' ', '\u00A0'),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.projectTitle),
           ),
           Text(
               tr('documentsCaption', args: [
-                formatedDate(element.updated),
+                formatedDate(element.updated!),
                 element.filesCount.toString(),
                 element.foldersCount.toString()
               ]),
@@ -233,11 +233,11 @@ void _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
   BuildContext context,
-  DocumentsController controller,
+  DocumentsController? controller,
 ) async {
   switch (value) {
     case 'copyLink':
-      var portalDomain = controller.portalInfoController.portalUri;
+      var portalDomain = controller!.portalInfoController.portalUri;
 
       var link =
           '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
@@ -260,7 +260,7 @@ void _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller!.currentFolder,
       });
       break;
     case 'move':
@@ -268,7 +268,7 @@ void _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller!.currentFolder,
       });
 
       break;
@@ -276,7 +276,7 @@ void _onFolderPopupMenuSelected(
       _renameFolder(controller, selectedFolder, context);
       break;
     case 'delete':
-      var success = await controller.deleteFolder(selectedFolder);
+      var success = await controller!.deleteFolder(selectedFolder);
 
       if (success) {
         MessagesHandler.showSnackBar(
@@ -288,9 +288,9 @@ void _onFolderPopupMenuSelected(
 }
 
 void _renameFolder(
-    DocumentsController controller, Folder element, BuildContext context) {
+    DocumentsController? controller, Folder element, BuildContext context) {
   var inputController = TextEditingController();
-  inputController.text = element.title;
+  inputController.text = element.title!;
 
   Get.dialog(
     StyledAlertDialog(
@@ -303,7 +303,7 @@ void _renameFolder(
           hintText: tr('enterFolderName'),
         ),
         onSubmitted: (value) {
-          controller.newSearch(value);
+          controller!.newSearch(value);
         },
       ),
       acceptText: tr('confirm'),
@@ -311,7 +311,7 @@ void _renameFolder(
       onAcceptTap: () async {
         if (inputController.text != element.title) {
           var success =
-              await controller.renameFolder(element, inputController.text);
+              await controller!.renameFolder(element, inputController.text);
           if (success) {
             MessagesHandler.showSnackBar(
                 context: context, text: tr('folderRenamed'));

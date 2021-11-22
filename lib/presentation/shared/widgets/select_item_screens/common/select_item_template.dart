@@ -134,7 +134,7 @@ mixin SelectItemMixin on StatelessWidget {
 }
 
 mixin SelectItemListMixin on StatelessWidget {
-  PaginationController get paginationController;
+  PaginationController? get paginationController;
   Widget Function(BuildContext context, int index) get itemBuilder;
 
   @override
@@ -143,7 +143,7 @@ mixin SelectItemListMixin on StatelessWidget {
       () => PaginationListView(
         paginationController: paginationController,
         child: ListView.separated(
-          itemCount: paginationController.data.length,
+          itemCount: paginationController!.data.length,
           padding: const EdgeInsets.symmetric(vertical: 8),
           separatorBuilder: (BuildContext context, int index) {
             return const StyledDivider(
@@ -160,12 +160,12 @@ mixin SelectItemListMixin on StatelessWidget {
 
 class SelectItemTile extends StatelessWidget {
   const SelectItemTile({
-    Key key,
-    @required this.title,
-    @required this.onSelect,
+    Key? key,
+    required this.title,
+    required this.onSelect,
   }) : super(key: key);
 
-  final String title;
+  final String? title;
   final VoidCallback onSelect;
 
   @override
@@ -184,7 +184,7 @@ class SelectItemTile extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    title,
+                    title!,
                     style: TextStyleHelper.projectTitle,
                   ),
                 ),

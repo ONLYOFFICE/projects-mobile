@@ -42,8 +42,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DiscussionsHeader extends StatelessWidget {
-  final DiscussionsController controller;
-  DiscussionsHeader({Key key, this.controller}) : super(key: key);
+  final DiscussionsController? controller;
+  DiscussionsHeader({Key? key, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +53,12 @@ class DiscussionsHeader extends StatelessWidget {
         const Divider(height: 9, thickness: 1),
         SortTile(
             sortParameter: 'create_on',
-            sortController: controller.sortController),
+            sortController: controller!.sortController),
         SortTile(
-            sortParameter: 'title', sortController: controller.sortController),
+            sortParameter: 'title', sortController: controller!.sortController),
         SortTile(
             sortParameter: 'comments',
-            sortController: controller.sortController),
+            sortController: controller!.sortController),
         const SizedBox(height: 20)
       ],
     );
@@ -80,14 +80,14 @@ class DiscussionsHeader extends StatelessWidget {
                   children: [
                     Obx(
                       () => Text(
-                        controller.sortController.currentSortTitle.value,
+                        controller!.sortController.currentSortTitle.value,
                         style: TextStyleHelper.projectsSorting
                             .copyWith(color: Get.theme.colors().primary),
                       ),
                     ),
                     const SizedBox(width: 8),
                     Obx(
-                      () => (controller.sortController.currentSortOrder ==
+                      () => (controller!.sortController.currentSortOrder ==
                               'ascending')
                           ? AppIcon(
                               icon: SvgIcons.sorting_4_ascend,
@@ -113,7 +113,7 @@ class DiscussionsHeader extends StatelessWidget {
             Obx(
               () => Text(
                 tr('total', args: [
-                  controller.paginationController.total.value.toString()
+                  controller!.paginationController!.total.value.toString()
                 ]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),

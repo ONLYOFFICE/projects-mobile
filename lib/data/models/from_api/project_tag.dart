@@ -31,10 +31,10 @@
  */
 
 class ProjectTag {
-  final int id;
-  String title;
-  String description;
-  int status;
+  final int? id;
+  String? title;
+  String? description;
+  int? status;
 
   ProjectTag({
     this.id,

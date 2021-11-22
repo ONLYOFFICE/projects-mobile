@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -40,7 +41,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/internal/locator.dart';
 
 class MilestonesDataSource extends GetxController {
-  final _api = locator<MilestoneService>();
+  final MilestoneService? _api = locator<MilestoneService>();
 
   final paginationController =
       Get.put(PaginationController(), tag: 'MilestonesDataSource');
@@ -52,7 +53,7 @@ class MilestonesDataSource extends GetxController {
 
   var searchQuery = '';
 
-  ProjectDetailed _projectDetailed;
+  ProjectDetailed? _projectDetailed;
 
   MilestonesSortController get sortController => _sortController;
   MilestonesFilterController get filterController => _filterController;
@@ -64,7 +65,7 @@ class MilestonesDataSource extends GetxController {
 
   var hasFilters = false.obs;
 
-  int _projectId;
+  int? _projectId;
 
   var fabIsVisible = false.obs;
 
@@ -85,7 +86,7 @@ class MilestonesDataSource extends GetxController {
   }
 
   Future _getMilestones({needToClear = false}) async {
-    var result = await _api.milestonesByFilter(
+    var result = await (_api!.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId != null ? _projectId.toString() : null,
@@ -94,7 +95,7 @@ class MilestonesDataSource extends GetxController {
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
-    );
+    ) as Future<List<Milestone>>);
 
     paginationController.total.value = result.length;
 
@@ -103,21 +104,21 @@ class MilestonesDataSource extends GetxController {
     paginationController.data.addAll(result);
   }
 
-  Future<void> setup({ProjectDetailed projectDetailed, int projectId}) async {
+  Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {
     loaded.value = false;
     _projectDetailed = projectDetailed;
-    _projectId = projectId ?? projectDetailed.id;
+    _projectId = projectId ?? projectDetailed!.id;
     _filterController.projectId = _projectId.toString();
 
     // ignore: unawaited_futures
     loadMilestones();
 
-    fabIsVisible.value = _canCreate();
+    fabIsVisible.value = _canCreate()!;
   }
 
-  bool _canCreate() => _projectDetailed == null
+  bool? _canCreate() => _projectDetailed == null
       ? false
-      : _projectDetailed.security['canCreateMilestone'];
+      : _projectDetailed!.security!['canCreateMilestone'];
 
   void loadMilestonesWithFilterByName(String searchText) {
     searchQuery = searchText;

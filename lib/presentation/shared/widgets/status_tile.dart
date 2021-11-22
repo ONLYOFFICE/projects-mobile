@@ -36,11 +36,11 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StatusTile extends StatelessWidget {
-  final String title;
-  final Widget icon;
+  final String? title;
+  final Widget? icon;
   final bool selected;
 
-  const StatusTile({Key key, this.icon, this.title, this.selected = false})
+  const StatusTile({Key? key, this.icon, this.title, this.selected = false})
       : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class StatusTile extends StatelessWidget {
               children: [
                 SizedBox(width: 48, child: icon),
                 Flexible(
-                    child: Text(title,
+                    child: Text(title!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyleHelper.body2())),

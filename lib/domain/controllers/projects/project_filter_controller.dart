@@ -32,6 +32,8 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -41,34 +43,34 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class ProjectsFilterController extends BaseFilterController {
-  final _api = locator<ProjectService>();
-  final _storage = locator<Storage>();
+  final ProjectService? _api = locator<ProjectService>();
+  final Storage? _storage = locator<Storage>();
 
   final _sortController = Get.find<ProjectsSortController>();
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
-  String _teamMemberFilter = '';
-  String _projectManagerFilter = '';
-  String _otherFilter = '';
-  String _statusFilter = '';
+  String? _teamMemberFilter = '';
+  String? _projectManagerFilter = '';
+  String? _otherFilter = '';
+  String? _statusFilter = '';
 
-  String get projectManagerFilter => _projectManagerFilter;
-  String get teamMemberFilter => _teamMemberFilter;
-  String get otherFilter => _otherFilter;
-  String get statusFilter => _statusFilter;
+  String? get projectManagerFilter => _projectManagerFilter;
+  String? get teamMemberFilter => _teamMemberFilter;
+  String? get otherFilter => _otherFilter;
+  String? get statusFilter => _statusFilter;
 
   var _selfId;
 
   bool get _hasFilters =>
-      _projectManagerFilter.isNotEmpty ||
-      _teamMemberFilter.isNotEmpty ||
-      _otherFilter.isNotEmpty ||
-      _statusFilter.isNotEmpty;
+      _projectManagerFilter!.isNotEmpty ||
+      _teamMemberFilter!.isNotEmpty ||
+      _otherFilter!.isNotEmpty ||
+      _statusFilter!.isNotEmpty;
 
-  RxMap projectManager;
-  RxMap teamMember;
-  RxMap other;
-  RxMap status;
+  late RxMap projectManager;
+  late RxMap teamMember;
+  late RxMap other;
+  late RxMap status;
 
   @override
   String get filtersTitle =>
@@ -197,16 +199,16 @@ class ProjectsFilterController extends BaseFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.getProjectsByParams(
+    var result = await (_api!.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectManagerFilter: projectManagerFilter,
       participantFilter: teamMemberFilter,
       otherFilter: otherFilter,
       statusFilter: statusFilter,
-    );
+    ) as Future<PageDTO<List<ProjectDetailed>>>);
 
-    suitableResultCount.value = result.response.length;
+    suitableResultCount.value = result.response!.length;
   }
 
   @override
@@ -238,12 +240,12 @@ class ProjectsFilterController extends BaseFilterController {
     hasFilters.value = _hasFilters;
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
 
     await saveFilters();
   }
 
-  Future<void> setupPreset(PresetProjectFilters preset) async {
+  Future<void> setupPreset(PresetProjectFilters? preset) async {
     _selfId = await Get.find<UserController>().getUserId();
 
     switch (preset) {
@@ -277,7 +279,7 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   Future<void> saveFilters() async {
-    await _storage.write(
+    await _storage!.write(
       'projectFilters',
       {
         'projectManager': {
@@ -304,7 +306,7 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    var savedFilters = await _storage.read('projectFilters');
+    var savedFilters = await _storage!.read('projectFilters');
 
     if (savedFilters != null) {
       try {

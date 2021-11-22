@@ -33,13 +33,13 @@
 import 'package:intl/intl.dart';
 
 class NewMilestoneDTO {
-  String title;
-  DateTime deadline;
-  bool isKey;
-  bool isNotify;
-  String description;
-  String responsible;
-  bool notifyResponsible;
+  String? title;
+  DateTime? deadline;
+  bool? isKey;
+  bool? isNotify;
+  String? description;
+  String? responsible;
+  bool? notifyResponsible;
 
   NewMilestoneDTO(
       {this.title,
@@ -65,7 +65,7 @@ class NewMilestoneDTO {
     data['title'] = title;
 
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
-    var duedate = formatter.format(deadline);
+    var duedate = formatter.format(deadline!);
     data['deadline'] = duedate;
 
     data['isKey'] = isKey;

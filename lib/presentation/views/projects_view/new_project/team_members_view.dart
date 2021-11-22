@@ -51,7 +51,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TeamMembersSelectionView extends StatelessWidget {
   const TeamMembersSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -118,9 +118,9 @@ class TeamMembersSelectionView extends StatelessWidget {
 
 class TeamMembersSelectionHeader extends StatelessWidget {
   const TeamMembersSelectionHeader({
-    Key key,
-    @required this.title,
-    @required this.controller,
+    Key? key,
+    required this.title,
+    required this.controller,
   }) : super(key: key);
 
   final String title;
@@ -192,9 +192,9 @@ class TeamMembersSelectionHeader extends StatelessWidget {
 
 class TeamMembersSearchBar extends StatelessWidget {
   const TeamMembersSearchBar({
-    Key key,
-    @required this.controller,
-    @required this.usersDataSource,
+    Key? key,
+    required this.controller,
+    required this.usersDataSource,
   }) : super(key: key);
 
   final UsersDataSource usersDataSource;

@@ -43,8 +43,8 @@ import 'package:projects/presentation/views/new_task/select/select_project_view.
 class NewTaskProjectTile extends StatelessWidget {
   final TaskActionsController controller;
   const NewTaskProjectTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

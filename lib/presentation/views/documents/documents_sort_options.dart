@@ -35,8 +35,8 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsSortOption extends StatelessWidget {
   const DocumentsSortOption({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;

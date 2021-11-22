@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -41,46 +42,46 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestonesFilterController extends BaseFilterController {
-  final _api = locator<MilestoneService>();
-  final _storage = locator<Storage>();
+  final MilestoneService? _api = locator<MilestoneService>();
+  final Storage? _storage = locator<Storage>();
 
   final _sortController = Get.find<MilestonesSortController>();
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
-  String _taskResponsibleFilter = '';
-  String _milestoneResponsibleFilter = '';
-  String _deadlineFilter = '';
-  String _statusFilter = '';
+  String? _taskResponsibleFilter = '';
+  String? _milestoneResponsibleFilter = '';
+  String? _deadlineFilter = '';
+  String? _statusFilter = '';
 
-  String _currentAppliedResponsibleFilter = '';
-  String _currentAppliedMilestoneResponsibleFilter = '';
-  String _currentAppliedDeadlineFilter = '';
-  String _currentAppliedStatusFilter = '';
+  String? _currentAppliedResponsibleFilter = '';
+  String? _currentAppliedMilestoneResponsibleFilter = '';
+  String? _currentAppliedDeadlineFilter = '';
+  String? _currentAppliedStatusFilter = '';
 
-  String get taskResponsibleFilter => _taskResponsibleFilter;
-  String get milestoneResponsibleFilter => _milestoneResponsibleFilter;
-  String get statusFilter => _statusFilter;
-  String get deadlineFilter => _deadlineFilter;
+  String? get taskResponsibleFilter => _taskResponsibleFilter;
+  String? get milestoneResponsibleFilter => _milestoneResponsibleFilter;
+  String? get statusFilter => _statusFilter;
+  String? get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String _projectId;
+  String? _projectId;
   set projectId(String value) => _projectId = value;
 
   bool get _hasFilters =>
-      _milestoneResponsibleFilter.isNotEmpty ||
-      _taskResponsibleFilter.isNotEmpty ||
-      _deadlineFilter.isNotEmpty ||
-      _statusFilter.isNotEmpty;
+      _milestoneResponsibleFilter!.isNotEmpty ||
+      _taskResponsibleFilter!.isNotEmpty ||
+      _deadlineFilter!.isNotEmpty ||
+      _statusFilter!.isNotEmpty;
 
-  RxMap milestoneResponsible;
-  RxMap taskResponsible;
-  RxMap deadline;
-  RxMap status;
+  RxMap? milestoneResponsible;
+  RxMap? taskResponsible;
+  late RxMap deadline;
+  RxMap? status;
 
-  Map _currentAppliedMilestoneResponsible;
-  Map _currentAppliedTaskResponsible;
-  Map _currentAppliedDeadline;
-  Map _currentAppliedStatus;
+  late Map _currentAppliedMilestoneResponsible;
+  late Map _currentAppliedTaskResponsible;
+  late Map _currentAppliedDeadline;
+  late Map _currentAppliedStatus;
 
   @override
   Future<void> restoreFilters() async {
@@ -110,17 +111,17 @@ class MilestonesFilterController extends BaseFilterController {
     _selfId = await Get.find<UserController>().getUserId();
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
-      milestoneResponsible['other'] = '';
-      milestoneResponsible['me'] = !milestoneResponsible['me'];
-      if (milestoneResponsible['me'])
+      milestoneResponsible!['other'] = '';
+      milestoneResponsible!['me'] = !milestoneResponsible!['me'];
+      if (milestoneResponsible!['me'])
         _milestoneResponsibleFilter = '&milestoneResponsible=$_selfId';
     }
     if (filter == 'other') {
-      milestoneResponsible['me'] = false;
+      milestoneResponsible!['me'] = false;
       if (newValue == null) {
-        milestoneResponsible['other'] = '';
+        milestoneResponsible!['other'] = '';
       } else {
-        milestoneResponsible['other'] = newValue['displayName'];
+        milestoneResponsible!['other'] = newValue['displayName'];
         _milestoneResponsibleFilter = '&milestoneResponsible=${newValue["id"]}';
       }
     }
@@ -131,17 +132,17 @@ class MilestonesFilterController extends BaseFilterController {
     _selfId = await Get.find<UserController>().getUserId();
     _taskResponsibleFilter = '';
     if (filter == 'me') {
-      taskResponsible['other'] = '';
-      taskResponsible['me'] = !taskResponsible['me'];
-      if (taskResponsible['me'])
+      taskResponsible!['other'] = '';
+      taskResponsible!['me'] = !taskResponsible!['me'];
+      if (taskResponsible!['me'])
         _taskResponsibleFilter = '&participant=$_selfId';
     }
     if (filter == 'other') {
-      taskResponsible['me'] = false;
+      taskResponsible!['me'] = false;
       if (newValue == null) {
-        taskResponsible['other'] = '';
+        taskResponsible!['other'] = '';
       } else {
-        taskResponsible['other'] = newValue['displayName'];
+        taskResponsible!['other'] = newValue['displayName'];
         _taskResponsibleFilter = '&taskResponsible=${newValue["id"]}';
       }
     }
@@ -150,7 +151,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   Future<void> changeDeadline(String filter,
-      {DateTime start, DateTime stop}) async {
+      {DateTime? start, DateTime? stop}) async {
     _deadlineFilter = '';
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
@@ -189,8 +190,8 @@ class MilestonesFilterController extends BaseFilterController {
       deadline['custom']['selected'] = !deadline['custom']['selected'];
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start);
-      var stopDate = formatter.format(stop);
+      var startDate = formatter.format(start!);
+      var stopDate = formatter.format(stop!);
       if (deadline['custom']['selected'])
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
@@ -202,25 +203,25 @@ class MilestonesFilterController extends BaseFilterController {
     _statusFilter = '';
     switch (filter) {
       case 'active':
-        status['active'] = !status['active'];
-        status['paused'] = false;
-        status['closed'] = false;
+        status!['active'] = !status!['active'];
+        status!['paused'] = false;
+        status!['closed'] = false;
 
-        if (status['active']) _statusFilter = '&status=open';
+        if (status!['active']) _statusFilter = '&status=open';
         break;
       case 'paused':
-        status['active'] = false;
-        status['paused'] = !status['paused'];
-        status['closed'] = false;
+        status!['active'] = false;
+        status!['paused'] = !status!['paused'];
+        status!['closed'] = false;
 
-        if (status['paused']) _statusFilter = '&status=paused';
+        if (status!['paused']) _statusFilter = '&status=paused';
         break;
       case 'closed':
-        status['active'] = false;
-        status['paused'] = false;
-        status['closed'] = !status['closed'];
+        status!['active'] = false;
+        status!['paused'] = false;
+        status!['closed'] = !status!['closed'];
 
-        if (status['closed']) _statusFilter = '&status=closed';
+        if (status!['closed']) _statusFilter = '&status=closed';
         break;
       default:
     }
@@ -232,7 +233,7 @@ class MilestonesFilterController extends BaseFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.milestonesByFilter(
+    var result = await (_api!.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
@@ -240,22 +241,22 @@ class MilestonesFilterController extends BaseFilterController {
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
-    );
+    ) as Future<List<Milestone>>);
 
     suitableResultCount.value = result.length;
   }
 
   @override
   void resetFilters() async {
-    milestoneResponsible['me'] = false;
-    milestoneResponsible['other'] = '';
+    milestoneResponsible!['me'] = false;
+    milestoneResponsible!['other'] = '';
 
-    taskResponsible['me'] = false;
-    taskResponsible['other'] = '';
+    taskResponsible!['me'] = false;
+    taskResponsible!['other'] = '';
 
-    status['active'] = false;
-    status['paused'] = false;
-    status['closed'] = false;
+    status!['active'] = false;
+    status!['paused'] = false;
+    status!['closed'] = false;
 
     deadline['overdue'] = false;
     deadline['today'] = false;
@@ -279,7 +280,7 @@ class MilestonesFilterController extends BaseFilterController {
     hasFilters.value = _hasFilters;
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
 
     _updateFilterState();
   }
@@ -298,7 +299,7 @@ class MilestonesFilterController extends BaseFilterController {
       'stopDate': stopDate,
     };
 
-    await _storage.write(
+    await _storage!.write(
       'milestonesFilter',
       {
         'milestoneResponsible': {
@@ -331,10 +332,10 @@ class MilestonesFilterController extends BaseFilterController {
       }
     }.obs;
     status = {'active': false, 'paused': false, 'closed': false}.obs;
-    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible);
-    _currentAppliedTaskResponsible = Map.from(taskResponsible);
+    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible!);
+    _currentAppliedTaskResponsible = Map.from(taskResponsible!);
     _currentAppliedDeadline = Map.from(deadline);
-    _currentAppliedStatus = Map.from(status);
+    _currentAppliedStatus = Map.from(status!);
 
     _updateFilterState();
   }
@@ -343,7 +344,7 @@ class MilestonesFilterController extends BaseFilterController {
   // ignore: unused_element
   Future<void> _getSavedFilters() async {
     var savedFilters =
-        await _storage.read('milestoneFilters', returnCopy: true);
+        await _storage!.read('milestoneFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
@@ -380,9 +381,9 @@ class MilestonesFilterController extends BaseFilterController {
 
   void _updateFilterState() {
     _currentAppliedDeadline = Map.from(deadline);
-    _currentAppliedStatus = Map.from(status);
-    _currentAppliedTaskResponsible = Map.from(taskResponsible);
-    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible);
+    _currentAppliedStatus = Map.from(status!);
+    _currentAppliedTaskResponsible = Map.from(taskResponsible!);
+    _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible!);
 
     _currentAppliedResponsibleFilter = _taskResponsibleFilter;
     _currentAppliedMilestoneResponsibleFilter = _milestoneResponsibleFilter;

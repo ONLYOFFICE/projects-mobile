@@ -38,15 +38,15 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class AuthTextField extends StatelessWidget {
   final bool obscureText;
   final bool hasError;
-  final Function(String value) onChanged;
-  final String hintText;
-  final String autofillHint;
-  final TextEditingController controller;
-  final TextInputType keyboardType;
+  final Function(String value)? onChanged;
+  final String? hintText;
+  final String? autofillHint;
+  final TextEditingController? controller;
+  final TextInputType? keyboardType;
   final validator;
 
   const AuthTextField({
-    Key key,
+    Key? key,
     this.autofillHint,
     this.controller,
     this.hintText,
@@ -61,7 +61,7 @@ class AuthTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      autofillHints: [autofillHint],
+      autofillHints: [autofillHint!],
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',

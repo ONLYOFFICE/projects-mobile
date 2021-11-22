@@ -50,7 +50,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectScreen extends StatelessWidget {
-  SelectProjectScreen({Key key}) : super(key: key);
+  SelectProjectScreen({Key? key}) : super(key: key);
 
   final searchFieldController = TextEditingController();
   final searchController = Get.put(ProjectSearchController());
@@ -179,7 +179,7 @@ class SelectProjectScreen extends StatelessWidget {
             return PaginationListView(
               paginationController: _projectsController.paginationController,
               child: ListView.separated(
-                itemCount: _projectsController.paginationController.data.length,
+                itemCount: _projectsController.paginationController!.data.length,
                 padding: const EdgeInsets.only(bottom: 16),
                 separatorBuilder: (BuildContext context, int index) {
                   return const StyledDivider(
@@ -189,7 +189,7 @@ class SelectProjectScreen extends StatelessWidget {
                 },
                 itemBuilder: (BuildContext context, int index) {
                   var project =
-                      _projectsController.paginationController.data[index];
+                      _projectsController.paginationController!.data[index];
                   return _ProjectTile(
                     project: project,
                     onPressed: () => onSelect(project),
@@ -207,9 +207,9 @@ class SelectProjectScreen extends StatelessWidget {
 
 class _ProjectTile extends StatelessWidget {
   const _ProjectTile({
-    Key key,
-    @required this.project,
-    @required this.onPressed,
+    Key? key,
+    required this.project,
+    required this.onPressed,
   }) : super(key: key);
 
   final ProjectDetailed project;
@@ -232,13 +232,13 @@ class _ProjectTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    project.title,
+                    project.title!,
                     style: TextStyleHelper.projectTitle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
                   Text(
-                    NameFormatter.formateName(project.responsible),
+                    NameFormatter.formateName(project.responsible!)!,
                     style: TextStyleHelper.projectResponsible,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,

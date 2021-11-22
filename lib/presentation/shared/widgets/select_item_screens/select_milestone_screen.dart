@@ -43,7 +43,7 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/common/
 
 class SelectMilestoneScreen extends StatelessWidget
     with SelectItemWithSearchMixin {
-  const SelectMilestoneScreen({Key key}) : super(key: key);
+  const SelectMilestoneScreen({Key? key}) : super(key: key);
 
   @override
   String get appBarText => tr('selectMilestone');
@@ -71,15 +71,15 @@ class SelectMilestoneScreen extends StatelessWidget
 }
 
 class _MilestoneList extends StatelessWidget with SelectItemListMixin {
-  const _MilestoneList({Key key}) : super(key: key);
+  const _MilestoneList({Key? key}) : super(key: key);
 
   @override
-  PaginationController get paginationController =>
+  PaginationController? get paginationController =>
       Get.find<MilestonesController>().paginationController;
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
-        Milestone milestone = paginationController.data[i];
+        Milestone milestone = paginationController!.data[i];
         return SelectItemTile(
             title: milestone.title,
             onSelect: () => Get.back(
@@ -89,16 +89,16 @@ class _MilestoneList extends StatelessWidget with SelectItemListMixin {
 
 class _SearchResult extends StatelessWidget with SelectItemListMixin {
   const _SearchResult({
-    Key key,
+    Key? key,
     this.paginationController,
   }) : super(key: key);
 
   @override
-  final PaginationController paginationController;
+  final PaginationController? paginationController;
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
-        Milestone milestone = paginationController.data[i];
+        Milestone milestone = paginationController!.data[i];
         return SelectItemTile(
             title: milestone.title,
             onSelect: () => Get.back(

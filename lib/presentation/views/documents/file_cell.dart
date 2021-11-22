@@ -49,14 +49,14 @@ import 'package:projects/presentation/views/documents/documents_move_or_copy_vie
 class FileCell extends StatelessWidget {
   final int index;
 
-  final PortalFile entity;
+  final PortalFile? entity;
   final controller;
 
   const FileCell({
-    Key key,
-    @required this.entity,
-    @required this.index,
-    @required this.controller,
+    Key? key,
+    required this.entity,
+    required this.index,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -105,13 +105,13 @@ class FileCell extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: Text(entity.title.replaceAll(' ', '\u00A0'),
+                    child: Text(entity!.title!.replaceAll(' ', '\u00A0'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.projectTitle),
                   ),
                   Text(
-                      '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.createdBy.displayName}',
+                      '${formatedDate(entity!.updated!)} • ${entity!.contentLength} • ${entity!.createdBy!.displayName}',
                       style: TextStyleHelper.caption(
                           color:
                               Get.theme.colors().onSurface.withOpacity(0.6))),
@@ -123,7 +123,7 @@ class FileCell extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PopupMenuButton(
-                  onSelected: (value) => {
+                  onSelected: (dynamic value) => {
                     _onFilePopupMenuSelected(value, entity, context, controller)
                   },
                   icon: Icon(Icons.more_vert,
@@ -180,7 +180,7 @@ class FileCell extends StatelessWidget {
 
 void _onFilePopupMenuSelected(
   value,
-  PortalFile selectedFile,
+  PortalFile? selectedFile,
   BuildContext context,
   controller,
 ) async {
@@ -189,7 +189,7 @@ void _onFilePopupMenuSelected(
       var portalDomain = controller.portalInfoController.portalUri;
 
       var link =
-          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
+          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile!.id.toString()}';
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
@@ -200,13 +200,13 @@ void _onFilePopupMenuSelected(
       await controller.openFile(selectedFile);
       break;
     case 'download':
-      await controller.downloadFile(selectedFile.viewUrl);
+      await controller.downloadFile(selectedFile!.viewUrl);
       break;
     case 'copy':
       Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
-        'target': selectedFile.id,
+        'target': selectedFile!.id,
         'initialFolderId': controller.currentFolder,
         'refreshCalback': controller.refreshContent
       });
@@ -215,14 +215,14 @@ void _onFilePopupMenuSelected(
       Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
-        'target': selectedFile.id,
+        'target': selectedFile!.id,
         'initialFolderId': controller.currentFolder,
         'refreshCalback': controller.refreshContent
       });
 
       break;
     case 'rename':
-      _renameFile(controller, selectedFile, context);
+      _renameFile(controller, selectedFile!, context);
       break;
     case 'delete':
       var success = await controller.deleteFile(selectedFile);
@@ -241,7 +241,7 @@ void _renameFile(
   BuildContext context,
 ) {
   var inputController = TextEditingController();
-  inputController.text = element.title.replaceAll(element.fileExst, '');
+  inputController.text = element.title!.replaceAll(element.fileExst!, '');
 
   Get.dialog(
     StyledAlertDialog(

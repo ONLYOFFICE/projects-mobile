@@ -35,9 +35,9 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationListView<T> extends StatelessWidget {
   const PaginationListView({
-    Key key,
-    @required this.paginationController,
-    @required this.child,
+    Key? key,
+    required this.paginationController,
+    required this.child,
   }) : super(key: key);
 
   final paginationController;
@@ -47,7 +47,7 @@ class PaginationListView<T> extends StatelessWidget {
   Widget build(BuildContext context) {
     return SmartRefresher(
         footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus mode) {
+          builder: (BuildContext context, LoadStatus? mode) {
             return Container(
               height: 55.0,
               child: const Center(child: CircularProgressIndicator()),

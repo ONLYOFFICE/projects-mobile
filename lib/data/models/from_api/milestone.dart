@@ -54,23 +54,23 @@ class Milestone {
     this.updatedBy,
   });
 
-  bool canDelete;
-  bool canEdit;
-  bool isKey;
-  bool isNotify;
-  DateTime created;
-  DateTime deadline;
-  DateTime updated;
-  int activeTaskCount;
-  int closedTaskCount;
-  int id;
-  int status;
-  PortalUser createdBy;
-  PortalUser responsible;
-  PortalUser updatedBy;
-  ProjectOwner projectOwner;
-  String description;
-  String title;
+  bool? canDelete;
+  bool? canEdit;
+  bool? isKey;
+  bool? isNotify;
+  DateTime? created;
+  DateTime? deadline;
+  DateTime? updated;
+  int? activeTaskCount;
+  int? closedTaskCount;
+  int? id;
+  int? status;
+  PortalUser? createdBy;
+  PortalUser? responsible;
+  PortalUser? updatedBy;
+  ProjectOwner? projectOwner;
+  String? description;
+  String? title;
 
   factory Milestone.fromJson(Map<String, dynamic> json) => Milestone(
         canEdit: json['canEdit'],
@@ -120,9 +120,9 @@ class Milestone {
         'title': title,
         'updated': updated?.toIso8601String(),
         'updatedBy': updatedBy?.toJson(),
-        if (projectOwner != null) 'projectOwner': projectOwner.toJson(),
-        if (responsible != null) 'responsible': responsible.toJson(),
-        if (updatedBy != null) 'updatedBy': updatedBy.toJson(),
-        if (createdBy != null) 'createdBy': createdBy.toJson()
+        if (projectOwner != null) 'projectOwner': projectOwner!.toJson(),
+        if (responsible != null) 'responsible': responsible!.toJson(),
+        if (updatedBy != null) 'updatedBy': updatedBy!.toJson(),
+        if (createdBy != null) 'createdBy': createdBy!.toJson()
       };
 }

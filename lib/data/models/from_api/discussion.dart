@@ -59,25 +59,25 @@ class Discussion {
     this.updated,
   });
 
-  final DateTime created;
-  final DateTime updated;
-  final PortalUser createdBy;
-  final PortalUser updatedBy;
-  final ProjectOwner projectOwner;
-  final String text;
-  final String title;
-  final bool canCreateComment;
-  final bool canEdit;
-  final bool canEditFiles;
-  final bool canReadFiles;
-  List<PortalUser> subscribers;
-  final List<PortalFile> files;
-  final List<PortalComment> comments;
-  final Project project;
+  final DateTime? created;
+  final DateTime? updated;
+  final PortalUser? createdBy;
+  final PortalUser? updatedBy;
+  final ProjectOwner? projectOwner;
+  final String? text;
+  final String? title;
+  final bool? canCreateComment;
+  final bool? canEdit;
+  final bool? canEditFiles;
+  final bool? canReadFiles;
+  List<PortalUser>? subscribers;
+  final List<PortalFile>? files;
+  final List<PortalComment>? comments;
+  final Project? project;
   final dynamic description;
-  final int commentsCount;
-  final int id;
-  int status;
+  final int? commentsCount;
+  final int? id;
+  int? status;
 
   factory Discussion.fromJson(Map<String, dynamic> json) => Discussion(
         canCreateComment: json['canCreateComment'],
@@ -135,6 +135,6 @@ class Discussion {
         'updated': updated?.toIso8601String(),
       };
 
-  set setStatus(int newStatus) => status = newStatus;
-  set setSubscribers(List<PortalUser> newS) => subscribers = newS;
+  set setStatus(int? newStatus) => status = newStatus;
+  set setSubscribers(List<PortalUser>? newS) => subscribers = newS;
 }

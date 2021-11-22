@@ -36,15 +36,15 @@ import 'package:flutter/services.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.searchFunction,
     this.clearFunction,
   }) : super(key: key);
 
   final controller;
-  final Function(String value) searchFunction;
-  final VoidCallback clearFunction;
+  final Function(String value)? searchFunction;
+  final VoidCallback? clearFunction;
 
   @override
   Widget build(BuildContext context) {

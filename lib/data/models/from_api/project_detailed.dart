@@ -33,29 +33,29 @@
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class ProjectDetailed {
-  bool canEdit;
-  bool canDelete;
-  Map<String, dynamic> security;
-  int projectFolder;
-  int id;
-  String title;
-  String description;
-  int status;
-  PortalUser responsible;
-  bool isPrivate;
-  int taskCount;
-  int taskCountTotal;
-  int milestoneCount;
-  int discussionCount;
-  int participantCount;
-  String timeTrackingTotal;
-  int documentsCount;
-  bool isFollow;
-  PortalUser updatedBy;
-  String created;
-  PortalUser createdBy;
-  String updated;
-  List<String> tags;
+  bool? canEdit;
+  bool? canDelete;
+  Map<String, dynamic>? security;
+  int? projectFolder;
+  int? id;
+  String? title;
+  String? description;
+  int? status;
+  PortalUser? responsible;
+  bool? isPrivate;
+  int? taskCount;
+  int? taskCountTotal;
+  int? milestoneCount;
+  int? discussionCount;
+  int? participantCount;
+  String? timeTrackingTotal;
+  int? documentsCount;
+  bool? isFollow;
+  PortalUser? updatedBy;
+  String? created;
+  PortalUser? createdBy;
+  String? updated;
+  List<String>? tags;
 
   ProjectDetailed(
       {this.canEdit,

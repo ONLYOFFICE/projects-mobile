@@ -45,7 +45,7 @@ import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class PortalUserItemController extends GetxController {
-  final _downloadService = locator<DownloadService>();
+  final DownloadService? _downloadService = locator<DownloadService>();
 
   var userTitle = ''.obs;
 
@@ -53,8 +53,8 @@ class PortalUserItemController extends GetxController {
     if (portalUser != null) setupUser();
   }
 
-  final PortalUser portalUser;
-  RxBool isSelected;
+  final PortalUser? portalUser;
+  RxBool? isSelected;
   var selectionMode = UserSelectionMode.None.obs;
 
   Rx<Uint8List> avatarData = Uint8List.fromList([]).obs;
@@ -67,15 +67,15 @@ class PortalUserItemController extends GetxController {
           color: Get.theme.colors().onSurface) as Widget)
       .obs;
 
-  String get displayName => portalUser.displayName;
-  String get id => portalUser.id;
+  String? get displayName => portalUser!.displayName;
+  String? get id => portalUser!.id;
 
   Future<void> loadAvatar() async {
     try {
-      var avatarBytes = await _downloadService.downloadImage(
-          portalUser?.avatar ??
+      var avatarBytes = await _downloadService!.downloadImage(
+          (portalUser?.avatar ??
               portalUser?.avatarMedium ??
-              portalUser?.avatarSmall);
+              portalUser?.avatarSmall!)!);
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;
@@ -90,7 +90,7 @@ class PortalUserItemController extends GetxController {
   void setupUser() {
     isSelected ??= false.obs;
     if (portalUser?.title != null) {
-      userTitle.value = portalUser.title;
+      userTitle.value = portalUser!.title!;
     }
     loadAvatar();
   }
@@ -100,7 +100,7 @@ class PortalUserItemController extends GetxController {
 
     if (selectionMode.value == UserSelectionMode.Single ||
         selectionMode.value == UserSelectionMode.Multiple)
-      isSelected.value = !isSelected.value;
+      isSelected!.value = !isSelected!.value;
     else
       Get.find<NavigationController>().toScreen(const ProfileScreen(),
           arguments: {'portalUser': portalUser});

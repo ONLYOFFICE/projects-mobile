@@ -41,7 +41,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersDataSource extends GetxController {
-  final _api = locator<UserService>();
+  final UserService? _api = locator<UserService>();
   RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
   var loaded = true.obs;
   var searchInputController = TextEditingController();
@@ -55,21 +55,21 @@ class UsersDataSource extends GetxController {
   var isSearchResult = false.obs;
 
   // var withoutSelf_remove = false;
-  PortalUserItemController selfUserItem;
+  PortalUserItemController? selfUserItem;
 
   RefreshController refreshController = RefreshController();
 
   var totalProfiles;
 
-  Future<void> Function() applyUsersSelection;
+  Future<void> Function()? applyUsersSelection;
 
-  PortalUser selectedProjectManager;
+  PortalUser? selectedProjectManager;
   var selfIsVisible = true.obs;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
   RxList<PortalUserItemController> get usersWithoutVisitors =>
-      RxList.from(usersList.where((user) => !user.portalUser.isVisitor));
+      RxList.from(usersList.where((user) => !user.portalUser!.isVisitor!));
 
   void onLoading() async {
     _startIndex += 25;
@@ -100,10 +100,10 @@ class UsersDataSource extends GetxController {
 
     var result;
     if (_query == null || _query.isEmpty) {
-      result = await _api.getProfilesByExtendedFilter(startIndex: _startIndex);
+      result = await _api!.getProfilesByExtendedFilter(startIndex: _startIndex);
       isSearchResult.value = false;
     } else {
-      result = await _api.getProfilesByExtendedFilter(
+      result = await _api!.getProfilesByExtendedFilter(
           startIndex: _startIndex, query: _query.toLowerCase());
       isSearchResult.value = true;
     }
@@ -126,16 +126,16 @@ class UsersDataSource extends GetxController {
 
     usersList.removeWhere((element) =>
         selectedProjectManager != null &&
-        selectedProjectManager.id == element.id);
+        selectedProjectManager!.id == element.id);
 
     selfIsVisible.value = !(selectedProjectManager != null &&
-        selectedProjectManager.id == selfUserItem.portalUser.id);
+        selectedProjectManager!.id == selfUserItem!.portalUser!.id);
 
     usersList
-        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
+        .removeWhere((item) => item.portalUser!.status == UserStatus.Terminated);
 
     if (applyUsersSelection != null) {
-      await applyUsersSelection();
+      await applyUsersSelection!();
     }
   }
 
@@ -152,7 +152,7 @@ class UsersDataSource extends GetxController {
     nothingFound.value = false;
   }
 
-  Future getProfiles({bool needToClear, withoutSelf = false}) async {
+  Future getProfiles({required bool needToClear, withoutSelf = false}) async {
     _clear();
     loaded.value = false;
     await _loadUsers(needToClear: needToClear, withoutSelf: withoutSelf);

@@ -31,16 +31,16 @@
  */
 
 class NewProjectDTO {
-  String title;
-  String description;
-  String responsibleId;
-  String tags;
-  bool private;
-  List<Participant> participants;
-  bool notify;
+  String? title;
+  String? description;
+  String? responsibleId;
+  String? tags;
+  bool? private;
+  List<Participant>? participants;
+  bool? notify;
   // List<Null> tasks;
   // List<Null> milestones;
-  bool notifyResponsibles;
+  bool? notifyResponsibles;
 
   NewProjectDTO(
       {this.title,
@@ -63,7 +63,7 @@ class NewProjectDTO {
     if (json['participants'] != null) {
       participants = <Participant>[];
       json['participants'].forEach((v) {
-        participants.add(Participant.fromJson(v));
+        participants!.add(Participant.fromJson(v));
       });
     }
     notify = json['notify'];
@@ -78,7 +78,7 @@ class NewProjectDTO {
     data['tags'] = tags;
     data['private'] = private;
     if (participants != null) {
-      data['participants'] = participants.map((v) => v.toJson()).toList();
+      data['participants'] = participants!.map((v) => v.toJson()).toList();
     }
     data['notify'] = notify;
     // if (tasks != null) {
@@ -93,12 +93,12 @@ class NewProjectDTO {
 }
 
 class Participant {
-  String iD;
-  bool canReadFiles;
-  bool canReadMilestones;
-  bool canReadMessages;
-  bool canReadTasks;
-  bool canReadContacts;
+  String? iD;
+  bool? canReadFiles;
+  bool? canReadMilestones;
+  bool? canReadMessages;
+  bool? canReadTasks;
+  bool? canReadContacts;
 
   Participant({
     this.iD,
@@ -132,14 +132,14 @@ class Participant {
 }
 
 class EditProjectDTO {
-  String title;
-  String description;
-  String responsibleId;
-  String tags;
-  List<Participant> participants;
-  bool private;
-  int status;
-  bool notify;
+  String? title;
+  String? description;
+  String? responsibleId;
+  String? tags;
+  List<Participant>? participants;
+  bool? private;
+  int? status;
+  bool? notify;
 
   EditProjectDTO({
     this.title,
@@ -160,7 +160,7 @@ class EditProjectDTO {
     if (json['participants'] != null) {
       participants = <Participant>[];
       json['participants'].forEach((v) {
-        participants.add(Participant.fromJson(v));
+        participants!.add(Participant.fromJson(v));
       });
     }
     private = json['private'];
@@ -175,7 +175,7 @@ class EditProjectDTO {
     data['responsibleId'] = responsibleId;
     data['tags'] = tags;
     if (participants != null) {
-      data['participants'] = participants.map((v) => v.iD).toList();
+      data['participants'] = participants!.map((v) => v.iD).toList();
     }
     data['private'] = private;
     data['status'] = status;

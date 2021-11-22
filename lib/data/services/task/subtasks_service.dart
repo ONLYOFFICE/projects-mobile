@@ -38,11 +38,11 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class SubtasksService {
-  final SubtasksApi _api = locator<SubtasksApi>();
-  final SecureStorage _secureStorage = locator<SecureStorage>();
+  final SubtasksApi? _api = locator<SubtasksApi>();
+  final SecureStorage? _secureStorage = locator<SecureStorage>();
 
-  Future acceptSubtask({int taskId, int subtaskId, Map data}) async {
-    var response = await _api.acceptSubtask(
+  Future acceptSubtask({int? taskId, int? subtaskId, required Map data}) async {
+    var response = await _api!.acceptSubtask(
         data: data, taskId: taskId, subtaskId: subtaskId);
     var success = response.response != null;
 
@@ -50,70 +50,70 @@ class SubtasksService {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message!);
       return null;
     }
   }
 
-  Future deleteSubtask({int taskId, int subtaskId}) async {
+  Future deleteSubtask({int? taskId, int? subtaskId}) async {
     var response =
-        await _api.deleteSubTask(taskId: taskId, subtaskId: subtaskId);
+        await _api!.deleteSubTask(taskId: taskId, subtaskId: subtaskId);
     var success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.deleteEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message!);
       return null;
     }
   }
 
-  Future createSubtask({int taskId, Map data}) async {
-    var response = await _api.createSubtask(taskId: taskId, data: data);
+  Future createSubtask({int? taskId, Map? data}) async {
+    var response = await _api!.createSubtask(taskId: taskId, data: data);
     var success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.createEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message!);
       return null;
     }
   }
 
-  Future copySubtask({int taskId, int subtaskId}) async {
-    var response = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
+  Future copySubtask({int? taskId, int? subtaskId}) async {
+    var response = await _api!.copySubtask(taskId: taskId, subtaskId: subtaskId);
     var success = response.response != null;
 
     if (success) {
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message!);
       return null;
     }
   }
 
-  Future updateSubtaskStatus({int taskId, int subtaskId, Map data}) async {
-    var response = await _api.updateSubtaskStatus(
+  Future updateSubtaskStatus({int? taskId, int? subtaskId, required Map data}) async {
+    var response = await _api!.updateSubtaskStatus(
         taskId: taskId, subtaskId: subtaskId, data: data);
     var success = response.response != null;
 
@@ -121,19 +121,19 @@ class SubtasksService {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message!);
       return null;
     }
   }
 
-  Future updateSubtask({int taskId, int subtaskId, Map data}) async {
-    var response = await _api.updateSubtask(
+  Future updateSubtask({int? taskId, int? subtaskId, required Map data}) async {
+    var response = await _api!.updateSubtask(
       taskId: taskId,
       subtaskId: subtaskId,
       data: data,
@@ -145,13 +145,13 @@ class SubtasksService {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+            await _secureStorage!.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message!);
       return null;
     }
   }

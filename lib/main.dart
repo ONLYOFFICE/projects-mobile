@@ -123,9 +123,9 @@ Future<bool> isAuthorized() async {
 }
 
 class App extends GetMaterialApp {
-  final String initialPage;
+  final String? initialPage;
 
-  App({Key key, this.initialPage}) : super(key: key);
+  App({Key? key, this.initialPage}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

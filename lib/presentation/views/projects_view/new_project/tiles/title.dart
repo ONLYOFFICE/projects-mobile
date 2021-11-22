@@ -41,8 +41,8 @@ class ProjectTitleTile extends StatelessWidget {
   final bool showCaption;
   final bool focusOnTitle;
   const ProjectTitleTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.showCaption = false,
     this.focusOnTitle = true,
   }) : super(key: key);

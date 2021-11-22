@@ -55,11 +55,11 @@ part 'filters/project.dart';
 part 'filters/other.dart';
 
 class DiscussionsFilterScreen extends StatelessWidget {
-  const DiscussionsFilterScreen({Key key}) : super(key: key);
+  const DiscussionsFilterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final BaseFilterController filterController =
+    final BaseFilterController? filterController =
         Get.arguments['filterController'];
 
     final platformController = Get.find<PlatformController>();
@@ -69,7 +69,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
           platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         onLeadingPressed: () {
-          filterController.restoreFilters();
+          filterController!.restoreFilters();
           Get.back();
         },
         titleText: tr('filter'),
@@ -81,7 +81,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
             : const Icon(Icons.close),
         actions: [
           TextButton(
-              onPressed: () async => filterController.resetFilters(),
+              onPressed: () async => filterController!.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
                       color: Get.theme.colors().systemBlue))),
@@ -97,7 +97,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12.5),
-                  _Author(filterController: filterController),
+                  _Author(filterController: filterController as DiscussionsFilterController?),
                   _Status(filterController: filterController),
                   _CreatingDate(filterController: filterController),
                   _Project(filterController: filterController),
@@ -108,7 +108,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (filterController.suitableResultCount.value != -1)
+            if (filterController!.suitableResultCount.value != -1)
               return ConfirmFiltersButton(filterController: filterController);
             return const SizedBox();
           }),

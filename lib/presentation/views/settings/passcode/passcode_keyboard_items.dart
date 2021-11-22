@@ -41,9 +41,9 @@ class PasscodeNumbersRow extends StatelessWidget {
   final List<int> numbers;
   final Function(int number) onPressed;
   const PasscodeNumbersRow({
-    Key key,
-    @required this.numbers,
-    @required this.onPressed,
+    Key? key,
+    required this.numbers,
+    required this.onPressed,
   })  : assert(numbers.length == 3),
         super(key: key);
 
@@ -73,9 +73,9 @@ class PasscodeNumbersRow extends StatelessWidget {
 
 class PasscodeRowWithZero extends StatelessWidget {
   const PasscodeRowWithZero({
-    Key key,
-    @required this.onZeroPressed,
-    @required this.onDeletePressed,
+    Key? key,
+    required this.onZeroPressed,
+    required this.onDeletePressed,
   }) : super(key: key);
 
   final VoidCallback onDeletePressed;
@@ -98,12 +98,12 @@ class PasscodeRowWithZero extends StatelessWidget {
 class PasscodeNumber extends StatelessWidget {
   final int number;
   final Function(int number) onPressed;
-  final PasscodeSettingsController controller;
+  final PasscodeSettingsController? controller;
 
   const PasscodeNumber({
-    Key key,
-    @required this.number,
-    @required this.onPressed,
+    Key? key,
+    required this.number,
+    required this.onPressed,
     this.controller,
   }) : super(key: key);
 
@@ -129,8 +129,8 @@ class PasscodeNumber extends StatelessWidget {
 
 class DeleteButton extends StatelessWidget {
   const DeleteButton({
-    Key key,
-    @required this.onTap,
+    Key? key,
+    required this.onTap,
   }) : super(key: key);
 
   final VoidCallback onTap;
@@ -155,8 +155,8 @@ class DeleteButton extends StatelessWidget {
 
 class FingerprintButton extends StatelessWidget {
   const FingerprintButton({
-    Key key,
-    @required this.onTap,
+    Key? key,
+    required this.onTap,
   }) : super(key: key);
 
   final VoidCallback onTap;

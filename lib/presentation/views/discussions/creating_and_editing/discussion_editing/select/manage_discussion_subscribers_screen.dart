@@ -50,7 +50,7 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
-  const ManageDiscussionSubscribersScreen({Key key}) : super(key: key);
+  const ManageDiscussionSubscribersScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -82,8 +82,8 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                   style: TextStyleHelper.headerStyle(
                       color: Get.theme.colors().onSurface),
                 ),
-                if (controller.subscribers.isNotEmpty)
-                  Text(plural('selected', controller.subscribers.length),
+                if (controller.subscribers!.isNotEmpty)
+                  Text(plural('selected', controller.subscribers!.length),
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onSurface))
               ],
@@ -137,9 +137,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
                 enablePullUp: usersDataSource.pullUpEnabled,
                 child: CustomScrollView(
                   slivers: <Widget>[
-                    if (controller.subscribers.isNotEmpty)
+                    if (controller.subscribers!.isNotEmpty)
                       _UsersCategoryText(text: tr('subscribed')),
-                    if (controller.subscribers.isNotEmpty)
+                    if (controller.subscribers!.isNotEmpty)
                       _SubscribedUsers(
                         controller: controller,
                         usersDataSource: usersDataSource,
@@ -174,8 +174,8 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
 
 class _UsersCategoryText extends StatelessWidget {
   const _UsersCategoryText({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
   }) : super(key: key);
 
   final String text;
@@ -197,8 +197,8 @@ class _UsersCategoryText extends StatelessWidget {
 
 class _AllUsers extends StatelessWidget {
   const _AllUsers({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final DiscussionActionsController controller;
@@ -210,14 +210,14 @@ class _AllUsers extends StatelessWidget {
         (context, index) => Padding(
           padding: const EdgeInsets.only(top: 24),
           child: PortalUserItem(
-            userController: controller.otherUsers[index],
+            userController: controller.otherUsers![index],
             onTapFunction: (value) => {
-              controller.addSubscriber(controller.otherUsers[index],
+              controller.addSubscriber(controller.otherUsers![index],
                   fromUsersDataSource: false)
             },
           ),
         ),
-        childCount: controller.otherUsers.length,
+        childCount: controller.otherUsers!.length,
       ),
     );
   }
@@ -225,9 +225,9 @@ class _AllUsers extends StatelessWidget {
 
 class _SubscribedUsers extends StatelessWidget {
   const _SubscribedUsers({
-    Key key,
-    @required this.controller,
-    @required this.usersDataSource,
+    Key? key,
+    required this.controller,
+    required this.usersDataSource,
   }) : super(key: key);
 
   final DiscussionActionsController controller;
@@ -241,14 +241,14 @@ class _SubscribedUsers extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(top: 24),
             child: PortalUserItem(
-              userController: controller.subscribers[index],
+              userController: controller.subscribers![index],
               onTapFunction: (value) => {
-                controller.removeSubscriber(controller.subscribers[index]),
+                controller.removeSubscriber(controller.subscribers![index]),
               },
             ),
           );
         },
-        childCount: controller.subscribers.length,
+        childCount: controller.subscribers!.length,
       ),
     );
   }

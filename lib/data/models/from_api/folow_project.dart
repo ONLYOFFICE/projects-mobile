@@ -33,13 +33,13 @@
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class FollowProject {
-  int id;
-  String title;
-  String description;
-  int status;
-  PortalUser responsible;
-  bool canEdit;
-  bool isPrivate;
+  int? id;
+  String? title;
+  String? description;
+  int? status;
+  PortalUser? responsible;
+  bool? canEdit;
+  bool? isPrivate;
 
   FollowProject(
       {this.id,
@@ -69,7 +69,7 @@ class FollowProject {
     data['description'] = description;
     data['status'] = status;
     if (responsible != null) {
-      data['responsible'] = responsible.toJson();
+      data['responsible'] = responsible!.toJson();
     }
     data['canEdit'] = canEdit;
     data['isPrivate'] = isPrivate;

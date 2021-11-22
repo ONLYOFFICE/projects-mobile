@@ -50,46 +50,46 @@ class SubtaskEditingController extends GetxController
   SubtaskEditingController(this.subtaskController);
 
   final subtaskController;
-  final _api = locator<SubtasksService>();
+  final SubtasksService? _api = locator<SubtasksService>();
   final _titleController = TextEditingController();
-  Subtask _subtask;
-  ProjectTeamController teamController;
+  Subtask? _subtask;
+  late ProjectTeamController teamController;
 
   @override
   TextEditingController get titleController => _titleController;
   @override
-  FocusNode get titleFocus => null;
+  FocusNode? get titleFocus => null;
   RxList responsibles = [].obs;
   @override
-  RxInt status;
+  RxInt? status;
   @override
-  RxBool setTiltleError = false.obs;
+  RxBool? setTiltleError = false.obs;
   // title befor editing
-  String _previousTitle;
+  String? _previousTitle;
   // responsible id before editing
-  String _previousResponsibleId;
+  String? _previousResponsibleId;
   List _previusSelectedResponsible = [];
 
   @override
-  void init({Subtask subtask, int projectId}) {
+  void init({Subtask? subtask, int? projectId}) {
     _subtask = subtask;
-    _previousTitle = subtask.title;
+    _previousTitle = subtask!.title;
     _previousResponsibleId = subtask.responsible?.id;
-    _titleController.text = subtask.title;
+    _titleController.text = subtask.title!;
 
     teamController = Get.find<ProjectTeamController>();
 
-    status = subtask.status.obs;
-    if (_subtask.responsible != null) {
+    status = subtask.status!.obs;
+    if (_subtask!.responsible != null) {
       _previusSelectedResponsible
-          .add(PortalUserItemController(portalUser: _subtask.responsible));
+          .add(PortalUserItemController(portalUser: _subtask!.responsible));
       responsibles
-          .add(PortalUserItemController(portalUser: _subtask.responsible));
+          .add(PortalUserItemController(portalUser: _subtask!.responsible));
     }
     setupResponsibleSelection(projectId);
   }
 
-  void setupResponsibleSelection([int projectId]) async {
+  void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
           projectId: projectId, withoutVisitors: true, withoutBlocked: true);
@@ -104,13 +104,13 @@ class SubtaskEditingController extends GetxController
 
   Future<void> _getSelectedResponsibles() async {
     for (var element in teamController.usersList) {
-      element.isSelected.value = false;
+      element.isSelected!.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
     for (var selectedMember in responsibles) {
       for (var user in teamController.usersList) {
-        if (selectedMember.portalUser.id == user.portalUser.id) {
-          user.isSelected.value = true;
+        if (selectedMember.portalUser.id == user.portalUser!.id) {
+          user.isSelected!.value = true;
         }
       }
     }
@@ -120,14 +120,14 @@ class SubtaskEditingController extends GetxController
   void addResponsible(PortalUserItemController user) {
     // ignore: avoid_function_literals_in_foreach_calls
     teamController.usersList.forEach((element) {
-      if (element.portalUser.id != user.id) element.isSelected.value = false;
+      if (element.portalUser!.id != user.id) element.isSelected!.value = false;
     });
     responsibles.clear();
-    if (user.isSelected.value == true) {
+    if (user.isSelected!.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+          (element) => user.portalUser!.id == element.portalUser.id);
     }
   }
 
@@ -190,18 +190,18 @@ class SubtaskEditingController extends GetxController
   }
 
   @override
-  Future<void> confirm({context, int taskId}) async {
+  Future<void> confirm({context, int? taskId}) async {
     if (titleController.text.isEmpty)
-      setTiltleError.value = true;
+      setTiltleError!.value = true;
     else {
       var responsible =
           responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
 
       var data = {'responsible': responsible, 'title': _titleController.text};
 
-      var editedSubtask = await _api.updateSubtask(
-        taskId: _subtask.taskId,
-        subtaskId: _subtask.id,
+      var editedSubtask = await _api!.updateSubtask(
+        taskId: _subtask!.taskId,
+        subtaskId: _subtask!.id,
         data: data,
       );
       if (editedSubtask != null) {

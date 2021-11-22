@@ -33,26 +33,26 @@
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class PortalFile {
-  bool shared;
-  DateTime created;
-  DateTime updated;
+  bool? shared;
+  DateTime? created;
+  DateTime? updated;
   dynamic comment;
-  int access;
-  int fileStatus;
-  int fileType;
-  int folderId;
-  int id;
-  int pureContentLength;
-  int rootFolderType;
-  int version;
-  int versionGroup;
-  PortalUser createdBy;
-  PortalUser updatedBy;
-  String contentLength;
-  String fileExst;
-  String title;
-  String thumbnailUrl;
-  String viewUrl;
+  int? access;
+  int? fileStatus;
+  int? fileType;
+  int? folderId;
+  int? id;
+  int? pureContentLength;
+  int? rootFolderType;
+  int? version;
+  int? versionGroup;
+  PortalUser? createdBy;
+  PortalUser? updatedBy;
+  String? contentLength;
+  String? fileExst;
+  String? title;
+  String? thumbnailUrl;
+  String? viewUrl;
 
   PortalFile({
     this.access,

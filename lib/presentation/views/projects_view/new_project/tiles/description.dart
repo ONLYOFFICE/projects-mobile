@@ -45,7 +45,7 @@ import 'package:projects/presentation/views/projects_view/new_project/descriptio
 class ProjectDescriptionTile extends StatefulWidget {
   final controller;
   ProjectDescriptionTile({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 
@@ -55,14 +55,14 @@ class ProjectDescriptionTile extends StatefulWidget {
 
 class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
     with TickerProviderStateMixin {
-  bool _isExpanded;
+  late bool _isExpanded;
 
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   final Animatable<double> _halfTween = Tween<double>(begin: 0, end: 0.245);
   final Animatable<double> _turnsTween = CurveTween(curve: Curves.easeIn);
 
-  Animation<double> _iconTurns;
+  late Animation<double> _iconTurns;
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    double _height = _isExpanded ? null : 61;
+    double? _height = _isExpanded ? null : 61;
 
     void changeExpansion() {
       setState(() {

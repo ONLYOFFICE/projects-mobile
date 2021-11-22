@@ -85,14 +85,14 @@ class ProjectApi {
 // &__=291475
 // &FilterValue=searchquerry
   Future<PageDTO<List<ProjectDetailed>>> getProjectsByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    String projectManagerFilter,
-    String participantFilter,
-    String otherFilter,
-    String statusFilter,
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    String? projectManagerFilter,
+    String? participantFilter,
+    String? otherFilter,
+    String? statusFilter,
   }) async {
     var url = await locator.get<CoreApi>().projectsByParamsBaseUrl();
 
@@ -143,7 +143,7 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectDetailed>> getProjectById({int projectId}) async {
+  Future<ApiDTO<ProjectDetailed>> getProjectById({int? projectId}) async {
     var url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
     var result = ApiDTO<ProjectDetailed>();
@@ -208,8 +208,8 @@ class ProjectApi {
   }
 
   Future<PageDTO<List<ProjectTag>>> getTagsPaginated({
-    int startIndex,
-    String query,
+    int? startIndex,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().projectTags();
 
@@ -236,7 +236,7 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectDetailed>> createProject({NewProjectDTO project}) async {
+  Future<ApiDTO<ProjectDetailed>> createProject({required NewProjectDTO project}) async {
     var url = await locator.get<CoreApi>().createProjectUrl();
 
     var result = ApiDTO<ProjectDetailed>();
@@ -259,7 +259,7 @@ class ProjectApi {
   }
 
   Future<ApiDTO<Map<String, dynamic>>> editProject(
-      {EditProjectDTO project, int projectId}) async {
+      {required EditProjectDTO project, int? projectId}) async {
     var url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
     var result = ApiDTO<Map<String, dynamic>>();
@@ -303,7 +303,7 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<PortalUser>> deleteProject({int projectId}) async {
+  Future<ApiDTO<PortalUser>> deleteProject({int? projectId}) async {
     var url = await locator.get<CoreApi>().projectByIDUrl(projectId);
 
     var result = ApiDTO<PortalUser>();
@@ -325,7 +325,7 @@ class ProjectApi {
   }
 
   Future<ApiDTO<ProjectDetailed>> updateProjectStatus(
-      {int projectId, String newStatus}) async {
+      {int? projectId, String? newStatus}) async {
     var url = await locator.get<CoreApi>().updateProjectStatusUrl(projectId);
 
     var result = ApiDTO<ProjectDetailed>();
@@ -347,7 +347,7 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<FollowProject>> followProject({int projectId}) async {
+  Future<ApiDTO<FollowProject>> followProject({int? projectId}) async {
     var url = await locator.get<CoreApi>().followProjectUrl(projectId);
 
     var result = ApiDTO<FollowProject>();
@@ -368,7 +368,7 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectTag>> createTag({String name}) async {
+  Future<ApiDTO<ProjectTag>> createTag({String? name}) async {
     var url = await locator.get<CoreApi>().createTagUrl();
 
     var result = ApiDTO<ProjectTag>();
@@ -392,7 +392,7 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<PortalUser>>> addToProjectTeam(
-      String projectID, List<String> users) async {
+      String projectID, List<String?> users) async {
     var url = await locator.get<CoreApi>().projectTeamUrl(projectID);
 
     var result = ApiDTO<List<PortalUser>>();

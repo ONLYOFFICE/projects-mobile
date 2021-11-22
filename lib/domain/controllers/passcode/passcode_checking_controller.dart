@@ -43,24 +43,24 @@ class PasscodeCheckingController extends GetxController {
     _canUseFingerprint = canUseFingerprint;
   }
 
-  bool _canUseFingerprint;
+  late bool _canUseFingerprint;
 
-  final _service = locator<PasscodeService>();
-  final _authService = locator<LocalAuthenticationService>();
+  final PasscodeService? _service = locator<PasscodeService>();
+  final LocalAuthenticationService? _authService = locator<LocalAuthenticationService>();
 
   var passcodeCheckFailed = false.obs;
   RxInt passcodeLen = 0.obs;
   var loaded = false.obs;
 
-  bool isFingerprintEnable;
-  bool isFingerprintAvailable;
+  late bool isFingerprintEnable;
+  bool? isFingerprintAvailable;
 
   String _enteredPasscode = '';
-  String _correctPasscode;
+  String? _correctPasscode;
 
   @override
   void onInit() async {
-    _correctPasscode = await _service.getPasscode;
+    _correctPasscode = await _service!.getPasscode;
     await _getFingerprintAvailability();
     super.onInit();
     if (isFingerprintEnable) await useFingerprint();
@@ -68,14 +68,14 @@ class PasscodeCheckingController extends GetxController {
 
   // update code in main passcode controller
   void updatePasscode() async {
-    _correctPasscode = await _service.getPasscode;
+    _correctPasscode = await _service!.getPasscode;
     await _getFingerprintAvailability();
     if (isFingerprintEnable) await useFingerprint();
   }
 
   Future<void> useFingerprint() async {
     try {
-      var didAuthenticate = await _authService.authenticate();
+      var didAuthenticate = await _authService!.authenticate();
 
       if (!didAuthenticate) {
         await _getFingerprintAvailability();
@@ -97,7 +97,7 @@ class PasscodeCheckingController extends GetxController {
   }) async {
     if (passcodeCheckFailed.isTrue) passcodeCheckFailed.value = false;
 
-    _correctPasscode = _correctPasscode ?? await _service.getPasscode;
+    _correctPasscode = _correctPasscode ?? await _service!.getPasscode;
 
     if (_enteredPasscode.length < 4) {
       _enteredPasscode += number.toString();
@@ -155,8 +155,8 @@ class PasscodeCheckingController extends GetxController {
       isFingerprintAvailable = false;
       isFingerprintEnable = false;
     } else {
-      isFingerprintAvailable = await _authService.isFingerprintAvailable;
-      isFingerprintEnable = await _service.isFingerprintEnable;
+      isFingerprintAvailable = await _authService!.isFingerprintAvailable;
+      isFingerprintEnable = await _service!.isFingerprintEnable;
     }
     loaded.value = true;
   }

@@ -43,11 +43,11 @@ import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detai
 
 class SubtaskCell extends StatelessWidget {
   final Subtask subtask;
-  final PortalTask parentTask;
+  final PortalTask? parentTask;
   const SubtaskCell({
-    Key key,
-    @required this.subtask,
-    @required this.parentTask,
+    Key? key,
+    required this.subtask,
+    required this.parentTask,
   }) : super(key: key);
 
   @override
@@ -75,10 +75,10 @@ class SubtaskCell extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(subtask.title,
+                        Text(subtask.title!,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: subtaskController.subtask.value.status ==
+                            style: subtaskController.subtask.value!.status ==
                                     SubtaskStatus.CLOSED
                                 ? TextStyleHelper.subtitle1(
                                         color: const Color(0xff9C9C9C))
@@ -87,10 +87,10 @@ class SubtaskCell extends StatelessWidget {
                                 : TextStyleHelper.subtitle1()),
                         Text(
                             subtaskController
-                                    .subtask.value.responsible?.displayName ??
+                                    .subtask.value!.responsible?.displayName ??
                                 tr('nobody'),
                             style: TextStyleHelper.caption(
-                                color: subtaskController.subtask.value.status ==
+                                color: subtaskController.subtask.value!.status ==
                                         SubtaskStatus.CLOSED
                                     ? const Color(0xffc2c2c2)
                                     : Get.theme
@@ -100,30 +100,30 @@ class SubtaskCell extends StatelessWidget {
                       ],
                     ),
                   ),
-                  if (subtaskController.subtask.value.canEdit ||
+                  if (subtaskController.subtask.value!.canEdit! ||
                       subtaskController.canCreateSubtask)
                     SizedBox(
                       width: 52,
                       child: PopupMenuButton(
-                        onSelected: (value) =>
+                        onSelected: (dynamic value) =>
                             _onSelected(context, value, subtaskController),
                         itemBuilder: (context) {
                           return [
                             if (subtaskController.canEdit &&
-                                subtaskController.subtask.value.responsible ==
+                                subtaskController.subtask.value!.responsible ==
                                     null)
                               PopupMenuItem(
                                   value: 'acceptSubtask',
                                   child: Text(tr('acceptSubtask'),
                                       style: TextStyleHelper.subtitle1())),
                             if (subtaskController.canCreateSubtask &&
-                                subtaskController.subtask.value.status ==
+                                subtaskController.subtask.value!.status ==
                                     SubtaskStatus.OPEN)
                               PopupMenuItem(
                                   value: 'copySubtask',
                                   child: Text(tr('copySubtask'),
                                       style: TextStyleHelper.subtitle1())),
-                            if (subtask.canEdit)
+                            if (subtask.canEdit!)
                               PopupMenuItem(
                                   value: 'delete',
                                   child: Text(tr('delete'),
@@ -151,19 +151,19 @@ void _onSelected(context, value, SubtaskController controller) async {
   switch (value) {
     case 'acceptSubtask':
       controller.acceptSubtask(context,
-          taskId: controller.subtask.value.taskId,
-          subtaskId: controller.subtask.value.id);
+          taskId: controller.subtask.value!.taskId,
+          subtaskId: controller.subtask.value!.id);
       break;
     case 'copySubtask':
       controller.copySubtask(context,
-          taskId: controller.subtask.value.taskId,
-          subtaskId: controller.subtask.value.id);
+          taskId: controller.subtask.value!.taskId,
+          subtaskId: controller.subtask.value!.id);
       break;
     case 'delete':
       controller.deleteSubtask(
         context: context,
-        taskId: controller.subtask.value.taskId,
-        subtaskId: controller.subtask.value.id,
+        taskId: controller.subtask.value!.taskId,
+        subtaskId: controller.subtask.value!.id,
       );
       break;
     default:

@@ -47,10 +47,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 
 class ProjectsDashboardMoreView extends StatelessWidget {
-  const ProjectsDashboardMoreView({Key key}) : super(key: key);
+  const ProjectsDashboardMoreView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    ProjectsController controller = Get.arguments['controller'];
+    ProjectsController? controller = Get.arguments['controller'];
 
     var scrollController = ScrollController();
     var elevation = ValueNotifier<double>(0);
@@ -62,7 +62,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
       backgroundColor: Get.theme.colors().backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
-          visible: controller.fabIsVisible.value,
+          visible: controller!.fabIsVisible.value,
           child: StyledFloatingActionButton(
             onPressed: () => controller.createNewProject(),
             child: AppIcon(
@@ -78,7 +78,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: Bottom(controller: controller),
             showBackButton: true,
@@ -88,11 +88,11 @@ class ProjectsDashboardMoreView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
+          if (controller!.loaded.value == false)
             return const ListLoadingSkeleton();
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value) {
+              controller.paginationController!.data.isEmpty &&
+              !controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.project_not_created,
@@ -100,8 +100,8 @@ class ProjectsDashboardMoreView extends StatelessWidget {
             );
           }
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value) {
+              controller.paginationController!.data.isEmpty &&
+              controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
@@ -112,8 +112,8 @@ class ProjectsDashboardMoreView extends StatelessWidget {
             child: ListView.builder(
               controller: scrollController,
               itemBuilder: (c, i) =>
-                  ProjectCell(item: controller.paginationController.data[i]),
-              itemCount: controller.paginationController.data.length,
+                  ProjectCell(item: controller.paginationController!.data[i]),
+              itemCount: controller.paginationController!.data.length,
             ),
           );
         },
@@ -123,7 +123,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({Key key, @required this.controller}) : super(key: key);
+  const _Title({Key? key, required this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {

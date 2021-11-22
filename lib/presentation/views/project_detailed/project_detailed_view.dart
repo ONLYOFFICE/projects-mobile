@@ -55,7 +55,7 @@ import 'package:projects/presentation/views/project_detailed/project_task_screen
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
 
 class ProjectDetailedView extends StatefulWidget {
-  ProjectDetailedView({Key key}) : super(key: key);
+  ProjectDetailedView({Key? key}) : super(key: key);
 
   @override
   _ProjectDetailedViewState createState() => _ProjectDetailedViewState();
@@ -63,14 +63,14 @@ class ProjectDetailedView extends StatefulWidget {
 
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
   // ignore: prefer_final_fields
   RxInt _activeIndex = 0.obs;
 
-  ProjectDetailed projectDetailed = Get.arguments['projectDetailed'];
+  ProjectDetailed? projectDetailed = Get.arguments['projectDetailed'];
 
-  ProjectDetailsController projectController;
-  ProjectDiscussionsController discussionsController;
+  ProjectDetailsController? projectController;
+  ProjectDiscussionsController? discussionsController;
   final documentsController = Get.find<DocumentsController>();
 
   @override
@@ -78,63 +78,63 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     super.initState();
 
     discussionsController =
-        Get.put(ProjectDiscussionsController(projectDetailed));
+        Get.put(ProjectDiscussionsController(projectDetailed!));
 
     projectController = Get.find<ProjectDetailsController>();
-    projectController.setup(Get.arguments['projectDetailed']);
+    projectController!.setup(Get.arguments['projectDetailed']);
 
     documentsController.setupFolder(
-        folderName: projectDetailed.title,
-        folderId: projectDetailed.projectFolder);
+        folderName: projectDetailed!.title!,
+        folderId: projectDetailed!.projectFolder);
 
     _tabController = TabController(
       vsync: this,
       length: 6,
     );
 
-    projectController.addProjectDetailsListeners(() {
-      projectDetailed = projectController.projectData;
-      discussionsController.setup(projectDetailed);
+    projectController!.addProjectDetailsListeners(() {
+      projectDetailed = projectController!.projectData;
+      discussionsController!.setup(projectDetailed!);
       documentsController.setupFolder(
-          folderName: projectDetailed.title,
-          folderId: projectDetailed.projectFolder);
+          folderName: projectDetailed!.title!,
+          folderId: projectDetailed!.projectFolder);
     });
 
     documentsController.filesCount.listen((count) {
-      projectController.docsCount.value = count;
+      projectController!.docsCount.value = count;
     });
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
+    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController.addListener(() {
-      if (_activeIndex.value == _tabController.index) return;
+    _tabController!.addListener(() {
+      if (_activeIndex.value == _tabController!.index) return;
 
-      _activeIndex.value = _tabController.index;
+      _activeIndex.value = _tabController!.index;
     });
 
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            projectController.projectData.canEdit
+            projectController!.projectData!.canEdit!
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
                     onPressed: () => Get.find<NavigationController>().to(
                             EditProjectView(
-                                projectDetailed: projectController.projectData),
+                                projectDetailed: projectController!.projectData),
                             arguments: {
-                              'projectDetailed': projectController.projectData
+                              'projectDetailed': projectController!.projectData
                             }))
                 : const SizedBox(),
-            if (!projectController.projectData.security['isInTeam'] ||
-                projectController.projectData.canDelete)
+            if (!projectController!.projectData!.security!['isInTeam'] ||
+                projectController!.projectData!.canDelete!)
               _ProjectContextMenu(controller: projectController)
           ],
           bottom: SizedBox(
@@ -152,23 +152,23 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('tasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: projectController.tasksCount.value),
+                      count: projectController!.tasksCount.value),
                   CustomTab(
                       title: tr('milestones'),
                       currentTab: _activeIndex.value == 2,
-                      count: projectController.milestoneCount.value),
+                      count: projectController!.milestoneCount.value),
                   CustomTab(
                       title: tr('discussions'),
                       currentTab: _activeIndex.value == 3,
-                      count: projectController.projectData.discussionCount),
+                      count: projectController!.projectData!.discussionCount),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
-                      count: projectController.docsCount.value),
+                      count: projectController!.docsCount.value),
                   CustomTab(
                       title: tr('team'),
                       currentTab: _activeIndex.value == 5,
-                      count: projectController.projectData.participantCount),
+                      count: projectController!.projectData!.participantCount),
                 ]),
           ),
         ),
@@ -176,18 +176,18 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ProjectOverview(
               projectController: projectController,
               tabController: _tabController),
-          ProjectTaskScreen(projectDetailed: projectController.projectData),
+          ProjectTaskScreen(projectDetailed: projectController!.projectData),
           ProjectMilestonesScreen(
-              projectDetailed: projectController.projectData),
+              projectDetailed: projectController!.projectData),
           ProjectDiscussionsScreen(controller: discussionsController),
           EntityDocumentsView(
-            folderId: projectController.projectData.projectFolder,
-            folderName: projectController.projectData.title,
+            folderId: projectController!.projectData!.projectFolder,
+            folderName: projectController!.projectData!.title,
             documentsController: documentsController,
           ),
           ProjectTeamView(
-              projectDetailed: projectController.projectData,
-              fabAction: projectController.manageTeamMembers),
+              projectDetailed: projectController!.projectData,
+              fabAction: projectController!.manageTeamMembers),
         ]),
       ),
     );
@@ -196,7 +196,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
 class _ProjectContextMenu extends StatelessWidget {
   final controller;
-  const _ProjectContextMenu({Key key, @required this.controller})
+  const _ProjectContextMenu({Key? key, required this.controller})
       : super(key: key);
 
   @override
@@ -204,7 +204,7 @@ class _ProjectContextMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (value) => _onSelected(value, controller, context),
+      onSelected: (dynamic value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
         return [
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
@@ -219,7 +219,7 @@ class _ProjectContextMenu extends StatelessWidget {
             ),
           if (controller.projectData.canDelete)
             PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle
+              textStyle: Get.theme.popupMenuTheme.textStyle!
                   .copyWith(color: Get.theme.colors().colorError),
               value: 'delete',
               child: Text(

@@ -38,7 +38,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class DefaultAvatar extends StatelessWidget {
   final radius;
 
-  const DefaultAvatar({Key key, this.radius = 20.0}) : super(key: key);
+  const DefaultAvatar({Key? key, this.radius = 20.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -33,14 +33,14 @@
 import 'package:flutter/material.dart';
 
 class LoginItem extends StatelessWidget {
-  final String serviceName;
-  final Function onTap;
-  const LoginItem({Key key, this.serviceName, this.onTap}) : super(key: key);
+  final String? serviceName;
+  final Function? onTap;
+  const LoginItem({Key? key, this.serviceName, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap as void Function()?,
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
         padding: const EdgeInsets.all(10.0),
@@ -57,7 +57,7 @@ class LoginItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              serviceName,
+              serviceName!,
               style:
                   const TextStyle(fontWeight: FontWeight.w900, fontSize: 16.0),
             ),

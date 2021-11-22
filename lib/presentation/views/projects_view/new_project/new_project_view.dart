@@ -45,7 +45,7 @@ import 'package:projects/domain/controllers/projects/new_project/new_project_con
 
 class NewProject extends StatelessWidget {
   const NewProject({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

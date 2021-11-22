@@ -55,8 +55,8 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectDetailsController extends BaseProjectEditorController {
-  final _projectService = locator<ProjectService>();
-  final _docApi = locator<FilesService>();
+  final ProjectService? _projectService = locator<ProjectService>();
+  final FilesService? _docApi = locator<FilesService>();
 
   RefreshController refreshController = RefreshController();
   var loaded = true.obs;
@@ -76,16 +76,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
   var docsCount = (-1).obs;
 
   var milestoneCount = (-1).obs;
-  var currentTab = -1.obs;
+  int currentTab = -1.obs;
 
   bool markedToDelete = false;
 
-  final Rx<ProjectDetailed> _projectDetailed = ProjectDetailed().obs;
+  final Rx<ProjectDetailed?> _projectDetailed = ProjectDetailed().obs;
 
-  StreamSubscription _subscription;
-  StreamSubscription _projectDetailedsubscription;
+  late StreamSubscription _subscription;
+  late StreamSubscription _projectDetailedsubscription;
 
-  ProjectDetailed get projectData => _projectDetailed.value;
+  ProjectDetailed? get projectData => _projectDetailed.value;
 
   final _userController = Get.find<UserController>();
 
@@ -127,32 +127,32 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     await fillProjectInfo();
 
-    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
+    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
 
     creationDateText.value =
-        formatter.format(DateTime.parse(_projectDetailed.value.created));
+        formatter.format(DateTime.parse(_projectDetailed.value!.created!));
 
-    await _projectService
-        .getProjectById(projectId: _projectDetailed.value.id)
+    await _projectService!
+        .getProjectById(projectId: _projectDetailed.value!.id)
         .then((value) => {
               _projectDetailed.value = value,
               fillProjectInfo(),
               if (value?.tags != null)
                 {
-                  tags.addAll(value.tags),
-                  tagsText.value = value.tags.join(', '),
+                  tags.addAll(value!.tags!),
+                  tagsText.value = value.tags!.join(', '),
                 }
             });
 
-    tasksCount.value = _projectDetailed.value.taskCountTotal;
+    tasksCount.value = _projectDetailed.value!.taskCountTotal!;
 
-    await _docApi
-        .getFilesByParams(folderId: _projectDetailed.value.projectFolder)
-        .then((value) => docsCount.value = value.files.length);
+    await _docApi!
+        .getFilesByParams(folderId: _projectDetailed.value!.projectFolder)
+        .then((value) => docsCount.value = value!.files!.length);
 
     await locator<MilestoneService>()
         .milestonesByFilter(
-          projectId: _projectDetailed.value.id.toString(),
+          projectId: _projectDetailed.value!.id.toString(),
         )
         .then((value) => {
               if (value != null) {milestoneCount.value = value.length}
@@ -160,7 +160,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   Future<void> fillProjectInfo() async {
-    teamMembersCount.value = _projectDetailed.value.participantCount;
+    teamMembersCount.value = _projectDetailed.value!.participantCount!;
 
     var tream = Get.find<ProjectTeamController>()
       ..setup(projectDetailed: _projectDetailed.value);
@@ -169,30 +169,30 @@ class ProjectDetailsController extends BaseProjectEditorController {
           teamMembers.clear(),
           teamMembers.addAll(tream.usersList),
           teamMembers.removeWhere((element) =>
-              element.portalUser.id == _projectDetailed.value.responsible.id),
+              element.portalUser.id == _projectDetailed.value!.responsible!.id),
         });
 
     statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed.value.status)]);
+        args: [ProjectStatus.toName(_projectDetailed.value!.status)]);
 
-    projectTitleText.value = _projectDetailed.value.title;
-    descriptionText.value = _projectDetailed.value.description;
-    managerText.value = _projectDetailed.value.responsible.displayName;
+    projectTitleText.value = _projectDetailed.value!.title!;
+    descriptionText.value = _projectDetailed.value!.description!;
+    managerText.value = _projectDetailed.value!.responsible!.displayName!;
 
-    milestoneCount.value = _projectDetailed.value.milestoneCount;
+    milestoneCount.value = _projectDetailed.value!.milestoneCount!;
   }
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed.value = await _projectService.getProjectById(
-        projectId: _projectDetailed.value.id);
+    _projectDetailed.value = await _projectService!.getProjectById(
+        projectId: _projectDetailed.value!.id);
     loaded.value = true;
 
     await setup(_projectDetailed.value);
   }
 
   Future manageTeamMembers() async {
-    selectedProjectManager.value = projectData.responsible;
+    selectedProjectManager.value = projectData!.responsible;
 
     selectedTeamMembers.clear();
 
@@ -207,29 +207,29 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future deleteProject() async {
     markedToDelete = true;
-    return await _projectService.deleteProject(
-        projectId: _projectDetailed.value.id);
+    return await _projectService!.deleteProject(
+        projectId: _projectDetailed.value!.id);
   }
 
-  Future<bool> updateStatus({int newStatusId}) async =>
+  Future<bool> updateStatus({int? newStatusId}) async =>
       Get.find<ProjectStatusesController>().updateStatus(
           newStatusId: newStatusId, projectData: _projectDetailed.value);
 
   Future followProject() async {
-    await _projectService.followProject(projectId: _projectDetailed.value.id);
+    await _projectService!.followProject(projectId: _projectDetailed.value!.id);
     await refreshData();
   }
 
   @override
   Future<void> confirmTeamMembers() async {
     Get.find<UsersDataSource>().loaded.value = false;
-    var users = <String>[];
+    var users = <String?>[];
 
     for (var user in selectedTeamMembers) {
       users.add(user.id);
     }
 
-    await _projectService.addToProjectTeam(projectData.id.toString(), users);
+    await _projectService!.addToProjectTeam(projectData!.id.toString(), users);
     await refreshData();
     Get.find<UsersDataSource>().loaded.value = true;
 

@@ -44,7 +44,7 @@ class DownloadApi {
     if (avatarUrl.toLowerCase().contains('http')) {
       url = avatarUrl;
     } else {
-      url = await locator.get<CoreApi>().getPortalURI() + avatarUrl;
+      url = (await locator.get<CoreApi>().getPortalURI())! + avatarUrl;
     }
 
     var result = ApiDTO<Uint8List>();
@@ -66,7 +66,7 @@ class DownloadApi {
     if (docUrl.toLowerCase().contains('http')) {
       url = docUrl;
     } else {
-      url = await locator.get<CoreApi>().getPortalURI() + docUrl;
+      url = (await locator.get<CoreApi>().getPortalURI())! + docUrl;
     }
 
     var result = ApiDTO<Uint8List>();

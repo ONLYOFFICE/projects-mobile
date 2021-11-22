@@ -49,7 +49,7 @@ import 'package:projects/presentation/views/projects_view/widgets/search_bar.dar
 
 class ProjectManagerSelectionView extends StatelessWidget {
   const ProjectManagerSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -113,12 +113,12 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
 class UsersSearchResult extends StatelessWidget {
   const UsersSearchResult({
-    Key key,
-    @required this.usersDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.usersDataSource,
+    required this.onTapFunction,
     this.withoutVisitors = false,
   }) : super(key: key);
-  final Function onTapFunction;
+  final Function? onTapFunction;
   final UsersDataSource usersDataSource;
   final bool withoutVisitors;
 
@@ -153,14 +153,14 @@ class UsersSearchResult extends StatelessWidget {
 
 class UsersDefault extends StatelessWidget {
   const UsersDefault({
-    Key key,
-    @required this.selfUserItem,
-    @required this.usersDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.selfUserItem,
+    required this.usersDataSource,
+    required this.onTapFunction,
     this.withoutGuests = false,
   }) : super(key: key);
-  final Function onTapFunction;
-  final PortalUserItemController selfUserItem;
+  final Function? onTapFunction;
+  final PortalUserItemController? selfUserItem;
   final usersDataSource;
   final bool withoutGuests;
 

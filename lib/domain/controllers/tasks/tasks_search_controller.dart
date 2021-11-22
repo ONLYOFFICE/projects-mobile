@@ -33,18 +33,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TasksSearchController extends BaseController {
-  final _api = locator<TaskService>();
+  final TaskService? _api = locator<TaskService>();
 
   var loaded = true.obs;
   var nothingFound = false.obs;
 
-  String _query;
+  late String _query;
 
   final PaginationController _paginationController = PaginationController();
   PaginationController get paginationController => _paginationController;
@@ -81,18 +83,18 @@ class TasksSearchController extends BaseController {
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    var result = await _api.getTasksByParams(
+    var result = await (_api!.getTasksByParams(
       startIndex: paginationController.startIndex,
       query: _query.toLowerCase(),
-    );
+    ) as Future<PageDTO<List<PortalTask>>>);
 
-    paginationController.total.value = result.total;
+    paginationController.total.value = result.total!;
 
-    if (result.response.isEmpty) nothingFound.value = true;
+    if (result.response!.isEmpty) nothingFound.value = true;
 
     if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response);
+    paginationController.data.addAll(result.response!);
   }
 
   void clearSearch() {

@@ -44,7 +44,7 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_group_i
 
 class GroupMembersSelectionView extends StatelessWidget {
   const GroupMembersSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -89,11 +89,11 @@ class GroupMembersSelectionView extends StatelessWidget {
 
 class GroupsOverview extends StatelessWidget {
   const GroupsOverview({
-    Key key,
-    @required this.groupsDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.groupsDataSource,
+    required this.onTapFunction,
   }) : super(key: key);
-  final Function onTapFunction;
+  final Function? onTapFunction;
   final GroupsDataSource groupsDataSource;
 
   @override

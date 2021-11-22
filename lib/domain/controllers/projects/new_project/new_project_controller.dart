@@ -47,7 +47,7 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
-  final _api = locator<ProjectService>();
+  final ProjectService? _api = locator<ProjectService>();
 
   NewProjectController() {
     selectionMode = UserSelectionMode.Single;
@@ -72,7 +72,7 @@ class NewProjectController extends BaseProjectEditorController {
     needToFillTitle.value = titleController.text.isEmpty;
 
     needToFillManager.value = (selectedProjectManager.value == null ||
-        selectedProjectManager.value.id == null);
+        selectedProjectManager.value!.id == null);
 
     if (needToFillTitle.value == true || needToFillManager.value == true)
       return;
@@ -82,7 +82,7 @@ class NewProjectController extends BaseProjectEditorController {
     for (var element in selectedTeamMembers) {
       participants.add(
         Participant(
-            iD: element.portalUser.id,
+            iD: element.portalUser!.id,
             canReadMessages: true,
             canReadFiles: true,
             canReadTasks: true,
@@ -94,13 +94,13 @@ class NewProjectController extends BaseProjectEditorController {
     var newProject = NewProjectDTO(
         title: titleController.text,
         description: descriptionController.text,
-        responsibleId: selectedProjectManager.value.id,
+        responsibleId: selectedProjectManager.value!.id,
         participants: participants,
         private: isPrivate.value,
         notify: notificationEnabled.value,
         notifyResponsibles: responsiblesNotificationEnabled);
 
-    var result = await _api.createProject(project: newProject);
+    var result = await _api!.createProject(project: newProject);
     if (result != null) {
       locator<EventHub>().fire('needToRefreshProjects');
 

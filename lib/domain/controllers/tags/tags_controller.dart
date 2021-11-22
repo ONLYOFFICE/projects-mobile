@@ -38,9 +38,9 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TagsController extends BaseController {
-  final _api = locator<ProjectService>();
+  final ProjectService? _api = locator<ProjectService>();
 
-  PaginationController paginationController;
+  PaginationController? paginationController;
 
   @override
   void onInit() {
@@ -48,9 +48,9 @@ class TagsController extends BaseController {
     paginationController =
         Get.put(PaginationController(), tag: 'TagsController');
 
-    paginationController.loadDelegate = () async => await _getItems();
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
+    paginationController!.loadDelegate = () async => await _getItems();
+    paginationController!.refreshDelegate = () async => await refreshData();
+    paginationController!.pullDownEnabled = true;
 
     super.onInit();
   }
@@ -67,20 +67,20 @@ class TagsController extends BaseController {
   }
 
   Future getItems({bool needToClear = false}) async {
-    paginationController.startIndex = 0;
+    paginationController!.startIndex = 0;
     loaded.value = false;
     await _getItems(needToClear: needToClear);
     loaded.value = true;
   }
 
   Future _getItems({bool needToClear = false}) async {
-    var result = await _api.getTagsPaginated(
-        startIndex: paginationController.startIndex);
+    var result = await _api!.getTagsPaginated(
+        startIndex: paginationController!.startIndex);
 
     if (result != null) {
-      paginationController.total.value = result.total;
-      if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response);
+      paginationController!.total.value = result.total!;
+      if (needToClear) paginationController!.data.clear();
+      paginationController!.data.addAll(result.response!);
     }
   }
 }

@@ -43,7 +43,7 @@ import 'package:projects/presentation/views/authentication/2fa_sms/select_countr
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class TFASmsScreen extends StatelessWidget {
-  const TFASmsScreen({Key key}) : super(key: key);
+  const TFASmsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -107,7 +107,7 @@ class TFASmsScreen extends StatelessWidget {
 }
 
 class _CountrySelection extends StatelessWidget {
-  const _CountrySelection({Key key}) : super(key: key);
+  const _CountrySelection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,7 +124,7 @@ class _CountrySelection extends StatelessWidget {
               onPressed: () => Get.to(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
-                  controller?.deviceCountry?.value?.countryName ??
+                  controller.deviceCountry.value?.countryName ??
                       tr('chooseCountry'),
                   style: TextStyleHelper.subtitle1(
                       color: Get.theme.colors().primary),
@@ -143,7 +143,7 @@ class _CountrySelection extends StatelessWidget {
                     controller: controller.phoneCodeController,
                     onChanged: (value) {},
                     autofocus:
-                        controller?.deviceCountry?.value?.phoneCode == null,
+                        controller.deviceCountry.value?.phoneCode == null,
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.only(
@@ -162,7 +162,7 @@ class _CountrySelection extends StatelessWidget {
                   flex: 4,
                   child: TextField(
                     autofocus:
-                        controller?.deviceCountry?.value?.phoneCode != null,
+                        controller.deviceCountry.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(

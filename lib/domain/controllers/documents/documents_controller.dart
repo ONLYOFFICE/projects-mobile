@@ -53,7 +53,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DocumentsController extends GetxController {
-  final _api = locator<FilesService>();
+  final FilesService? _api = locator<FilesService>();
   var portalInfoController = Get.find<PortalInfoController>();
 
   var hasFilters = false.obs;
@@ -63,32 +63,32 @@ class DocumentsController extends GetxController {
 
   var searchInputController = TextEditingController();
 
-  PaginationController _paginationController;
+  PaginationController? _paginationController;
 
-  String _query;
+  String? _query;
 
-  String _entityType;
+  String? _entityType;
 
-  String get entityType => _entityType;
-  set entityType(String value) =>
-      {_entityType = value, _filterController.entityType = value};
+  String? get entityType => _entityType;
+  set entityType(String? value) =>
+      {_entityType = value, _filterController!.entityType = value};
 
-  PaginationController get paginationController => _paginationController;
+  PaginationController? get paginationController => _paginationController;
 
-  String _screenName;
-  int _currentFolderId;
-  int get currentFolder => _currentFolderId;
+  String? _screenName;
+  int? _currentFolderId;
+  int? get currentFolder => _currentFolderId;
 
   var screenName = tr('documents').obs;
 
-  RxList get itemList => _paginationController.data;
+  RxList get itemList => _paginationController!.data;
   RxInt filesCount = RxInt(-1);
 
-  DocumentsSortController _sortController;
-  DocumentsSortController get sortController => _sortController;
+  DocumentsSortController? _sortController;
+  DocumentsSortController? get sortController => _sortController;
 
-  DocumentsFilterController _filterController;
-  DocumentsFilterController get filterController => _filterController;
+  DocumentsFilterController? _filterController;
+  DocumentsFilterController? get filterController => _filterController;
 
   DocumentsController(
     DocumentsFilterController filterController,
@@ -98,7 +98,7 @@ class DocumentsController extends GetxController {
     _sortController = sortController;
     _paginationController = paginationController;
     _filterController = filterController;
-    _filterController.applyFiltersDelegate = () async => await refreshContent();
+    _filterController!.applyFiltersDelegate = () async => await refreshContent();
     sortController.updateSortDelegate = () async => await refreshContent();
     paginationController.loadDelegate = () async => await _getDocuments();
     paginationController.refreshDelegate = () async => await refreshContent();
@@ -128,12 +128,12 @@ class DocumentsController extends GetxController {
     loaded.value = true;
   }
 
-  Future<void> setupFolder({String folderName, int folderId}) async {
+  Future<void> setupFolder({required String folderName, int? folderId}) async {
     loaded.value = false;
 
     _clear();
     _currentFolderId = folderId;
-    _filterController.folderId = _currentFolderId;
+    _filterController!.folderId = _currentFolderId;
     screenName.value = folderName;
     await _getDocuments();
 
@@ -144,35 +144,35 @@ class DocumentsController extends GetxController {
     _screenName = null;
     _currentFolderId = null;
 
-    _filterController.folderId = null;
-    paginationController.startIndex = 0;
-    if (paginationController.data.isNotEmpty) paginationController.data.clear();
+    _filterController!.folderId = null;
+    paginationController!.startIndex = 0;
+    if (paginationController!.data.isNotEmpty) paginationController!.data.clear();
   }
 
   Future _getDocuments() async {
-    var result = await _api.getFilesByParams(
+    var result = await _api!.getFilesByParams(
       folderId: _currentFolderId,
       query: _query,
-      startIndex: paginationController.startIndex,
-      sortBy: sortController.currentSortfilter,
-      sortOrder: sortController.currentSortOrder,
-      typeFilter: _filterController.typeFilter,
-      authorFilter: _filterController.authorFilter,
+      startIndex: paginationController!.startIndex,
+      sortBy: sortController!.currentSortfilter,
+      sortOrder: sortController!.currentSortOrder,
+      typeFilter: _filterController!.typeFilter,
+      authorFilter: _filterController!.authorFilter,
       entityType: _entityType,
     );
 
     if (result == null) return;
 
-    paginationController.total.value = result.total;
+    paginationController!.total.value = result.total!;
 
     if (_currentFolderId != null && result.current != null)
-      _screenName = result.current.title;
+      _screenName = result.current!.title;
 
     if (result.folders != null)
-      paginationController.data.addAll(result.folders);
+      paginationController!.data.addAll(result.folders!);
     if (result.files != null) {
-      paginationController.data.addAll(result.files);
-      filesCount.value = result.files.length;
+      paginationController!.data.addAll(result.files!);
+      filesCount.value = result.files!.length;
     }
 
     screenName.value = _screenName ?? tr('documents');
@@ -184,18 +184,18 @@ class DocumentsController extends GetxController {
     searchInputController.clear();
     nothingFound.value = false;
 
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
+    paginationController!.startIndex = 0;
+    paginationController!.data.clear();
   }
 
   void newSearch(query) {
     _query = query;
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
+    paginationController!.startIndex = 0;
+    paginationController!.data.clear();
     _performSearch();
   }
 
-  Future<void> setupSearchMode({String folderName, int folderId}) async {
+  Future<void> setupSearchMode({String? folderName, int? folderId}) async {
     loaded.value = true;
     searchMode.value = true;
 
@@ -209,7 +209,7 @@ class DocumentsController extends GetxController {
 
     await _getDocuments();
 
-    if (paginationController.data.isEmpty) {
+    if (paginationController!.data.isEmpty) {
       nothingFound.value = true;
     }
 
@@ -219,7 +219,7 @@ class DocumentsController extends GetxController {
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
   Future<bool> renameFolder(Folder element, String newName) async {
-    var result = await _api.renameFolder(
+    var result = await _api!.renameFolder(
       folderId: element.id.toString(),
       newTitle: newName,
     );
@@ -228,7 +228,7 @@ class DocumentsController extends GetxController {
   }
 
   Future<bool> deleteFolder(Folder element) async {
-    var result = await _api.deleteFolder(
+    var result = await _api!.deleteFolder(
       folderId: element.id.toString(),
     );
 
@@ -238,7 +238,7 @@ class DocumentsController extends GetxController {
   }
 
   Future<bool> deleteFile(PortalFile element) async {
-    var result = await _api.deleteFile(
+    var result = await _api!.deleteFile(
       fileId: element.id.toString(),
     );
 
@@ -248,7 +248,7 @@ class DocumentsController extends GetxController {
   }
 
   Future<bool> renameFile(PortalFile element, String newName) async {
-    var result = await _api.renameFile(
+    var result = await _api!.renameFile(
       fileId: element.id.toString(),
       newTitle: newName,
     );
@@ -267,8 +267,8 @@ class DocumentsController extends GetxController {
     await userController.getUserInfo();
     var body = <String, dynamic>{
       'portal': '${portalInfoController.portalName}',
-      'email': '${userController.user.email}',
-      'file': <String, int>{'id': selectedFile.id},
+      'email': '${userController.user!.email}',
+      'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,
         'parentId': null,
@@ -286,7 +286,7 @@ class DocumentsController extends GetxController {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
-        AnalyticsService.Params.Key.extension: extension(selectedFile.title)
+        AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
       });
     } else {
       await LaunchReview.launch(

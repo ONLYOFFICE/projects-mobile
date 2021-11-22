@@ -33,7 +33,7 @@
 part of '../milestone_filter_screen.dart';
 
 class _DueDate extends StatelessWidget {
-  const _DueDate({Key key}) : super(key: key);
+  const _DueDate({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -38,8 +38,8 @@ class Contact {
     value = json['value'];
   }
 
-  String type;
-  String value;
+  String? type;
+  String? value;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};

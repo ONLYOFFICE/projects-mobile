@@ -41,10 +41,10 @@ import 'package:projects/data/api/download_api.dart';
 import 'package:projects/internal/locator.dart';
 
 class DownloadService {
-  final DownloadApi _api = locator<DownloadApi>();
+  final DownloadApi? _api = locator<DownloadApi>();
 
-  Future<Uint8List> downloadImage(String url) async {
-    var projects = await _api.downloadImage(url);
+  Future<Uint8List?> downloadImage(String url) async {
+    var projects = await _api!.downloadImage(url);
 
     var success = projects.response != null;
 
@@ -68,18 +68,18 @@ class DownloadService {
     var headers = await locator.get<CoreApi>().getHeaders();
     FlutterDownloader.registerCallback(downloadCallback);
 
-    final taskId = await FlutterDownloader.enqueue(
+    final taskId = await (FlutterDownloader.enqueue(
       url: url,
-      headers: headers,
+      headers: headers as Map<String, String>?,
       savedDir: path,
       showNotification: true,
       openFileFromNotification: true,
-    );
+    ) as FutureOr<String>);
 
     var waitTask = true;
     while (waitTask) {
       var query = "SELECT * FROM task WHERE task_id='$taskId'";
-      var _tasks = await FlutterDownloader.loadTasksWithRawQuery(query: query);
+      var _tasks = await (FlutterDownloader.loadTasksWithRawQuery(query: query) as FutureOr<List<DownloadTask>>);
       var taskStatus = _tasks[0].status.toString();
       var taskProgress = _tasks[0].progress;
       if (taskStatus == 'DownloadTaskStatus(3)' && taskProgress == 100) {

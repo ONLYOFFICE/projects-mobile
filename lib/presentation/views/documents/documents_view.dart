@@ -55,11 +55,11 @@ import 'package:projects/presentation/views/documents/filter/documents_filter_sc
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class PortalDocumentsView extends StatelessWidget {
-  const PortalDocumentsView({Key key}) : super(key: key);
+  const PortalDocumentsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<DocumentsController>();
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.initialSetup();
     });
 
@@ -76,7 +76,7 @@ class PortalDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: DocsTitle(controller: controller),
             bottom: DocsBottom(controller: controller),
             showBackButton: false,
@@ -91,16 +91,16 @@ class PortalDocumentsView extends StatelessWidget {
 }
 
 class FolderContentView extends StatelessWidget {
-  FolderContentView({Key key}) : super(key: key);
+  FolderContentView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<DocumentsController>();
-    final String folderName = Get.arguments['folderName'];
-    final int folderId = Get.arguments['folderId'];
+    final String? folderName = Get.arguments['folderName'];
+    final int? folderId = Get.arguments['folderId'];
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      controller.setupFolder(folderName: folderName, folderId: folderId);
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      controller.setupFolder(folderName: folderName!, folderId: folderId);
     });
 
     var scrollController = ScrollController();
@@ -116,7 +116,7 @@ class FolderContentView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             title: DocsTitle(controller: controller),
             bottom: DocsBottom(controller: controller),
             showBackButton: true,
@@ -130,18 +130,18 @@ class FolderContentView extends StatelessWidget {
 }
 
 class DocumentsSearchView extends StatelessWidget {
-  DocumentsSearchView({Key key}) : super(key: key);
+  DocumentsSearchView({Key? key}) : super(key: key);
 
   final documentsController = Get.find<DocumentsController>();
 
   @override
   Widget build(BuildContext context) {
-    final String folderName = Get.arguments['folderName'];
-    final int folderId = Get.arguments['folderId'];
+    final String? folderName = Get.arguments['folderName'];
+    final int? folderId = Get.arguments['folderId'];
 
     documentsController.entityType = Get.arguments['entityType'];
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       documentsController.setupSearchMode(
           folderName: folderName, folderId: folderId);
     });
@@ -160,13 +160,13 @@ class DocumentsSearchView extends StatelessWidget {
 
 class DocumentsScreen extends StatelessWidget {
   const DocumentsScreen({
-    Key key,
-    @required this.controller,
-    @required this.scrollController,
+    Key? key,
+    required this.controller,
+    required this.scrollController,
     this.appBar,
   }) : super(key: key);
 
-  final PreferredSizeWidget appBar;
+  final PreferredSizeWidget? appBar;
   final controller;
   final ScrollController scrollController;
 
@@ -231,7 +231,7 @@ class DocumentsScreen extends StatelessWidget {
 }
 
 class DocsTitle extends StatelessWidget {
-  const DocsTitle({Key key, @required this.controller}) : super(key: key);
+  const DocsTitle({Key? key, required this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {
@@ -290,7 +290,7 @@ class DocsTitle extends StatelessWidget {
 }
 
 class DocsBottom extends StatelessWidget {
-  DocsBottom({Key key, this.controller}) : super(key: key);
+  DocsBottom({Key? key, this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {

@@ -42,7 +42,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class PortalApi {
-  var secureStorage = locator<SecureStorage>();
+  SecureStorage? secureStorage = locator<SecureStorage>();
 
   Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
     var url = locator.get<CoreApi>().capabilitiesUrl(portalName);
@@ -60,7 +60,7 @@ class PortalApi {
       }
     } catch (e) {
       var error;
-      if (e is SocketException) error = e?.osError?.message;
+      if (e is SocketException) error = e.osError?.message;
       result.error = CustomError(message: error ?? e.toString());
     }
 

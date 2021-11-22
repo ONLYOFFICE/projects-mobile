@@ -41,8 +41,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class FiltersHeader extends StatelessWidget {
   const FiltersHeader({
-    Key key,
-    @required this.filterController,
+    Key? key,
+    required this.filterController,
   }) : super(key: key);
 
   final BaseFilterController filterController;

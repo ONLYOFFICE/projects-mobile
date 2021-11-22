@@ -46,7 +46,7 @@ import 'package:projects/presentation/views/project_detailed/milestones/descript
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class NewMilestoneView extends StatelessWidget {
-  const NewMilestoneView({Key key}) : super(key: key);
+  const NewMilestoneView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -127,8 +127,8 @@ class NewMilestoneView extends StatelessWidget {
 class MilestoneInput extends StatelessWidget {
   final controller;
   const MilestoneInput({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -159,8 +159,8 @@ class MilestoneInput extends StatelessWidget {
 class DescriptionTile extends StatelessWidget {
   final newMilestoneController;
   const DescriptionTile({
-    Key key,
-    @required this.newMilestoneController,
+    Key? key,
+    required this.newMilestoneController,
   }) : super(key: key);
 
   @override
@@ -195,8 +195,8 @@ class DescriptionTile extends StatelessWidget {
 class ProjectTile extends StatelessWidget {
   final controller;
   const ProjectTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -237,8 +237,8 @@ class ProjectTile extends StatelessWidget {
 class ResponsibleTile extends StatelessWidget {
   final controller;
   const ResponsibleTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -278,8 +278,8 @@ class ResponsibleTile extends StatelessWidget {
 class DueDateTile extends StatelessWidget {
   final controller;
   const DueDateTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

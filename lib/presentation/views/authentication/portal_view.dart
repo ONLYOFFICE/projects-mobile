@@ -44,7 +44,7 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key key}) : super(key: key);
+  PortalInputView({Key? key}) : super(key: key);
 
   final LoginController controller = Get.find<LoginController>();
 

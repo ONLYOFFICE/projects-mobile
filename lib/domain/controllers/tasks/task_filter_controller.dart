@@ -33,6 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
@@ -42,46 +44,46 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class TaskFilterController extends BaseTaskFilterController {
-  final _api = locator<TaskService>();
+  final TaskService? _api = locator<TaskService>();
   final _sortController = Get.find<TasksSortController>();
-  final _storage = locator<Storage>();
+  final Storage? _storage = locator<Storage>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
   RxString acceptedFilters = ''.obs;
 
-  String _responsibleFilter = '';
-  String _creatorFilter = '';
-  String _projectFilter = '';
-  String _milestoneFilter = '';
-  String _statusFilter = '';
+  String? _responsibleFilter = '';
+  String? _creatorFilter = '';
+  String? _projectFilter = '';
+  String? _milestoneFilter = '';
+  String? _statusFilter = '';
   String _deadlineFilter = '';
 
   @override
-  String get responsibleFilter => _responsibleFilter;
+  String? get responsibleFilter => _responsibleFilter;
   @override
-  String get creatorFilter => _creatorFilter;
+  String? get creatorFilter => _creatorFilter;
   @override
-  String get projectFilter => _projectFilter;
+  String? get projectFilter => _projectFilter;
   @override
-  String get milestoneFilter => _milestoneFilter;
+  String? get milestoneFilter => _milestoneFilter;
   @override
-  String get statusFilter => _statusFilter;
+  String? get statusFilter => _statusFilter;
   @override
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String _projectId;
+  String? _projectId;
 
   bool get _hasFilters =>
-      _responsibleFilter.isNotEmpty ||
-      _creatorFilter.isNotEmpty ||
-      _projectFilter.isNotEmpty ||
+      _responsibleFilter!.isNotEmpty ||
+      _creatorFilter!.isNotEmpty ||
+      _projectFilter!.isNotEmpty ||
       _deadlineFilter.isNotEmpty ||
-      _milestoneFilter.isNotEmpty ||
-      _statusFilter.isNotEmpty;
+      _milestoneFilter!.isNotEmpty ||
+      _statusFilter!.isNotEmpty;
 
   @override
   void onInit() async {
@@ -277,8 +279,8 @@ class TaskFilterController extends BaseTaskFilterController {
   @override
   void changeDeadline(
     String filter, {
-    DateTime start,
-    DateTime stop,
+    DateTime? start,
+    DateTime? stop,
   }) async {
     _deadlineFilter = '';
 
@@ -319,8 +321,8 @@ class TaskFilterController extends BaseTaskFilterController {
       deadline['custom']['selected'] = !deadline['custom']['selected'];
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start).substring(0, 10);
-      var stopDate = formatter.format(stop).substring(0, 10);
+      var startDate = formatter.format(start!).substring(0, 10);
+      var stopDate = formatter.format(stop!).substring(0, 10);
       if (deadline['custom']['selected'])
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
@@ -333,7 +335,7 @@ class TaskFilterController extends BaseTaskFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.getTasksByParams(
+    var result = await (_api!.getTasksByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       responsibleFilter: responsibleFilter,
@@ -343,16 +345,16 @@ class TaskFilterController extends BaseTaskFilterController {
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
       projectId: _projectId,
-    );
+    ) as Future<PageDTO<List<PortalTask>>>);
 
-    suitableResultCount.value = result.response.length;
+    suitableResultCount.value = result.response!.length;
   }
 
   @override
   void applyFilters() async {
     hasFilters.value = _hasFilters;
     await saveFilters();
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
   }
 
   @override
@@ -453,7 +455,7 @@ class TaskFilterController extends BaseTaskFilterController {
       'hasFilters': _hasFilters,
     };
 
-    await _storage.write('taskFilters', map);
+    await _storage!.write('taskFilters', map);
   }
 
   @override
@@ -481,7 +483,7 @@ class TaskFilterController extends BaseTaskFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    var savedFilters = await _storage.read('taskFilters', returnCopy: true);
+    var savedFilters = await _storage!.read('taskFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
@@ -506,12 +508,12 @@ class TaskFilterController extends BaseTaskFilterController {
         _statusFilter = savedFilters['status']['value'];
 
         var deadLineFilters =
-            Map<String, Object>.from(savedFilters['deadline']['buttons']);
+            Map<String, Object?>.from(savedFilters['deadline']['buttons']);
 
         var customDeadlineFilters = deadLineFilters['custom'];
 
         customDeadlineFilters =
-            stringsToDateTime(customDeadlineFilters, ['startDate', 'stopDate']);
+            stringsToDateTime(customDeadlineFilters as Map<dynamic, dynamic>?, ['startDate', 'stopDate']);
 
         deadLineFilters['custom'] = customDeadlineFilters;
 

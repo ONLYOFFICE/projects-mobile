@@ -44,7 +44,7 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class LoginView extends StatelessWidget {
-  LoginView({Key key}) : super(key: key);
+  LoginView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<LoginController>();
@@ -122,7 +122,7 @@ class LoginView extends StatelessWidget {
                       TextButton(
                         onPressed: () async => Get.to(
                           () => const PasswordRecoveryScreen1(),
-                          arguments: {'email': controller.emailController.text},
+                          arguments: {'email': controller.emailController!.text},
                         ),
                         child: Text(
                           tr('forgotPassword'),

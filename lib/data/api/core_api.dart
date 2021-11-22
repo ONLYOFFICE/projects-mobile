@@ -40,16 +40,16 @@ import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class CoreApi {
-  final _secureStorage = locator<SecureStorage>();
-  String _portalName;
+  final SecureStorage? _secureStorage = locator<SecureStorage>();
+  String? _portalName;
 
   final int timeout = 30;
 
   var cancellationToken = CancellationToken();
 
-  Future<Map<String, String>> getHeaders() async {
+  Future<Map<String, String?>> getHeaders() async {
     var token = await getToken();
-    return <String, String>{
+    return <String, String?>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
       'Authorization': token
@@ -68,13 +68,13 @@ class CoreApi {
     return '$_portalName/api/$version/capabilities';
   }
 
-  Future<String> addTaskCommentUrl({int taskId}) async =>
+  Future<String> addTaskCommentUrl({int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
-  Future<String> addMessageUrl({int projectId}) async =>
+  Future<String> addMessageUrl({int? projectId}) async =>
       '${await getPortalURI()}/api/$version/project/$projectId/message';
 
-  Future<String> addMessageCommentUrl({int messageId}) async =>
+  Future<String> addMessageCommentUrl({int? messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/comment';
 
   Future<String> allGroups() async =>
@@ -89,37 +89,37 @@ class CoreApi {
   Future<String> authUrl() async =>
       '${await getPortalURI()}/api/$version/authentication';
 
-  Future<String> copyTaskUrl({@required int copyFrom}) async =>
+  Future<String> copyTaskUrl({required int? copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
 
   Future<String> copySubtaskUrl({
-    @required int taskId,
-    @required int subtaskId,
+    required int? taskId,
+    required int? subtaskId,
   }) async =>
       '${await getPortalURI()}/api/2.0/project/task/$taskId/$subtaskId/copy';
 
-  Future<String> createSubtaskUrl({@required int taskId}) async =>
+  Future<String> createSubtaskUrl({required int? taskId}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$taskId';
 
-  Future<String> deleteCommentUrl({String commentId}) async =>
+  Future<String> deleteCommentUrl({String? commentId}) async =>
       '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
-  Future<String> deleteTaskUrl({int taskId}) async =>
+  Future<String> deleteTaskUrl({int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
-  Future<String> deleteMessageUrl({int id}) async =>
+  Future<String> deleteMessageUrl({int? id}) async =>
       '${await getPortalURI()}/api/$version/project/message/$id';
 
   Future<String> deleteSubtaskUrl({
-    @required int taskId,
-    @required int subtaskId,
+    required int? taskId,
+    required int? subtaskId,
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
-  Future<String> getTaskFilesUrl({int taskId}) async =>
+  Future<String> getTaskFilesUrl({int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
 
-  Future<String> getEntityFilesUrl({String entityId}) async =>
+  Future<String> getEntityFilesUrl({String? entityId}) async =>
       '${await getPortalURI()}/api/$version/project/$entityId/entityfiles';
 
   Future<String> getFilesBaseUrl() async =>
@@ -128,27 +128,27 @@ class CoreApi {
   Future<String> discussionsByParamsUrl() async =>
       '${await getPortalURI()}/api/$version/project/message/filter?';
 
-  Future<String> discussionDetailedUrl({int messageId}) async =>
+  Future<String> discussionDetailedUrl({int? messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId';
 
   Future<String> milestonesByFilterUrl() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
 
   Future<String> getTaskLinkUrl(
-          {@required taskId, @required projectId}) async =>
+          {required taskId, required projectId}) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#';
 
   Future<String> getDiscussionCommentLink({
-    @required discussionId,
-    @required projectId,
-    @required commentId,
+    required discussionId,
+    required projectId,
+    required commentId,
   }) async =>
       '${await getPortalURI()}/Products/Projects/Messages.aspx?prjID=$projectId&id=$discussionId#comment_$commentId';
 
   Future<String> getTaskCommentLink({
-    @required taskId,
-    @required projectId,
-    @required commentId,
+    required taskId,
+    required projectId,
+    required commentId,
   }) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#comment_$commentId';
 
@@ -164,16 +164,16 @@ class CoreApi {
   Future<String> tasksByParamsrUrl() async =>
       '${await getPortalURI()}/api/$version/project/task/filter?';
 
-  Future<String> taskByIdUrl(int id) async =>
+  Future<String> taskByIdUrl(int? id) async =>
       '${await getPortalURI()}/api/$version/project/task/$id';
 
-  Future<String> taskComments({int taskId}) async =>
+  Future<String> taskComments({int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/$version/project';
 
-  Future<String> projectByIdUrl(int projectId) async =>
+  Future<String> projectByIdUrl(int? projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 
   Future<String> projectTags() async =>
@@ -194,37 +194,37 @@ class CoreApi {
   Future<String> statusesUrl() async =>
       '${await getPortalURI()}/api/$version/project/status';
 
-  Future<String> subscribeTaskUrl({int taskId}) async =>
+  Future<String> subscribeTaskUrl({int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
 
-  Future<String> subscribeToMessage({int messageId}) async =>
+  Future<String> subscribeToMessage({int? messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/subscribe';
 
   Future<String> updateCommentUrl({
-    @required String commentId,
+    required String? commentId,
   }) async =>
       '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
-  Future<String> updateMessageUrl({@required int messageId}) async =>
+  Future<String> updateMessageUrl({required int? messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId';
 
-  Future<String> updateMessageStatusUrl({@required int messageId}) async =>
+  Future<String> updateMessageStatusUrl({required int? messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/status';
 
   Future<String> updateSubtask({
-    @required int taskId,
-    @required int subtaskId,
+    required int? taskId,
+    required int? subtaskId,
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
   Future<String> updateSubtaskStatus(
-          {@required int taskId, @required int subtaskId}) async =>
+          {required int? taskId, required int? subtaskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
 
-  Future<String> updateTaskUrl({@required int taskId}) async =>
+  Future<String> updateTaskUrl({required int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
-  Future<String> updateTaskStatusUrl({int taskId}) async =>
+  Future<String> updateTaskStatusUrl({int? taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/status';
 
   Future<String> createProjectUrl() async =>
@@ -233,13 +233,13 @@ class CoreApi {
   Future<String> createTagUrl() async =>
       '${await getPortalURI()}/api/$version/project/tag';
 
-  Future<String> projectByIDUrl(int projectId) async =>
+  Future<String> projectByIDUrl(int? projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 
-  Future<String> updateProjectStatusUrl(int projectId) async =>
+  Future<String> updateProjectStatusUrl(int? projectId) async =>
       '${await projectByIDUrl(projectId)}/status';
 
-  Future<String> followProjectUrl(int projectId) async =>
+  Future<String> followProjectUrl(int? projectId) async =>
       '${await projectByIDUrl(projectId)}/follow';
 
   Future<String> projectTeamUrl(String projectID) async =>
@@ -248,10 +248,10 @@ class CoreApi {
   Future<String> createMilestoneUrl(String projectID) async =>
       '${await getPortalURI()}/api/$version/project/$projectID/milestone';
 
-  Future<String> getFolderByIdUrl({String folderId}) async =>
+  Future<String> getFolderByIdUrl({String? folderId}) async =>
       '${await getPortalURI()}/api/$version/files/folder/$folderId';
 
-  Future<String> getFileByIdUrl({String fileId}) async =>
+  Future<String> getFileByIdUrl({String? fileId}) async =>
       '${await getPortalURI()}/api/$version/files/file/$fileId';
 
   Future<String> getMoveOpsUrl() async =>
@@ -274,7 +274,7 @@ class CoreApi {
           timeRetry: const Duration(milliseconds: 100),
           retries: 3,
           timeLimit: Duration(seconds: timeout),
-          headers: headers);
+          headers: headers as Map<String, String>?);
       final response = await request;
 
       if (response == null) return CustomError(message: '');
@@ -284,7 +284,7 @@ class CoreApi {
       } else {
         var error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
+            response.headers['content-type']!.contains('json'))
           error = json.decode(response.body)['error']['message'];
 
         return CustomError(message: error ?? response.reasonPhrase);
@@ -298,7 +298,7 @@ class CoreApi {
     }
   }
 
-  Future<dynamic> postRequest(String url, Map body) async {
+  Future<dynamic> postRequest(String url, Map? body) async {
     try {
       debugPrint(url);
       var headers = await getHeaders();
@@ -308,7 +308,7 @@ class CoreApi {
         timeRetry: const Duration(milliseconds: 100),
         retries: 3,
         timeLimit: Duration(seconds: timeout),
-        headers: headers,
+        headers: headers as Map<String, String>?,
         body: jsonEncode(body),
       );
 
@@ -321,7 +321,7 @@ class CoreApi {
       } else {
         var error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
+            response.headers['content-type']!.contains('json'))
           error = json.decode(response.body)['error']['message'];
 
         return CustomError(message: error ?? response.reasonPhrase);
@@ -345,7 +345,7 @@ class CoreApi {
         timeRetry: const Duration(milliseconds: 100),
         retries: 3,
         timeLimit: Duration(seconds: timeout),
-        headers: headers,
+        headers: headers as Map<String, String>?,
         body: body.isEmpty ? null : jsonEncode(body),
       );
       final response = await request;
@@ -357,7 +357,7 @@ class CoreApi {
       } else {
         var error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
+            response.headers['content-type']!.contains('json'))
           error = json.decode(response.body)['error']['message'];
 
         return CustomError(message: error ?? response.reasonPhrase);
@@ -381,7 +381,7 @@ class CoreApi {
         timeRetry: const Duration(milliseconds: 100),
         retries: 3,
         timeLimit: Duration(seconds: timeout),
-        headers: headers,
+        headers: headers as Map<String, String>?,
       );
       final response = await request;
 
@@ -392,7 +392,7 @@ class CoreApi {
       } else {
         var error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
+            response.headers['content-type']!.contains('json'))
           error = json.decode(response.body)['error']['message'];
 
         return CustomError(message: error ?? response.reasonPhrase);
@@ -406,14 +406,14 @@ class CoreApi {
     }
   }
 
-  Future<String> getPortalURI() async {
-    if (_portalName == null || _portalName.isEmpty) {
-      _portalName = await _secureStorage.getString('portalName');
+  Future<String?> getPortalURI() async {
+    if (_portalName == null || _portalName!.isEmpty) {
+      _portalName = await _secureStorage!.getString('portalName');
     }
 
     if (_portalName == null) return null;
 
-    if (!_portalName.contains('http')) {
+    if (!_portalName!.contains('http')) {
       _portalName = 'https://$_portalName';
       await savePortalName();
     }
@@ -421,13 +421,13 @@ class CoreApi {
     return _portalName;
   }
 
-  Future<String> getToken() async {
-    var token = await _secureStorage.getString('token');
+  Future<String?> getToken() async {
+    var token = await _secureStorage!.getString('token');
 
     return token;
   }
 
   Future<void> savePortalName() async {
-    await _secureStorage.putString('portalName', _portalName);
+    await _secureStorage!.putString('portalName', _portalName);
   }
 }

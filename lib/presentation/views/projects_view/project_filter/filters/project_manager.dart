@@ -33,8 +33,8 @@
 part of '../projects_filter.dart';
 
 class _ProjectManager extends StatelessWidget {
-  final ProjectsFilterController filterController;
-  const _ProjectManager({Key key, this.filterController}) : super(key: key);
+  final ProjectsFilterController? filterController;
+  const _ProjectManager({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,23 +45,23 @@ class _ProjectManager extends StatelessWidget {
           FilterElement(
             title: tr('me'),
             titleColor: Get.theme.colors().onSurface,
-            isSelected: filterController.projectManager['me'],
-            onTap: () => filterController.changeProjectManager('me'),
+            isSelected: filterController!.projectManager['me'],
+            onTap: () => filterController!.changeProjectManager('me'),
           ),
           FilterElement(
-            title: filterController.projectManager['other'].isEmpty
+            title: filterController!.projectManager['other'].isEmpty
                 ? tr('otherUser')
-                : filterController.projectManager['other'],
-            isSelected: filterController.projectManager['other'].isNotEmpty,
+                : filterController!.projectManager['other'],
+            isSelected: filterController!.projectManager['other'].isNotEmpty,
             cancelButtonEnabled:
-                filterController.projectManager['other'].isNotEmpty,
+                filterController!.projectManager['other'].isNotEmpty,
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());
-              await filterController.changeProjectManager('other', newUser);
+              await filterController!.changeProjectManager('other', newUser);
             },
             onCancelTap: () =>
-                filterController.changeProjectManager('other', null),
+                filterController!.changeProjectManager('other', null),
           ),
         ],
       ),

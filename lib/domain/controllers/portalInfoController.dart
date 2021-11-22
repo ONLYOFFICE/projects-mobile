@@ -36,13 +36,13 @@ import 'package:projects/internal/locator.dart';
 
 class PortalInfoController extends GetxController {
   var lock = Lock();
-  String _portalName;
-  String _portalUri;
-  Map _headers;
+  String? _portalName;
+  String? _portalUri;
+  Map? _headers;
 
-  String get portalUri => _portalUri;
-  String get portalName => _portalName;
-  Map get headers => _headers;
+  String? get portalUri => _portalUri;
+  String? get portalName => _portalName;
+  Map? get headers => _headers;
 
   @override
   void onInit() async {
@@ -61,7 +61,7 @@ class PortalInfoController extends GetxController {
     await lock.synchronized(() async {
       _portalUri ??= await locator.get<CoreApi>().getPortalURI();
       _headers ??= await locator.get<CoreApi>().getHeaders();
-      _portalName ??= _portalUri.replaceFirst('https://', '');
+      _portalName ??= _portalUri!.replaceFirst('https://', '');
     });
   }
 }

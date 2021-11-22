@@ -33,9 +33,9 @@
 part of '../get_code_views.dart';
 
 class _Step3 extends StatelessWidget {
-  const _Step3({Key key, this.topPadding}) : super(key: key);
+  const _Step3({Key? key, this.topPadding}) : super(key: key);
 
-  final double topPadding;
+  final double? topPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _Step3 extends StatelessWidget {
             icon: PngIcons.authentificator_s3,
             hasDarkVersion: true,
             isPng: true,
-            height: 184.5.h,
+            height: 184.5.h as double?,
           ),
           const SizedBox(height: 23),
           Padding(
@@ -80,12 +80,12 @@ class _Step3 extends StatelessWidget {
 }
 
 class _Code extends StatelessWidget {
-  const _Code({Key key}) : super(key: key);
+  const _Code({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<LoginController>();
-    var code = _splitCode(controller.tfaKey);
+    var code = _splitCode(controller.tfaKey!);
 
     return SizedBox(
       width: 280,

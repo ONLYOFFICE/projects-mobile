@@ -54,9 +54,9 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailed? projectDetailed;
 
-  const ProjectTaskScreen({Key key, @required this.projectDetailed})
+  const ProjectTaskScreen({Key? key, required this.projectDetailed})
       : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class ProjectTaskScreen extends StatelessWidget {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
 
-    var controller = Get.find<ProjectTasksController>()..setup(projectDetailed);
+    var controller = Get.find<ProjectTasksController>()..setup(projectDetailed!);
 
     return Stack(
       children: [
@@ -96,8 +96,8 @@ class ProjectTaskScreen extends StatelessWidget {
 
 class _Content extends StatelessWidget {
   const _Content({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final ProjectTasksController controller;
@@ -151,7 +151,7 @@ class _Content extends StatelessWidget {
 
 class Header extends StatelessWidget {
   Header({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 

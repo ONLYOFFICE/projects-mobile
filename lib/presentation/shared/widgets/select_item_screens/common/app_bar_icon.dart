@@ -34,10 +34,10 @@ part of 'select_item_template.dart';
 
 class _AppBarIcon extends StatelessWidget {
   const _AppBarIcon({
-    Key key,
-    @required this.searchController,
-    @required this.searchIconKey,
-    @required this.clearIconKey,
+    Key? key,
+    required this.searchController,
+    required this.searchIconKey,
+    required this.clearIconKey,
   }) : super(key: key);
 
   final BaseSearchController searchController;

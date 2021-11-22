@@ -34,35 +34,35 @@ import 'package:projects/data/models/from_api/contact.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 
 class SelfUserProfile {
-  String id;
-  String userName;
-  bool isVisitor;
-  String firstName;
-  String lastName;
-  String email;
-  String birthday;
-  String sex;
-  int status;
-  int activationStatus;
-  bool terminated;
-  String department;
-  String workFrom;
-  String location;
-  String notes;
-  String displayName;
-  String title;
-  List<Contact> contacts;
-  List<PortalGroup> groups;
-  String avatarMedium;
-  String avatar;
-  bool isAdmin;
-  bool isLDAP;
-  List<String> listAdminModules;
-  bool isOwner;
-  String cultureName;
-  bool isSSO;
-  String avatarSmall;
-  String profileUrl;
+  String? id;
+  String? userName;
+  bool? isVisitor;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? birthday;
+  String? sex;
+  int? status;
+  int? activationStatus;
+  bool? terminated;
+  String? department;
+  String? workFrom;
+  String? location;
+  String? notes;
+  String? displayName;
+  String? title;
+  List<Contact>? contacts;
+  List<PortalGroup>? groups;
+  String? avatarMedium;
+  String? avatar;
+  bool? isAdmin;
+  bool? isLDAP;
+  List<String>? listAdminModules;
+  bool? isOwner;
+  String? cultureName;
+  bool? isSSO;
+  String? avatarSmall;
+  String? profileUrl;
 
   SelfUserProfile(
       {this.id,
@@ -116,13 +116,13 @@ class SelfUserProfile {
     if (json['contacts'] != null) {
       contacts = <Contact>[];
       json['contacts'].forEach((v) {
-        contacts.add(Contact.fromJson(v));
+        contacts!.add(Contact.fromJson(v));
       });
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
       json['groups'].forEach((v) {
-        groups.add(PortalGroup.fromJson(v));
+        groups!.add(PortalGroup.fromJson(v));
       });
     }
     avatarMedium = json['avatarMedium'];
@@ -157,10 +157,10 @@ class SelfUserProfile {
     data['displayName'] = displayName;
     data['title'] = title;
     if (contacts != null) {
-      data['contacts'] = contacts.map((v) => v.toJson()).toList();
+      data['contacts'] = contacts!.map((v) => v.toJson()).toList();
     }
     if (groups != null) {
-      data['groups'] = groups.map((v) => v.toJson()).toList();
+      data['groups'] = groups!.map((v) => v.toJson()).toList();
     }
     data['avatarMedium'] = avatarMedium;
     data['avatar'] = avatar;

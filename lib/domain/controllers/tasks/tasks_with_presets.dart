@@ -37,15 +37,15 @@ import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import '../pagination_controller.dart';
 
 class TasksWithPresets {
-  TasksController _myTasksController;
-  TasksController _upcomingTaskscontroller;
+  TasksController? _myTasksController;
+  TasksController? _upcomingTaskscontroller;
 
-  TasksController get myTasksController {
+  TasksController? get myTasksController {
     _myTasksController ?? setupMyTasks();
     return _myTasksController;
   }
 
-  TasksController get upcomingTasksController {
+  TasksController? get upcomingTasksController {
     _upcomingTaskscontroller ?? setupUpcomingTasks();
     return _upcomingTaskscontroller;
   }
@@ -56,10 +56,10 @@ class TasksWithPresets {
           Get.find<TaskFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_myTasksController')
+        tag: '_myTasksController')!
       ..setup(PresetTaskFilters.myTasks, withFAB: false);
 
-    _myTasksController.loadTasks();
+    _myTasksController!.loadTasks();
   }
 
   void setupUpcomingTasks() {
@@ -68,8 +68,8 @@ class TasksWithPresets {
           Get.find<TaskFilterController>(),
           Get.find<PaginationController>(),
         ),
-        tag: '_upcomingTaskscontroller')
+        tag: '_upcomingTaskscontroller')!
       ..setup(PresetTaskFilters.upcomming, withFAB: false);
-    _upcomingTaskscontroller.loadTasks();
+    _upcomingTaskscontroller!.loadTasks();
   }
 }

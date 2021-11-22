@@ -53,7 +53,7 @@ import 'package:projects/presentation/views/task_editing_view/task_editing_view.
 part 'app_bar_menu.dart';
 
 class TaskDetailedView extends StatefulWidget {
-  TaskDetailedView({Key key}) : super(key: key);
+  TaskDetailedView({Key? key}) : super(key: key);
 
   @override
   _TaskDetailedViewState createState() => _TaskDetailedViewState();
@@ -61,10 +61,10 @@ class TaskDetailedView extends StatefulWidget {
 
 class _TaskDetailedViewState extends State<TaskDetailedView>
     with SingleTickerProviderStateMixin {
-  TabController _tabController;
+  TabController? _tabController;
   // ignore: prefer_final_fields
   var _activeIndex = 0.obs;
-  TaskItemController taskItemController;
+  TaskItemController? taskItemController;
   final documentsController = Get.find<DocumentsController>();
   final tabsAmount = 4;
 
@@ -72,43 +72,43 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
   void initState() {
     super.initState();
     taskItemController = Get.arguments['controller'];
-    taskItemController.firstReload.value = true;
+    taskItemController!.firstReload.value = true;
 
     // to get full info about task
-    taskItemController
+    taskItemController!
         .reloadTask()
-        .then((value) => taskItemController.setLoaded = true);
+        .then((value) => taskItemController!.setLoaded = true);
 
     _tabController = TabController(vsync: this, length: tabsAmount);
 
     documentsController.entityType = 'task';
     documentsController.setupFolder(
-        folderId: taskItemController.task.value.id,
-        folderName: taskItemController.task.value.title);
+        folderId: taskItemController!.task.value!.id,
+        folderName: taskItemController!.task.value!.title!);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _tabController.dispose();
+    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController.addListener(() {
-      if (_activeIndex.value == _tabController.index) return;
+    _tabController!.addListener(() {
+      if (_activeIndex.value == _tabController!.index) return;
 
-      _activeIndex.value = _tabController.index;
+      _activeIndex.value = _tabController!.index;
     });
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            if (taskItemController.canEdit)
+            if (taskItemController!.canEdit)
               IconButton(
                 icon: const Icon(Icons.edit_outlined),
                 onPressed: () => Get.find<NavigationController>()
-                    .to(TaskEditingView(task: taskItemController.task.value)),
+                    .to(TaskEditingView(task: taskItemController!.task.value)),
               ),
             _AppBarMenu(controller: taskItemController)
           ],
@@ -127,15 +127,15 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                   CustomTab(
                       title: tr('subtasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: taskItemController.task.value?.subtasks?.length),
+                      count: taskItemController!.task.value?.subtasks?.length),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 2,
-                      count: taskItemController.task.value?.files?.length),
+                      count: taskItemController!.task.value?.files?.length),
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex.value == 3,
-                      count: taskItemController.getActualCommentCount),
+                      count: taskItemController!.getActualCommentCount),
                 ]),
           ),
         ),
@@ -145,8 +145,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
               tabController: _tabController),
           SubtasksView(controller: taskItemController),
           TaskDocumentsView(
-            folderId: taskItemController.task.value.id,
-            folderName: taskItemController.task.value.title,
+            folderId: taskItemController!.task.value!.id,
+            folderName: taskItemController!.task.value!.title,
             documentsController: documentsController,
           ),
           TaskCommentsView(controller: taskItemController),

@@ -39,7 +39,7 @@ import 'package:projects/domain/controllers/tags/tags_controller.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/common/select_item_template.dart';
 
 class SelectTagScreen extends StatelessWidget with SelectItemMixin {
-  const SelectTagScreen({Key key}) : super(key: key);
+  const SelectTagScreen({Key? key}) : super(key: key);
 
   @override
   String get appBarText => tr('selectTag');
@@ -55,15 +55,15 @@ class SelectTagScreen extends StatelessWidget with SelectItemMixin {
 }
 
 class _TagList extends StatelessWidget with SelectItemListMixin {
-  const _TagList({Key key}) : super(key: key);
+  const _TagList({Key? key}) : super(key: key);
 
   @override
-  PaginationController get paginationController =>
+  PaginationController? get paginationController =>
       Get.find<TagsController>().paginationController;
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
-        ProjectTag tag = paginationController.data[i];
+        ProjectTag tag = paginationController!.data[i];
         return SelectItemTile(
             title: tag.title,
             onSelect: () =>

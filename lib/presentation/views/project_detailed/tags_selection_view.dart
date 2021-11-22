@@ -48,7 +48,7 @@ import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart'
 
 class TagsSelectionView extends StatelessWidget {
   const TagsSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -138,9 +138,9 @@ class TagsSelectionView extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   const _Header({
-    Key key,
-    @required this.title,
-    @required this.controller,
+    Key? key,
+    required this.title,
+    required this.controller,
   }) : super(key: key);
 
   final String title;
@@ -180,8 +180,8 @@ class _Header extends StatelessWidget {
 
 class _TagsSearchBar extends StatelessWidget {
   const _TagsSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;
@@ -210,9 +210,9 @@ class _TagsSearchBar extends StatelessWidget {
 
 class _TagsList extends StatelessWidget {
   const _TagsList({
-    Key key,
-    @required this.controller,
-    @required this.onTapFunction,
+    Key? key,
+    required this.controller,
+    required this.onTapFunction,
   }) : super(key: key);
   final Function onTapFunction;
   final controller;

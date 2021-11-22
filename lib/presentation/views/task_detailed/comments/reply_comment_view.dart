@@ -47,12 +47,12 @@ import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class ReplyCommentView extends StatelessWidget {
-  const ReplyCommentView({Key key}) : super(key: key);
+  const ReplyCommentView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     PortalComment comment = Get.arguments['comment'];
-    NewCommentController controller;
+    late NewCommentController controller;
     final platformController = Get.find<PlatformController>();
 
     if (Get.arguments['taskId'] != null) {
@@ -118,7 +118,7 @@ class ReplyCommentView extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (comment.userFullName != null)
-                          Text(comment.userFullName,
+                          Text(comment.userFullName!,
                               style: TextStyleHelper.subtitle1(
                                   color: Get.theme.colors().onSurface)),
                         Text(

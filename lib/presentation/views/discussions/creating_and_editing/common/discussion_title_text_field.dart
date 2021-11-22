@@ -40,8 +40,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class DiscussionTitleTextField extends StatelessWidget {
   final DiscussionActionsController controller;
   const DiscussionTitleTextField({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

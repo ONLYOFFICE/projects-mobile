@@ -42,14 +42,14 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewDiscussionCommentController extends NewCommentController {
-  final _api = locator<CommentsService>();
+  final CommentsService? _api = locator<CommentsService>();
 
   @override
   // ignore: overridden_fields
-  final int idFrom;
+  final int? idFrom;
   @override
   // ignore: overridden_fields
-  final String parentId;
+  final String? parentId;
 
   NewDiscussionCommentController({
     this.parentId,
@@ -68,8 +68,8 @@ class NewDiscussionCommentController extends NewCommentController {
       emptyTitleError();
     } else {
       setTitleError.value = false;
-      PortalComment newComment =
-          await _api.addMessageComment(content: text, messageId: idFrom);
+      PortalComment? newComment =
+          await (_api!.addMessageComment(content: text, messageId: idFrom) as Future<PortalComment?>);
       if (newComment != null) {
         _textController.clear();
         var discussionController = Get.find<DiscussionItemController>();
@@ -89,11 +89,11 @@ class NewDiscussionCommentController extends NewCommentController {
       emptyTitleError();
     } else {
       setTitleError.value = false;
-      PortalComment newComment = await _api.addMessageReplyComment(
+      PortalComment? newComment = await (_api!.addMessageReplyComment(
         content: text,
         messageId: idFrom,
         parentId: parentId,
-      );
+      ) as Future<PortalComment?>);
       if (newComment != null) {
         _textController.clear();
         var discussionController = Get.find<DiscussionItemController>();

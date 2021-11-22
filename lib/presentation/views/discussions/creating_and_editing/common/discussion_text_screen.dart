@@ -41,11 +41,11 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 
 class NewDiscussionTextScreen extends StatelessWidget {
   const NewDiscussionTextScreen({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final DiscussionActionsController controller;
+  final DiscussionActionsController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        controller.leaveTextView();
+        controller!.leaveTextView();
         return false;
       },
       child: Scaffold(
@@ -66,16 +66,16 @@ class NewDiscussionTextScreen extends StatelessWidget {
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
               : const Icon(Icons.close),
-          onLeadingPressed: controller.leaveTextView,
+          onLeadingPressed: controller!.leaveTextView,
           actions: [
             IconButton(
                 icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmText)
+                onPressed: controller!.confirmText)
           ],
         ),
         body: HtmlTextEditor(
-          initialText: controller.text.value,
-          textController: controller.textController,
+          initialText: controller!.text!.value,
+          textController: controller!.textController,
           hintText: tr('discussionText'),
         ),
       ),

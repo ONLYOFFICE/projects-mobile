@@ -38,10 +38,10 @@ class TileWithSwitch extends StatelessWidget {
   final bool enableBorder;
   final Function(bool value) onChanged;
   const TileWithSwitch({
-    Key key,
-    @required this.title,
-    @required this.isSelected,
-    @required this.onChanged,
+    Key? key,
+    required this.title,
+    required this.isSelected,
+    required this.onChanged,
     this.enableBorder = false,
   }) : super(key: key);
 

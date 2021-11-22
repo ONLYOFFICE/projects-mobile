@@ -45,11 +45,11 @@ class ProjectStatusesController extends GetxController {
   String getStatusName(int value) => ProjectStatus.toName(value);
   String getStatusImageString(int value) => ProjectStatus.toImageString(value);
 
-  Future<bool> updateStatus({int newStatusId, projectData}) async {
+  Future<bool> updateStatus({int? newStatusId, required projectData}) async {
     if (projectData.taskCount > 0 &&
         newStatusId == ProjectStatusCode.closed.index) {
       MessagesHandler.showSnackBar(
-        context: Get.context,
+        context: Get.context!,
         text: tr('cannotCloseProject'),
       );
       return false;

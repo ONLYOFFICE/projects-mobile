@@ -41,10 +41,10 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsService {
-  final _passcodeService = locator<PasscodeService>();
+  final PasscodeService? _passcodeService = locator<PasscodeService>();
 
   Future<bool> get isPasscodeEnable async =>
-      await _passcodeService.isPasscodeEnable;
+      await _passcodeService!.isPasscodeEnable;
 
   Future<void> openEmailApp(String url, context) async {
     try {

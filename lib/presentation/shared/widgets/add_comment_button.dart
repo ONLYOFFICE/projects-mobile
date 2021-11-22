@@ -39,8 +39,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class AddCommentButton extends StatelessWidget {
   final Function() onPressed;
   const AddCommentButton({
-    Key key,
-    @required this.onPressed,
+    Key? key,
+    required this.onPressed,
   }) : super(key: key);
 
   @override

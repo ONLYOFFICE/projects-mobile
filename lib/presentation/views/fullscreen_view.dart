@@ -37,8 +37,8 @@ class ModalScreenView extends StatelessWidget {
   final Widget contentView;
 
   const ModalScreenView({
-    Key key,
-    @required this.contentView,
+    Key? key,
+    required this.contentView,
   }) : super(key: key);
 
   @override

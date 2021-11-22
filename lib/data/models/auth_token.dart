@@ -40,12 +40,12 @@ class AuthToken {
     this.token,
   });
 
-  bool tfa;
-  bool sms;
-  String expires;
-  String phoneNoise;
-  String token;
-  String tfaKey;
+  bool? tfa;
+  bool? sms;
+  String? expires;
+  String? phoneNoise;
+  String? token;
+  String? tfaKey;
 
   AuthToken.fromJson(Map<String, dynamic> json) {
     expires = json['expires'];

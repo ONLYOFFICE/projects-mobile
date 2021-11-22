@@ -42,7 +42,7 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PasswordRecoveryScreen1 extends StatelessWidget {
-  const PasswordRecoveryScreen1({Key key}) : super(key: key);
+  const PasswordRecoveryScreen1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

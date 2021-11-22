@@ -50,13 +50,13 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class SelfProfileScreen extends StatelessWidget {
-  const SelfProfileScreen({Key key}) : super(key: key);
+  const SelfProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var profileController = Get.find<ProfileController>();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       profileController.setup();
     });
 
@@ -185,7 +185,7 @@ class SelfProfileScreen extends StatelessWidget {
 }
 
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({Key key}) : super(key: key);
+  const ProfileScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -215,9 +215,9 @@ class ProfileScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(80),
                       child: CustomNetworkImage(
-                        image: portalUser?.avatar ??
-                            portalUser?.avatarMedium ??
-                            portalUser?.avatarSmall,
+                        image: portalUser.avatar ??
+                            portalUser.avatarMedium ??
+                            portalUser.avatarSmall,
                         defaultImage: const DefaultAvatar(),
                         fit: BoxFit.contain,
                       ),
@@ -229,14 +229,14 @@ class ProfileScreen extends StatelessWidget {
                         right: 15,
                         child: AppIcon(
                             icon: SvgIcons.userBlocked, width: 32, height: 32)),
-                  if ((portalUser.isAdmin || portalUser.isOwner) &&
+                  if ((portalUser.isAdmin! || portalUser.isOwner!) &&
                       portalUser.status != UserStatus.Terminated)
                     Positioned(
                         bottom: 0,
                         right: 15,
                         child: AppIcon(
                             icon: SvgIcons.userAdmin, width: 32, height: 32)),
-                  if (portalUser.isVisitor &&
+                  if (portalUser.isVisitor! &&
                       portalUser.status != UserStatus.Terminated)
                     Positioned(
                         bottom: 0,
@@ -249,7 +249,7 @@ class ProfileScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  portalUser?.displayName,
+                  portalUser.displayName!,
                   style: TextStyleHelper.headline6(
                     color: Get.theme.colors().onSurface,
                   ),
@@ -258,7 +258,7 @@ class ProfileScreen extends StatelessWidget {
               const SizedBox(height: 68),
               _ProfileInfoTile(
                 caption: '${tr('email')}:',
-                text: portalUser?.email ?? '',
+                text: portalUser.email ?? '',
                 icon: SvgIcons.message,
               ),
               _ProfileInfoTile(
@@ -276,20 +276,20 @@ class ProfileScreen extends StatelessWidget {
 
 // TODO instead crerate shared styledTile
 class _ProfileInfoTile extends StatelessWidget {
-  final int maxLines;
+  final int? maxLines;
   final bool enableBorder;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final String text;
-  final String icon;
-  final Color iconColor;
-  final String caption;
-  final Function() onTap;
-  final Color textColor;
+  final String? icon;
+  final Color? iconColor;
+  final String? caption;
+  final Function()? onTap;
+  final Color? textColor;
   final EdgeInsetsGeometry suffixPadding;
   final TextOverflow textOverflow;
 
   const _ProfileInfoTile({
-    Key key,
+    Key? key,
     this.caption,
     this.enableBorder = true,
     this.icon,
@@ -300,7 +300,7 @@ class _ProfileInfoTile extends StatelessWidget {
     this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,
-    @required this.text,
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -326,12 +326,12 @@ class _ProfileInfoTile extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                         vertical:
-                            caption != null && caption.isNotEmpty ? 10 : 18),
+                            caption != null && caption!.isNotEmpty ? 10 : 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (caption != null && caption.isNotEmpty)
-                          Text(caption,
+                        if (caption != null && caption!.isNotEmpty)
+                          Text(caption!,
                               style: TextStyleHelper.caption(
                                   color: Get.theme
                                       .colors()

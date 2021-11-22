@@ -34,8 +34,8 @@ import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 abstract class NewCommentController extends GetxController {
-  final int idFrom;
-  final String parentId;
+  final int? idFrom;
+  final String? parentId;
 
   NewCommentController({
     this.parentId,

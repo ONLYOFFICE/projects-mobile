@@ -56,7 +56,7 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
-  const TasksView({Key key}) : super(key: key);
+  const TasksView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class TasksView extends StatelessWidget {
 
     controller.setup(PresetTaskFilters.saved);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadTasks();
     });
 
@@ -101,7 +101,7 @@ class TasksView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, dynamic value, __) => StyledAppBar(
             showBackButton: false,
             titleText: controller.screenName,
             elevation: value,
@@ -136,8 +136,8 @@ class TasksView extends StatelessWidget {
             return const ListLoadingSkeleton();
           if (controller.loaded.value &&
               controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value) {
+              controller.paginationController!.data.isEmpty &&
+              !controller.filterController!.hasFilters.value) {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.task_not_created,
@@ -145,8 +145,8 @@ class TasksView extends StatelessWidget {
           }
           if (controller.loaded.value &&
               controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value) {
+              controller.paginationController!.data.isEmpty &&
+              controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.not_found, text: tr('noTasksMatching')),
@@ -157,10 +157,10 @@ class TasksView extends StatelessWidget {
             child: ListView.builder(
               // controller: controller.scrollController,
               controller: scrollController,
-              itemCount: controller.paginationController.data.length,
+              itemCount: controller.paginationController!.data.length,
               itemBuilder: (BuildContext context, int index) {
                 return TaskCell(
-                    task: controller.paginationController.data[index]);
+                    task: controller.paginationController!.data[index]);
               },
             ),
           );
@@ -171,7 +171,7 @@ class TasksView extends StatelessWidget {
 }
 
 class TasksHeader extends StatelessWidget {
-  TasksHeader({Key key, @required this.controller}) : super(key: key);
+  TasksHeader({Key? key, required this.controller}) : super(key: key);
 
   final controller;
 

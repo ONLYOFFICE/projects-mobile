@@ -37,34 +37,34 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_owner.dart';
 
 class PortalTask {
-  int customTaskStatus;
-  int id;
-  int milestoneId;
-  int priority;
-  int status;
-  bool canCreateComment;
-  bool canCreateSubtask;
-  bool canCreateTimeSpend;
-  bool canDelete;
-  bool canEdit;
-  bool canEditFiles;
-  bool canReadFiles;
-  bool isSubscribed;
-  String created;
-  String deadline;
-  String description;
-  String startDate;
-  String title;
-  String updated;
-  List<PortalComment> comments;
-  List<PortalFile> files;
-  List<PortalUser> responsibles;
-  List<Subtask> subtasks;
-  Milestone milestone;
-  PortalUser createdBy;
-  PortalUser responsible;
-  PortalUser updatedBy;
-  ProjectOwner projectOwner;
+  int? customTaskStatus;
+  int? id;
+  int? milestoneId;
+  int? priority;
+  int? status;
+  bool? canCreateComment;
+  bool? canCreateSubtask;
+  bool? canCreateTimeSpend;
+  bool? canDelete;
+  bool? canEdit;
+  bool? canEditFiles;
+  bool? canReadFiles;
+  bool? isSubscribed;
+  String? created;
+  String? deadline;
+  String? description;
+  String? startDate;
+  String? title;
+  String? updated;
+  List<PortalComment>? comments;
+  List<PortalFile>? files;
+  List<PortalUser?>? responsibles;
+  List<Subtask>? subtasks;
+  Milestone? milestone;
+  PortalUser? createdBy;
+  PortalUser? responsible;
+  PortalUser? updatedBy;
+  ProjectOwner? projectOwner;
 
   PortalTask(
       {this.canCreateSubtask,
@@ -162,47 +162,47 @@ class PortalTask {
     data['description'] = description;
     data['deadline'] = deadline;
     data['priority'] = priority;
-    if (milestone != null) data['milestone'] = milestone.toJson();
+    if (milestone != null) data['milestone'] = milestone!.toJson();
     data['milestoneId'] = milestoneId;
     if (projectOwner != null) {
-      data['projectOwner'] = projectOwner.toJson();
+      data['projectOwner'] = projectOwner!.toJson();
     }
     data['status'] = status;
     if (responsible != null) {
-      data['responsible'] = responsible.toJson();
+      data['responsible'] = responsible!.toJson();
     }
     if (updatedBy != null) {
-      data['updatedBy'] = updatedBy.toJson();
+      data['updatedBy'] = updatedBy!.toJson();
     }
     data['created'] = created;
     if (createdBy != null) {
-      data['createdBy'] = createdBy.toJson();
+      data['createdBy'] = createdBy!.toJson();
     }
 
-    data['subtasks'] = List<dynamic>.from(subtasks.map((x) => x.toJson()));
+    data['subtasks'] = List<dynamic>.from(subtasks!.map((x) => x.toJson()));
 
     data['updated'] = updated;
     return data;
   }
 
   bool get hasOpenSubtasks {
-    for (var item in subtasks) if (item.status != 2) return true;
+    for (var item in subtasks!) if (item.status != 2) return true;
     return false;
   }
 }
 
 class Subtask {
-  final bool canEdit;
-  final int taskId;
-  final int id;
-  final String title;
+  final bool? canEdit;
+  final int? taskId;
+  final int? id;
+  final String? title;
   final dynamic description;
-  final int status;
-  final PortalUser responsible;
-  final DateTime created;
-  final PortalUser createdBy;
-  final PortalUser updatedBy;
-  final DateTime updated;
+  final int? status;
+  final PortalUser? responsible;
+  final DateTime? created;
+  final PortalUser? createdBy;
+  final PortalUser? updatedBy;
+  final DateTime? updated;
 
   Subtask({
     this.canEdit,
@@ -247,10 +247,10 @@ class Subtask {
         'title': title,
         'description': description,
         'status': status,
-        'responsible': responsible == null ? null : responsible.toJson(),
-        'updatedBy': updatedBy == null ? null : updatedBy.toJson(),
-        'created': created == null ? null : created.toIso8601String(),
-        'createdBy': createdBy == null ? null : createdBy.toJson(),
-        'updated': updated == null ? null : updated.toIso8601String(),
+        'responsible': responsible == null ? null : responsible!.toJson(),
+        'updatedBy': updatedBy == null ? null : updatedBy!.toJson(),
+        'created': created == null ? null : created!.toIso8601String(),
+        'createdBy': createdBy == null ? null : createdBy!.toJson(),
+        'updated': updated == null ? null : updated!.toIso8601String(),
       };
 }

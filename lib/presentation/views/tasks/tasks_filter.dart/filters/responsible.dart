@@ -33,8 +33,8 @@
 part of '../tasks_filter.dart';
 
 class _Responsible extends StatelessWidget {
-  final BaseTaskFilterController filterController;
-  const _Responsible({Key key, this.filterController}) : super(key: key);
+  final BaseTaskFilterController? filterController;
+  const _Responsible({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,41 +45,41 @@ class _Responsible extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.responsible['me'],
-              onTap: () => filterController.changeResponsible('me')),
+              isSelected: filterController!.responsible['me'],
+              onTap: () => filterController!.changeResponsible('me')),
           FilterElement(
-              title: filterController.responsible['other'].isEmpty
+              title: filterController!.responsible['other'].isEmpty
                   ? tr('otherUser')
-                  : filterController.responsible['other'],
-              isSelected: filterController.responsible['other'].isNotEmpty,
+                  : filterController!.responsible['other'],
+              isSelected: filterController!.responsible['other'].isNotEmpty,
               cancelButtonEnabled:
-                  filterController.responsible['other'].isNotEmpty,
+                  filterController!.responsible['other'].isNotEmpty,
               onTap: () async {
                 var newUser = await Get.find<NavigationController>()
                     .toScreen(const SelectUserScreen());
-                filterController.changeResponsible('other', newUser);
+                filterController!.changeResponsible('other', newUser);
               },
               onCancelTap: () =>
-                  filterController.changeResponsible('other', null)),
+                  filterController!.changeResponsible('other', null)),
           FilterElement(
-              title: filterController.responsible['groups'].isEmpty
+              title: filterController!.responsible['groups'].isEmpty
                   ? tr('groups')
-                  : filterController.responsible['groups'],
-              isSelected: filterController.responsible['groups'].isNotEmpty,
+                  : filterController!.responsible['groups'],
+              isSelected: filterController!.responsible['groups'].isNotEmpty,
               cancelButtonEnabled:
-                  filterController.responsible['groups'].isNotEmpty,
+                  filterController!.responsible['groups'].isNotEmpty,
               onTap: () async {
                 var newGroup = await Get.find<NavigationController>()
                     .toScreen(const SelectGroupScreen());
-                filterController.changeResponsible('groups', newGroup);
+                filterController!.changeResponsible('groups', newGroup);
               },
               onCancelTap: () =>
-                  filterController.changeResponsible('groups', null)),
+                  filterController!.changeResponsible('groups', null)),
           FilterElement(
               title: tr('noResponsible'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.responsible['no'],
-              onTap: () => filterController.changeResponsible('no'))
+              isSelected: filterController!.responsible['no'],
+              onTap: () => filterController!.changeResponsible('no'))
         ],
       ),
     );

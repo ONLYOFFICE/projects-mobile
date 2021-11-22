@@ -42,8 +42,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class ProjectManagerTile extends StatelessWidget {
   const ProjectManagerTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;

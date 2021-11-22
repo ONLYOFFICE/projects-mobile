@@ -34,13 +34,13 @@ import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class FoldersResponse {
-  List<PortalFile> files;
-  List<Folder> folders;
-  Folder current;
-  List<int> pathParts;
-  int startIndex;
-  int count;
-  int total;
+  List<PortalFile>? files;
+  List<Folder>? folders;
+  Folder? current;
+  List<int>? pathParts;
+  int? startIndex;
+  int? count;
+  int? total;
 
   FoldersResponse(
       {this.files,
@@ -55,13 +55,13 @@ class FoldersResponse {
     if (json['files'] != null) {
       files = <PortalFile>[];
       json['files'].forEach((v) {
-        files.add(PortalFile.fromJson(v));
+        files!.add(PortalFile.fromJson(v));
       });
     }
     if (json['folders'] != null) {
       folders = <Folder>[];
       json['folders'].forEach((v) {
-        folders.add(Folder.fromJson(v));
+        folders!.add(Folder.fromJson(v));
       });
     }
     current = json['current'] != null ? Folder.fromJson(json['current']) : null;
@@ -74,13 +74,13 @@ class FoldersResponse {
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     if (files != null) {
-      data['files'] = files.map((v) => v.toJson()).toList();
+      data['files'] = files!.map((v) => v.toJson()).toList();
     }
     if (folders != null) {
-      data['folders'] = folders.map((v) => v.toJson()).toList();
+      data['folders'] = folders!.map((v) => v.toJson()).toList();
     }
     if (current != null) {
-      data['current'] = current.toJson();
+      data['current'] = current!.toJson();
     }
     data['pathParts'] = pathParts;
     data['startIndex'] = startIndex;
@@ -91,18 +91,18 @@ class FoldersResponse {
 }
 
 class Folder {
-  int parentId;
-  int filesCount;
-  int foldersCount;
-  int id;
-  String title;
-  int access;
-  bool shared;
-  int rootFolderType;
-  PortalUser updatedBy;
-  DateTime created;
-  PortalUser createdBy;
-  DateTime updated;
+  int? parentId;
+  int? filesCount;
+  int? foldersCount;
+  int? id;
+  String? title;
+  int? access;
+  bool? shared;
+  int? rootFolderType;
+  PortalUser? updatedBy;
+  DateTime? created;
+  PortalUser? createdBy;
+  DateTime? updated;
 
   Folder(
       {this.parentId,
@@ -148,11 +148,11 @@ class Folder {
     data['shared'] = shared;
     data['rootFolderType'] = rootFolderType;
     if (updatedBy != null) {
-      data['updatedBy'] = updatedBy.toJson();
+      data['updatedBy'] = updatedBy!.toJson();
     }
     data['created'] = created?.toIso8601String();
     if (createdBy != null) {
-      data['createdBy'] = createdBy.toJson();
+      data['createdBy'] = createdBy!.toJson();
     }
     data['updated'] = updated?.toIso8601String();
     return data;
