@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageView
@@ -16,11 +17,19 @@ import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterFragmentActivity() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        println("other message")
+        super.onCreate(savedInstanceState)
+
+    }
+
     override fun provideSplashScreen(): SplashScreen {
+        println("other message")
         return MainSplashScreen(this)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+        Log.d("t" ,"other message")
         GeneratedPluginRegistrant.registerWith(flutterEngine)
     }
 }

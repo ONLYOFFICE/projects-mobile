@@ -87,6 +87,8 @@ dependencies:
   connectivity_plus: ^1.1.0
   html_editor_enhanced: ^2.3.0
   flutter_widget_from_html: ^0.7.0
+  accountmanager: ^0.2.1
+  permission_handler: ^8.3.0
 
 dependency_overrides:
   flutter_colorpicker: ^0.6.0
