@@ -37,10 +37,10 @@ abstract class BaseController extends GetxController {
 
   String screenName;
   RxList<dynamic> get itemList;
-  RxBool hasFilters = false.obs;
+  final hasFilters = false.obs;
 
-  RxBool showAll = false.obs;
-  RxBool expandedCardView = true.obs;
+  final showAll = false.obs;
+  final expandedCardView = true.obs;
 
   void showSearch() {}
 }

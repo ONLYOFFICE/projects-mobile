@@ -75,13 +75,14 @@ class NewDiscussionController extends GetxController
   final _manualSelectedPersons = [];
 
   @override
-  RxString? title = ''.obs;
+  final title = RxString('');
 
   @override
-  RxString selectedProjectTitle = ''.obs;
+  final selectedProjectTitle = RxString('');
 
   @override
-  RxString? text = ''.obs;
+  final text = RxString('');
+
   @override
   dynamic textController = HtmlEditorController();
 
@@ -97,13 +98,11 @@ class NewDiscussionController extends GetxController
   FocusNode get titleFocus => _titleFocus;
 
   @override
-  RxList<PortalUserItemController>? otherUsers =
-      <PortalUserItemController>[].obs;
+  final otherUsers = <PortalUserItemController>[].obs;
 
   var _team = [];
   @override
-  RxList<PortalUserItemController>? subscribers =
-      <PortalUserItemController>[].obs;
+  final subscribers = <PortalUserItemController>[].obs;
   List _previusSelectedSubscribers = []; // to track changes
 
   @override

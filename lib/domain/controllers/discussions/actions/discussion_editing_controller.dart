@@ -57,24 +57,26 @@ class DiscussionEditingController extends GetxController
     implements DiscussionActionsController {
   final int? id;
   final int? projectId;
-  @override
-  var selectedProjectTitle;
-  @override
-  RxString? title;
-  @override
-  RxString? text;
-  @override
-  RxList<PortalUserItemController> subscribers =
-      <PortalUserItemController>[].obs;
 
   @override
-  RxList<PortalUserItemController> otherUsers =
-      <PortalUserItemController>[].obs;
+  var selectedProjectTitle;
+
+  @override
+  RxString? title;
+  var _previusTitle;
+
+  @override
+  RxString? text;
+  var _previusText;
+
+  @override
+  final subscribers = <PortalUserItemController>[].obs;
+
+  @override
+  final otherUsers = <PortalUserItemController>[].obs;
 
   final initialSubscribers;
   List? _previusSelectedSubscribers;
-  var _previusText;
-  var _previusTitle;
 
   @override
   void onInit() {
@@ -83,7 +85,7 @@ class DiscussionEditingController extends GetxController
     for (var item in initialSubscribers) {
       var pu = PortalUserItemController(portalUser: item, isSelected: true.obs);
       pu.selectionMode.value = UserSelectionMode.Multiple;
-      subscribers!.add(pu);
+      subscribers.add(pu);
     }
     _previusSelectedSubscribers = List.from(subscribers!);
     _previusText = text!.value;
@@ -91,11 +93,11 @@ class DiscussionEditingController extends GetxController
     super.onInit();
   }
 
-  final DiscussionItemService? _api = locator<DiscussionItemService>();
+  final DiscussionItemService _api = locator<DiscussionItemService>();
 
-  final UserService? _userService = locator<UserService>();
+  final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
-  var selectedGroups = <PortalGroupItemController>[];
+  final selectedGroups = <PortalGroupItemController>[];
 
   @override
   dynamic textController = HtmlEditorController();

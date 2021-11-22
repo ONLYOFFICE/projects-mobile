@@ -57,17 +57,16 @@ class _PasswordFormState extends State<PasswordForm> {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
+    final controller = Get.find<LoginController>();
 
     final emailField = TextFormField(
       controller: emailController,
       validator: controller.emailValidator,
-      autofillHints: [AutofillHints.email],
-      obscureText: false,
+      autofillHints: const [AutofillHints.email],
       style: TextStyleHelper.mainStyle,
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: tr('emailAddress'),
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))

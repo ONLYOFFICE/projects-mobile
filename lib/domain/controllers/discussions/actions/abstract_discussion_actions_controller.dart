@@ -39,10 +39,8 @@ abstract class DiscussionActionsController {
   final text = RxString('');
   final title = RxString('');
   dynamic selectedProjectTitle;
-  RxList<PortalUserItemController> subscribers =
-      <PortalUserItemController>[].obs;
-  RxList<PortalUserItemController> otherUsers =
-      <PortalUserItemController>[].obs;
+  final subscribers = <PortalUserItemController>[].obs;
+  final otherUsers = <PortalUserItemController>[].obs;
 
   FocusNode get titleFocus => FocusNode();
   TextEditingController? _titleController;

@@ -178,7 +178,7 @@ class LoginController extends GetxController {
   }
 
   Future<bool> sendCode(String code,
-      {required String userName, required String password}) async {
+      {String? userName, String? password}) async {
     setState(ViewState.Busy);
 
     code = code.removeAllWhitespace;
@@ -240,8 +240,8 @@ class LoginController extends GetxController {
     }
   }
 
-  String? emailValidator(String value) {
-    if (value.isEmpty) return 'Введите корректный email';
+  String? emailValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Введите корректный email';
 
     /// regex pattern to validate email inputs.
     const Pattern _emailPattern =
@@ -252,9 +252,9 @@ class LoginController extends GetxController {
     return 'Введите корректный email';
   }
 
-  String? passValidator(String value) {
-    if (value.isNotEmpty) return null;
-    return 'Введите пароль';
+  String? passValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Введите пароль';
+    return null;
   }
 
   Rx<ViewState> get state => ViewState.Idle.obs;
