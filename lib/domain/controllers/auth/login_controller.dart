@@ -59,12 +59,13 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-   late TextEditingController portalAdressController;
-   late TextEditingController _emailController;
-   late TextEditingController _passwordController;
+  late TextEditingController portalAdressController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
-  TextEditingController? get emailController => _emailController;
-  TextEditingController? get passwordController => _passwordController;
+  TextEditingController get emailController => _emailController;
+
+  TextEditingController get passwordController => _passwordController;
 
   RxBool portalFieldError = false.obs;
   RxBool emailFieldError = false.obs;
@@ -89,12 +90,12 @@ class LoginController extends GetxController {
 
   Future<void> loginByPassword() async {
     if (await _checkEmailAndPass()) {
-      String email = _emailController.text;
-      String password = _passwordController.text;
+      final email = _emailController.text;
+      final password = _passwordController.text;
 
       setState(ViewState.Busy);
 
-      var result = await _authService.login(email, password);
+      final result = await _authService.login(pass: password, email: email);
 
       if (result.response == null) {
         setState(ViewState.Idle);
@@ -118,23 +119,28 @@ class LoginController extends GetxController {
 
         if (result.response!.tfaKey != null) {
           _tfaKey = result.response!.tfaKey;
-          await Get.to(() => const GetCodeViews());
+          await Get.to<GetCodeViews>(() => const GetCodeViews());
         } else {
-          await Get.to(() => CodeView());
+          await Get.to<CodeView>(() => CodeView());
         }
       } else if (result.response!.sms == true) {
         _email = email;
         _pass = password;
         setState(ViewState.Idle);
         if (result.response!.phoneNoise != null) {
-          await Get.to(() => const EnterSMSCodeScreen(), arguments: {
-            'phoneNoise': result.response!.phoneNoise,
-            'login': _email,
-            'password': _pass
-          });
+          await Get.to<EnterSMSCodeScreen>(
+            () => const EnterSMSCodeScreen(),
+            arguments: {
+              'phoneNoise': result.response!.phoneNoise,
+              'login': _email,
+              'password': _pass
+            },
+          );
         } else {
-          await Get.to(() => const TFASmsScreen(),
-              arguments: {'login': _email, 'password': _pass});
+          await Get.to<TFASmsScreen>(
+            () => const TFASmsScreen(),
+            arguments: {'login': _email, 'password': _pass},
+          );
         }
       }
     }
@@ -142,7 +148,7 @@ class LoginController extends GetxController {
 
   Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
-    var result;
+    bool? result;
 
     emailFieldError.value = false;
     passwordFieldError.value = false;
@@ -153,8 +159,8 @@ class LoginController extends GetxController {
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => emailFieldError.value = false);
       // save cursor position
-      emailController!.selection = TextSelection.fromPosition(
-        TextPosition(offset: emailController!.text.length),
+      emailController.selection = TextSelection.fromPosition(
+        TextPosition(offset: emailController.text.length),
       );
     }
     if (_passwordController.text.isEmpty) {
@@ -171,14 +177,16 @@ class LoginController extends GetxController {
     await _secureStorage.putString('expires', result.response!.expires);
   }
 
-  Future<bool> sendCode(String code, {String? userName, String? password}) async {
+  Future<bool> sendCode(String code,
+      {required String userName, required String password}) async {
     setState(ViewState.Busy);
 
     code = code.removeAllWhitespace;
     _email ??= userName;
     _pass ??= password;
 
-    var result = await _authService.confirmTFACode(_email, _pass, code);
+    final result = await _authService.confirmTFACode(
+        email: _email!, pass: _pass!, code: code);
 
     if (result.response == null) {
       setState(ViewState.Idle);
@@ -219,7 +227,7 @@ class LoginController extends GetxController {
     } else {
       setState(ViewState.Busy);
 
-      var _capabilities =
+      final _capabilities =
           await _portalService.portalCapabilities(portalAdressController.text);
 
       if (_capabilities != null) {
@@ -232,11 +240,11 @@ class LoginController extends GetxController {
     }
   }
 
-  String? emailValidator(value) {
+  String? emailValidator(String value) {
     if (value.isEmpty) return 'Введите корректный email';
 
     /// regex pattern to validate email inputs.
-    final Pattern _emailPattern =
+    const Pattern _emailPattern =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]";
 
     if (RegExp(_emailPattern as String).hasMatch(value)) return null;
@@ -244,24 +252,24 @@ class LoginController extends GetxController {
     return 'Введите корректный email';
   }
 
-  String? passValidator(value) {
-    if (!value.isEmpty) return null;
+  String? passValidator(String value) {
+    if (value.isNotEmpty) return null;
     return 'Введите пароль';
   }
 
-  var state = ViewState.Idle.obs;
+  Rx<ViewState> get state => ViewState.Idle.obs;
 
   void setState(ViewState viewState) {
     state.value = viewState;
   }
 
   Future<bool> sendRegistrationType() async {
-    var result = await _authService.sendRegistrationType();
+    final result = await _authService.sendRegistrationType();
     return result != null;
   }
 
   Future<void> logout() async {
-    var storage = locator<Storage>();
+    final storage = locator<Storage>();
 
     locator.get<CoreApi>().cancellationToken.cancel();
 
@@ -279,6 +287,7 @@ class LoginController extends GetxController {
     locator<EventHub>().fire('logoutSuccess');
   }
 
+  // TODO: check dispose textControllers
   @override
   void onClose() {
     // clearInputFields();

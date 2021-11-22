@@ -42,68 +42,78 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class AuthService {
-  final AuthApi? _api = locator<AuthApi>();
+  final AuthApi _api = locator<AuthApi>();
 
   Future<ApiDTO<PortalUser>> getSelfInfo() async {
-    var authResponse = await _api!.getUserInfo();
+    final authResponse = await _api.getUserInfo();
 
-    var result = authResponse.response != null;
+    final result = authResponse.response != null;
 
     if (!result) {
       var errorText = '';
-      if (authResponse.error?.message == 'Server error')
+      if (authResponse.error?.message == 'Server error') {
         errorText = tr('tfaWrongCode');
+      }
       await Get.find<ErrorDialog>()
-          .show(errorText == '' ? authResponse.error!.message! : errorText);
+          .show(errorText == '' ? authResponse.error!.message : errorText);
     }
     return authResponse;
   }
 
   Future<bool> checkAuthorization() async {
-    var authResponse = await _api!.getUserInfo();
+    final authResponse = await _api.getUserInfo();
 
     if (authResponse.response == null) {
-      if (authResponse.error!.message!.toLowerCase().contains('unauthorized'))
+      if (authResponse.error!.message.toLowerCase().contains('unauthorized')) {
         return false;
-      else
-        await Get.find<ErrorDialog>().show(authResponse.error!.message!);
+      } else {
+        await Get.find<ErrorDialog>().show(authResponse.error!.message);
+      }
     }
     return true;
   }
 
-  Future<ApiDTO<AuthToken>> login(String email, String pass) async {
-    var authResponse = await _api!.loginByUsername(email, pass);
+  Future<ApiDTO<AuthToken>> login({
+    required String email,
+    required String pass,
+  }) async {
+    final authResponse = await _api.loginByUsername(email: email, pass: pass);
 
-    var tokenReceived = authResponse.response != null;
+    final tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      await Get.find<ErrorDialog>().show(authResponse.error!.message!);
+      await Get.find<ErrorDialog>().show(authResponse.error!.message);
     }
     return authResponse;
   }
 
-  Future<ApiDTO<AuthToken>> confirmTFACode(
-      String? email, String? pass, String code) async {
-    var authResponse = await _api!.confirmTFACode(email, pass, code);
+  Future<ApiDTO<AuthToken>> confirmTFACode({
+    required String email,
+    required String pass,
+    required String code,
+  }) async {
+    final authResponse =
+        await _api.confirmTFACode(email: email, pass: pass, code: code);
 
-    var tokenReceived = authResponse.response != null;
+    final tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      var errorText;
-      if (authResponse.error?.message != 'Server error')
+      String? errorText;
+      if (authResponse.error?.message != 'Server error') {
         errorText = authResponse.error?.message;
+      }
       await Get.find<ErrorDialog>().show(errorText ?? '');
     }
     return authResponse;
   }
 
-  Future passwordRecovery(String email) async {
-    var response = await _api!.passwordRecovery(email);
+  Future passwordRecovery({required String email}) async {
+    final response = await _api.passwordRecovery(email);
 
-    var success = response.response != null;
+    final success = response.response != null;
 
     if (!success) {
-      await Get.find<ErrorDialog>().show(response.error!.message!);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     } else {
       return response;
@@ -111,9 +121,9 @@ class AuthService {
   }
 
   Future sendRegistrationType() async {
-    var response = await _api!.sendRegistrationType();
+    final response = await _api.sendRegistrationType();
 
-    var success = response.response != null;
+    final success = response.response != null;
 
     if (!success) {
       return null;
