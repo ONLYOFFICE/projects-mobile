@@ -48,16 +48,18 @@ import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 class TasksController extends BaseController {
-  final TaskService? _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
-  final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
+  final ProjectsWithPresets? projectsWithPresets =
+      locator<ProjectsWithPresets>();
 
-  PaginationController? _paginationController;
+  late PaginationController<PortalTask> _paginationController;
+  PaginationController<PortalTask> get paginationController =>
+      _paginationController;
 
   final _userController = Get.find<UserController>();
 
   PresetTaskFilters? _preset;
-  PaginationController? get paginationController => _paginationController;
 
   final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
@@ -65,8 +67,8 @@ class TasksController extends BaseController {
   final taskStatusesLoaded = false.obs;
   TasksSortController get sortController => _sortController;
 
-  TaskFilterController? _filterController;
-  TaskFilterController? get filterController => _filterController;
+  late TaskFilterController _filterController;
+  TaskFilterController get filterController => _filterController;
 
   var fabIsVisible = false.obs;
   var _withFAB = true;
@@ -80,13 +82,13 @@ class TasksController extends BaseController {
   }
 
   TasksController(TaskFilterController filterController,
-      PaginationController paginationController) {
+      PaginationController<PortalTask> paginationController)
+      : super(tr('tasks')) {
     loaded.value = false;
-    screenName = tr('tasks');
     _paginationController = paginationController;
     expandedCardView.value = true;
     _filterController = filterController;
-    _filterController!.applyFiltersDelegate = () async => loadTasks();
+    _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => await loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
     paginationController.refreshDelegate = () async => await refreshData();
@@ -136,8 +138,8 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  Future _getTasks({needToClear = false}) async {
-    var result = await (_api!.getTasksByParams(
+  Future _getTasks({bool needToClear = false}) async {
+    var result = await (_api.getTasksByParams(
       startIndex: paginationController!.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -149,12 +151,12 @@ class TasksController extends BaseController {
       deadlineFilter: _filterController!.deadlineFilter,
       // query: 'задача',
     ) as Future<PageDTO<List<PortalTask>>>);
-    paginationController!.total.value = result.total!;
+    paginationController.total.value = result.total!;
 
-    if (needToClear) paginationController!.data.clear();
+    if (needToClear) paginationController.data.clear();
 
-    paginationController!.data.addAll(result.response!);
-    expandedCardView.value = paginationController!.data.isNotEmpty;
+    paginationController.data.addAll(result.response!);
+    expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
   @override

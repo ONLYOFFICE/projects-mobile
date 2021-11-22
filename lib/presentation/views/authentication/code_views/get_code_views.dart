@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
@@ -62,25 +63,25 @@ class GetCodeViews extends StatefulWidget {
 }
 
 class _GetCodeViewsState extends State<GetCodeViews> {
-  ValueNotifier<double?> page = ValueNotifier<double?>(0);
+  ValueNotifier<double> page = ValueNotifier<double>(0);
 
-  final _pageController = PageController(keepPage: true);
+  final _pageController = PageController();
   final _platformController = Get.find<PlatformController>();
 
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(() => page.value = _pageController.page);
+    _pageController.addListener(() => page.value = _pageController.page ?? 0);
   }
 
   @override
   Widget build(BuildContext context) {
     // additional padding at the top on tablets
     // ignore: omit_local_variable_types
-    double padding = getTopPadding(
+    final double padding = getTopPadding(
         _platformController.isMobile, MediaQuery.of(context).size.height);
 
-    var pages = [
+    final pages = [
       _Step1(topPadding: padding),
       _Step2(topPadding: padding),
       _Step3(topPadding: padding),
@@ -111,11 +112,11 @@ class _GetCodeViewsState extends State<GetCodeViews> {
   }
 }
 
-TextStyle _stepStyle(context) =>
+TextStyle _stepStyle(BuildContext context) =>
     TextStyleHelper.headline6(color: Get.theme.colors().onSurface);
 
-TextStyle _setup1Style(context) =>
+TextStyle _setup1Style(BuildContext context) =>
     TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
 
-TextStyle _setup2Style(context) =>
+TextStyle _setup2Style(BuildContext context) =>
     TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6));

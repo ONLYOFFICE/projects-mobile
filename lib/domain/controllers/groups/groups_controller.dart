@@ -39,22 +39,23 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/group_service.dart';
 
 class GroupsController extends BaseController {
-  final GroupService? _api = locator<GroupService>();
+  final GroupService _api = locator<GroupService>();
 
   @override
-  RxList itemList = [].obs;
+  RxList itemList = [].obs; // TODO always empty
 
-  PaginationController? paginationController;
+  late PaginationController paginationController;
+
+  GroupsController(String screenName) : super(tr('groups'));
 
   @override
   void onInit() {
-    screenName = tr('groups');
     paginationController =
         Get.put(PaginationController(), tag: 'GroupsController');
 
-    paginationController!.loadDelegate = () async => await _getGroups();
-    paginationController!.refreshDelegate = () async => await refreshData();
-    paginationController!.pullDownEnabled = true;
+    paginationController.loadDelegate = () async => await _getGroups();
+    paginationController.refreshDelegate = () async => await refreshData();
+    paginationController.pullDownEnabled = true;
     super.onInit();
   }
 
@@ -64,26 +65,28 @@ class GroupsController extends BaseController {
 
   Future getAllGroups() async {
     loaded.value = false;
-    groups.value = await (_api!.getAllGroups() as Future<List<PortalGroup>>);
+    groups.value = await (_api.getAllGroups() as Future<List<PortalGroup>>);
     loaded.value = true;
   }
 
   Future getGroups({bool needToClear = false}) async {
-    paginationController!.startIndex = 0;
     loaded.value = false;
+
+    paginationController.startIndex = 0;
     await _getGroups();
+
     loaded.value = true;
   }
 
-  Future _getGroups({bool needToClear = false}) async {
-    var result = await _api!.getGroupsByExtendedFilter(
-      startIndex: paginationController!.startIndex,
+  Future<void> _getGroups({bool needToClear = false}) async {
+    final result = await _api.getGroupsByExtendedFilter(
+      startIndex: paginationController.startIndex,
     );
 
     if (result != null) {
-      paginationController!.total.value = result.total!;
-      if (needToClear) paginationController!.data.clear();
-      paginationController!.data.addAll(result.response!);
+      paginationController.total.value = result.total!;
+      if (needToClear) paginationController.data.clear();
+      paginationController.data.addAll(result.response!);
     }
   }
 

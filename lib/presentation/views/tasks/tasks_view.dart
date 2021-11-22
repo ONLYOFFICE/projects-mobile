@@ -37,6 +37,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -65,7 +66,7 @@ class TasksView extends StatelessWidget {
         : Get.put(
             TasksController(
               Get.find<TaskFilterController>(),
-              Get.find<PaginationController>(),
+              Get.find<PaginationController<PortalTask>>(),
             ),
             tag: 'TasksView');
 

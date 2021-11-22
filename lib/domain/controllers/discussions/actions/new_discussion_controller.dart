@@ -63,7 +63,7 @@ class NewDiscussionController extends GetxController
     implements DiscussionActionsController {
   final DiscussionsService? _api = locator<DiscussionsService>();
 
-  var _selectedProjectId;
+  int _selectedProjectId;
   int? get selectedProjectId => _selectedProjectId;
 
   bool _projectIsLocked = false;
@@ -78,7 +78,7 @@ class NewDiscussionController extends GetxController
   RxString? title = ''.obs;
 
   @override
-  dynamic selectedProjectTitle = ''.obs; //RxString
+  RxString selectedProjectTitle = ''.obs;
 
   @override
   RxString? text = ''.obs;
@@ -260,8 +260,8 @@ class NewDiscussionController extends GetxController
   }
 
   Future<void> _getSelectedSubscribers() async {
-    _usersDataSource.usersList
-        .removeWhere((item) => item.portalUser!.status == UserStatus.Terminated);
+    _usersDataSource.usersList.removeWhere(
+        (item) => item.portalUser!.status == UserStatus.Terminated);
 
     for (var element in _usersDataSource.usersList) {
       element.isSelected!.value = false;
@@ -316,7 +316,8 @@ class NewDiscussionController extends GetxController
       }
     }
 
-    subscribers!.value = subscribers!.distinct((d) => d.portalUser!.id!).toList();
+    subscribers!.value =
+        subscribers!.distinct((d) => d.portalUser!.id!).toList();
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 

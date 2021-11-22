@@ -43,7 +43,8 @@ class UsersFromGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DiscussionActionsController controller = Get.arguments['controller'];
+    final controller =
+        Get.arguments['controller'] as DiscussionActionsController;
 
     var groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();

@@ -76,8 +76,9 @@ class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
       children: [
         Obx(() {
           if (passcodeCheckingController.loaded.value == false ||
-              !passcodeCheckingController.isFingerprintEnable)
+              !passcodeCheckingController.isFingerprintEnable) {
             return const SizedBox(width: 72.53);
+          }
           return FingerprintButton(
               onTap: passcodeCheckingController.useFingerprint);
         }),

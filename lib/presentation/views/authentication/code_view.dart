@@ -49,16 +49,9 @@ class CodeView extends StatefulWidget {
 }
 
 class _CodeViewState extends State<CodeView> {
-  late var controller;
-
-  var codeController;
-
-  @override
-  void initState() {
-    controller = Get.find<LoginController>();
-    codeController = TextEditingController();
-    super.initState();
-  }
+  // TODO make Stateless?
+  LoginController controller = Get.find<LoginController>();
+  TextEditingController codeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

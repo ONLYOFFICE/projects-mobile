@@ -84,8 +84,8 @@ class _Code extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
-    var code = _splitCode(controller.tfaKey!);
+    final controller = Get.find<LoginController>();
+    final code = _splitCode(controller.tfaKey!);
 
     return SizedBox(
       width: 280,
@@ -133,12 +133,12 @@ class _Code extends StatelessWidget {
 }
 
 String _splitCode(String code) {
-  var result = code[0];
+  final result = StringBuffer(code[0]);
   for (var i = 1; i <= code.length - 1; i++) {
     if (i % 4 == 0) {
-      result += ' ';
+      result.write(' ');
     }
-    result += code[i];
+    result.write(code[i]);
   }
-  return result;
+  return result.toString();
 }

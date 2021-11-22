@@ -44,7 +44,7 @@ class SelectCountryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
 
     var previousContrysFirstLetter = '';
 
@@ -72,7 +72,7 @@ class SelectCountryScreen extends StatelessWidget {
                   controller.countriesToShow[index].countryName![0];
               return _CountryWithCodeTile(
                 showFirstLetter: true,
-                showBorder: index != 0 ? true : false,
+                showBorder: index != 0,
                 country: controller.countriesToShow[index],
               );
             }
@@ -91,7 +91,7 @@ class _SarchField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
 
     return TextField(
       autofocus: true,
@@ -100,7 +100,7 @@ class _SarchField extends StatelessWidget {
         hintText: tr('search'),
         hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
       ),
-      onChanged: (value) => controller.onSearch(value),
+      onChanged: controller.onSearch,
     );
   }
 }
@@ -118,7 +118,7 @@ class _CountryWithCodeTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
     return InkWell(
       onTap: () => controller.selectCountry(country),
       child: Padding(

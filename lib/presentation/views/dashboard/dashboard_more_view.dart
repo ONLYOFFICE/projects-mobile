@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -50,10 +51,10 @@ class ProjectsDashboardMoreView extends StatelessWidget {
   const ProjectsDashboardMoreView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    ProjectsController? controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'] as ProjectsController;
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
     scrollController.addListener(
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
@@ -64,7 +65,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
         () => Visibility(
           visible: controller!.fabIsVisible.value,
           child: StyledFloatingActionButton(
-            onPressed: () => controller.createNewProject(),
+            onPressed: controller.createNewProject,
             child: AppIcon(
               icon: SvgIcons.fab_project,
               width: 32,
@@ -78,20 +79,20 @@ class ProjectsDashboardMoreView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, dynamic value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: Bottom(controller: controller),
-            showBackButton: true,
             elevation: value,
           ),
         ),
       ),
       body: Obx(
         () {
-          if (controller!.loaded.value == false)
+          if (controller.loaded.value == false) {
             return const ListLoadingSkeleton();
+          }
           if (controller.loaded.value == true &&
-              controller.paginationController!.data.isEmpty &&
+              controller.paginationController.data.isEmpty &&
               !controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
@@ -100,20 +101,20 @@ class ProjectsDashboardMoreView extends StatelessWidget {
             );
           }
           if (controller.loaded.value == true &&
-              controller.paginationController!.data.isEmpty &&
+              controller.paginationController.data.isEmpty &&
               controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
             );
           }
-          return PaginationListView(
+          return PaginationListView<ProjectDetailed>(
             paginationController: controller.paginationController,
             child: ListView.builder(
               controller: scrollController,
               itemBuilder: (c, i) =>
-                  ProjectCell(item: controller.paginationController!.data[i]),
-              itemCount: controller.paginationController!.data.length,
+                  ProjectCell(item: controller.paginationController.data[i]),
+              itemCount: controller.paginationController.data.length,
             ),
           );
         },
@@ -124,14 +125,12 @@ class ProjectsDashboardMoreView extends StatelessWidget {
 
 class _Title extends StatelessWidget {
   const _Title({Key? key, required this.controller}) : super(key: key);
-  final controller;
+  final ProjectsController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Text(
@@ -141,13 +140,10 @@ class _Title extends StatelessWidget {
             ),
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               InkResponse(
-                onTap: () {
-                  controller.showSearch();
-                },
+                onTap: controller.showSearch,
                 child: AppIcon(
                   width: 24,
                   height: 24,

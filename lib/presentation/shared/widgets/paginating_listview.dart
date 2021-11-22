@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationListView<T> extends StatelessWidget {
@@ -40,8 +41,8 @@ class PaginationListView<T> extends StatelessWidget {
     required this.child,
   }) : super(key: key);
 
-  final paginationController;
-  final child;
+  final PaginationController<T> paginationController;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +50,7 @@ class PaginationListView<T> extends StatelessWidget {
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
             return Container(
-              height: 55.0,
+              height: 55,
               child: const Center(child: CircularProgressIndicator()),
             );
           },

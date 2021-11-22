@@ -58,7 +58,7 @@ class _GroupList extends StatelessWidget with SelectItemListMixin {
   const _GroupList({Key? key}) : super(key: key);
 
   @override
-  PaginationController? get paginationController =>
+  PaginationController get paginationController =>
       Get.find<GroupsController>().paginationController;
 
   @override

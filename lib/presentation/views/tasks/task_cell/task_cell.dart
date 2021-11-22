@@ -50,8 +50,8 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 part 'status_image.dart';
 
 class TaskCell extends StatefulWidget {
-  final PortalTask? task;
-  const TaskCell({Key? key, this.task}) : super(key: key);
+  final PortalTask task;
+  const TaskCell({Key? key, required this.task}) : super(key: key);
 
   @override
   _TaskCellState createState() => _TaskCellState();

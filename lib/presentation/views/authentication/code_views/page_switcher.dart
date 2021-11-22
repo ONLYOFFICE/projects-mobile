@@ -34,7 +34,7 @@ part of 'get_code_views.dart';
 
 class _PageSwitcher extends StatelessWidget {
   final PageController pageController;
-  final ValueNotifier page;
+  final ValueNotifier<double> page;
   _PageSwitcher({
     Key? key,
     required this.page,
@@ -44,14 +44,14 @@ class _PageSwitcher extends StatelessWidget {
   double? get _backButtonOpacity {
     if (page.value >= 1) return 1;
     if (page.value <= 0.6) return 0;
-    var value = (page.value - 0.6) / 0.4;
+    final value = (page.value - 0.6) / 0.4;
     return value;
   }
 
   double get _nextButtonOpacity {
     if (page.value <= 2) return 1;
     if (page.value >= 2.4) return 0;
-    var value = (0.4 - (page.value - 2)) / 0.4;
+    final value = (0.4 - (page.value - 2)) / 0.4;
     return value;
   }
 
@@ -81,9 +81,9 @@ class _PageSwitcher extends StatelessWidget {
                 color: Get.theme.colors().onSurface.withOpacity(0.039),
               ),
             ]),
-        child: ValueListenableBuilder(
+        child: ValueListenableBuilder<double>(
           valueListenable: page,
-          builder: (_, dynamic value, __) {
+          builder: (_, double value, __) {
             return Row(
               children: [
                 const SizedBox(width: 6),
@@ -92,9 +92,10 @@ class _PageSwitcher extends StatelessWidget {
                   opacity: _backButtonOpacity!,
                   child: TextButton(
                     onPressed: () async {
-                      if (value >= 1)
+                      if (value >= 1) {
                         return pageController.previousPage(
                             duration: _duration, curve: _curve);
+                      }
                     },
                     child: Text(tr('back'), style: _buttonsStyle),
                   ),
@@ -105,9 +106,10 @@ class _PageSwitcher extends StatelessWidget {
                   opacity: _nextButtonOpacity,
                   child: TextButton(
                     onPressed: () async {
-                      if (value <= 2)
+                      if (value <= 2) {
                         await pageController.nextPage(
                             duration: _duration, curve: _curve);
+                      }
                     },
                     child: Text(tr('next'), style: _buttonsStyle),
                   ),

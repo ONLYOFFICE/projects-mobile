@@ -46,11 +46,8 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var email;
-
-    if (Get.arguments != null) email = Get.arguments['email'];
-
-    var controller = Get.put(PasswordRecoveryController(email));
+    final email = Get.arguments['email'] as String;
+    final controller = Get.put(PasswordRecoveryController(email));
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -97,7 +94,7 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: WideButton(
                     text: tr('confirm'),
-                    onPressed: () => controller.onConfirmPressed(),
+                    onPressed: controller.onConfirmPressed,
                   ),
                 ),
               ],

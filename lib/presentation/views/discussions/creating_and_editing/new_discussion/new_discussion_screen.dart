@@ -45,15 +45,10 @@ class NewDiscussionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var projectId;
-    var projectTitle;
+    final projectId = Get.arguments['projectId'] as int?;
+    final projectTitle = Get.arguments['projectTitle'] as String?;
 
-    try {
-      projectId = Get.arguments['projectId'];
-      projectTitle = Get.arguments['projectTitle'];
-    } catch (_) {}
-
-    var controller = Get.put(NewDiscussionController(
+    final controller = Get.put(NewDiscussionController(
       projectId: projectId,
       projectTitle: projectTitle,
     ));

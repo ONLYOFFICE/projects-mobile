@@ -50,12 +50,12 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
-  final ProjectDetailed? item;
+  final ProjectDetailed item;
   const ProjectCell({Key? key, this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var itemController = Get.find<ProjectCellController>();
+    final itemController = Get.find<ProjectCellController>();
     itemController.setup(item);
 
     return Container(

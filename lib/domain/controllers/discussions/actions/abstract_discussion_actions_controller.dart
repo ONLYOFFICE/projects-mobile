@@ -36,18 +36,20 @@ import 'package:projects/domain/controllers/projects/new_project/portal_group_it
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class DiscussionActionsController {
-  RxString? text;
-  RxString? title;
-  var selectedProjectTitle;
-  RxList<PortalUserItemController>? subscribers;
-  RxList<PortalUserItemController>? otherUsers;
+  final text = RxString('');
+  final title = RxString('');
+  dynamic selectedProjectTitle;
+  RxList<PortalUserItemController> subscribers =
+      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> otherUsers =
+      <PortalUserItemController>[].obs;
 
   FocusNode get titleFocus => FocusNode();
   TextEditingController? _titleController;
   TextEditingController? _userSearchController;
   TextEditingController? get titleController => _titleController;
   TextEditingController? get userSearchController => _userSearchController;
-  var textController;
+  dynamic textController;
 
   var setTitleError;
   var setTextError;

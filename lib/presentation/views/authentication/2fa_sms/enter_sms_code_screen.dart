@@ -53,13 +53,13 @@ class EnterSMSCodeScreen extends StatelessWidget {
       controller = Get.find<TFASmsController>();
     } catch (e) {
       controller = Get.put(TFASmsController());
-      String? phoneNoise = Get.arguments['phoneNoise'];
-      var login = Get.arguments['login'];
-      var password = Get.arguments['password'];
+      final phoneNoise = Get.arguments['phoneNoise'] as String;
+      final login = Get.arguments['login'] as String;
+      final password = Get.arguments['password'] as String;
       controller.initLoginAndPass(login, password);
       controller.setPhoneNoise(phoneNoise);
     }
-    var codeController = MaskedTextController(mask: '*** ***');
+    final codeController = MaskedTextController(mask: '*** ***');
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -71,7 +71,6 @@ class EnterSMSCodeScreen extends StatelessWidget {
               color: Get.theme.backgroundColor,
               constraints: const BoxConstraints(maxWidth: 480),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: h(24.71)),
                   AppIcon(

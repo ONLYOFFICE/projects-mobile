@@ -45,7 +45,7 @@ class PasswordRecoveryScreen2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<PasswordRecoveryController>();
+    final controller = Get.find<PasswordRecoveryController>();
 
     return Scaffold(
       appBar: StyledAppBar(),

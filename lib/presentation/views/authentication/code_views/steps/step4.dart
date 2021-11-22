@@ -39,8 +39,8 @@ class _Step4 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
-    var codeController = MaskedTextController(mask: '000000');
+    final controller = Get.find<LoginController>();
+    final codeController = MaskedTextController(mask: '000000');
 
     return SingleChildScrollView(
       child: Column(

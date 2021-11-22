@@ -43,7 +43,7 @@ class AuthTextField extends StatelessWidget {
   final String? autofillHint;
   final TextEditingController? controller;
   final TextInputType? keyboardType;
-  final validator;
+  final String? Function(String?)? validator;
 
   const AuthTextField({
     Key? key,

@@ -43,7 +43,7 @@ class CustomNetworkImage extends StatelessWidget {
   final BoxFit? fit;
   final double? height;
   final double? width;
-  final defaultImage;
+  final Widget? defaultImage;
 
   const CustomNetworkImage({
     Key? key,
@@ -59,10 +59,11 @@ class CustomNetworkImage extends StatelessWidget {
     return FutureBuilder(
       future: locator<ImagesController>().getHeaders(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return CircleAvatar(
               backgroundColor:
                   Get.theme.colors().bgDescription.withOpacity(0.4));
+        }
         return CachedNetworkImage(
             imageUrl: locator<ImagesController>().getImagePath(image!),
             httpHeaders: snapshot.data as Map<String, String>?,

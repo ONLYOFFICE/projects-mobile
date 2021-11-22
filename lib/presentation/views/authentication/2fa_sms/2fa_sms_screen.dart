@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -47,10 +49,10 @@ class TFASmsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var login = Get.arguments['login'];
-    var password = Get.arguments['password'];
+    final login = Get.arguments['login'] as String;
+    final password = Get.arguments['password'] as String;
 
-    var controller = Get.put(TFASmsController());
+    final controller = Get.put(TFASmsController());
     controller.initLoginAndPass(login, password);
 
     return Scaffold(
@@ -111,7 +113,7 @@ class _CountrySelection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -121,7 +123,8 @@ class _CountrySelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: TextButton(
-              onPressed: () => Get.to(const SelectCountryScreen()),
+              onPressed: () =>
+                  Get.to<SelectCountryScreen>(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
                   controller.deviceCountry.value?.countryName ??

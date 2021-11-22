@@ -129,11 +129,12 @@ class Comment extends StatelessWidget {
 
 class _CommentAuthor extends StatelessWidget {
   final PortalComment comment;
-  final controller;
+  final CommentItemController controller;
+
   const _CommentAuthor({
     Key? key,
     required this.comment,
-    this.controller,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -171,7 +172,8 @@ class _CommentAuthor extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 35),
               child: PopupMenuButton(
-                onSelected: (dynamic value) => _onSelected(value, context, controller),
+                onSelected: (String value) =>
+                    _onSelected(value, context, controller),
                 icon: Icon(Icons.more_vert_rounded,
                     size: 25,
                     color: Get.theme.colors().onSurface.withOpacity(0.5)),
@@ -221,16 +223,20 @@ class _DeletedComment extends StatelessWidget {
   }
 }
 
-void _onSelected(value, context, CommentItemController? controller) async {
+Future<void> _onSelected(
+  String value,
+  BuildContext context,
+  CommentItemController controller,
+) async {
   switch (value) {
     case 'Copy link':
-      await controller!.copyLink(context);
+      await controller.copyLink(context);
       break;
     case 'Edit':
-      controller!.toCommentEditingView();
+      controller.toCommentEditingView();
       break;
     case 'Delete':
-      await controller!.deleteComment(context);
+      await controller.deleteComment(context);
       break;
     default:
   }

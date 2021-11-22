@@ -64,11 +64,11 @@ class DiscussionEditingController extends GetxController
   @override
   RxString? text;
   @override
-  RxList<PortalUserItemController>? subscribers =
+  RxList<PortalUserItemController> subscribers =
       <PortalUserItemController>[].obs;
 
   @override
-  RxList<PortalUserItemController>? otherUsers =
+  RxList<PortalUserItemController> otherUsers =
       <PortalUserItemController>[].obs;
 
   final initialSubscribers;
@@ -137,7 +137,7 @@ class DiscussionEditingController extends GetxController
 
   @override
   void confirmText() async {
-    text!.value = await textController.getText();
+    text.value = await textController.getText();
     Get.back();
   }
 
@@ -199,8 +199,8 @@ class DiscussionEditingController extends GetxController
   }
 
   Future<void> _getSelectedSubscribers() async {
-    _usersDataSource.usersList
-        .removeWhere((item) => item.portalUser!.status == UserStatus.Terminated);
+    _usersDataSource.usersList.removeWhere(
+        (item) => item.portalUser!.status == UserStatus.Terminated);
 
     otherUsers = RxList(_usersDataSource.usersList
         .where((element) => !subscribers!.any((it) => it.id == element.id))
@@ -243,11 +243,11 @@ class DiscussionEditingController extends GetxController
   @override
   void removeSubscriber(PortalUserItemController user) {
     user.isSelected!.value = false;
-    subscribers!
-        .removeWhere((element) => user.portalUser!.id == element.portalUser!.id);
+    subscribers!.removeWhere(
+        (element) => user.portalUser!.id == element.portalUser!.id);
     otherUsers!.add(user);
-    otherUsers!
-        .removeWhere((item) => item.portalUser!.status == UserStatus.Terminated);
+    otherUsers!.removeWhere(
+        (item) => item.portalUser!.status == UserStatus.Terminated);
     sortLists();
   }
 
@@ -290,7 +290,8 @@ class DiscussionEditingController extends GetxController
       }
     }
 
-    subscribers!.value = subscribers!.distinct((d) => d.portalUser!.id!).toList();
+    subscribers!.value =
+        subscribers!.distinct((d) => d.portalUser!.id!).toList();
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 

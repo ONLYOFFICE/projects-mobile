@@ -102,7 +102,7 @@ double getTopPadding(bool isMobile, double height) {
   if (isMobile) return 0;
 
   const contentArea = 550;
-  var freeArea = height - Get.statusBarHeight - 128;
+  final freeArea = height - Get.statusBarHeight - 128;
 
   if (freeArea - contentArea > 0) return (freeArea - contentArea) / 3;
   return 0;
