@@ -37,7 +37,7 @@ class Storage {
   final _storage = GetStorage();
 
   Future read(String key, {bool returnCopy = false}) async {
-    var data = await _storage.read(key);
+    final dynamic data = await _storage.read<dynamic>(key);
 
     if (returnCopy) return json.decode(json.encode(data));
 
@@ -45,15 +45,15 @@ class Storage {
   }
 
   // ignore: always_declare_return_types
-  getValue(String key) => _storage.read(key);
+  dynamic getValue(String key) => _storage.read<dynamic>(key);
 
   Future getKeys() async => await _storage.getKeys();
 
   Future getValues() async => await _storage.getValues();
 
-  Future write(String key, var value) async => await _storage.write(key, value);
+  Future write(String key, dynamic value) async => _storage.write(key, value);
 
-  Future<void> remove(String key) async => await _storage.remove(key);
+  Future<void> remove(String key) async => _storage.remove(key);
 
-  Future<void> removeAll() async => await _storage.erase();
+  Future<void> removeAll() async => _storage.erase();
 }

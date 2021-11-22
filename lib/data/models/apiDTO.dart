@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -37,6 +39,7 @@ class ApiDTO<T> {
     this.response,
     this.error,
   });
+
   T? response;
   CustomError? error;
 }
@@ -48,9 +51,9 @@ class PageDTO<T> {
     this.startIndex,
     this.total,
   });
+
   T? response;
   CustomError? error;
   int? startIndex;
-
   int? total;
 }

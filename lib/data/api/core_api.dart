@@ -163,7 +163,7 @@ class CoreApi {
   Future<String> projectsByParamsBaseUrl() async =>
       '${await getPortalURI()}/api/$version/project/filter?';
 
-  Future<String> tasksByParamsrUrl() async =>
+  Future<String> tasksByParamsUrl() async =>
       '${await getPortalURI()}/api/$version/project/task/filter?';
 
   Future<String> taskByIdUrl(int id) async =>
@@ -274,8 +274,6 @@ class CoreApi {
       final request = HttpClientHelper.get(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
       );
@@ -286,12 +284,13 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type']!.contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -309,8 +308,6 @@ class CoreApi {
       final request = HttpClientHelper.post(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
         body: jsonEncode(body),
@@ -323,12 +320,13 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type']!.contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -339,15 +337,14 @@ class CoreApi {
     }
   }
 
-  Future<dynamic> putRequest(String url, {Map body = const {}}) async {
+  Future<dynamic> putRequest(String url,
+      {Map<dynamic, dynamic> body = const <dynamic, dynamic>{}}) async {
     try {
       debugPrint(url);
       final headers = await getHeaders();
       final request = HttpClientHelper.put(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
         body: body.isEmpty ? null : jsonEncode(body),
@@ -359,12 +356,13 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type']!.contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
@@ -382,8 +380,6 @@ class CoreApi {
       final request = HttpClientHelper.delete(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
       );
@@ -394,12 +390,13 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type']!.contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
