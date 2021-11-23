@@ -56,23 +56,23 @@ class MoveFolderResponse {
       this.folders});
 
   MoveFolderResponse.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    operation = json['operation'];
-    progress = json['progress'];
-    error = json['error'];
-    processed = json['processed'];
-    finished = json['finished'];
-    url = json['url'];
+    id = json['id'] as String?;
+    operation = json['operation'] as int?;
+    progress = json['progress'] as int?;
+    error = json['error'] as String?;
+    processed = json['processed'] as String?;
+    finished = json['finished'] as bool?;
+    url = json['url'] as String?;
     if (json['files'] != null) {
       files = <PortalFile>[];
-      json['files'].forEach((v) {
-        files!.add(PortalFile.fromJson(v));
+      json['files'].forEach((e) {
+        files!.add(PortalFile.fromJson(e as Map<String, dynamic>));
       });
     }
     if (json['folders'] != null) {
       folders = <Folder>[];
-      json['folders'].forEach((v) {
-        folders!.add(Folder.fromJson(v));
+      json['folders'].forEach((e) {
+        folders!.add(Folder.fromJson(e as Map<String, dynamic>));
       });
     }
   }
@@ -87,10 +87,10 @@ class MoveFolderResponse {
     data['finished'] = finished;
     data['url'] = url;
     if (files != null) {
-      data['files'] = files!.map((v) => v.toJson()).toList();
+      data['files'] = files!.map((e) => e.toJson()).toList();
     }
     if (folders != null) {
-      data['folders'] = folders!.map((v) => v.toJson()).toList();
+      data['folders'] = folders!.map((e) => e.toJson()).toList();
     }
     return data;
   }
