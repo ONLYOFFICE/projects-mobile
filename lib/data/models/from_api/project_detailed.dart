@@ -83,37 +83,37 @@ class ProjectDetailed {
       this.tags});
 
   ProjectDetailed.fromJson(Map<String, dynamic> json) {
-    canEdit = json['canEdit'];
-    canDelete = json['canDelete'];
-    security = json['security'];
+    canEdit = json['canEdit'] as bool?;
+    canDelete = json['canDelete'] as bool?;
+    security = json['security'] as Map<String, dynamic>?;
 
     projectFolder = json['projectFolder'] is int
-        ? json['projectFolder']
-        : int.parse(json['projectFolder']);
-    id = json['id'];
-    title = json['title'];
-    description = json['description'];
-    status = json['status'];
+        ? json['projectFolder'] as int
+        : int.parse(json['projectFolder'] as String);
+    id = json['id'] as int?;
+    title = json['title'] as String?;
+    description = json['description'] as String?;
+    status = json['status'] as int?;
     responsible = json['responsible'] != null
-        ? PortalUser.fromJson(json['responsible'])
+        ? PortalUser.fromJson(json['responsible'] as Map<String, dynamic>)
         : null;
-    isPrivate = json['isPrivate'];
-    taskCount = json['taskCount'];
-    taskCountTotal = json['taskCountTotal'];
-    milestoneCount = json['milestoneCount'];
-    discussionCount = json['discussionCount'];
-    participantCount = json['participantCount'];
-    timeTrackingTotal = json['timeTrackingTotal'];
-    documentsCount = json['documentsCount'];
-    isFollow = json['isFollow'];
+    isPrivate = json['isPrivate'] as bool?;
+    taskCount = json['taskCount'] as int?;
+    taskCountTotal = json['taskCountTotal'] as int?;
+    milestoneCount = json['milestoneCount'] as int?;
+    discussionCount = json['discussionCount'] as int?;
+    participantCount = json['participantCount'] as int?;
+    timeTrackingTotal = json['timeTrackingTotal'] as String?;
+    documentsCount = json['documentsCount'] as int?;
+    isFollow = json['isFollow'] as bool?;
     updatedBy = json['updatedBy'] != null
-        ? PortalUser.fromJson(json['updatedBy'])
+        ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
         : null;
-    created = json['created'];
+    created = json['created'] as String?;
     createdBy = json['createdBy'] != null
-        ? PortalUser.fromJson(json['createdBy'])
+        ? PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>)
         : null;
-    updated = json['updated'];
-    tags = json['tags'] != null ? json['tags'].cast<String>() : null;
+    updated = json['updated'] as String?;
+    tags = json['tags'] != null ? (json['tags'] as List).cast<String>() : null;
   }
 }

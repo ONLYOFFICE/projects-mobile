@@ -41,19 +41,19 @@ import 'package:projects/data/models/from_api/error.dart';
 
 class GroupApi {
   Future<ApiDTO<List<PortalGroup>>> getAllGroups() async {
-    var url = await locator.get<CoreApi>().allGroups();
+    final url = await locator.get<CoreApi>().allGroups();
 
-    var result = ApiDTO<List<PortalGroup>>();
+    final result = ApiDTO<List<PortalGroup>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => PortalGroup.fromJson(i))
+            .map((i) => PortalGroup.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -76,20 +76,20 @@ class GroupApi {
       url += '&FilterValue=$query';
     }
 
-    var result = PageDTO<List<PortalGroup>>();
+    final result = PageDTO<List<PortalGroup>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['total'] as int?;
         {
           result.response = (responseJson['response'] as List)
-              .map((i) => PortalGroup.fromJson(i))
+              .map((i) => PortalGroup.fromJson(i as Map<String, dynamic>))
               .toList();
         }
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

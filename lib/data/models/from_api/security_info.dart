@@ -30,26 +30,26 @@
  *
  */
 
-class SecrityInfo {
+class SecurityInfo {
   bool? canCreateProject;
   bool? canCreateTask;
   bool? canCreateMilestone;
   bool? canCreateMessage;
   bool? canCreateTimeSpend;
 
-  SecrityInfo(
+  SecurityInfo(
       {this.canCreateProject,
       this.canCreateTask,
       this.canCreateMilestone,
       this.canCreateMessage,
       this.canCreateTimeSpend});
 
-  SecrityInfo.fromJson(Map<String, dynamic> json) {
-    canCreateProject = json['canCreateProject'];
-    canCreateTask = json['canCreateTask'];
-    canCreateMilestone = json['canCreateMilestone'];
-    canCreateMessage = json['canCreateMessage'];
-    canCreateTimeSpend = json['canCreateTimeSpend'];
+  SecurityInfo.fromJson(Map<String, dynamic> json) {
+    canCreateProject = json['canCreateProject'] as bool?;
+    canCreateTask = json['canCreateTask'] as bool?;
+    canCreateMilestone = json['canCreateMilestone'] as bool?;
+    canCreateMessage = json['canCreateMessage'] as bool?;
+    canCreateTimeSpend = json['canCreateTimeSpend'] as bool?;
   }
 
   Map<String, dynamic> toJson() {

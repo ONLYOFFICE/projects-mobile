@@ -44,7 +44,7 @@ class UserController extends GetxController {
   final _lock = Lock();
 
   PortalUser? user;
-  SecrityInfo? securityInfo;
+  SecurityInfo? securityInfo;
   RxBool loaded = false.obs;
 
   Future getUserInfo() async {

@@ -41,8 +41,8 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestoneService {
-  final MilestoneApi? _api = locator<MilestoneApi>();
-  final SecureStorage? _secureStorage = locator<SecureStorage>();
+  final MilestoneApi _api = locator<MilestoneApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   Future<List<Milestone>?> milestonesByFilter({
     int? startIndex,
@@ -55,7 +55,7 @@ class MilestoneService {
     String? deadlineFilter,
     String? query,
   }) async {
-    var milestones = await _api!.milestonesByFilter(
+    final milestones = await _api.milestonesByFilter(
       startIndex: startIndex,
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -67,12 +67,12 @@ class MilestoneService {
       query: query,
     );
 
-    var success = milestones.response != null;
+    final success = milestones.response != null;
 
     if (success) {
       return milestones.response;
     } else {
-      await Get.find<ErrorDialog>().show(milestones.error!.message!);
+      await Get.find<ErrorDialog>().show(milestones.error!.message);
       return null;
     }
   }
@@ -88,7 +88,7 @@ class MilestoneService {
     String? deadlineFilter,
     String? query,
   }) async {
-    var milestones = await _api!.milestonesByFilterPaginated(
+    final milestones = await _api.milestonesByFilterPaginated(
       startIndex: startIndex,
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -100,36 +100,36 @@ class MilestoneService {
       query: query,
     );
 
-    var success = milestones.response != null;
+    final success = milestones.response != null;
 
     if (success) {
       return milestones;
     } else {
-      await Get.find<ErrorDialog>().show(milestones.error!.message!);
+      await Get.find<ErrorDialog>().show(milestones.error!.message);
       return null;
     }
   }
 
   Future<bool> createMilestone(
-      {int? projectId, required NewMilestoneDTO milestone}) async {
-    var result = await _api!.createMilestone(
+      {required int projectId, required NewMilestoneDTO milestone}) async {
+    final result = await _api.createMilestone(
       projectId: projectId,
       milestone: milestone,
     );
 
-    var success = result.response != null;
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.createEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage!.getString('portalName'),
+            await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.milestone
       });
       return success;
     } else {
-      await Get.find<ErrorDialog>().show(result.error!.message!);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return false;
     }
   }

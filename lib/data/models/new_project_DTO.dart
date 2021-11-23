@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -38,36 +40,36 @@ class NewProjectDTO {
   bool? private;
   List<Participant>? participants;
   bool? notify;
+
   // List<Null> tasks;
   // List<Null> milestones;
   bool? notifyResponsibles;
 
-  NewProjectDTO(
-      {this.title,
-      this.description,
-      this.responsibleId,
-      this.tags,
-      this.private,
-      this.participants,
-      this.notify,
-      // tasks,
-      // milestones,
-      this.notifyResponsibles});
+  NewProjectDTO({this.title,
+    this.description,
+    this.responsibleId,
+    this.tags,
+    this.private,
+    this.participants,
+    this.notify,
+    // tasks,
+    // milestones,
+    this.notifyResponsibles});
 
   NewProjectDTO.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    description = json['description'];
-    responsibleId = json['responsibleId'];
-    tags = json['tags'];
-    private = json['private'];
+    title = json['title'] as String?;
+    description = json['description'] as String?;
+    responsibleId = json['responsibleId'] as String?;
+    tags = json['tags'] as String?;
+    private = json['private'] as bool?;
     if (json['participants'] != null) {
       participants = <Participant>[];
       json['participants'].forEach((v) {
-        participants!.add(Participant.fromJson(v));
+        participants!.add(Participant.fromJson(v as Map<String, dynamic>));
       });
     }
-    notify = json['notify'];
-    notifyResponsibles = json['notifyResponsibles'];
+    notify = json['notify'] as bool?;
+    notifyResponsibles = json['notifyResponsibles'] as bool?;
   }
 
   Map<String, dynamic> toJson() {
@@ -111,12 +113,12 @@ class Participant {
   });
 
   Participant.fromJson(Map<String, dynamic> json) {
-    iD = json['ID'];
-    canReadFiles = json['CanReadFiles'];
-    canReadMilestones = json['CanReadMilestones'];
-    canReadMessages = json['CanReadMessages'];
-    canReadTasks = json['CanReadTasks'];
-    canReadContacts = json['CanReadContacts'];
+    iD = json['ID'] as String?;
+    canReadFiles = json['CanReadFiles'] as bool?;
+    canReadMilestones = json['CanReadMilestones'] as bool?;
+    canReadMessages = json['CanReadMessages'] as bool?;
+    canReadTasks = json['CanReadTasks'] as bool?;
+    canReadContacts = json['CanReadContacts'] as bool?;
   }
 
   Map<String, dynamic> toJson() {
@@ -153,19 +155,19 @@ class EditProjectDTO {
   });
 
   EditProjectDTO.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    description = json['description'];
-    responsibleId = json['responsibleId'];
-    tags = json['tags'];
+    title = json['title'] as String?;
+    description = json['description'] as String?;
+    responsibleId = json['responsibleId'] as String?;
+    tags = json['tags'] as String?;
     if (json['participants'] != null) {
       participants = <Participant>[];
       json['participants'].forEach((v) {
-        participants!.add(Participant.fromJson(v));
+        participants!.add(Participant.fromJson(v as Map<String, dynamic>));
       });
     }
-    private = json['private'];
-    status = json['status'];
-    notify = json['notify'];
+    private = json['private'] as bool?;
+    status = json['status'] as int?;
+    notify = json['notify'] as bool?;
   }
 
   Map<String, dynamic> toJson() {

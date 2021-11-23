@@ -57,17 +57,17 @@ class Status {
       this.available});
 
   Status.fromJson(Map<String, dynamic> json) {
-    statusType = json['statusType'];
-    canChangeAvailable = json['canChangeAvailable'];
-    id = json['id'];
-    image = json['image'];
-    imageType = json['imageType'];
-    title = json['title'];
-    description = json['description'];
-    color = json['color'];
-    order = json['order'];
-    isDefault = json['isDefault'];
-    available = json['available'];
+    statusType = json['statusType'] as int?;
+    canChangeAvailable = json['canChangeAvailable'] as bool?;
+    id = json['id'] as int?;
+    image = json['image'] as String?;
+    imageType = json['imageType'] as String?;
+    title = json['title'] as String?;
+    description = json['description'] as String?;
+    color = json['color'] as String?;
+    order = json['order'] as int?;
+    isDefault = json['isDefault'] as bool?;
+    available = json['available'] as bool?;
   }
 
   Map<String, dynamic> toJson() {
@@ -86,5 +86,5 @@ class Status {
     return data;
   }
 
-  bool get isNull => this == null || id == null || title == null;
+  bool get isNull => id == null || title == null;
 }

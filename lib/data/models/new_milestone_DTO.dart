@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -41,23 +43,24 @@ class NewMilestoneDTO {
   String? responsible;
   bool? notifyResponsible;
 
-  NewMilestoneDTO(
-      {this.title,
-      this.deadline,
-      this.isKey,
-      this.isNotify,
-      this.description,
-      this.responsible,
-      this.notifyResponsible});
+  NewMilestoneDTO({this.title,
+    this.deadline,
+    this.isKey,
+    this.isNotify,
+    this.description,
+    this.responsible,
+    this.notifyResponsible});
 
   NewMilestoneDTO.fromJson(Map<String, dynamic> json) {
-    title = json['title'];
-    deadline = json['deadline'];
-    isKey = json['isKey'];
-    isNotify = json['isNotify'];
-    description = json['description'];
-    responsible = json['responsible'];
-    notifyResponsible = json['notifyResponsible'];
+    title = json['title'] as String?;
+    deadline = json['deadline'] != null
+        ? DateTime.parse(json['deadline'] as String)
+        : null;
+    isKey = json['isKey'] as bool?;
+    isNotify = json['isNotify'] as bool?;
+    description = json['description'] as String?;
+    responsible = json['responsible'] as String?;
+    notifyResponsible = json['notifyResponsible'] as bool?;
   }
 
   Map<String, dynamic> toJson() {
@@ -65,7 +68,7 @@ class NewMilestoneDTO {
     data['title'] = title;
 
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
-    var duedate = formatter.format(deadline!);
+    final duedate = formatter.format(deadline!);
     data['deadline'] = duedate;
 
     data['isKey'] = isKey;
