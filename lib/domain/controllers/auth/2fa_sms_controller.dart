@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -41,16 +43,16 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_code_screen.dart';
 
 class TFASmsController extends GetxController {
-  final NumbersService? _numberService = locator<NumbersService>();
-  final SmsCodeService? _service = locator<SmsCodeService>();
+  final NumbersService _numberService = locator<NumbersService>();
+  final SmsCodeService _service = locator<SmsCodeService>();
 
-  var loaded = false.obs;
-  var searching = false.obs;
-  var codeError = false.obs;
+  RxBool loaded = false.obs;
+  RxBool searching = false.obs;
+  RxBool codeError = false.obs;
 
-  var _userName;
-  var _password;
-  var _phoneNoise;
+  late String _userName;
+  late String _password;
+  String? _phoneNoise;
 
   late String _locale;
   List<CountryWithPhoneCode>? _countries;
@@ -59,8 +61,11 @@ class TFASmsController extends GetxController {
 
   final _phoneCodeController = TextEditingController();
   MaskedTextController? _phoneNumberController;
+
   TextEditingController get phoneCodeController => _phoneCodeController;
+
   MaskedTextController? get phoneNumberController => _phoneNumberController;
+
   String? get phoneNoise => _phoneNoise;
 
   String get number {
@@ -72,17 +77,16 @@ class TFASmsController extends GetxController {
   @override
   void onInit() async {
     loaded = false.obs;
-    await _numberService!.init();
-    _locale = _numberService!.localeCode;
-    _countries = _numberService!.countries as List<CountryWithPhoneCode>?;
+    await _numberService.init();
+    _locale = _numberService.localeCode;
+    _countries = _numberService.countries as List<CountryWithPhoneCode>?;
     _countries!.sort((a, b) => a.countryName![0].compareTo(b.countryName![0]));
     countriesToShow = _countries!.obs;
 
     try {
       deviceCountry = _countries!
-          .firstWhere((element) => element.countryCode
-              .toLowerCase()
-              .contains(_locale.toLowerCase()))
+          .firstWhere((element) =>
+              element.countryCode.toLowerCase().contains(_locale.toLowerCase()))
           .obs;
       _phoneCodeController.text = deviceCountry.value!.phoneCode;
       _phoneNumberController = MaskedTextController(
@@ -96,30 +100,31 @@ class TFASmsController extends GetxController {
     super.onInit();
   }
 
-  void initLoginAndPass(String? login, String? password) {
+  void initLoginAndPass(String login, String password) {
     _userName = login;
     _password = password;
   }
 
-  void setPhoneNoise(phoneNoise) => _phoneNoise = phoneNoise;
+  void setPhoneNoise(String phoneNoise) => _phoneNoise = phoneNoise;
 
   void onSearchPressed() => searching.toggle();
-  void onSendCodePressed() async {
-    var result = await setPhone();
+
+  Future<void> onSendCodePressed() async {
+    final result = await setPhone();
     if (result != null) await Get.to(() => const EnterSMSCodeScreen());
   }
 
-  void onConfirmPressed(String code) async {
+  Future<void> onConfirmPressed(String code) async {
     codeError.value = false;
-    var loginController = Get.find<LoginController>();
-    var resp = await loginController.sendCode(code.removeAllWhitespace,
+    final loginController = Get.find<LoginController>();
+    final resp = await loginController.sendCode(code.removeAllWhitespace,
         userName: _userName, password: _password);
 
     if (resp == false) codeError.value = true;
   }
 
-  void resendSms() async {
-    await _service!.sendSms(
+  Future<void> resendSms() async {
+    await _service.sendSms(
       userName: _userName,
       password: _password,
     );
@@ -149,18 +154,18 @@ class TFASmsController extends GetxController {
 
   String get numberHint {
     return deleteNumberPrefix(
-            deviceCountry.value!.phoneMaskFixedLineInternational)
+        deviceCountry.value!.phoneMaskFixedLineInternational)
         .replaceAll('0', '_');
   }
 
   Future setPhone() async {
-    var result = await _service!.setPhone(
+    final result = await _service.setPhone(
       mobilePhone: number,
       userName: _userName,
       password: _password,
     );
 
-    _phoneNoise = result.phoneNoise;
+    _phoneNoise = result.phoneNoise as String?;
     _phoneNumberController!.clear();
 
     return result;

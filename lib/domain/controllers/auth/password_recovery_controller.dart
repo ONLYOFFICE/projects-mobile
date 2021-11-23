@@ -37,25 +37,27 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
 
 class PasswordRecoveryController extends GetxController {
-  final String? _email;
-  final AuthService? _authService = locator<AuthService>();
+  late final String _email;
+  final AuthService _authService = locator<AuthService>();
 
   PasswordRecoveryController(this._email);
 
   @override
   void onInit() {
-    _emailController.text = _email!;
+    _emailController.text = _email;
     super.onInit();
   }
 
   final TextEditingController _emailController = TextEditingController();
+
   TextEditingController get emailController => _emailController;
 
-  var emailFieldError = false.obs;
+  RxBool emailFieldError = false.obs;
 
   Future onConfirmPressed() async {
     if (_checkEmail()) {
-      var result = await _authService!.passwordRecovery(_emailController.text);
+      final result =
+          await _authService.passwordRecovery(email: _emailController.text);
       if (result != null) await Get.to(() => const PasswordRecoveryScreen2());
     }
   }

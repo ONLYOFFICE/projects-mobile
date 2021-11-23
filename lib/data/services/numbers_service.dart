@@ -45,5 +45,5 @@ class NumbersService {
 
   List get countries => CountryManager().countries;
   String get localeCode =>
-      _locale!.substring(_locale!.indexOf('_') + 1 ?? 0, _locale!.length);
+      _locale!.substring(_locale!.indexOf('_') + 1, _locale!.length);
 }

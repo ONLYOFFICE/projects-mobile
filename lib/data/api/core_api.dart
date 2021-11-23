@@ -143,14 +143,14 @@ class CoreApi {
   Future<String> getDiscussionCommentLink({
     required int discussionId,
     required int projectId,
-    required int commentId,
+    required String commentId,
   }) async =>
       '${await getPortalURI()}/Products/Projects/Messages.aspx?prjID=$projectId&id=$discussionId#comment_$commentId';
 
   Future<String> getTaskCommentLink({
     required int taskId,
     required int projectId,
-    required int commentId,
+    required String commentId,
   }) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#comment_$commentId';
 

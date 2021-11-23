@@ -63,23 +63,24 @@ class PortalComment {
     this.userProfileLink,
   });
   factory PortalComment.fromJson(Map<String, dynamic> json) => PortalComment(
-        commentId: json['commentID'],
-        userId: json['userID'],
-        userPost: json['userPost'],
-        userFullName: json['userFullName'],
-        userProfileLink: json['userProfileLink'],
-        userAvatarPath: json['userAvatarPath'],
-        commentBody: json['commentBody'],
-        inactive: json['inactive'],
-        isRead: json['isRead'],
-        isEditPermissions: json['isEditPermissions'],
-        isResponsePermissions: json['isResponsePermissions'],
-        timeStampStr: json['timeStampStr'],
+        commentId: json['commentID'] as String?,
+        userId: json['userID'] as String?,
+        userPost: json['userPost'] as String?,
+        userFullName: json['userFullName'] as String?,
+        userProfileLink: json['userProfileLink'] as String?,
+        userAvatarPath: json['userAvatarPath'] as String?,
+        commentBody: json['commentBody'] as String?,
+        inactive: json['inactive'] as bool?,
+        isRead: json['isRead'] as bool?,
+        isEditPermissions: json['isEditPermissions'] as bool?,
+        isResponsePermissions: json['isResponsePermissions'] as bool?,
+        timeStampStr: json['timeStampStr'] as String?,
         commentList: (json['commentList'] != null)
-            ? List<PortalComment>.from(
-                json['commentList'].map((x) => PortalComment.fromJson(x)))
+            ? (json['commentList'] as List<Map<String, dynamic>>)
+                .map((e) => PortalComment.fromJson(e))
+                .toList()
             : null,
-        attachments: json['attachments'],
+        attachments: json['attachments'] as dynamic,
       );
 
   Map<String, dynamic> toJson() => {
@@ -100,7 +101,9 @@ class PortalComment {
       };
 
   bool get hasDisplayedReplies {
-    for (var item in commentList!) if (!item.inactive!) return true;
+    for (final item in commentList!) {
+      if (!item.inactive!) return true;
+    }
     return false;
   }
 
