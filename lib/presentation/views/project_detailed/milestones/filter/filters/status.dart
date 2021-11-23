@@ -37,7 +37,7 @@ class _Status extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<MilestonesFilterController>();
+    final filterController = Get.find<MilestonesFilterController>();
     return Obx(
       () => FiltersRow(
         title: tr('status'),
@@ -45,12 +45,12 @@ class _Status extends StatelessWidget {
           FilterElement(
               title: tr('active'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status!['active'],
+              isSelected: filterController.status?['active'] as bool?,
               onTap: () => filterController.changeStatus('active')),
           FilterElement(
               title: tr('closed'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status!['closed'],
+              isSelected: filterController.status?['closed'] as bool?,
               onTap: () => filterController.changeStatus('closed')),
         ],
       ),

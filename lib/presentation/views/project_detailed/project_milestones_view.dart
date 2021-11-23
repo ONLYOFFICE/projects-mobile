@@ -133,7 +133,7 @@ class _Content extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (c, i) => MilestoneCell(
                       milestone: controller.paginationController.data[i]),
-                  itemExtent: 72.0,
+                  itemExtent: 72,
                   itemCount: controller.paginationController.data.length,
                 ),
               ),

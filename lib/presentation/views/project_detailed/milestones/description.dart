@@ -45,8 +45,8 @@ class NewMilestoneDescription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NewMilestoneController newMilestoneController =
-        Get.arguments['newMilestoneController'];
+    final newMilestoneController =
+        Get.arguments['newMilestoneController'] as NewMilestoneController;
 
     final platformController = Get.find<PlatformController>();
 

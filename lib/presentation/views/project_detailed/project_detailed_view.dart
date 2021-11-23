@@ -67,10 +67,11 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   // ignore: prefer_final_fields
   RxInt _activeIndex = 0.obs;
 
-  ProjectDetailed? projectDetailed = Get.arguments['projectDetailed'];
+  ProjectDetailed projectDetailed =
+      Get.arguments['projectDetailed'] as ProjectDetailed;
 
-  ProjectDetailsController? projectController;
-  ProjectDiscussionsController? discussionsController;
+  late ProjectDetailsController projectController;
+  late ProjectDiscussionsController discussionsController;
   final documentsController = Get.find<DocumentsController>();
 
   @override
@@ -78,30 +79,30 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     super.initState();
 
     discussionsController =
-        Get.put(ProjectDiscussionsController(projectDetailed!));
+        Get.put(ProjectDiscussionsController(projectDetailed));
 
     projectController = Get.find<ProjectDetailsController>();
-    projectController!.setup(Get.arguments['projectDetailed']);
+    projectController.setup(Get.arguments['projectDetailed']);
 
     documentsController.setupFolder(
-        folderName: projectDetailed!.title!,
-        folderId: projectDetailed!.projectFolder);
+        folderName: projectDetailed.title!,
+        folderId: projectDetailed.projectFolder);
 
     _tabController = TabController(
       vsync: this,
       length: 6,
     );
 
-    projectController!.addProjectDetailsListeners(() {
-      projectDetailed = projectController!.projectData;
-      discussionsController!.setup(projectDetailed!);
+    projectController.addProjectDetailsListeners(() {
+      projectDetailed = projectController.projectData!;
+      discussionsController.setup(projectDetailed);
       documentsController.setupFolder(
-          folderName: projectDetailed!.title!,
-          folderId: projectDetailed!.projectFolder);
+          folderName: projectDetailed.title!,
+          folderId: projectDetailed.projectFolder);
     });
 
     documentsController.filesCount.listen((count) {
-      projectController!.docsCount.value = count;
+      projectController.docsCount.value = count;
     });
   }
 
@@ -123,18 +124,19 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            projectController!.projectData!.canEdit!
+            projectController.projectData!.canEdit!
                 ? IconButton(
                     icon: const Icon(Icons.edit_outlined),
                     onPressed: () => Get.find<NavigationController>().to(
                             EditProjectView(
-                                projectDetailed: projectController!.projectData),
+                                projectDetailed: projectController.projectData),
                             arguments: {
-                              'projectDetailed': projectController!.projectData
+                              'projectDetailed': projectController.projectData
                             }))
                 : const SizedBox(),
-            if (!projectController!.projectData!.security!['isInTeam'] ||
-                projectController!.projectData!.canDelete!)
+            if (!(projectController.projectData!.security!['isInTeam']
+                    as bool) ||
+                projectController.projectData!.canDelete!)
               _ProjectContextMenu(controller: projectController)
           ],
           bottom: SizedBox(
@@ -152,23 +154,23 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('tasks'),
                       currentTab: _activeIndex.value == 1,
-                      count: projectController!.tasksCount.value),
+                      count: projectController.tasksCount.value),
                   CustomTab(
                       title: tr('milestones'),
                       currentTab: _activeIndex.value == 2,
-                      count: projectController!.milestoneCount.value),
+                      count: projectController.milestoneCount.value),
                   CustomTab(
                       title: tr('discussions'),
                       currentTab: _activeIndex.value == 3,
-                      count: projectController!.projectData!.discussionCount),
+                      count: projectController.projectData!.discussionCount),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
-                      count: projectController!.docsCount.value),
+                      count: projectController.docsCount.value),
                   CustomTab(
                       title: tr('team'),
                       currentTab: _activeIndex.value == 5,
-                      count: projectController!.projectData!.participantCount),
+                      count: projectController.projectData!.participantCount),
                 ]),
           ),
         ),
@@ -176,18 +178,18 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ProjectOverview(
               projectController: projectController,
               tabController: _tabController),
-          ProjectTaskScreen(projectDetailed: projectController!.projectData),
+          ProjectTaskScreen(projectDetailed: projectController.projectData),
           ProjectMilestonesScreen(
-              projectDetailed: projectController!.projectData),
+              projectDetailed: projectController.projectData),
           ProjectDiscussionsScreen(controller: discussionsController),
           EntityDocumentsView(
-            folderId: projectController!.projectData!.projectFolder,
-            folderName: projectController!.projectData!.title,
+            folderId: projectController.projectData!.projectFolder,
+            folderName: projectController.projectData!.title,
             documentsController: documentsController,
           ),
           ProjectTeamView(
-              projectDetailed: projectController!.projectData,
-              fabAction: projectController!.manageTeamMembers),
+              projectDetailed: projectController.projectData,
+              fabAction: projectController.manageTeamMembers),
         ]),
       ),
     );
@@ -195,7 +197,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 }
 
 class _ProjectContextMenu extends StatelessWidget {
-  final controller;
+  final ProjectDetailsController controller;
   const _ProjectContextMenu({Key? key, required this.controller})
       : super(key: key);
 
@@ -210,14 +212,14 @@ class _ProjectContextMenu extends StatelessWidget {
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           // if (controller.projectDetailed.canEdit)
           //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          if (!controller.projectData.security['isInTeam'])
+          if (!(controller.projectData?.security?['isInTeam'] as bool))
             PopupMenuItem(
               value: 'follow',
-              child: controller.projectData.isFollow
+              child: controller.projectData?.isFollow as bool
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
             ),
-          if (controller.projectData.canDelete)
+          if (controller.projectData?.canDelete as bool)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle!
                   .copyWith(color: Get.theme.colors().colorError),
@@ -234,7 +236,7 @@ class _ProjectContextMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(value, controller, context) async {
+Future<void> _onSelected(value, controller, BuildContext context) async {
   switch (value) {
     case 'copyLink':
       controller.copyLink();

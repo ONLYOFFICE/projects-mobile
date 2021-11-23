@@ -62,12 +62,12 @@ class SelfProfileScreen extends StatelessWidget {
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
-    var showBackButton = Get.arguments == null
+    final showBackButton = Get.arguments == null
         ? false
-        : Get.arguments['showBackButton'] ?? false;
+        : Get.arguments['showBackButton'] as bool? ?? false;
     var showSettingsButton = Get.arguments == null
         ? true
-        : Get.arguments['showSettingsButton'] ?? true;
+        : Get.arguments['showSettingsButton'] as bool? ?? true;
 
     final platformController = Get.find<PlatformController>();
 
@@ -77,7 +77,7 @@ class SelfProfileScreen extends StatelessWidget {
         backgroundColor:
             platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          showBackButton: showBackButton ?? false,
+          showBackButton: showBackButton,
           backgroundColor:
               platformController.isMobile ? null : Get.theme.colors().surface,
           backButtonIcon: Get.put(PlatformController()).isMobile
@@ -107,7 +107,7 @@ class SelfProfileScreen extends StatelessWidget {
                           ? 0.4
                           : 1.0,
                       child: CircleAvatar(
-                        radius: 60.0,
+                        radius: 60,
                         backgroundColor: Get.theme.colors().bgDescription,
                         child: ClipRRect(
                             borderRadius: BorderRadius.circular(60),
@@ -189,8 +189,8 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PortalUser portalUser = Get.arguments['portalUser'];
-    var portalInfoController = Get.find<PortalInfoController>();
+    final portalUser = Get.arguments['portalUser'] as PortalUser;
+    final portalInfoController = Get.find<PortalInfoController>();
     portalInfoController.setup();
 
     return WillPopScope(
