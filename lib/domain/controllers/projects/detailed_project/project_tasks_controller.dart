@@ -41,10 +41,10 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 
 class ProjectTasksController extends GetxController {
-  final TaskService? _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
-  final paginationController =
-      Get.put(PaginationController(), tag: 'ProjectTasksController');
+  final paginationController = Get.put(PaginationController<PortalTask>(),
+      tag: 'ProjectTasksController');
 
   final _sortController =
       Get.put(TasksSortController(), tag: 'ProjectTasksController');
@@ -58,11 +58,11 @@ class ProjectTasksController extends GetxController {
 
   RxBool loaded = false.obs;
 
-  var hasFilters = false.obs;
+  RxBool hasFilters = false.obs;
 
   int? _projectId;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
@@ -82,8 +82,8 @@ class ProjectTasksController extends GetxController {
     loaded.value = true;
   }
 
-  Future _getTasks({needToClear = false}) async {
-    var result = await (_api!.getTasksByParams(
+  Future _getTasks({bool needToClear = false}) async {
+    var result = await (_api.getTasksByParams(
         startIndex: paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
         sortOrder: _sortController.currentSortOrder,

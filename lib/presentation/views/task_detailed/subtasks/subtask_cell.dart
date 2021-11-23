@@ -52,7 +52,7 @@ class SubtaskCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var subtaskController = Get.put(
+    final subtaskController = Get.put(
       SubtaskController(subtask: subtask, parentTask: parentTask),
       tag: subtask.hashCode.toString(),
     );
@@ -90,13 +90,14 @@ class SubtaskCell extends StatelessWidget {
                                     .subtask.value!.responsible?.displayName ??
                                 tr('nobody'),
                             style: TextStyleHelper.caption(
-                                color: subtaskController.subtask.value!.status ==
-                                        SubtaskStatus.CLOSED
-                                    ? const Color(0xffc2c2c2)
-                                    : Get.theme
-                                        .colors()
-                                        .onBackground
-                                        .withOpacity(0.6))),
+                                color:
+                                    subtaskController.subtask.value!.status ==
+                                            SubtaskStatus.CLOSED
+                                        ? const Color(0xffc2c2c2)
+                                        : Get.theme
+                                            .colors()
+                                            .onBackground
+                                            .withOpacity(0.6))),
                       ],
                     ),
                   ),
@@ -146,7 +147,8 @@ class SubtaskCell extends StatelessWidget {
   }
 }
 
-void _onSelected(context, value, SubtaskController controller) async {
+void _onSelected(
+    BuildContext context, value, SubtaskController controller) async {
   print(value);
   switch (value) {
     case 'acceptSubtask':

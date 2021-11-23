@@ -48,11 +48,11 @@ class SubtaskDetailedView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SubtaskController? controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'] as SubtaskController;
 
     return Obx(
       () {
-        var _subtask = controller!.subtask.value!;
+        var _subtask = controller.subtask.value!;
         return Scaffold(
           appBar: StyledAppBar(
             actions: [
@@ -169,10 +169,10 @@ class SubtaskDetailedView extends StatelessWidget {
   }
 }
 
-void _onSelected(context, value, SubtaskController? controller) {
+void _onSelected(BuildContext context, value, SubtaskController controller) {
   switch (value) {
     case 'accept':
-      controller!.acceptSubtask(
+      controller.acceptSubtask(
         context,
         taskId: controller.subtask.value!.taskId,
         subtaskId: controller.subtask.value!.id,
@@ -181,21 +181,21 @@ void _onSelected(context, value, SubtaskController? controller) {
     case 'edit':
       Get.find<NavigationController>()
           .to(const CreatingAndEditingSubtaskView(), arguments: {
-        'taskId': controller!.subtask.value!.taskId,
+        'taskId': controller.subtask.value!.taskId,
         'projectId': controller.parentTask!.projectOwner!.id,
         'forEditing': true,
         'itemController': controller,
       });
       break;
     case 'copy':
-      controller!.copySubtask(
+      controller.copySubtask(
         context,
         taskId: controller.subtask.value!.taskId,
         subtaskId: controller.subtask.value!.id,
       );
       break;
     case 'delete':
-      controller!.deleteSubtask(
+      controller.deleteSubtask(
         context: context,
         taskId: controller.subtask.value!.taskId,
         subtaskId: controller.subtask.value!.id,

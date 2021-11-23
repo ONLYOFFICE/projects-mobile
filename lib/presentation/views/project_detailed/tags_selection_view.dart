@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/tag_itemDTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 
@@ -225,13 +226,13 @@ class _TagsList extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemBuilder: (c, i) => TagItem(
-              tagItemDTO: controller.tags[i],
+              tagItemDTO: controller.tags[i] as TagItemDTO?,
               onTapFunction: () {
                 controller.changeTagSelection(controller.tags[i]);
               },
             ),
-            itemExtent: 65.0,
-            itemCount: controller.tags.length,
+            itemExtent: 65,
+            itemCount: controller.tags.length as int?,
           ),
         )
       ],

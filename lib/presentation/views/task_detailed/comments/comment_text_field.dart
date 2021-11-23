@@ -46,7 +46,7 @@ class CommentTextField extends StatelessWidget {
       () => TextField(
         maxLines: null,
         autofocus: true,
-        controller: controller.textController,
+        controller: controller.textController as TextEditingController?,
         scrollPadding: const EdgeInsets.all(10),
         decoration: InputDecoration.collapsed(
           hintText: tr('replyText'),

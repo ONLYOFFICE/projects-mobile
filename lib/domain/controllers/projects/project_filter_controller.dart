@@ -43,8 +43,8 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class ProjectsFilterController extends BaseFilterController {
-  final ProjectService? _api = locator<ProjectService>();
-  final Storage? _storage = locator<Storage>();
+  final ProjectService _api = locator<ProjectService>();
+  final Storage _storage = locator<Storage>();
 
   final _sortController = Get.find<ProjectsSortController>();
   Function? applyFiltersDelegate;
@@ -67,10 +67,10 @@ class ProjectsFilterController extends BaseFilterController {
       _otherFilter!.isNotEmpty ||
       _statusFilter!.isNotEmpty;
 
-  late RxMap projectManager;
-  late RxMap teamMember;
-  late RxMap other;
-  late RxMap status;
+  late RxMap<String, dynamic> projectManager;
+  late RxMap<String, dynamic> teamMember;
+  late RxMap<String, dynamic> other;
+  late RxMap<String, bool> status;
 
   @override
   String get filtersTitle =>
@@ -199,7 +199,7 @@ class ProjectsFilterController extends BaseFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await (_api!.getProjectsByParams(
+    var result = await (_api.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectManagerFilter: projectManagerFilter,
@@ -279,7 +279,7 @@ class ProjectsFilterController extends BaseFilterController {
 
   @override
   Future<void> saveFilters() async {
-    await _storage!.write(
+    await _storage.write(
       'projectFilters',
       {
         'projectManager': {
@@ -306,7 +306,7 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    var savedFilters = await _storage!.read('projectFilters');
+    var savedFilters = await _storage.read('projectFilters');
 
     if (savedFilters != null) {
       try {

@@ -70,7 +70,7 @@ class NewProjectDescription extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: TextField(
           autofocus: true,
-          controller: controller.descriptionController,
+          controller: controller.descriptionController as TextEditingController,
           maxLines: null,
           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           decoration: InputDecoration.collapsed(

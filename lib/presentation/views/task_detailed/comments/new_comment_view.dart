@@ -44,7 +44,7 @@ class NewCommentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    NewCommentController controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'] as NewCommentController;
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(

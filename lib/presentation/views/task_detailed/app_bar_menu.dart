@@ -45,7 +45,7 @@ class _AppBarMenu extends StatelessWidget {
       onSelected: (dynamic value) => _onSelected(context, value, controller!),
       itemBuilder: (context) {
         return [
-          if (controller!.canEdit && task!.responsibles!.isEmpty)
+          if (controller!.canEdit && task.responsibles!.isEmpty)
             PopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
@@ -61,8 +61,8 @@ class _AppBarMenu extends StatelessWidget {
             ),
           PopupMenuItem(
             value: 'followTask',
-            child:
-                Text(task!.isSubscribed! ? tr('unfollowTask') : tr('followTask')),
+            child: Text(
+                task.isSubscribed! ? tr('unfollowTask') : tr('followTask')),
           ),
           if (controller!.canEdit)
             PopupMenuItem(
@@ -82,7 +82,8 @@ class _AppBarMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(context, value, TaskItemController controller) async {
+void _onSelected(
+    BuildContext context, value, TaskItemController controller) async {
   var task = controller.task.value;
   switch (value) {
     case 'accept':
@@ -90,7 +91,7 @@ void _onSelected(context, value, TaskItemController controller) async {
       break;
 
     case 'copyLink':
-      controller.copyLink(taskId: task!.id, projectId: task.projectOwner!.id);
+      controller.copyLink(taskId: task.id, projectId: task.projectOwner!.id);
       break;
 
     case 'editTask':
@@ -99,7 +100,7 @@ void _onSelected(context, value, TaskItemController controller) async {
       break;
 
     case 'followTask':
-      var result = await controller.subscribeToTask(taskId: task!.id);
+      var result = await controller.subscribeToTask(taskId: task.id);
       if (result) await controller.reloadTask();
       break;
 
@@ -114,7 +115,7 @@ void _onSelected(context, value, TaskItemController controller) async {
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
-          var result = await controller.deleteTask(taskId: task!.id);
+          var result = await controller.deleteTask(taskId: task.id);
           if (result) {
             locator<EventHub>().fire('needToRefreshProjects');
             locator<EventHub>().fire('needToRefreshTasks');

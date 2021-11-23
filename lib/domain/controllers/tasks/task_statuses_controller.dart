@@ -41,10 +41,10 @@ import 'package:projects/internal/utils/debug_print.dart';
 import 'package:projects/internal/utils/image_decoder.dart';
 
 class TaskStatusesController extends GetxController {
-  final TaskService? _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
+  RxList<Status> statuses = <Status>[].obs;
+  RxList<String> statusImagesDecoded = <String>[].obs;
   RxBool loaded = false.obs;
 
   Future getStatuses() async {
@@ -55,10 +55,11 @@ class TaskStatusesController extends GetxController {
   Future<void> _updateStatuses({bool forceReload = false}) async {
     if (forceReload || loaded.value != false) {
       loaded.value = false;
-      statuses.value = await (_api!.getStatuses() as Future<List<dynamic>>);
+      statuses.value = await _api.getStatuses() as List<Status>;
       statusImagesDecoded.clear();
-      for (var element in statuses) {
-        statusImagesDecoded.add(decodeImageString(element.image));
+      for (final element in statuses) {
+        if (element.image == null) continue;
+        statusImagesDecoded.add(decodeImageString(element.image as String));
       }
       loaded.value = true;
     }
@@ -66,8 +67,7 @@ class TaskStatusesController extends GetxController {
 
   Future getTaskStatus(PortalTask? task) async {
     if (!loaded.isFalse) {
-      var status;
-      status = await _findStatus(task!);
+      final status = await _findStatus(task!);
       if (status == null && !loaded.isFalse) {
         printWarning('TASK ID ${task.id} STATUS DIDNT FIND');
         await _updateStatuses();
@@ -77,18 +77,19 @@ class TaskStatusesController extends GetxController {
     }
   }
 
-  Future _findStatus(PortalTask task) async {
-    var status;
+  Future<Status?> _findStatus(PortalTask task) async {
+    // TODO async???
+    Status status;
 
     if (task.customTaskStatus != null) {
       status = statuses.firstWhere(
         (element) => element.id == task.customTaskStatus,
-        orElse: () => null,
+        orElse: () => Status(),
       );
     } else {
       status = statuses.firstWhere(
         (element) => -element.id == task.status,
-        orElse: () => null,
+        orElse: () => Status(),
       );
       status ??= statuses.lastWhere(
         (element) => element.statusType == task.status,

@@ -39,7 +39,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class AdvancedOptions extends StatelessWidget {
-  final options;
+  final List<Widget> options;
 
   const AdvancedOptions({
     Key? key,

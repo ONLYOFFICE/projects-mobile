@@ -64,7 +64,8 @@ class ProjectTaskScreen extends StatelessWidget {
     var taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
 
-    var controller = Get.find<ProjectTasksController>()..setup(projectDetailed!);
+    var controller = Get.find<ProjectTasksController>()
+      ..setup(projectDetailed!);
 
     return Stack(
       children: [
@@ -138,7 +139,7 @@ class _Content extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (c, i) =>
                       TaskCell(task: controller.paginationController.data[i]),
-                  itemExtent: 72.0,
+                  itemExtent: 72,
                   itemCount: controller.paginationController.data.length,
                 ),
               ),

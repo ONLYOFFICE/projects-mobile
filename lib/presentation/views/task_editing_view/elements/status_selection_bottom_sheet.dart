@@ -47,7 +47,7 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 // but you need to do it when saving changes
 Future<void> statusSelectionBS(
     {required context, TaskEditingController? controller}) async {
-  var _statusesController = Get.find<TaskStatusesController>();
+  final _statusesController = Get.find<TaskStatusesController>();
 
   showCustomBottomSheet(
     context: context,

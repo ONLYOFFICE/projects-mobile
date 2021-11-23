@@ -42,25 +42,25 @@ import 'package:projects/presentation/views/settings/passcode/new/new_passcode_s
 import 'package:projects/presentation/views/settings/passcode/new/new_passcode_screen2.dart';
 
 class PasscodeSettingsController extends GetxController {
-  final PasscodeService? _service = locator<PasscodeService>();
+  final PasscodeService _service = locator<PasscodeService>();
   String _passcode = '';
   String _passcodeCheck = '';
 
-  var loaded = false.obs;
-  var passcodeCheckFailed = false.obs;
-  var isPasscodeEnable;
-  late var isFingerprintEnable;
-  late var isFingerprintAvailable;
+  RxBool loaded = false.obs;
+  RxBool passcodeCheckFailed = false.obs;
+  late RxBool isPasscodeEnable;
+  late RxBool isFingerprintEnable;
+  late RxBool isFingerprintAvailable;
 
   RxInt enteredPasscodeLen = 0.obs;
   RxInt passcodeCheckLen = 0.obs;
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     loaded.value = false;
-    var isPassEnable = await _service!.isPasscodeEnable;
-    var isFinEnable = await _service!.isFingerprintEnable;
-    var isFinAvailable = await _service!.isFingerprintAvailable;
+    var isPassEnable = await _service.isPasscodeEnable;
+    var isFinEnable = await _service.isFingerprintEnable;
+    var isFinAvailable = await _service.isFingerprintAvailable;
     isPasscodeEnable = isPassEnable.obs;
     if (isFinAvailable) {
       isFingerprintEnable = isFinEnable.obs;
@@ -91,7 +91,7 @@ class PasscodeSettingsController extends GetxController {
     }
     if (_passcodeCheck.length == 4) {
       if (_passcode == _passcodeCheck) {
-        await _service!.setPasscode(_passcode);
+        await _service.setPasscode(_passcode);
         try {
           // update code in main passcode controller
           Get.find<PasscodeCheckingController>().updatePasscode();
@@ -107,7 +107,7 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void cancelEnablingPasscode() async {
-    var isPassEnable = await _service!.isPasscodeEnable;
+    var isPassEnable = await _service.isPasscodeEnable;
     isPasscodeEnable.value = isPassEnable;
     leave();
   }
@@ -128,9 +128,9 @@ class PasscodeSettingsController extends GetxController {
   }
 
   Future<void> _disablePasscode() async {
-    await _service!.deletePasscode();
+    await _service.deletePasscode();
     if (isFingerprintEnable.value == true) {
-      await _service!.setFingerprintStatus(false);
+      await _service.setFingerprintStatus(false);
       isFingerprintEnable.value = false;
     }
     leave();
@@ -217,10 +217,10 @@ class PasscodeSettingsController extends GetxController {
     );
   }
 
-  void _toggleFingerprintStatus(value) {
+  void _toggleFingerprintStatus(bool value) {
     if (isFingerprintAvailable.value == true) {
       isFingerprintEnable.value = value;
-      _service!.setFingerprintStatus(value);
+      _service.setFingerprintStatus(value);
     }
     Get.back();
   }

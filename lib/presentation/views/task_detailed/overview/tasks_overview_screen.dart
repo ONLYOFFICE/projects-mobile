@@ -148,8 +148,8 @@ class TaskOverviewScreen extends StatelessWidget {
                 if (task.responsibles != null && task.responsibles!.isNotEmpty)
                   InfoTile(
                       onTap: () {
-                        Get.find<NavigationController>()
-                            .toScreen(TaskTeamView(controller: taskController));
+                        Get.find<NavigationController>().toScreen(
+                            TaskTeamView(controller: taskController!));
                       },
                       icon: AppIcon(
                           icon: SvgIcons.person,
@@ -167,7 +167,7 @@ class TaskOverviewScreen extends StatelessWidget {
                                   .withOpacity(0.6)),
                           onPressed: () {
                             Get.find<NavigationController>().toScreen(
-                                TaskTeamView(controller: taskController));
+                                TaskTeamView(controller: taskController!));
                           })),
                 const SizedBox(height: 20),
                 InfoTile(

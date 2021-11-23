@@ -98,11 +98,12 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isNotEmpty = widget.controller.descriptionText.value.isNotEmpty;
+        bool _isNotEmpty =
+            widget.controller.descriptionText.value.isNotEmpty as bool;
         var _color = _isNotEmpty
             ? Get.theme.colors().onBackground
             : Get.theme.colors().onBackground.withOpacity(0.4);
-        var text = widget.controller.descriptionText.value;
+        var text = widget.controller.descriptionText.value as String;
         var textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(

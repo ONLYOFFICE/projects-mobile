@@ -43,9 +43,10 @@ class CommentEditingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? commentId = Get.arguments['commentId'];
-    String? commentBody = Get.arguments['commentBody'];
-    CommentItemController? itemController = Get.arguments['itemController'];
+    var commentId = Get.arguments['commentId'] as String?;
+    var commentBody = Get.arguments['commentBody'] as String?;
+    var itemController =
+        Get.arguments['itemController'] as CommentItemController?;
 
     var controller = Get.put(CommentEditingController(
       commentBody: commentBody,

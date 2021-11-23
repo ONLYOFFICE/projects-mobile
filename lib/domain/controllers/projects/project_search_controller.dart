@@ -43,30 +43,30 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProjectSearchController extends GetxController {
   static const PAGINATION_LENGTH = 25;
 
-  final ProjectService? _api = locator<ProjectService>();
-  final onlyMyProjects;
+  final ProjectService _api = locator<ProjectService>();
+  final bool onlyMyProjects;
 
   ProjectSearchController({this.onlyMyProjects = false});
 
-  var searchResult = [].obs;
-  var loaded = true.obs;
-  var searchInputController = TextEditingController();
+  var searchResult = <ProjectDetailed>[].obs;
+  RxBool loaded = true.obs;
+  TextEditingController searchInputController = TextEditingController();
 
-  var nothingFound = false.obs;
+  RxBool nothingFound = false.obs;
   // for select project view
-  var switchToSearchView = false.obs;
-  var _startIndex;
-  late var _query;
+  RxBool switchToSearchView = false.obs;
+  int _startIndex = 0;
+  late String _query;
   var _selfId;
 
   bool get pullUpEnabled => searchResult.length >= PAGINATION_LENGTH;
 
   RefreshController refreshController = RefreshController();
 
-  var _totalProjects;
+  int _totalProjects = 0;
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     if (onlyMyProjects) {
       _selfId = await Get.find<UserController>().getUserId();
       _query = '&participant=$_selfId';
@@ -74,7 +74,7 @@ class ProjectSearchController extends GetxController {
     super.onInit();
   }
 
-  void onLoading() async {
+  Future<void> onLoading() async {
     _startIndex += PAGINATION_LENGTH;
     if (_startIndex >= _totalProjects) {
       refreshController.loadComplete();
@@ -85,7 +85,7 @@ class ProjectSearchController extends GetxController {
     refreshController.loadComplete();
   }
 
-  void newSearch(query) {
+  void newSearch(String query) {
     _query = query;
     if (onlyMyProjects) _query += '&participant=$_selfId';
     _startIndex = 0;
@@ -98,8 +98,9 @@ class ProjectSearchController extends GetxController {
     switchToSearchView.value = true;
     searchResult.clear();
 
-    var result = await (_api!.getProjectsByParams(
-        startIndex: _startIndex, query: _query.toLowerCase()) as Future<PageDTO<List<ProjectDetailed>>>);
+    var result = await (_api.getProjectsByParams(
+        startIndex: _startIndex,
+        query: _query.toLowerCase()) as Future<PageDTO<List<ProjectDetailed>>>);
 
     _totalProjects = result.total;
 

@@ -62,9 +62,11 @@ class ProjectTitleTile extends StatelessWidget {
                         color:
                             Get.theme.colors().onBackground.withOpacity(0.75))),
               TextField(
-                  focusNode: focusOnTitle ? controller.titleFocus : null,
+                  focusNode:
+                      focusOnTitle ? controller.titleFocus as FocusNode : null,
                   maxLines: null,
-                  controller: controller.titleController,
+                  controller:
+                      controller.titleController as TextEditingController?,
                   style: TextStyleHelper.headline6(
                       color: Get.theme.colors().onBackground),
                   cursorColor: Get.theme.colors().primary.withOpacity(0.87),

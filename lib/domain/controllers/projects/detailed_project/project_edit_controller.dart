@@ -48,7 +48,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class ProjectEditController extends BaseProjectEditorController {
-  final ProjectService? _projectService = locator<ProjectService>();
+  final ProjectService _projectService = locator<ProjectService>();
 
   var loaded = true.obs;
   var isSearchResult = false.obs;
@@ -62,7 +62,7 @@ class ProjectEditController extends BaseProjectEditorController {
   ProjectDetailed? _projectDetailed;
   ProjectDetailed? get projectData => _projectDetailed;
 
-  Future<void> setupEditor(projectDetailed) async {
+  Future<void> setupEditor(ProjectDetailed? projectDetailed) async {
     _projectDetailed = projectDetailed;
     loaded.value = false;
 
@@ -75,8 +75,8 @@ class ProjectEditController extends BaseProjectEditorController {
 
     isPrivate.value = _projectDetailed!.isPrivate!;
 
-    var projectById =
-        await _projectService!.getProjectById(projectId: _projectDetailed!.id);
+    final projectById =
+        await _projectService.getProjectById(projectId: _projectDetailed!.id);
     tags.clear();
     if (projectById?.tags != null) {
       for (var value in projectById!.tags!) {
@@ -101,18 +101,18 @@ class ProjectEditController extends BaseProjectEditorController {
     if (selectedTeamMembers.isNotEmpty) selectedTeamMembers.clear();
     for (var portalUser in projectTeamDataSource.usersList) {
       portalUser.selectionMode.value = UserSelectionMode.Multiple;
-      portalUser.isSelected!.value = true;
+      portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
     selectedTeamMembers.removeWhere(
-        (element) => element.portalUser!.id == selectedProjectManager.value!.id);
+        (element) => element.portalUser.id == selectedProjectManager.value!.id);
 
     var participants = <Participant>[];
 
     for (var element in selectedTeamMembers) {
       participants.add(
         Participant(
-            iD: element.portalUser!.id,
+            iD: element.portalUser.id,
             canReadMessages: true,
             canReadFiles: true,
             canReadTasks: true,
@@ -152,7 +152,7 @@ class ProjectEditController extends BaseProjectEditorController {
     for (var element in selectedTeamMembers) {
       participants.add(
         Participant(
-            iD: element.portalUser!.id,
+            iD: element.portalUser.id,
             canReadMessages: true,
             canReadFiles: true,
             canReadTasks: true,
@@ -172,7 +172,7 @@ class ProjectEditController extends BaseProjectEditorController {
       notify: notificationEnabled.value,
     );
 
-    var success = await _projectService!.editProject(
+    var success = await _projectService.editProject(
         project: newProject, projectId: _projectDetailed!.id);
     if (success) {
       {
@@ -196,7 +196,7 @@ class ProjectEditController extends BaseProjectEditorController {
     var i = 0;
     while (!edited && oldProjectDTO!.participants!.length > i) {
       if (oldProjectDTO!.participants![i].iD !=
-          selectedTeamMembers[i].portalUser!.id) {
+          selectedTeamMembers[i].portalUser.id) {
         edited = true;
       }
       i++;

@@ -36,6 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
@@ -66,7 +67,7 @@ class ProjectsView extends StatelessWidget {
         : Get.put(
             ProjectsController(
               Get.find<ProjectsFilterController>(),
-              Get.find<PaginationController>(),
+              Get.find<PaginationController<ProjectDetailed>>(),
             ),
             tag: 'ProjectsView');
 
@@ -101,7 +102,7 @@ class ProjectsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, dynamic value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: Bottom(controller: controller),
             showBackButton: false,
@@ -147,7 +148,7 @@ class ProjectsView extends StatelessWidget {
 
 class _Title extends StatelessWidget {
   const _Title({Key? key, required this.controller}) : super(key: key);
-  final controller;
+  final ProjectsController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -168,9 +169,7 @@ class _Title extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               InkResponse(
-                onTap: () {
-                  controller.showSearch();
-                },
+                onTap: controller.showSearch,
                 child: AppIcon(
                   width: 24,
                   height: 24,
@@ -199,8 +198,8 @@ class _Title extends StatelessWidget {
 }
 
 class Bottom extends StatelessWidget {
-  Bottom({Key? key, this.controller}) : super(key: key);
-  final controller;
+  const Bottom({Key? key, required this.controller}) : super(key: key);
+  final ProjectsController controller;
   @override
   Widget build(BuildContext context) {
     var options = Column(

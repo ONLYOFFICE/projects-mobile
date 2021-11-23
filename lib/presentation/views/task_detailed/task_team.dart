@@ -59,7 +59,7 @@ class TaskTeamView extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.task.value.responsibles != null &&
-            controller.task.value.responsibles.isNotEmpty as bool) {
+            controller.task.value.responsibles!.isNotEmpty) {
           return Column(
             children: [
               ListView.builder(
@@ -67,15 +67,15 @@ class TaskTeamView extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (c, i) => PortalUserItem(
                     userController: PortalUserItemController(
-                        portalUser: controller.task.value.responsibles[i]),
+                        portalUser: controller.task.value.responsibles![i]!),
                     onTapFunction: (value) => {
                           Get.find<NavigationController>()
                               .toScreen(const ProfileScreen(), arguments: {
-                            'portalUser': controller.task.value.responsibles[i]
+                            'portalUser': controller.task.value.responsibles![i]
                           })
                         }),
-                itemExtent: 65.0,
-                itemCount: controller.task.value.responsibles.length,
+                itemExtent: 65,
+                itemCount: controller.task.value.responsibles!.length,
               )
             ],
           );

@@ -121,9 +121,9 @@ class TaskItemController extends GetxController {
     }
   }
 
-  dynamic get getActualCommentCount {
-    if (task.value?.comments == null) {
-      return null;
+  int get getActualCommentCount {
+    if (task.value.comments == null) {
+      return 0;
     } else {
       return countCommentsAndReplies(task.value.comments!);
     }
@@ -276,12 +276,12 @@ class TaskItemController extends GetxController {
     loaded.value = true;
   }
 
-  Future deleteTask({required int? taskId}) async {
+  Future<bool> deleteTask({required int? taskId}) async {
     var r = await _api.deleteTask(taskId: taskId);
     return r != null;
   }
 
-  Future subscribeToTask({required int? taskId}) async {
+  Future<bool> subscribeToTask({required int? taskId}) async {
     var r = await _api.subscribeToTask(taskId: taskId);
     return r != null;
   }

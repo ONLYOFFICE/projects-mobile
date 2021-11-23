@@ -52,21 +52,22 @@ class TeamMembersTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.selectedTeamMembers.isNotEmpty;
+        bool _isNotEmpty = controller.selectedTeamMembers.isNotEmpty as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('team')}:' : null,
-          text:
-              _isNotEmpty ? controller.teamMembersTitle : tr('addTeamMembers'),
+          text: _isNotEmpty
+              ? controller.teamMembersTitle as String
+              : tr('addTeamMembers'),
           icon: SvgIcons.users,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
-                  onTap: controller.editTeamMember,
+                  onTap: controller.editTeamMember as Function(),
                   child: Icon(
-                    controller.selectedTeamMembers.length >= 2
+                    controller.selectedTeamMembers.length as int >= 2
                         ? Icons.navigate_next
                         : Icons.close,
                     size: 24,

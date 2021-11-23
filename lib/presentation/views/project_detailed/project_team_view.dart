@@ -73,7 +73,7 @@ class ProjectTeamView extends StatelessWidget {
               () => Visibility(
                 visible: projectTeamDataSource.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: fabAction,
+                  onPressed: fabAction as Function(),
                   child: AppIcon(
                     icon: SvgIcons.fab_user,
                     color: Get.theme.colors().onPrimarySurface,

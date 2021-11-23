@@ -51,7 +51,7 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 
 class ProjectCell extends StatelessWidget {
   final ProjectDetailed item;
-  const ProjectCell({Key? key, this.item}) : super(key: key);
+  const ProjectCell({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,13 +66,14 @@ class ProjectCell extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            item!.canEdit!
-                ? InkWell(
-                    onTap: () async => showsStatusesBS(
-                        context: context, itemController: itemController),
-                    child: ProjectIcon(itemController: itemController),
-                  )
-                : ProjectIcon(itemController: itemController),
+            if (item.canEdit!)
+              InkWell(
+                onTap: () async => showsStatusesBS(
+                    context: context, itemController: itemController),
+                child: ProjectIcon(itemController: itemController),
+              )
+            else
+              ProjectIcon(itemController: itemController),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -192,7 +193,7 @@ class _Content extends StatelessWidget {
         children: <Widget>[
           Obx(
             () {
-              var style;
+              TextStyle style;
               if (itemController.status.value == 1) {
                 style = TextStyleHelper.projectTitle.copyWith(
                     decoration: TextDecoration.lineThrough,
@@ -277,7 +278,7 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS({required context, itemController}) async {
+void showsStatusesBS({required context, dynamic itemController}) async {
   var _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,
@@ -320,7 +321,7 @@ void showsStatusesBS({required context, itemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        var success = await itemController.updateStatus(
+                        final success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
                         );
                         if (success) {

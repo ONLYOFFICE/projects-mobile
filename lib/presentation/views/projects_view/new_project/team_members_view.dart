@@ -34,8 +34,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -60,7 +62,7 @@ class TeamMembersSelectionView extends StatelessWidget {
     var usersDataSource = Get.find<UsersDataSource>();
 
     usersDataSource.selectedProjectManager =
-        controller.selectedProjectManager.value;
+        controller.selectedProjectManager.value as PortalUser?;
     controller.selectionMode = UserSelectionMode.Multiple;
     usersDataSource.selectionMode = UserSelectionMode.Multiple;
 
@@ -93,20 +95,21 @@ class TeamMembersSelectionView extends StatelessWidget {
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.value == false) {
             return UsersDefault(
-              selfUserItem: controller.selfUserItem,
+              selfUserItem:
+                  controller.selfUserItem as PortalUserItemController?,
               usersDataSource: usersDataSource,
-              onTapFunction: controller.selectTeamMember,
+              onTapFunction: controller.selectTeamMember as Function(),
             );
           }
           if (usersDataSource.nothingFound.value == true) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.selectTeamMember,
+              onTapFunction: controller.selectTeamMember as Function(),
             );
           }
           return const ListLoadingSkeleton();
@@ -136,7 +139,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
         children: <Widget>[
           Obx(
             () {
-              if (controller.selectedTeamMembers.isNotEmpty) {
+              if (controller.selectedTeamMembers.isNotEmpty as bool) {
                 return Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -152,8 +155,8 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                       ),
                       Expanded(
                         child: Text(
-                          plural(
-                              'person', controller.selectedTeamMembers.length),
+                          plural('person',
+                              controller.selectedTeamMembers.length as int),
                           style: TextStyleHelper.caption(
                               color: Get.theme.colors().onSurface),
                         ),
@@ -173,7 +176,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
           ),
           Obx(
             () {
-              if (controller.selectedTeamMembers.isNotEmpty) {
+              if (controller.selectedTeamMembers.isNotEmpty as bool) {
                 return InkWell(
                   onTap: () {
                     controller.confirmTeamMembers();

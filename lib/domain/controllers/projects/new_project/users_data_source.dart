@@ -41,37 +41,37 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersDataSource extends GetxController {
-  final UserService? _api = locator<UserService>();
+  final UserService _api = locator<UserService>();
   RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
-  var loaded = true.obs;
-  var searchInputController = TextEditingController();
+  RxBool loaded = true.obs;
+  TextEditingController searchInputController = TextEditingController();
 
-  var nothingFound = false.obs;
-  var _startIndex = 0;
-  var _query = '';
+  RxBool nothingFound = false.obs;
+  int _startIndex = 0;
+  String _query = '';
 
-  var selectionMode = UserSelectionMode.Single;
+  UserSelectionMode selectionMode = UserSelectionMode.Single;
 
-  var isSearchResult = false.obs;
+  RxBool isSearchResult = false.obs;
 
   // var withoutSelf_remove = false;
   PortalUserItemController? selfUserItem;
 
   RefreshController refreshController = RefreshController();
 
-  var totalProfiles;
+  int totalProfiles = 0;
 
   Future<void> Function()? applyUsersSelection;
 
   PortalUser? selectedProjectManager;
-  var selfIsVisible = true.obs;
+  RxBool selfIsVisible = true.obs;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
   RxList<PortalUserItemController> get usersWithoutVisitors =>
-      RxList.from(usersList.where((user) => !user.portalUser!.isVisitor!));
+      RxList.from(usersList.where((user) => !user.portalUser.isVisitor!));
 
-  void onLoading() async {
+  Future<void> onLoading() async {
     _startIndex += 25;
     if (_startIndex >= totalProfiles) {
       refreshController.loadComplete();
@@ -82,7 +82,7 @@ class UsersDataSource extends GetxController {
     refreshController.loadComplete();
   }
 
-  void searchUsers(query) {
+  void searchUsers(String query) {
     loaded.value = false;
     _query = query;
     _startIndex = 0;
@@ -100,10 +100,10 @@ class UsersDataSource extends GetxController {
 
     var result;
     if (_query == null || _query.isEmpty) {
-      result = await _api!.getProfilesByExtendedFilter(startIndex: _startIndex);
+      result = await _api.getProfilesByExtendedFilter(startIndex: _startIndex);
       isSearchResult.value = false;
     } else {
-      result = await _api!.getProfilesByExtendedFilter(
+      result = await _api.getProfilesByExtendedFilter(
           startIndex: _startIndex, query: _query.toLowerCase());
       isSearchResult.value = true;
     }
@@ -129,10 +129,10 @@ class UsersDataSource extends GetxController {
         selectedProjectManager!.id == element.id);
 
     selfIsVisible.value = !(selectedProjectManager != null &&
-        selectedProjectManager!.id == selfUserItem!.portalUser!.id);
+        selectedProjectManager!.id == selfUserItem!.portalUser.id);
 
     usersList
-        .removeWhere((item) => item.portalUser!.status == UserStatus.Terminated);
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
     if (applyUsersSelection != null) {
       await applyUsersSelection!();

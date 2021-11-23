@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 
@@ -47,7 +48,7 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
-  final ProjectService? _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
 
   NewProjectController() {
     selectionMode = UserSelectionMode.Single;
@@ -68,7 +69,7 @@ class NewProjectController extends BaseProjectEditorController {
     ));
   }
 
-  Future<void> confirm(context) async {
+  Future<void> confirm(BuildContext context) async {
     needToFillTitle.value = titleController.text.isEmpty;
 
     needToFillManager.value = (selectedProjectManager.value == null ||
@@ -82,7 +83,7 @@ class NewProjectController extends BaseProjectEditorController {
     for (var element in selectedTeamMembers) {
       participants.add(
         Participant(
-            iD: element.portalUser!.id,
+            iD: element.portalUser.id,
             canReadMessages: true,
             canReadFiles: true,
             canReadTasks: true,
@@ -100,7 +101,7 @@ class NewProjectController extends BaseProjectEditorController {
         notify: notificationEnabled.value,
         notifyResponsibles: responsiblesNotificationEnabled);
 
-    var result = await _api!.createProject(project: newProject);
+    var result = await _api.createProject(project: newProject);
     if (result != null) {
       locator<EventHub>().fire('needToRefreshProjects');
 

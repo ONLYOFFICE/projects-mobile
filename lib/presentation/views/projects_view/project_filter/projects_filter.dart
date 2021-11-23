@@ -56,8 +56,8 @@ class ProjectsFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProjectsFilterController? filterController =
-        Get.arguments['filterController'];
+    final filterController =
+        Get.arguments['filterController'] as ProjectsFilterController;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
@@ -67,7 +67,7 @@ class ProjectsFilterScreen extends StatelessWidget {
         titleText: tr('filter'),
         showBackButton: true,
         onLeadingPressed: () {
-          filterController!.restoreFilters();
+          filterController.restoreFilters();
           Get.back();
         },
         backgroundColor:
@@ -77,7 +77,7 @@ class ProjectsFilterScreen extends StatelessWidget {
             : const Icon(Icons.close),
         actions: [
           TextButton(
-              onPressed: () async => filterController!.resetFilters(),
+              onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(
                       color: Get.theme.colors().systemBlue))),
@@ -102,7 +102,7 @@ class ProjectsFilterScreen extends StatelessWidget {
             ),
           ),
           Obx(() {
-            if (filterController!.suitableResultCount.value != -1)
+            if (filterController.suitableResultCount.value != -1)
               return ConfirmFiltersButton(filterController: filterController);
             return const SizedBox();
           }),

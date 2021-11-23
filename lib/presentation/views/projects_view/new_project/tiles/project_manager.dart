@@ -52,13 +52,15 @@ class ProjectManagerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.isPMSelected.value;
+        bool _isNotEmpty = controller.isPMSelected.value as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          text: _isNotEmpty ? controller.managerName.value : tr('choosePM'),
+          text: _isNotEmpty
+              ? controller.managerName.value as String
+              : tr('choosePM'),
           icon: SvgIcons.user,
-          textColor: controller.needToFillManager.value
+          textColor: controller.needToFillManager.value as bool
               ? Get.theme.colors().colorError
               : null,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
@@ -66,7 +68,7 @@ class ProjectManagerTile extends StatelessWidget {
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
-                  onTap: controller.removeManager,
+                  onTap: controller.removeManager as Function(),
                   child: Icon(
                     Icons.close,
                     size: 24,

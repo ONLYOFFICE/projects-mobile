@@ -82,25 +82,25 @@ class ProjectManagerSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.usersLoaded.value &&
+          if (controller.usersLoaded.value as bool &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               !usersDataSource.isSearchResult.value) {
             return UsersDefault(
-              selfUserItem: controller.selfUserItem,
+              selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection,
+              onTapFunction: controller.changePMSelection as Function(),
               withoutGuests: true,
             );
           }
           if (usersDataSource.nothingFound.value == true) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection,
+              onTapFunction: controller.changePMSelection as Function(),
               withoutVisitors: true,
             );
           }
@@ -161,7 +161,7 @@ class UsersDefault extends StatelessWidget {
   }) : super(key: key);
   final Function? onTapFunction;
   final PortalUserItemController? selfUserItem;
-  final usersDataSource;
+  final UsersDataSource usersDataSource;
   final bool withoutGuests;
 
   @override
@@ -206,7 +206,7 @@ class UsersDefault extends StatelessWidget {
               shrinkWrap: true,
               itemBuilder: (c, i) => PortalUserItem(
                   userController: users[i], onTapFunction: onTapFunction),
-              itemExtent: 65.0,
+              itemExtent: 65,
               itemCount: users.length,
             )
           ]),

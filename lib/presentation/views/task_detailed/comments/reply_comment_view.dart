@@ -51,14 +51,14 @@ class ReplyCommentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PortalComment comment = Get.arguments['comment'];
+    final comment = Get.arguments['comment'] as PortalComment;
     late NewCommentController controller;
     final platformController = Get.find<PlatformController>();
 
     if (Get.arguments['taskId'] != null) {
       controller = Get.put(
         NewTaskCommentController(
-          idFrom: Get.arguments['taskId'],
+          idFrom: Get.arguments['taskId'] as int?,
           parentId: comment.commentId,
         ),
       );
@@ -66,7 +66,7 @@ class ReplyCommentView extends StatelessWidget {
     if (Get.arguments['discussionId'] != null) {
       controller = Get.put(
         NewDiscussionCommentController(
-          idFrom: Get.arguments['discussionId'],
+          idFrom: Get.arguments['discussionId'] as int?,
           parentId: comment.commentId,
         ),
       );

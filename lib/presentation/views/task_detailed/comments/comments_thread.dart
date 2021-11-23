@@ -81,7 +81,7 @@ List<_SortedComment> sortComments(PortalComment initComment) {
 
   visited.add(_SortedComment(initComment, 0));
 
-  void dfs(PortalComment comment, paddingLevel) {
+  void dfs(PortalComment comment, int paddingLevel) {
     var a = visited.firstWhereOrNull(
       (element) {
         return element.comment.commentId == comment.commentId;

@@ -50,7 +50,7 @@ class NewProject extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewProjectController>();
+    final controller = Get.find<NewProjectController>();
     return WillPopScope(
       onWillPop: () async {
         controller.discardChanges();
@@ -86,14 +86,14 @@ class NewProject extends StatelessWidget {
                   OptionWithSwitch(
                     title: tr('notifyPM'),
                     switchValue: controller.notificationEnabled,
-                    switchOnChanged: (value) {
+                    switchOnChanged: (bool value) {
                       controller.enableNotification(value);
                     },
                   ),
                   OptionWithSwitch(
                     title: tr('privateProject'),
                     switchValue: controller.isPrivate,
-                    switchOnChanged: (value) {
+                    switchOnChanged: (bool value) {
                       controller.setPrivate(value);
                     },
                   ),
@@ -109,7 +109,7 @@ class NewProject extends StatelessWidget {
                       return OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: controller.isFolowed,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           controller.folow(value);
                         },
                       );

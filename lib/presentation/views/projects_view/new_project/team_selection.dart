@@ -75,7 +75,7 @@ class GroupMembersSelectionView extends StatelessWidget {
               groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
-              onTapFunction: controller.selectGroupMembers,
+              onTapFunction: controller.selectGroupMembers as Function(),
             );
           } else if (groupsDataSource.loaded.value == true) {
             return Column(children: [const NothingFound()]);

@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
+import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -47,19 +48,20 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool forEditing = Get.arguments['forEditing'];
+    final forEditing = Get.arguments['forEditing'] as bool;
 
     SubtaskActionController controller;
     int? taskId;
-    int? projectId = Get.arguments['projectId'];
+    var projectId = Get.arguments['projectId'] as int?;
 
     if (forEditing) {
-      var itemController = Get.arguments['itemController'];
+      final itemController =
+          Get.arguments['itemController'] as SubtaskController;
       controller = Get.put(SubtaskEditingController(itemController));
       controller.init(
           subtask: itemController.subtask.value, projectId: projectId);
     } else {
-      taskId = Get.arguments['taskId'];
+      taskId = Get.arguments['taskId'] as int?;
       controller = Get.put(NewSubtaskController());
       controller.init(projectId: projectId);
     }
