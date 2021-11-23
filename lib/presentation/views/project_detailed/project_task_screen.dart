@@ -153,10 +153,10 @@ class _Content extends StatelessWidget {
 class Header extends StatelessWidget {
   Header({
     Key? key,
-    this.controller,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final ProjectTasksController controller;
   @override
   Widget build(BuildContext context) {
     var options = Column(

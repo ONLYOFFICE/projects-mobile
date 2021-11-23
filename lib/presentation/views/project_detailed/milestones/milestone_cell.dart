@@ -112,7 +112,7 @@ class _SecondColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Obx(() {
-            var style;
+            TextStyle style;
             if (itemController.milestone.value!.status == 1) {
               style = TextStyleHelper.projectTitle.copyWith(
                   decoration: TextDecoration.lineThrough,
@@ -148,7 +148,8 @@ class _SecondColumn extends StatelessWidget {
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
-                    milestone!.responsible!.displayName!.replaceAll(' ', '\u00A0'),
+                    milestone!.responsible!.displayName!
+                        .replaceAll(' ', '\u00A0'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(

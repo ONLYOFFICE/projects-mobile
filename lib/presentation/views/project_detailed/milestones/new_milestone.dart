@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
@@ -51,7 +52,7 @@ class NewMilestoneView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var newMilestoneController = Get.find<NewMilestoneController>();
-    var projectDetailed = Get.arguments['projectDetailed'];
+    var projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
     newMilestoneController.setup(projectDetailed);
 
     return WillPopScope(
@@ -88,7 +89,7 @@ class NewMilestoneView extends StatelessWidget {
                     OptionWithSwitch(
                       title: tr('keyMilestone'),
                       switchValue: newMilestoneController.keyMilestone,
-                      switchOnChanged: (value) {
+                      switchOnChanged: (bool value) {
                         if (!FocusScope.of(context).hasPrimaryFocus) {
                           FocusScope.of(context).unfocus();
                         }
@@ -98,7 +99,7 @@ class NewMilestoneView extends StatelessWidget {
                     OptionWithSwitch(
                       title: tr('remindBeforeDue'),
                       switchValue: newMilestoneController.remindBeforeDueDate,
-                      switchOnChanged: (value) {
+                      switchOnChanged: (bool value) {
                         if (!FocusScope.of(context).hasPrimaryFocus) {
                           FocusScope.of(context).unfocus();
                         }
@@ -109,7 +110,7 @@ class NewMilestoneView extends StatelessWidget {
                     OptionWithSwitch(
                       title: tr('notifyResponsible'),
                       switchValue: newMilestoneController.notificationEnabled,
-                      switchOnChanged: (value) {
+                      switchOnChanged: (bool value) {
                         newMilestoneController.enableNotification(value);
                       },
                     ),
@@ -125,7 +126,7 @@ class NewMilestoneView extends StatelessWidget {
 }
 
 class MilestoneInput extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const MilestoneInput({
     Key? key,
     required this.controller,
@@ -157,7 +158,7 @@ class MilestoneInput extends StatelessWidget {
 }
 
 class DescriptionTile extends StatelessWidget {
-  final newMilestoneController;
+  final NewMilestoneController newMilestoneController;
   const DescriptionTile({
     Key? key,
     required this.newMilestoneController,
@@ -167,7 +168,7 @@ class DescriptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSletected =
+        final _isSletected =
             newMilestoneController.descriptionText.value.isNotEmpty;
         return NewItemTile(
             text: _isSletected
@@ -193,7 +194,7 @@ class DescriptionTile extends StatelessWidget {
 }
 
 class ProjectTile extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const ProjectTile({
     Key? key,
     required this.controller,
@@ -203,7 +204,7 @@ class ProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
+        final _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
         return NewItemTile(
             text: _isSelected
                 ? controller.slectedProjectTitle.value
@@ -235,7 +236,7 @@ class ProjectTile extends StatelessWidget {
 }
 
 class ResponsibleTile extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const ResponsibleTile({
     Key? key,
     required this.controller,
@@ -251,7 +252,7 @@ class ResponsibleTile extends StatelessWidget {
         caption:
             controller.responsible?.value != null ? tr('assignedTo') : null,
         text: controller.responsible?.value != null
-            ? '${controller.responsible.value.portalUser.displayName}'
+            ? '${controller.responsible?.value?.portalUser.displayName}'
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value
             ? Get.theme.colors().colorError
@@ -276,7 +277,7 @@ class ResponsibleTile extends StatelessWidget {
 }
 
 class DueDateTile extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const DueDateTile({
     Key? key,
     required this.controller,
@@ -286,7 +287,7 @@ class DueDateTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSelected = controller.dueDateText.value.isNotEmpty;
+        final _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewItemTile(
             icon: SvgIcons.due_date,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),

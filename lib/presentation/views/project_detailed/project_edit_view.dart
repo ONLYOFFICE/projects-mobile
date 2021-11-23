@@ -58,8 +58,9 @@ class EditProjectView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var editProjectController = Get.find<ProjectEditController>();
-    editProjectController.setupEditor(Get.arguments['projectDetailed']);
+    final editProjectController = Get.find<ProjectEditController>();
+    editProjectController
+        .setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     return WillPopScope(
       onWillPop: () async {
@@ -100,14 +101,14 @@ class EditProjectView extends StatelessWidget {
                       OptionWithSwitch(
                         title: tr('privateProject'),
                         switchValue: editProjectController.isPrivate,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           editProjectController.setPrivate(value);
                         },
                       ),
                       OptionWithSwitch(
                         title: tr('notifyPM'),
                         switchValue: editProjectController.notificationEnabled,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           editProjectController.enableNotification(value);
                         },
                       ),

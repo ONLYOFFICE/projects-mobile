@@ -49,24 +49,24 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 
 class NewMilestoneController extends GetxController {
-  final MilestoneService? _api = locator<MilestoneService>();
-  var _selectedProjectId;
+  final MilestoneService _api = locator<MilestoneService>();
+  int? _selectedProjectId;
   DateTime? _dueDate;
 
-  var remindBeforeDueDate = false.obs;
-  var keyMilestone = false.obs;
+  RxBool remindBeforeDueDate = false.obs;
+  RxBool keyMilestone = false.obs;
 
-  var notificationEnabled = false.obs;
+  RxBool notificationEnabled = false.obs;
   int? get selectedProjectId => _selectedProjectId;
   DateTime? get dueDate => _dueDate;
 
-  late var teamController;
+  late ProjectTeamController teamController;
 
   RxString slectedProjectTitle = ''.obs;
   RxString slectedMilestoneTitle = ''.obs;
 
   RxString descriptionText = ''.obs;
-  var descriptionController = TextEditingController().obs;
+  Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   RxString dueDateText = ''.obs;
   RxBool needToSelectProject = false.obs;
@@ -74,11 +74,12 @@ class NewMilestoneController extends GetxController {
   RxBool needToSelectResponsible = false.obs;
   RxBool needToSetDueDate = false.obs;
 
-  var titleController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
 
   PortalUserItemController? _previusSelectedResponsible;
   Rx<PortalUserItemController?>? responsible;
-  RxList<PortalUserItemController?> teamMembers = <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController?> teamMembers =
+      <PortalUserItemController>[].obs;
 
   Future<void> setup(ProjectDetailed? projectDetailed) async {
     if (projectDetailed != null) {
@@ -100,7 +101,7 @@ class NewMilestoneController extends GetxController {
     }
   }
 
-  void changeProjectSelection({var id, String? title}) {
+  void changeProjectSelection({int? id, String? title}) {
     if (id != null && title != null) {
       slectedProjectTitle.value = title;
       _selectedProjectId = id;
@@ -188,7 +189,7 @@ class NewMilestoneController extends GetxController {
     Get.back();
   }
 
-  void changeDueDate(DateTime newDate) {
+  void changeDueDate(DateTime? newDate) {
     if (newDate != null) {
       _dueDate = newDate;
       dueDateText.value = formatedDateFromString(
@@ -223,7 +224,7 @@ class NewMilestoneController extends GetxController {
       notifyResponsible: notificationEnabled.value,
     );
 
-    var success = await _api!.createMilestone(
+    var success = await _api.createMilestone(
         projectId: _selectedProjectId, milestone: milestone);
     if (success) {
       MessagesHandler.showSnackBar(
@@ -254,8 +255,9 @@ class NewMilestoneController extends GetxController {
     }
   }
 
-  void setKeyMilestone(value) => keyMilestone.value = value;
-  void enableRemindBeforeDueDate(value) => remindBeforeDueDate.value = value;
+  void setKeyMilestone(bool value) => keyMilestone.value = value;
+  void enableRemindBeforeDueDate(bool value) =>
+      remindBeforeDueDate.value = value;
 
   void onDueDateTilePressed() {
     Get.find<NavigationController>().toScreen(const SelectDateView(),

@@ -51,11 +51,12 @@ class NewTaskProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.selectedProjectTitle.value.isNotEmpty;
+        bool _isNotEmpty =
+            controller.selectedProjectTitle.value.isNotEmpty as bool;
 
         return NewItemTile(
           text: _isNotEmpty
-              ? controller.selectedProjectTitle.value
+              ? controller.selectedProjectTitle.value as String
               : tr('selectProject'),
           icon: SvgIcons.project,
           textColor: controller.needToSelectProject == true

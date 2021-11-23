@@ -159,7 +159,7 @@ class ProjectStatusButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    bool canEdit = projectController.projectData.canEdit;
+    bool canEdit = projectController.projectData.canEdit as bool;
     return Padding(
       padding: const EdgeInsets.only(left: 72),
       child: Column(
@@ -191,7 +191,7 @@ class ProjectStatusButton extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
                     child: Obx(
                       () => Text(
-                        projectController.statusText.value,
+                        projectController.statusText.value as String,
                         style: TextStyleHelper.subtitle2(
                           color: canEdit
                               ? Get.theme.colors().primary

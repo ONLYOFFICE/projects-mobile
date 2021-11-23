@@ -41,17 +41,17 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/internal/locator.dart';
 
 class MilestonesDataSource extends GetxController {
-  final MilestoneService? _api = locator<MilestoneService>();
+  final MilestoneService _api = locator<MilestoneService>();
 
   final paginationController =
-      Get.put(PaginationController(), tag: 'MilestonesDataSource');
+      Get.put(PaginationController<Milestone>(), tag: 'MilestonesDataSource');
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
 
-  var searchQuery = '';
+  String searchQuery = '';
 
   ProjectDetailed? _projectDetailed;
 
@@ -63,11 +63,11 @@ class MilestonesDataSource extends GetxController {
 
   RxBool loaded = false.obs;
 
-  var hasFilters = false.obs;
+  RxBool hasFilters = false.obs;
 
   int? _projectId;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => await loadMilestones();
@@ -85,8 +85,8 @@ class MilestonesDataSource extends GetxController {
     loaded.value = true;
   }
 
-  Future _getMilestones({needToClear = false}) async {
-    var result = await (_api!.milestonesByFilter(
+  Future _getMilestones({bool needToClear = false}) async {
+    final result = await (_api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId != null ? _projectId.toString() : null,
