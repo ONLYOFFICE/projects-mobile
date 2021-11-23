@@ -42,9 +42,9 @@ class PortalGroup {
   String? manager;
 
   factory PortalGroup.fromJson(Map<String, dynamic> json) => PortalGroup(
-        id: json['id'],
-        name: json['name'],
-        manager: json['manager'],
+        id: json['id'] as String?,
+        name: json['name'] as String?,
+        manager: json['manager'] as String?,
       );
 
   Map<String, dynamic> toJson() => {

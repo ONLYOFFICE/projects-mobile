@@ -52,12 +52,13 @@ class Project {
   PortalUser? responsible;
 
   Project.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    description = json['description'];
-    title = json['title'];
-    status = json['status'];
-    canEdit = json['canEdit'];
-    isPrivate = json['isPrivate'];
-    responsible = PortalUser.fromJson(json['responsible']);
+    id = json['id'] as int?;
+    description = json['description'] as String?;
+    title = json['title'] as String?;
+    status = json['status'] as int?;
+    canEdit = json['canEdit'] as bool?;
+    isPrivate = json['isPrivate'] as bool?;
+    responsible =
+        PortalUser.fromJson(json['responsible'] as Map<String, dynamic>);
   }
 }

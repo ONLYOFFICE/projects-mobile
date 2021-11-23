@@ -41,8 +41,8 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionsService {
-  final DiscussionsApi? _api = locator<DiscussionsApi>();
-  final SecureStorage? _secureStorage = locator<SecureStorage>();
+  final DiscussionsApi _api = locator<DiscussionsApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   Future<PageDTO<List<Discussion>>?> getDiscussionsByParams({
     int? startIndex,
@@ -56,7 +56,7 @@ class DiscussionsService {
     String? creationDateFilter,
     String? otherFilter,
   }) async {
-    var projects = await _api!.getDiscussionsByParams(
+    final projects = await _api.getDiscussionsByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
@@ -69,36 +69,36 @@ class DiscussionsService {
       projectId: projectId,
     );
 
-    var success = projects.response != null;
+    final success = projects.response != null;
 
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message!);
+      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
 
   Future<Discussion?> addMessage({
-    int? projectId,
+    required int projectId,
     required NewDiscussionDTO newDiscussion,
   }) async {
-    var result =
-        await _api!.addMessage(projectId: projectId, newDiss: newDiscussion);
+    final result =
+        await _api.addMessage(projectId: projectId, newDiss: newDiscussion);
 
-    var success = result.response != null;
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.createEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage!.getString('portalName'),
+            await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.discussion
       });
-      return result.response;
+      return result.response as Discussion;
     } else {
-      await Get.find<ErrorDialog>().show(result.error!.message!);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }

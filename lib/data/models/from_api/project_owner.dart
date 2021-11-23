@@ -39,10 +39,10 @@ class ProjectOwner {
   ProjectOwner({this.id, this.title, this.status, this.isPrivate});
 
   ProjectOwner.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    status = json['status'];
-    isPrivate = json['isPrivate'];
+    id = json['id'] as int?;
+    title = json['title'] as String?;
+    status = json['status'] as int?;
+    isPrivate = json['isPrivate'] as bool?;
   }
 
   Map<String, dynamic> toJson() {

@@ -80,43 +80,50 @@ class Discussion {
   int? status;
 
   factory Discussion.fromJson(Map<String, dynamic> json) => Discussion(
-        canCreateComment: json['canCreateComment'],
-        canEditFiles: json['canEditFiles'],
-        canReadFiles: json['canReadFiles'],
+        canCreateComment: json['canCreateComment'] as bool?,
+        canEditFiles: json['canEditFiles'] as bool?,
+        canReadFiles: json['canReadFiles'] as bool?,
         subscribers: json['subscribers'] != null
-            ? List<PortalUser>.from(
-                json['subscribers'].map((x) => PortalUser.fromJson(x)))
+            ? (json['subscribers'] as List<Map<String, dynamic>>)
+                .map((e) => PortalUser.fromJson(e))
+                .toList()
             : null,
         files: json['files'] != null
-            ? List<PortalFile>.from(
-                json['files'].map((x) => PortalFile.fromJson(x)))
+            ? (json['files'] as List<Map<String, dynamic>>)
+                .map((e) => PortalFile.fromJson(e))
+                .toList()
             : null,
         comments: json['comments'] != null
-            ? List<PortalComment>.from(
-                json['comments'].map((x) => PortalComment.fromJson(x)))
+            ? (json['files'] as List<Map<String, dynamic>>)
+                .map((e) => PortalComment.fromJson(e))
+                .toList()
             : null,
-        project:
-            json['project'] != null ? Project.fromJson(json['project']) : null,
-        canEdit: json['canEdit'],
-        id: json['id'],
-        title: json['title'],
-        description: json['description'],
+        project: json['project'] != null
+            ? Project.fromJson(json['project'] as Map<String, dynamic>)
+            : null,
+        canEdit: json['canEdit'] as bool?,
+        id: json['id'] as int?,
+        title: json['title'] as String?,
+        description: json['description'] as String?,
         projectOwner: json['projectOwner'] != null
-            ? ProjectOwner.fromJson(json['projectOwner'])
+            ? ProjectOwner.fromJson(
+                json['projectOwner'] as Map<String, dynamic>)
             : null,
-        commentsCount: json['commentsCount'],
-        text: json['text'],
-        status: json['status'],
+        commentsCount: json['commentsCount'] as int?,
+        text: json['text'] as String?,
+        status: json['status'] as int?,
         updatedBy: json['updatedBy'] != null
-            ? PortalUser.fromJson(json['updatedBy'])
+            ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
             : null,
-        created:
-            json['created'] != null ? DateTime.parse(json['created']) : null,
+        created: json['created'] != null
+            ? DateTime.parse(json['created'] as String)
+            : null,
         createdBy: json['createdBy'] != null
-            ? PortalUser.fromJson(json['createdBy'])
+            ? PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>)
             : null,
-        updated:
-            json['updated'] != null ? DateTime.parse(json['updated']) : null,
+        updated: json['updated'] != null
+            ? DateTime.parse(json['updated'] as String)
+            : null,
       );
 
   Map<String, dynamic> toJson() => {

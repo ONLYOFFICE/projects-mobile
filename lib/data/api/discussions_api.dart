@@ -53,7 +53,7 @@ class DiscussionsApi {
     String? projectId,
     String? otherFilter,
   }) async {
-    var url = await locator.get<CoreApi>().discussionsByParamsUrl();
+     var url = await locator.get<CoreApi>().discussionsByParamsUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
@@ -79,20 +79,20 @@ class DiscussionsApi {
       url += '&projectId=$projectId';
     }
 
-    var result = PageDTO<List<Discussion>>();
+    final result = PageDTO<List<Discussion>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['total'] as int?;
         {
           result.response = (responseJson['response'] as List)
-              .map((i) => Discussion.fromJson(i))
+              .map((i) => Discussion.fromJson(i as Map<String, dynamic>))
               .toList();
         }
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -101,19 +101,22 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> addMessage({int? projectId, required NewDiscussionDTO newDiss}) async {
-    var url = await locator.get<CoreApi>().addMessageUrl(projectId: projectId);
-    var result = ApiDTO();
+  Future<ApiDTO> addMessage(
+      {required int projectId, required NewDiscussionDTO newDiss}) async {
+    final url =
+        await locator.get<CoreApi>().addMessageUrl(projectId: projectId);
+    final result = ApiDTO();
 
     try {
-      var response =
+      final response =
           await locator.get<CoreApi>().postRequest(url, newDiss.toJson());
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = Discussion.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -122,18 +125,20 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> getMessageDetailed({int? id}) async {
-    var url = await locator.get<CoreApi>().discussionDetailedUrl(messageId: id);
-    var result = ApiDTO();
+  Future<ApiDTO> getMessageDetailed({required int id}) async {
+    final url =
+        await locator.get<CoreApi>().discussionDetailedUrl(messageId: id);
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = Discussion.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -142,20 +147,22 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> updateMessage({int? id, required NewDiscussionDTO discussion}) async {
-    var url = await locator.get<CoreApi>().updateMessageUrl(messageId: id);
-    var result = ApiDTO();
+  Future<ApiDTO> updateMessage(
+      {required int id, required NewDiscussionDTO discussion}) async {
+    final url = await locator.get<CoreApi>().updateMessageUrl(messageId: id);
+    final result = ApiDTO();
 
     try {
-      var body = discussion.toJson();
+      final body = discussion.toJson();
 
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = Discussion.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -164,21 +171,23 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> updateMessageStatus({int? id, String? newStatus}) async {
-    var url =
+  Future<ApiDTO> updateMessageStatus(
+      {required int id, required String newStatus}) async {
+    final url =
         await locator.get<CoreApi>().updateMessageStatusUrl(messageId: id);
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var body = {'status': newStatus};
+      final body = {'status': newStatus};
 
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = Discussion.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -187,20 +196,21 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> subscribeToMessage({int? id}) async {
-    var url = await locator.get<CoreApi>().subscribeToMessage(messageId: id);
-    var result = ApiDTO();
+  Future<ApiDTO> subscribeToMessage({required int id}) async {
+    final url = await locator.get<CoreApi>().subscribeToMessage(messageId: id);
+    final result = ApiDTO();
 
     try {
-      var body = {};
+      final body = {};
 
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = Discussion.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -209,18 +219,19 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> deleteMessage({int? id}) async {
-    var url = await locator.get<CoreApi>().deleteMessageUrl(id: id);
-    var result = ApiDTO();
+  Future<ApiDTO> deleteMessage({required int id}) async {
+    final url = await locator.get<CoreApi>().deleteMessageUrl(id: id);
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Discussion.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = Discussion.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
