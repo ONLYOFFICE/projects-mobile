@@ -74,7 +74,7 @@ class TaskEditingController extends GetxController
   RxString? title;
   @override
   RxString? descriptionText;
-  var newMilestoneId;
+  int? newMilestoneId;
   @override
   RxString? selectedMilestoneTitle;
   @override
@@ -113,7 +113,8 @@ class TaskEditingController extends GetxController
   void onInit() async {
     title = task!.title!.obs;
     _titleController.text = task!.title!;
-    _taskItemController = Get.find<TaskItemController>(tag: task!.id.toString());
+    _taskItemController =
+        Get.find<TaskItemController>(tag: task!.id.toString());
 
     teamController = Get.find<ProjectTeamController>();
 
@@ -126,8 +127,8 @@ class TaskEditingController extends GetxController
     _initDates();
     highPriority = task!.priority == 1 ? true.obs : false.obs;
     responsibles = [].obs;
-    for (var user in task!.responsibles!) {
-      responsibles!.add(PortalUserItemController(portalUser: user));
+    for (final user in task!.responsibles!) {
+      responsibles!.add(PortalUserItemController(portalUser: user!));
     }
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.from(responsibles!.value);
@@ -142,7 +143,8 @@ class TaskEditingController extends GetxController
     var now = DateTime.now();
     _newStartDate =
         task!.startDate != null ? DateTime.parse(task!.startDate!) : null;
-    _newDueDate = task!.deadline != null ? DateTime.parse(task!.deadline!) : null;
+    _newDueDate =
+        task!.deadline != null ? DateTime.parse(task!.deadline!) : null;
 
     startDateText = task!.startDate != null
         ? formatedDateFromString(now: now, stringDate: task!.startDate!).obs
@@ -396,8 +398,8 @@ class TaskEditingController extends GetxController
     }
   }
 
-  Future<void> acceptTask(context) async {
-    var newTask = NewTaskDTO(
+  Future<void> acceptTask(BuildContext context) async {
+    final newTask = NewTaskDTO(
       description: descriptionText!.value,
       deadline: _newDueDate,
       id: task!.id,

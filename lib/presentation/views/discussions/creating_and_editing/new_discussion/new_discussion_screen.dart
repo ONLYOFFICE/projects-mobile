@@ -74,7 +74,7 @@ class NewDiscussionScreen extends StatelessWidget {
               DiscussionTitleTextField(controller: controller),
               Listener(
                 onPointerDown: (_) {
-                  if (controller.title!.isNotEmpty &&
+                  if (controller.title.isNotEmpty &&
                       controller.titleFocus.hasFocus)
                     controller.titleFocus.unfocus();
                 },

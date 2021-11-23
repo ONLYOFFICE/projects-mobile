@@ -122,9 +122,7 @@ class LoginView extends StatelessWidget {
                       TextButton(
                         onPressed: () async => Get.to<PasswordRecoveryScreen1>(
                           () => const PasswordRecoveryScreen1(),
-                          arguments: {
-                            'email': controller.emailController!.text
-                          },
+                          arguments: {'email': controller.emailController.text},
                         ),
                         child: Text(
                           tr('forgotPassword'),

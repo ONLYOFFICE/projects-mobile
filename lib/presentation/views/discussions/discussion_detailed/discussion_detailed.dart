@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -55,14 +56,14 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
   int _activeIndex = 0;
-  DiscussionItemController? controller;
+  late DiscussionItemController controller;
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
-    var discussion = Get.arguments['discussion'];
+    final discussion = Get.arguments['discussion'] as Discussion;
     controller = Get.put(DiscussionItemController(discussion));
-    controller!.getDiscussionDetailed();
+    controller.getDiscussionDetailed();
     super.initState();
   }
 
@@ -99,16 +100,15 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                   CustomTab(
                       title: tr('comments'),
                       currentTab: _activeIndex == 1,
-                      count: controller!.discussion.value.commentsCount),
+                      count: controller.discussion.value.commentsCount),
                   CustomTab(
                       title: tr('subscribers'),
                       currentTab: _activeIndex == 2,
-                      count:
-                          controller?.discussion.value.subscribers?.length),
+                      count: controller.discussion.value.subscribers?.length),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex == 3,
-                      count: controller?.discussion.value.files?.length),
+                      count: controller.discussion.value.files?.length),
                   Tab(text: tr('overview')),
                 ]),
           ),
@@ -116,7 +116,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
         body: TabBarView(controller: _tabController, children: [
           DiscussionCommentsView(controller: controller),
           DiscussionSubscribersView(controller: controller),
-          DiscussionsDocumentsView(files: controller?.discussion.value.files),
+          DiscussionsDocumentsView(files: controller.discussion.value.files),
           DiscussionOverview(controller: controller),
         ]),
       ),

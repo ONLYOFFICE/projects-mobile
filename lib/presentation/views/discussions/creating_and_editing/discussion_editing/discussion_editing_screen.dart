@@ -46,15 +46,11 @@ class DiscussionEditingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Discussion? discussion;
+    final discussion = Get.arguments['discussion'] as Discussion;
 
-    try {
-      discussion = Get.arguments['discussion'];
-    } catch (_) {}
-
-    var controller = Get.put(
+    final controller = Get.put(
       DiscussionEditingController(
-        id: discussion!.id,
+        id: discussion.id,
         title: discussion.title!.obs,
         text: discussion.text!.obs,
         projectId: discussion.project!.id,
@@ -84,7 +80,7 @@ class DiscussionEditingScreen extends StatelessWidget {
               DiscussionTitleTextField(controller: controller),
               Listener(
                 onPointerDown: (_) {
-                  if (controller.title!.isNotEmpty &&
+                  if (controller.title.isNotEmpty &&
                       controller.titleFocus.hasFocus)
                     controller.titleFocus.unfocus();
                 },

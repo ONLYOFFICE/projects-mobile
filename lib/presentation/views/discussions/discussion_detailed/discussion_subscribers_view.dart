@@ -74,8 +74,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) =>
                       PortalUserItem(
                           userController: PortalUserItemController(
-                              portalUser: discussion.subscribers![index],
-                              isSelected: false.obs),
+                              portalUser: discussion.subscribers![index]),
                           onTapFunction: (value) => {
                                 Get.find<NavigationController>().toScreen(
                                     const ProfileScreen(),

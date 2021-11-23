@@ -58,16 +58,16 @@ class TaskCell extends StatefulWidget {
 }
 
 class _TaskCellState extends State<TaskCell> {
-  TaskItemController? itemController;
+  late TaskItemController itemController;
 
   @override
   void initState() {
     itemController = Get.put(
       TaskItemController(widget.task),
-      tag: widget.task!.id.toString(),
+      tag: widget.task.id.toString(),
     );
     WidgetsBinding.instance!.addPostFrameCallback(
-        (_) async => await itemController!.initTaskStatus(widget.task));
+        (_) async => await itemController.initTaskStatus(widget.task));
     super.initState();
   }
 

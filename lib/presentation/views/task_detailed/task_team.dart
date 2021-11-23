@@ -36,6 +36,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
@@ -43,7 +44,7 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class TaskTeamView extends StatelessWidget {
-  final controller;
+  final TaskItemController controller;
 
   const TaskTeamView({
     Key? key,
@@ -54,12 +55,11 @@ class TaskTeamView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: StyledAppBar(
-        showBackButton: true,
         titleText: tr('assignedTo'),
       ),
       body: Obx(() {
         if (controller.task.value.responsibles != null &&
-            controller.task.value.responsibles.isNotEmpty)
+            controller.task.value.responsibles.isNotEmpty as bool) {
           return Column(
             children: [
               ListView.builder(
@@ -67,8 +67,7 @@ class TaskTeamView extends StatelessWidget {
                 shrinkWrap: true,
                 itemBuilder: (c, i) => PortalUserItem(
                     userController: PortalUserItemController(
-                        portalUser: controller.task.value.responsibles[i],
-                        isSelected: false.obs),
+                        portalUser: controller.task.value.responsibles[i]),
                     onTapFunction: (value) => {
                           Get.find<NavigationController>()
                               .toScreen(const ProfileScreen(), arguments: {
@@ -80,13 +79,14 @@ class TaskTeamView extends StatelessWidget {
               )
             ],
           );
-        else
+        } else {
           return Center(
             child: EmptyScreen(
               icon: SvgIcons.not_found,
               text: tr('noPeopleMatching'),
             ),
           );
+        }
       }),
     );
   }

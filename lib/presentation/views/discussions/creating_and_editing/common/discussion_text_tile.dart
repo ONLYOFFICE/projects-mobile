@@ -42,25 +42,24 @@ import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_screen.dart';
 
 class DiscussionTextTile extends StatelessWidget {
-  final DiscussionActionsController? controller;
+  final DiscussionActionsController controller;
   const DiscussionTextTile({
     Key? key,
-    this.controller,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => NewItemTile(
-        text: controller!.text?.value != null && controller!.text!.value.isNotEmpty
-            ? parseHtml(controller!.text!.value)
+        text: controller.text.value.isNotEmpty
+            ? parseHtml(controller.text.value)
             : tr('text'),
         textColor:
-            controller!.setTextError == true && controller!.text!.value.isEmpty
+            controller.setTextError == true && controller.text.value.isEmpty
                 ? Get.theme.colors().colorError
                 : null,
-        isSelected:
-            controller!.text?.value != null && controller!.text!.value.isNotEmpty,
+        isSelected: controller.text.value.isNotEmpty,
         icon: SvgIcons.description,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () => Get.find<NavigationController>().toScreen(

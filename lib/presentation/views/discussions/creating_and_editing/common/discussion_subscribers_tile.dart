@@ -54,10 +54,10 @@ class DiscussionSubscribersTile extends StatelessWidget {
     return Obx(
       () => NewItemTile(
         icon: SvgIcons.subscribers,
-        text: controller.subscribers!.isEmpty
+        text: controller.subscribers.isEmpty
             ? tr('addSubscribers')
-            : plural('subscribersPlural', controller.subscribers!.length),
-        isSelected: controller.subscribers!.isNotEmpty,
+            : plural('subscribersPlural', controller.subscribers.length),
+        isSelected: controller.subscribers.isNotEmpty,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () {
           Get.find<NavigationController>().toScreen(

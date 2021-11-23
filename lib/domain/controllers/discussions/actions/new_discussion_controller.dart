@@ -61,17 +61,18 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 
 class NewDiscussionController extends GetxController
     implements DiscussionActionsController {
-  final DiscussionsService? _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
 
-  int _selectedProjectId;
+  int? _selectedProjectId;
   int? get selectedProjectId => _selectedProjectId;
 
   bool _projectIsLocked = false;
 
   // final _userController = Get.find<UserController>();
-  final UserService? _userService = locator<UserService>();
+  final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
-  var selectedGroups = <PortalGroupItemController>[];
+  List<PortalGroupItemController> selectedGroups =
+      <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
   @override
@@ -112,7 +113,7 @@ class NewDiscussionController extends GetxController
   @override
   dynamic setTextError = false.obs;
 
-  NewDiscussionController({projectId, projectTitle}) {
+  NewDiscussionController({int? projectId, String? projectTitle}) {
     if (projectId != null) {
       _selectedProjectId = projectId;
       selectedProjectTitle.value = projectTitle;
@@ -131,10 +132,10 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void changeTitle(String newText) => title!.value = newText;
+  void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection({var id, String? title}) {
+  void changeProjectSelection({int? id, String? title}) {
     if (_projectIsLocked) return;
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
@@ -142,7 +143,7 @@ class NewDiscussionController extends GetxController
       selectProjectError.value = false;
 
       saveManualSelectedPersons();
-      subscribers!.clear();
+      subscribers.clear();
       addTeam();
     } else {
       removeProjectSelection();
@@ -166,7 +167,7 @@ class NewDiscussionController extends GetxController
           addSubscriber(item);
         }
       }
-      _previusSelectedSubscribers = List.of(subscribers!);
+      _previusSelectedSubscribers = List.of(subscribers);
     });
   }
 
@@ -177,16 +178,16 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void confirmText() async {
-    text!.value = await textController.getText();
+  Future<void> confirmText() async {
+    text.value = await textController.getText() as String;
     Get.back();
   }
 
   @override
-  void leaveTextView() async {
-    var t = await textController.getText();
+  Future<void> leaveTextView() async {
+    final t = await textController.getText();
 
-    if (t == text!.value) {
+    if (t == text.value) {
       Get.back();
     } else {
       await Get.dialog(StyledAlertDialog(
@@ -205,11 +206,11 @@ class NewDiscussionController extends GetxController
   @override
   void confirmSubscribersSelection() {
     for (var user in _usersDataSource.usersList) {
-      if (!subscribers!.any((it) => it.id == user.id) && user.isSelected!.value)
-        subscribers!.add(user);
+      if (!subscribers.any((it) => it.id == user.id) && user.isSelected!.value)
+        subscribers.add(user);
     }
 
-    _previusSelectedSubscribers = List.of(subscribers!);
+    _previusSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
     Get.back();
   }
@@ -224,7 +225,7 @@ class NewDiscussionController extends GetxController
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          subscribers!.value = RxList.from(_previusSelectedSubscribers);
+          subscribers.value = RxList.from(_previusSelectedSubscribers);
           clearUserSearch();
           Get.back();
           Get.back();
@@ -266,7 +267,7 @@ class NewDiscussionController extends GetxController
       element.isSelected!.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
-    for (var selectedMember in subscribers!) {
+    for (var selectedMember in subscribers) {
       for (var user in _usersDataSource.usersList) {
         if (selectedMember.portalUser!.id == user.portalUser!.id) {
           user.isSelected!.value = true;
@@ -279,11 +280,11 @@ class NewDiscussionController extends GetxController
   void addSubscriber(PortalUserItemController user,
       {fromUsersDataSource = false}) {
     if (user.isSelected!.value == true &&
-        !subscribers!.any((it) => it.id == user.id)) {
-      subscribers!.add(user);
+        !subscribers.any((it) => it.id == user.id)) {
+      subscribers.add(user);
       user.isSelected!.value = true;
     } else {
-      subscribers!.removeWhere(
+      subscribers.removeWhere(
           (element) => user.portalUser!.id == element.portalUser!.id);
       user.isSelected!.value = false;
     }
@@ -303,20 +304,19 @@ class NewDiscussionController extends GetxController
   @override
   void confirmGroupSelection() async {
     for (var group in selectedGroups) {
-      var groupMembers = await (_userService!.getProfilesByExtendedFilter(
+      var groupMembers = await (_userService.getProfilesByExtendedFilter(
           groupId: group.portalGroup!.id) as Future<PageDTO<List<PortalUser>>>);
 
       if (groupMembers.response!.isNotEmpty) {
         for (var element in groupMembers.response!) {
           var user = PortalUserItemController(portalUser: element);
           user.isSelected!.value = true;
-          subscribers!.add(user);
+          subscribers.add(user);
         }
       }
     }
 
-    subscribers!.value =
-        subscribers!.distinct((d) => d.portalUser!.id!).toList();
+    subscribers.value = subscribers.distinct((d) => d.portalUser!.id!).toList();
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
@@ -331,21 +331,21 @@ class NewDiscussionController extends GetxController
 
   void confirm(BuildContext context) async {
     if (_selectedProjectId == null) selectProjectError.value = true;
-    if (title!.isEmpty) setTitleError.value = true;
-    if (text!.isEmpty) setTextError.value = true;
-    if (_selectedProjectId != null && title!.isNotEmpty && text!.isNotEmpty) {
+    if (title.isEmpty) setTitleError.value = true;
+    if (text.isEmpty) setTextError.value = true;
+    if (_selectedProjectId != null && title.isNotEmpty && text.isNotEmpty) {
       // ignore: omit_local_variable_types
       List<String?> subscribersIds = [];
 
-      for (var item in subscribers!) subscribersIds.add(item.id);
+      for (var item in subscribers) subscribersIds.add(item.id);
 
       var newDiss = NewDiscussionDTO(
-        content: text!.value,
-        title: title!.value,
+        content: text.value,
+        title: title.value,
         participants: subscribersIds,
       );
 
-      var createdDiss = await _api!.addMessage(
+      var createdDiss = await _api.addMessage(
         projectId: _selectedProjectId,
         newDiscussion: newDiss,
       );
@@ -381,9 +381,9 @@ class NewDiscussionController extends GetxController
 
   void discardDiscussion() {
     if ((_selectedProjectId != null && !_projectIsLocked) ||
-        title!.isNotEmpty ||
-        subscribers!.isNotEmpty ||
-        text!.isNotEmpty) {
+        title.isNotEmpty ||
+        subscribers.isNotEmpty ||
+        text.isNotEmpty) {
       Get.dialog(StyledAlertDialog(
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),

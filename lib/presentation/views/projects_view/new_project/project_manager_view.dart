@@ -124,7 +124,7 @@ class UsersSearchResult extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var users = withoutVisitors
+    final users = withoutVisitors
         ? usersDataSource.usersWithoutVisitors
         : usersDataSource.usersList;
     return Column(
@@ -141,7 +141,7 @@ class UsersSearchResult extends StatelessWidget {
                 userController: users[i],
                 onTapFunction: onTapFunction,
               ),
-              itemExtent: 65.0,
+              itemExtent: 65,
               itemCount: users.length,
             ),
           ),

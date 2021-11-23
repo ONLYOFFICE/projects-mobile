@@ -45,7 +45,7 @@ class TasksSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(TasksSearchController());
+    final controller = Get.put(TasksSearchController());
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),

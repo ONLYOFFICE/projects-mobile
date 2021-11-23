@@ -33,9 +33,7 @@
 import 'package:get/get.dart';
 
 abstract class BaseController extends GetxController {
-  BaseController(this.screenName);
-
-  String screenName;
+  late String screenName;
   RxList<dynamic> get itemList;
   final hasFilters = false.obs;
 

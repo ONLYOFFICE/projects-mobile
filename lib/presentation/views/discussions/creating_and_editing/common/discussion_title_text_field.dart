@@ -61,7 +61,7 @@ class DiscussionTitleTextField extends StatelessWidget {
                 hintText: tr('discussionTitle'),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 hintStyle: TextStyleHelper.headline6(
-                  color: controller.setTitleError == true
+                  color: controller.setTitleError.value == true
                       ? Get.theme.colors().colorError
                       : Get.theme.colors().onSurface.withOpacity(0.5),
                 ),

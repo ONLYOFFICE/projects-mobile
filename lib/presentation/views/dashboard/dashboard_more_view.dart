@@ -63,7 +63,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
       backgroundColor: Get.theme.colors().backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
-          visible: controller!.fabIsVisible.value,
+          visible: controller.fabIsVisible.value,
           child: StyledFloatingActionButton(
             onPressed: controller.createNewProject,
             child: AppIcon(

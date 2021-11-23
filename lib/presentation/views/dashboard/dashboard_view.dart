@@ -188,57 +188,57 @@ class DashboardCardView extends StatelessWidget {
                       endIndent: 0,
                     ),
                     Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            if (controller is ProjectsController &&
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          if (controller is ProjectsController &&
                               controller.loaded.value as bool)
-                              Expanded(
-                                child: ProjectCardContent(
+                            Expanded(
+                              child: ProjectCardContent(
                                 controller: controller as ProjectsController,
-                                ),
                               ),
-                            if (controller is TasksController &&
+                            ),
+                          if (controller is TasksController &&
                               controller.loaded.value as bool)
-                              Expanded(
-                                child: TaskCardContent(
+                            Expanded(
+                              child: TaskCardContent(
                                 controller: controller as TasksController,
-                                ),
                               ),
+                            ),
                           if (!(controller.loaded.value as bool))
-                              Container(
-                                height: 100,
-                                child: const Center(
-                                    child: CircularProgressIndicator()),
-                              ),
-                          ],
-                        ),
+                            Container(
+                              height: 100,
+                              child: const Center(
+                                  child: CircularProgressIndicator()),
+                            ),
+                        ],
                       ),
+                    ),
                     Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
                           if (controller.loaded.value as bool &&
                               controller.paginationController.total.value == 0)
-                              Container(
-                                height: 100,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      tr('dashboardNoActive',
-                                          args: [overline!.toLowerCase()]),
-                                      style: TextStyleHelper.subtitle1(
-                                        color: Get.theme
-                                            .colors()
-                                            .onSurface
-                                            .withOpacity(0.6),
-                                      ),
+                            Container(
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    tr('dashboardNoActive',
+                                        args: [overline.toLowerCase()]),
+                                    style: TextStyleHelper.subtitle1(
+                                      color: Get.theme
+                                          .colors()
+                                          .onSurface
+                                          .withOpacity(0.6),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                          ],
+                            ),
+                        ],
                       ),
                     ),
                     Container(
@@ -394,16 +394,16 @@ class TaskCardContent extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                if (controller!.loaded.value)
+                if (controller.loaded.value)
                   Column(children: [
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => i < 2
                           ? TaskCell(
-                              task: controller!.paginationController!.data[i])
+                              task: controller.paginationController.data[i])
                           : const SizedBox(),
-                      itemCount: controller!.paginationController!.data.length,
+                      itemCount: controller.paginationController.data.length,
                     ),
                   ]),
               ],

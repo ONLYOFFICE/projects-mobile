@@ -57,22 +57,22 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class DiscussionItemController extends GetxController {
-  final DiscussionItemService? _api = locator<DiscussionItemService>();
+  final DiscussionItemService _api = locator<DiscussionItemService>();
 
-  var discussion = Discussion().obs;
-  var status = 0.obs;
+  final discussion = Discussion().obs;
+  final status = 0.obs;
 
-  var loaded = true.obs;
+  final loaded = true.obs;
   var refreshController = RefreshController();
   var subscribersRefreshController = RefreshController();
   var commentsRefreshController = RefreshController();
   var selfId;
 
-  var statusImageString = ''.obs;
+  final statusImageString = ''.obs;
   // to show overview screen without loading
-  var firstReload = true.obs;
+  final firstReload = true.obs;
 
-  var fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
 
   DiscussionItemController(Discussion discussion) {
     this.discussion.value = discussion;
@@ -81,10 +81,10 @@ class DiscussionItemController extends GetxController {
     fabIsVisible.value = discussion.canEdit! && discussion.status == 0;
   }
 
-  var commentsListController = ScrollController();
+  final commentsListController = ScrollController();
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     selfId = await Get.find<UserController>().getUserId();
     super.onInit();
   }
@@ -95,7 +95,7 @@ class DiscussionItemController extends GetxController {
   }
 
   bool get isSubscribed {
-    for (var item in discussion.value.subscribers!) {
+    for (final item in discussion.value.subscribers!) {
       if (item.id == selfId) return true;
     }
     return false;
@@ -119,7 +119,7 @@ class DiscussionItemController extends GetxController {
 
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;
-    var result = await _api!.getMessageDetailed(id: discussion.value.id);
+    final result = await _api.getMessageDetailed(id: discussion.value.id);
 
     if (result != null) {
       try {
@@ -131,7 +131,7 @@ class DiscussionItemController extends GetxController {
     if (showLoading) loaded.value = true;
   }
 
-  void tryChangingStatus(context) async {
+  Future<void> tryChangingStatus(context) async {
     if (discussion.value.canEdit!) {
       await showsDiscussionStatusesBS(context: context, controller: this);
     }
@@ -141,13 +141,14 @@ class DiscussionItemController extends GetxController {
     var newStatusStr = newStatus == 1 ? 'archived' : 'open';
 
     try {
-      Discussion? result = await (_api!.updateMessageStatus(
-          id: discussion.value.id, newStatus: newStatusStr) as Future<Discussion?>);
+      final result = await (_api.updateMessageStatus(
+          id: discussion.value.id,
+          newStatus: newStatusStr) as Future<Discussion?>);
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status!;
         // ignore: unawaited_futures
-        getDiscussionDetailed(showLoading: true);
+        getDiscussionDetailed();
         Get.back();
       }
     } catch (e) {
@@ -164,8 +165,8 @@ class DiscussionItemController extends GetxController {
 
   Future<void> subscribeToMessageAction() async {
     try {
-      Discussion? result =
-          await (_api!.subscribeToMessage(id: discussion.value.id) as Future<Discussion?>);
+      final result = await (_api.subscribeToMessage(id: discussion.value.id)
+          as Future<Discussion?>);
       if (result != null) {
         discussion.value.setSubscribers = result.subscribers;
       }
@@ -174,7 +175,7 @@ class DiscussionItemController extends GetxController {
     }
   }
 
-  Future<void> deleteMessage(context) async {
+  Future<void> deleteMessage(BuildContext context) async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
@@ -182,7 +183,8 @@ class DiscussionItemController extends GetxController {
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {
-          Discussion? result = await (_api!.deleteMessage(id: discussion.value.id) as Future<Discussion?>);
+          final result = await (_api.deleteMessage(id: discussion.value.id)
+              as Future<Discussion?>);
           if (result != null) {
             Get.back();
             Get.back();
@@ -219,12 +221,12 @@ class DiscussionItemController extends GetxController {
     );
   }
 
-  void toSubscribersManagingScreen(context) {
+  void toSubscribersManagingScreen(BuildContext context) {
     try {
       Get.find<DiscussionEditingController>().dispose();
     } catch (_) {}
 
-    var controller = Get.put(
+    final controller = Get.put(
       DiscussionEditingController(
         id: discussion.value.id,
         title: discussion.value.title!.obs,
