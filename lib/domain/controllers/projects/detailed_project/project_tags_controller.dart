@@ -38,13 +38,13 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectTagsController extends GetxController {
-  final ProjectService? _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
   final _userController = Get.find<UserController>()..getUserInfo();
 
-  var usersList = [].obs;
-  var loaded = true.obs;
+  RxList usersList = [].obs;
+  RxBool loaded = true.obs;
 
-  var isSearchResult = false.obs;
+  RxBool isSearchResult = false.obs;
 
   RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
 
@@ -52,7 +52,7 @@ class ProjectTagsController extends GetxController {
 
   var _projController;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   void onLoading() async {}
 
@@ -61,11 +61,11 @@ class ProjectTagsController extends GetxController {
     loaded.value = false;
     tags.clear();
     projectDetailedTags.clear();
-    var allTags = await _api!.getProjectTags();
+    var allTags = await _api.getProjectTags();
 
     if (projController?.tags != null) {
       for (var value in projController?.tags) {
-        projectDetailedTags.add(value);
+        projectDetailedTags.add(value as String?);
       }
     }
 
@@ -110,7 +110,7 @@ class ProjectTagsController extends GetxController {
   }
 
   Future<void> createTag(String value) async {
-    var res = await _api!.createTag(name: value);
+    var res = await _api.createTag(name: value);
     if (res != null) await setup(_projController);
   }
 }

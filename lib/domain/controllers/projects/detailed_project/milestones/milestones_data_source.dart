@@ -118,7 +118,7 @@ class MilestonesDataSource extends GetxController {
 
   bool? _canCreate() => _projectDetailed == null
       ? false
-      : _projectDetailed!.security!['canCreateMilestone'];
+      : _projectDetailed!.security!['canCreateMilestone'] as bool;
 
   void loadMilestonesWithFilterByName(String searchText) {
     searchQuery = searchText;

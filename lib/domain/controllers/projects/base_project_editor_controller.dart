@@ -224,7 +224,7 @@ abstract class BaseProjectEditorController extends GetxController {
       element.selectionMode.value = selectionMode;
     }
 
-    if (selfUserItem?.portalUser?.id == selectedProjectManager.value?.id) {
+    if (selfUserItem?.portalUser.id == selectedProjectManager.value?.id) {
       selfUserItem!.isSelected.value = true;
     }
   }

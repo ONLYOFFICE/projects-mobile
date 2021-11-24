@@ -99,8 +99,9 @@ class ProjectsFilterController extends BaseFilterController {
     _projectManagerFilter = '';
     if (filter == 'me') {
       projectManager['other'] = '';
-      projectManager['me'] = !projectManager['me'];
-      if (projectManager['me']) _projectManagerFilter = '&manager=$_selfId';
+      projectManager['me'] = !(projectManager['me'] as bool);
+      if (projectManager['me'] as bool)
+        _projectManagerFilter = '&manager=$_selfId';
     }
     if (filter == 'other') {
       projectManager['me'] = false;
@@ -119,8 +120,8 @@ class ProjectsFilterController extends BaseFilterController {
     _teamMemberFilter = '';
     if (filter == 'me') {
       teamMember['other'] = '';
-      teamMember['me'] = !teamMember['me'];
-      if (teamMember['me']) _teamMemberFilter = '&participant=$_selfId';
+      teamMember['me'] = !(teamMember['me'] as bool);
+      if (teamMember['me'] as bool) _teamMemberFilter = '&participant=$_selfId';
     }
     if (filter == 'other') {
       teamMember['me'] = false;
@@ -138,11 +139,11 @@ class ProjectsFilterController extends BaseFilterController {
     _otherFilter = '';
     switch (filter) {
       case 'followed':
-        other['followed'] = !other['followed'];
+        other['followed'] = !(other['followed'] as bool);
         other['withTag'] = '';
         other['withoutTag'] = false;
 
-        if (other['followed']) _otherFilter = '&follow=true';
+        if (other['followed'] as bool) _otherFilter = '&follow=true';
         break;
       case 'withTag':
         other['followed'] = false;
@@ -157,8 +158,8 @@ class ProjectsFilterController extends BaseFilterController {
       case 'withoutTag':
         other['followed'] = false;
         other['withTag'] = '';
-        other['withoutTag'] = !other['withoutTag'];
-        if (other['withoutTag']) _otherFilter = '&tag=-1';
+        other['withoutTag'] = !(other['withoutTag'] as bool);
+        if (other['withoutTag'] as bool) _otherFilter = '&tag=-1';
         break;
       default:
     }
@@ -169,25 +170,25 @@ class ProjectsFilterController extends BaseFilterController {
     _statusFilter = '';
     switch (filter) {
       case 'active':
-        status['active'] = !status['active'];
+        status['active'] = !(status['active'] as bool);
         status['paused'] = false;
         status['closed'] = false;
 
-        if (status['active']) _statusFilter = '&status=open';
+        if (status['active'] as bool) _statusFilter = '&status=open';
         break;
       case 'paused':
         status['active'] = false;
-        status['paused'] = !status['paused'];
+        status['paused'] = !(status['paused'] as bool);
         status['closed'] = false;
 
-        if (status['paused']) _statusFilter = '&status=paused';
+        if (status['paused'] as bool) _statusFilter = '&status=paused';
         break;
       case 'closed':
         status['active'] = false;
         status['paused'] = false;
-        status['closed'] = !status['closed'];
+        status['closed'] = !(status['closed'] as bool);
 
-        if (status['closed']) _statusFilter = '&status=closed';
+        if (status['closed'] as bool) _statusFilter = '&status=closed';
         break;
       default:
     }
@@ -199,16 +200,16 @@ class ProjectsFilterController extends BaseFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await (_api.getProjectsByParams(
+    var result = await _api.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectManagerFilter: projectManagerFilter,
       participantFilter: teamMemberFilter,
       otherFilter: otherFilter,
       statusFilter: statusFilter,
-    ) as Future<PageDTO<List<ProjectDetailed>>>);
+    );
 
-    suitableResultCount.value = result.response!.length;
+    if (result != null) suitableResultCount.value = result.response!.length;
   }
 
   @override
@@ -310,23 +311,24 @@ class ProjectsFilterController extends BaseFilterController {
 
     if (savedFilters != null) {
       try {
-        projectManager.value =
-            Map<String, Object>.from(savedFilters['projectManager']['buttons']);
-        _projectManagerFilter = savedFilters['projectManager']['value'];
+        projectManager.value = Map<String, Object>.from(
+            savedFilters['projectManager']['buttons'] as Map);
+        _projectManagerFilter =
+            savedFilters['projectManager']['value'] as String;
 
-        teamMember.value =
-            Map<String, Object>.from(savedFilters['teamMember']['buttons']);
-        _teamMemberFilter = savedFilters['teamMember']['value'];
+        teamMember.value = Map<String, Object>.from(
+            savedFilters['teamMember']['buttons'] as Map);
+        _teamMemberFilter = savedFilters['teamMember']['value'] as String;
 
         other.value =
-            Map<String, Object>.from(savedFilters['other']['buttons']);
-        _otherFilter = savedFilters['other']['value'];
+            Map<String, Object>.from(savedFilters['other']['buttons'] as Map);
+        _otherFilter = savedFilters['other']['value'] as String;
 
         status.value =
-            Map<String, bool>.from(savedFilters['status']['buttons']);
-        _statusFilter = savedFilters['status']['value'];
+            Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
+        _statusFilter = savedFilters['status']['value'] as String;
 
-        hasFilters.value = savedFilters['hasFilters'];
+        hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
         printWarning('Projects filter loading error: $e');
         await loadFilters();

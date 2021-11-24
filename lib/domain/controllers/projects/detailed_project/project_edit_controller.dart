@@ -50,11 +50,11 @@ import 'package:projects/presentation/views/project_detailed/tags_selection_view
 class ProjectEditController extends BaseProjectEditorController {
   final ProjectService _projectService = locator<ProjectService>();
 
-  var loaded = true.obs;
-  var isSearchResult = false.obs;
-  var nothingFound = false.obs;
-  var projectTitleText = ''.obs;
-  var statusText = ''.obs;
+  RxBool loaded = true.obs;
+  RxBool isSearchResult = false.obs;
+  RxBool nothingFound = false.obs;
+  RxString projectTitleText = ''.obs;
+  RxString statusText = ''.obs;
   var selectedTags;
 
   EditProjectDTO? oldProjectDTO;
@@ -76,7 +76,7 @@ class ProjectEditController extends BaseProjectEditorController {
     isPrivate.value = _projectDetailed!.isPrivate!;
 
     final projectById =
-        await _projectService.getProjectById(projectId: _projectDetailed!.id);
+        await _projectService.getProjectById(projectId: _projectDetailed!.id!);
     tags.clear();
     if (projectById?.tags != null) {
       for (var value in projectById!.tags!) {
@@ -136,7 +136,7 @@ class ProjectEditController extends BaseProjectEditorController {
 
   Future<bool> updateStatus({int? newStatusId}) async =>
       Get.find<ProjectStatusesController>().updateStatus(
-          newStatusId: newStatusId, projectData: _projectDetailed);
+          newStatusId: newStatusId, projectData: _projectDetailed!);
 
   Future<void> confirmChanges() async {
     needToFillTitle.value = titleController.text.isEmpty;
@@ -173,7 +173,7 @@ class ProjectEditController extends BaseProjectEditorController {
     );
 
     var success = await _projectService.editProject(
-        project: newProject, projectId: _projectDetailed!.id);
+        project: newProject, projectId: _projectDetailed!.id!);
     if (success) {
       {
         locator<EventHub>().fire('needToRefreshProjects');

@@ -92,7 +92,7 @@ class ProjectDiscussionsController extends GetxController {
   }
 
   Future _getDiscussions({bool needToClear = false}) async {
-    var result = await (_api!.getDiscussionsByParams(
+    var result = await (_api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,

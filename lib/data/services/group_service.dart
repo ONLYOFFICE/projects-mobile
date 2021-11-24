@@ -40,8 +40,7 @@ import 'package:projects/data/api/group_api.dart';
 class GroupService {
   final GroupApi _api = locator<GroupApi>();
 
-  // TODO: Future <??>
-  Future getAllGroups() async {
+  Future<List<PortalGroup>?> getAllGroups() async {
     final groups = await _api.getAllGroups();
 
     final success = groups.response != null;

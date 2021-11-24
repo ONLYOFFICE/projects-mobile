@@ -112,5 +112,5 @@ class ProjectTasksController extends GetxController {
     fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() => _projectDetailed.security!['canCreateTask'];
+  bool? _canCreate() => _projectDetailed.security!['canCreateTask'] as bool?;
 }

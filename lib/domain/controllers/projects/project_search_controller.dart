@@ -98,16 +98,17 @@ class ProjectSearchController extends GetxController {
     switchToSearchView.value = true;
     searchResult.clear();
 
-    var result = await (_api.getProjectsByParams(
-        startIndex: _startIndex,
-        query: _query.toLowerCase()) as Future<PageDTO<List<ProjectDetailed>>>);
+    var result = await _api.getProjectsByParams(
+        startIndex: _startIndex, query: _query.toLowerCase());
 
-    _totalProjects = result.total;
+    if (result != null) {
+      _totalProjects = result.total!;
 
-    if (result.response!.isEmpty) {
-      nothingFound.value = true;
-    } else {
-      searchResult.addAll(result.response!);
+      if (result.response!.isEmpty) {
+        nothingFound.value = true;
+      } else {
+        searchResult.addAll(result.response!);
+      }
     }
     loaded.value = true;
   }

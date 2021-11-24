@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -45,8 +46,9 @@ class ProjectStatusesController extends GetxController {
   String getStatusName(int value) => ProjectStatus.toName(value);
   String getStatusImageString(int value) => ProjectStatus.toImageString(value);
 
-  Future<bool> updateStatus({int? newStatusId, required projectData}) async {
-    if (projectData.taskCount > 0 &&
+  Future<bool> updateStatus(
+      {int? newStatusId, required ProjectDetailed projectData}) async {
+    if (projectData.taskCount! > 0 &&
         newStatusId == ProjectStatusCode.closed.index) {
       MessagesHandler.showSnackBar(
         context: Get.context!,
@@ -56,7 +58,7 @@ class ProjectStatusesController extends GetxController {
     }
 
     var t = await locator<ProjectService>().updateProjectStatus(
-        projectId: projectData.id,
+        projectId: projectData.id!,
         newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {

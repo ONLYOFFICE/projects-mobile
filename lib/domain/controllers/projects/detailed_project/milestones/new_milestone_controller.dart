@@ -225,7 +225,7 @@ class NewMilestoneController extends GetxController {
     );
 
     var success = await _api.createMilestone(
-        projectId: _selectedProjectId, milestone: milestone);
+        projectId: _selectedProjectId!, milestone: milestone);
     if (success) {
       MessagesHandler.showSnackBar(
           context: context, text: tr('milestoneCreated'));

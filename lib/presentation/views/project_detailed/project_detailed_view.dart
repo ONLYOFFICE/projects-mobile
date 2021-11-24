@@ -82,7 +82,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         Get.put(ProjectDiscussionsController(projectDetailed));
 
     projectController = Get.find<ProjectDetailsController>();
-    projectController.setup(Get.arguments['projectDetailed']);
+    projectController
+        .setup(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     documentsController.setupFolder(
         folderName: projectDetailed.title!,

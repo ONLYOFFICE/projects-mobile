@@ -112,8 +112,8 @@ class MilestonesFilterController extends BaseFilterController {
     _milestoneResponsibleFilter = '';
     if (filter == 'me') {
       milestoneResponsible!['other'] = '';
-      milestoneResponsible!['me'] = !milestoneResponsible!['me'];
-      if (milestoneResponsible!['me'])
+      milestoneResponsible!['me'] = !(milestoneResponsible!['me'] as bool);
+      if (milestoneResponsible!['me'] as bool)
         _milestoneResponsibleFilter = '&milestoneResponsible=$_selfId';
     }
     if (filter == 'other') {
@@ -133,8 +133,8 @@ class MilestonesFilterController extends BaseFilterController {
     _taskResponsibleFilter = '';
     if (filter == 'me') {
       taskResponsible!['other'] = '';
-      taskResponsible!['me'] = !taskResponsible!['me'];
-      if (taskResponsible!['me'])
+      taskResponsible!['me'] = !(taskResponsible!['me'] as bool);
+      if (taskResponsible!['me'] as bool)
         _taskResponsibleFilter = '&participant=$_selfId';
     }
     if (filter == 'other') {
@@ -159,40 +159,42 @@ class MilestonesFilterController extends BaseFilterController {
       deadline['upcoming'] = false;
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
-      deadline['overdue'] = !deadline['overdue'];
+      deadline['overdue'] = !(deadline['overdue'] as bool);
       var dueDate = formatter.format(DateTime.now());
-      if (deadline['overdue']) _deadlineFilter = '&deadlineStop=$dueDate';
+      if (deadline['overdue'] as bool)
+        _deadlineFilter = '&deadlineStop=$dueDate';
     }
     if (filter == 'today') {
       deadline['overdue'] = false;
       deadline['upcoming'] = false;
       deadline['custom']['selected'] = false;
-      deadline['today'] = !deadline['today'];
+      deadline['today'] = !(deadline['today'] as bool);
       var dueDate = formatter.format(DateTime.now());
-      if (deadline['today'])
+      if (deadline['today'] as bool)
         _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
     }
     if (filter == 'upcoming') {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
-      deadline['upcoming'] = !deadline['upcoming'];
+      deadline['upcoming'] = !(deadline['upcoming'] as bool);
       var startDate = formatter.format(DateTime.now());
       var stopDate =
           formatter.format(DateTime.now().add(const Duration(days: 7)));
-      if (deadline['upcoming'])
+      if (deadline['upcoming'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
     if (filter == 'custom') {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['upcoming'] = false;
-      deadline['custom']['selected'] = !deadline['custom']['selected'];
+      deadline['custom']['selected'] =
+          !(deadline['custom']['selected'] as bool);
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
       var startDate = formatter.format(start!);
       var stopDate = formatter.format(stop!);
-      if (deadline['custom']['selected'])
+      if (deadline['custom']['selected'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
 
@@ -203,25 +205,25 @@ class MilestonesFilterController extends BaseFilterController {
     _statusFilter = '';
     switch (filter) {
       case 'active':
-        status!['active'] = !status!['active'];
+        status!['active'] = !(status!['active'] as bool);
         status!['paused'] = false;
         status!['closed'] = false;
 
-        if (status!['active']) _statusFilter = '&status=open';
+        if (status!['active'] as bool) _statusFilter = '&status=open';
         break;
       case 'paused':
         status!['active'] = false;
-        status!['paused'] = !status!['paused'];
+        status!['paused'] = !(status!['paused'] as bool);
         status!['closed'] = false;
 
-        if (status!['paused']) _statusFilter = '&status=paused';
+        if (status!['paused'] as bool) _statusFilter = '&status=paused';
         break;
       case 'closed':
         status!['active'] = false;
         status!['paused'] = false;
-        status!['closed'] = !status!['closed'];
+        status!['closed'] = !(status!['closed'] as bool);
 
-        if (status!['closed']) _statusFilter = '&status=closed';
+        if (status!['closed'] as bool) _statusFilter = '&status=closed';
         break;
       default:
     }
@@ -349,27 +351,29 @@ class MilestonesFilterController extends BaseFilterController {
     if (savedFilters != null) {
       try {
         milestoneResponsible =
-            Map.from(savedFilters['milestoneResponsible']['buttons']).obs;
+            Map.from(savedFilters['milestoneResponsible']['buttons'] as Map)
+                .obs;
         _milestoneResponsibleFilter =
-            savedFilters['milestoneResponsible']['value'];
+            savedFilters['milestoneResponsible']['value'] as String;
 
         taskResponsible =
-            Map.from(savedFilters['taskResponsible']['buttons']).obs;
-        _taskResponsibleFilter = savedFilters['taskResponsible']['value'];
+            Map.from(savedFilters['taskResponsible']['buttons'] as Map).obs;
+        _taskResponsibleFilter =
+            savedFilters['taskResponsible']['value'] as String;
 
-        status = Map.from(savedFilters['status']['buttons']).obs;
-        _statusFilter = savedFilters['status']['value'];
+        status = Map.from(savedFilters['status']['buttons'] as Map).obs;
+        _statusFilter = savedFilters['status']['value'] as String;
 
-        Map d = savedFilters['deadline']['buttons'];
+        Map d = savedFilters['deadline']['buttons'] as Map;
         d['custom'] = {
           'selected': d['custom']['selected'],
-          'startDate': DateTime.parse(d['custom']['startDate']),
-          'stopDate': DateTime.parse(d['custom']['stopDate']),
+          'startDate': DateTime.parse(d['custom']['startDate'] as String),
+          'stopDate': DateTime.parse(d['custom']['stopDate'] as String),
         };
         deadline = d.obs;
-        _deadlineFilter = savedFilters['deadline']['value'];
+        _deadlineFilter = savedFilters['deadline']['value'] as String;
 
-        hasFilters.value = savedFilters['hasFilters'];
+        hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
         print(e);
         await loadFilters();

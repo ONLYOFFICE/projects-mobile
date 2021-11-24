@@ -131,8 +131,9 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         responsible['other'] = '';
         responsible['groups'] = '';
         responsible['no'] = false;
-        responsible['me'] = !responsible['me'];
-        if (responsible['me']) _responsibleFilter = '&participant=$_selfId';
+        responsible['me'] = !(responsible['me'] as bool);
+        if (responsible['me'] as bool)
+          _responsibleFilter = '&participant=$_selfId';
         break;
       case 'other':
         responsible['me'] = false;
@@ -160,8 +161,8 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         responsible['me'] = false;
         responsible['other'] = '';
         responsible['groups'] = '';
-        responsible['no'] = !responsible['no'];
-        if (responsible['no']) {
+        responsible['no'] = !(responsible['no'] as bool);
+        if (responsible['no'] as bool) {
           _responsibleFilter =
               '&participant=00000000-0000-0000-0000-000000000000';
         }
@@ -177,8 +178,8 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
     _creatorFilter = '';
     if (filter == 'me') {
       creator['other'] = '';
-      creator['me'] = !creator['me'];
-      if (creator['me']) _creatorFilter = '&creator=$_selfId';
+      creator['me'] = !(creator['me'] as bool);
+      if (creator['me'] as bool) _creatorFilter = '&creator=$_selfId';
     }
     if (filter == 'other') {
       creator['me'] = false;
@@ -200,8 +201,8 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         project['other'] = '';
         project['withTag'] = '';
         project['withoutTag'] = false;
-        project['my'] = !project['my'];
-        if (project['my']) _projectFilter = '&myprojects=true';
+        project['my'] = !(project['my'] as bool);
+        if (project['my'] as bool) _projectFilter = '&myprojects=true';
         break;
       case 'other':
         project['my'] = false;
@@ -229,8 +230,8 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         project['my'] = false;
         project['other'] = '';
         project['withTag'] = '';
-        project['withoutTag'] = !project['withoutTag'];
-        if (project['withoutTag']) _projectFilter = '&tag=-1';
+        project['withoutTag'] = !(project['withoutTag'] as bool);
+        if (project['withoutTag'] as bool) _projectFilter = '&tag=-1';
         break;
       default:
     }
@@ -244,14 +245,14 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       case 'my':
         milestone['no'] = false;
         milestone['other'] = '';
-        milestone['my'] = !milestone['my'];
-        if (milestone['my']) _milestoneFilter = '&mymilestones=true';
+        milestone['my'] = !(milestone['my'] as bool);
+        if (milestone['my'] as bool) _milestoneFilter = '&mymilestones=true';
         break;
       case 'no':
         milestone['my'] = false;
         milestone['other'] = '';
-        milestone['no'] = !milestone['no'];
-        if (milestone['no']) _milestoneFilter = '&nomilestone=true';
+        milestone['no'] = !(milestone['no'] as bool);
+        if (milestone['no'] as bool) _milestoneFilter = '&nomilestone=true';
         break;
       case 'other':
         milestone['my'] = false;
@@ -274,13 +275,13 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
     switch (filter) {
       case 'open':
         status['closed'] = false;
-        status['open'] = !status['open'];
-        if (status['open']) _statusFilter = '&status=1';
+        status['open'] = !(status['open'] as bool);
+        if (status['open'] as bool) _statusFilter = '&status=1';
         break;
       case 'closed':
         status['open'] = false;
-        status['closed'] = !status['closed'];
-        if (status['closed']) _statusFilter = '&status=2';
+        status['closed'] = !(status['closed'] as bool);
+        if (status['closed'] as bool) _statusFilter = '&status=2';
         break;
       default:
     }
@@ -299,42 +300,43 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       deadline['upcoming'] = false;
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
-      deadline['overdue'] = !deadline['overdue'];
+      deadline['overdue'] = !(deadline['overdue'] as bool);
       var dueDate = formatter.format(DateTime.now()).substring(0, 10);
-      if (deadline['overdue'])
+      if (deadline['overdue'] as bool)
         _deadlineFilter = '&deadlineStop=$dueDate&status=open';
     }
     if (filter == 'today') {
       deadline['overdue'] = false;
       deadline['upcoming'] = false;
       deadline['custom']['selected'] = false;
-      deadline['today'] = !deadline['today'];
+      deadline['today'] = !(deadline['today'] as bool);
       var dueDate = formatter.format(DateTime.now()).substring(0, 10);
-      if (deadline['today'])
+      if (deadline['today'] as bool)
         _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
     }
     if (filter == 'upcoming') {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
-      deadline['upcoming'] = !deadline['upcoming'];
+      deadline['upcoming'] = !(deadline['upcoming'] as bool);
       var startDate = formatter.format(DateTime.now()).substring(0, 10);
       var stopDate = formatter
           .format(DateTime.now().add(const Duration(days: 7)))
           .substring(0, 10);
-      if (deadline['upcoming'])
+      if (deadline['upcoming'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
     if (filter == 'custom') {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['upcoming'] = false;
-      deadline['custom']['selected'] = !deadline['custom']['selected'];
+      deadline['custom']['selected'] =
+          !(deadline['custom']['selected'] as bool);
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
       var startDate = formatter.format(start!).substring(0, 10);
       var stopDate = formatter.format(stop!).substring(0, 10);
-      if (deadline['custom']['selected'])
+      if (deadline['custom']['selected'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
 

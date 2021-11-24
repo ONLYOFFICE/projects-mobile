@@ -55,27 +55,28 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectDetailsController extends BaseProjectEditorController {
-  final ProjectService? _projectService = locator<ProjectService>();
-  final FilesService? _docApi = locator<FilesService>();
+  final ProjectService _projectService = locator<ProjectService>();
+  final FilesService _docApi = locator<FilesService>();
 
   RefreshController refreshController = RefreshController();
-  var loaded = true.obs;
+  RxBool loaded = true.obs;
 
   final statuses = [].obs;
 
-  var projectTitleText = ''.obs;
+  RxString projectTitleText = ''.obs;
 
-  var managerText = ''.obs;
-  var teamMembers = [].obs;
-  var teamMembersCount = 0.obs;
+  RxString managerText = ''.obs;
+  RxList<PortalUserItemController> teamMembers =
+      <PortalUserItemController>[].obs;
+  RxInt teamMembersCount = 0.obs;
 
-  var creationDateText = ''.obs;
+  RxString creationDateText = ''.obs;
 
-  var statusText = ''.obs;
-  var tasksCount = 0.obs;
-  var docsCount = (-1).obs;
+  RxString statusText = ''.obs;
+  RxInt tasksCount = 0.obs;
+  RxInt docsCount = (-1).obs;
 
-  var milestoneCount = (-1).obs;
+  RxInt milestoneCount = (-1).obs;
   int currentTab = -1.obs;
 
   bool markedToDelete = false;
@@ -92,7 +93,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   ProjectDetailsController() {
     _userController.getUserInfo().whenComplete(() => {
           selfUserItem =
-              PortalUserItemController(portalUser: _userController.user),
+              PortalUserItemController(portalUser: _userController.user!),
         });
 
     _subscription =
@@ -122,7 +123,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<void> setup(projectDetailed) async {
+  Future<void> setup(ProjectDetailed projectDetailed) async {
     _projectDetailed.value = projectDetailed;
 
     await fillProjectInfo();
@@ -132,8 +133,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
     creationDateText.value =
         formatter.format(DateTime.parse(_projectDetailed.value!.created!));
 
-    await _projectService!
-        .getProjectById(projectId: _projectDetailed.value!.id)
+    await _projectService
+        .getProjectById(projectId: _projectDetailed.value!.id!)
         .then((value) => {
               _projectDetailed.value = value,
               fillProjectInfo(),
@@ -146,7 +147,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     tasksCount.value = _projectDetailed.value!.taskCountTotal!;
 
-    await _docApi!
+    await _docApi
         .getFilesByParams(folderId: _projectDetailed.value!.projectFolder)
         .then((value) => docsCount.value = value!.files!.length);
 
@@ -184,11 +185,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed.value = await _projectService!.getProjectById(
-        projectId: _projectDetailed.value!.id);
+    _projectDetailed.value = await _projectService.getProjectById(
+        projectId: _projectDetailed.value!.id!);
     loaded.value = true;
 
-    await setup(_projectDetailed.value);
+    await setup(_projectDetailed.value!);
   }
 
   Future manageTeamMembers() async {
@@ -207,29 +208,29 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future deleteProject() async {
     markedToDelete = true;
-    return await _projectService!.deleteProject(
-        projectId: _projectDetailed.value!.id);
+    return await _projectService.deleteProject(
+        projectId: _projectDetailed.value!.id!);
   }
 
   Future<bool> updateStatus({int? newStatusId}) async =>
       Get.find<ProjectStatusesController>().updateStatus(
-          newStatusId: newStatusId, projectData: _projectDetailed.value);
+          newStatusId: newStatusId, projectData: _projectDetailed.value!);
 
   Future followProject() async {
-    await _projectService!.followProject(projectId: _projectDetailed.value!.id);
+    await _projectService.followProject(projectId: _projectDetailed.value!.id!);
     await refreshData();
   }
 
   @override
   Future<void> confirmTeamMembers() async {
     Get.find<UsersDataSource>().loaded.value = false;
-    var users = <String?>[];
+    var users = <String>[];
 
     for (var user in selectedTeamMembers) {
-      users.add(user.id);
+      users.add(user.id!);
     }
 
-    await _projectService!.addToProjectTeam(projectData!.id.toString(), users);
+    await _projectService.addToProjectTeam(projectData!.id!, users);
     await refreshData();
     Get.find<UsersDataSource>().loaded.value = true;
 
