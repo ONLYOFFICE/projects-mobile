@@ -38,6 +38,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -54,11 +55,11 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 
 class NewTaskController extends GetxController
     implements TaskActionsController {
-  final TaskService? _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
   late ProjectTeamController teamController;
 
-  var _selectedProjectId;
-  var newMilestoneId;
+  int? _selectedProjectId;
+  int? newMilestoneId;
   // for dateTime format
   DateTime? _startDate;
   DateTime? _dueDate;
@@ -73,13 +74,13 @@ class NewTaskController extends GetxController
   @override
   RxString? title = ''.obs;
   @override
-  dynamic selectedProjectTitle = ''.obs; //RxString
+  RxString selectedProjectTitle = ''.obs; //RxString
   @override
   RxString? selectedMilestoneTitle = ''.obs;
 
   @override
   RxString? descriptionText = ''.obs;
-  var descriptionController = TextEditingController().obs;
+  Rx<TextEditingController> descriptionController = TextEditingController().obs;
   final TextEditingController _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
 
@@ -108,13 +109,14 @@ class NewTaskController extends GetxController
   RxBool? setTitleError = false.obs;
 
   @override
-  void init([projectDetailed]) {
+  void init(ProjectDetailed? projectDetailed) {
+    // TODO why []
     _titleFocus.requestFocus();
 
     teamController = Get.find<ProjectTeamController>();
 
     if (projectDetailed != null) {
-      selectedProjectTitle.value = projectDetailed.title;
+      selectedProjectTitle.value = projectDetailed.title!;
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
     }
@@ -123,7 +125,7 @@ class NewTaskController extends GetxController
   @override
   void changeTitle(String newText) => title!.value = newText;
 
-  void changeProjectSelection({var id, String? title}) {
+  void changeProjectSelection({int? id, String? title}) {
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
       _selectedProjectId = id;
@@ -148,7 +150,7 @@ class NewTaskController extends GetxController
   }
 
   @override
-  void changeMilestoneSelection({var id, String? title}) {
+  void changeMilestoneSelection({int? id, String? title}) {
     if (id != null && title != null) {
       selectedMilestoneTitle!.value = title;
       newMilestoneId = id;
@@ -238,24 +240,24 @@ class NewTaskController extends GetxController
 
   Future<void> _getSelectedResponsibles() async {
     for (var element in teamController.usersList) {
-      element.isSelected!.value = false;
+      element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
     for (var selectedMember in responsibles!) {
       for (var user in teamController.usersList) {
-        if (selectedMember.portalUser.id == user.portalUser!.id) {
-          user.isSelected!.value = true;
+        if (selectedMember.portalUser.id == user.portalUser.id) {
+          user.isSelected.value = true;
         }
       }
     }
   }
 
   void addResponsible(PortalUserItemController user) {
-    if (user.isSelected!.value == true) {
+    if (user.isSelected.value == true) {
       responsibles!.add(user);
     } else {
       responsibles!.removeWhere(
-          (element) => user.portalUser!.id == element.portalUser.id);
+          (element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -324,7 +326,7 @@ class NewTaskController extends GetxController
         title: title!.value,
         milestoneid: newMilestoneId);
 
-    var createdTask = await _api!.addTask(newTask: newTask);
+    var createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
       locator<EventHub>().fire('needToRefreshTasks');
       Get.back();

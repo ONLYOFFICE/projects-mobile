@@ -37,7 +37,7 @@ abstract class TaskActionsController extends GetxController {
   RxString? title;
   RxString? descriptionText;
   RxString? selectedMilestoneTitle;
-  var selectedProjectTitle;
+  late RxString selectedProjectTitle;
   RxList? responsibles;
   RxString? startDateText;
   RxString? dueDateText;

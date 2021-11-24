@@ -58,9 +58,9 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final target = Get.arguments['target'];
-    final int? initialFolderId = Get.arguments['initialFolderId'];
-    final String? mode = Get.arguments['mode'];
+    final target = Get.arguments['target'] as int?;
+    final initialFolderId = Get.arguments['initialFolderId'] as int?;
+    final mode = Get.arguments['mode'] as String?;
 
     controller.initialSetup();
 
@@ -386,7 +386,8 @@ class MoveDocumentsScreen extends StatelessWidget {
                       return const SizedBox(height: 10);
                     },
                     itemBuilder: (BuildContext context, int index) {
-                      var element = controller.paginationController!.data[index];
+                      var element =
+                          controller.paginationController!.data[index];
                       if (controller.target == element.id)
                         return const SizedBox();
                       return element is Folder

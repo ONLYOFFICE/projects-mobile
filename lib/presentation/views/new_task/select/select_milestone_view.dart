@@ -61,7 +61,8 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
 
   @override
   void initState() {
-    _milestoneController.setup(projectId: _controller.selectedProjectId);
+    _milestoneController.setup(
+        projectId: _controller.selectedProjectId as int?);
     super.initState();
   }
 
@@ -105,7 +106,8 @@ class _SelectMilestoneViewState extends State<SelectMilestoneView> {
                       itemBuilder: (BuildContext context, int index) {
                         if (index == 0) {
                           return _None(
-                            onTap: _controller.changeMilestoneSelection,
+                            onTap: _controller.changeMilestoneSelection
+                                as Function(),
                             isSelected: _controller.newMilestoneId == null,
                           );
                         }

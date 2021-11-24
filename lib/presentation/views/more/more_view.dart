@@ -46,9 +46,7 @@ class MoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var portalUser;
-
-    portalUser = Get.isRegistered<ProfileController>()
+    final portalUser = Get.isRegistered<ProfileController>()
         ? Get.find<ProfileController>()
         : Get.put(ProfileController(), permanent: true);
 
@@ -87,7 +85,7 @@ class MoreView extends StatelessWidget {
                         alignment: Alignment.center,
                         children: <Widget>[
                           CircleAvatar(
-                            radius: 40.0,
+                            radius: 40,
                             backgroundColor: Get.theme.colors().bgDescription,
                             child: ClipOval(
                               child: Obx(() {

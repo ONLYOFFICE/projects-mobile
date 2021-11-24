@@ -45,8 +45,8 @@ class SelectDateView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var controller = Get.arguments['controller'];
-    bool startDate = Get.arguments['startDate'];
-    DateTime? initialDate = Get.arguments['initialDate'];
+    final startDate = Get.arguments['startDate'] as bool;
+    final initialDate = Get.arguments['initialDate'] as DateTime?;
 
     final platformController = Get.find<PlatformController>();
 

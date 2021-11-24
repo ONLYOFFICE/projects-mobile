@@ -37,8 +37,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -76,7 +78,7 @@ class PortalDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, dynamic value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             title: DocsTitle(controller: controller),
             bottom: DocsBottom(controller: controller),
             showBackButton: false,
@@ -96,8 +98,8 @@ class FolderContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<DocumentsController>();
-    final String? folderName = Get.arguments['folderName'];
-    final int? folderId = Get.arguments['folderId'];
+    final folderName = Get.arguments['folderName'] as String?;
+    final folderId = Get.arguments['folderId'] as int?;
 
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.setupFolder(folderName: folderName!, folderId: folderId);
@@ -136,10 +138,10 @@ class DocumentsSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String? folderName = Get.arguments['folderName'];
-    final int? folderId = Get.arguments['folderId'];
+    final folderName = Get.arguments['folderName'] as String?;
+    final folderId = Get.arguments['folderId'] as int?;
 
-    documentsController.entityType = Get.arguments['entityType'];
+    documentsController.entityType = Get.arguments['entityType'] as String?;
 
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       documentsController.setupSearchMode(
@@ -167,7 +169,7 @@ class DocumentsScreen extends StatelessWidget {
   }) : super(key: key);
 
   final PreferredSizeWidget? appBar;
-  final controller;
+  final controller; // TODO DocumentsController, DiscDocContr
   final ScrollController scrollController;
 
   @override
@@ -186,8 +188,8 @@ class DocumentsScreen extends StatelessWidget {
                     icon: SvgIcons.not_found, text: tr('notFound')));
           }
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value &&
+              controller.paginationController.data.isEmpty as bool &&
+              !(controller.filterController.hasFilters.value as bool) &&
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
@@ -195,18 +197,19 @@ class DocumentsScreen extends StatelessWidget {
                     text: tr('noDocumentsCreated')));
           }
           if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value &&
+              controller.paginationController.data.isEmpty as bool &&
+              controller.filterController.hasFilters.value as bool &&
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
                     icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
           }
           return PaginationListView(
-            paginationController: controller.paginationController,
+            paginationController:
+                controller.paginationController as PaginationController,
             child: ListView.separated(
               controller: scrollController,
-              itemCount: controller.paginationController.data.length,
+              itemCount: controller.paginationController.data.length as int,
               separatorBuilder: (BuildContext context, int index) =>
                   const SizedBox(height: 10),
               itemBuilder: (BuildContext context, int index) {
@@ -214,12 +217,12 @@ class DocumentsScreen extends StatelessWidget {
                 return element is Folder
                     ? FolderCell(
                         entity: element,
-                        controller: controller,
+                        controller: controller as DocumentsController,
                       )
                     : FileCell(
-                        entity: element,
+                        entity: element as PortalFile,
                         index: index,
-                        controller: controller,
+                        controller: controller as DocumentsController,
                       );
               },
             ),
@@ -232,7 +235,7 @@ class DocumentsScreen extends StatelessWidget {
 
 class DocsTitle extends StatelessWidget {
   const DocsTitle({Key? key, required this.controller}) : super(key: key);
-  final controller;
+  final DocumentsController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -290,7 +293,7 @@ class DocsTitle extends StatelessWidget {
 }
 
 class DocsBottom extends StatelessWidget {
-  DocsBottom({Key? key, this.controller}) : super(key: key);
+  DocsBottom({Key? key, required this.controller}) : super(key: key);
   final controller;
   @override
   Widget build(BuildContext context) {

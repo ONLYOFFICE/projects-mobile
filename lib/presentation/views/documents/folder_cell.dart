@@ -57,7 +57,7 @@ class FolderCell extends StatelessWidget {
   }) : super(key: key);
 
   final Folder entity;
-  final controller;
+  final DocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -229,15 +229,15 @@ class FolderCellTitle extends StatelessWidget {
   }
 }
 
-void _onFolderPopupMenuSelected(
+Future<void> _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
   BuildContext context,
-  DocumentsController? controller,
+  DocumentsController controller,
 ) async {
   switch (value) {
     case 'copyLink':
-      var portalDomain = controller!.portalInfoController.portalUri;
+      var portalDomain = controller.portalInfoController.portalUri;
 
       var link =
           '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
@@ -260,7 +260,7 @@ void _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller!.currentFolder,
+        'initialFolderId': controller.currentFolder,
       });
       break;
     case 'move':
@@ -268,7 +268,7 @@ void _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller!.currentFolder,
+        'initialFolderId': controller.currentFolder,
       });
 
       break;
@@ -276,7 +276,7 @@ void _onFolderPopupMenuSelected(
       _renameFolder(controller, selectedFolder, context);
       break;
     case 'delete':
-      var success = await controller!.deleteFolder(selectedFolder);
+      var success = await controller.deleteFolder(selectedFolder);
 
       if (success) {
         MessagesHandler.showSnackBar(
@@ -289,7 +289,7 @@ void _onFolderPopupMenuSelected(
 
 void _renameFolder(
     DocumentsController? controller, Folder element, BuildContext context) {
-  var inputController = TextEditingController();
+  final inputController = TextEditingController();
   inputController.text = element.title!;
 
   Get.dialog(

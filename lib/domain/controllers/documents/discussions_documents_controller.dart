@@ -53,19 +53,21 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DiscussionsDocumentsController extends GetxController {
-  final FilesService? _api = locator<FilesService>();
-  var portalInfoController = Get.find<PortalInfoController>();
+  final FilesService _api = locator<FilesService>();
+  PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
   final _userController = Get.find<UserController>();
 
-  var hasFilters = false.obs;
-  var loaded = false.obs;
-  var nothingFound = false.obs;
-  var searchMode = false.obs;
+  RxBool hasFilters = false.obs;
+  RxBool loaded = false.obs;
+  RxBool nothingFound = false.obs;
+  RxBool searchMode = false.obs;
 
-  var searchInputController = TextEditingController();
+  TextEditingController searchInputController = TextEditingController();
 
-  PaginationController? _paginationController;
+  late PaginationController _paginationController;
+  PaginationController get paginationController => _paginationController;
+  RxList get itemList => _paginationController.data;
 
   String? _entityType;
 
@@ -73,14 +75,10 @@ class DiscussionsDocumentsController extends GetxController {
   set entityType(String? value) =>
       {_entityType = value, _filterController!.entityType = value};
 
-  PaginationController? get paginationController => _paginationController;
-
   int? _currentFolderId;
   int? get currentFolder => _currentFolderId;
 
   var screenName = tr('documents').obs;
-
-  RxList get itemList => _paginationController!.data;
 
   DocumentsSortController? _sortController;
   DocumentsSortController? get sortController => _sortController;
@@ -116,15 +114,15 @@ class DiscussionsDocumentsController extends GetxController {
 
   void setupFiles(List<PortalFile> files) {
     loaded.value = false;
-    paginationController!.data.clear();
-    paginationController!.data.addAll(files);
+    paginationController.data.clear();
+    paginationController.data.addAll(files);
     loaded.value = true;
   }
 
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
   Future<bool> renameFolder(Folder element, String newName) async {
-    var result = await _api!.renameFolder(
+    var result = await _api.renameFolder(
       folderId: element.id.toString(),
       newTitle: newName,
     );
@@ -135,7 +133,7 @@ class DiscussionsDocumentsController extends GetxController {
   void downloadFolder() {}
 
   Future<bool> deleteFolder(Folder element) async {
-    var result = await _api!.deleteFolder(
+    var result = await _api.deleteFolder(
       folderId: element.id.toString(),
     );
 
@@ -143,7 +141,7 @@ class DiscussionsDocumentsController extends GetxController {
   }
 
   Future<bool> deleteFile(PortalFile element) async {
-    var result = await _api!.deleteFile(
+    var result = await _api.deleteFile(
       fileId: element.id.toString(),
     );
 

@@ -59,7 +59,7 @@ class MilestonesDataSource extends GetxController {
   MilestonesFilterController get filterController => _filterController;
 
   int get itemCount => paginationController.data.length;
-  RxList get itemList => paginationController.data;
+  RxList<Milestone> get itemList => paginationController.data;
 
   RxBool loaded = false.obs;
 

@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
@@ -49,8 +50,8 @@ import 'package:projects/presentation/views/documents/documents_move_or_copy_vie
 class FileCell extends StatelessWidget {
   final int index;
 
-  final PortalFile? entity;
-  final controller;
+  final PortalFile entity;
+  final DocumentsController controller;
 
   const FileCell({
     Key? key,
@@ -105,13 +106,13 @@ class FileCell extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: Text(entity!.title!.replaceAll(' ', '\u00A0'),
+                    child: Text(entity.title!.replaceAll(' ', '\u00A0'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.projectTitle),
                   ),
                   Text(
-                      '${formatedDate(entity!.updated!)} • ${entity!.contentLength} • ${entity!.createdBy!.displayName}',
+                      '${formatedDate(entity.updated!)} • ${entity.contentLength} • ${entity.createdBy!.displayName}',
                       style: TextStyleHelper.caption(
                           color:
                               Get.theme.colors().onSurface.withOpacity(0.6))),
@@ -178,18 +179,18 @@ class FileCell extends StatelessWidget {
   }
 }
 
-void _onFilePopupMenuSelected(
+Future<void> _onFilePopupMenuSelected(
   value,
-  PortalFile? selectedFile,
+  PortalFile selectedFile,
   BuildContext context,
-  controller,
+  DocumentsController controller,
 ) async {
   switch (value) {
     case 'copyLink':
       var portalDomain = controller.portalInfoController.portalUri;
 
       var link =
-          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile!.id.toString()}';
+          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
 
       if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
@@ -200,13 +201,13 @@ void _onFilePopupMenuSelected(
       await controller.openFile(selectedFile);
       break;
     case 'download':
-      await controller.downloadFile(selectedFile!.viewUrl);
+      await controller.downloadFile(selectedFile.viewUrl!);
       break;
     case 'copy':
       Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
-        'target': selectedFile!.id,
+        'target': selectedFile.id,
         'initialFolderId': controller.currentFolder,
         'refreshCalback': controller.refreshContent
       });
@@ -215,14 +216,14 @@ void _onFilePopupMenuSelected(
       Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
-        'target': selectedFile!.id,
+        'target': selectedFile.id,
         'initialFolderId': controller.currentFolder,
         'refreshCalback': controller.refreshContent
       });
 
       break;
     case 'rename':
-      _renameFile(controller, selectedFile!, context);
+      _renameFile(controller, selectedFile, context);
       break;
     case 'delete':
       var success = await controller.deleteFile(selectedFile);
@@ -236,7 +237,7 @@ void _onFilePopupMenuSelected(
 }
 
 void _renameFile(
-  controller,
+  DocumentsController controller,
   PortalFile element,
   BuildContext context,
 ) {

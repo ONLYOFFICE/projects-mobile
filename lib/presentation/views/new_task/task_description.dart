@@ -75,7 +75,8 @@ class TaskDescription extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
           child: TextField(
-            controller: controller.descriptionController.value,
+            controller:
+                controller.descriptionController.value as TextEditingController,
             autofocus: true,
             maxLines: null,
             style:

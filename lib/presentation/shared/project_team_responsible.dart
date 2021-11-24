@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
@@ -67,23 +68,24 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
         actions: [
           IconButton(
               icon: const Icon(Icons.check_rounded),
-              onPressed: controller.confirmResponsiblesSelection)
+              onPressed: controller.confirmResponsiblesSelection as Function())
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: controller.leaveResponsiblesSelectionView,
+          onPressed: controller.leaveResponsiblesSelectionView as Function(),
         ),
       ),
       body: Obx(
         () {
           if (controller.teamController.loaded.value == true &&
-              controller.teamController.usersList.isNotEmpty &&
+              controller.teamController.usersList.isNotEmpty as bool &&
               controller.teamController.isSearchResult.value == false) {
             return SmartRefresher(
               enablePullDown: false,
-              enablePullUp: controller.teamController.pullUpEnabled,
-              controller: controller.teamController.refreshController,
-              onLoading: controller.teamController.onLoading,
+              enablePullUp: controller.teamController.pullUpEnabled as bool,
+              controller: controller.teamController.refreshController
+                  as RefreshController,
+              onLoading: controller.teamController.onLoading as Function(),
               child: ListView(
                 children: <Widget>[
                   Column(children: [
@@ -91,11 +93,13 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.teamController.usersList[i],
-                          onTapFunction: controller.addResponsible),
+                          userController: controller.teamController.usersList[i]
+                              as PortalUserItemController,
+                          onTapFunction:
+                              controller.addResponsible as Function()),
                       itemExtent: 65.0,
-                      itemCount: controller.teamController.usersList.length,
+                      itemCount:
+                          controller.teamController.usersList.length as int,
                     )
                   ]),
                 ],
@@ -106,13 +110,14 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             return Column(children: [const NothingFound()]);
           }
           if (controller.teamController.loaded.value == true &&
-              controller.teamController.searchResult.isNotEmpty &&
+              controller.teamController.searchResult.isNotEmpty as bool &&
               controller.teamController.isSearchResult.value == true) {
             return SmartRefresher(
               enablePullDown: false,
-              enablePullUp: controller.teamController.pullUpEnabled,
-              controller: controller.teamController.refreshController,
-              onLoading: controller.teamController.onLoading,
+              enablePullUp: controller.teamController.pullUpEnabled as bool,
+              controller: controller.teamController.refreshController
+                  as RefreshController,
+              onLoading: controller.teamController.onLoading as Function(),
               child: ListView(
                 children: <Widget>[
                   Column(children: [
@@ -120,11 +125,13 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => PortalUserItem(
-                          userController:
-                              controller.teamController.searchResult[i],
-                          onTapFunction: controller.addResponsible),
-                      itemExtent: 65.0,
-                      itemCount: controller.teamController.searchResult.length,
+                          userController: controller.teamController
+                              .searchResult[i] as PortalUserItemController,
+                          onTapFunction:
+                              controller.addResponsible as Function()),
+                      itemExtent: 65,
+                      itemCount:
+                          controller.teamController.searchResult.length as int,
                     )
                   ]),
                 ],
