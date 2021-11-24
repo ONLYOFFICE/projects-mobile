@@ -43,7 +43,7 @@ class FilesService {
   final FilesApi _api = locator<FilesApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  Future getTaskFiles({required int taskId}) async {
+  Future<List<PortalFile>?> getTaskFiles({required int taskId}) async {
     final files = await _api.getTaskFiles(taskId: taskId);
     final success = files.response != null;
 

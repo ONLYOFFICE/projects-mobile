@@ -46,24 +46,26 @@ import 'package:projects/presentation/views/task_detailed/comments/comment_editi
 
 class DiscussionCommentItemController extends GetxController
     implements CommentItemController {
-  final CommentsService? _api = locator<CommentsService>();
+  final CommentsService _api = locator<CommentsService>();
 
   @override
-  final Rx<PortalComment>? comment;
+  late final Rx<PortalComment> comment;
   final int? discussionId;
-  DiscussionCommentItemController({this.comment, this.discussionId});
+
+  DiscussionCommentItemController({required this.comment, this.discussionId});
 
   @override
-  Future<void> copyLink(context) async {
-    var projectId =
+  Future<void> copyLink(BuildContext context) async {
+    final projectId =
         Get.find<DiscussionItemController>().discussion.value.projectOwner!.id;
 
-    var link = await _api!.getDiscussionCommentLink(
-      commentId: comment!.value.commentId,
-      discussionId: discussionId,
-      projectId: projectId,
+    final link = await _api.getDiscussionCommentLink(
+      commentId: comment.value.commentId!,
+      discussionId: discussionId!,
+      projectId: projectId!,
     );
 
+    // TODO: refactoring needed
     if (link != null) {
       await Clipboard.setData(ClipboardData(text: link));
       MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
@@ -71,15 +73,15 @@ class DiscussionCommentItemController extends GetxController
   }
 
   @override
-  Future deleteComment(context) async {
+  Future deleteComment(BuildContext context) async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
       onAcceptTap: () async {
-        var response =
-            await _api!.deleteComment(commentId: comment!.value.commentId);
+        final response =
+            await _api.deleteComment(commentId: comment.value.commentId!);
         if (response != null) {
           // ignore: unawaited_futures
           Get.find<DiscussionItemController>().onRefresh(showLoading: false);
@@ -98,8 +100,8 @@ class DiscussionCommentItemController extends GetxController
   @override
   void toCommentEditingView() {
     Get.find<NavigationController>().to(const CommentEditingView(), arguments: {
-      'commentId': comment!.value.commentId,
-      'commentBody': comment!.value.commentBody,
+      'commentId': comment.value.commentId,
+      'commentBody': comment.value.commentBody,
       'itemController': this,
     });
   }

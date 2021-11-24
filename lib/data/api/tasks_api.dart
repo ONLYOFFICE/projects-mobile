@@ -31,14 +31,14 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
-import 'package:projects/data/models/new_task_DTO.dart';
+import 'package:http/http.dart' as http;
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskApi {
@@ -280,7 +280,7 @@ class TaskApi {
   }
 
   Future<ApiDTO<PortalTask>> updateTask({required NewTaskDTO newTask}) async {
-    final url = await locator.get<CoreApi>().updateTaskUrl(taskId: newTask.id);
+    final url = await locator.get<CoreApi>().updateTaskUrl(taskId: newTask.id!);
     final result = ApiDTO<PortalTask>();
 
     try {

@@ -32,9 +32,9 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -42,7 +42,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewTaskCommentController extends NewCommentController {
-  final CommentsService? _api = locator<CommentsService>();
+  final CommentsService _api = locator<CommentsService>();
 
   @override
   // ignore: overridden_fields
@@ -62,14 +62,14 @@ class NewTaskCommentController extends NewCommentController {
   HtmlEditorController get textController => _textController;
 
   @override
-  Future addComment(context) async {
-    var text = await _textController.getText();
+  Future addComment(BuildContext context) async {
+    final text = await _textController.getText();
     if (text.isEmpty) {
-      emptyTitleError();
+      await emptyTitleError();
     } else {
       setTitleError.value = false;
-      PortalComment? newComment =
-          await (_api!.addTaskComment(content: text, taskId: idFrom) as Future<PortalComment?>);
+      final newComment =
+          await _api.addTaskComment(content: text, taskId: idFrom!);
       if (newComment != null) {
         _textController.clear();
 
@@ -84,17 +84,17 @@ class NewTaskCommentController extends NewCommentController {
   }
 
   @override
-  Future addReplyComment(context) async {
-    var text = await _textController.getText();
+  Future addReplyComment(BuildContext context) async {
+    final text = await _textController.getText();
     if (text.isEmpty) {
-      emptyTitleError();
+      await emptyTitleError();
     } else {
       setTitleError.value = false;
-      PortalComment? newComment = await (_api!.addTaskReplyComment(
+      final newComment = await _api.addTaskReplyComment(
         content: text,
-        taskId: idFrom,
-        parentId: parentId,
-      ) as Future<PortalComment?>);
+        taskId: idFrom!,
+        parentId: parentId!,
+      );
       if (newComment != null) {
         _textController.clear();
 
@@ -108,8 +108,8 @@ class NewTaskCommentController extends NewCommentController {
   }
 
   @override
-  void leavePage() async {
-    var text = await _textController.getText();
+  Future<void> leavePage() async {
+    final text = await _textController.getText();
     if (text.isNotEmpty) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),

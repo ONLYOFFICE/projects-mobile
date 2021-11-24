@@ -32,6 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/api/comments_api.dart';
+import 'package:projects/data/models/from_api/portal_comment.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
@@ -41,8 +42,7 @@ class CommentsService {
   final CommentsApi _api = locator<CommentsApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  // TODO: Future <??>
-  Future getTaskComments({required int taskId}) async {
+  Future<List<PortalComment>?> getTaskComments({required int taskId}) async {
     final files = await _api.getTaskComments(taskId: taskId);
     final success = files.response != null;
 
@@ -54,8 +54,7 @@ class CommentsService {
     }
   }
 
-  // TODO: Future <??>
-  Future addTaskReplyComment({
+  Future<PortalComment?> addTaskReplyComment({
     required int taskId,
     required String content,
     required String parentId,
@@ -75,8 +74,7 @@ class CommentsService {
     }
   }
 
-  // TODO: Future <??>
-  Future addMessageReplyComment({
+  Future<PortalComment?> addMessageReplyComment({
     required int messageId,
     required String content,
     required String parentId,
@@ -102,8 +100,8 @@ class CommentsService {
     }
   }
 
-  // TODO: Future <??>
-  Future addTaskComment({required int taskId, required String content}) async {
+  Future<PortalComment?> addTaskComment(
+      {required int taskId, required String content}) async {
     final result = await _api.addTaskComment(taskId: taskId, content: content);
     final success = result.response != null;
 
@@ -115,8 +113,7 @@ class CommentsService {
     }
   }
 
-  // TODO: Future <??>
-  Future addMessageComment(
+  Future<PortalComment?> addMessageComment(
       {required int messageId, required String content}) async {
     final result =
         await _api.addMessageComment(messageId: messageId, content: content);
@@ -130,8 +127,7 @@ class CommentsService {
     }
   }
 
-  // TODO: Future <??>
-  Future deleteComment({required String commentId}) async {
+  Future<dynamic> deleteComment({required String commentId}) async {
     final task = await _api.deleteComment(commentId: commentId);
     final success = task.response != null;
 
@@ -172,8 +168,7 @@ class CommentsService {
     );
   }
 
-  // TODO: Future <??>
-  Future updateComment(
+  Future<dynamic> updateComment(
       {required String commentId, required String content}) async {
     final result =
         await _api.updateComment(commentId: commentId, content: content);

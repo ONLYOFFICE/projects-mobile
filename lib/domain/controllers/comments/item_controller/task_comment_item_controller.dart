@@ -47,27 +47,28 @@ import 'package:projects/presentation/views/task_detailed/comments/comment_editi
 
 class TaskCommentItemController extends GetxController
     implements CommentItemController {
-  final CommentsService? _api = locator<CommentsService>();
+  final CommentsService _api = locator<CommentsService>();
 
   @override
-  final Rx<PortalComment>? comment;
+  Rx<PortalComment>? comment;
   final int? taskId;
+
   TaskCommentItemController({this.comment, this.taskId});
 
   @override
-  Future<void> copyLink(context) async {
-    var projectId = Get.find<TaskItemController>(tag: taskId.toString())
+  Future<void> copyLink(BuildContext context) async {
+    final projectId = Get.find<TaskItemController>(tag: taskId.toString())
         .task
-        .value!
+        .value
         .projectOwner!
         .id;
 
-    var link = await _api!.getTaskCommentLink(
-      commentId: comment!.value.commentId,
-      taskId: taskId,
-      projectId: projectId,
+    final link = await _api.getTaskCommentLink(
+      commentId: comment!.value.commentId!,
+      taskId: taskId!,
+      projectId: projectId!,
     );
-
+// TODO: refactoring needed
     if (link != null) {
       await Clipboard.setData(ClipboardData(text: link));
       MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
@@ -75,15 +76,15 @@ class TaskCommentItemController extends GetxController
   }
 
   @override
-  Future<void> deleteComment(context) async {
+  Future<void> deleteComment(BuildContext context) async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
       onAcceptTap: () async {
-        var response =
-            await _api!.deleteComment(commentId: comment!.value.commentId);
+        final response =
+            await _api.deleteComment(commentId: comment!.value.commentId!);
         if (response != null) {
           Get.back();
 

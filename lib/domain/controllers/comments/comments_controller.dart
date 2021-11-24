@@ -35,14 +35,15 @@ import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class CommentsController extends GetxController {
-  final CommentsService? _api = locator<CommentsService>();
+  final CommentsService _api = locator<CommentsService>();
 
-  var comments = [].obs;
+  RxList comments = [].obs;
   RxBool loaded = false.obs;
 
   Future getTaskComments({required int taskId}) async {
     loaded.value = false;
-    comments.value = await (_api!.getTaskComments(taskId: taskId) as Future<List<dynamic>>);
+    comments.value =
+        await (_api.getTaskComments(taskId: taskId) as Future<List<dynamic>>);
     loaded.value = true;
   }
 }
