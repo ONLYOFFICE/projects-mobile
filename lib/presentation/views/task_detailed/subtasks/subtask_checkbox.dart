@@ -53,8 +53,8 @@ class SubtaskCheckBox extends StatelessWidget {
           onChanged: (value) {
             subtaskController!.updateSubtaskStatus(
               context: context,
-              taskId: subtaskController!.subtask.value!.taskId,
-              subtaskId: subtaskController!.subtask.value!.id,
+              taskId: subtaskController!.subtask.value!.taskId!,
+              subtaskId: subtaskController!.subtask.value!.id!,
             );
           },
         ),

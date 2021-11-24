@@ -101,7 +101,7 @@ class TasksController extends BaseController {
         });
 
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
-      fabIsVisible.value = data ? false : await getFabVisibility();
+      fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
 
     locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
@@ -112,7 +112,7 @@ class TasksController extends BaseController {
   }
 
   @override
-  RxList get itemList => paginationController!.data;
+  RxList get itemList => paginationController.data;
 
   Future<void> refreshData() async {
     loaded.value = false;
@@ -120,16 +120,16 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  void setup(PresetTaskFilters preset, {withFAB = true}) {
+  void setup(PresetTaskFilters preset, {bool withFAB = true}) {
     _preset = preset;
     _withFAB = withFAB;
   }
 
   Future loadTasks() async {
     loaded.value = false;
-    paginationController!.startIndex = 0;
+    paginationController.startIndex = 0;
     if (_preset != null) {
-      await _filterController!
+      await _filterController
           .setupPreset(_preset!)
           .then((value) => _getTasks(needToClear: true));
     } else {
@@ -140,15 +140,15 @@ class TasksController extends BaseController {
 
   Future _getTasks({bool needToClear = false}) async {
     var result = await (_api.getTasksByParams(
-      startIndex: paginationController!.startIndex,
+      startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      responsibleFilter: _filterController!.responsibleFilter,
-      creatorFilter: _filterController!.creatorFilter,
-      projectFilter: _filterController!.projectFilter,
-      milestoneFilter: _filterController!.milestoneFilter,
-      statusFilter: _filterController!.statusFilter,
-      deadlineFilter: _filterController!.deadlineFilter,
+      responsibleFilter: _filterController.responsibleFilter,
+      creatorFilter: _filterController.creatorFilter,
+      projectFilter: _filterController.projectFilter,
+      milestoneFilter: _filterController.milestoneFilter,
+      statusFilter: _filterController.statusFilter,
+      deadlineFilter: _filterController.deadlineFilter,
       // query: 'задача',
     ) as Future<PageDTO<List<PortalTask>>>);
     paginationController.total.value = result.total!;

@@ -40,12 +40,12 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/internal/locator.dart';
 
 class SubtasksApi {
-  Future<ApiDTO> acceptSubtask(
+  Future<ApiDTO<Subtask>> acceptSubtask(
       {required int taskId, required int subtaskId, required Map data}) async {
     final url = await locator
         .get<CoreApi>()
         .updateSubtask(taskId: taskId, subtaskId: subtaskId);
-    final result = ApiDTO();
+    final result = ApiDTO<Subtask>();
 
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: data);
@@ -86,12 +86,12 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> copySubtask(
+  Future<ApiDTO<Subtask>> copySubtask(
       {required int taskId, required int subtaskId}) async {
     final url = await locator
         .get<CoreApi>()
         .copySubtaskUrl(taskId: taskId, subtaskId: subtaskId);
-    final result = ApiDTO();
+    final result = ApiDTO<Subtask>();
 
     try {
       final response = await locator.get<CoreApi>().postRequest(url, {});
@@ -109,9 +109,10 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> createSubtask({required int taskId, required Map data}) async {
+  Future<ApiDTO<Subtask>> createSubtask(
+      {required int taskId, required Map data}) async {
     final url = await locator.get<CoreApi>().createSubtaskUrl(taskId: taskId);
-    final result = ApiDTO();
+    final result = ApiDTO<Subtask>();
 
     try {
       final response = await locator.get<CoreApi>().postRequest(url, data);
@@ -129,7 +130,7 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> updateSubtaskStatus({
+  Future<ApiDTO<Subtask>> updateSubtaskStatus({
     required int taskId,
     required int subtaskId,
     required Map data,
@@ -138,7 +139,7 @@ class SubtasksApi {
         .get<CoreApi>()
         .updateSubtaskStatus(taskId: taskId, subtaskId: subtaskId);
 
-    final result = ApiDTO();
+    final result = ApiDTO<Subtask>();
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: data);
 
@@ -155,7 +156,7 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> updateSubtask({
+  Future<ApiDTO<Subtask>> updateSubtask({
     required int taskId,
     required int subtaskId,
     required Map data,
@@ -165,7 +166,7 @@ class SubtasksApi {
           subtaskId: subtaskId,
         );
 
-    final result = ApiDTO();
+    final result = ApiDTO<Subtask>();
     try {
       final response = await locator.get<CoreApi>().putRequest(url, body: data);
 

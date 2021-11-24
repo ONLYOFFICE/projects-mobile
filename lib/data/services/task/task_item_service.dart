@@ -46,8 +46,8 @@ class TaskItemService {
 
   Rx<PortalTask> portalTask = PortalTask().obs;
 
-  // TODO: Future <??>
-  Future copyTask({required int copyFrom, required NewTaskDTO newTask}) async {
+  Future<PortalTask?> copyTask(
+      {required int copyFrom, required NewTaskDTO newTask}) async {
     final task = await _api.copyTask(copyFrom: copyFrom, task: newTask);
     final success = task.response != null;
 
@@ -59,8 +59,7 @@ class TaskItemService {
     }
   }
 
-  // TODO: Future <??>
-  Future getTaskByID({required int id}) async {
+  Future<PortalTask?> getTaskByID({required int id}) async {
     final task = await _api.getTaskByID(id: id);
     final success = task.response != null;
 

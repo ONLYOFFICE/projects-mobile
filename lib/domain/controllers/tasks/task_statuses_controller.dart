@@ -55,11 +55,14 @@ class TaskStatusesController extends GetxController {
   Future<void> _updateStatuses({bool forceReload = false}) async {
     if (forceReload || loaded.value != false) {
       loaded.value = false;
-      statuses.value = await _api.getStatuses() as List<Status>;
-      statusImagesDecoded.clear();
-      for (final element in statuses) {
-        if (element.image == null) continue;
-        statusImagesDecoded.add(decodeImageString(element.image as String));
+      final response = await _api.getStatuses();
+      if (response != null) {
+        statuses.value = response;
+        statusImagesDecoded.clear();
+        for (final element in statuses) {
+          if (element.image == null) continue;
+          statusImagesDecoded.add(decodeImageString(element.image!));
+        }
       }
       loaded.value = true;
     }
@@ -88,14 +91,17 @@ class TaskStatusesController extends GetxController {
       );
     } else {
       status = statuses.firstWhere(
-        (element) => -element.id == task.status,
+        (element) => -element.id! == task.status, // TODO negative task id???
         orElse: () => Status(),
       );
-      status ??= statuses.lastWhere(
-        (element) => element.statusType == task.status,
-        orElse: () => null,
-      );
+      if (status.id == null) {
+        status = statuses.lastWhere(
+          (element) => element.statusType == task.status,
+          orElse: () => Status(), // TODO StateError
+        );
+      }
     }
-    return status;
+
+    return status.id == null ? null : status;
   }
 }

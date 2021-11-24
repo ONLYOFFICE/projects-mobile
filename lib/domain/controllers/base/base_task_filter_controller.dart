@@ -39,7 +39,7 @@ abstract class BaseTaskFilterController extends BaseFilterController {
   String? get projectFilter;
   String? get milestoneFilter;
   String? get statusFilter;
-  String get deadlineFilter;
+  String? get deadlineFilter;
 
   late RxMap responsible;
   late RxMap creator;

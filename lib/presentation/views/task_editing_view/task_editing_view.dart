@@ -52,7 +52,7 @@ class TaskEditingView extends StatelessWidget {
     required this.task,
   }) : super(key: key);
 
-  final PortalTask? task;
+  final PortalTask task;
 
   @override
   Widget build(BuildContext context) {

@@ -74,7 +74,7 @@ class NewTaskController extends GetxController
   @override
   RxString? title = ''.obs;
   @override
-  RxString selectedProjectTitle = ''.obs; //RxString
+  RxString? selectedProjectTitle = ''.obs;
   @override
   RxString? selectedMilestoneTitle = ''.obs;
 
@@ -108,7 +108,6 @@ class NewTaskController extends GetxController
   @override
   RxBool? setTitleError = false.obs;
 
-  @override
   void init(ProjectDetailed? projectDetailed) {
     // TODO why []
     _titleFocus.requestFocus();
@@ -116,7 +115,7 @@ class NewTaskController extends GetxController
     teamController = Get.find<ProjectTeamController>();
 
     if (projectDetailed != null) {
-      selectedProjectTitle.value = projectDetailed.title!;
+      selectedProjectTitle!.value = projectDetailed.title!;
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
     }
@@ -127,7 +126,7 @@ class NewTaskController extends GetxController
 
   void changeProjectSelection({int? id, String? title}) {
     if (id != null && title != null) {
-      selectedProjectTitle.value = title;
+      selectedProjectTitle!.value = title;
       _selectedProjectId = id;
       _clearState();
       needToSelectProject.value = false;
@@ -146,7 +145,7 @@ class NewTaskController extends GetxController
 
   void removeProjectSelection() {
     _selectedProjectId = null;
-    selectedProjectTitle.value = '';
+    selectedProjectTitle!.value = '';
   }
 
   @override
@@ -309,14 +308,13 @@ class NewTaskController extends GetxController
     if (_selectedProjectId == null || title!.isEmpty) return;
 
     String? priority;
-    // ignore: omit_local_variable_types
-    List<String?> responsibleIds = [];
+    final responsibleIds = <String?>[];
 
     if (highPriority!.value == true) priority = 'high';
-    for (var item in responsibles!) responsibleIds.add(item.id);
+    for (var item in responsibles!) responsibleIds.add(item.id as String?);
 
     var newTask = NewTaskDTO(
-        projectId: _selectedProjectId,
+        projectId: _selectedProjectId!,
         responsibles: responsibleIds,
         startDate: _startDate,
         deadline: _dueDate,

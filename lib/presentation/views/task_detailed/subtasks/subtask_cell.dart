@@ -153,19 +153,19 @@ void _onSelected(
   switch (value) {
     case 'acceptSubtask':
       controller.acceptSubtask(context,
-          taskId: controller.subtask.value!.taskId,
-          subtaskId: controller.subtask.value!.id);
+          taskId: controller.subtask.value!.taskId!,
+          subtaskId: controller.subtask.value!.id!);
       break;
     case 'copySubtask':
       controller.copySubtask(context,
-          taskId: controller.subtask.value!.taskId,
-          subtaskId: controller.subtask.value!.id);
+          taskId: controller.subtask.value!.taskId!,
+          subtaskId: controller.subtask.value!.id!);
       break;
     case 'delete':
       controller.deleteSubtask(
         context: context,
-        taskId: controller.subtask.value!.taskId,
-        subtaskId: controller.subtask.value!.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
       );
       break;
     default:

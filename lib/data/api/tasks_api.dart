@@ -42,10 +42,10 @@ import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskApi {
-  Future<ApiDTO> addTask({required NewTaskDTO newTask}) async {
+  Future<ApiDTO<PortalTask>> addTask({required NewTaskDTO newTask}) async {
     final url =
         await locator.get<CoreApi>().addTaskUrl(projectId: newTask.projectId);
-    final result = ApiDTO();
+    final result = ApiDTO<PortalTask>();
 
     try {
       final response =
@@ -64,10 +64,10 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> copyTask(
+  Future<ApiDTO<PortalTask>> copyTask(
       {required int copyFrom, required NewTaskDTO task}) async {
     final url = await locator.get<CoreApi>().copyTaskUrl(copyFrom: copyFrom);
-    final result = ApiDTO();
+    final result = ApiDTO<PortalTask>();
 
     try {
       final response =
@@ -86,9 +86,9 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> getTaskByID({required int id}) async {
+  Future<ApiDTO<PortalTask>> getTaskByID({required int id}) async {
     final url = await locator.get<CoreApi>().taskByIdUrl(id);
-    final result = ApiDTO();
+    final result = ApiDTO<PortalTask>();
 
     try {
       final response = await locator.get<CoreApi>().getRequest(url);
@@ -279,9 +279,9 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> updateTask({required NewTaskDTO newTask}) async {
+  Future<ApiDTO<PortalTask>> updateTask({required NewTaskDTO newTask}) async {
     final url = await locator.get<CoreApi>().updateTaskUrl(taskId: newTask.id);
-    final result = ApiDTO();
+    final result = ApiDTO<PortalTask>();
 
     try {
       final response =

@@ -38,7 +38,7 @@ class NewTaskDTO {
     this.copySubtasks,
     this.deadline,
     this.description,
-    required this.id,
+    this.id,
     this.milestoneid,
     this.notify,
     this.priority,
@@ -52,7 +52,7 @@ class NewTaskDTO {
   final String? description;
   final String? priority;
   final String? title;
-  final int id;
+  final int? id;
   final int? milestoneid;
   final int projectId;
   final List<String?>? responsibles;
@@ -74,11 +74,11 @@ class NewTaskDTO {
   final bool? removeOld;
 
   factory NewTaskDTO.fromJson(Map<String, dynamic> json) => NewTaskDTO(
-    description: json['description'] as String?,
+        description: json['description'] as String?,
         deadline: json['deadline'] != null
             ? DateTime.parse(json['deadline'] as String)
             : null,
-        id: json['id'] as int,
+        id: json['id'] as int?,
         priority: json['priority'] as String?,
         title: json['title'] as String?,
         milestoneid: json['milestoneid'] as int?,
@@ -95,20 +95,20 @@ class NewTaskDTO {
       );
 
   Map<String, dynamic> toJson() => {
-    'description': description,
-    'deadline': deadline != null ? deadline!.toIso8601String() : null,
-    'id': id,
-    'priority': priority,
-    'title': title,
-    'milestoneid': milestoneid,
-    'projectid': projectId,
-    'responsibles': responsibles != null
-        ? List<dynamic>.from(responsibles!.map((x) => x))
-        : null,
-    'notify': notify,
-    'startDate': startDate != null ? startDate!.toIso8601String() : null,
-    'copyFiles': copyFiles,
-    'copySubtasks': copySubtasks,
-    'removeOld': removeOld,
-  };
+        'description': description,
+        'deadline': deadline != null ? deadline!.toIso8601String() : null,
+        'id': id,
+        'priority': priority,
+        'title': title,
+        'milestoneid': milestoneid,
+        'projectid': projectId,
+        'responsibles': responsibles != null
+            ? List<dynamic>.from(responsibles!.map((x) => x))
+            : null,
+        'notify': notify,
+        'startDate': startDate != null ? startDate!.toIso8601String() : null,
+        'copyFiles': copyFiles,
+        'copySubtasks': copySubtasks,
+        'removeOld': removeOld,
+      };
 }

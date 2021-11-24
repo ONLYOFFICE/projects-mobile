@@ -31,10 +31,10 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
-
-import '../pagination_controller.dart';
 
 class TasksWithPresets {
   TasksController? _myTasksController;
@@ -54,7 +54,7 @@ class TasksWithPresets {
     _myTasksController = Get.put(
         TasksController(
           Get.find<TaskFilterController>(),
-          Get.find<PaginationController>(),
+          Get.find<PaginationController<PortalTask>>(),
         ),
         tag: '_myTasksController')!
       ..setup(PresetTaskFilters.myTasks, withFAB: false);
@@ -66,7 +66,7 @@ class TasksWithPresets {
     _upcomingTaskscontroller = Get.put(
         TasksController(
           Get.find<TaskFilterController>(),
-          Get.find<PaginationController>(),
+          Get.find<PaginationController<PortalTask>>(),
         ),
         tag: '_upcomingTaskscontroller')!
       ..setup(PresetTaskFilters.upcomming, withFAB: false);

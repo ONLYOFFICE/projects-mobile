@@ -44,7 +44,7 @@ abstract class SubtaskActionController extends GetxController {
 
   void init({Subtask? subtask, int? projectId});
   void addResponsible(PortalUserItemController user);
-  Future<void> confirm({required context, int? taskId});
+  Future<void> confirm({required BuildContext context, required int taskId});
   void confirmResponsiblesSelection();
   void leaveResponsiblesSelectionView();
   void deleteResponsible();

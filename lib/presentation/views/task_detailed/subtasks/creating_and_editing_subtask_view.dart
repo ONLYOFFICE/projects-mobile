@@ -61,7 +61,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
       controller.init(
           subtask: itemController.subtask.value, projectId: projectId);
     } else {
-      taskId = Get.arguments['taskId'] as int?;
+      taskId = Get.arguments['taskId'] as int;
       controller = Get.put(NewSubtaskController());
       controller.init(projectId: projectId);
     }
@@ -78,8 +78,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
           actions: [
             IconButton(
               icon: const Icon(Icons.done_rounded),
-              onPressed: () =>
-                  controller.confirm(context: context, taskId: taskId),
+              onPressed: () => controller.confirm(
+                  context: context, taskId: taskId ?? -1), // TODO FIX
             )
           ],
         ),

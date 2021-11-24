@@ -156,7 +156,7 @@ class SubtaskDetailedView extends StatelessWidget {
                             color:
                                 Get.theme.colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
-                            taskId: _subtask.taskId, subtaskId: _subtask.id),
+                            taskId: _subtask.taskId!, subtaskId: _subtask.id!),
                       )
                   ],
                 )
@@ -174,8 +174,8 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
     case 'accept':
       controller.acceptSubtask(
         context,
-        taskId: controller.subtask.value!.taskId,
-        subtaskId: controller.subtask.value!.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
       );
       break;
     case 'edit':
@@ -190,15 +190,15 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
     case 'copy':
       controller.copySubtask(
         context,
-        taskId: controller.subtask.value!.taskId,
-        subtaskId: controller.subtask.value!.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
       );
       break;
     case 'delete':
       controller.deleteSubtask(
         context: context,
-        taskId: controller.subtask.value!.taskId,
-        subtaskId: controller.subtask.value!.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
         closePage: true,
       );
       break;

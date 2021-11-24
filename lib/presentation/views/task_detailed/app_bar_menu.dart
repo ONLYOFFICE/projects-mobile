@@ -91,7 +91,7 @@ void _onSelected(
       break;
 
     case 'copyLink':
-      controller.copyLink(taskId: task.id, projectId: task.projectOwner!.id);
+      controller.copyLink(taskId: task.id!, projectId: task.projectOwner!.id!);
       break;
 
     case 'editTask':
@@ -100,7 +100,7 @@ void _onSelected(
       break;
 
     case 'followTask':
-      var result = await controller.subscribeToTask(taskId: task.id);
+      var result = await controller.subscribeToTask(taskId: task.id!);
       if (result) await controller.reloadTask();
       break;
 
@@ -115,7 +115,7 @@ void _onSelected(
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
-          var result = await controller.deleteTask(taskId: task.id);
+          var result = await controller.deleteTask(taskId: task.id!);
           if (result) {
             locator<EventHub>().fire('needToRefreshProjects');
             locator<EventHub>().fire('needToRefreshTasks');

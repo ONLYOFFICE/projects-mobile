@@ -93,9 +93,9 @@ class NewTaskView extends StatelessWidget {
                   child: Column(
                     children: [
                       NewTaskProjectTile(controller: controller),
-                      if (controller.selectedProjectTitle.value.isNotEmpty)
+                      if (controller.selectedProjectTitle!.value.isNotEmpty)
                         MilestoneTile(controller: controller),
-                      if (controller.selectedProjectTitle.value.isNotEmpty)
+                      if (controller.selectedProjectTitle!.value.isNotEmpty)
                         ResponsibleTile(controller: controller),
                       if (controller.responsibles!.isNotEmpty)
                         NotifyResponsiblesTile(controller: controller),

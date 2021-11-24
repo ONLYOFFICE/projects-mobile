@@ -43,8 +43,7 @@ class SubtasksService {
   final SubtasksApi _api = locator<SubtasksApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  // TODO: Future <??>
-  Future acceptSubtask(
+  Future<Subtask?> acceptSubtask(
       {required int taskId, required int subtaskId, required Map data}) async {
     final response = await _api.acceptSubtask(
         data: data, taskId: taskId, subtaskId: subtaskId);
@@ -86,8 +85,8 @@ class SubtasksService {
     }
   }
 
-  // TODO: Future <??>
-  Future createSubtask({required int taskId, required Map data}) async {
+  Future<Subtask?> createSubtask(
+      {required int taskId, required Map data}) async {
     final response = await _api.createSubtask(taskId: taskId, data: data);
     final success = response.response != null;
 
@@ -106,8 +105,8 @@ class SubtasksService {
     }
   }
 
-  // TODO: Future <??>
-  Future copySubtask({required int taskId, required int subtaskId}) async {
+  Future<Subtask?> copySubtask(
+      {required int taskId, required int subtaskId}) async {
     final response =
         await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     final success = response.response != null;
@@ -120,8 +119,7 @@ class SubtasksService {
     }
   }
 
-  // TODO: Future <??>
-  Future updateSubtaskStatus(
+  Future<Subtask?> updateSubtaskStatus(
       {required int taskId, required int subtaskId, required Map data}) async {
     final response = await _api.updateSubtaskStatus(
         taskId: taskId, subtaskId: subtaskId, data: data);
@@ -142,8 +140,7 @@ class SubtasksService {
     }
   }
 
-  // TODO: Future <??>
-  Future updateSubtask(
+  Future<Subtask?> updateSubtask(
       {required int taskId, required int subtaskId, required Map data}) async {
     final response = await _api.updateSubtask(
       taskId: taskId,

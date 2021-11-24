@@ -50,7 +50,7 @@ class SubtaskEditingController extends GetxController
   SubtaskEditingController(this.subtaskController);
 
   final subtaskController;
-  final SubtasksService? _api = locator<SubtasksService>();
+  final SubtasksService _api = locator<SubtasksService>();
   final _titleController = TextEditingController();
   Subtask? _subtask;
   late ProjectTeamController teamController;
@@ -82,9 +82,9 @@ class SubtaskEditingController extends GetxController
     status = subtask.status!.obs;
     if (_subtask!.responsible != null) {
       _previusSelectedResponsible
-          .add(PortalUserItemController(portalUser: _subtask!.responsible));
+          .add(PortalUserItemController(portalUser: _subtask!.responsible!));
       responsibles
-          .add(PortalUserItemController(portalUser: _subtask!.responsible));
+          .add(PortalUserItemController(portalUser: _subtask!.responsible!));
     }
     setupResponsibleSelection(projectId);
   }
@@ -104,13 +104,13 @@ class SubtaskEditingController extends GetxController
 
   Future<void> _getSelectedResponsibles() async {
     for (var element in teamController.usersList) {
-      element.isSelected!.value = false;
+      element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
     for (var selectedMember in responsibles) {
       for (var user in teamController.usersList) {
-        if (selectedMember.portalUser.id == user.portalUser!.id) {
-          user.isSelected!.value = true;
+        if (selectedMember.portalUser.id == user.portalUser.id) {
+          user.isSelected.value = true;
         }
       }
     }
@@ -120,14 +120,14 @@ class SubtaskEditingController extends GetxController
   void addResponsible(PortalUserItemController user) {
     // ignore: avoid_function_literals_in_foreach_calls
     teamController.usersList.forEach((element) {
-      if (element.portalUser!.id != user.id) element.isSelected!.value = false;
+      if (element.portalUser.id != user.id) element.isSelected.value = false;
     });
     responsibles.clear();
-    if (user.isSelected!.value == true) {
+    if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
       responsibles.removeWhere(
-          (element) => user.portalUser!.id == element.portalUser.id);
+          (element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -190,7 +190,8 @@ class SubtaskEditingController extends GetxController
   }
 
   @override
-  Future<void> confirm({context, int? taskId}) async {
+  Future<void> confirm({required BuildContext context, int? taskId}) async {
+    // TODO taskid not used
     if (titleController.text.isEmpty)
       setTiltleError!.value = true;
     else {
@@ -199,9 +200,9 @@ class SubtaskEditingController extends GetxController
 
       var data = {'responsible': responsible, 'title': _titleController.text};
 
-      var editedSubtask = await _api!.updateSubtask(
-        taskId: _subtask!.taskId,
-        subtaskId: _subtask!.id,
+      var editedSubtask = await _api.updateSubtask(
+        taskId: _subtask!.taskId!,
+        subtaskId: _subtask!.id!,
         data: data,
       );
       if (editedSubtask != null) {

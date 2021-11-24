@@ -34,6 +34,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -46,7 +47,7 @@ class TaskService {
 
   Rx<PortalTask> portalTask = PortalTask().obs;
 
-  Future addTask({required NewTaskDTO newTask}) async {
+  Future<PortalTask?> addTask({required NewTaskDTO newTask}) async {
     final task = await _api.addTask(newTask: newTask);
 
     final success = task.response != null;
@@ -65,8 +66,7 @@ class TaskService {
     }
   }
 
-// TODO: Future <??>
-  Future getTaskByID({required int id}) async {
+  Future<PortalTask?> getTaskByID({required int id}) async {
     final task = await _api.getTaskByID(id: id);
 
     final success = task.response != null;
@@ -79,8 +79,7 @@ class TaskService {
     }
   }
 
-// TODO: Future <??>
-  Future getStatuses() async {
+  Future<List<Status>?> getStatuses() async {
     final statuses = await _api.getStatuses();
 
     final success = statuses.response != null;
@@ -165,8 +164,7 @@ class TaskService {
     }
   }
 
-// TODO: Future <??>
-  Future updateTask({required NewTaskDTO newTask}) async {
+  Future<PortalTask?> updateTask({required NewTaskDTO newTask}) async {
     final task = await _api.updateTask(newTask: newTask);
 
     final success = task.response != null;

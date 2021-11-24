@@ -37,7 +37,7 @@ abstract class TaskActionsController extends GetxController {
   RxString? title;
   RxString? descriptionText;
   RxString? selectedMilestoneTitle;
-  late RxString selectedProjectTitle;
+  RxString? selectedProjectTitle;
   RxList? responsibles;
   RxString? startDateText;
   RxString? dueDateText;
@@ -53,7 +53,6 @@ abstract class TaskActionsController extends GetxController {
   RxBool? setTitleError;
   var needToSelectProject;
 
-  void init();
   void changeMilestoneSelection();
   void leaveDescriptionView(String typedText);
 
