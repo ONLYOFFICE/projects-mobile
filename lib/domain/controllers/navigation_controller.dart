@@ -43,10 +43,10 @@ import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
-  var tabIndex = 0.obs;
-  var onMoreView = false.obs;
+  RxInt tabIndex = 0.obs;
+  RxBool onMoreView = false.obs;
   final _userController = Get.find<UserController>();
-  Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
+  late Rx<PortalUserItemController> selfUserItem;
 
   int treeLength = 0;
 
@@ -55,7 +55,7 @@ class NavigationController extends GetxController {
     _userController
         .getUserInfo()
         .then((value) => selfUserItem.value =
-            PortalUserItemController(portalUser: _userController.user))
+            PortalUserItemController(portalUser: _userController.user!))
         .obs;
 
     super.onInit();
