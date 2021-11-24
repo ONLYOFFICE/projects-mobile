@@ -47,7 +47,7 @@ class DiscussionsSearchScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(DiscussionSearchController());
+    final controller = Get.put(DiscussionSearchController());
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),

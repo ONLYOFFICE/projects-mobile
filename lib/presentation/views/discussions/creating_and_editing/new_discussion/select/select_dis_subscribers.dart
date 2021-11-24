@@ -54,8 +54,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var usersDataSource = Get.find<UsersDataSource>();
-    DiscussionActionsController controller = Get.arguments['controller'];
+    final usersDataSource = Get.find<UsersDataSource>();
+    final controller =
+        Get.arguments['controller'] as DiscussionActionsController;
 
     controller.setupSubscribersSelection();
 
