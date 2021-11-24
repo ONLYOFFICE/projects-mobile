@@ -82,8 +82,8 @@ class TasksController extends BaseController {
   }
 
   TasksController(TaskFilterController filterController,
-      PaginationController<PortalTask> paginationController)
-      : super(tr('tasks')) {
+      PaginationController<PortalTask> paginationController) {
+    screenName = tr('tasks');
     loaded.value = false;
     _paginationController = paginationController;
     expandedCardView.value = true;

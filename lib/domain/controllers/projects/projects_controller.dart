@@ -59,11 +59,10 @@ class ProjectsController extends BaseController {
   late PaginationController<ProjectDetailed> _paginationController;
   PaginationController<ProjectDetailed> get paginationController =>
       _paginationController;
-
-  PresetProjectFilters? _preset;
-
   @override
   RxList get itemList => _paginationController.data;
+
+  PresetProjectFilters? _preset;
 
   final _sortController = Get.find<ProjectsSortController>();
   ProjectsSortController get sortController => _sortController;
@@ -83,7 +82,8 @@ class ProjectsController extends BaseController {
   ProjectsController(
     ProjectsFilterController filterController,
     PaginationController<ProjectDetailed> paginationController,
-  ) : super(tr('projects')) {
+  ) {
+    screenName = tr('projects');
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;
@@ -104,7 +104,7 @@ class ProjectsController extends BaseController {
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
     fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged',
         (dynamic data) async {
-      fabIsVisible.value = data ? false : await getFabVisibility();
+      fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
   }
 
@@ -141,14 +141,14 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  void setup(PresetProjectFilters preset, {withFAB = true}) {
+  void setup(PresetProjectFilters preset, {bool withFAB = true}) {
     _preset = preset;
     _withFAB = withFAB;
   }
 
   Future<void> loadProjects() async {
     loaded.value = false;
-    paginationController!.startIndex = 0;
+    paginationController.startIndex = 0;
     if (_preset != null) {
       await _filterController!
           .setupPreset(_preset)
@@ -160,8 +160,8 @@ class ProjectsController extends BaseController {
   }
 
   Future _getProjects({bool needToClear = false}) async {
-    var result = await _api!.getProjectsByParams(
-      startIndex: paginationController!.startIndex,
+    var result = await _api.getProjectsByParams(
+      startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectManagerFilter: _filterController!.projectManagerFilter,
@@ -174,7 +174,7 @@ class ProjectsController extends BaseController {
 
     paginationController.total.value = result.total!;
     paginationController.data.addAll(result.response!);
-    expandedCardView.value = paginationController!.data.isNotEmpty;
+    expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
   Future getProjectTags() async {

@@ -41,7 +41,9 @@ import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
-void showsStatusesBS({required context, TaskItemController? taskItemController}) async {
+void showsStatusesBS(
+    {required BuildContext context,
+    TaskItemController? taskItemController}) async {
   var _statusesController = Get.find<TaskStatusesController>();
   showCustomBottomSheet(
     context: context,
@@ -94,7 +96,8 @@ void showsStatusesBS({required context, TaskItemController? taskItemController})
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
                           icon: StatusIcon(
-                            canEditTask: taskItemController!.task.value!.canEdit,
+                            canEditTask:
+                                taskItemController!.task.value!.canEdit,
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].title ==

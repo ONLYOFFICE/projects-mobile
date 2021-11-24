@@ -40,7 +40,7 @@ import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 Future<void> showsDiscussionStatusesBS({
-  required context,
+  required BuildContext context,
   DiscussionItemController? controller,
 }) async {
   var initSize = _getInititalSize();

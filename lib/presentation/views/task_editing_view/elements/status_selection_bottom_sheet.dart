@@ -46,7 +46,7 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 // update the status of the task immediately after clicking,
 // but you need to do it when saving changes
 Future<void> statusSelectionBS(
-    {required context, TaskEditingController? controller}) async {
+    {required BuildContext context, TaskEditingController? controller}) async {
   final _statusesController = Get.find<TaskStatusesController>();
 
   showCustomBottomSheet(

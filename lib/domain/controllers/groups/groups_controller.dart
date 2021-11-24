@@ -46,10 +46,9 @@ class GroupsController extends BaseController {
 
   late PaginationController paginationController;
 
-  GroupsController(String screenName) : super(tr('groups'));
-
   @override
   void onInit() {
+    screenName = tr('groups');
     paginationController =
         Get.put(PaginationController(), tag: 'GroupsController');
 

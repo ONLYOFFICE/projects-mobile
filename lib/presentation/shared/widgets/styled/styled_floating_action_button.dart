@@ -51,7 +51,7 @@ class StyledFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: MessagesHandler.isDisplayed,
-      builder: (context, bool? value, _) {
+      builder: (context, bool value, _) {
         // ignore: omit_local_variable_types
         double padding = value ? 60.0 : 0.0;
         return AnimatedPadding(

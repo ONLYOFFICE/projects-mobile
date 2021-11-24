@@ -41,7 +41,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 class SortView extends StatelessWidget {
   const SortView({Key? key, required this.sortOptions}) : super(key: key);
 
-  final sortOptions;
+  final Widget sortOptions;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +56,7 @@ class SortView extends StatelessWidget {
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 8),
               child: SizedBox(
                 height: 4,
                 width: 40,

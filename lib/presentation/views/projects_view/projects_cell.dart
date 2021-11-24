@@ -278,7 +278,8 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS({required context, dynamic itemController}) async {
+void showsStatusesBS(
+    {required BuildContext context, dynamic itemController}) async {
   var _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,

@@ -56,13 +56,15 @@ class CustomSearchBar extends StatelessWidget {
             child: TextField(
               autofocus: true,
               textInputAction: TextInputAction.search,
-              controller: controller.searchInputController,
+              controller:
+                  controller.searchInputController as TextEditingController?,
               decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
-              onSubmitted: searchFunction ?? controller.newSearch,
+              onSubmitted:
+                  searchFunction ?? controller.newSearch as Function(String)?,
             ),
           ),
           InkResponse(
-            onTap: clearFunction ?? controller.clearSearch,
+            onTap: clearFunction ?? controller.clearSearch as Function()?,
             child: const Icon(Icons.close, color: Colors.blue),
           )
         ],
