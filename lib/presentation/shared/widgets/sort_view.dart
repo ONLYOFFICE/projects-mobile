@@ -80,15 +80,17 @@ class SortView extends StatelessWidget {
 }
 
 class SortTile extends StatelessWidget {
-  final String? sortParameter;
+  final String sortParameter;
   final BaseSortController? sortController;
-  const SortTile({Key? key, this.sortParameter, required this.sortController})
+
+  const SortTile(
+      {Key? key, required this.sortParameter, required this.sortController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _selected = sortController!.currentSortfilter == sortParameter;
-    var title = sortController!.getFilterLabel(sortParameter);
+    final _selected = sortController!.currentSortfilter == sortParameter;
+    final title = sortController!.getFilterLabel(sortParameter);
 
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
