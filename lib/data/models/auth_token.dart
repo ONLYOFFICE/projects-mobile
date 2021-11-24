@@ -48,12 +48,12 @@ class AuthToken {
   String? tfaKey;
 
   AuthToken.fromJson(Map<String, dynamic> json) {
-    expires = json['expires'];
-    phoneNoise = json['phoneNoise'];
-    sms = json['sms'];
-    token = json['token'];
-    tfa = json['tfa'];
-    tfaKey = json['tfaKey'];
+    expires = json['expires'] as String?;
+    phoneNoise = json['phoneNoise'] as String?;
+    sms = json['sms'] as bool?;
+    token = json['token'] as String?;
+    tfa = json['tfa'] as bool?;
+    tfaKey = json['tfaKey'] as String?;
   }
 
   Map<String, dynamic> toJson() {

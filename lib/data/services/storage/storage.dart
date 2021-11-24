@@ -36,6 +36,7 @@ import 'package:get_storage/get_storage.dart';
 class Storage {
   final _storage = GetStorage();
 
+  // TODO: Future <??>
   Future read(String key, {bool returnCopy = false}) async {
     final dynamic data = await _storage.read<dynamic>(key);
 

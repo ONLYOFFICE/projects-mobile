@@ -42,6 +42,7 @@ class DiscussionItemService {
   final DiscussionsApi _api = locator<DiscussionsApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
+  // TODO: Future <??>
   Future getMessageDetailed({required int id}) async {
     final result = await _api.getMessageDetailed(id: id);
     final success = result.response != null;
@@ -54,6 +55,7 @@ class DiscussionItemService {
     }
   }
 
+  // TODO: Future <??>
   Future updateMessage(
       {required int id, required NewDiscussionDTO discussion}) async {
     final result = await _api.updateMessage(id: id, discussion: discussion);
@@ -74,6 +76,7 @@ class DiscussionItemService {
     }
   }
 
+  // TODO: Future <??>
   Future updateMessageStatus(
       {required int id, required String newStatus}) async {
     final result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
@@ -94,6 +97,7 @@ class DiscussionItemService {
     }
   }
 
+  // TODO: Future <??>
   Future subscribeToMessage({required int id}) async {
     final result = await _api.subscribeToMessage(id: id);
     final success = result.response != null;
@@ -113,6 +117,7 @@ class DiscussionItemService {
     }
   }
 
+  // TODO: Future <??>
   Future deleteMessage({required int id}) async {
     final result = await _api.deleteMessage(id: id);
     final success = result.response != null;

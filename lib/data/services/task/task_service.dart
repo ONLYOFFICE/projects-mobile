@@ -41,52 +41,54 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskService {
-  final TaskApi? _api = locator<TaskApi>();
-  final SecureStorage? _secureStorage = locator<SecureStorage>();
+  final TaskApi _api = locator<TaskApi>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  var portalTask = PortalTask().obs;
+  Rx<PortalTask> portalTask = PortalTask().obs;
 
   Future addTask({required NewTaskDTO newTask}) async {
-    var task = await _api!.addTask(newTask: newTask);
+    final task = await _api.addTask(newTask: newTask);
 
-    var success = task.response != null;
+    final success = task.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.createEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage!.getString('portalName'),
+            await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
-      await Get.find<ErrorDialog>().show(task.error!.message!);
+      await Get.find<ErrorDialog>().show(task.error!.message);
       return null;
     }
   }
 
-  Future getTaskByID({int? id}) async {
-    var task = await _api!.getTaskByID(id: id);
+// TODO: Future <??>
+  Future getTaskByID({required int id}) async {
+    final task = await _api.getTaskByID(id: id);
 
-    var success = task.response != null;
+    final success = task.response != null;
 
     if (success) {
       return task.response;
     } else {
-      await Get.find<ErrorDialog>().show(task.error!.message!);
+      await Get.find<ErrorDialog>().show(task.error!.message);
       return null;
     }
   }
 
+// TODO: Future <??>
   Future getStatuses() async {
-    var statuses = await _api!.getStatuses();
+    final statuses = await _api.getStatuses();
 
-    var success = statuses.response != null;
+    final success = statuses.response != null;
 
     if (success) {
       return statuses.response;
     } else {
-      await Get.find<ErrorDialog>().show(statuses.error!.message!);
+      await Get.find<ErrorDialog>().show(statuses.error!.message);
       return null;
     }
   }
@@ -104,7 +106,7 @@ class TaskService {
     String? projectId,
     String? deadlineFilter,
   }) async {
-    var projects = await _api!.getTasksByParams(
+    final projects = await _api.getTasksByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
@@ -118,12 +120,12 @@ class TaskService {
       projectId: projectId,
     );
 
-    var success = projects.response != null;
+    final success = projects.response != null;
 
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message!);
+      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
@@ -140,7 +142,7 @@ class TaskService {
     // String projectId,
     // String deadlineFilter,
   }) async {
-    var projects = await _api!.getTasksByParams(
+    final projects = await _api.getTasksByParams(
       startIndex: startIndex,
       query: query,
       // sortBy: sortBy,
@@ -153,31 +155,32 @@ class TaskService {
       // projectId: projectId,
     );
 
-    var success = projects.response != null;
+    final success = projects.response != null;
 
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message!);
+      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
 
+// TODO: Future <??>
   Future updateTask({required NewTaskDTO newTask}) async {
-    var task = await _api!.updateTask(newTask: newTask);
+    final task = await _api.updateTask(newTask: newTask);
 
-    var success = task.response != null;
+    final success = task.response != null;
 
     if (success) {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.editEntity, {
         AnalyticsService.Params.Key.portal:
-            await _secureStorage!.getString('portalName'),
+            await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.task
       });
       return task.response;
     } else {
-      await Get.find<ErrorDialog>().show(task.error.message);
+      await Get.find<ErrorDialog>().show(task.error!.message);
       return null;
     }
   }

@@ -254,6 +254,7 @@ class ProjectService {
     }
   }
 
+  // TODO: Future <??>
   Future followProject({required int projectId}) async {
     final result = await _api.followProject(projectId: projectId);
 
@@ -274,6 +275,7 @@ class ProjectService {
     }
   }
 
+  // TODO: Future <??>
   Future createTag({required String name}) async {
     final result = await _api.createTag(name: name);
 

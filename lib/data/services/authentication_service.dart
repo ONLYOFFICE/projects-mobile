@@ -107,6 +107,7 @@ class AuthService {
     return authResponse;
   }
 
+  // TODO: Future <??>
   Future passwordRecovery({required String email}) async {
     final response = await _api.passwordRecovery(email);
 
@@ -120,6 +121,7 @@ class AuthService {
     }
   }
 
+  // TODO: Future <??>
   Future sendRegistrationType() async {
     final response = await _api.sendRegistrationType();
 

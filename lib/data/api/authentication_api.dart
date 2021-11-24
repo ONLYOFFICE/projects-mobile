@@ -154,7 +154,7 @@ class AuthApi {
         result.response = AuthToken.fromJson(
             responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

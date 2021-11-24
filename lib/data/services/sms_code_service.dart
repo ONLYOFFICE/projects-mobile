@@ -38,6 +38,7 @@ import 'package:projects/internal/locator.dart';
 class SmsCodeService {
   final AuthApi _api = locator<AuthApi>();
 
+  // TODO: Future <??>
   Future setPhone({
     required String userName,
     required String password,
@@ -61,6 +62,7 @@ class SmsCodeService {
     }
   }
 
+  // TODO: Future <??>
   Future sendSms({required String userName, required String password}) async {
     final body = {
       'userName': userName,

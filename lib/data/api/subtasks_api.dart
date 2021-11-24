@@ -40,20 +40,22 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/internal/locator.dart';
 
 class SubtasksApi {
-  Future<ApiDTO> acceptSubtask({int? taskId, int? subtaskId, required Map data}) async {
-    var url = await locator
+  Future<ApiDTO> acceptSubtask(
+      {required int taskId, required int subtaskId, required Map data}) async {
+    final url = await locator
         .get<CoreApi>()
         .updateSubtask(taskId: taskId, subtaskId: subtaskId);
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: data);
+      final response = await locator.get<CoreApi>().putRequest(url, body: data);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Subtask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -61,20 +63,22 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> deleteSubTask({int? taskId, int? subtaskId}) async {
-    var url = await locator
+  Future<ApiDTO> deleteSubTask(
+      {required int taskId, required int subtaskId}) async {
+    final url = await locator
         .get<CoreApi>()
         .deleteSubtaskUrl(taskId: taskId, subtaskId: subtaskId);
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Subtask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -82,20 +86,22 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> copySubtask({int? taskId, int? subtaskId}) async {
-    var url = await locator
+  Future<ApiDTO> copySubtask(
+      {required int taskId, required int subtaskId}) async {
+    final url = await locator
         .get<CoreApi>()
         .copySubtaskUrl(taskId: taskId, subtaskId: subtaskId);
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, {});
+      final response = await locator.get<CoreApi>().postRequest(url, {});
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Subtask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -103,18 +109,19 @@ class SubtasksApi {
     return result;
   }
 
-  Future<ApiDTO> createSubtask({int? taskId, Map? data}) async {
-    var url = await locator.get<CoreApi>().createSubtaskUrl(taskId: taskId);
-    var result = ApiDTO();
+  Future<ApiDTO> createSubtask({required int taskId, required Map data}) async {
+    final url = await locator.get<CoreApi>().createSubtaskUrl(taskId: taskId);
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, data);
+      final response = await locator.get<CoreApi>().postRequest(url, data);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Subtask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -123,23 +130,24 @@ class SubtasksApi {
   }
 
   Future<ApiDTO> updateSubtaskStatus({
-    int? taskId,
-    int? subtaskId,
+    required int taskId,
+    required int subtaskId,
     required Map data,
   }) async {
-    var url = await locator
+    final url = await locator
         .get<CoreApi>()
         .updateSubtaskStatus(taskId: taskId, subtaskId: subtaskId);
 
-    var result = ApiDTO();
+    final result = ApiDTO();
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: data);
+      final response = await locator.get<CoreApi>().putRequest(url, body: data);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Subtask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -148,24 +156,25 @@ class SubtasksApi {
   }
 
   Future<ApiDTO> updateSubtask({
-    int? taskId,
-    int? subtaskId,
+    required int taskId,
+    required int subtaskId,
     required Map data,
   }) async {
-    var url = await locator.get<CoreApi>().updateSubtask(
+    final url = await locator.get<CoreApi>().updateSubtask(
           taskId: taskId,
           subtaskId: subtaskId,
         );
 
-    var result = ApiDTO();
+    final result = ApiDTO();
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: data);
+      final response = await locator.get<CoreApi>().putRequest(url, body: data);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Subtask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Subtask.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

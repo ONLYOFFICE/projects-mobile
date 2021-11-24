@@ -60,7 +60,7 @@ class DiscussionsApi {
     }
 
     if (query != null) {
-      var parsedData = Uri.encodeComponent(query);
+      final parsedData = Uri.encodeComponent(query);
       url += '&FilterValue=$parsedData';
     }
 

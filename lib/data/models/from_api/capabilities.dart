@@ -43,12 +43,11 @@ class Capabilities {
   String ssoUrl;
 
   factory Capabilities.fromJson(Map<String, dynamic> json) {
-    return
-      Capabilities(ldapEnabled: json['ldapEnabled'],
-        providers: List<String>.from(json['providers']),
-        ssoLabel: json['ssoLabel'],
-        ssoUrl: json['ldapEnabled'],
-      );
-
+    return Capabilities(
+      ldapEnabled: json['ldapEnabled'] as bool,
+      providers: List<String>.from(json['providers'] as List),
+      ssoLabel: json['ssoLabel'] as String,
+      ssoUrl: json['ldapEnabled'] as String,
+    );
   }
 }
