@@ -44,7 +44,7 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/new
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class ProjectDiscussionsController extends GetxController {
-  final DiscussionsService? _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
   var projectId;
   var projectTitle;
 
@@ -80,7 +80,7 @@ class ProjectDiscussionsController extends GetxController {
     fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() => _projectDetailed.security!['canCreateMessage'];
+  bool? _canCreate() => _projectDetailed.security!['canCreateMessage'] as bool?;
 
   RxList get itemList => paginationController.data;
 
@@ -91,7 +91,7 @@ class ProjectDiscussionsController extends GetxController {
     loaded.value = true;
   }
 
-  Future _getDiscussions({needToClear = false}) async {
+  Future _getDiscussions({bool needToClear = false}) async {
     var result = await (_api!.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,

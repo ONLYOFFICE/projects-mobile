@@ -323,7 +323,7 @@ void showsStatusesBS({required context, dynamic itemController}) async {
                       onTap: () async {
                         final success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
-                        );
+                        ) as bool;
                         if (success) {
                           locator<EventHub>().fire('needToRefreshProjects');
                         }
@@ -333,7 +333,7 @@ void showsStatusesBS({required context, dynamic itemController}) async {
                           title: _statusesController.getStatusName(i),
                           icon: AppIcon(
                               icon: _statusesController.getStatusImageString(i),
-                              color: itemController.projectData.canEdit
+                              color: itemController.projectData.canEdit as bool
                                   ? Get.theme.colors().primary
                                   : Get.theme.colors().onBackground),
                           selected: _statusesController.statuses[i] ==

@@ -124,10 +124,10 @@ class DiscussionEditingController extends GetxController
   RxBool setTextError = false.obs;
 
   DiscussionEditingController({
-    required this.id,
+    this.id = -1,
     required this.title,
     required this.text,
-    required this.projectId,
+    this.projectId = -1,
     required this.selectedProjectTitle,
     required this.initialSubscribers,
   }) {

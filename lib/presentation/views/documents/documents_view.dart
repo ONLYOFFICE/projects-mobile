@@ -310,7 +310,7 @@ class DocsBottom extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                controller.sortController.currentSortTitle.value,
+                controller.sortController.currentSortTitle.value as String,
                 style: TextStyleHelper.projectsSorting
                     .copyWith(color: Get.theme.colors().primary),
               ),

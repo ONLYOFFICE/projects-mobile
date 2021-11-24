@@ -45,16 +45,14 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DocumentsMoveOrCopyController extends GetxController {
-  final FilesService? _api = locator<FilesService>();
+  final FilesService _api = locator<FilesService>();
 
-  var hasFilters = false.obs;
-  var loaded = false.obs;
-  var nothingFound = false.obs;
-  var searchMode = false.obs;
+  RxBool hasFilters = false.obs;
+  RxBool loaded = false.obs;
+  RxBool nothingFound = false.obs;
+  RxBool searchMode = false.obs;
 
-  var searchInputController = TextEditingController();
-
-  PaginationController? _paginationController;
+  TextEditingController searchInputController = TextEditingController();
 
   String? _query;
 
@@ -67,7 +65,9 @@ class DocumentsMoveOrCopyController extends GetxController {
   int? _targetId;
   int? get target => _targetId;
 
-  PaginationController? get paginationController => _paginationController;
+  late PaginationController _paginationController;
+  PaginationController get paginationController => _paginationController;
+  RxList get itemList => _paginationController.data;
 
   String? _screenName;
   Folder? _currentFolder;
@@ -75,13 +75,11 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   var screenName = tr('chooseSection').obs;
 
-  RxList get itemList => _paginationController!.data;
+  late DocumentsSortController _sortController;
+  DocumentsSortController get sortController => _sortController;
 
-  DocumentsSortController? _sortController;
-  DocumentsSortController? get sortController => _sortController;
-
-  DocumentsFilterController? _filterController;
-  DocumentsFilterController? get filterController => _filterController;
+  late DocumentsFilterController _filterController;
+  DocumentsFilterController get filterController => _filterController;
 
   DocumentsMoveOrCopyController(
     DocumentsFilterController filterController,
@@ -92,7 +90,7 @@ class DocumentsMoveOrCopyController extends GetxController {
     _paginationController = paginationController;
 
     _filterController = filterController;
-    _filterController!.applyFiltersDelegate = () async => await refreshContent();
+    _filterController.applyFiltersDelegate = () async => await refreshContent();
 
     sortController.updateSortDelegate = () async => await refreshContent();
     paginationController.loadDelegate = () async => await _getDocuments();
@@ -121,7 +119,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
     _clear();
     _currentFolder = folder;
-    _filterController!.folderId = _currentFolder!.id;
+    _filterController.folderId = _currentFolder!.id;
     screenName.value = folderName;
     await _getDocuments();
 
@@ -132,31 +130,31 @@ class DocumentsMoveOrCopyController extends GetxController {
     _screenName = null;
     _currentFolder = null;
 
-    _filterController!.folderId = null;
-    paginationController!.startIndex = 0;
-    paginationController!.data.clear();
+    _filterController.folderId = null;
+    paginationController.startIndex = 0;
+    paginationController.data.clear();
   }
 
   Future _getDocuments() async {
-    var result = await _api!.getFilesByParams(
+    var result = await _api.getFilesByParams(
       folderId: _currentFolder == null ? null : _currentFolder!.id,
       query: _query,
-      startIndex: paginationController!.startIndex,
-      sortBy: sortController!.currentSortfilter,
-      sortOrder: sortController!.currentSortOrder,
-      typeFilter: _filterController!.typeFilter,
-      authorFilter: _filterController!.authorFilter,
+      startIndex: paginationController.startIndex,
+      sortBy: sortController.currentSortfilter,
+      sortOrder: sortController.currentSortOrder,
+      typeFilter: _filterController.typeFilter,
+      authorFilter: _filterController.authorFilter,
     );
 
     if (result == null) return;
 
-    paginationController!.total.value = result.total!;
+    paginationController.total.value = result.total!;
 
     if (_currentFolder != null && result.current != null)
       _screenName = result.current!.title;
 
-    paginationController!.data.addAll(result.folders!);
-    paginationController!.data.addAll(result.files!);
+    paginationController.data.addAll(result.folders!);
+    paginationController.data.addAll(result.files!);
 
     screenName.value = _screenName ?? tr('documents');
   }
@@ -167,14 +165,14 @@ class DocumentsMoveOrCopyController extends GetxController {
     searchInputController.clear();
     nothingFound.value = false;
 
-    paginationController!.startIndex = 0;
-    paginationController!.data.clear();
+    paginationController.startIndex = 0;
+    paginationController.data.clear();
   }
 
-  void newSearch(query) {
+  void newSearch(String query) {
     _query = query;
-    paginationController!.startIndex = 0;
-    paginationController!.data.clear();
+    paginationController.startIndex = 0;
+    paginationController.data.clear();
     _performSearch();
   }
 
@@ -188,7 +186,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
     await _getDocuments();
 
-    if (paginationController!.data.isEmpty) {
+    if (paginationController.data.isEmpty) {
       nothingFound.value = true;
     }
 
@@ -198,7 +196,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
   Future moveFolder() async {
-    var result = await _api!.moveDocument(
+    var result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -213,7 +211,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   }
 
   Future copyFolder() async {
-    var result = await _api!.copyDocument(
+    var result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -228,7 +226,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   }
 
   Future moveFile() async {
-    var result = await _api!.moveDocument(
+    var result = await _api.moveDocument(
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -236,13 +234,14 @@ class DocumentsMoveOrCopyController extends GetxController {
     if (result != null) {
       Get.close(foldersCount);
 
-      MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
+      MessagesHandler.showSnackBar(
+          context: Get.context!, text: tr('fileMoved'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFile() async {
-    var result = await _api!.copyDocument(
+    var result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );

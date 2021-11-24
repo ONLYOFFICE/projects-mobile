@@ -31,7 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/base/base_sort_controller.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsSortOption extends StatelessWidget {
@@ -40,7 +40,7 @@ class DocumentsSortOption extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final dynamic controller;
 
   @override
   Widget build(BuildContext context) {
@@ -50,27 +50,27 @@ class DocumentsSortOption extends StatelessWidget {
         const Divider(height: 9, thickness: 1),
         SortTile(
           sortParameter: 'dateandtime',
-          sortController: controller.sortController,
+          sortController: controller.sortController as BaseSortController,
         ),
         SortTile(
           sortParameter: 'create_on',
-          sortController: controller.sortController,
+          sortController: controller.sortController as BaseSortController,
         ),
         SortTile(
           sortParameter: 'AZ',
-          sortController: controller.sortController,
+          sortController: controller.sortController as BaseSortController,
         ),
         SortTile(
           sortParameter: 'type',
-          sortController: controller.sortController,
+          sortController: controller.sortController as BaseSortController,
         ),
         SortTile(
           sortParameter: 'size',
-          sortController: controller.sortController,
+          sortController: controller.sortController as BaseSortController,
         ),
         SortTile(
           sortParameter: 'author',
-          sortController: controller.sortController,
+          sortController: controller.sortController as BaseSortController,
         ),
         const SizedBox(height: 20),
       ],
