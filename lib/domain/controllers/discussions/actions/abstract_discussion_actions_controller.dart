@@ -50,9 +50,9 @@ abstract class DiscussionActionsController {
   TextEditingController get userSearchController => _userSearchController;
   late HtmlEditorController textController;
 
-  var setTitleError;
-  var setTextError;
-  var selectProjectError;
+  late RxBool setTitleError;
+  late RxBool setTextError;
+  late RxBool selectProjectError;
 
   void setupSubscribersSelection();
   void addSubscriber(PortalUserItemController user,

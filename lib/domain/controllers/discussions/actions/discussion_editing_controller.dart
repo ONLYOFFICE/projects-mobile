@@ -56,7 +56,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 class DiscussionEditingController extends GetxController
     implements DiscussionActionsController {
   int id;
-  int? projectId;
+  int projectId;
 
   @override
   RxString selectedProjectTitle;
@@ -117,17 +117,17 @@ class DiscussionEditingController extends GetxController
   FocusNode get titleFocus => _titleFocus;
 
   @override
-  dynamic selectProjectError = false.obs; //RxBool
+  RxBool selectProjectError = false.obs;
   @override
-  dynamic setTitleError = false.obs;
+  RxBool setTitleError = false.obs;
   @override
-  dynamic setTextError = false.obs;
+  RxBool setTextError = false.obs;
 
   DiscussionEditingController({
     required this.id,
     required this.title,
     required this.text,
-    this.projectId,
+    required this.projectId,
     required this.selectedProjectTitle,
     required this.initialSubscribers,
   }) {
@@ -312,10 +312,9 @@ class DiscussionEditingController extends GetxController
     if (title.isEmpty) setTitleError.value = true;
     if (text.isEmpty) setTextError.value = true;
     if (title.isNotEmpty && text.isNotEmpty) {
-      // ignore: omit_local_variable_types
-      List<String?> subscribersIds = [];
+      final subscribersIds = <String?>[];
 
-      for (var item in subscribers) subscribersIds.add(item.id);
+      for (final item in subscribers) subscribersIds.add(item.id);
 
       var diss = NewDiscussionDTO(
         content: text.value,
