@@ -56,14 +56,16 @@ abstract class BaseSearchController extends GetxController {
       switchToSearchView.isTrue &&
       paginationController!.data.isNotEmpty;
 
-  Future search({needToClear = true, String? query});
+  Future search({bool needToClear = true, String? query});
+
   Future<void> performSearch({needToClear = true, String? query}) async {}
 
+  // TODO: refact
   void addData(var result, bool needToClear) {
     if (result != null) {
-      paginationController!.total.value = result.total;
+      paginationController!.total.value = result.total as int;
       if (needToClear) paginationController!.data.clear();
-      paginationController!.data.addAll(result.response);
+      paginationController!.data.addAll(result.response as Iterable<dynamic>);
     }
   }
 

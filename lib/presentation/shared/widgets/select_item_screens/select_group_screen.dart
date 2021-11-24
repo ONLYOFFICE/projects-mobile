@@ -63,7 +63,7 @@ class _GroupList extends StatelessWidget with SelectItemListMixin {
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
-        PortalGroup group = paginationController!.data[i];
+        final PortalGroup group = paginationController.data[i] as PortalGroup;
         return SelectItemTile(
             title: group.name,
             onSelect: () =>
