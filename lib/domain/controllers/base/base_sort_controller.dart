@@ -38,9 +38,9 @@ abstract class BaseSortController extends GetxController {
   RxBool isSortAscending = true.obs;
   Function? updateSortDelegate;
 
-  String? currentSortfilter;
+  late String currentSortfilter;
 
-  void changeSort(String? newSort) async {
+  Future<void> changeSort(String newSort) async {
     if (newSort == currentSortfilter) {
       isSortAscending.value = !isSortAscending.value;
     } else {
@@ -57,5 +57,5 @@ abstract class BaseSortController extends GetxController {
   String get currentSortOrder =>
       isSortAscending.value == true ? 'ascending' : 'descending';
 
-  String getFilterLabel(value) => tr(value);
+  String getFilterLabel(String value) => tr(value);
 }

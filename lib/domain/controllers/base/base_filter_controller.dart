@@ -55,8 +55,8 @@ abstract class BaseFilterController extends GetxController {
   }
 
   Map? stringsToDateTime(Map? map, List keysToConvert) {
-    for (var item in keysToConvert) {
-      map![item] = DateTime.parse(map[item]);
+    for (final item in keysToConvert) {
+      map![item] = DateTime.parse(map[item] as String);
     }
     return map;
   }
