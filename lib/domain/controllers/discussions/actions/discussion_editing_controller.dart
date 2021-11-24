@@ -55,11 +55,11 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 
 class DiscussionEditingController extends GetxController
     implements DiscussionActionsController {
-   int? id;
-   int? projectId;
+  int id;
+  int? projectId;
 
   @override
-  var selectedProjectTitle;
+  RxString selectedProjectTitle;
 
   @override
   RxString title = RxString('');
@@ -70,13 +70,16 @@ class DiscussionEditingController extends GetxController
   String _previusText = '';
 
   @override
-  final subscribers = <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> subscribers =
+      <PortalUserItemController>[].obs;
 
   @override
-  var otherUsers = <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> otherUsers =
+      <PortalUserItemController>[].obs;
 
   List<PortalUser> initialSubscribers = <PortalUser>[];
-  var _previusSelectedSubscribers = <PortalUser>[];
+  List<PortalUserItemController> _previusSelectedSubscribers =
+      <PortalUserItemController>[];
 
   @override
   void onInit() {
@@ -100,7 +103,7 @@ class DiscussionEditingController extends GetxController
   final selectedGroups = <PortalGroupItemController>[];
 
   @override
-  dynamic textController = HtmlEditorController();
+  HtmlEditorController textController = HtmlEditorController();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _userSearchController = TextEditingController();
@@ -121,12 +124,12 @@ class DiscussionEditingController extends GetxController
   dynamic setTextError = false.obs;
 
   DiscussionEditingController({
-    this.id,
-    this.title!,
-    this.text,
+    required this.id,
+    required this.title,
+    required this.text,
     this.projectId,
-    this.selectedProjectTitle,
-    this.initialSubscribers,
+    required this.selectedProjectTitle,
+    required this.initialSubscribers,
   }) {
     _usersDataSource.selectionMode = UserSelectionMode.Multiple;
   }
@@ -181,10 +184,10 @@ class DiscussionEditingController extends GetxController
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          for (var item in _previusSelectedSubscribers!) {
+          for (final item in _previusSelectedSubscribers) {
             if (!item.isSelected.value) item.isSelected.value = true;
           }
-          subscribers.value = List.from(_previusSelectedSubscribers!);
+          subscribers.value = List.from(_previusSelectedSubscribers);
           clearUserSearch();
           Get.back();
           Get.back();
@@ -195,14 +198,14 @@ class DiscussionEditingController extends GetxController
   }
 
   @override
-  void setupSubscribersSelection() async {
+  Future<void> setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
     await _usersDataSource.getProfiles(needToClear: true, withoutSelf: false);
   }
 
   Future<void> _getSelectedSubscribers() async {
-    _usersDataSource.usersList.removeWhere(
-        (item) => item.portalUser!.status == UserStatus.Terminated);
+    _usersDataSource.usersList
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
     otherUsers = RxList(_usersDataSource.usersList
         .where((element) => !subscribers.any((it) => it.id == element.id))
@@ -210,7 +213,7 @@ class DiscussionEditingController extends GetxController
 
     for (var user in _usersDataSource.usersList) {
       if (subscribers.any((it) => it.id == user.id))
-        user.isSelected!.value = true;
+        user.isSelected.value = true;
     }
 
     for (var user in otherUsers) {
@@ -220,20 +223,20 @@ class DiscussionEditingController extends GetxController
 
   @override
   void addSubscriber(PortalUserItemController user,
-      {fromUsersDataSource = false}) {
+      {bool fromUsersDataSource = false}) {
     if (!fromUsersDataSource) {
-      user.isSelected!.value = true;
+      user.isSelected.value = true;
       otherUsers.removeWhere(
-          (element) => user.portalUser!.id == element.portalUser!.id);
+          (element) => user.portalUser.id == element.portalUser.id);
       subscribers.add(user);
 
       sortLists();
     } else {
       // the items in usersDataSource have their own onTap functions,
       // so the value of IsSelected has already been changed
-      if (user.isSelected!.value == false) {
+      if (user.isSelected.value == false) {
         subscribers.removeWhere(
-            (element) => user.portalUser!.id == element.portalUser!.id);
+            (element) => user.portalUser.id == element.portalUser.id);
         sortLists();
       } else {
         subscribers.add(user);
@@ -244,26 +247,26 @@ class DiscussionEditingController extends GetxController
 
   @override
   void removeSubscriber(PortalUserItemController user) {
-    user.isSelected!.value = false;
-    subscribers.removeWhere(
-        (element) => user.portalUser!.id == element.portalUser!.id);
+    user.isSelected.value = false;
+    subscribers
+        .removeWhere((element) => user.portalUser.id == element.portalUser.id);
     otherUsers.add(user);
-    otherUsers.removeWhere(
-        (item) => item.portalUser!.status == UserStatus.Terminated);
+    otherUsers
+        .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
     sortLists();
   }
 
   void sortLists() {
     otherUsers.sort((a, b) {
-      return a.portalUser!.displayName!
+      return a.portalUser.displayName!
           .toLowerCase()
-          .compareTo(b.portalUser!.displayName!.toLowerCase());
+          .compareTo(b.portalUser.displayName!.toLowerCase());
     });
 
     subscribers.sort((a, b) {
-      return a.portalUser!.displayName!
+      return a.portalUser.displayName!
           .toLowerCase()
-          .compareTo(b.portalUser!.displayName!.toLowerCase());
+          .compareTo(b.portalUser.displayName!.toLowerCase());
     });
   }
 
@@ -286,13 +289,13 @@ class DiscussionEditingController extends GetxController
       if (groupMembers.response!.isNotEmpty) {
         for (var element in groupMembers.response!) {
           var user = PortalUserItemController(portalUser: element);
-          user.isSelected!.value = true;
+          user.isSelected.value = true;
           subscribers.add(user);
         }
       }
     }
 
-    subscribers.value = subscribers.distinct((d) => d.portalUser!.id!).toList();
+    subscribers.value = subscribers.distinct((d) => d.portalUser.id!).toList();
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 

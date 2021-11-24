@@ -32,22 +32,23 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class DiscussionActionsController {
-  final text = RxString('');
-  final title = RxString('');
-  dynamic selectedProjectTitle;
+  RxString text = RxString('');
+  RxString title = RxString('');
+  RxString selectedProjectTitle = RxString('');
   final subscribers = <PortalUserItemController>[].obs;
   final otherUsers = <PortalUserItemController>[].obs;
 
   FocusNode get titleFocus => FocusNode();
-  TextEditingController? _titleController;
-  TextEditingController? _userSearchController;
-  TextEditingController? get titleController => _titleController;
-  TextEditingController? get userSearchController => _userSearchController;
-  dynamic textController;
+  late TextEditingController _titleController;
+  late TextEditingController _userSearchController;
+  TextEditingController get titleController => _titleController;
+  TextEditingController get userSearchController => _userSearchController;
+  late HtmlEditorController textController;
 
   var setTitleError;
   var setTextError;
@@ -55,7 +56,7 @@ abstract class DiscussionActionsController {
 
   void setupSubscribersSelection();
   void addSubscriber(PortalUserItemController user,
-      {fromUsersDataSource = false});
+      {bool fromUsersDataSource = false});
   void removeSubscriber(PortalUserItemController user);
 
   void changeTitle(String newText);

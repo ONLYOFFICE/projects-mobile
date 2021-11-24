@@ -39,7 +39,7 @@ import 'package:projects/presentation/views/discussions/discussions_view.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectDiscussionsScreen extends StatelessWidget {
-  final ProjectDiscussionsController? controller;
+  final ProjectDiscussionsController controller;
   const ProjectDiscussionsScreen({
     Key? key,
     required this.controller,
@@ -47,8 +47,8 @@ class ProjectDiscussionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (controller!.paginationController.data.isEmpty)
-      controller!.loadProjectDiscussions();
+    if (controller.paginationController.data.isEmpty)
+      controller.loadProjectDiscussions();
     return Stack(
       children: [
         DiscussionsList(
@@ -59,9 +59,9 @@ class ProjectDiscussionsScreen extends StatelessWidget {
             padding: const EdgeInsets.only(right: 16, bottom: 24),
             child: Obx(
               () => Visibility(
-                visible: controller!.fabIsVisible.value,
+                visible: controller.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: controller!.toNewDiscussionScreen,
+                  onPressed: controller.toNewDiscussionScreen,
                   child: AppIcon(
                     icon: SvgIcons.add_discussion,
                     color: Get.theme.colors().onPrimarySurface,

@@ -41,17 +41,18 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionSearchController extends BaseController {
-  final DiscussionsService? _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
 
-  var loaded = true.obs;
-  var nothingFound = false.obs;
+  RxBool loaded = true.obs;
+  RxBool nothingFound = false.obs;
 
   String? _query;
 
-  final PaginationController _paginationController = PaginationController();
-  PaginationController get paginationController => _paginationController;
+  final _paginationController = PaginationController<Discussion>();
+  PaginationController<Discussion> get paginationController =>
+      _paginationController;
 
-  var searchInputController = TextEditingController();
+  TextEditingController searchInputController = TextEditingController();
 
   @override
   RxList get itemList => _paginationController.data;
@@ -83,7 +84,7 @@ class DiscussionSearchController extends BaseController {
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    var result = await (_api!.getDiscussionsByParams(
+    var result = await (_api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       query: _query,
     ) as Future<PageDTO<List<Discussion>>>);
