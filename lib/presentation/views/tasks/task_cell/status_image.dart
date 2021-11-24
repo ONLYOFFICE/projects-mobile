@@ -59,7 +59,7 @@ class _StatusImage extends StatelessWidget {
                   color: controller!.getStatusBGColor,
                 ),
                 child: StatusIcon(
-                  canEditTask: controller!.task.value!.canEdit,
+                  canEditTask: controller!.task.value.canEdit,
                   status: controller!.status.value,
                 ),
               ),

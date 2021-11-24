@@ -65,7 +65,7 @@ class TaskOverviewScreen extends StatelessWidget {
         if (taskController!.loaded.value == true ||
             taskController!.firstReload.value == true) {
           taskController!.firstReload.value = false;
-          var task = taskController!.task.value!;
+          var task = taskController!.task.value;
           return SmartRefresher(
             controller: taskController!.refreshController,
             onRefresh: () => taskController!.reloadTask(showLoading: true),

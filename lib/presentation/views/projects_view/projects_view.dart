@@ -115,7 +115,7 @@ class ProjectsView extends StatelessWidget {
           if (controller.loaded.value == false)
             return const ListLoadingSkeleton();
           if (controller.loaded.value == true &&
-              controller.paginationController!.data.isEmpty &&
+              controller.paginationController.data.isEmpty &&
               !controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
@@ -124,7 +124,7 @@ class ProjectsView extends StatelessWidget {
             );
           }
           if (controller.loaded.value == true &&
-              controller.paginationController!.data.isEmpty &&
+              controller.paginationController.data.isEmpty &&
               controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
@@ -136,8 +136,8 @@ class ProjectsView extends StatelessWidget {
             child: ListView.builder(
               controller: scrollController,
               itemBuilder: (c, i) =>
-                  ProjectCell(item: controller.paginationController!.data[i]),
-              itemCount: controller.paginationController!.data.length,
+                  ProjectCell(item: controller.paginationController.data[i]),
+              itemCount: controller.paginationController.data.length,
             ),
           );
         },
@@ -274,7 +274,7 @@ class Bottom extends StatelessWidget {
                 Obx(
                   () => Text(
                     tr('total', args: [
-                      controller.paginationController!.total!.value.toString()
+                      controller.paginationController.total.value.toString()
                     ]),
                     style: TextStyleHelper.body2(
                       color: Get.theme.colors().onSurface.withOpacity(0.6),

@@ -61,7 +61,7 @@ class SubtasksView extends StatelessWidget {
         if (controller!.loaded.value == true) {
           return Stack(
             children: [
-              if (_task!.subtasks!.isEmpty)
+              if (_task.subtasks!.isEmpty)
                 Center(
                   child: EmptyScreen(
                     icon: SvgIcons.task_not_created,
@@ -83,8 +83,8 @@ class SubtasksView extends StatelessWidget {
                     },
                   ),
                 ),
-              if (controller?.task.value?.canCreateSubtask == true &&
-                  controller?.task.value?.status != 2)
+              if (controller?.task.value.canCreateSubtask == true &&
+                  controller?.task.value.status != 2)
                 _FAB(task: _task),
             ],
           );

@@ -86,8 +86,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                   style: TextStyleHelper.headerStyle(
                       color: Get.theme.colors().onSurface),
                 ),
-                if (controller.subscribers!.isNotEmpty)
-                  Text(plural('selected', controller.subscribers!.length),
+                if (controller.subscribers.isNotEmpty)
+                  Text(plural('selected', controller.subscribers.length),
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onSurface))
               ],

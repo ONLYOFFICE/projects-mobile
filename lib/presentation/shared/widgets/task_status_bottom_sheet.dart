@@ -87,7 +87,7 @@ void showsStatusesBS(
                     InkWell(
                       onTap: () async {
                         await taskItemController!.tryChangingStatus(
-                            id: taskItemController.task.value!.id!,
+                            id: taskItemController.task.value.id!,
                             newStatusId: _statusesController.statuses[i].id!,
                             newStatusType:
                                 _statusesController.statuses[i].statusType!);
@@ -96,8 +96,7 @@ void showsStatusesBS(
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
                           icon: StatusIcon(
-                            canEditTask:
-                                taskItemController!.task.value!.canEdit,
+                            canEditTask: taskItemController!.task.value.canEdit,
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].title ==

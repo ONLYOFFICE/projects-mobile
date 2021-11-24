@@ -56,8 +56,8 @@ class TaskCommentsView extends StatelessWidget {
     return Obx(
       () {
         if (controller!.loaded.value == true &&
-            controller!.task.value!.comments != null) {
-          var comments = controller!.task.value!.comments!;
+            controller!.task.value.comments != null) {
+          var comments = controller!.task.value.comments!;
           return Column(
             children: [
               if (comments.isEmpty)
@@ -85,20 +85,20 @@ class TaskCommentsView extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return CommentsThread(
                           comment: comments[index],
-                          taskId: controller!.task.value!.id,
+                          taskId: controller!.task.value.id,
                         );
                       },
                     ),
                   ),
                 ),
-              if (controller?.task.value?.canCreateComment == null ||
-                  controller?.task.value?.canCreateComment == true)
+              if (controller?.task.value.canCreateComment == null ||
+                  controller?.task.value.canCreateComment == true)
                 AddCommentButton(
                   onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewCommentView(),
                     arguments: {
                       'controller': Get.put(NewTaskCommentController(
-                          idFrom: controller!.task.value!.id))
+                          idFrom: controller!.task.value.id))
                     },
                   ),
                 ),

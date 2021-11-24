@@ -167,10 +167,10 @@ class _SecondColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CellAtributedTitle(
-                text: itemController!.task.value!.title,
+                text: itemController!.task.value.title,
                 style: TextStyleHelper.projectTitle,
                 atributeIcon: AppIcon(icon: SvgIcons.high_priority),
-                atributeIconVisible: itemController!.task.value!.priority == 1,
+                atributeIconVisible: itemController!.task.value.priority == 1,
               ),
               Wrap(
                 children: [
@@ -206,8 +206,8 @@ class _ThirdColumn extends StatelessWidget {
     var _now = DateTime.now();
 
     DateTime? _deadline;
-    if (controller!.task.value!.deadline != null)
-      _deadline = DateTime.parse(controller!.task.value!.deadline!);
+    if (controller!.task.value.deadline != null)
+      _deadline = DateTime.parse(controller!.task.value.deadline!);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -217,7 +217,7 @@ class _ThirdColumn extends StatelessWidget {
           Text(
               formatedDateFromString(
                 now: _now,
-                stringDate: controller!.task.value!.deadline!,
+                stringDate: controller!.task.value.deadline!,
               ),
               style: _deadline.isBefore(_now)
                   ? TextStyleHelper.caption(
@@ -230,7 +230,7 @@ class _ThirdColumn extends StatelessWidget {
           children: [
             AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
             const SizedBox(width: 5),
-            Text(controller!.task.value!.subtasks!.length.toString(),
+            Text(controller!.task.value.subtasks!.length.toString(),
                 style: TextStyleHelper.body2(
                     color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ],

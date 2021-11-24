@@ -52,7 +52,7 @@ class PortalUserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = userController!.portalUser!;
+    var user = userController!.portalUser;
     return InkWell(
       onTap: () {
         userController!.onTap();
@@ -159,7 +159,7 @@ class PortalUserItem extends StatelessWidget {
             Obx(() {
               if (userController!.selectionMode.value ==
                   UserSelectionMode.Multiple) {
-                if (userController!.isSelected!.value == true) {
+                if (userController!.isSelected.value == true) {
                   return SizedBox(
                       width: 72,
                       child: Icon(Icons.check_box,
@@ -170,7 +170,7 @@ class PortalUserItem extends StatelessWidget {
                       child: Icon(Icons.check_box_outline_blank_outlined));
                 }
               } else {
-                if (userController!.isSelected!.value == true) {
+                if (userController!.isSelected.value == true) {
                   return SizedBox(
                     width: 72,
                     child: Icon(

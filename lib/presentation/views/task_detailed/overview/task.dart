@@ -48,14 +48,14 @@ class _Task extends StatelessWidget {
             children: [
               Text(tr('task').toUpperCase(), style: TextStyleHelper.overline()),
               Text(
-                taskController!.task.value!.title!,
+                taskController!.task.value.title!,
                 style: TextStyleHelper.headline6(
                   color: Get.theme.colors().onSurface,
                 ),
               ),
               const SizedBox(height: 22),
               StatusButton(
-                canEdit: taskController!.task.value!.canEdit,
+                canEdit: taskController!.task.value.canEdit,
                 text: taskController?.status.value.title ?? '',
                 onPressed: () => taskController!.openStatuses(context),
               ),

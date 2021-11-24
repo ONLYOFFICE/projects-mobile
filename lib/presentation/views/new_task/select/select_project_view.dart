@@ -131,12 +131,12 @@ class SelectProjectView extends StatelessWidget {
           return PaginationListView(
             paginationController: projectsController.paginationController,
             child: ListView.separated(
-              itemCount: projectsController.paginationController!.data.length,
+              itemCount: projectsController.paginationController.data.length,
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
               itemBuilder: (c, i) => _ProjectCell(
-                  item: projectsController!.paginationController!.data[i],
+                  item: projectsController!.paginationController.data[i],
                   controller: controller),
             ),
           );
