@@ -42,10 +42,10 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
@@ -58,7 +58,7 @@ class SelectProjectScreen extends StatelessWidget {
   final _projectsController = Get.put(
       ProjectsController(
         Get.find<ProjectsFilterController>(),
-        Get.find<PaginationController>(),
+        Get.find<PaginationController<ProjectDetailed>>(),
       ),
       tag: '7');
 
@@ -173,13 +173,13 @@ class SelectProjectScreen extends StatelessWidget {
               searchController.searchResult.isEmpty &&
               searchController.loaded.value == true &&
               searchFieldController.text.isNotEmpty) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           if (_projectsController.loaded.value == true) {
             return PaginationListView(
               paginationController: _projectsController.paginationController,
               child: ListView.separated(
-                itemCount: _projectsController.paginationController!.data.length,
+                itemCount: _projectsController.paginationController.data.length,
                 padding: const EdgeInsets.only(bottom: 16),
                 separatorBuilder: (BuildContext context, int index) {
                   return const StyledDivider(
@@ -188,8 +188,8 @@ class SelectProjectScreen extends StatelessWidget {
                   );
                 },
                 itemBuilder: (BuildContext context, int index) {
-                  var project =
-                      _projectsController.paginationController!.data[index];
+                  final project =
+                      _projectsController.paginationController.data[index];
                   return _ProjectTile(
                     project: project,
                     onPressed: () => onSelect(project),
