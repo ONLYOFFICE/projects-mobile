@@ -32,6 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/api/discussions_api.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -42,8 +43,7 @@ class DiscussionItemService {
   final DiscussionsApi _api = locator<DiscussionsApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  // TODO: Future <??>
-  Future getMessageDetailed({required int id}) async {
+  Future<Discussion?> getMessageDetailed({required int id}) async {
     final result = await _api.getMessageDetailed(id: id);
     final success = result.response != null;
 
@@ -55,8 +55,7 @@ class DiscussionItemService {
     }
   }
 
-  // TODO: Future <??>
-  Future updateMessage(
+  Future<Discussion?> updateMessage(
       {required int id, required NewDiscussionDTO discussion}) async {
     final result = await _api.updateMessage(id: id, discussion: discussion);
     final success = result.response != null;
@@ -76,8 +75,7 @@ class DiscussionItemService {
     }
   }
 
-  // TODO: Future <??>
-  Future updateMessageStatus(
+  Future<Discussion?> updateMessageStatus(
       {required int id, required String newStatus}) async {
     final result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
     final success = result.response != null;
@@ -97,8 +95,7 @@ class DiscussionItemService {
     }
   }
 
-  // TODO: Future <??>
-  Future subscribeToMessage({required int id}) async {
+  Future<Discussion?> subscribeToMessage({required int id}) async {
     final result = await _api.subscribeToMessage(id: id);
     final success = result.response != null;
 
@@ -117,8 +114,7 @@ class DiscussionItemService {
     }
   }
 
-  // TODO: Future <??>
-  Future deleteMessage({required int id}) async {
+  Future<Discussion?> deleteMessage({required int id}) async {
     final result = await _api.deleteMessage(id: id);
     final success = result.response != null;
 

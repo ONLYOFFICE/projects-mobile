@@ -49,20 +49,24 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 
 class DiscussionsController extends BaseController {
-  final DiscussionsService? _api = locator<DiscussionsService>();
-  final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
+  final DiscussionsService _api = locator<DiscussionsService>();
+  final ProjectsWithPresets projectsWithPresets =
+      locator<ProjectsWithPresets>();
   PaginationController? _paginationController;
+
   PaginationController? get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
   final _sortController = Get.find<DiscussionsSortController>();
+
   DiscussionsSortController get sortController => _sortController;
 
   DiscussionsFilterController? _filterController;
+
   DiscussionsFilterController? get filterController => _filterController;
 
   RxBool loaded = false.obs;
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   DiscussionsController(
     DiscussionsFilterController filterController,
@@ -83,7 +87,7 @@ class DiscussionsController extends BaseController {
         {if (_loaded) fabIsVisible.value = await getFabVisibility()});
 
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
-      fabIsVisible.value = data ? false : await getFabVisibility();
+      fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
   }
 
@@ -109,8 +113,8 @@ class DiscussionsController extends BaseController {
     loaded.value = true;
   }
 
-  Future _getDiscussions({needToClear = false, String? projectId}) async {
-    var result = await (_api!.getDiscussionsByParams(
+  Future _getDiscussions({bool needToClear = false, String? projectId}) async {
+    final result = await (_api.getDiscussionsByParams(
       startIndex: paginationController!.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -141,21 +145,21 @@ class DiscussionsController extends BaseController {
   Future<bool> getFabVisibility() async {
     var fabVisibility = false;
     await _userController.getUserInfo();
-    var selfUser = _userController.user!;
+    final selfUser = _userController.user!;
 
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
         (selfUser.listAdminModules != null &&
             selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets!.activeProjectsController!.itemList.isEmpty)
-        await projectsWithPresets!.activeProjectsController!.loadProjects();
+      if (projectsWithPresets.activeProjectsController!.itemList.isEmpty)
+        await projectsWithPresets.activeProjectsController!.loadProjects();
       fabVisibility =
-          projectsWithPresets!.activeProjectsController!.itemList.isNotEmpty;
+          projectsWithPresets.activeProjectsController!.itemList.isNotEmpty;
     } else {
-      if (projectsWithPresets!.myProjectsController!.itemList.isEmpty)
-        await projectsWithPresets!.myProjectsController!.loadProjects();
+      if (projectsWithPresets.myProjectsController!.itemList.isEmpty)
+        await projectsWithPresets.myProjectsController!.loadProjects();
       fabVisibility =
-          projectsWithPresets!.myProjectsController!.itemList.isNotEmpty;
+          projectsWithPresets.myProjectsController!.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

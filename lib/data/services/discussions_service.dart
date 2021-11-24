@@ -96,7 +96,7 @@ class DiscussionsService {
         AnalyticsService.Params.Key.entity:
             AnalyticsService.Params.Value.discussion
       });
-      return result.response as Discussion;
+      return result.response;
     } else {
       await Get.find<ErrorDialog>().show(result.error!.message);
       return null;

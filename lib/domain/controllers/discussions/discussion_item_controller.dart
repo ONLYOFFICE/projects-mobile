@@ -63,12 +63,13 @@ class DiscussionItemController extends GetxController {
   final status = 0.obs;
 
   final loaded = true.obs;
-  var refreshController = RefreshController();
-  var subscribersRefreshController = RefreshController();
-  var commentsRefreshController = RefreshController();
+  final refreshController = RefreshController();
+  final subscribersRefreshController = RefreshController();
+  final commentsRefreshController = RefreshController();
   var selfId;
 
   final statusImageString = ''.obs;
+
   // to show overview screen without loading
   final firstReload = true.obs;
 
@@ -119,30 +120,30 @@ class DiscussionItemController extends GetxController {
 
   Future<void> getDiscussionDetailed({bool showLoading = true}) async {
     if (showLoading) loaded.value = false;
-    final result = await _api.getMessageDetailed(id: discussion.value.id);
+    final result = await _api.getMessageDetailed(id: discussion.value.id!);
 
     if (result != null) {
       try {
         await Get.delete<DiscussionCommentItemController>();
         discussion.value = result;
-        status.value = result.status;
+        status.value = result.status!;
       } catch (_) {}
     }
     if (showLoading) loaded.value = true;
   }
 
-  Future<void> tryChangingStatus(context) async {
+  Future<void> tryChangingStatus(BuildContext context) async {
     if (discussion.value.canEdit!) {
       await showsDiscussionStatusesBS(context: context, controller: this);
     }
   }
 
   Future<void> updateMessageStatus(int newStatus) async {
-    var newStatusStr = newStatus == 1 ? 'archived' : 'open';
+    final newStatusStr = newStatus == 1 ? 'archived' : 'open';
 
     try {
       final result = await (_api.updateMessageStatus(
-          id: discussion.value.id,
+          id: discussion.value.id!,
           newStatus: newStatusStr) as Future<Discussion?>);
       if (result != null) {
         discussion.value.setStatus = result.status;
@@ -165,7 +166,7 @@ class DiscussionItemController extends GetxController {
 
   Future<void> subscribeToMessageAction() async {
     try {
-      final result = await (_api.subscribeToMessage(id: discussion.value.id)
+      final result = await (_api.subscribeToMessage(id: discussion.value.id!)
           as Future<Discussion?>);
       if (result != null) {
         discussion.value.setSubscribers = result.subscribers;
@@ -183,7 +184,7 @@ class DiscussionItemController extends GetxController {
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {
-          final result = await (_api.deleteMessage(id: discussion.value.id)
+          final result = await (_api.deleteMessage(id: discussion.value.id!)
               as Future<Discussion?>);
           if (result != null) {
             Get.back();
@@ -226,14 +227,15 @@ class DiscussionItemController extends GetxController {
       Get.find<DiscussionEditingController>().dispose();
     } catch (_) {}
 
+    //TODO: refactor parameters
     final controller = Get.put(
       DiscussionEditingController(
-        id: discussion.value.id,
+        id: discussion.value.id!,
         title: discussion.value.title!.obs,
         text: discussion.value.text!.obs,
-        projectId: discussion.value.project!.id,
+        projectId: discussion.value.project!.id!,
         selectedProjectTitle: discussion.value.project!.title!.obs,
-        initialSubscribers: discussion.value.subscribers,
+        initialSubscribers: discussion.value.subscribers!,
       ),
     );
 
@@ -246,15 +248,16 @@ class DiscussionItemController extends GetxController {
     );
   }
 
-  void toProjectOverview() async {
-    var projectService = locator<ProjectService>();
-    var project = await projectService.getProjectById(
-      projectId: discussion.value.projectOwner!.id,
+  Future<void> toProjectOverview() async {
+    final projectService = locator<ProjectService>();
+    final project = await projectService.getProjectById(
+      projectId: discussion.value.projectOwner!.id!,
     );
-    if (project != null)
+    if (project != null) {
       Get.find<NavigationController>().to(
         ProjectDetailedView(),
         arguments: {'projectDetailed': project},
       );
+    }
   }
 }

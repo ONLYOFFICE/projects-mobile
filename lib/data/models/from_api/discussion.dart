@@ -111,7 +111,7 @@ class Discussion {
             : null,
         commentsCount: json['commentsCount'] as int?,
         text: json['text'] as String?,
-        status: json['status'] as int?,
+        status: json['status'] as int,
         updatedBy: json['updatedBy'] != null
             ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
             : null,

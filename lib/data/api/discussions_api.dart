@@ -31,14 +31,14 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
 
 class DiscussionsApi {
   Future<PageDTO<List<Discussion>>> getDiscussionsByParams({
@@ -53,7 +53,7 @@ class DiscussionsApi {
     String? projectId,
     String? otherFilter,
   }) async {
-     var url = await locator.get<CoreApi>().discussionsByParamsUrl();
+    var url = await locator.get<CoreApi>().discussionsByParamsUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
@@ -101,11 +101,11 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> addMessage(
+  Future<ApiDTO<Discussion>> addMessage(
       {required int projectId, required NewDiscussionDTO newDiss}) async {
     final url =
         await locator.get<CoreApi>().addMessageUrl(projectId: projectId);
-    final result = ApiDTO();
+    final result = ApiDTO<Discussion>();
 
     try {
       final response =
@@ -125,10 +125,10 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> getMessageDetailed({required int id}) async {
+  Future<ApiDTO<Discussion>> getMessageDetailed({required int id}) async {
     final url =
         await locator.get<CoreApi>().discussionDetailedUrl(messageId: id);
-    final result = ApiDTO();
+    final result = ApiDTO<Discussion>();
 
     try {
       final response = await locator.get<CoreApi>().getRequest(url);
@@ -147,10 +147,10 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> updateMessage(
+  Future<ApiDTO<Discussion>> updateMessage(
       {required int id, required NewDiscussionDTO discussion}) async {
     final url = await locator.get<CoreApi>().updateMessageUrl(messageId: id);
-    final result = ApiDTO();
+    final result = ApiDTO<Discussion>();
 
     try {
       final body = discussion.toJson();
@@ -171,11 +171,11 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> updateMessageStatus(
+  Future<ApiDTO<Discussion>> updateMessageStatus(
       {required int id, required String newStatus}) async {
     final url =
         await locator.get<CoreApi>().updateMessageStatusUrl(messageId: id);
-    final result = ApiDTO();
+    final result = ApiDTO<Discussion>();
 
     try {
       final body = {'status': newStatus};
@@ -196,9 +196,9 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> subscribeToMessage({required int id}) async {
+  Future<ApiDTO<Discussion>> subscribeToMessage({required int id}) async {
     final url = await locator.get<CoreApi>().subscribeToMessage(messageId: id);
-    final result = ApiDTO();
+    final result = ApiDTO<Discussion>();
 
     try {
       final body = {};
@@ -219,9 +219,9 @@ class DiscussionsApi {
     return result;
   }
 
-  Future<ApiDTO> deleteMessage({required int id}) async {
+  Future<ApiDTO<Discussion>> deleteMessage({required int id}) async {
     final url = await locator.get<CoreApi>().deleteMessageUrl(id: id);
-    final result = ApiDTO();
+    final result = ApiDTO<Discussion>();
 
     try {
       final response = await locator.get<CoreApi>().deleteRequest(url);
