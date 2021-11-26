@@ -37,19 +37,15 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_scaffold.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardView extends StatelessWidget {
@@ -62,30 +58,24 @@ class DashboardView extends StatelessWidget {
       dashboardController.loadContent();
     });
 
-    return PlatformScaffold(
+    return Scaffold(
       backgroundColor: Get.theme.colors().background,
-      material: (context, target) => MaterialScaffoldData(
-        appBar: StyledAppBar(
-          backgroundColor: Get.theme.colors().background,
-          title: Title(controller: dashboardController),
-          // titleHeight: 50,
-          elevation: 0,
-          showBackButton: false,
-        ),
+      body: NestedScrollView(
         body: _BodyDashboardWidget(dashboardController: dashboardController),
-      ),
-      cupertino: (context, target) => CupertinoPageScaffoldData(
-        body: NestedScrollView(
-          // controller: dashboardController.scrollController,
-          body: _BodyDashboardWidget(dashboardController: dashboardController),
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              CupertinoSliverNavigationBar(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            PlatformWidget(
+              material: (context, target) => SliverAppBar(
+                pinned: true,
+                floating: true,
+                title: Text(dashboardController.screenName.value),
+              ),
+              cupertino: (context, target) => CupertinoSliverNavigationBar(
                 largeTitle: Text(dashboardController.screenName.value),
-              )
-            ];
-          },
-        ),
+              ),
+            )
+          ];
+        },
       ),
     );
   }
@@ -158,8 +148,7 @@ class DashboardCardView extends StatelessWidget {
           () => Column(
             children: <Widget>[
               InkWell(
-                onTap: () =>
-                {
+                onTap: () => {
                   controller.expandedCardView.value =
                       !(controller.expandedCardView.value as bool)
                 },
@@ -428,8 +417,7 @@ class TaskCardContent extends StatelessWidget {
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
-                      itemBuilder: (c, i) =>
-                      i < 2
+                      itemBuilder: (c, i) => i < 2
                           ? TaskCell(
                               task: controller.paginationController.data[i])
                           : const SizedBox(),
