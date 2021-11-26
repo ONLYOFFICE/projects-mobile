@@ -33,9 +33,9 @@
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:synchronized/synchronized.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:synchronized/synchronized.dart';
 
 class ProjectsWithPresets {
   ProjectsController? _myProjectsController;
@@ -44,7 +44,7 @@ class ProjectsWithPresets {
   ProjectsController? _myMembershipProjectController;
   ProjectsController? _myManagedProjectController;
 
-  var lock = Lock();
+  Lock lock = Lock();
 
   ProjectsController? get myProjectsController {
     _myProjectsController ?? _setupMyProjects();
@@ -71,11 +71,13 @@ class ProjectsWithPresets {
     return _myManagedProjectController;
   }
 
-  void _setupMyProjects() async {
+  Future<void> _setupMyProjects() async {
     _myProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController<ProjectDetailed>>(),
+          Get.put<PaginationController<ProjectDetailed>>(
+              PaginationController<ProjectDetailed>(),
+              tag: '_myProjectPaginationController'),
         ),
         tag: '_myProjectsController')!
       ..setup(PresetProjectFilters.myProjects, withFAB: false);
@@ -86,7 +88,14 @@ class ProjectsWithPresets {
     _folowedProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController<ProjectDetailed>>(),
+          Get.put<PaginationController<ProjectDetailed>>(
+              PaginationController<ProjectDetailed>(),
+              tag: '_folowedProjectPaginationController'),
+          // Get.find<PaginationController<ProjectDetailed>>(
+          //     tag: '_folowedProjectPaginationController'),
+          // Get.put<PaginationController<ProjectDetailed>>(
+          //     PaginationController<ProjectDetailed>(),
+          //     tag: '_folowedProjectPaginationController'),
         ),
         tag: '_folowedProjectsController')!
       ..setup(PresetProjectFilters.myFollowedProjects, withFAB: false);
@@ -97,7 +106,14 @@ class ProjectsWithPresets {
     _activeProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController<ProjectDetailed>>(),
+          Get.put<PaginationController<ProjectDetailed>>(
+              PaginationController<ProjectDetailed>(),
+              tag: '_activeProjectPaginationController'),
+          // Get.put<PaginationController<ProjectDetailed>>(
+          //     PaginationController<ProjectDetailed>()),
+          // Get.put<PaginationController<ProjectDetailed>>(
+          //     PaginationController<ProjectDetailed>(),
+          //     tag: '_activeProjectPaginationController'),
         ),
         tag: '_activeProjectsController')!
       ..setup(PresetProjectFilters.active, withFAB: false);
@@ -108,7 +124,9 @@ class ProjectsWithPresets {
     _myMembershipProjectController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController<ProjectDetailed>>(),
+          Get.put<PaginationController<ProjectDetailed>>(
+              PaginationController<ProjectDetailed>(),
+              tag: '_myMembershipProjectPaginationController'),
         ),
         tag: '_myMembershipProjectController')!
       ..setup(PresetProjectFilters.myMembership, withFAB: false);
@@ -119,7 +137,9 @@ class ProjectsWithPresets {
     _myManagedProjectController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController<ProjectDetailed>>(),
+          Get.put<PaginationController<ProjectDetailed>>(
+              PaginationController<ProjectDetailed>(),
+              tag: '_myManagedProjectPaginationController'),
         ),
         tag: '_myManagedProjectController')!
       ..setup(PresetProjectFilters.myManaged, withFAB: false);

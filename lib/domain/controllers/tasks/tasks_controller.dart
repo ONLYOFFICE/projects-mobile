@@ -33,8 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -44,7 +44,6 @@ import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 class TasksController extends BaseController {
@@ -65,13 +64,15 @@ class TasksController extends BaseController {
   final _sortController = Get.find<TasksSortController>();
   final loaded = false.obs;
   final taskStatusesLoaded = false.obs;
+
   TasksSortController get sortController => _sortController;
 
   late TaskFilterController _filterController;
+
   TaskFilterController get filterController => _filterController;
 
-  var fabIsVisible = false.obs;
-  var _withFAB = true;
+  RxBool fabIsVisible = false.obs;
+  bool _withFAB = true;
 
   @override
   Future<void> onInit() async {
@@ -89,9 +90,9 @@ class TasksController extends BaseController {
     expandedCardView.value = true;
     _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => loadTasks();
-    _sortController.updateSortDelegate = () async => await loadTasks();
-    paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate = () async => await refreshData();
+    _sortController.updateSortDelegate = () async => loadTasks();
+    paginationController.loadDelegate = () async => _getTasks();
+    paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
@@ -138,8 +139,8 @@ class TasksController extends BaseController {
     loaded.value = true;
   }
 
-  Future _getTasks({bool needToClear = false}) async {
-    var result = await (_api.getTasksByParams(
+  Future<void> _getTasks({bool needToClear = false}) async {
+    final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -150,13 +151,17 @@ class TasksController extends BaseController {
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       // query: 'задача',
-    ) as Future<PageDTO<List<PortalTask>>>);
-    paginationController.total.value = result.total!;
+    );
+    if (result != null) {
+      paginationController.total.value = result.total;
 
-    if (needToClear) paginationController.data.clear();
+      if (result.total != 0) {
+        if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response!);
-    expandedCardView.value = paginationController.data.isNotEmpty;
+        paginationController.data.addAll(result.response!);
+        expandedCardView.value = paginationController.data.isNotEmpty;
+      }
+    }
   }
 
   @override
@@ -167,18 +172,20 @@ class TasksController extends BaseController {
     if (!_withFAB) return false;
     var fabVisibility = false;
     await _userController.getUserInfo();
-    var selfUser = _userController.user!;
+    final selfUser = _userController.user!;
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
         (selfUser.listAdminModules != null &&
             selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets!.activeProjectsController!.itemList.isEmpty)
+      if (projectsWithPresets!.activeProjectsController!.itemList.isEmpty) {
         await projectsWithPresets!.activeProjectsController!.loadProjects();
+      }
       fabVisibility =
           projectsWithPresets!.activeProjectsController!.itemList.isNotEmpty;
     } else {
-      if (projectsWithPresets!.myProjectsController!.itemList.isEmpty)
+      if (projectsWithPresets!.myProjectsController!.itemList.isEmpty) {
         await projectsWithPresets!.myProjectsController!.loadProjects();
+      }
       fabVisibility =
           projectsWithPresets!.myProjectsController!.itemList.isNotEmpty;
     }

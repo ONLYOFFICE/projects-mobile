@@ -35,7 +35,7 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 class ProjectDetailed {
   bool? canEdit;
   bool? canDelete;
-  Map<String, dynamic>? security;
+  Map<String, bool>? security;
   int? projectFolder;
   int? id;
   String? title;
@@ -85,8 +85,7 @@ class ProjectDetailed {
   ProjectDetailed.fromJson(Map<String, dynamic> json) {
     canEdit = json['canEdit'] as bool?;
     canDelete = json['canDelete'] as bool?;
-    security = json['security'] as Map<String, dynamic>?;
-
+    security = (json['security'] as Map).cast<String, bool>();
     projectFolder = json['projectFolder'] is int
         ? json['projectFolder'] as int
         : int.parse(json['projectFolder'] as String);

@@ -54,7 +54,10 @@ class TasksWithPresets {
     _myTasksController = Get.put(
         TasksController(
           Get.find<TaskFilterController>(),
-          Get.find<PaginationController<PortalTask>>(),
+          Get.put<PaginationController<PortalTask>>(
+            PaginationController<PortalTask>(),
+            tag: '_myTasksPaginationController',
+          ),
         ),
         tag: '_myTasksController')!
       ..setup(PresetTaskFilters.myTasks, withFAB: false);
@@ -66,7 +69,10 @@ class TasksWithPresets {
     _upcomingTaskscontroller = Get.put(
         TasksController(
           Get.find<TaskFilterController>(),
-          Get.find<PaginationController<PortalTask>>(),
+          Get.put<PaginationController<PortalTask>>(
+            PaginationController<PortalTask>(),
+            tag: '_upcomingTasksPaginationController',
+          ),
         ),
         tag: '_upcomingTaskscontroller')!
       ..setup(PresetTaskFilters.upcomming, withFAB: false);

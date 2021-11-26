@@ -32,12 +32,12 @@
 
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
-import 'package:http/http.dart' as http;
 
 class UserApi {
   Future<ApiDTO<List<PortalUser>>> getAllProfiles() async {
@@ -87,7 +87,7 @@ class UserApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.total = responseJson['total'] as int?;
+        result.total = responseJson['total'] as int;
         {
           result.response =
               (responseJson['response'] as List<Map<String, dynamic>>)

@@ -49,11 +49,11 @@ class PageDTO<T> {
     this.response,
     this.error,
     this.startIndex,
-    this.total,
+    this.total = 0,
   });
 
   T? response;
   CustomError? error;
   int? startIndex;
-  int? total;
+  int total;
 }

@@ -31,13 +31,13 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
 
 class GroupApi {
   Future<ApiDTO<List<PortalGroup>>> getAllGroups() async {
@@ -82,7 +82,7 @@ class GroupApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.total = responseJson['total'] as int?;
+        result.total = responseJson['total'] as int;
         {
           result.response = (responseJson['response'] as List)
               .map((i) => PortalGroup.fromJson(i as Map<String, dynamic>))

@@ -117,8 +117,8 @@ class PortalUser {
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
-      (json['groups'] as List<Map<String, dynamic>>).forEach((e) {
-        groups!.add(PortalGroup.fromJson(e));
+      (json['groups'] as List).forEach((e) {
+        groups!.add(PortalGroup.fromJson((e as Map).cast<String, dynamic>()));
       });
     }
     avatarMedium = json['avatarMedium'] as String?;
@@ -131,7 +131,7 @@ class PortalUser {
     profileUrl = json['profileUrl'] as String?;
     if (json['listAdminModules'] != null) {
       listAdminModules = <String>[];
-      (json['listAdminModules'] as List<String>).forEach((e) {
+      (json['listAdminModules'] as List).cast<String>().forEach((e) {
         listAdminModules!.add(e);
       });
     }

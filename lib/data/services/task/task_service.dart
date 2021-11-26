@@ -50,7 +50,7 @@ class TaskService {
   Future<PortalTask?> addTask({required NewTaskDTO newTask}) async {
     final task = await _api.addTask(newTask: newTask);
 
-    final success = task.response != null;
+    final success = task.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -69,7 +69,7 @@ class TaskService {
   Future<PortalTask?> getTaskByID({required int id}) async {
     final task = await _api.getTaskByID(id: id);
 
-    final success = task.response != null;
+    final success = task.error == null;
 
     if (success) {
       return task.response;
@@ -82,7 +82,7 @@ class TaskService {
   Future<List<Status>?> getStatuses() async {
     final statuses = await _api.getStatuses();
 
-    final success = statuses.response != null;
+    final success = statuses.error == null;
 
     if (success) {
       return statuses.response;
@@ -119,7 +119,7 @@ class TaskService {
       projectId: projectId,
     );
 
-    final success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects;
@@ -154,7 +154,7 @@ class TaskService {
       // projectId: projectId,
     );
 
-    final success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects;
@@ -167,7 +167,7 @@ class TaskService {
   Future<PortalTask?> updateTask({required NewTaskDTO newTask}) async {
     final task = await _api.updateTask(newTask: newTask);
 
-    final success = task.response != null;
+    final success = task.error == null;
 
     if (success) {
       await AnalyticsService.shared

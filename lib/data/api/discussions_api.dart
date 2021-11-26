@@ -85,7 +85,7 @@ class DiscussionsApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.total = responseJson['total'] as int?;
+        result.total = responseJson['total'] as int;
         {
           result.response = (responseJson['response'] as List)
               .map((i) => Discussion.fromJson(i as Map<String, dynamic>))

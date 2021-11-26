@@ -41,8 +41,10 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
@@ -51,9 +53,6 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectsView extends StatelessWidget {
   const ProjectsView({Key? key}) : super(key: key);
@@ -76,8 +75,8 @@ class ProjectsView extends StatelessWidget {
       controller.loadProjects();
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
     scrollController.addListener(
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
@@ -112,8 +111,9 @@ class ProjectsView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
+          if (controller.loaded.value == false) {
             return const ListLoadingSkeleton();
+          }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController!.hasFilters.value) {
@@ -154,8 +154,6 @@ class _Title extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Text(
@@ -165,7 +163,6 @@ class _Title extends StatelessWidget {
             ),
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               InkResponse(
@@ -202,7 +199,7 @@ class Bottom extends StatelessWidget {
   final ProjectsController controller;
   @override
   Widget build(BuildContext context) {
-    var options = Column(
+    final options = Column(
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
@@ -218,7 +215,7 @@ class Bottom extends StatelessWidget {
       ],
     );
 
-    var sortButton = Container(
+    final sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
@@ -264,25 +261,22 @@ class Bottom extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           sortButton,
-          Container(
-            child: Row(
-              children: <Widget>[
-                Obx(
-                  () => Text(
-                    tr('total', args: [
-                      controller.paginationController.total.value.toString()
-                    ]),
-                    style: TextStyleHelper.body2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
-                    ),
+          Row(
+            children: <Widget>[
+              Obx(
+                () => Text(
+                  tr('total', args: [
+                    controller.paginationController.total.value.toString()
+                  ]),
+                  style: TextStyleHelper.body2(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
