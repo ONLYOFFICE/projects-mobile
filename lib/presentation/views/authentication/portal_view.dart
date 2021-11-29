@@ -59,9 +59,11 @@ class PortalInputView extends StatelessWidget {
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: const BoxConstraints(maxWidth: 480),
+                    constraints: BoxConstraints(
+                        maxWidth: 480, maxHeight: MediaQuery.of(context).size.height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         SizedBox(height: Get.height * 0.165),
                         const AppIcon(icon: SvgIcons.app_logo),
@@ -95,7 +97,7 @@ class PortalInputView extends StatelessWidget {
                             onPressed: () async => await controller.getPortalCapabilities(),
                           ),
                         ),
-                        SizedBox(height: Get.height * 0.222),
+                        const Spacer(),
                         const PrivacyAndTermsFooter(),
                         const SizedBox(height: 36),
                       ],
