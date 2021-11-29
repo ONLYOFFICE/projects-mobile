@@ -231,11 +231,11 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await (_api!.milestonesByFilter(
+    final result = await _api!.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
@@ -243,9 +243,11 @@ class MilestonesFilterController extends BaseFilterController {
       taskResponsibleFilter: taskResponsibleFilter,
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
-    ) as Future<List<Milestone>>);
+    );
 
-    suitableResultCount.value = result.length;
+    if (result != null) {
+      suitableResultCount.value = result.length;
+    }
   }
 
   @override

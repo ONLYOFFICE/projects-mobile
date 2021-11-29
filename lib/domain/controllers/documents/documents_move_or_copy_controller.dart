@@ -136,7 +136,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   }
 
   Future _getDocuments() async {
-    var result = await _api.getFilesByParams(
+    final result = await _api.getFilesByParams(
       folderId: _currentFolder == null ? null : _currentFolder!.id,
       query: _query,
       startIndex: paginationController.startIndex,

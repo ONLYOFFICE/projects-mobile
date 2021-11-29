@@ -31,15 +31,15 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
 
 class FilesApi {
   Future<ApiDTO<List<PortalFile>>> getTaskFiles({required int taskId}) async {

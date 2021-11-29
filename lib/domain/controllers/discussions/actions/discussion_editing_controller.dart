@@ -281,16 +281,18 @@ class DiscussionEditingController extends GetxController
   }
 
   @override
-  void confirmGroupSelection() async {
-    for (var group in selectedGroups) {
-      var groupMembers = await (_userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup!.id) as Future<PageDTO<List<PortalUser>>>);
+  Future<void> confirmGroupSelection() async {
+    for (final group in selectedGroups) {
+      final groupMembers = await _userService.getProfilesByExtendedFilter(
+          groupId: group.portalGroup!.id);
 
-      if (groupMembers.response!.isNotEmpty) {
-        for (var element in groupMembers.response!) {
-          var user = PortalUserItemController(portalUser: element);
-          user.isSelected.value = true;
-          subscribers.add(user);
+      if (groupMembers != null) {
+        if (groupMembers.response!.isNotEmpty) {
+          for (final element in groupMembers.response!) {
+            final user = PortalUserItemController(portalUser: element);
+            user.isSelected.value = true;
+            subscribers.add(user);
+          }
         }
       }
     }
@@ -316,21 +318,21 @@ class DiscussionEditingController extends GetxController
 
       for (final item in subscribers) subscribersIds.add(item.id);
 
-      var diss = NewDiscussionDTO(
+      final diss = NewDiscussionDTO(
         content: text.value,
         title: title.value,
         participants: subscribersIds,
         projectId: projectId,
       );
 
-      var editedDiss = await _api.updateMessage(
+      final editedDiss = await _api.updateMessage(
         id: id,
         discussion: diss,
       );
 
       if (editedDiss != null) {
-        var discussionsController = Get.find<DiscussionsController>();
-        var discussionController = Get.find<DiscussionItemController>();
+        final discussionsController = Get.find<DiscussionsController>();
+        final discussionController = Get.find<DiscussionItemController>();
         clearUserSearch();
         // ignore: unawaited_futures
         discussionController.onRefresh();

@@ -122,7 +122,7 @@ class DiscussionsDocumentsController extends GetxController {
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
   Future<bool> renameFolder(Folder element, String newName) async {
-    var result = await _api.renameFolder(
+    final result = await _api.renameFolder(
       folderId: element.id.toString(),
       newTitle: newName,
     );
@@ -141,7 +141,7 @@ class DiscussionsDocumentsController extends GetxController {
   }
 
   Future<bool> deleteFile(PortalFile element) async {
-    var result = await _api.deleteFile(
+    final result = await _api.deleteFile(
       fileId: element.id.toString(),
     );
 

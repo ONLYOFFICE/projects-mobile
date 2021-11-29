@@ -385,7 +385,7 @@ class TaskEditingController extends GetxController
         responsibles: responsibleIds,
       );
 
-      var updatedTask = await _api.updateTask(newTask: newTask);
+      final updatedTask = await _api.updateTask(newTask: newTask);
 
       if (updatedTask != null) {
         // ignore: unawaited_futures
@@ -408,7 +408,7 @@ class TaskEditingController extends GetxController
       responsibles: [Get.find<UserController>().user!.id],
     );
     _taskItemController.setLoaded = false;
-    var updatedTask = await _api.updateTask(newTask: newTask);
+    final updatedTask = await _api.updateTask(newTask: newTask);
     _taskItemController.setLoaded = true;
 
     if (updatedTask != null) {

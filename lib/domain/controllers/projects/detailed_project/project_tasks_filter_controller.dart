@@ -344,11 +344,11 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await (_api!.getTasksByParams(
+    final result = await _api!.getTasksByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       responsibleFilter: responsibleFilter,
@@ -358,9 +358,11 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       statusFilter: statusFilter,
       deadlineFilter: deadlineFilter,
       projectId: _projectId,
-    ) as Future<PageDTO<List<PortalTask>>>);
+    );
 
-    suitableResultCount.value = result.response!.length;
+    if (result != null) {
+      suitableResultCount.value = result.response!.length;
+    }
   }
 
   @override

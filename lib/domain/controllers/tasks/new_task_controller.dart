@@ -222,7 +222,7 @@ class NewTaskController extends GetxController
     }
   }
 
-  void setupResponsibleSelection() async {
+  Future<void> setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
           projectId: _selectedProjectId,
@@ -238,12 +238,12 @@ class NewTaskController extends GetxController
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in teamController.usersList) {
+    for (final element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
-    for (var selectedMember in responsibles!) {
-      for (var user in teamController.usersList) {
+    for (final selectedMember in responsibles!) {
+      for (final user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -264,7 +264,7 @@ class NewTaskController extends GetxController
   void changeStartDate(DateTime? newDate) {
     if (newDate != null) {
       // ignore: omit_local_variable_types
-      bool verificationResult = checkDate(newDate, _dueDate);
+      final bool verificationResult = checkDate(newDate, _dueDate);
       if (verificationResult) {
         _startDate = newDate;
         startDateText!.value = formatedDate(newDate);
@@ -280,7 +280,7 @@ class NewTaskController extends GetxController
   void changeDueDate(DateTime? newDate) {
     if (newDate != null) {
       // ignore: omit_local_variable_types
-      bool verificationResult = checkDate(_startDate, newDate);
+      final bool verificationResult = checkDate(_startDate, newDate);
       if (verificationResult) {
         _dueDate = newDate;
         dueDateText!.value = formatedDate(newDate);
@@ -302,7 +302,7 @@ class NewTaskController extends GetxController
     return true;
   }
 
-  void confirm(BuildContext context) async {
+  Future<void> confirm(BuildContext context) async {
     if (_selectedProjectId == null) needToSelectProject.value = true;
     if (title!.isEmpty) setTitleError!.value = true;
     if (_selectedProjectId == null || title!.isEmpty) return;
@@ -311,9 +311,9 @@ class NewTaskController extends GetxController
     final responsibleIds = <String?>[];
 
     if (highPriority!.value == true) priority = 'high';
-    for (var item in responsibles!) responsibleIds.add(item.id as String?);
+    for (final item in responsibles!) responsibleIds.add(item.id as String?);
 
-    var newTask = NewTaskDTO(
+    final newTask = NewTaskDTO(
         projectId: _selectedProjectId!,
         responsibles: responsibleIds,
         startDate: _startDate,
@@ -324,7 +324,7 @@ class NewTaskController extends GetxController
         title: title!.value,
         milestoneid: newMilestoneId);
 
-    var createdTask = await _api.addTask(newTask: newTask);
+    final createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
       locator<EventHub>().fire('needToRefreshTasks');
       Get.back();
@@ -333,7 +333,7 @@ class NewTaskController extends GetxController
           text: tr('taskCreated'),
           buttonText: tr('open').toUpperCase(),
           buttonOnTap: () {
-            var itemController = Get.put(TaskItemController(createdTask),
+            final itemController = Get.put(TaskItemController(createdTask),
                 tag: createdTask.id.toString());
             return Get.find<NavigationController>().to(TaskDetailedView(),
                 arguments: {'controller': itemController});

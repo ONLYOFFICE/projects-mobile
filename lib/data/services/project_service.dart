@@ -35,6 +35,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/folow_project.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -53,7 +54,7 @@ class ProjectService {
   Future<List<Project>?> getProjects() async {
     final projects = await _api.getProjects();
 
-    final success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects.response;
@@ -84,7 +85,7 @@ class ProjectService {
       statusFilter: statusFilter,
     );
 
-    final success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects;
@@ -97,7 +98,7 @@ class ProjectService {
   Future<ProjectDetailed?> getProjectById({required int projectId}) async {
     final projects = await _api.getProjectById(projectId: projectId);
 
-    final success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects.response;
@@ -172,7 +173,8 @@ class ProjectService {
     }
   }
 
-  Future createProject({required NewProjectDTO project}) async {
+  Future<ProjectDetailed?> createProject(
+      {required NewProjectDTO project}) async {
     final result = await _api.createProject(project: project);
 
     if (result.response != null) {
@@ -237,7 +239,7 @@ class ProjectService {
     final result = await _api.updateProjectStatus(
         projectId: projectId, newStatus: newStatus);
 
-    final success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -254,11 +256,10 @@ class ProjectService {
     }
   }
 
-  // TODO: Future <??>
-  Future followProject({required int projectId}) async {
+  Future<FollowProject?> followProject({required int projectId}) async {
     final result = await _api.followProject(projectId: projectId);
 
-    final success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -275,11 +276,10 @@ class ProjectService {
     }
   }
 
-  // TODO: Future <??>
-  Future createTag({required String name}) async {
+  Future<ProjectTag?> createTag({required String name}) async {
     final result = await _api.createTag(name: name);
 
-    final success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -299,7 +299,7 @@ class ProjectService {
   Future<SecurityInfo?> getProjectSecurityinfo() async {
     final result = await _api.getProjectSecurityinfo();
 
-    final success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       return result.response;

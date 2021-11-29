@@ -42,8 +42,11 @@ class CommentsController extends GetxController {
 
   Future getTaskComments({required int taskId}) async {
     loaded.value = false;
-    comments.value =
-        await (_api.getTaskComments(taskId: taskId) as Future<List<dynamic>>);
+
+    final result = await _api.getTaskComments(taskId: taskId);
+    if (result != null) {
+      comments.value = result;
+    }
     loaded.value = true;
   }
 }

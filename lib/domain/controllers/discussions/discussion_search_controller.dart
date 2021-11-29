@@ -84,18 +84,20 @@ class DiscussionSearchController extends BaseController {
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    var result = await (_api.getDiscussionsByParams(
+    final result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       query: _query,
-    ) as Future<PageDTO<List<Discussion>>>);
+    );
 
-    paginationController.total.value = result.total!;
+    if (result != null) {
+      paginationController.total.value = result.total;
 
-    if (result.response!.isEmpty) nothingFound.value = true;
+      if (result.response!.isEmpty) nothingFound.value = true;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response!);
+    }
   }
 
   void clearSearch() {

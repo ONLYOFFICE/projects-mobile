@@ -257,7 +257,7 @@ class DiscussionsFilterController extends BaseFilterController {
   Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
-    final result = await (_api.getDiscussionsByParams(
+    final result = await _api.getDiscussionsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       authorFilter: _authorFilter,
@@ -266,9 +266,11 @@ class DiscussionsFilterController extends BaseFilterController {
       creationDateFilter: _creationDateFilter,
       otherFilter: _otherFilter,
       projectId: _projectId,
-    ) as Future<PageDTO<List<Discussion>>>);
+    );
 
-    suitableResultCount.value = result.response!.length;
+    if (result != null) {
+      suitableResultCount.value = result.response!.length;
+    }
   }
 
   @override

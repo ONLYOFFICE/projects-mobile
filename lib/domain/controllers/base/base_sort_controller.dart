@@ -50,7 +50,7 @@ abstract class BaseSortController extends GetxController {
     currentSortTitle.value = getFilterLabel(currentSortfilter);
 
     if (updateSortDelegate != null) {
-      updateSortDelegate!();
+      await updateSortDelegate!();
     }
   }
 

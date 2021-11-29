@@ -77,10 +77,12 @@ class ProjectEditController extends BaseProjectEditorController {
 
     final projectById =
         await _projectService.getProjectById(projectId: _projectDetailed!.id!);
-    tags.clear();
-    if (projectById?.tags != null) {
-      for (var value in projectById!.tags!) {
-        tags.add(value);
+    if (projectById != null) {
+      tags.clear();
+      if (projectById.tags != null) {
+        for (final value in projectById.tags!) {
+          tags.add(value);
+        }
       }
     }
 
@@ -93,13 +95,13 @@ class ProjectEditController extends BaseProjectEditorController {
     isPMSelected.value = true;
     managerName.value = selectedProjectManager.value!.displayName!;
 
-    var projectTeamDataSource = Get.put(ProjectTeamController())
+    final projectTeamDataSource = Get.put(ProjectTeamController())
       ..setup(projectDetailed: projectDetailed);
 
     await projectTeamDataSource.getTeam();
 
     if (selectedTeamMembers.isNotEmpty) selectedTeamMembers.clear();
-    for (var portalUser in projectTeamDataSource.usersList) {
+    for (final portalUser in projectTeamDataSource.usersList) {
       portalUser.selectionMode.value = UserSelectionMode.Multiple;
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
@@ -107,9 +109,9 @@ class ProjectEditController extends BaseProjectEditorController {
     selectedTeamMembers.removeWhere(
         (element) => element.portalUser.id == selectedProjectManager.value!.id);
 
-    var participants = <Participant>[];
+    final participants = <Participant>[];
 
-    for (var element in selectedTeamMembers) {
+    for (final element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -147,9 +149,9 @@ class ProjectEditController extends BaseProjectEditorController {
     if (needToFillTitle.value == true || needToFillManager.value == true)
       return;
 
-    var participants = <Participant>[];
+    final participants = <Participant>[];
 
-    for (var element in selectedTeamMembers) {
+    for (final element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -161,7 +163,7 @@ class ProjectEditController extends BaseProjectEditorController {
       );
     }
 
-    var newProject = EditProjectDTO(
+    final newProject = EditProjectDTO(
       title: titleController.text,
       description: descriptionController.text,
       responsibleId: selectedProjectManager.value!.id,
@@ -172,7 +174,7 @@ class ProjectEditController extends BaseProjectEditorController {
       notify: notificationEnabled.value,
     );
 
-    var success = await _projectService.editProject(
+    final success = await _projectService.editProject(
         project: newProject, projectId: _projectDetailed!.id!);
     if (success) {
       {

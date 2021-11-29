@@ -64,7 +64,10 @@ class GroupsController extends BaseController {
 
   Future getAllGroups() async {
     loaded.value = false;
-    groups.value = await (_api.getAllGroups() as Future<List<PortalGroup>>);
+    final result = await _api.getAllGroups();
+    if (result != null) {
+      groups.value = result;
+    }
     loaded.value = true;
   }
 
@@ -83,7 +86,7 @@ class GroupsController extends BaseController {
     );
 
     if (result != null) {
-      paginationController.total.value = result.total!;
+      paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
       paginationController.data.addAll(result.response!);
     }

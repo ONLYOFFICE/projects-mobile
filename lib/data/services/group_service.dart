@@ -62,7 +62,7 @@ class GroupService {
       query: query,
     );
 
-    final success = profiles.response != null;
+    final success = profiles.error == null;
 
     if (success) {
       return profiles;

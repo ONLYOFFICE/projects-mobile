@@ -68,7 +68,10 @@ class UsersController extends BaseController {
 
   Future getAllProfiles({String? params}) async {
     loaded.value = false;
-    itemList.value = await (_api.getAllProfiles() as Future<List<dynamic>>);
+    final result = await _api.getAllProfiles();
+    if (result != null) {
+      itemList.value = result;
+    }
     loaded.value = true;
   }
 
@@ -80,12 +83,12 @@ class UsersController extends BaseController {
   }
 
   Future _getUsers({bool needToClear = false}) async {
-    var result = await _api.getProfilesByExtendedFilter(
+    final result = await _api.getProfilesByExtendedFilter(
       startIndex: paginationController.startIndex,
     );
 
     if (result != null) {
-      paginationController.total.value = result.total!;
+      paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
       paginationController.data.addAll(result.response!);
     }

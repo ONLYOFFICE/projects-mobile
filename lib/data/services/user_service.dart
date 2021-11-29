@@ -46,7 +46,7 @@ class UserService {
   Future<List<PortalUser>?> getAllProfiles() async {
     final profiles = await _api.getAllProfiles();
 
-    final success = profiles.response != null;
+    final success = profiles.error == null;
 
     if (success) {
       return profiles.response;

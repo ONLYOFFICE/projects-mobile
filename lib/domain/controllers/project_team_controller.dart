@@ -76,20 +76,21 @@ class ProjectTeamController extends GetxController {
     refreshController.loadComplete();
   }
 
-  Future _loadTeam({bool needToClear = false}) async {
-    var result = await _api.getProjectTeam(_projectId);
+  Future<void> _loadTeam({bool needToClear = false}) async {
+    final result = await _api.getProjectTeam(_projectId);
 
     if (result != null) {
       totalProfiles = result.length;
 
       if (needToClear) usersList.clear();
 
-      for (var element in result) {
+      for (final element in result) {
         if (_withoutVisitors && element.isVisitor!) continue;
-        if (_withoutBlocked && element.status == UserStatus.Terminated)
+        if (_withoutBlocked && element.status == UserStatus.Terminated) {
           continue;
+        }
 
-        var portalUser = PortalUserItemController(portalUser: element);
+        final portalUser = PortalUserItemController(portalUser: element);
         portalUser.selectionMode.value = selectionMode;
         usersList.add(portalUser);
       }

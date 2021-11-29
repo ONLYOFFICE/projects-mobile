@@ -208,7 +208,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future deleteProject() async {
     markedToDelete = true;
-    return await _projectService.deleteProject(
+    return _projectService.deleteProject(
         projectId: _projectDetailed.value!.id!);
   }
 
@@ -224,9 +224,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
   @override
   Future<void> confirmTeamMembers() async {
     Get.find<UsersDataSource>().loaded.value = false;
-    var users = <String>[];
+    final users = <String>[];
 
-    for (var user in selectedTeamMembers) {
+    for (final user in selectedTeamMembers) {
       users.add(user.id!);
     }
 

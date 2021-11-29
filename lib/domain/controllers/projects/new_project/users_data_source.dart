@@ -109,12 +109,12 @@ class UsersDataSource extends GetxController {
       isSearchResult.value = true;
     }
     if (result != null) {
-      totalProfiles = result.total!;
+      totalProfiles = result.total;
       if (result.response!.isEmpty) {
         nothingFound.value = true;
       } else {
-        for (var user in result.response!) {
-          var portalUser = PortalUserItemController(portalUser: user);
+        for (final user in result.response!) {
+          final portalUser = PortalUserItemController(portalUser: user);
           portalUser.selectionMode.value = selectionMode;
 
           usersList.add(portalUser);

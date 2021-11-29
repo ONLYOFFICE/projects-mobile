@@ -138,13 +138,13 @@ class PortalTask {
     updated = json['updated'] as String?;
 
     subtasks = json['subtasks'] != null
-        ? (json['commentList'] as List<Map<String, dynamic>>)
+        ? ((json['subtasks'] as List).cast<Map<String, dynamic>>())
             .map((e) => Subtask.fromJson(e))
             .toList()
         : null;
 
     responsibles = json['responsibles'] != null
-        ? (json['responsibles'] as List<Map<String, dynamic>>)
+        ? ((json['responsibles'] as List).cast<Map<String, dynamic>>())
             .map((i) => PortalUser.fromJson(i))
             .toList()
         : null;

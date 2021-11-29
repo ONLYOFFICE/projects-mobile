@@ -74,11 +74,11 @@ class TagsController extends BaseController {
   }
 
   Future _getItems({bool needToClear = false}) async {
-    var result = await _api.getTagsPaginated(
+    final result = await _api.getTagsPaginated(
         startIndex: paginationController.startIndex);
 
     if (result != null) {
-      paginationController.total.value = result.total!;
+      paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
       paginationController.data.addAll(result.response!);
     }

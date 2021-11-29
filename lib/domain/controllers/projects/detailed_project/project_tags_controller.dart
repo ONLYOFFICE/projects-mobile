@@ -61,7 +61,7 @@ class ProjectTagsController extends GetxController {
     loaded.value = false;
     tags.clear();
     projectDetailedTags.clear();
-    var allTags = await _api.getProjectTags();
+    final allTags = await _api.getProjectTags();
 
     if (projController?.tags != null) {
       for (var value in projController?.tags) {
@@ -70,8 +70,8 @@ class ProjectTagsController extends GetxController {
     }
 
     if (allTags != null) {
-      for (var tag in allTags) {
-        var isSelected = projectDetailedTags.contains(tag.title).obs;
+      for (final tag in allTags) {
+        final isSelected = projectDetailedTags.contains(tag.title).obs;
 
         tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
       }
@@ -110,7 +110,7 @@ class ProjectTagsController extends GetxController {
   }
 
   Future<void> createTag(String value) async {
-    var res = await _api.createTag(name: value);
+    final res = await _api.createTag(name: value);
     if (res != null) await setup(_projController);
   }
 }

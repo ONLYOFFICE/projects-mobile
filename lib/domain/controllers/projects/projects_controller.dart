@@ -159,8 +159,8 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  Future _getProjects({bool needToClear = false}) async {
-    var result = await _api.getProjectsByParams(
+  Future<void> _getProjects({bool needToClear = false}) async {
+    final result = await _api.getProjectsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -172,14 +172,18 @@ class ProjectsController extends BaseController {
     if (needToClear) paginationController.data.clear();
     if (result == null) return;
 
-    paginationController.total.value = result.total!;
+    paginationController.total.value = result.total;
     paginationController.data.addAll(result.response!);
     expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
   Future getProjectTags() async {
     loaded.value = false;
-    tags.value = await (_api.getProjectTags() as FutureOr<List<ProjectTag>>);
+
+    final result = await _api.getProjectTags();
+    if (result != null) {
+      tags.value = result;
+    }
     loaded.value = true;
   }
 

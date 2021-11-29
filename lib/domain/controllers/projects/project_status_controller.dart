@@ -57,7 +57,7 @@ class ProjectStatusesController extends GetxController {
       return false;
     }
 
-    var t = await locator<ProjectService>().updateProjectStatus(
+    final t = await locator<ProjectService>().updateProjectStatus(
         projectId: projectData.id!,
         newStatus: ProjectStatus.toLiteral(newStatusId));
 

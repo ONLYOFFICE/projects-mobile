@@ -57,8 +57,11 @@ class MilestonesController extends GetxController {
 
   Future getAllMilestones() async {
     loaded.value = false;
-    milestones.value =
-        await (_api.milestonesByFilter() as Future<List<dynamic>>);
+
+    final result = await _api.milestonesByFilter();
+    if (result != null) {
+      milestones.value = result;
+    }
     loaded.value = true;
   }
 
@@ -75,7 +78,7 @@ class MilestonesController extends GetxController {
     );
 
     if (result != null) {
-      paginationController.total.value = result.total!;
+      paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
       paginationController.data.addAll(result.response!);
     }
@@ -87,17 +90,3 @@ class MilestonesController extends GetxController {
     loaded.value = true;
   }
 }
-
-// class MilestonesController extends GetxController {
-//   final _api = locator<MilestoneService>();
-
-//   var milestones = <Milestone>[].obs;
-
-//   RxBool loaded = false.obs;
-
-//   Future getMilestonesByFilter() async {
-//     loaded.value = false;
-//     milestones.value = await _api.milestonesByFilter();
-//     loaded.value = true;
-//   }
-// }

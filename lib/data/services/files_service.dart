@@ -107,8 +107,7 @@ class FilesService {
     }
   }
 
-  // TODO: Future <??>
-  Future deleteFolder({required String folderId}) async {
+  Future<dynamic> deleteFolder({required String folderId}) async {
     final result = await _api.deleteFolder(
       folderId: folderId,
     );

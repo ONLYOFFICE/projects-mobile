@@ -84,18 +84,20 @@ class TasksSearchController extends BaseController {
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    final result = await (_api.getTasksByParams(
+    final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
       query: _query.toLowerCase(),
-    ) as Future<PageDTO<List<PortalTask>>>);
+    );
 
-    paginationController.total.value = result.total!;
+    if (result != null) {
+      paginationController.total.value = result.total;
 
-    if (result.response!.isEmpty) nothingFound.value = true;
+      if (result.response!.isEmpty) nothingFound.value = true;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response!);
+    }
   }
 
   void clearSearch() {

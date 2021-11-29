@@ -266,15 +266,17 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   Future<void> confirmGroupSelection() async {
-    for (var group in selectedGroups) {
-      var groupMembers = await (_userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup!.id) as Future<PageDTO<List<PortalUser>>>);
+    for (final group in selectedGroups) {
+      final groupMembers = await _userService.getProfilesByExtendedFilter(
+          groupId: group.portalGroup!.id);
 
-      if (groupMembers.response!.isNotEmpty) {
-        for (var element in groupMembers.response!) {
-          var user = PortalUserItemController(portalUser: element);
-          user.isSelected.value = true;
-          selectedTeamMembers.add(user);
+      if (groupMembers != null) {
+        if (groupMembers.response!.isNotEmpty) {
+          for (final element in groupMembers.response!) {
+            final user = PortalUserItemController(portalUser: element);
+            user.isSelected.value = true;
+            selectedTeamMembers.add(user);
+          }
         }
       }
     }

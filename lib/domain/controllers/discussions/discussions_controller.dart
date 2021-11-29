@@ -114,7 +114,7 @@ class DiscussionsController extends BaseController {
   }
 
   Future _getDiscussions({bool needToClear = false, String? projectId}) async {
-    final result = await (_api.getDiscussionsByParams(
+    final result = await _api.getDiscussionsByParams(
       startIndex: paginationController!.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -124,12 +124,15 @@ class DiscussionsController extends BaseController {
       projectFilter: _filterController!.projectFilter,
       otherFilter: _filterController!.otherFilter,
       projectId: projectId,
-    ) as Future<PageDTO<List<Discussion>>>);
-    paginationController!.total.value = result.total!;
+    );
 
-    if (needToClear) paginationController!.data.clear();
+    if (result != null) {
+      paginationController!.total.value = result.total;
 
-    paginationController!.data.addAll(result.response!);
+      if (needToClear) paginationController!.data.clear();
+
+      paginationController!.data.addAll(result.response!);
+    }
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()

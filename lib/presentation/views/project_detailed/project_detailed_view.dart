@@ -261,7 +261,7 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
-          var result = await controller.deleteProject();
+          final result = await controller.deleteProject();
           if (result != null) {
             Get.back();
             Get.back();

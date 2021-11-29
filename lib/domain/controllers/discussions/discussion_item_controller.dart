@@ -142,9 +142,8 @@ class DiscussionItemController extends GetxController {
     final newStatusStr = newStatus == 1 ? 'archived' : 'open';
 
     try {
-      final result = await (_api.updateMessageStatus(
-          id: discussion.value.id!,
-          newStatus: newStatusStr) as Future<Discussion?>);
+      final result = await _api.updateMessageStatus(
+          id: discussion.value.id!, newStatus: newStatusStr);
       if (result != null) {
         discussion.value.setStatus = result.status;
         status.value = result.status!;
@@ -166,8 +165,7 @@ class DiscussionItemController extends GetxController {
 
   Future<void> subscribeToMessageAction() async {
     try {
-      final result = await (_api.subscribeToMessage(id: discussion.value.id!)
-          as Future<Discussion?>);
+      final result = await _api.subscribeToMessage(id: discussion.value.id!);
       if (result != null) {
         discussion.value.setSubscribers = result.subscribers;
       }
@@ -184,8 +182,7 @@ class DiscussionItemController extends GetxController {
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {
-          final result = await (_api.deleteMessage(id: discussion.value.id!)
-              as Future<Discussion?>);
+          final result = await _api.deleteMessage(id: discussion.value.id!);
           if (result != null) {
             Get.back();
             Get.back();

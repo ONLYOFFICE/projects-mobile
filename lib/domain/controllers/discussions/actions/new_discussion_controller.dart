@@ -306,14 +306,16 @@ class NewDiscussionController extends GetxController
   @override
   Future<void> confirmGroupSelection() async {
     for (final group in selectedGroups) {
-      final groupMembers = await (_userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup!.id) as Future<PageDTO<List<PortalUser>>>);
+      final groupMembers = await _userService.getProfilesByExtendedFilter(
+          groupId: group.portalGroup!.id);
 
-      if (groupMembers.response!.isNotEmpty) {
-        for (final element in groupMembers.response!) {
-          final user = PortalUserItemController(portalUser: element);
-          user.isSelected.value = true;
-          subscribers.add(user);
+      if (groupMembers != null) {
+        if (groupMembers.response!.isNotEmpty) {
+          for (final element in groupMembers.response!) {
+            final user = PortalUserItemController(portalUser: element);
+            user.isSelected.value = true;
+            subscribers.add(user);
+          }
         }
       }
     }

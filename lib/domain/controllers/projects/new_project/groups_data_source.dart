@@ -56,7 +56,7 @@ class GroupsDataSource extends GetxController {
 
     final result = await _api.getAllGroups();
 
-    if (result!.isEmpty) {
+    if (result == null || result.isEmpty) {
     } else {
       result.forEach(
         (element) {

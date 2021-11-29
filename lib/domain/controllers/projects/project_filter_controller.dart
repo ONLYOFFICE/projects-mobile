@@ -196,11 +196,11 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.getProjectsByParams(
+    final result = await _api.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectManagerFilter: projectManagerFilter,

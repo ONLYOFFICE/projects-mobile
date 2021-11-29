@@ -265,7 +265,7 @@ class TaskApi {
         result.total = responseJson['total'] as int;
         if (result.total != 0) {
           result.response =
-              (responseJson['response'] as List<Map<String, dynamic>>)
+              ((responseJson['response'] as List).cast<Map<String, dynamic>>())
                   .map((i) => PortalTask.fromJson(i))
                   .toList();
         }

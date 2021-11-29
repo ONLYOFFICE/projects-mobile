@@ -82,8 +82,8 @@ class ProjectTasksController extends GetxController {
     loaded.value = true;
   }
 
-  Future _getTasks({bool needToClear = false}) async {
-    var result = await (_api.getTasksByParams(
+  Future<void> _getTasks({bool needToClear = false}) async {
+    final result = await _api.getTasksByParams(
         startIndex: paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
         sortOrder: _sortController.currentSortOrder,
@@ -92,12 +92,13 @@ class ProjectTasksController extends GetxController {
         projectFilter: _filterController.projectFilter,
         milestoneFilter: _filterController.milestoneFilter,
         deadlineFilter: _filterController.deadlineFilter,
-        projectId: _projectId.toString()) as Future<PageDTO<List<PortalTask>>>);
-    paginationController.total.value = result.total!;
+        projectId: _projectId.toString());
 
-    if (needToClear) paginationController.data.clear();
-
-    paginationController.data.addAll(result.response!);
+    if (result != null) {
+      paginationController.total.value = result.total;
+      if (needToClear) paginationController.data.clear();
+      paginationController.data.addAll(result.response!);
+    }
   }
 
   Future<void> setup(ProjectDetailed projectDetailed) async {

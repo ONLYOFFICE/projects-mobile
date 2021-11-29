@@ -62,7 +62,7 @@ class TagSearchController extends BaseSearchController {
   String? _query;
 
   @override
-  Future search({bool needToClear = true, String? query}) async {
+  Future<void> search({bool needToClear = true, String? query}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;
@@ -70,7 +70,7 @@ class TagSearchController extends BaseSearchController {
     loaded.value = true;
   }
 
-  Future _performSearch({bool needToClear = true, String? query}) async {
+  Future<void> _performSearch({bool needToClear = true, String? query}) async {
     // now the result is incorrect
     final result = await _api.getTagsPaginated(
       startIndex: paginationController.startIndex,

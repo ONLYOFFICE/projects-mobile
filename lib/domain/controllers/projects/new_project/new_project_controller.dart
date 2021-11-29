@@ -78,9 +78,9 @@ class NewProjectController extends BaseProjectEditorController {
     if (needToFillTitle.value == true || needToFillManager.value == true)
       return;
 
-    var participants = <Participant>[];
+    final participants = <Participant>[];
 
-    for (var element in selectedTeamMembers) {
+    for (final element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -92,7 +92,7 @@ class NewProjectController extends BaseProjectEditorController {
       );
     }
 
-    var newProject = NewProjectDTO(
+    final newProject = NewProjectDTO(
         title: titleController.text,
         description: descriptionController.text,
         responsibleId: selectedProjectManager.value!.id,
@@ -101,7 +101,7 @@ class NewProjectController extends BaseProjectEditorController {
         notify: notificationEnabled.value,
         notifyResponsibles: responsiblesNotificationEnabled);
 
-    var result = await _api.createProject(project: newProject);
+    final result = await _api.createProject(project: newProject);
     if (result != null) {
       locator<EventHub>().fire('needToRefreshProjects');
 

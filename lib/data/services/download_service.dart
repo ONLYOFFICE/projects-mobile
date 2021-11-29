@@ -55,8 +55,7 @@ class DownloadService {
     }
   }
 
-  // TODO: Future <??>
-  Future downloadDocument(String url) async {
+  Future<void> downloadDocument(String url) async {
     var dir;
     if (Platform.isAndroid) {
       dir = await getExternalStorageDirectory();

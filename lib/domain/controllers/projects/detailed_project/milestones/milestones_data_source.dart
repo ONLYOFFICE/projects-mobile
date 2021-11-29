@@ -70,11 +70,11 @@ class MilestonesDataSource extends GetxController {
   RxBool fabIsVisible = false.obs;
 
   MilestonesDataSource() {
-    _sortController.updateSortDelegate = () async => await loadMilestones();
+    _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
-    paginationController.loadDelegate = () async => await _getMilestones();
+    paginationController.loadDelegate = () async => _getMilestones();
     paginationController.refreshDelegate =
-        () async => await _getMilestones(needToClear: true);
+        () async => _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 
@@ -86,7 +86,7 @@ class MilestonesDataSource extends GetxController {
   }
 
   Future _getMilestones({bool needToClear = false}) async {
-    final result = await (_api.milestonesByFilter(
+    final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId != null ? _projectId.toString() : null,
@@ -95,13 +95,15 @@ class MilestonesDataSource extends GetxController {
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
-    ) as Future<List<Milestone>>);
+    );
 
-    paginationController.total.value = result.length;
+    if (result != null) {
+      paginationController.total.value = result.length;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result);
+      paginationController.data.addAll(result);
+    }
   }
 
   Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {

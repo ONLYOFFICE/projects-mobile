@@ -220,14 +220,16 @@ class DocumentsFilterController extends BaseFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    final result = await (_api.getFilesByParams(
+    final result = await _api.getFilesByParams(
       folderId: _folderId,
       typeFilter: typeFilter,
       authorFilter: authorFilter,
       entityType: entityType,
-    ) as Future<FoldersResponse>);
+    );
 
-    suitableResultCount.value = result.count!;
+    if (result != null) {
+      suitableResultCount.value = result.count!;
+    }
   }
 
   @override

@@ -92,17 +92,17 @@ class ProjectSearchController extends GetxController {
     _performSearch();
   }
 
-  void _performSearch() async {
+  Future<void> _performSearch() async {
     loaded.value = false;
     nothingFound.value = false;
     switchToSearchView.value = true;
     searchResult.clear();
 
-    var result = await _api.getProjectsByParams(
+    final result = await _api.getProjectsByParams(
         startIndex: _startIndex, query: _query.toLowerCase());
 
     if (result != null) {
-      _totalProjects = result.total!;
+      _totalProjects = result.total;
 
       if (result.response!.isEmpty) {
         nothingFound.value = true;
