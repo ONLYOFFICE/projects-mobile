@@ -162,7 +162,7 @@ class DocumentsController extends GetxController {
 
     if (result == null) return;
 
-    paginationController.total.value = result.total!;
+    if (result.total != null) paginationController.total.value = result.total!;
 
     if (_currentFolderId != null && result.current != null)
       _screenName = result.current!.title;

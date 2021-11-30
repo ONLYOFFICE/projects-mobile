@@ -175,7 +175,7 @@ class CoreApi {
   Future<String> projectsUrl() async =>
       '${await getPortalURI()}/api/$version/project';
 
-  Future<String> projectByIdUrl( int projectId) async =>
+  Future<String> projectByIdUrl(int projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 
   Future<String> projectTags() async =>

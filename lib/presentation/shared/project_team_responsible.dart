@@ -95,9 +95,9 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                       itemBuilder: (c, i) => PortalUserItem(
                           userController: controller.teamController.usersList[i]
                               as PortalUserItemController,
-                          onTapFunction:
-                              controller.addResponsible as Function()),
-                      itemExtent: 65.0,
+                          onTapFunction: controller.addResponsible as void
+                              Function(PortalUserItemController)),
+                      itemExtent: 65,
                       itemCount:
                           controller.teamController.usersList.length as int,
                     )
@@ -107,7 +107,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             );
           }
           if (controller.teamController.nothingFound.value == true) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           if (controller.teamController.loaded.value == true &&
               controller.teamController.searchResult.isNotEmpty as bool &&

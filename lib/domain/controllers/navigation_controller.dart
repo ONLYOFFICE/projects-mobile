@@ -52,11 +52,8 @@ class NavigationController extends GetxController {
 
   @override
   void onInit() {
-    _userController
-        .getUserInfo()
-        .then((value) => selfUserItem.value =
-            PortalUserItemController(portalUser: _userController.user!))
-        .obs;
+    _userController.getUserInfo().then((value) => selfUserItem =
+        Rx(PortalUserItemController(portalUser: _userController.user!)));
 
     super.onInit();
   }
