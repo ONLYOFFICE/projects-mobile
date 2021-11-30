@@ -84,17 +84,17 @@ class Discussion {
         canEditFiles: json['canEditFiles'] as bool?,
         canReadFiles: json['canReadFiles'] as bool?,
         subscribers: json['subscribers'] != null
-            ? (json['subscribers'] as List<Map<String, dynamic>>)
+            ? ((json['subscribers'] as List).cast<Map<String, dynamic>>())
                 .map((e) => PortalUser.fromJson(e))
                 .toList()
             : null,
         files: json['files'] != null
-            ? (json['files'] as List<Map<String, dynamic>>)
+            ? ((json['files'] as List).cast<Map<String, dynamic>>())
                 .map((e) => PortalFile.fromJson(e))
                 .toList()
             : null,
         comments: json['comments'] != null
-            ? (json['files'] as List<Map<String, dynamic>>)
+            ? ((json['files'] as List).cast<Map<String, dynamic>>())
                 .map((e) => PortalComment.fromJson(e))
                 .toList()
             : null,

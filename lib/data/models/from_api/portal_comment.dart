@@ -76,7 +76,7 @@ class PortalComment {
         isResponsePermissions: json['isResponsePermissions'] as bool?,
         timeStampStr: json['timeStampStr'] as String?,
         commentList: (json['commentList'] != null)
-            ? (json['commentList'] as List<Map<String, dynamic>>)
+            ? ((json['commentList'] as List).cast<Map<String, dynamic>>())
                 .map((e) => PortalComment.fromJson(e))
                 .toList()
             : null,

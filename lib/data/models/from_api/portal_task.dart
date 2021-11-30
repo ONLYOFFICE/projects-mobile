@@ -100,14 +100,14 @@ class PortalTask {
     canDelete = json['canDelete'] as bool?;
     canReadFiles = json['canReadFiles'] as bool?;
     comments = json['comments'] != null
-        ? (json['comments'] as List<Map<String, dynamic>>)
+        ? ((json['comments'] as List).cast<Map<String, dynamic>>())
             .map((e) => PortalComment.fromJson(e))
             .toList()
         : null;
     customTaskStatus = json['customTaskStatus'] as int?;
     startDate = json['startDate'] as String?;
     files = json['files'] != null
-        ? (json['commentList'] as List<Map<String, dynamic>>)
+        ? ((json['files'] as List).cast<Map<String, dynamic>>())
             .map((e) => PortalFile.fromJson(e))
             .toList()
         : null;

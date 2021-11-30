@@ -115,13 +115,13 @@ class SelfUserProfile {
     title = json['title'] as String?;
     if (json['contacts'] != null) {
       contacts = <Contact>[];
-      (json['contacts'] as List<Map<String, dynamic>>).forEach((v) {
+      ((json['contacts'] as List).cast<Map<String, dynamic>>()).forEach((v) {
         contacts!.add(Contact.fromJson(v));
       });
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
-      (json['groups'] as List<Map<String, dynamic>>).forEach((v) {
+      ((json['groups'] as List).cast<Map<String, dynamic>>()).forEach((v) {
         groups!.add(PortalGroup.fromJson(v));
       });
     }

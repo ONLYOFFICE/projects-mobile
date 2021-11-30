@@ -50,7 +50,7 @@ class UserApi {
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
         result.response =
-            (responseJson['response'] as List<Map<String, dynamic>>)
+            ((responseJson['response'] as List).cast<Map<String, dynamic>>())
                 .map((i) => PortalUser.fromJson(i))
                 .toList();
       } else {
@@ -90,7 +90,7 @@ class UserApi {
         result.total = responseJson['total'] as int;
         {
           result.response =
-              (responseJson['response'] as List<Map<String, dynamic>>)
+              ((responseJson['response'] as List).cast<Map<String, dynamic>>())
                   .map((i) => PortalUser.fromJson(i))
                   .toList();
         }

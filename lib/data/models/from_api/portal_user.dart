@@ -111,7 +111,7 @@ class PortalUser {
     title = json['title'] as String?;
     if (json['contacts'] != null) {
       contacts = <Contact>[];
-      (json['contacts'] as List<Map<String, dynamic>>).forEach((e) {
+      ((json['contacts'] as List).cast<Map<String, dynamic>>()).forEach((e) {
         contacts!.add(Contact.fromJson(e));
       });
     }
