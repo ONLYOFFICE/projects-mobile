@@ -75,7 +75,7 @@ class UserSearchController extends BaseSearchController {
       query: query,
     );
 
-    addData(result, needToClear);
+    if (result != null) addData(result, needToClear);
   }
 
   @override

@@ -42,7 +42,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectTaskFilterController extends BaseTaskFilterController {
-  final TaskService? _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
   final _sortController = Get.find<TasksSortController>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
@@ -348,7 +348,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    final result = await _api!.getTasksByParams(
+    final result = await _api.getTasksByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       responsibleFilter: responsibleFilter,
@@ -360,9 +360,9 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       projectId: _projectId,
     );
 
-    if (result != null) {
-      suitableResultCount.value = result.response!.length;
-    }
+    if (result == null) return;
+
+    suitableResultCount.value = result.response?.length ?? 0;
   }
 
   @override

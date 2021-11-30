@@ -63,7 +63,7 @@ class PasscodeService {
 
   Future<bool> get isFingerprintAvailable async {
     final isFingerprintAvailable =
-        await _biometricService.isFingerprintAvailable ?? false;
+        await _biometricService.isFingerprintAvailable;
 
     return isFingerprintAvailable;
   }

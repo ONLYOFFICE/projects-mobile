@@ -88,7 +88,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
             return UsersDefault(
               selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection as Function(),
+              onTapFunction: controller.changePMSelection as void Function(
+                  PortalUserItemController),
               withoutGuests: true,
             );
           }

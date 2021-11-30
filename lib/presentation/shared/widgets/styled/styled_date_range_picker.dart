@@ -44,7 +44,7 @@ class StyledDateRangePickerDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Theme(
       data: ThemeData(
-        colorScheme: Get.isDarkMode ?? Get.isPlatformDarkMode
+        colorScheme: Get.isDarkMode
             ? ColorScheme.dark(
                 onSurface: darkColors.onSurface,
                 onPrimary: darkColors.onBackground,

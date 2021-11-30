@@ -154,7 +154,7 @@ class TFASmsController extends GetxController {
 
   String get numberHint {
     return deleteNumberPrefix(
-        deviceCountry.value!.phoneMaskFixedLineInternational)
+            deviceCountry.value!.phoneMaskFixedLineInternational)
         .replaceAll('0', '_');
   }
 
@@ -164,6 +164,8 @@ class TFASmsController extends GetxController {
       userName: _userName,
       password: _password,
     );
+
+    if (result == null) return null;
 
     _phoneNoise = result.phoneNoise as String?;
     _phoneNumberController!.clear();

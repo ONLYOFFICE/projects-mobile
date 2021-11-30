@@ -79,7 +79,7 @@ class PortalFile {
 
   factory PortalFile.fromJson(Map<String, dynamic> json) => PortalFile(
         access: json['access'] as int?,
-        comment: json['comment'] as int?,
+        comment: json['comment'] as dynamic,
         contentLength: json['contentLength'] as String?,
         created: DateTime.parse(json['created'] as String),
         createdBy: json['createdBy'] != null
