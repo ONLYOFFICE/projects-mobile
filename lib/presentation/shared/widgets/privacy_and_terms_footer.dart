@@ -40,9 +40,16 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyAndTermsFooter extends StatelessWidget {
-  const PrivacyAndTermsFooter({
+  PrivacyAndTermsFooter({
     Key? key,
   }) : super(key: key);
+
+  PrivacyAndTermsFooter.withCheckbox({
+    Key? key,
+    this.checkBoxValue,
+  }) : super(key: key);
+
+  RxBool? checkBoxValue;
 
   @override
   Widget build(BuildContext context) {
@@ -83,20 +90,41 @@ class PrivacyAndTermsFooter extends StatelessWidget {
           );
         },
     );
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        style: TextStyleHelper.body2(
-          color: Get.theme.colors().onSurface.withOpacity(0.6),
+    return Row(
+      children: [
+        if (Get.deviceLocale!.languageCode == 'zh' && checkBoxValue != null)
+          Obx(
+            () => Checkbox(
+              activeColor: Get.theme.colors().primary,
+              value: checkBoxValue!.value,
+              onChanged: (bool? value) {
+                checkBoxValue!.value = value ?? false;
+              },
+            ),
+          ),
+        Expanded(
+          child: SizedBox(
+            width: double.infinity,
+            child: RichText(
+              textAlign: Get.deviceLocale!.languageCode == 'zh' && checkBoxValue != null
+                  ? TextAlign.left
+                  : TextAlign.center,
+              text: TextSpan(
+                style: TextStyleHelper.body2(
+                  color: Get.theme.colors().onSurface.withOpacity(0.6),
+                ),
+                children: [
+                  TextSpan(text: beforeText),
+                  textSpanPrivacyPolicy,
+                  TextSpan(text: betweenText),
+                  textSpanTermsOfService,
+                  TextSpan(text: afterText),
+                ],
+              ),
+            ),
+          ),
         ),
-        children: [
-          TextSpan(text: beforeText),
-          textSpanPrivacyPolicy,
-          TextSpan(text: betweenText),
-          textSpanTermsOfService,
-          TextSpan(text: afterText),
-        ],
-      ),
+      ],
     );
   }
 }
