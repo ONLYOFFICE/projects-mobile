@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -90,7 +91,7 @@ class UsersController extends BaseController {
     if (result != null) {
       paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response ?? <PortalUser>[]);
     }
   }
 }

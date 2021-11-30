@@ -31,6 +31,7 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -80,7 +81,7 @@ class MilestonesController extends GetxController {
     if (result != null) {
       paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response ?? <Milestone>[]);
     }
   }
 

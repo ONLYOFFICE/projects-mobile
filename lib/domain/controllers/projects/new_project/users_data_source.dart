@@ -113,7 +113,7 @@ class UsersDataSource extends GetxController {
       if (result.response!.isEmpty) {
         nothingFound.value = true;
       } else {
-        for (final user in result.response!) {
+        for (final user in result.response ?? <PortalUser>[]) {
           final portalUser = PortalUserItemController(portalUser: user);
           portalUser.selectionMode.value = selectionMode;
 

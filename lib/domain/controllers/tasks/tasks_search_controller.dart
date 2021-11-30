@@ -96,7 +96,7 @@ class TasksSearchController extends BaseController {
 
       if (needToClear) paginationController.data.clear();
 
-      paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response ?? <PortalTask>[]);
     }
   }
 

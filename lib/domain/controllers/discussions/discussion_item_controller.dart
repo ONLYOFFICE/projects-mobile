@@ -35,6 +35,7 @@ import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/discussion_item_service.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
@@ -96,7 +97,7 @@ class DiscussionItemController extends GetxController {
   }
 
   bool get isSubscribed {
-    for (final item in discussion.value.subscribers!) {
+    for (final item in discussion.value.subscribers ?? <PortalUser>[]) {
       if (item.id == selfId) return true;
     }
     return false;

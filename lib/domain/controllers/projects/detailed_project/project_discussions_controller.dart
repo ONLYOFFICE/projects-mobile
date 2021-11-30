@@ -104,7 +104,7 @@ class ProjectDiscussionsController extends GetxController {
 
       if (needToClear) paginationController.data.clear();
 
-      paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response ?? <Discussion>[]);
     }
   }
 

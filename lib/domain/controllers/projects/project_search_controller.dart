@@ -107,7 +107,7 @@ class ProjectSearchController extends GetxController {
       if (result.response!.isEmpty) {
         nothingFound.value = true;
       } else {
-        searchResult.addAll(result.response!);
+        searchResult.addAll(result.response ?? <ProjectDetailed>[]);
       }
     }
     loaded.value = true;

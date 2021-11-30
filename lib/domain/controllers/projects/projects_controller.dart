@@ -173,7 +173,7 @@ class ProjectsController extends BaseController {
     if (result == null) return;
 
     paginationController.total.value = result.total;
-    paginationController.data.addAll(result.response!);
+    paginationController.data.addAll(result.response ?? <ProjectDetailed>[]);
     expandedCardView.value = paginationController.data.isNotEmpty;
   }
 

@@ -88,7 +88,7 @@ class GroupsController extends BaseController {
     if (result != null) {
       paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response!);
+      paginationController.data.addAll(result.response ?? <PortalGroup>[]);
     }
   }
 
