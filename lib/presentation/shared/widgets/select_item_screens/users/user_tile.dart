@@ -34,8 +34,8 @@ part of 'select_user_screen.dart';
 
 class _UserTile extends StatelessWidget {
   const _UserTile({
-    Key key,
-    @required this.user,
+    Key? key,
+    required this.user,
   }) : super(key: key);
 
   final PortalUser user;
@@ -71,14 +71,14 @@ class _UserTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    user.displayName,
+                    user.displayName!,
                     style: TextStyleHelper.projectTitle,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),
                   if (user.title != null)
                     Text(
-                      user.title,
+                      user.title!,
                       style: TextStyleHelper.projectResponsible,
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,

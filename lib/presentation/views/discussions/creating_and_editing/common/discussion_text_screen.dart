@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -41,8 +42,8 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 
 class NewDiscussionTextScreen extends StatelessWidget {
   const NewDiscussionTextScreen({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final DiscussionActionsController controller;
@@ -75,7 +76,7 @@ class NewDiscussionTextScreen extends StatelessWidget {
         ),
         body: HtmlTextEditor(
           initialText: controller.text.value,
-          textController: controller.textController,
+          textController: controller.textController as HtmlEditorController,
           hintText: tr('discussionText'),
         ),
       ),

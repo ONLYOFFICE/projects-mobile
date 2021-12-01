@@ -32,6 +32,8 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -41,34 +43,34 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class ProjectsFilterController extends BaseFilterController {
-  final _api = locator<ProjectService>();
-  final _storage = locator<Storage>();
+  final ProjectService _api = locator<ProjectService>();
+  final Storage _storage = locator<Storage>();
 
   final _sortController = Get.find<ProjectsSortController>();
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
-  String _teamMemberFilter = '';
-  String _projectManagerFilter = '';
-  String _otherFilter = '';
-  String _statusFilter = '';
+  String? _teamMemberFilter = '';
+  String? _projectManagerFilter = '';
+  String? _otherFilter = '';
+  String? _statusFilter = '';
 
-  String get projectManagerFilter => _projectManagerFilter;
-  String get teamMemberFilter => _teamMemberFilter;
-  String get otherFilter => _otherFilter;
-  String get statusFilter => _statusFilter;
+  String? get projectManagerFilter => _projectManagerFilter;
+  String? get teamMemberFilter => _teamMemberFilter;
+  String? get otherFilter => _otherFilter;
+  String? get statusFilter => _statusFilter;
 
   var _selfId;
 
   bool get _hasFilters =>
-      _projectManagerFilter.isNotEmpty ||
-      _teamMemberFilter.isNotEmpty ||
-      _otherFilter.isNotEmpty ||
-      _statusFilter.isNotEmpty;
+      _projectManagerFilter!.isNotEmpty ||
+      _teamMemberFilter!.isNotEmpty ||
+      _otherFilter!.isNotEmpty ||
+      _statusFilter!.isNotEmpty;
 
-  RxMap projectManager;
-  RxMap teamMember;
-  RxMap other;
-  RxMap status;
+  late RxMap<String, dynamic> projectManager;
+  late RxMap<String, dynamic> teamMember;
+  late RxMap<String, dynamic> other;
+  late RxMap<String, bool> status;
 
   @override
   String get filtersTitle =>
@@ -97,8 +99,9 @@ class ProjectsFilterController extends BaseFilterController {
     _projectManagerFilter = '';
     if (filter == 'me') {
       projectManager['other'] = '';
-      projectManager['me'] = !projectManager['me'];
-      if (projectManager['me']) _projectManagerFilter = '&manager=$_selfId';
+      projectManager['me'] = !(projectManager['me'] as bool);
+      if (projectManager['me'] as bool)
+        _projectManagerFilter = '&manager=$_selfId';
     }
     if (filter == 'other') {
       projectManager['me'] = false;
@@ -117,8 +120,8 @@ class ProjectsFilterController extends BaseFilterController {
     _teamMemberFilter = '';
     if (filter == 'me') {
       teamMember['other'] = '';
-      teamMember['me'] = !teamMember['me'];
-      if (teamMember['me']) _teamMemberFilter = '&participant=$_selfId';
+      teamMember['me'] = !(teamMember['me'] as bool);
+      if (teamMember['me'] as bool) _teamMemberFilter = '&participant=$_selfId';
     }
     if (filter == 'other') {
       teamMember['me'] = false;
@@ -136,11 +139,11 @@ class ProjectsFilterController extends BaseFilterController {
     _otherFilter = '';
     switch (filter) {
       case 'followed':
-        other['followed'] = !other['followed'];
+        other['followed'] = !(other['followed'] as bool);
         other['withTag'] = '';
         other['withoutTag'] = false;
 
-        if (other['followed']) _otherFilter = '&follow=true';
+        if (other['followed'] as bool) _otherFilter = '&follow=true';
         break;
       case 'withTag':
         other['followed'] = false;
@@ -155,8 +158,8 @@ class ProjectsFilterController extends BaseFilterController {
       case 'withoutTag':
         other['followed'] = false;
         other['withTag'] = '';
-        other['withoutTag'] = !other['withoutTag'];
-        if (other['withoutTag']) _otherFilter = '&tag=-1';
+        other['withoutTag'] = !(other['withoutTag'] as bool);
+        if (other['withoutTag'] as bool) _otherFilter = '&tag=-1';
         break;
       default:
     }
@@ -167,25 +170,25 @@ class ProjectsFilterController extends BaseFilterController {
     _statusFilter = '';
     switch (filter) {
       case 'active':
-        status['active'] = !status['active'];
+        status['active'] = !(status['active'] as bool);
         status['paused'] = false;
         status['closed'] = false;
 
-        if (status['active']) _statusFilter = '&status=open';
+        if (status['active'] as bool) _statusFilter = '&status=open';
         break;
       case 'paused':
         status['active'] = false;
-        status['paused'] = !status['paused'];
+        status['paused'] = !(status['paused'] as bool);
         status['closed'] = false;
 
-        if (status['paused']) _statusFilter = '&status=paused';
+        if (status['paused'] as bool) _statusFilter = '&status=paused';
         break;
       case 'closed':
         status['active'] = false;
         status['paused'] = false;
-        status['closed'] = !status['closed'];
+        status['closed'] = !(status['closed'] as bool);
 
-        if (status['closed']) _statusFilter = '&status=closed';
+        if (status['closed'] as bool) _statusFilter = '&status=closed';
         break;
       default:
     }
@@ -193,11 +196,11 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.getProjectsByParams(
+    final result = await _api.getProjectsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectManagerFilter: projectManagerFilter,
@@ -206,7 +209,7 @@ class ProjectsFilterController extends BaseFilterController {
       statusFilter: statusFilter,
     );
 
-    suitableResultCount.value = result.response.length;
+    if (result != null) suitableResultCount.value = result.response!.length;
   }
 
   @override
@@ -238,12 +241,12 @@ class ProjectsFilterController extends BaseFilterController {
     hasFilters.value = _hasFilters;
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
 
     await saveFilters();
   }
 
-  Future<void> setupPreset(PresetProjectFilters preset) async {
+  Future<void> setupPreset(PresetProjectFilters? preset) async {
     _selfId = await Get.find<UserController>().getUserId();
 
     switch (preset) {
@@ -308,23 +311,24 @@ class ProjectsFilterController extends BaseFilterController {
 
     if (savedFilters != null) {
       try {
-        projectManager.value =
-            Map<String, Object>.from(savedFilters['projectManager']['buttons']);
-        _projectManagerFilter = savedFilters['projectManager']['value'];
+        projectManager.value = Map<String, Object>.from(
+            savedFilters['projectManager']['buttons'] as Map);
+        _projectManagerFilter =
+            savedFilters['projectManager']['value'] as String;
 
-        teamMember.value =
-            Map<String, Object>.from(savedFilters['teamMember']['buttons']);
-        _teamMemberFilter = savedFilters['teamMember']['value'];
+        teamMember.value = Map<String, Object>.from(
+            savedFilters['teamMember']['buttons'] as Map);
+        _teamMemberFilter = savedFilters['teamMember']['value'] as String;
 
         other.value =
-            Map<String, Object>.from(savedFilters['other']['buttons']);
-        _otherFilter = savedFilters['other']['value'];
+            Map<String, Object>.from(savedFilters['other']['buttons'] as Map);
+        _otherFilter = savedFilters['other']['value'] as String;
 
         status.value =
-            Map<String, bool>.from(savedFilters['status']['buttons']);
-        _statusFilter = savedFilters['status']['value'];
+            Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
+        _statusFilter = savedFilters['status']['value'] as String;
 
-        hasFilters.value = savedFilters['hasFilters'];
+        hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
         printWarning('Projects filter loading error: $e');
         await loadFilters();

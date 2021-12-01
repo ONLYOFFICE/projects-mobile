@@ -43,32 +43,32 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardController extends GetxController {
-  RefreshController refreshController;
-  final projectsWithPresets = locator<ProjectsWithPresets>();
-  final tasksWithPresets = locator<TasksWithPresets>();
+  late RefreshController refreshController;
+  final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
+  final TasksWithPresets? tasksWithPresets = locator<TasksWithPresets>();
 
   var screenName = tr('dashboard').obs;
-  TasksController _myTaskController;
-  TasksController _upcomingTaskscontroller;
+  TasksController? _myTaskController;
+  TasksController? _upcomingTaskscontroller;
 
-  ProjectsController _myProjectsController;
-  ProjectsController _folowedProjectsController;
-  ProjectsController _activeProjectsController;
+  ProjectsController? _myProjectsController;
+  ProjectsController? _folowedProjectsController;
+  ProjectsController? _activeProjectsController;
   var scrollController = ScrollController();
 
   Future setup() async {
-    _myTaskController = tasksWithPresets.myTasksController;
-    _upcomingTaskscontroller = tasksWithPresets.upcomingTasksController;
+    _myTaskController = tasksWithPresets!.myTasksController;
+    _upcomingTaskscontroller = tasksWithPresets!.upcomingTasksController;
 
-    _myProjectsController = projectsWithPresets.myProjectsController;
-    _folowedProjectsController = projectsWithPresets.folowedProjectsController;
-    _activeProjectsController = projectsWithPresets.activeProjectsController;
+    _myProjectsController = projectsWithPresets!.myProjectsController;
+    _folowedProjectsController = projectsWithPresets!.folowedProjectsController;
+    _activeProjectsController = projectsWithPresets!.activeProjectsController;
 
-    myTaskController.screenName = tr('myTasks');
-    upcomingTaskscontroller.screenName = tr('upcomingTasks');
-    myProjectsController.screenName = tr('myProjects');
-    folowedProjectsController.screenName = tr('projectsIFolow');
-    activeProjectsController.screenName = tr('activeProjects');
+    myTaskController!.screenName = tr('myTasks');
+    upcomingTaskscontroller!.screenName = tr('upcomingTasks');
+    myProjectsController!.screenName = tr('myProjects');
+    folowedProjectsController!.screenName = tr('projectsIFolow');
+    activeProjectsController!.screenName = tr('activeProjects');
 
     refreshController = RefreshController();
 
@@ -102,29 +102,29 @@ class DashboardController extends GetxController {
   }
 
   void loadContent() {
-    myTaskController.loadTasks();
-    upcomingTaskscontroller.loadTasks();
-    myProjectsController.loadProjects();
-    folowedProjectsController.loadProjects();
-    activeProjectsController.loadProjects();
+    myTaskController!.loadTasks();
+    upcomingTaskscontroller!.loadTasks();
+    myProjectsController!.loadProjects();
+    folowedProjectsController!.loadProjects();
+    activeProjectsController!.loadProjects();
   }
 
   void refreshData() {
-    myTaskController.refreshData();
-    upcomingTaskscontroller.refreshData();
+    myTaskController!.refreshData();
+    upcomingTaskscontroller!.refreshData();
   }
 
   void refreshProjectsData() {
-    myProjectsController.refreshData();
-    folowedProjectsController.refreshData();
-    activeProjectsController.refreshData();
+    myProjectsController!.refreshData();
+    folowedProjectsController!.refreshData();
+    activeProjectsController!.refreshData();
   }
 
-  TasksController get myTaskController => _myTaskController;
-  TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
+  TasksController? get myTaskController => _myTaskController;
+  TasksController? get upcomingTaskscontroller => _upcomingTaskscontroller;
 
-  ProjectsController get myProjectsController => _myProjectsController;
-  ProjectsController get folowedProjectsController =>
+  ProjectsController? get myProjectsController => _myProjectsController;
+  ProjectsController? get folowedProjectsController =>
       _folowedProjectsController;
-  ProjectsController get activeProjectsController => _activeProjectsController;
+  ProjectsController? get activeProjectsController => _activeProjectsController;
 }

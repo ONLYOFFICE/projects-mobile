@@ -33,13 +33,13 @@
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class FollowProject {
-  int id;
-  String title;
-  String description;
-  int status;
-  PortalUser responsible;
-  bool canEdit;
-  bool isPrivate;
+  int? id;
+  String? title;
+  String? description;
+  int? status;
+  PortalUser? responsible;
+  bool? canEdit;
+  bool? isPrivate;
 
   FollowProject(
       {this.id,
@@ -51,15 +51,15 @@ class FollowProject {
       this.isPrivate});
 
   FollowProject.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    description = json['description'];
-    status = json['status'];
+    id = json['id'] as int?;
+    title = json['title'] as String?;
+    description = json['description'] as String?;
+    status = json['status'] as int?;
     responsible = json['responsible'] != null
-        ? PortalUser.fromJson(json['responsible'])
+        ? PortalUser.fromJson(json['responsible'] as Map<String, dynamic>)
         : null;
-    canEdit = json['canEdit'];
-    isPrivate = json['isPrivate'];
+    canEdit = json['canEdit'] as bool?;
+    isPrivate = json['isPrivate'] as bool?;
   }
 
   Map<String, dynamic> toJson() {
@@ -69,7 +69,7 @@ class FollowProject {
     data['description'] = description;
     data['status'] = status;
     if (responsible != null) {
-      data['responsible'] = responsible.toJson();
+      data['responsible'] = responsible!.toJson();
     }
     data['canEdit'] = canEdit;
     data['isPrivate'] = isPrivate;

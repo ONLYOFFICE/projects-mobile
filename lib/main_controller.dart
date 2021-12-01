@@ -54,7 +54,7 @@ import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/no_internet_view.dart';
 
 class MainController extends GetxController {
-  final _secureStorage = locator<SecureStorage>();
+  final SecureStorage? _secureStorage = locator<SecureStorage>();
   // ignore: unnecessary_cast
   Rx<Widget> mainPage = (const SplashView() as Widget).obs;
 
@@ -98,7 +98,7 @@ class MainController extends GetxController {
       if (result == ConnectivityResult.none) {
         Get.to(const NoInternetScreen());
 
-        locator.get<CoreApi>().cancellationToken?.cancel();
+        locator.get<CoreApi>().cancellationToken.cancel();
       } else {
         GetIt.instance.resetLazySingleton<CoreApi>();
         if (isSessionStarted)
@@ -154,9 +154,9 @@ class MainController extends GetxController {
   }
 
   Future<bool> isAuthorized() async {
-    var expirationDate = await _secureStorage.getString('expires');
-    var token = await _secureStorage.getString('token');
-    var portalName = await _secureStorage.getString('portalName');
+    var expirationDate = await _secureStorage!.getString('expires');
+    var token = await _secureStorage!.getString('token');
+    var portalName = await _secureStorage!.getString('portalName');
 
     if (expirationDate == null ||
         expirationDate.isEmpty ||
@@ -177,9 +177,9 @@ class MainController extends GetxController {
   Future<void> logout() async {
     var storage = locator<Storage>();
 
-    await _secureStorage.delete('expires');
-    await _secureStorage.delete('portalName');
-    await _secureStorage.delete('token');
+    await _secureStorage!.delete('expires');
+    await _secureStorage!.delete('portalName');
+    await _secureStorage!.delete('token');
 
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');

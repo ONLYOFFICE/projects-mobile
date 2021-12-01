@@ -33,23 +33,26 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionSearchController extends BaseController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
 
-  var loaded = true.obs;
-  var nothingFound = false.obs;
+  RxBool loaded = true.obs;
+  RxBool nothingFound = false.obs;
 
-  String _query;
+  String? _query;
 
-  final PaginationController _paginationController = PaginationController();
-  PaginationController get paginationController => _paginationController;
+  final _paginationController = PaginationController<Discussion>();
+  PaginationController<Discussion> get paginationController =>
+      _paginationController;
 
-  var searchInputController = TextEditingController();
+  TextEditingController searchInputController = TextEditingController();
 
   @override
   RxList get itemList => _paginationController.data;
@@ -60,7 +63,7 @@ class DiscussionSearchController extends BaseController {
     paginationController.startIndex = 0;
     _paginationController.loadDelegate =
         () => _performSearch(needToClear: false);
-    paginationController.refreshDelegate = () => newSearch(_query);
+    paginationController.refreshDelegate = () => newSearch(_query!);
     super.onInit();
   }
 
@@ -81,18 +84,20 @@ class DiscussionSearchController extends BaseController {
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    var result = await _api.getDiscussionsByParams(
+    final result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       query: _query,
     );
 
-    paginationController.total.value = result.total;
+    if (result != null) {
+      paginationController.total.value = result.total;
 
-    if (result.response.isEmpty) nothingFound.value = true;
+      if (result.response!.isEmpty) nothingFound.value = true;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response);
+      paginationController.data.addAll(result.response ?? <Discussion>[]);
+    }
   }
 
   void clearSearch() {

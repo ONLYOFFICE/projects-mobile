@@ -46,8 +46,8 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 // update the status of the task immediately after clicking,
 // but you need to do it when saving changes
 Future<void> statusSelectionBS(
-    {context, TaskEditingController controller}) async {
-  var _statusesController = Get.find<TaskStatusesController>();
+    {required BuildContext context, TaskEditingController? controller}) async {
+  final _statusesController = Get.find<TaskStatusesController>();
 
   showCustomBottomSheet(
     context: context,
@@ -89,7 +89,7 @@ Future<void> statusSelectionBS(
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await controller
+                        await controller!
                             .changeStatus(_statusesController.statuses[i]);
                         Get.back();
                       },
@@ -100,7 +100,7 @@ Future<void> statusSelectionBS(
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].id ==
-                              controller.newStatus.value.id),
+                              controller!.newStatus.value!.id),
                     ),
                   const SizedBox(height: 16),
                 ],
@@ -113,7 +113,7 @@ Future<void> statusSelectionBS(
   );
 }
 
-double _getInititalSize({int statusCount}) {
+double _getInititalSize({required int statusCount}) {
   var size = (statusCount * 55 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

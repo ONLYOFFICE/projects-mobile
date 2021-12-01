@@ -32,9 +32,10 @@
 
 class CustomError {
   String message;
-  CustomError({this.message});
 
-  CustomError.fromJson(Map<String, dynamic> json) {
-    message = json['message'];
+  CustomError({required this.message});
+
+  factory CustomError.fromJson(Map<String, dynamic> json) {
+    return CustomError(message: json['message'] as String);
   }
 }

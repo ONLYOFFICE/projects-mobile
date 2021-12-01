@@ -52,10 +52,10 @@ class AccountUserController extends GetxController {
     if (accountData != null) setupUser();
   }
 
-  final AccountData accountData;
+  final AccountData? accountData;
 
-  String get name => accountData.displayName;
-  String get portal => accountData.portal;
+  String? get name => accountData!.displayName;
+  String? get portal => accountData!.portal;
 
   Rx<Uint8List> avatarData = Uint8List.fromList([]).obs;
 
@@ -67,12 +67,12 @@ class AccountUserController extends GetxController {
           color: Get.theme.colors().onSurface) as Widget)
       .obs;
 
-  String get displayName => accountData.displayName;
+  String? get displayName => accountData!.displayName;
 
   Future<void> loadAvatar() async {
     try {
       var avatarBytes =
-          await _downloadService.downloadImage(accountData?.avatar);
+          await _downloadService.downloadImage(accountData!.avatar!);
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;
@@ -86,16 +86,16 @@ class AccountUserController extends GetxController {
 
   void setupUser() {
     if (accountData?.portal != null) {
-      userTitle.value = accountData.portal;
+      userTitle.value = accountData!.portal!;
     }
     loadAvatar();
   }
 
   Future<void> loginToSavedAccount() async {
     Get.back();
-    await locator<SecureStorage>().putString('portalName', accountData.portal);
+    await locator<SecureStorage>().putString('portalName', accountData!.portal);
     await Get.find<LoginController>().saveLoginData(
-        token: accountData.accessToken, expires: accountData.expires);
+        token: accountData!.accessToken, expires: accountData!.expires);
 
     locator<EventHub>().fire('loginSuccess');
   }

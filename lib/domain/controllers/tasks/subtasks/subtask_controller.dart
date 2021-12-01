@@ -48,29 +48,30 @@ class SubtaskStatus {
 
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();
-  Rx<Subtask> subtask;
-  PortalTask parentTask;
+  late Rx<Subtask?> subtask;
+  PortalTask? parentTask;
   final _userController = Get.find<UserController>();
 
-  SubtaskController({Subtask subtask, this.parentTask}) {
+  SubtaskController({Subtask? subtask, this.parentTask}) {
     this.subtask = subtask.obs;
   }
 
   bool get canEdit =>
-      subtask.value.canEdit && parentTask.status != SubtaskStatus.CLOSED;
+      subtask.value!.canEdit! && parentTask!.status != SubtaskStatus.CLOSED;
   bool get canCreateSubtask =>
-      parentTask.canCreateSubtask && parentTask.status != SubtaskStatus.CLOSED;
+      parentTask!.canCreateSubtask! &&
+      parentTask!.status != SubtaskStatus.CLOSED;
 
   void acceptSubtask(
-    context, {
-    @required int taskId,
-    @required int subtaskId,
+    BuildContext context, {
+    required int taskId,
+    required int subtaskId,
   }) async {
     await _userController.getUserInfo();
-    var selfUser = _userController.user;
-    var data = {'responsible': selfUser.id, 'title': subtask.value.title};
+    final selfUser = _userController.user!;
+    final data = {'responsible': selfUser.id, 'title': subtask.value!.title};
 
-    var result = await _api.acceptSubtask(
+    final result = await _api.acceptSubtask(
         data: data, taskId: taskId, subtaskId: subtaskId);
 
     if (result != null) {
@@ -79,15 +80,15 @@ class SubtaskController extends GetxController {
         context: context,
         text: tr('subtaskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar,
       );
     }
   }
 
   void copySubtask(
-    context, {
-    @required int taskId,
-    @required int subtaskId,
+    BuildContext context, {
+    required int taskId,
+    required int subtaskId,
   }) async {
     var result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
@@ -97,9 +98,9 @@ class SubtaskController extends GetxController {
   }
 
   void deleteSubtask({
-    @required BuildContext context,
-    @required int taskId,
-    @required int subtaskId,
+    required BuildContext context,
+    required int taskId,
+    required int subtaskId,
     bool closePage = false,
   }) async {
     var result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
@@ -112,14 +113,14 @@ class SubtaskController extends GetxController {
   }
 
   void updateSubtaskStatus({
-    @required context,
-    @required int taskId,
-    @required int subtaskId,
+    required BuildContext context,
+    required int taskId,
+    required int subtaskId,
   }) async {
-    if (subtask.value.canEdit) {
+    if (subtask.value!.canEdit!) {
       var newStatus;
 
-      if (subtask.value.status == SubtaskStatus.OPEN)
+      if (subtask.value!.status == SubtaskStatus.OPEN)
         newStatus = 'closed';
       else
         newStatus = 'open';
@@ -137,11 +138,11 @@ class SubtaskController extends GetxController {
   }
 
   void deleteSubtaskResponsible({
-    @required int taskId,
-    @required int subtaskId,
+    required int taskId,
+    required int subtaskId,
   }) async {
-    if (subtask.value.canEdit) {
-      var data = {'title': subtask.value.title, 'responsible': null};
+    if (subtask.value!.canEdit!) {
+      var data = {'title': subtask.value!.title, 'responsible': null};
 
       var result = await _api.updateSubtask(
         data: data,

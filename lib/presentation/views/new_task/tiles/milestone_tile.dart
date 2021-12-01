@@ -44,8 +44,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class MilestoneTile extends StatelessWidget {
   final TaskActionsController controller;
   const MilestoneTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -53,10 +53,10 @@ class MilestoneTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isSelected = controller.selectedMilestoneTitle.value.isNotEmpty;
+        bool _isSelected = controller.selectedMilestoneTitle!.value.isNotEmpty;
         return NewItemTile(
             text: _isSelected
-                ? controller.selectedMilestoneTitle.value
+                ? controller.selectedMilestoneTitle!.value
                 : tr('none'),
             icon: SvgIcons.milestone,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),

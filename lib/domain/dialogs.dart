@@ -63,7 +63,7 @@ class ErrorDialog extends GetxController {
 
     dialogIsShown = true;
 
-    var error = queue.first;
+    final error = queue.first;
 
     await Get.dialog(
       WillPopScope(
@@ -98,7 +98,7 @@ class ErrorDialog extends GetxController {
   void addToQueue(String message) {
     queue.add(message);
 
-    var list = queue.toSet().toList();
+    final list = queue.toSet().toList();
 
     queue.clear();
     queue.addAll(list);
@@ -117,7 +117,7 @@ Map _blockingErrors = {
       'Contact the portal administrator for access to the Projects module.',
 };
 
-Map _customErrors = {
+Map<String, String> _customErrors = {
   'User authentication failed': tr('authenticationFailed'),
   'No address associated with hostname': tr('noAdress'),
 };

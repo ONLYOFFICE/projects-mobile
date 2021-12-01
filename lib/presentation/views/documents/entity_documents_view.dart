@@ -51,18 +51,21 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 
 class EntityDocumentsView extends StatelessWidget {
-  final String folderName;
-  final int folderId;
+  final String? folderName;
+  final int? folderId;
   final DocumentsController documentsController;
 
-  EntityDocumentsView(
-      {Key key, this.folderName, this.folderId, this.documentsController})
+  const EntityDocumentsView(
+      {Key? key,
+      this.folderName,
+      this.folderId,
+      required this.documentsController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
     scrollController.addListener(
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
@@ -74,7 +77,7 @@ class EntityDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 50),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             title: _DocsTitle(controller: documentsController),
             showBackButton: false,
             titleHeight: 50,
@@ -87,12 +90,15 @@ class EntityDocumentsView extends StatelessWidget {
 }
 
 class TaskDocumentsView extends StatelessWidget {
-  final String folderName;
-  final int folderId;
+  final String? folderName;
+  final int? folderId;
   final DocumentsController documentsController;
 
   TaskDocumentsView(
-      {Key key, this.folderName, this.folderId, this.documentsController})
+      {Key? key,
+      this.folderName,
+      this.folderId,
+      required this.documentsController})
       : super(key: key);
 
   @override
@@ -110,7 +116,7 @@ class TaskDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 0),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             showBackButton: false,
             titleHeight: 0,
             elevation: value,
@@ -122,8 +128,8 @@ class TaskDocumentsView extends StatelessWidget {
 }
 
 class DiscussionsDocumentsView extends StatelessWidget {
-  final List<PortalFile> files;
-  DiscussionsDocumentsView({Key key, this.files}) : super(key: key);
+  final List<PortalFile>? files;
+  DiscussionsDocumentsView({Key? key, this.files}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -139,12 +145,12 @@ class DiscussionsDocumentsView extends StatelessWidget {
     return Obx(
       () {
         if (discussionController.loaded.value == true) {
-          documentsController.setupFiles(files);
+          documentsController.setupFiles(files!);
           return PreferredSize(
             preferredSize: const Size(double.infinity, 101),
             child: ValueListenableBuilder(
               valueListenable: elevation,
-              builder: (_, value, __) => DocumentsScreen(
+              builder: (_, double value, __) => DocumentsScreen(
                 controller: documentsController,
                 scrollController: scrollController,
                 appBar: StyledAppBar(
@@ -164,8 +170,8 @@ class DiscussionsDocumentsView extends StatelessWidget {
 }
 
 class _DocsTitle extends StatelessWidget {
-  const _DocsTitle({Key key, @required this.controller}) : super(key: key);
-  final controller;
+  const _DocsTitle({Key? key, required this.controller}) : super(key: key);
+  final DocumentsController controller;
   @override
   Widget build(BuildContext context) {
     var sortButton = Container(
@@ -181,7 +187,7 @@ class _DocsTitle extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                controller.sortController.currentSortTitle.value,
+                controller.sortController.currentSortTitle.value as String,
                 style: TextStyleHelper.projectsSorting
                     .copyWith(color: Get.theme.colors().primary),
               ),
@@ -213,7 +219,7 @@ class _DocsTitle extends StatelessWidget {
 
     return Obx(
       () => Visibility(
-        visible: controller.itemList.isNotEmpty ||
+        visible: controller.itemList.isNotEmpty as bool ||
             controller.filterController.hasFilters.value == true,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),

@@ -33,6 +33,7 @@
 import 'dart:convert';
 
 import 'package:accountmanager/accountmanager.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -46,45 +47,40 @@ class AccountManagerController extends GetxController {
   static const tokenType = 'com.onlyoffice.auth';
   static const key = 'account_data';
 
-  List<AccountData> accounts;
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
+  List<AccountData> accounts = <AccountData>[];
 
   Future setup() async {
     accounts = await fetchAccounts();
 
     if (accounts.isNotEmpty) {
       await showBarModalBottomSheet(
-        context: Get.context,
-        builder: (context) => const AccountManagerView(),
+        context: Get.context!,
+        builder: (context) => AccountManagerView(),
       );
     }
   }
 
-  Future<void> addAccount({String tokenString, String expires}) async {
+  Future<void> addAccount({String? tokenString, String? expires}) async {
     if (await Permission.contacts.request().isGranted) {
       try {
-        var portalInfo = Get.find<PortalInfoController>();
+        final portalInfo = Get.find<PortalInfoController>();
         await portalInfo.setup();
 
-        var account =
-            Account(name: portalInfo.portalName, accountType: accountType);
+        final account =
+            Account(name: portalInfo.portalName!, accountType: accountType);
 
         if (await AccountManager.addAccount(account)) {
-          var accessToken =
-              AccessToken(tokenType: tokenType, token: tokenString);
+          final accessToken =
+              AccessToken(tokenType: tokenType, token: tokenString!);
 
           await AccountManager.setAccessToken(account, accessToken);
 
           await Get.find<UserController>().getUserInfo();
 
-          var user = Get.find<UserController>().user;
-          var data = AccountData(
+          final user = Get.find<UserController>().user;
+          final data = AccountData(
               portal: Get.find<PortalInfoController>().portalName,
-              email: user.email,
+              email: user!.email,
               expires: expires,
               displayName: user.displayName,
               avatar: user.avatar);
@@ -92,32 +88,33 @@ class AccountManagerController extends GetxController {
               account, key, json.encode(data.toJson()));
         }
       } catch (e, s) {
-        print(e);
-        print(s);
+        debugPrint(e.toString());
+        debugPrint(s.toString());
       }
     }
   }
 
   Future<List<AccountData>> fetchAccounts() async {
-    var accountsList = <AccountData>[];
+    final accountsList = <AccountData>[];
     if (await Permission.contacts.request().isGranted) {
       try {
-        var accounts = await AccountManager.getAccounts();
+        final accounts = await AccountManager.getAccounts();
 
-        for (var account in accounts) {
+        for (final account in accounts) {
           if (account.accountType == accountType) {
-            var value = await AccountManager.getUserData(account, key);
-            var accountData = AccountData.fromJson(json.decode(value));
-            var accesstoken =
+            final value = await AccountManager.getUserData(account, key);
+            final accountData = AccountData.fromJson(
+                json.decode(value!) as Map<String, dynamic>);
+            final accesstoken =
                 await AccountManager.getAccessToken(account, tokenType);
-            accountData.accessToken = accesstoken.token;
+            accountData.accessToken = accesstoken?.token;
 
             accountsList.add(accountData);
           }
         }
       } catch (e, s) {
-        print(e);
-        print(s);
+        debugPrint(e.toString());
+        debugPrint(s.toString());
       }
     }
     return accountsList;

@@ -34,35 +34,35 @@ import 'package:projects/data/models/from_api/contact.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 
 class SelfUserProfile {
-  String id;
-  String userName;
-  bool isVisitor;
-  String firstName;
-  String lastName;
-  String email;
-  String birthday;
-  String sex;
-  int status;
-  int activationStatus;
-  bool terminated;
-  String department;
-  String workFrom;
-  String location;
-  String notes;
-  String displayName;
-  String title;
-  List<Contact> contacts;
-  List<PortalGroup> groups;
-  String avatarMedium;
-  String avatar;
-  bool isAdmin;
-  bool isLDAP;
-  List<String> listAdminModules;
-  bool isOwner;
-  String cultureName;
-  bool isSSO;
-  String avatarSmall;
-  String profileUrl;
+  String? id;
+  String? userName;
+  bool? isVisitor;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? birthday;
+  String? sex;
+  int? status;
+  int? activationStatus;
+  bool? terminated;
+  String? department;
+  String? workFrom;
+  String? location;
+  String? notes;
+  String? displayName;
+  String? title;
+  List<Contact>? contacts;
+  List<PortalGroup>? groups;
+  String? avatarMedium;
+  String? avatar;
+  bool? isAdmin;
+  bool? isLDAP;
+  List<String>? listAdminModules;
+  bool? isOwner;
+  String? cultureName;
+  bool? isSSO;
+  String? avatarSmall;
+  String? profileUrl;
 
   SelfUserProfile(
       {this.id,
@@ -96,45 +96,45 @@ class SelfUserProfile {
       this.profileUrl});
 
   SelfUserProfile.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    userName = json['userName'];
-    isVisitor = json['isVisitor'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    birthday = json['birthday'];
-    sex = json['sex'];
-    status = json['status'];
-    activationStatus = json['activationStatus'];
-    terminated = json['terminated'];
-    department = json['department'];
-    workFrom = json['workFrom'];
-    location = json['location'];
-    notes = json['notes'];
-    displayName = json['displayName'];
-    title = json['title'];
+    id = json['id'] as String?;
+    userName = json['userName'] as String?;
+    isVisitor = json['isVisitor'] as bool?;
+    firstName = json['firstName'] as String?;
+    lastName = json['lastName'] as String?;
+    email = json['email'] as String?;
+    birthday = json['birthday'] as String?;
+    sex = json['sex'] as String?;
+    status = json['status'] as int?;
+    activationStatus = json['activationStatus'] as int?;
+    terminated = json['terminated'] as bool?;
+    department = json['department'] as String?;
+    workFrom = json['workFrom'] as String?;
+    location = json['location'] as String?;
+    notes = json['notes'] as String?;
+    displayName = json['displayName'] as String?;
+    title = json['title'] as String?;
     if (json['contacts'] != null) {
       contacts = <Contact>[];
-      json['contacts'].forEach((v) {
-        contacts.add(Contact.fromJson(v));
+      ((json['contacts'] as List).cast<Map<String, dynamic>>()).forEach((v) {
+        contacts!.add(Contact.fromJson(v));
       });
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
-      json['groups'].forEach((v) {
-        groups.add(PortalGroup.fromJson(v));
+      ((json['groups'] as List).cast<Map<String, dynamic>>()).forEach((v) {
+        groups!.add(PortalGroup.fromJson(v));
       });
     }
-    avatarMedium = json['avatarMedium'];
-    avatar = json['avatar'];
-    isAdmin = json['isAdmin'];
-    isLDAP = json['isLDAP'];
+    avatarMedium = json['avatarMedium'] as String?;
+    avatar = json['avatar'] as String?;
+    isAdmin = json['isAdmin'] as bool?;
+    isLDAP = json['isLDAP'] as bool?;
 
-    isOwner = json['isOwner'];
-    cultureName = json['cultureName'];
-    isSSO = json['isSSO'];
-    avatarSmall = json['avatarSmall'];
-    profileUrl = json['profileUrl'];
+    isOwner = json['isOwner'] as bool?;
+    cultureName = json['cultureName'] as String?;
+    isSSO = json['isSSO'] as bool?;
+    avatarSmall = json['avatarSmall'] as String?;
+    profileUrl = json['profileUrl'] as String?;
   }
 
   Map<String, dynamic> toJson() {
@@ -157,10 +157,10 @@ class SelfUserProfile {
     data['displayName'] = displayName;
     data['title'] = title;
     if (contacts != null) {
-      data['contacts'] = contacts.map((v) => v.toJson()).toList();
+      data['contacts'] = contacts!.map((v) => v.toJson()).toList();
     }
     if (groups != null) {
-      data['groups'] = groups.map((v) => v.toJson()).toList();
+      data['groups'] = groups!.map((v) => v.toJson()).toList();
     }
     data['avatarMedium'] = avatarMedium;
     data['avatar'] = avatar;

@@ -35,6 +35,7 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
@@ -49,45 +50,44 @@ import 'package:projects/presentation/views/projects_view/new_project/new_projec
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 
 class ProjectsController extends BaseController {
-  final _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
 
-  var loaded = false.obs;
+  RxBool loaded = false.obs;
 
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
-  PaginationController _paginationController;
-
-  PresetProjectFilters _preset;
-
-  PaginationController get paginationController => _paginationController;
-
+  late PaginationController<ProjectDetailed> _paginationController;
+  PaginationController<ProjectDetailed> get paginationController =>
+      _paginationController;
   @override
   RxList get itemList => _paginationController.data;
+
+  PresetProjectFilters? _preset;
 
   final _sortController = Get.find<ProjectsSortController>();
   ProjectsSortController get sortController => _sortController;
 
-  ProjectsFilterController _filterController;
-  ProjectsFilterController get filterController => _filterController;
+  ProjectsFilterController? _filterController;
+  ProjectsFilterController? get filterController => _filterController;
 
   final _userController = Get.find<UserController>();
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   var _withFAB = true;
 
-  StreamSubscription fabSubscription;
-  StreamSubscription refreshSubscription;
+  StreamSubscription? fabSubscription;
+  StreamSubscription? refreshSubscription;
 
   ProjectsController(
     ProjectsFilterController filterController,
-    PaginationController paginationController,
+    PaginationController<ProjectDetailed> paginationController,
   ) {
     screenName = tr('projects');
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;
-    _filterController.applyFiltersDelegate = () async => await loadProjects();
+    _filterController!.applyFiltersDelegate = () async => await loadProjects();
 
     paginationController.loadDelegate = () async => await _getProjects();
     paginationController.refreshDelegate = () async => await refreshData();
@@ -104,7 +104,7 @@ class ProjectsController extends BaseController {
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
     fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged',
         (dynamic data) async {
-      fabIsVisible.value = data ? false : await getFabVisibility();
+      fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
   }
 
@@ -112,17 +112,17 @@ class ProjectsController extends BaseController {
     if (!_withFAB) return false;
     await _userController.getUserInfo();
     await _userController.getSecurityInfo();
-    return _userController.user.isAdmin ||
-        _userController.user.isOwner ||
-        (_userController.user.listAdminModules != null &&
-            _userController.user.listAdminModules.contains('projects')) ||
-        _userController.securityInfo.canCreateProject;
+    return _userController.user!.isAdmin! ||
+        _userController.user!.isOwner! ||
+        (_userController.user!.listAdminModules != null &&
+            _userController.user!.listAdminModules!.contains('projects')) ||
+        _userController.securityInfo!.canCreateProject!;
   }
 
   @override
   void onClose() {
-    fabSubscription.cancel();
-    refreshSubscription.cancel();
+    fabSubscription!.cancel();
+    refreshSubscription!.cancel();
     super.onClose();
   }
 
@@ -141,7 +141,7 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  void setup(PresetProjectFilters preset, {withFAB = true}) {
+  void setup(PresetProjectFilters preset, {bool withFAB = true}) {
     _preset = preset;
     _withFAB = withFAB;
   }
@@ -150,7 +150,7 @@ class ProjectsController extends BaseController {
     loaded.value = false;
     paginationController.startIndex = 0;
     if (_preset != null) {
-      await _filterController
+      await _filterController!
           .setupPreset(_preset)
           .then((value) => _getProjects(needToClear: true));
     } else {
@@ -159,27 +159,31 @@ class ProjectsController extends BaseController {
     loaded.value = true;
   }
 
-  Future _getProjects({needToClear = false}) async {
-    var result = await _api.getProjectsByParams(
+  Future<void> _getProjects({bool needToClear = false}) async {
+    final result = await _api.getProjectsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectManagerFilter: _filterController.projectManagerFilter,
-      participantFilter: _filterController.teamMemberFilter,
-      otherFilter: _filterController.otherFilter,
-      statusFilter: _filterController.statusFilter,
+      projectManagerFilter: _filterController!.projectManagerFilter,
+      participantFilter: _filterController!.teamMemberFilter,
+      otherFilter: _filterController!.otherFilter,
+      statusFilter: _filterController!.statusFilter,
     );
     if (needToClear) paginationController.data.clear();
     if (result == null) return;
 
     paginationController.total.value = result.total;
-    paginationController.data.addAll(result.response);
+    paginationController.data.addAll(result.response ?? <ProjectDetailed>[]);
     expandedCardView.value = paginationController.data.isNotEmpty;
   }
 
   Future getProjectTags() async {
     loaded.value = false;
-    tags.value = await _api.getProjectTags();
+
+    final result = await _api.getProjectTags();
+    if (result != null) {
+      tags.value = result;
+    }
     loaded.value = true;
   }
 

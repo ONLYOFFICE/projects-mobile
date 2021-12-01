@@ -34,7 +34,7 @@ part of '../tasks_filter.dart';
 
 class _DueDate extends StatelessWidget {
   final BaseTaskFilterController filterController;
-  const _DueDate({Key key, this.filterController}) : super(key: key);
+  const _DueDate({Key? key, required this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,34 +45,38 @@ class _DueDate extends StatelessWidget {
           FilterElement(
               title: tr('overdue'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.deadline['overdue'],
+              isSelected: filterController.deadline['overdue'] as bool?,
               onTap: () => filterController.changeDeadline('overdue')),
           FilterElement(
               title: tr('today'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.deadline['today'],
+              isSelected: filterController.deadline['today'] as bool?,
               onTap: () => filterController.changeDeadline('today')),
           FilterElement(
               title: tr('upcoming'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.deadline['upcoming'],
+              isSelected: filterController.deadline['upcoming'] as bool?,
               onTap: () => filterController.changeDeadline('upcoming')),
           FilterElement(
               title: tr('customPeriod'),
-              isSelected: filterController.deadline['custom']['selected'],
+              isSelected:
+                  filterController.deadline['custom']['selected'] as bool?,
               onTap: () async {
                 var pickedRange =
                     await Get.find<NavigationController>().toScreen(
                   StyledDateRangePickerDialog(
                     initialDateRange: DateTimeRange(
-                      start: filterController.deadline['custom']['startDate'],
-                      end: filterController.deadline['custom']['stopDate'],
+                      start: filterController.deadline['custom']['startDate']
+                          as DateTime,
+                      end: filterController.deadline['custom']['stopDate']
+                          as DateTime,
                     ),
                   ),
                 );
                 if (pickedRange != null) {
-                  await filterController.changeDeadline('custom',
-                      start: pickedRange.start, stop: pickedRange.end);
+                  filterController.changeDeadline('custom',
+                      start: pickedRange.start as DateTime,
+                      stop: pickedRange.end as DateTime);
                 }
               }),
         ],

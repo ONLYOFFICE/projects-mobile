@@ -52,13 +52,13 @@ part 'filters/author.dart';
 
 class DocumentsFilterScreen extends StatelessWidget {
   const DocumentsFilterScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final DocumentsFilterController filterController =
-        Get.arguments['filterController'];
+    final filterController =
+        Get.arguments['filterController'] as DocumentsFilterController;
 
     final platformController = Get.find<PlatformController>();
 

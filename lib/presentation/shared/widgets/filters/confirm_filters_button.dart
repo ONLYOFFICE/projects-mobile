@@ -39,11 +39,11 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class ConfirmFiltersButton extends StatelessWidget {
   const ConfirmFiltersButton({
-    Key key,
-    @required this.filterController,
+    Key? key,
+    required this.filterController,
   }) : super(key: key);
 
-  final BaseFilterController filterController;
+  final BaseFilterController? filterController;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,7 @@ class ConfirmFiltersButton extends StatelessWidget {
           width: 280,
           child: TextButton(
             onPressed: () async {
-              filterController.applyFilters();
+              filterController!.applyFilters();
               Get.back();
             },
             style: ButtonStyle(
@@ -67,7 +67,7 @@ class ConfirmFiltersButton extends StatelessWidget {
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               ),
             ),
-            child: Text(filterController.filtersTitle,
+            child: Text(filterController!.filtersTitle,
                 textAlign: TextAlign.center,
                 // tr('filterConfirmButton', args: [
                 //   filterController.suitableResultCount.value.toString(),

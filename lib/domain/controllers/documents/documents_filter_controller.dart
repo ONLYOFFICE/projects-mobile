@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -39,11 +40,11 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DocumentsFilterController extends BaseFilterController {
-  final _api = locator<FilesService>();
-  final _storage = locator<Storage>();
+  final FilesService _api = locator<FilesService>();
+  final Storage _storage = locator<Storage>();
 
-  Function applyFiltersDelegate;
-  String entityType;
+  Function? applyFiltersDelegate;
+  String? entityType;
 
   String _typeFilter = '';
   String _authorFilter = '';
@@ -53,21 +54,24 @@ class DocumentsFilterController extends BaseFilterController {
   String _currentAppliedAuthorFilter = '';
   String _currentAppliedSearchSettingsFilter = '';
 
-  RxMap contentTypes;
-  RxMap searchSettings;
-  RxMap author;
+  late RxMap contentTypes;
+  late RxMap searchSettings;
+  late RxMap author;
 
-  Map _currentAppliedContentTypes;
-  Map _currentAppliedSearchSettings;
-  Map _currentApplieddAuthor;
+  late Map _currentAppliedContentTypes;
+  late Map _currentAppliedSearchSettings;
+  late Map _currentAppliedAuthor;
 
   String get typeFilter => _typeFilter;
+
   String get authorFilter => _authorFilter;
+
   String get searchSettingsFilter => _searchSettingsFilter;
 
   var _selfId;
-  int _folderId;
-  set folderId(int value) => _folderId = value;
+  int? _folderId;
+
+  set folderId(int? value) => _folderId = value;
 
   bool get _hasFilters => _typeFilter.isNotEmpty || _authorFilter.isNotEmpty;
 
@@ -93,12 +97,13 @@ class DocumentsFilterController extends BaseFilterController {
 
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
 
 // _getSavedFilters();
   }
 
-  Future<void> changeAuthorFilter(String filter, [newValue = '']) async {
+  Future<void> changeAuthorFilter(String filter,
+      [dynamic newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
     _authorFilter = '';
 
@@ -107,8 +112,8 @@ class DocumentsFilterController extends BaseFilterController {
         author['other'] = '';
         author['groups'] = '';
         author['no'] = false;
-        author['me'] = !author['me'];
-        if (author['me']) _authorFilter = '&userIdOrGroupId=$_selfId';
+        author['me'] = !(author['me'] as bool);
+        if (author['me'] as bool) _authorFilter = '&userIdOrGroupId=$_selfId';
         break;
       case 'users':
         author['me'] = false;
@@ -136,25 +141,25 @@ class DocumentsFilterController extends BaseFilterController {
         author['me'] = false;
         author['other'] = '';
         author['groups'] = '';
-        author['no'] = !author['no'];
-        if (author['no']) {
+        author['no'] = !(author['no'] as bool);
+        if (author['no'] as bool) {
           _authorFilter =
               '&userIdOrGroupId=00000000-0000-0000-0000-000000000000';
         }
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> changeSearchSettingsFilter(String filter) async {
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> changeContentTypeFilter(String filter) async {
     _typeFilter = '';
 
-    var newValue = !contentTypes[filter];
+    final newValue = !(contentTypes[filter] as bool);
 
     contentTypes.forEach((key, value) {
       contentTypes[key] = false;
@@ -164,62 +169,71 @@ class DocumentsFilterController extends BaseFilterController {
 
     switch (filter) {
       case 'folders':
-        if (contentTypes['folders']) _typeFilter = '&filterType=FoldersOnly';
+        if (contentTypes['folders'] as bool)
+          _typeFilter = '&filterType=FoldersOnly';
         break;
 
       case 'documents':
-        if (contentTypes['documents'])
+        if (contentTypes['documents'] as bool) {
           _typeFilter = '&filterType=DocumentsOnly';
+        }
         break;
 
       case 'presentations':
-        if (contentTypes['presentations'])
+        if (contentTypes['presentations'] as bool) {
           _typeFilter = '&filterType=PresentationsOnly';
+        }
         break;
 
       case 'images':
-        if (contentTypes['images']) _typeFilter = '&filterType=ImagesOnly';
+        if (contentTypes['images'] as bool)
+          _typeFilter = '&filterType=ImagesOnly';
         break;
 
       case 'spreadsheets':
-        if (contentTypes['spreadsheets'])
+        if (contentTypes['spreadsheets'] as bool) {
           _typeFilter = '&filterType=SpreadsheetsOnly';
+        }
         break;
 
       case 'media':
-        if (contentTypes['media']) _typeFilter = '&filterType=MediaOnly';
+        if (contentTypes['media'] as bool)
+          _typeFilter = '&filterType=MediaOnly';
         break;
 
       case 'archives':
-        if (contentTypes['archives']) _typeFilter = '&filterType=ArchiveOnly';
+        if (contentTypes['archives'] as bool)
+          _typeFilter = '&filterType=ArchiveOnly';
         break;
 
       case 'allFiles':
-        if (contentTypes['allFiles']) _typeFilter = '&filterType=None';
+        if (contentTypes['allFiles'] as bool) _typeFilter = '&filterType=None';
         break;
 
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.getFilesByParams(
+    final result = await _api.getFilesByParams(
       folderId: _folderId,
       typeFilter: typeFilter,
       authorFilter: authorFilter,
       entityType: entityType,
     );
 
-    suitableResultCount.value = result.count;
+    if (result != null) {
+      suitableResultCount.value = result.count!;
+    }
   }
 
   @override
-  void resetFilters() async {
+  Future<void> resetFilters() async {
     contentTypes['folders'] = false;
     contentTypes['documents'] = false;
     contentTypes['presentations'] = false;
@@ -241,18 +255,18 @@ class DocumentsFilterController extends BaseFilterController {
     _authorFilter = '';
     _searchSettingsFilter = '';
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void applyFilters() async {
+  Future<void> applyFilters() async {
     hasFilters.value = _hasFilters;
 
     _updateFilterState();
 
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    if (applyFiltersDelegate != null) applyFiltersDelegate!();
   }
 
   // UNUSED
@@ -292,7 +306,7 @@ class DocumentsFilterController extends BaseFilterController {
       'no': false,
     }.obs;
 
-    _currentApplieddAuthor = Map.from(author);
+    _currentAppliedAuthor = Map.from(author);
     _currentAppliedContentTypes = Map.from(contentTypes);
     _currentAppliedSearchSettings = Map.from(searchSettings);
 
@@ -302,24 +316,27 @@ class DocumentsFilterController extends BaseFilterController {
   // UNUSED
   // ignore: unused_element
   Future<void> _getSavedFilters() async {
-    var savedFilters = await _storage.read('documentFilters');
+    final savedFilters = await _storage.read('documentFilters');
 
     if (savedFilters != null) {
       try {
         contentTypes = Map.from(
-          savedFilters['contentTypes']['buttons'],
+          savedFilters['contentTypes']['buttons'] as Map<String, dynamic>,
         ).obs;
-        _typeFilter = savedFilters['contentTypes']['value'];
+        _typeFilter = savedFilters['contentTypes']['value'] as String;
 
         searchSettings = Map.from(
-          savedFilters['searchSettings']['buttons'],
+          savedFilters['searchSettings']['buttons'] as Map<String, dynamic>,
         ).obs;
-        _searchSettingsFilter = savedFilters['searchSettings']['value'];
+        _searchSettingsFilter =
+            savedFilters['searchSettings']['value'] as String;
 
-        author = Map.from(savedFilters['author']['buttons']).obs;
-        _authorFilter = savedFilters['author']['value'];
+        author =
+            Map.from(savedFilters['author']['buttons'] as Map<String, dynamic>)
+                .obs;
+        _authorFilter = savedFilters['author']['value'] as String;
 
-        hasFilters.value = savedFilters['hasFilters'];
+        hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
         print(e);
         await loadFilters();
@@ -330,7 +347,7 @@ class DocumentsFilterController extends BaseFilterController {
   }
 
   void _updateFilterState() {
-    _currentApplieddAuthor = Map.from(author);
+    _currentAppliedAuthor = Map.from(author);
     _currentAppliedContentTypes = Map.from(contentTypes);
     _currentAppliedSearchSettings = Map.from(searchSettings);
 
@@ -341,7 +358,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   void _restoreFilterState() {
     contentTypes = RxMap.from(_currentAppliedContentTypes);
-    author = RxMap.from(_currentApplieddAuthor);
+    author = RxMap.from(_currentAppliedAuthor);
     searchSettings = RxMap.from(_currentAppliedSearchSettings);
 
     _typeFilter = _currentAppliedTypeFilter;

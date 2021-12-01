@@ -87,7 +87,7 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value &&
+          if (controller.loaded.value as bool &&
               searchController.textController.text.isEmpty) return itemList;
 
           if (searchController.hasResult) return searchResult;
@@ -125,7 +125,7 @@ mixin SelectItemMixin on StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value) return itemList;
+          if (controller.loaded.value as bool) return itemList;
           return const ListLoadingSkeleton();
         },
       ),
@@ -135,6 +135,7 @@ mixin SelectItemMixin on StatelessWidget {
 
 mixin SelectItemListMixin on StatelessWidget {
   PaginationController get paginationController;
+
   Widget Function(BuildContext context, int index) get itemBuilder;
 
   @override
@@ -160,12 +161,12 @@ mixin SelectItemListMixin on StatelessWidget {
 
 class SelectItemTile extends StatelessWidget {
   const SelectItemTile({
-    Key key,
-    @required this.title,
-    @required this.onSelect,
+    Key? key,
+    required this.title,
+    required this.onSelect,
   }) : super(key: key);
 
-  final String title;
+  final String? title;
   final VoidCallback onSelect;
 
   @override
@@ -184,7 +185,7 @@ class SelectItemTile extends StatelessWidget {
               children: [
                 Flexible(
                   child: Text(
-                    title,
+                    title!,
                     style: TextStyleHelper.projectTitle,
                   ),
                 ),

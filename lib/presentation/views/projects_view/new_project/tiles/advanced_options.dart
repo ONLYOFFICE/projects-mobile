@@ -39,11 +39,11 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class AdvancedOptions extends StatelessWidget {
-  final options;
+  final List<Widget> options;
 
   const AdvancedOptions({
-    Key key,
-    @required this.options,
+    Key? key,
+    required this.options,
   }) : super(key: key);
 
   @override
@@ -103,14 +103,14 @@ class AdvancedOptions extends StatelessWidget {
 
 class OptionWithSwitch extends StatelessWidget {
   const OptionWithSwitch({
-    Key key,
-    @required this.title,
-    @required this.switchOnChanged,
-    @required this.switchValue,
+    Key? key,
+    required this.title,
+    required this.switchOnChanged,
+    required this.switchValue,
   }) : super(key: key);
 
   final RxBool switchValue;
-  final Function switchOnChanged;
+  final Function? switchOnChanged;
   final String title;
 
   @override
@@ -146,7 +146,7 @@ class OptionWithSwitch extends StatelessWidget {
               Obx(
                 () => Switch(
                   value: switchValue.value,
-                  onChanged: switchOnChanged,
+                  onChanged: switchOnChanged as void Function(bool)?,
                   activeTrackColor:
                       Get.theme.colors().primary.withOpacity(0.54),
                   activeColor: Get.theme.colors().primary,

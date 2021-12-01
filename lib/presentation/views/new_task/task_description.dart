@@ -39,7 +39,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class TaskDescription extends StatelessWidget {
-  const TaskDescription({Key key}) : super(key: key);
+  const TaskDescription({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +75,8 @@ class TaskDescription extends StatelessWidget {
         body: Padding(
           padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
           child: TextField(
-            controller: controller.descriptionController.value,
+            controller:
+                controller.descriptionController.value as TextEditingController,
             autofocus: true,
             maxLines: null,
             style:

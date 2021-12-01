@@ -42,23 +42,16 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class CodeView extends StatefulWidget {
-  CodeView({Key key}) : super(key: key);
+  CodeView({Key? key}) : super(key: key);
 
   @override
   _CodeViewState createState() => _CodeViewState();
 }
 
 class _CodeViewState extends State<CodeView> {
-  var controller;
-
-  var codeController;
-
-  @override
-  void initState() {
-    controller = Get.find<LoginController>();
-    codeController = TextEditingController();
-    super.initState();
-  }
+  // TODO make Stateless?
+  LoginController controller = Get.find<LoginController>();
+  TextEditingController codeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

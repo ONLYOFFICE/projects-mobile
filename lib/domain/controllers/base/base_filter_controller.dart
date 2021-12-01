@@ -33,9 +33,9 @@
 import 'package:get/get.dart';
 
 abstract class BaseFilterController extends GetxController {
-  RxInt suitableResultCount;
+  late RxInt suitableResultCount;
 
-  String filtersTitle;
+  late String filtersTitle;
 
   RxBool hasFilters = false.obs;
 
@@ -54,9 +54,9 @@ abstract class BaseFilterController extends GetxController {
     return map;
   }
 
-  Map stringsToDateTime(Map map, List keysToConvert) {
-    for (var item in keysToConvert) {
-      map[item] = DateTime.parse(map[item]);
+  Map? stringsToDateTime(Map? map, List keysToConvert) {
+    for (final item in keysToConvert) {
+      map![item] = DateTime.parse(map[item] as String);
     }
     return map;
   }

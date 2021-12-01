@@ -51,11 +51,11 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 
 class ProjectCell extends StatelessWidget {
   final ProjectDetailed item;
-  const ProjectCell({Key key, this.item}) : super(key: key);
+  const ProjectCell({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var itemController = Get.find<ProjectCellController>();
+    final itemController = Get.find<ProjectCellController>();
     itemController.setup(item);
 
     return Container(
@@ -66,13 +66,14 @@ class ProjectCell extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            item.canEdit
-                ? InkWell(
-                    onTap: () async => showsStatusesBS(
-                        context: context, itemController: itemController),
-                    child: ProjectIcon(itemController: itemController),
-                  )
-                : ProjectIcon(itemController: itemController),
+            if (item.canEdit!)
+              InkWell(
+                onTap: () async => showsStatusesBS(
+                    context: context, itemController: itemController),
+                child: ProjectIcon(itemController: itemController),
+              )
+            else
+              ProjectIcon(itemController: itemController),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -105,8 +106,8 @@ class ProjectCell extends StatelessWidget {
 
 class ProjectIcon extends StatelessWidget {
   const ProjectIcon({
-    Key key,
-    @required this.itemController,
+    Key? key,
+    required this.itemController,
   }) : super(key: key);
 
   final ProjectCellController itemController;
@@ -172,13 +173,13 @@ class ProjectIcon extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  final ProjectDetailed item;
+  final ProjectDetailed? item;
   final ProjectCellController itemController;
 
   const _Content({
-    Key key,
-    @required this.item,
-    @required this.itemController,
+    Key? key,
+    required this.item,
+    required this.itemController,
   }) : super(key: key);
 
   @override
@@ -192,7 +193,7 @@ class _Content extends StatelessWidget {
         children: <Widget>[
           Obx(
             () {
-              var style;
+              TextStyle style;
               if (itemController.status.value == 1) {
                 style = TextStyleHelper.projectTitle.copyWith(
                     decoration: TextDecoration.lineThrough,
@@ -204,7 +205,7 @@ class _Content extends StatelessWidget {
                 style = TextStyleHelper.projectTitle;
               }
               return CellAtributedTitle(
-                text: item.title,
+                text: item!.title,
                 style: style,
                 atributeIcon: AppIcon(icon: SvgIcons.lock),
                 atributeIconVisible: itemController.isPrivate.value == true,
@@ -226,7 +227,7 @@ class _Content extends StatelessWidget {
                   style: TextStyleHelper.caption(
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
-                child: Text(NameFormatter.formateName(item.responsible),
+                child: Text(NameFormatter.formateName(item!.responsible!)!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
@@ -242,12 +243,12 @@ class _Content extends StatelessWidget {
 
 class _Suffix extends StatelessWidget {
   const _Suffix({
-    Key key,
-    @required this.item,
-    @required this.controller,
+    Key? key,
+    required this.item,
+    required this.controller,
   }) : super(key: key);
 
-  final ProjectDetailed item;
+  final ProjectDetailed? item;
   final ProjectCellController controller;
 
   @override
@@ -264,7 +265,7 @@ class _Suffix extends StatelessWidget {
                 color: Get.theme.colors().onSurface),
             const SizedBox(width: 3),
             Text(
-              item.taskCount.toString(),
+              item!.taskCount.toString(),
               style: TextStyleHelper.projectCompleatedTasks.copyWith(
                 color: Get.theme.colors().onSurface.withOpacity(0.6),
               ),
@@ -277,7 +278,8 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS({context, itemController}) async {
+void showsStatusesBS(
+    {required BuildContext context, dynamic itemController}) async {
   var _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,
@@ -320,9 +322,9 @@ void showsStatusesBS({context, itemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        var success = await itemController.updateStatus(
+                        final success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
-                        );
+                        ) as bool;
                         if (success) {
                           locator<EventHub>().fire('needToRefreshProjects');
                         }
@@ -332,7 +334,7 @@ void showsStatusesBS({context, itemController}) async {
                           title: _statusesController.getStatusName(i),
                           icon: AppIcon(
                               icon: _statusesController.getStatusImageString(i),
-                              color: itemController.projectData.canEdit
+                              color: itemController.projectData.canEdit as bool
                                   ? Get.theme.colors().primary
                                   : Get.theme.colors().onBackground),
                           selected: _statusesController.statuses[i] ==
@@ -349,7 +351,7 @@ void showsStatusesBS({context, itemController}) async {
   );
 }
 
-double _getInititalSize({int statusCount}) {
+double _getInititalSize({required int statusCount}) {
   var size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

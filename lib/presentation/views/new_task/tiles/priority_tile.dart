@@ -39,15 +39,15 @@ import 'package:projects/presentation/views/new_task/new_task_view.dart';
 class PriorityTile extends StatelessWidget {
   final TaskActionsController controller;
   const PriorityTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(() => TileWithSwitch(
         title: tr('highPriority'),
-        isSelected: controller.highPriority.value,
+        isSelected: controller.highPriority!.value,
         onChanged: controller.changePriority));
   }
 }

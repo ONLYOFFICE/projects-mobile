@@ -37,12 +37,12 @@ import 'package:get/get.dart';
 import 'package:projects/main_controller.dart';
 
 class MainView extends StatelessWidget {
-  MainView({Key key}) : super(key: key);
+  MainView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<MainController>(builder: (controller) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
         controller.setupMainPage();
       });
       return Obx(() {

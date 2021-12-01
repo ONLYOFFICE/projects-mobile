@@ -30,58 +30,61 @@
  *
  */
 
+import 'package:darq/darq.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:darq/darq.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
-
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
+import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class NewDiscussionController extends GetxController
     implements DiscussionActionsController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
 
-  var _selectedProjectId;
-  int get selectedProjectId => _selectedProjectId;
+  int? _selectedProjectId;
+  int? get selectedProjectId => _selectedProjectId;
 
   bool _projectIsLocked = false;
 
   // final _userController = Get.find<UserController>();
-  final _userService = locator<UserService>();
+  final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
-  var selectedGroups = <PortalGroupItemController>[];
+  List<PortalGroupItemController> selectedGroups =
+      <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
   @override
-  RxString title = ''.obs;
+  final title = RxString('');
 
   @override
-  var selectedProjectTitle = ''.obs; //RxString
+  final selectedProjectTitle = RxString('');
 
   @override
-  RxString text = ''.obs;
+  final text = RxString('');
+
   @override
-  var textController = HtmlEditorController();
+  HtmlEditorController textController = HtmlEditorController();
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _userSearchController = TextEditingController();
@@ -89,30 +92,30 @@ class NewDiscussionController extends GetxController
 
   @override
   TextEditingController get titleController => _titleController;
+
   @override
   TextEditingController get userSearchController => _userSearchController;
+
   @override
   FocusNode get titleFocus => _titleFocus;
 
   @override
-  RxList<PortalUserItemController> otherUsers =
-      <PortalUserItemController>[].obs;
+  final otherUsers = <PortalUserItemController>[].obs;
 
   var _team = [];
   @override
-  RxList<PortalUserItemController> subscribers =
-      <PortalUserItemController>[].obs;
-  List _previusSelectedSubscribers = []; // to track changes
+  final subscribers = <PortalUserItemController>[].obs;
+  var _previousSelectedSubscribers = []; // to track changes
 
   @override
-  var selectProjectError = false.obs; //RxBool
+  RxBool selectProjectError = false.obs; //RxBool
   @override
-  var setTitleError = false.obs;
+  RxBool setTitleError = false.obs;
   @override
-  var setTextError = false.obs;
+  RxBool setTextError = false.obs;
 
-  NewDiscussionController({projectId, projectTitle}) {
-    if (projectId != null) {
+  NewDiscussionController({int? projectId, String? projectTitle}) {
+    if (projectId != null && projectTitle != null) {
       _selectedProjectId = projectId;
       selectedProjectTitle.value = projectTitle;
 
@@ -133,7 +136,7 @@ class NewDiscussionController extends GetxController
   void changeTitle(String newText) => title.value = newText;
 
   @override
-  void changeProjectSelection({var id, String title}) {
+  void changeProjectSelection({int? id, String? title}) {
     if (_projectIsLocked) return;
     if (id != null && title != null) {
       selectedProjectTitle.value = title;
@@ -152,12 +155,12 @@ class NewDiscussionController extends GetxController
   void addTeam() {
     if (_selectedProjectId == null) return;
 
-    var team = Get.find<ProjectTeamController>()
+    final team = Get.find<ProjectTeamController>()
       ..setup(projectId: _selectedProjectId);
 
     team.getTeam().then((value) {
       _team = List.of(team.usersList);
-      for (var item in team.usersList) {
+      for (final item in team.usersList) {
         if (item.portalUser.status != null &&
             item.portalUser.status != UserStatus.Terminated) {
           item.selectionMode.value = UserSelectionMode.Multiple;
@@ -165,7 +168,7 @@ class NewDiscussionController extends GetxController
           addSubscriber(item);
         }
       }
-      _previusSelectedSubscribers = List.of(subscribers);
+      _previousSelectedSubscribers = List.of(subscribers);
     });
   }
 
@@ -176,14 +179,14 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void confirmText() async {
+  Future<void> confirmText() async {
     text.value = await textController.getText();
     Get.back();
   }
 
   @override
-  void leaveTextView() async {
-    var t = await textController.getText();
+  Future<void> leaveTextView() async {
+    final t = await textController.getText();
 
     if (t == text.value) {
       Get.back();
@@ -203,19 +206,20 @@ class NewDiscussionController extends GetxController
 
   @override
   void confirmSubscribersSelection() {
-    for (var user in _usersDataSource.usersList) {
-      if (!subscribers.any((it) => it.id == user.id) && user.isSelected.value)
+    for (final user in _usersDataSource.usersList) {
+      if (!subscribers.any((it) => it.id == user.id) && user.isSelected.value) {
         subscribers.add(user);
+      }
     }
 
-    _previusSelectedSubscribers = List.of(subscribers);
+    _previousSelectedSubscribers = List.of(subscribers);
     clearUserSearch();
     Get.back();
   }
 
   @override
   void leaveSubscribersSelectionView() {
-    if (listEquals(_previusSelectedSubscribers, subscribers)) {
+    if (listEquals(_previousSelectedSubscribers, subscribers)) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -223,7 +227,7 @@ class NewDiscussionController extends GetxController
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          subscribers.value = RxList.from(_previusSelectedSubscribers);
+          subscribers.value = RxList.from(_previousSelectedSubscribers);
           clearUserSearch();
           Get.back();
           Get.back();
@@ -234,7 +238,7 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void setupSubscribersSelection() async {
+  Future<void> setupSubscribersSelection() async {
     _usersDataSource.applyUsersSelection = _getSelectedSubscribers;
     await _usersDataSource.getProfiles(needToClear: true);
     restoreManualSelectedPersons();
@@ -242,7 +246,7 @@ class NewDiscussionController extends GetxController
 
   void saveManualSelectedPersons() {
     _manualSelectedPersons.clear();
-    for (var user in _usersDataSource.usersList) {
+    for (final user in _usersDataSource.usersList) {
       if (user.isSelected.value && !_team.any((it) => it.id == user.id)) {
         _manualSelectedPersons.add(user);
       }
@@ -250,8 +254,8 @@ class NewDiscussionController extends GetxController
   }
 
   void restoreManualSelectedPersons() {
-    for (var manual in _manualSelectedPersons) {
-      for (var user in _usersDataSource.usersList) {
+    for (final manual in _manualSelectedPersons) {
+      for (final user in _usersDataSource.usersList) {
         if (user.id == manual.id) user.isSelected.value = true;
       }
     }
@@ -261,12 +265,12 @@ class NewDiscussionController extends GetxController
     _usersDataSource.usersList
         .removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
-    for (var element in _usersDataSource.usersList) {
+    for (final element in _usersDataSource.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
-    for (var selectedMember in subscribers) {
-      for (var user in _usersDataSource.usersList) {
+    for (final selectedMember in subscribers) {
+      for (final user in _usersDataSource.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -291,30 +295,32 @@ class NewDiscussionController extends GetxController
   @override
   void selectGroupMembers(PortalGroupItemController group) {
     if (group.isSelected.value == true) {
-      print(group.portalGroup.id);
+      print(group.portalGroup!.id);
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere(
-          (element) => group.portalGroup.id == element.portalGroup.id);
+          (element) => group.portalGroup!.id == element.portalGroup!.id);
     }
   }
 
   @override
-  void confirmGroupSelection() async {
-    for (var group in selectedGroups) {
-      var groupMembers = await _userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup.id);
+  Future<void> confirmGroupSelection() async {
+    for (final group in selectedGroups) {
+      final groupMembers = await _userService.getProfilesByExtendedFilter(
+          groupId: group.portalGroup!.id);
 
-      if (groupMembers.response.isNotEmpty) {
-        for (var element in groupMembers.response) {
-          var user = PortalUserItemController(portalUser: element);
-          user.isSelected.value = true;
-          subscribers.add(user);
+      if (groupMembers != null) {
+        if (groupMembers.response!.isNotEmpty) {
+          for (final element in groupMembers.response!) {
+            final user = PortalUserItemController(portalUser: element);
+            user.isSelected.value = true;
+            subscribers.add(user);
+          }
         }
       }
     }
 
-    subscribers.value = subscribers.distinct((d) => d.portalUser.id).toList();
+    subscribers.value = subscribers.distinct((d) => d.portalUser.id!).toList();
     await _getSelectedSubscribers();
     await _usersDataSource.updateUsers();
 
@@ -327,29 +333,31 @@ class NewDiscussionController extends GetxController
     _usersDataSource.clearSearch();
   }
 
-  void confirm(BuildContext context) async {
+  Future<void> confirm(BuildContext context) async {
     if (_selectedProjectId == null) selectProjectError.value = true;
     if (title.isEmpty) setTitleError.value = true;
     if (text.isEmpty) setTextError.value = true;
     if (_selectedProjectId != null && title.isNotEmpty && text.isNotEmpty) {
       // ignore: omit_local_variable_types
-      List<String> subscribersIds = [];
+      final List<String?> subscribersIds = [];
 
-      for (var item in subscribers) subscribersIds.add(item.id);
+      for (final item in subscribers) {
+        subscribersIds.add(item.id);
+      }
 
-      var newDiss = NewDiscussionDTO(
+      final newDiss = NewDiscussionDTO(
         content: text.value,
         title: title.value,
         participants: subscribersIds,
       );
 
-      var createdDiss = await _api.addMessage(
-        projectId: _selectedProjectId,
+      final createdDiss = await _api.addMessage(
+        projectId: _selectedProjectId!,
         newDiscussion: newDiss,
       );
 
       if (createdDiss != null) {
-        var discussionsController = Get.find<DiscussionsController>();
+        final discussionsController = Get.find<DiscussionsController>();
         // ignore: unawaited_futures
         discussionsController.loadDiscussions();
         if (_projectIsLocked) {
@@ -359,7 +367,7 @@ class NewDiscussionController extends GetxController
             // ignore: unawaited_futures
             Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
           } catch (e) {
-            debugPrint(e);
+            debugPrint(e.toString());
           }
         }
 
@@ -399,4 +407,19 @@ class NewDiscussionController extends GetxController
 
   @override
   void removeSubscriber(PortalUserItemController user) {}
+
+  @override
+  set selectedProjectTitle(RxString _selectedProjectTitle) {
+    // TODO: implement selectedProjectTitle
+  }
+
+  @override
+  set text(RxString _text) {
+    // TODO: implement text
+  }
+
+  @override
+  set title(RxString _title) {
+    // TODO: implement title
+  }
 }

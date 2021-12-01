@@ -52,10 +52,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 
 class ProjectMilestonesScreen extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailed? projectDetailed;
   const ProjectMilestonesScreen({
-    Key key,
-    @required this.projectDetailed,
+    Key? key,
+    required this.projectDetailed,
   }) : super(key: key);
 
   @override
@@ -92,8 +92,8 @@ class ProjectMilestonesScreen extends StatelessWidget {
 
 class _Content extends StatelessWidget {
   const _Content({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final MilestonesDataSource controller;
@@ -133,7 +133,7 @@ class _Content extends StatelessWidget {
                 child: ListView.builder(
                   itemBuilder: (c, i) => MilestoneCell(
                       milestone: controller.paginationController.data[i]),
-                  itemExtent: 72.0,
+                  itemExtent: 72,
                   itemCount: controller.paginationController.data.length,
                 ),
               ),
@@ -146,7 +146,7 @@ class _Content extends StatelessWidget {
 
 class Header extends StatelessWidget {
   Header({
-    Key key,
+    Key? key,
   }) : super(key: key);
   final controller = Get.find<MilestonesDataSource>();
 

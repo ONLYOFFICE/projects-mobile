@@ -39,15 +39,15 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class CustomNetworkImage extends StatelessWidget {
-  final String image;
-  final BoxFit fit;
-  final double height;
-  final double width;
-  final defaultImage;
+  final String? image;
+  final BoxFit? fit;
+  final double? height;
+  final double? width;
+  final Widget? defaultImage;
 
   const CustomNetworkImage({
-    Key key,
-    @required this.image,
+    Key? key,
+    required this.image,
     this.defaultImage,
     this.fit,
     this.height,
@@ -59,13 +59,14 @@ class CustomNetworkImage extends StatelessWidget {
     return FutureBuilder(
       future: locator<ImagesController>().getHeaders(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting)
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return CircleAvatar(
               backgroundColor:
                   Get.theme.colors().bgDescription.withOpacity(0.4));
+        }
         return CachedNetworkImage(
-            imageUrl: locator<ImagesController>().getImagePath(image),
-            httpHeaders: snapshot.data,
+            imageUrl: locator<ImagesController>().getImagePath(image!),
+            httpHeaders: snapshot.data as Map<String, String>?,
             fit: fit,
             height: height,
             width: width,

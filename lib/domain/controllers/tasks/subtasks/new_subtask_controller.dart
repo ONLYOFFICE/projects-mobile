@@ -52,11 +52,11 @@ import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detai
 
 class NewSubtaskController extends GetxController
     implements SubtaskActionController {
-  Subtask subtask;
+  Subtask? subtask;
 
-  final _api = locator<SubtasksService>();
+  final SubtasksService _api = locator<SubtasksService>();
 
-  ProjectTeamController teamController;
+  late ProjectTeamController teamController;
 
   final _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
@@ -67,21 +67,21 @@ class NewSubtaskController extends GetxController
   FocusNode get titleFocus => _titleFocus;
   RxList responsibles = [].obs;
   @override
-  RxInt status = 1.obs;
+  RxInt? status = 1.obs;
   @override
-  RxBool setTiltleError = false.obs;
+  RxBool? setTiltleError = false.obs;
 
   List _previusSelectedResponsible = [];
 
   @override
-  void init({Subtask subtask, int projectId}) {
+  void init({Subtask? subtask, int? projectId}) {
     teamController = Get.find<ProjectTeamController>();
 
     _titleFocus.requestFocus();
     setupResponsibleSelection(projectId);
   }
 
-  void setupResponsibleSelection([int projectId]) async {
+  void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
           projectId: projectId, withoutVisitors: true, withoutBlocked: true);
@@ -172,9 +172,9 @@ class NewSubtaskController extends GetxController
   }
 
   @override
-  Future<void> confirm({context, @required int taskId}) async {
+  Future<void> confirm({required dynamic context, required int taskId}) async {
     if (titleController.text.isEmpty)
-      setTiltleError.value = true;
+      setTiltleError!.value = true;
     else {
       var responsible =
           responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
@@ -189,7 +189,7 @@ class NewSubtaskController extends GetxController
         locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
         MessagesHandler.showSnackBar(
-            context: Get.context,
+            context: Get.context!,
             text: tr('subtaskCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {

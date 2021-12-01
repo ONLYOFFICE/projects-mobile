@@ -44,12 +44,12 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ProfileController extends GetxController {
-  final _downloadService = locator<DownloadService>();
+  final DownloadService? _downloadService = locator<DownloadService>();
 
   var portalInfoController = Get.find<PortalInfoController>();
   var userController = Get.find<UserController>();
 
-  Rx<PortalUser> user = PortalUser().obs;
+  Rx<PortalUser?> user = PortalUser().obs;
   RxBool loaded = false.obs;
   var username = ''.obs;
   var portalName = ''.obs;
@@ -74,14 +74,14 @@ class ProfileController extends GetxController {
     await portalInfoController.setup();
 
     user.value = userController.user;
-    portalName.value = portalInfoController.portalName;
-    username.value = userController.user.displayName;
-    status.value = userController.user.status;
-    isVisitor.value = userController.user.isVisitor;
-    isOwner.value = userController.user.isOwner;
-    isAdmin.value = userController.user.isAdmin;
+    portalName.value = portalInfoController.portalName!;
+    username.value = userController.user!.displayName!;
+    status.value = userController.user!.status!;
+    isVisitor.value = userController.user!.isVisitor!;
+    isOwner.value = userController.user!.isOwner!;
+    isAdmin.value = userController.user!.isAdmin!;
 
-    email.value = userController.user.email;
+    email.value = userController.user!.email!;
     await loadAvatar();
   }
 
@@ -98,10 +98,10 @@ class ProfileController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      var avatarBytes = await _downloadService.downloadImage(
-          user.value?.avatar ??
+      var avatarBytes = await _downloadService!.downloadImage(
+          (user.value?.avatar ??
               user.value?.avatarMedium ??
-              user.value?.avatarSmall);
+              user.value?.avatarSmall!)!);
       if (avatarBytes == null) return;
 
       // ignore: unnecessary_cast

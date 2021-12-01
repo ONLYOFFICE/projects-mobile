@@ -38,21 +38,21 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectTagsController extends GetxController {
-  final _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
   final _userController = Get.find<UserController>()..getUserInfo();
 
-  var usersList = [].obs;
-  var loaded = true.obs;
+  RxList usersList = [].obs;
+  RxBool loaded = true.obs;
 
-  var isSearchResult = false.obs;
+  RxBool isSearchResult = false.obs;
 
   RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
 
-  RxList<String> projectDetailedTags = <String>[].obs;
+  RxList<String?> projectDetailedTags = <String>[].obs;
 
   var _projController;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   void onLoading() async {}
 
@@ -61,26 +61,26 @@ class ProjectTagsController extends GetxController {
     loaded.value = false;
     tags.clear();
     projectDetailedTags.clear();
-    var allTags = await _api.getProjectTags();
+    final allTags = await _api.getProjectTags();
 
     if (projController?.tags != null) {
       for (var value in projController?.tags) {
-        projectDetailedTags.add(value);
+        projectDetailedTags.add(value as String?);
       }
     }
 
     if (allTags != null) {
-      for (var tag in allTags) {
-        var isSelected = projectDetailedTags?.contains(tag.title)?.obs;
+      for (final tag in allTags) {
+        final isSelected = projectDetailedTags.contains(tag.title).obs;
 
         tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
       }
     }
 
-    fabIsVisible.value = _userController.user.isAdmin ||
-        _userController.user.isOwner ||
-        (_userController.user.listAdminModules != null &&
-            _userController.user.listAdminModules.contains('projects'));
+    fabIsVisible.value = _userController.user!.isAdmin! ||
+        _userController.user!.isOwner! ||
+        (_userController.user!.listAdminModules != null &&
+            _userController.user!.listAdminModules!.contains('projects'));
 
     loaded.value = true;
   }
@@ -88,8 +88,8 @@ class ProjectTagsController extends GetxController {
   Future<void> confirm() async {
     _projController.tags.clear();
     for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
+      if (tag.isSelected!.value) {
+        _projController.tags.add(tag.tag!.title);
       }
     }
     _projController.tagsText.value = _projController.tags.join(', ');
@@ -97,12 +97,12 @@ class ProjectTagsController extends GetxController {
   }
 
   Future changeTagSelection(TagItemDTO tag) async {
-    tag.isSelected.value = !tag.isSelected.value;
+    tag.isSelected!.value = !tag.isSelected!.value;
 
     _projController.tags.clear();
     for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
+      if (tag.isSelected!.value) {
+        _projController.tags.add(tag.tag!.title);
       }
     }
 
@@ -110,7 +110,7 @@ class ProjectTagsController extends GetxController {
   }
 
   Future<void> createTag(String value) async {
-    var res = await _api.createTag(name: value);
+    final res = await _api.createTag(name: value);
     if (res != null) await setup(_projController);
   }
 }

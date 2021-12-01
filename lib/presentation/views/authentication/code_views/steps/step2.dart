@@ -33,9 +33,9 @@
 part of '../get_code_views.dart';
 
 class _Step2 extends StatelessWidget {
-  const _Step2({Key key, this.topPadding}) : super(key: key);
+  const _Step2({Key? key, this.topPadding}) : super(key: key);
 
-  final double topPadding;
+  final double? topPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +49,7 @@ class _Step2 extends StatelessWidget {
           AppIcon(
             icon: PngIcons.authentificator_s2,
             isPng: true,
-            height: 184.5.h,
+            height: 184.5.h as double?,
             hasDarkVersion: true,
           ),
           const SizedBox(height: 23),

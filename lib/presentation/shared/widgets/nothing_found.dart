@@ -42,7 +42,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class NothingFound extends StatelessWidget {
   const NothingFound({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -59,16 +59,16 @@ class NothingFound extends StatelessWidget {
 }
 
 class EmptyScreen extends StatelessWidget {
-  final String icon;
-  final String text;
+  final String? icon;
+  final String? text;
 
   const EmptyScreen({
-    Key key,
+    Key? key,
     this.text,
     this.icon,
   }) : super(key: key);
 
-  String get darkThemeIcon => icon.replaceFirst('.', '_dark.');
+  String get darkThemeIcon => icon!.replaceFirst('.', '_dark.');
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +96,7 @@ class EmptyScreen extends StatelessWidget {
             ),
           ),
           Text(
-            text,
+            text!,
             textAlign: TextAlign.center,
             style: TextStyleHelper.subtitle1(
                 color: Get.theme.colors().onSurface.withOpacity(0.4)),

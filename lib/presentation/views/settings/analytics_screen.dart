@@ -41,7 +41,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class AnalyticsScreen extends StatelessWidget {
-  const AnalyticsScreen({Key key}) : super(key: key);
+  const AnalyticsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

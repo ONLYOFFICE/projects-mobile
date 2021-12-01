@@ -41,7 +41,9 @@ import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
-void showsStatusesBS({context, TaskItemController taskItemController}) async {
+void showsStatusesBS(
+    {required BuildContext context,
+    TaskItemController? taskItemController}) async {
   var _statusesController = Get.find<TaskStatusesController>();
   showCustomBottomSheet(
     context: context,
@@ -84,17 +86,17 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await taskItemController.tryChangingStatus(
-                            id: taskItemController.task.value.id,
-                            newStatusId: _statusesController.statuses[i].id,
+                        await taskItemController!.tryChangingStatus(
+                            id: taskItemController.task.value.id!,
+                            newStatusId: _statusesController.statuses[i].id!,
                             newStatusType:
-                                _statusesController.statuses[i].statusType);
+                                _statusesController.statuses[i].statusType!);
                         Get.back();
                       },
                       child: StatusTile(
                           title: _statusesController.statuses[i].title,
                           icon: StatusIcon(
-                            canEditTask: taskItemController.task.value.canEdit,
+                            canEditTask: taskItemController!.task.value.canEdit,
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].title ==
@@ -111,7 +113,7 @@ void showsStatusesBS({context, TaskItemController taskItemController}) async {
   );
 }
 
-double _getInititalSize({int statusCount}) {
+double _getInititalSize({required int statusCount}) {
   var size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

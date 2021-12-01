@@ -34,7 +34,8 @@ part of '../projects_filter.dart';
 
 class _TeamMember extends StatelessWidget {
   final ProjectsFilterController filterController;
-  const _TeamMember({Key key, this.filterController}) : super(key: key);
+  const _TeamMember({Key? key, required this.filterController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +46,16 @@ class _TeamMember extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.teamMember['me'],
+              isSelected: filterController.teamMember['me'] as bool?,
               onTap: () => filterController.changeTeamMember('me')),
           FilterElement(
-            title: filterController.teamMember['other'].isEmpty
+            title: filterController.teamMember['other'].isEmpty as bool
                 ? tr('otherUser')
-                : filterController.teamMember['other'],
-            isSelected: filterController.teamMember['other'].isNotEmpty,
+                : filterController.teamMember['other'] as String,
+            isSelected:
+                filterController.teamMember['other'].isNotEmpty as bool?,
             cancelButtonEnabled:
-                filterController.teamMember['other'].isNotEmpty,
+                filterController.teamMember['other'].isNotEmpty as bool?,
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());

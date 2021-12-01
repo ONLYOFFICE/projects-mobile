@@ -37,15 +37,15 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class FilterElement extends StatelessWidget {
-  final bool isSelected;
-  final String title;
-  final Color titleColor;
-  final bool cancelButtonEnabled;
-  final Function() onTap;
-  final Function() onCancelTap;
+  final bool? isSelected;
+  final String? title;
+  final Color? titleColor;
+  final bool? cancelButtonEnabled;
+  final Function()? onTap;
+  final Function()? onCancelTap;
 
   const FilterElement(
-      {Key key,
+      {Key? key,
       this.isSelected = false,
       this.title,
       this.titleColor,
@@ -64,7 +64,7 @@ class FilterElement extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: Get.theme.colors().outline, width: 0.5),
           borderRadius: BorderRadius.circular(16),
-          color: isSelected
+          color: isSelected!
               ? Get.theme.colors().primary
               : Get.theme.colors().bgDescription,
         ),
@@ -73,14 +73,14 @@ class FilterElement extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Flexible(
-              child: Text(title,
+              child: Text(title!,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
-                      color: isSelected
+                      color: isSelected!
                           ? Get.theme.colors().onPrimarySurface
                           : titleColor ?? Get.theme.colors().primary)),
             ),
-            if (cancelButtonEnabled)
+            if (cancelButtonEnabled!)
               Padding(
                   padding: const EdgeInsets.only(left: 9),
                   child: InkWell(

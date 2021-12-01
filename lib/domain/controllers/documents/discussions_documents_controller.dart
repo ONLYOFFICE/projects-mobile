@@ -53,45 +53,43 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DiscussionsDocumentsController extends GetxController {
-  final _api = locator<FilesService>();
-  var portalInfoController = Get.find<PortalInfoController>();
+  final FilesService _api = locator<FilesService>();
+  PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
   final _userController = Get.find<UserController>();
 
-  var hasFilters = false.obs;
-  var loaded = false.obs;
-  var nothingFound = false.obs;
-  var searchMode = false.obs;
+  RxBool hasFilters = false.obs;
+  RxBool loaded = false.obs;
+  RxBool nothingFound = false.obs;
+  RxBool searchMode = false.obs;
 
-  var searchInputController = TextEditingController();
+  TextEditingController searchInputController = TextEditingController();
 
-  PaginationController _paginationController;
-
-  String _entityType;
-
-  String get entityType => _entityType;
-  set entityType(String value) =>
-      {_entityType = value, _filterController.entityType = value};
-
+  late PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
+  RxList get itemList => _paginationController.data;
 
-  int _currentFolderId;
-  int get currentFolder => _currentFolderId;
+  String? _entityType;
+
+  String? get entityType => _entityType;
+  set entityType(String? value) =>
+      {_entityType = value, _filterController!.entityType = value};
+
+  int? _currentFolderId;
+  int? get currentFolder => _currentFolderId;
 
   var screenName = tr('documents').obs;
 
-  RxList get itemList => _paginationController.data;
+  DocumentsSortController? _sortController;
+  DocumentsSortController? get sortController => _sortController;
 
-  DocumentsSortController _sortController;
-  DocumentsSortController get sortController => _sortController;
-
-  DocumentsFilterController _filterController;
-  DocumentsFilterController get filterController => _filterController;
+  DocumentsFilterController? _filterController;
+  DocumentsFilterController? get filterController => _filterController;
 
   bool get canCopy => false;
   bool get canMove => false;
   bool get canRename => false;
-  bool get canDelete => !_userController.user.isVisitor;
+  bool get canDelete => !_userController.user!.isVisitor!;
 
   DiscussionsDocumentsController(
     DocumentsFilterController filterController,
@@ -101,7 +99,7 @@ class DiscussionsDocumentsController extends GetxController {
     _sortController = sortController;
     _paginationController = paginationController;
     _filterController = filterController;
-    _filterController.applyFiltersDelegate =
+    _filterController!.applyFiltersDelegate =
         () async => {}; // await refreshContent();
     sortController.updateSortDelegate =
         () async => {}; //await refreshContent();
@@ -124,7 +122,7 @@ class DiscussionsDocumentsController extends GetxController {
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
   Future<bool> renameFolder(Folder element, String newName) async {
-    var result = await _api.renameFolder(
+    final result = await _api.renameFolder(
       folderId: element.id.toString(),
       newTitle: newName,
     );
@@ -143,7 +141,7 @@ class DiscussionsDocumentsController extends GetxController {
   }
 
   Future<bool> deleteFile(PortalFile element) async {
-    var result = await _api.deleteFile(
+    final result = await _api.deleteFile(
       fileId: element.id.toString(),
     );
 
@@ -161,8 +159,8 @@ class DiscussionsDocumentsController extends GetxController {
     await userController.getUserInfo();
     var body = <String, dynamic>{
       'portal': '${portalInfoController.portalName}',
-      'email': '${userController.user.email}',
-      'file': <String, int>{'id': selectedFile.id},
+      'email': '${userController.user!.email}',
+      'file': <String, int?>{'id': selectedFile.id},
       'folder': {
         'id': selectedFile.folderId,
         'parentId': null,
@@ -180,7 +178,7 @@ class DiscussionsDocumentsController extends GetxController {
       await AnalyticsService.shared
           .logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
-        AnalyticsService.Params.Key.extension: extension(selectedFile.title)
+        AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
       });
     } else {
       await LaunchReview.launch(

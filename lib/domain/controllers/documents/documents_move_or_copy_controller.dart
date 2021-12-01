@@ -45,42 +45,40 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
 class DocumentsMoveOrCopyController extends GetxController {
-  final _api = locator<FilesService>();
+  final FilesService _api = locator<FilesService>();
 
-  var hasFilters = false.obs;
-  var loaded = false.obs;
-  var nothingFound = false.obs;
-  var searchMode = false.obs;
+  RxBool hasFilters = false.obs;
+  RxBool loaded = false.obs;
+  RxBool nothingFound = false.obs;
+  RxBool searchMode = false.obs;
 
-  var searchInputController = TextEditingController();
+  TextEditingController searchInputController = TextEditingController();
 
-  PaginationController _paginationController;
+  String? _query;
 
-  String _query;
-
-  int initialFolderId;
+  int? initialFolderId;
 
   int foldersCount = 0;
 
-  String mode;
+  String? mode;
 
-  int _targetId;
-  int get target => _targetId;
+  int? _targetId;
+  int? get target => _targetId;
 
+  late PaginationController _paginationController;
   PaginationController get paginationController => _paginationController;
+  RxList get itemList => _paginationController.data;
 
-  String _screenName;
-  Folder _currentFolder;
-  Folder get currentFolder => _currentFolder;
+  String? _screenName;
+  Folder? _currentFolder;
+  Folder? get currentFolder => _currentFolder;
 
   var screenName = tr('chooseSection').obs;
 
-  RxList get itemList => _paginationController.data;
-
-  DocumentsSortController _sortController;
+  late DocumentsSortController _sortController;
   DocumentsSortController get sortController => _sortController;
 
-  DocumentsFilterController _filterController;
+  late DocumentsFilterController _filterController;
   DocumentsFilterController get filterController => _filterController;
 
   DocumentsMoveOrCopyController(
@@ -116,12 +114,12 @@ class DocumentsMoveOrCopyController extends GetxController {
     loaded.value = true;
   }
 
-  Future<void> setupFolder({String folderName, Folder folder}) async {
+  Future<void> setupFolder({required String folderName, Folder? folder}) async {
     loaded.value = false;
 
     _clear();
     _currentFolder = folder;
-    _filterController.folderId = _currentFolder.id;
+    _filterController.folderId = _currentFolder!.id;
     screenName.value = folderName;
     await _getDocuments();
 
@@ -138,8 +136,8 @@ class DocumentsMoveOrCopyController extends GetxController {
   }
 
   Future _getDocuments() async {
-    var result = await _api.getFilesByParams(
-      folderId: _currentFolder == null ? null : _currentFolder.id,
+    final result = await _api.getFilesByParams(
+      folderId: _currentFolder == null ? null : _currentFolder!.id,
       query: _query,
       startIndex: paginationController.startIndex,
       sortBy: sortController.currentSortfilter,
@@ -150,13 +148,13 @@ class DocumentsMoveOrCopyController extends GetxController {
 
     if (result == null) return;
 
-    paginationController.total.value = result.total;
+    paginationController.total.value = result.total!;
 
     if (_currentFolder != null && result.current != null)
-      _screenName = result.current.title;
+      _screenName = result.current!.title;
 
-    paginationController.data.addAll(result.folders);
-    paginationController.data.addAll(result.files);
+    paginationController.data.addAll(result.folders!);
+    paginationController.data.addAll(result.files!);
 
     screenName.value = _screenName ?? tr('documents');
   }
@@ -171,14 +169,14 @@ class DocumentsMoveOrCopyController extends GetxController {
     paginationController.data.clear();
   }
 
-  void newSearch(query) {
+  void newSearch(String query) {
     _query = query;
     paginationController.startIndex = 0;
     paginationController.data.clear();
     _performSearch();
   }
 
-  Future<void> setupSearchMode({String folderName, Folder folder}) async {
+  Future<void> setupSearchMode({String? folderName, Folder? folder}) async {
     loaded.value = true;
   }
 
@@ -200,14 +198,14 @@ class DocumentsMoveOrCopyController extends GetxController {
   Future moveFolder() async {
     var result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
-      targetFolder: _currentFolder.id.toString(),
+      targetFolder: _currentFolder!.id.toString(),
     );
 
     if (result != null) {
       Get.close(foldersCount);
 
       MessagesHandler.showSnackBar(
-          context: Get.context, text: tr('folderMoved'));
+          context: Get.context!, text: tr('folderMoved'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
@@ -215,14 +213,14 @@ class DocumentsMoveOrCopyController extends GetxController {
   Future copyFolder() async {
     var result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
-      targetFolder: _currentFolder.id.toString(),
+      targetFolder: _currentFolder!.id.toString(),
     );
 
     if (result != null) {
       Get.close(foldersCount);
 
       MessagesHandler.showSnackBar(
-          context: Get.context, text: tr('folderCopied'));
+          context: Get.context!, text: tr('folderCopied'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
@@ -230,13 +228,14 @@ class DocumentsMoveOrCopyController extends GetxController {
   Future moveFile() async {
     var result = await _api.moveDocument(
       movingFile: _targetId.toString(),
-      targetFolder: _currentFolder.id.toString(),
+      targetFolder: _currentFolder!.id.toString(),
     );
 
     if (result != null) {
       Get.close(foldersCount);
 
-      MessagesHandler.showSnackBar(context: Get.context, text: tr('fileMoved'));
+      MessagesHandler.showSnackBar(
+          context: Get.context!, text: tr('fileMoved'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
@@ -244,19 +243,19 @@ class DocumentsMoveOrCopyController extends GetxController {
   Future copyFile() async {
     var result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
-      targetFolder: _currentFolder.id.toString(),
+      targetFolder: _currentFolder!.id.toString(),
     );
 
     if (result != null) {
       Get.close(foldersCount);
 
       MessagesHandler.showSnackBar(
-          context: Get.context, text: tr('fileCopied'));
+          context: Get.context!, text: tr('fileCopied'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
-  void setupOptions(int targetId, int initial) {
+  void setupOptions(int? targetId, int? initial) {
     _targetId = targetId;
     initialFolderId = initial;
   }

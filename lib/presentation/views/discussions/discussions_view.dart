@@ -34,9 +34,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
@@ -50,12 +52,12 @@ import 'package:projects/presentation/views/discussions/filter/discussions_filte
 import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
-  const PortalDiscussionsView({Key key}) : super(key: key);
+  const PortalDiscussionsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     var controller = Get.find<DiscussionsController>();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
     });
 
@@ -70,7 +72,7 @@ class PortalDiscussionsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             titleHeight: 101,
             bottomHeight: 0,
             showBackButton: false,
@@ -125,25 +127,25 @@ class DiscussionsList extends StatelessWidget {
   final controller;
   final ScrollController scrollController;
   const DiscussionsList({
-    Key key,
-    @required this.controller,
-    @required this.scrollController,
+    Key? key,
+    required this.controller,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // a temporary solution for the discussion page in projects
     // where there are no filters yet
-    var hasFilters = false;
+    bool? hasFilters = false;
     try {
-      hasFilters = controller?.filterController?.hasFilters?.value;
+      hasFilters = controller?.filterController?.hasFilters?.value as bool?;
     } catch (_) {}
 
     return Obx(() {
       if (controller.loaded == false) {
         return const ListLoadingSkeleton();
       } else {
-        if (controller.paginationController.data.isEmpty && hasFilters)
+        if (controller.paginationController.data.isEmpty as bool && hasFilters!)
           return Center(
             child: EmptyScreen(
               icon: SvgIcons.not_found,
@@ -151,7 +153,7 @@ class DiscussionsList extends StatelessWidget {
             ),
           );
 
-        if (controller.paginationController.data.isEmpty)
+        if (controller.paginationController.data.isEmpty as bool)
           return Center(
             child: EmptyScreen(
               icon: SvgIcons.comments_not_created,
@@ -160,9 +162,10 @@ class DiscussionsList extends StatelessWidget {
           );
 
         return PaginationListView(
-          paginationController: controller.paginationController,
+          paginationController:
+              controller.paginationController as PaginationController,
           child: ListView.separated(
-            itemCount: controller.paginationController.data.length,
+            itemCount: controller.paginationController.data.length as int,
             padding: const EdgeInsets.only(bottom: 65),
             controller: scrollController,
             separatorBuilder: (BuildContext context, int index) {
@@ -170,7 +173,8 @@ class DiscussionsList extends StatelessWidget {
             },
             itemBuilder: (BuildContext context, int index) {
               return DiscussionTile(
-                discussion: controller.paginationController.data[index],
+                discussion:
+                    controller.paginationController.data[index] as Discussion,
                 onTap: () => controller
                     .toDetailed(controller.paginationController.data[index]),
               );

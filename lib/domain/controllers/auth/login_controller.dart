@@ -60,86 +60,93 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  TextEditingController portalAdressController = TextEditingController();
-  TextEditingController _emailController;
-  TextEditingController _passwordController;
+  late TextEditingController portalAdressController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
   TextEditingController get emailController => _emailController;
+
   TextEditingController get passwordController => _passwordController;
 
-  var portalFieldError = false.obs;
-  var emailFieldError = false.obs;
-  var passwordFieldError = false.obs;
+  RxBool portalFieldError = false.obs;
+  RxBool emailFieldError = false.obs;
+  RxBool passwordFieldError = false.obs;
 
-  Capabilities capabilities;
-  String _pass;
-  String _email;
-  String _tfaKey;
+  Capabilities? capabilities;
+  String? _pass;
+  String? _email;
+  String? _tfaKey;
 
   String get portalAdress =>
       portalAdressController.text.replaceFirst('https://', '');
-  String get tfaKey => _tfaKey;
+  String? get tfaKey => _tfaKey;
 
   @override
   void onInit() {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-
+    portalAdressController = TextEditingController();
     super.onInit();
   }
 
   Future<void> loginByPassword() async {
     if (await _checkEmailAndPass()) {
-      var email = _emailController.text;
-      var password = _passwordController.text;
+      final email = _emailController.text;
+      final password = _passwordController.text;
 
       setState(ViewState.Busy);
 
-      var result = await _authService.login(email, password);
+      final result = await _authService.login(pass: password, email: email);
 
       if (result.response == null) {
         setState(ViewState.Idle);
         return;
       }
-      if (result.response.token != null) {
+
+      if (result.response!.token != null) {
         await saveLoginData(
-            token: result.response.token, expires: result.response.expires);
+            token: result.response!.token, expires: result.response!.expires);
 
         await Get.find<AccountManagerController>().addAccount(
-            tokenString: result.response.token,
-            expires: result.response.expires);
+            tokenString: result.response!.token,
+            expires: result.response!.expires);
 
         locator<EventHub>().fire('loginSuccess');
-      } else if (result.response.tfa == true) {
+      } else if (result.response!.tfa == true) {
         _email = email;
         _pass = password;
         setState(ViewState.Idle);
 
-        if (result.response.tfaKey != null) {
-          _tfaKey = result.response.tfaKey;
-          await Get.to(() => const GetCodeViews());
+        if (result.response!.tfaKey != null) {
+          _tfaKey = result.response!.tfaKey;
+          await Get.to<GetCodeViews>(() => const GetCodeViews());
         } else {
-          await Get.to(() => CodeView());
+          await Get.to<CodeView>(() => CodeView());
         }
-      } else if (result.response.sms == true) {
+      } else if (result.response!.sms == true) {
         _email = email;
         _pass = password;
         setState(ViewState.Idle);
-        if (result.response.phoneNoise != null) {
-          await Get.to(() => const EnterSMSCodeScreen(), arguments: {
-            'phoneNoise': result.response.phoneNoise,
-            'login': _email,
-            'password': _pass
-          });
+        if (result.response!.phoneNoise != null) {
+          await Get.to<EnterSMSCodeScreen>(
+            () => const EnterSMSCodeScreen(),
+            arguments: {
+              'phoneNoise': result.response!.phoneNoise,
+              'login': _email,
+              'password': _pass
+            },
+          );
         } else {
-          await Get.to(() => const TFASmsScreen(),
-              arguments: {'login': _email, 'password': _pass});
+          await Get.to<TFASmsScreen>(
+            () => const TFASmsScreen(),
+            arguments: {'login': _email, 'password': _pass},
+          );
         }
       }
     }
   }
 
-  Future<void> saveLoginData({String token, String expires}) async {
+  Future<void> saveLoginData({String? token, String? expires}) async {
     await saveToken(token, expires);
     await sendRegistrationType();
     setState(ViewState.Idle);
@@ -154,7 +161,7 @@ class LoginController extends GetxController {
 
   Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
-    var result;
+    bool? result;
 
     emailFieldError.value = false;
     passwordFieldError.value = false;
@@ -178,41 +185,35 @@ class LoginController extends GetxController {
     return result ?? true;
   }
 
-  Future saveToken(token, expires) async {
+  Future saveToken(String? token, String? expires) async {
     await _secureStorage.putString('token', token);
     await _secureStorage.putString('expires', expires);
   }
 
-  Future<bool> sendCode(String code, {String userName, String password}) async {
+  Future<bool> sendCode(String code,
+      {String? userName, String? password}) async {
     setState(ViewState.Busy);
 
-    code = code.removeAllWhitespace;
     _email ??= userName;
     _pass ??= password;
 
-    var result = await _authService.confirmTFACode(_email, _pass, code);
+    final result = await _authService.confirmTFACode(
+        email: _email!, pass: _pass!, code: code.removeAllWhitespace);
 
     if (result.response == null) {
       setState(ViewState.Idle);
       return false;
     }
 
-    if (result.response.token != null) {
+    if (result.response!.token != null) {
       await saveLoginData(
-          token: result.response.token, expires: result.response.expires);
+          token: result.response!.token, expires: result.response!.expires);
       await Get.find<AccountManagerController>().addAccount(
-          tokenString: result.response.token, expires: result.response.expires);
-      // await saveToken(result.response.token, result.response.expires);
-      // await sendRegistrationType();
-      // setState(ViewState.Idle);
-      // clearInputFields();
-      // await AnalyticsService.shared.logEvent(
-      //     AnalyticsService.Events.loginPortal, {
-      //   AnalyticsService.Params.Key.portal:
-      //       await _secureStorage.getString('portalName')
-      // });
+          tokenString: result.response!.token,
+          expires: result.response!.expires);
+
       locator<EventHub>().fire('loginSuccess');
-    } else if (result.response.tfa) {
+    } else if (result.response!.tfa!) {
       setState(ViewState.Idle);
       await Get.to(() => CodeView());
       return true;
@@ -235,7 +236,7 @@ class LoginController extends GetxController {
     } else {
       setState(ViewState.Busy);
 
-      var _capabilities =
+      final _capabilities =
           await _portalService.portalCapabilities(portalAdressController.text);
 
       if (_capabilities != null) {
@@ -248,38 +249,38 @@ class LoginController extends GetxController {
     }
   }
 
-  String emailValidator(value) {
-    if (value.isEmpty) return 'Введите корректный email';
+  String? emailValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Введите корректный email';
 
     /// regex pattern to validate email inputs.
-    final Pattern _emailPattern =
+    const Pattern _emailPattern =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]";
 
-    if (RegExp(_emailPattern).hasMatch(value)) return null;
+    if (RegExp(_emailPattern as String).hasMatch(value)) return null;
 
     return 'Введите корректный email';
   }
 
-  String passValidator(value) {
-    if (!value.isEmpty) return null;
-    return 'Введите пароль';
+  String? passValidator(String? value) {
+    if (value == null || value.isEmpty) return 'Введите пароль';
+    return null;
   }
 
-  var state = ViewState.Idle.obs;
+  Rx<ViewState> get state => ViewState.Idle.obs;
 
   void setState(ViewState viewState) {
     state.value = viewState;
   }
 
   Future<bool> sendRegistrationType() async {
-    var result = await _authService.sendRegistrationType();
+    final result = await _authService.sendRegistrationType();
     return result != null;
   }
 
   Future<void> logout() async {
-    var storage = locator<Storage>();
+    final storage = locator<Storage>();
 
-    locator.get<CoreApi>().cancellationToken?.cancel();
+    locator.get<CoreApi>().cancellationToken.cancel();
 
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
@@ -295,6 +296,7 @@ class LoginController extends GetxController {
     locator<EventHub>().fire('logoutSuccess');
   }
 
+  // TODO: check dispose textControllers
   @override
   void onClose() {
     // clearInputFields();

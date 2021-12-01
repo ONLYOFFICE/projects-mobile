@@ -34,12 +34,12 @@ class Contact {
   Contact({this.type, this.value});
 
   Contact.fromJson(Map<String, dynamic> json) {
-    type = json['type'];
-    value = json['value'];
+    type = json['type'] as String?;
+    value = json['value'] as String?;
   }
 
-  String type;
-  String value;
+  String? type;
+  String? value;
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};

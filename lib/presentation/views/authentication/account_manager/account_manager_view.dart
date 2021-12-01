@@ -40,12 +40,12 @@ import 'package:projects/presentation/views/authentication/account_manager/accou
 
 class AccountManagerView extends StatelessWidget {
   const AccountManagerView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<AccountManagerController>();
+    final controller = Get.find<AccountManagerController>();
 
     return SingleChildScrollView(
       child: Column(

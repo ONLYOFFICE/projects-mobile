@@ -38,7 +38,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 // unused
 class CommentTextField extends StatelessWidget {
   final controller;
-  const CommentTextField({Key key, this.controller}) : super(key: key);
+  const CommentTextField({Key? key, this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class CommentTextField extends StatelessWidget {
       () => TextField(
         maxLines: null,
         autofocus: true,
-        controller: controller.textController,
+        controller: controller.textController as TextEditingController?,
         scrollPadding: const EdgeInsets.all(10),
         decoration: InputDecoration.collapsed(
           hintText: tr('replyText'),

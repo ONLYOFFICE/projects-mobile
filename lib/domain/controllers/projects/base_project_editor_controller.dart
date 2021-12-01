@@ -36,6 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 import 'package:projects/data/services/user_service.dart';
@@ -49,36 +50,37 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 
 abstract class BaseProjectEditorController extends GetxController {
-  final _userService = locator<UserService>();
-  var usersDataSourse = Get.find<UsersDataSource>();
-  var selectionMode = UserSelectionMode.Single;
-  var tags = [].obs;
-  var tagsText = ''.obs;
+  final UserService _userService = locator<UserService>();
+  UsersDataSource usersDataSourse = Get.find<UsersDataSource>();
+  UserSelectionMode selectionMode = UserSelectionMode.Single;
+  RxList tags = [].obs;
+  RxString tagsText = ''.obs;
 
   final _userController = Get.find<UserController>();
-  var usersLoaded = false.obs;
+  RxBool usersLoaded = false.obs;
 
-  var titleController = TextEditingController();
-  var descriptionController = TextEditingController();
-  var descriptionText = ''.obs;
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  RxString descriptionText = ''.obs;
 
-  var responsiblesNotificationEnabled = false;
-  var responsible = '';
+  bool responsiblesNotificationEnabled = false;
+  String responsible = '';
 
-  var notificationEnabled = false.obs;
-  var isPrivate = true.obs;
-  var isFolowed = false.obs;
+  RxBool notificationEnabled = false.obs;
+  RxBool isPrivate = true.obs;
+  RxBool isFolowed = false.obs;
 
-  var selectedTeamMembers = <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> selectedTeamMembers =
+      <PortalUserItemController>[].obs;
 
-  Rx<PortalUser> selectedProjectManager = PortalUser().obs;
-  var needToFillManager = false.obs;
-  var needToFillTitle = false.obs;
+  Rx<PortalUser?> selectedProjectManager = PortalUser().obs;
+  RxBool needToFillManager = false.obs;
+  RxBool needToFillTitle = false.obs;
 
-  var isPMSelected = false.obs;
-  var managerName = ''.obs;
+  RxBool isPMSelected = false.obs;
+  RxString managerName = ''.obs;
 
-  PortalUserItemController selfUserItem;
+  PortalUserItemController? selfUserItem;
 
   final FocusNode titleFocus = FocusNode();
 
@@ -86,13 +88,13 @@ abstract class BaseProjectEditorController extends GetxController {
   void onInit() {
     _userController.getUserInfo().then((value) => {
           selfUserItem =
-              PortalUserItemController(portalUser: _userController.user),
+              PortalUserItemController(portalUser: _userController.user!),
         });
 
     super.onInit();
   }
 
-  String get teamMembersTitle => selectedTeamMembers.length == 1
+  String? get teamMembersTitle => selectedTeamMembers.length == 1
       ? selectedTeamMembers.first.displayName
       : plural('members', selectedTeamMembers.length);
 
@@ -139,18 +141,18 @@ abstract class BaseProjectEditorController extends GetxController {
   void changePMSelection(PortalUserItemController user) {
     if (user.isSelected.value == true) {
       selectedProjectManager.value = user.portalUser;
-      managerName.value = selectedProjectManager.value.displayName;
+      managerName.value = selectedProjectManager.value!.displayName!;
       isPMSelected.value = true;
 
       selectedTeamMembers.removeWhere((element) =>
-          selectedProjectManager.value.id == element.portalUser.id);
+          selectedProjectManager.value!.id == element.portalUser.id);
 
       for (var element in usersDataSourse.usersList) {
         element.isSelected.value =
-            element.portalUser.id == selectedProjectManager.value.id;
+            element.portalUser.id == selectedProjectManager.value!.id;
       }
-      selfUserItem.isSelected.value =
-          selfUserItem.portalUser.id == selectedProjectManager.value.id;
+      selfUserItem!.isSelected.value =
+          selfUserItem!.portalUser.id == selectedProjectManager.value!.id;
 
       selectedTeamMembers.removeWhere(
           (element) => user.portalUser.id == element.portalUser.id);
@@ -165,7 +167,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   void removeManager() {
     selectedTeamMembers.removeWhere(
-        (element) => selectedProjectManager.value.id == element.portalUser.id);
+        (element) => selectedProjectManager.value!.id == element.portalUser.id);
     managerName.value = '';
     selectedProjectManager.value = null;
     isPMSelected.value = false;
@@ -173,7 +175,7 @@ abstract class BaseProjectEditorController extends GetxController {
     for (var element in usersDataSourse.usersList) {
       element.isSelected.value = false;
     }
-    selfUserItem.isSelected.value = false;
+    selfUserItem!.isSelected.value = false;
   }
 
   void selectTeamMember(PortalUserItemController user) {
@@ -183,8 +185,8 @@ abstract class BaseProjectEditorController extends GetxController {
       selectedTeamMembers.removeWhere(
           (element) => user.portalUser.id == element.portalUser.id);
     }
-    if (selfUserItem.portalUser.id == user.portalUser.id) {
-      selfUserItem.isSelected.value = user.isSelected.value;
+    if (selfUserItem!.portalUser.id == user.portalUser.id) {
+      selfUserItem!.isSelected.value = user.isSelected.value;
     }
   }
 
@@ -209,8 +211,8 @@ abstract class BaseProjectEditorController extends GetxController {
           user.isSelected.value = true;
         }
       }
-      if (selfUserItem.portalUser.id == selectedMember.portalUser.id) {
-        selfUserItem.isSelected.value = true;
+      if (selfUserItem!.portalUser.id == selectedMember.portalUser.id) {
+        selfUserItem!.isSelected.value = true;
       }
     }
   }
@@ -218,12 +220,12 @@ abstract class BaseProjectEditorController extends GetxController {
   Future<void> setupPMSelection() async {
     for (var element in usersDataSourse.usersList) {
       element.isSelected.value =
-          element.portalUser.id == selectedProjectManager?.value?.id;
+          element.portalUser.id == selectedProjectManager.value?.id;
       element.selectionMode.value = selectionMode;
     }
 
-    if (selfUserItem?.portalUser?.id == selectedProjectManager?.value?.id) {
-      selfUserItem.isSelected.value = true;
+    if (selfUserItem?.portalUser.id == selectedProjectManager.value?.id) {
+      selfUserItem!.isSelected.value = true;
     }
   }
 
@@ -232,8 +234,8 @@ abstract class BaseProjectEditorController extends GetxController {
 
     await _userController.getUserInfo();
     var selfUser = _userController.user;
-    selfUserItem = PortalUserItemController(portalUser: selfUser);
-    selfUserItem.selectionMode.value = selectionMode;
+    selfUserItem = PortalUserItemController(portalUser: selfUser!);
+    selfUserItem!.selectionMode.value = selectionMode;
     usersDataSourse.selfUserItem = selfUserItem;
     usersDataSourse.selectionMode = selectionMode;
 
@@ -255,7 +257,7 @@ abstract class BaseProjectEditorController extends GetxController {
       selectedGroups.add(group);
     } else {
       selectedGroups.removeWhere(
-          (element) => group.portalGroup.id == element.portalGroup.id);
+          (element) => group.portalGroup!.id == element.portalGroup!.id);
     }
   }
 
@@ -264,21 +266,23 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   Future<void> confirmGroupSelection() async {
-    for (var group in selectedGroups) {
-      var groupMembers = await _userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup.id);
+    for (final group in selectedGroups) {
+      final groupMembers = await _userService.getProfilesByExtendedFilter(
+          groupId: group.portalGroup!.id);
 
-      if (groupMembers.response.isNotEmpty) {
-        for (var element in groupMembers.response) {
-          var user = PortalUserItemController(portalUser: element);
-          user.isSelected.value = true;
-          selectedTeamMembers.add(user);
+      if (groupMembers != null) {
+        if (groupMembers.response!.isNotEmpty) {
+          for (final element in groupMembers.response!) {
+            final user = PortalUserItemController(portalUser: element);
+            user.isSelected.value = true;
+            selectedTeamMembers.add(user);
+          }
         }
       }
     }
 
     selectedTeamMembers.value =
-        selectedTeamMembers.distinct((d) => d.portalUser.id).toList();
+        selectedTeamMembers.distinct((d) => d.portalUser.id!).toList();
     await setupTeamMembers();
 
     await usersDataSourse.updateUsers();

@@ -39,7 +39,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class NewProjectDescription extends StatelessWidget {
-  const NewProjectDescription({Key key}) : super(key: key);
+  const NewProjectDescription({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +70,7 @@ class NewProjectDescription extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
         child: TextField(
           autofocus: true,
-          controller: controller.descriptionController,
+          controller: controller.descriptionController as TextEditingController,
           maxLines: null,
           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           decoration: InputDecoration.collapsed(

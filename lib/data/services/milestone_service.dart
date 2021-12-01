@@ -44,18 +44,18 @@ class MilestoneService {
   final MilestoneApi _api = locator<MilestoneApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  Future<List<Milestone>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-    String deadlineFilter,
-    String query,
+  Future<List<Milestone>?> milestonesByFilter({
+    int? startIndex,
+    String? sortBy,
+    String? sortOrder,
+    String? projectId,
+    String? milestoneResponsibleFilter,
+    String? taskResponsibleFilter,
+    String? statusFilter,
+    String? deadlineFilter,
+    String? query,
   }) async {
-    var milestones = await _api.milestonesByFilter(
+    final milestones = await _api.milestonesByFilter(
       startIndex: startIndex,
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -67,28 +67,28 @@ class MilestoneService {
       query: query,
     );
 
-    var success = milestones.response != null;
+    final success = milestones.response != null;
 
     if (success) {
       return milestones.response;
     } else {
-      await Get.find<ErrorDialog>().show(milestones.error.message);
+      await Get.find<ErrorDialog>().show(milestones.error!.message);
       return null;
     }
   }
 
-  Future<PageDTO<List<Milestone>>> milestonesByFilterPaginated({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-    String deadlineFilter,
-    String query,
+  Future<PageDTO<List<Milestone>>?> milestonesByFilterPaginated({
+    int? startIndex,
+    String? sortBy,
+    String? sortOrder,
+    String? projectId,
+    String? milestoneResponsibleFilter,
+    String? taskResponsibleFilter,
+    String? statusFilter,
+    String? deadlineFilter,
+    String? query,
   }) async {
-    var milestones = await _api.milestonesByFilterPaginated(
+    final milestones = await _api.milestonesByFilterPaginated(
       startIndex: startIndex,
       sortBy: sortBy,
       sortOrder: sortOrder,
@@ -100,24 +100,24 @@ class MilestoneService {
       query: query,
     );
 
-    var success = milestones.response != null;
+    final success = milestones.response != null;
 
     if (success) {
       return milestones;
     } else {
-      await Get.find<ErrorDialog>().show(milestones.error.message);
+      await Get.find<ErrorDialog>().show(milestones.error!.message);
       return null;
     }
   }
 
   Future<bool> createMilestone(
-      {int projectId, NewMilestoneDTO milestone}) async {
-    var result = await _api.createMilestone(
+      {required int projectId, required NewMilestoneDTO milestone}) async {
+    final result = await _api.createMilestone(
       projectId: projectId,
       milestone: milestone,
     );
 
-    var success = result.response != null;
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -129,7 +129,7 @@ class MilestoneService {
       });
       return success;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return false;
     }
   }

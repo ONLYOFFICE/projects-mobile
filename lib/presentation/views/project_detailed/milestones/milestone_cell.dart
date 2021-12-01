@@ -42,13 +42,13 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 
 class MilestoneCell extends StatelessWidget {
-  final Milestone milestone;
-  const MilestoneCell({Key key, this.milestone}) : super(key: key);
+  final Milestone? milestone;
+  const MilestoneCell({Key? key, this.milestone}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     var itemController = Get.put(MilestoneCellController(milestone),
-        tag: milestone.id.toString());
+        tag: milestone!.id.toString());
 
     return Container(
       height: 72,
@@ -93,13 +93,13 @@ class MilestoneCell extends StatelessWidget {
 }
 
 class _SecondColumn extends StatelessWidget {
-  final Milestone milestone;
+  final Milestone? milestone;
   final MilestoneCellController itemController;
 
   const _SecondColumn({
-    Key key,
-    @required this.milestone,
-    @required this.itemController,
+    Key? key,
+    required this.milestone,
+    required this.itemController,
   }) : super(key: key);
 
   @override
@@ -112,22 +112,22 @@ class _SecondColumn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Obx(() {
-            var style;
-            if (itemController.milestone.value.status == 1) {
+            TextStyle style;
+            if (itemController.milestone.value!.status == 1) {
               style = TextStyleHelper.projectTitle.copyWith(
                   decoration: TextDecoration.lineThrough,
                   color: Get.theme.colors().onSurface.withOpacity(0.6));
-            } else if (itemController.milestone.value.status == 2) {
+            } else if (itemController.milestone.value!.status == 2) {
               style = TextStyleHelper.projectTitle.copyWith(
                   color: Get.theme.colors().onSurface.withOpacity(0.6));
             } else {
               style = TextStyleHelper.projectTitle;
             }
             return CellAtributedTitle(
-              text: milestone.title,
+              text: milestone!.title,
               style: style,
               atributeIcon: AppIcon(icon: SvgIcons.atribute),
-              atributeIconVisible: itemController.milestone.value.isKey,
+              atributeIconVisible: itemController.milestone.value!.isKey,
             );
           }),
           Row(
@@ -135,7 +135,7 @@ class _SecondColumn extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: [
               Obx(() {
-                var color = itemController.milestone.value.canEdit
+                var color = itemController.milestone.value!.canEdit!
                     ? Get.theme.colors().primary
                     : Get.theme.colors().onBackground;
                 return Text(
@@ -148,7 +148,8 @@ class _SecondColumn extends StatelessWidget {
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
                 child: Text(
-                    milestone.responsible.displayName.replaceAll(' ', '\u00A0'),
+                    milestone!.responsible!.displayName!
+                        .replaceAll(' ', '\u00A0'),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
@@ -163,13 +164,13 @@ class _SecondColumn extends StatelessWidget {
 }
 
 class _ThirdColumn extends StatelessWidget {
-  final Milestone milestone;
+  final Milestone? milestone;
   final MilestoneCellController controller;
 
   const _ThirdColumn({
-    Key key,
-    @required this.milestone,
-    @required this.controller,
+    Key? key,
+    required this.milestone,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -180,10 +181,10 @@ class _ThirdColumn extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        if (milestone.deadline != null)
+        if (milestone!.deadline != null)
           Text(
-            formatedDate(milestone.deadline),
-            style: milestone.deadline.isBefore(_now)
+            formatedDate(milestone!.deadline!),
+            style: milestone!.deadline!.isBefore(_now)
                 ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
                 : TextStyleHelper.caption(color: Get.theme.colors().onSurface),
           ),
@@ -198,7 +199,7 @@ class _ThirdColumn extends StatelessWidget {
               height: 20,
             ),
             Text(
-              milestone.activeTaskCount.toString(),
+              milestone!.activeTaskCount.toString(),
               style: TextStyleHelper.body2(
                 color: Get.theme.colors().onSurface.withOpacity(0.6),
               ),
@@ -212,8 +213,8 @@ class _ThirdColumn extends StatelessWidget {
 
 class _MilestoneIcon extends StatelessWidget {
   const _MilestoneIcon({
-    Key key,
-    @required this.itemController,
+    Key? key,
+    required this.itemController,
   }) : super(key: key);
 
   final MilestoneCellController itemController;
@@ -225,7 +226,7 @@ class _MilestoneIcon extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Obx(() {
-          var color = itemController.milestone.value.canEdit
+          var color = itemController.milestone.value!.canEdit!
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
           return Container(

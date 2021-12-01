@@ -38,7 +38,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class HtmlTextEditor extends StatelessWidget {
   const HtmlTextEditor({
-    Key key,
+    Key? key,
     this.height,
     this.hintText,
     this.hasError = false,
@@ -46,10 +46,10 @@ class HtmlTextEditor extends StatelessWidget {
     this.textController,
   }) : super(key: key);
 
-  final HtmlEditorController textController;
-  final String hintText;
-  final String initialText;
-  final double height;
+  final HtmlEditorController? textController;
+  final String? hintText;
+  final String? initialText;
+  final double? height;
   final bool hasError;
 
   @override

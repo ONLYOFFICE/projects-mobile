@@ -33,23 +33,26 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TasksSearchController extends BaseController {
-  final _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
-  var loaded = true.obs;
-  var nothingFound = false.obs;
+  RxBool loaded = true.obs;
+  RxBool nothingFound = false.obs;
 
-  String _query;
+  late String _query;
 
-  final PaginationController _paginationController = PaginationController();
-  PaginationController get paginationController => _paginationController;
+  final _paginationController = PaginationController<PortalTask>();
+  PaginationController<PortalTask> get paginationController =>
+      _paginationController;
 
-  var searchInputController = TextEditingController();
+  TextEditingController searchInputController = TextEditingController();
 
   @override
   void onInit() {
@@ -64,7 +67,7 @@ class TasksSearchController extends BaseController {
   @override
   RxList get itemList => _paginationController.data;
 
-  void newSearch(String query, {bool needToClear = true}) async {
+  Future<void> newSearch(String query, {bool needToClear = true}) async {
     _query = query.toLowerCase();
     loaded.value = false;
 
@@ -81,18 +84,20 @@ class TasksSearchController extends BaseController {
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    var result = await _api.getTasksByParams(
+    final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
       query: _query.toLowerCase(),
     );
 
-    paginationController.total.value = result.total;
+    if (result != null) {
+      paginationController.total.value = result.total;
 
-    if (result.response.isEmpty) nothingFound.value = true;
+      if (result.response!.isEmpty) nothingFound.value = true;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response);
+      paginationController.data.addAll(result.response ?? <PortalTask>[]);
+    }
   }
 
   void clearSearch() {

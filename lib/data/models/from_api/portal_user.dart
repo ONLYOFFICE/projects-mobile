@@ -34,33 +34,33 @@ import 'package:projects/data/models/from_api/contact.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 
 class PortalUser {
-  String id;
-  String userName;
-  bool isVisitor;
-  String firstName;
-  String lastName;
-  String email;
-  String birthday;
-  String sex;
-  int status;
-  int activationStatus;
-  String terminated;
-  String department;
-  String workFrom;
-  String displayName;
-  String mobilePhone;
-  String title;
-  List<Contact> contacts;
-  List<PortalGroup> groups;
-  String avatarMedium;
-  String avatar;
-  bool isAdmin;
-  bool isLDAP;
-  bool isOwner;
-  bool isSSO;
-  String avatarSmall;
-  String profileUrl;
-  List<String> listAdminModules;
+  String? id;
+  String? userName;
+  bool? isVisitor;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? birthday;
+  String? sex;
+  int? status;
+  int? activationStatus;
+  String? terminated;
+  String? department;
+  String? workFrom;
+  String? displayName;
+  String? mobilePhone;
+  String? title;
+  List<Contact>? contacts;
+  List<PortalGroup>? groups;
+  String? avatarMedium;
+  String? avatar;
+  bool? isAdmin;
+  bool? isLDAP;
+  bool? isOwner;
+  bool? isSSO;
+  String? avatarSmall;
+  String? profileUrl;
+  List<String>? listAdminModules;
 
   PortalUser({
     this.id,
@@ -94,45 +94,45 @@ class PortalUser {
 
   PortalUser.fromJson(Map<String, dynamic> json) {
     id = json['id'].toString();
-    userName = json['userName'];
-    isVisitor = json['isVisitor'];
-    firstName = json['firstName'];
-    lastName = json['lastName'];
-    email = json['email'];
-    birthday = json['birthday'];
-    sex = json['sex'];
-    status = json['status'];
-    activationStatus = json['activationStatus'];
-    terminated = json['terminated'];
-    department = json['department'];
-    workFrom = json['workFrom'];
-    displayName = json['displayName'];
-    mobilePhone = json['mobilePhone'];
-    title = json['title'];
+    userName = json['userName'] as String?;
+    isVisitor = json['isVisitor'] as bool?;
+    firstName = json['firstName'] as String?;
+    lastName = json['lastName'] as String?;
+    email = json['email'] as String?;
+    birthday = json['birthday'] as String?;
+    sex = json['sex'] as String?;
+    status = json['status'] as int?;
+    activationStatus = json['activationStatus'] as int?;
+    terminated = json['terminated'] as String?;
+    department = json['department'] as String?;
+    workFrom = json['workFrom'] as String?;
+    displayName = json['displayName'] as String?;
+    mobilePhone = json['mobilePhone'] as String?;
+    title = json['title'] as String?;
     if (json['contacts'] != null) {
       contacts = <Contact>[];
-      json['contacts'].forEach((v) {
-        contacts.add(Contact.fromJson(v));
+      ((json['contacts'] as List).cast<Map<String, dynamic>>()).forEach((e) {
+        contacts!.add(Contact.fromJson(e));
       });
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
-      json['groups'].forEach((v) {
-        groups.add(PortalGroup.fromJson(v));
+      (json['groups'] as List).forEach((e) {
+        groups!.add(PortalGroup.fromJson((e as Map).cast<String, dynamic>()));
       });
     }
-    avatarMedium = json['avatarMedium'];
-    avatar = json['avatar'];
-    isAdmin = json['isAdmin'];
-    isLDAP = json['isLDAP'];
-    isOwner = json['isOwner'];
-    isSSO = json['isSSO'];
-    avatarSmall = json['avatarSmall'];
-    profileUrl = json['profileUrl'];
+    avatarMedium = json['avatarMedium'] as String?;
+    avatar = json['avatar'] as String?;
+    isAdmin = json['isAdmin'] as bool?;
+    isLDAP = json['isLDAP'] as bool?;
+    isOwner = json['isOwner'] as bool?;
+    isSSO = json['isSSO'] as bool?;
+    avatarSmall = json['avatarSmall'] as String?;
+    profileUrl = json['profileUrl'] as String?;
     if (json['listAdminModules'] != null) {
       listAdminModules = <String>[];
-      json['listAdminModules'].forEach((v) {
-        listAdminModules.add(v);
+      (json['listAdminModules'] as List).cast<String>().forEach((e) {
+        listAdminModules!.add(e);
       });
     }
   }
@@ -156,10 +156,10 @@ class PortalUser {
     data['mobilePhone'] = mobilePhone;
     data['title'] = title;
     if (contacts != null) {
-      data['contacts'] = contacts.map((v) => v.toJson()).toList();
+      data['contacts'] = contacts!.map((e) => e.toJson()).toList();
     }
     if (groups != null) {
-      data['groups'] = groups.map((v) => v.toJson()).toList();
+      data['groups'] = groups!.map((e) => e.toJson()).toList();
     }
     data['avatarMedium'] = avatarMedium;
     data['avatar'] = avatar;
@@ -169,6 +169,7 @@ class PortalUser {
     data['isSSO'] = isSSO;
     data['avatarSmall'] = avatarSmall;
     data['profileUrl'] = profileUrl;
+    // TODO: check comment code
     if (listAdminModules != null) {
       // data['contacts'] = listAdminModules.map((v) => v.toJson()).toList();
     }

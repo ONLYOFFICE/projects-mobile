@@ -34,7 +34,7 @@ part of '../tasks_filter.dart';
 
 class _Status extends StatelessWidget {
   final BaseTaskFilterController filterController;
-  const _Status({Key key, this.filterController}) : super(key: key);
+  const _Status({Key? key, required this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +45,12 @@ class _Status extends StatelessWidget {
           FilterElement(
               title: tr('open'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['open'],
+              isSelected: filterController.status['open'] as bool,
               onTap: () => filterController.changeStatus('open')),
           FilterElement(
               title: tr('closed'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['closed'],
+              isSelected: filterController.status['closed'] as bool,
               onTap: () => filterController.changeStatus('closed')),
         ],
       ),

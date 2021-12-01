@@ -43,7 +43,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class NoInternetScreen extends StatelessWidget {
   const NoInternetScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

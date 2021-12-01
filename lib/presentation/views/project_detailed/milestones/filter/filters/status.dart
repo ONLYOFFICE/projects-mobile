@@ -33,11 +33,11 @@
 part of '../milestone_filter_screen.dart';
 
 class _Status extends StatelessWidget {
-  const _Status({Key key}) : super(key: key);
+  const _Status({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<MilestonesFilterController>();
+    final filterController = Get.find<MilestonesFilterController>();
     return Obx(
       () => FiltersRow(
         title: tr('status'),
@@ -45,12 +45,12 @@ class _Status extends StatelessWidget {
           FilterElement(
               title: tr('active'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['active'],
+              isSelected: filterController.status?['active'] as bool?,
               onTap: () => filterController.changeStatus('active')),
           FilterElement(
               title: tr('closed'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['closed'],
+              isSelected: filterController.status?['closed'] as bool?,
               onTap: () => filterController.changeStatus('closed')),
         ],
       ),

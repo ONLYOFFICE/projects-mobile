@@ -44,23 +44,23 @@ import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 
 class SubtaskDetailedView extends StatelessWidget {
-  const SubtaskDetailedView({Key key}) : super(key: key);
+  const SubtaskDetailedView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    SubtaskController controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'] as SubtaskController;
 
     return Obx(
       () {
-        var _subtask = controller.subtask.value;
+        var _subtask = controller.subtask.value!;
         return Scaffold(
           appBar: StyledAppBar(
             actions: [
-              if (_subtask.canEdit || controller.canCreateSubtask)
+              if (_subtask.canEdit! || controller.canCreateSubtask)
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, size: 26),
                   offset: const Offset(0, 25),
-                  onSelected: (value) =>
+                  onSelected: (dynamic value) =>
                       _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
@@ -79,7 +79,7 @@ class SubtaskDetailedView extends StatelessWidget {
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
-                      if (_subtask.canEdit)
+                      if (_subtask.canEdit!)
                         PopupMenuItem(
                           value: 'delete',
                           child: Text(
@@ -104,8 +104,8 @@ class SubtaskDetailedView extends StatelessWidget {
                       children: [
                         SubtaskCheckBox(subtaskController: controller),
                         Obx(() => Expanded(
-                              child: Text(_subtask.title,
-                                  style: controller.subtask.value.status == 2
+                              child: Text(_subtask.title!,
+                                  style: controller.subtask.value!.status == 2
                                       ? TextStyleHelper.subtitle1(
                                               color: const Color(0xff9C9C9C))
                                           .copyWith(
@@ -140,7 +140,7 @@ class SubtaskDetailedView extends StatelessWidget {
                                       .onBackground
                                       .withOpacity(0.75))),
                           Text(
-                            _subtask?.responsible?.displayName ??
+                            _subtask.responsible?.displayName ??
                                 tr('noResponsible'),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -150,13 +150,13 @@ class SubtaskDetailedView extends StatelessWidget {
                         ],
                       ),
                     ),
-                    if (_subtask.responsible != null && _subtask.canEdit)
+                    if (_subtask.responsible != null && _subtask.canEdit!)
                       IconButton(
                         icon: Icon(Icons.clear_rounded,
                             color:
                                 Get.theme.colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
-                            taskId: _subtask.taskId, subtaskId: _subtask.id),
+                            taskId: _subtask.taskId!, subtaskId: _subtask.id!),
                       )
                   ],
                 )
@@ -169,20 +169,20 @@ class SubtaskDetailedView extends StatelessWidget {
   }
 }
 
-void _onSelected(context, value, SubtaskController controller) {
+void _onSelected(BuildContext context, value, SubtaskController controller) {
   switch (value) {
     case 'accept':
       controller.acceptSubtask(
         context,
-        taskId: controller.subtask.value.taskId,
-        subtaskId: controller.subtask.value.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
       );
       break;
     case 'edit':
       Get.find<NavigationController>()
           .to(const CreatingAndEditingSubtaskView(), arguments: {
-        'taskId': controller.subtask.value.taskId,
-        'projectId': controller.parentTask.projectOwner.id,
+        'taskId': controller.subtask.value!.taskId,
+        'projectId': controller.parentTask!.projectOwner!.id,
         'forEditing': true,
         'itemController': controller,
       });
@@ -190,15 +190,15 @@ void _onSelected(context, value, SubtaskController controller) {
     case 'copy':
       controller.copySubtask(
         context,
-        taskId: controller.subtask.value.taskId,
-        subtaskId: controller.subtask.value.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
       );
       break;
     case 'delete':
       controller.deleteSubtask(
         context: context,
-        taskId: controller.subtask.value.taskId,
-        subtaskId: controller.subtask.value.id,
+        taskId: controller.subtask.value!.taskId!,
+        subtaskId: controller.subtask.value!.id!,
         closePage: true,
       );
       break;

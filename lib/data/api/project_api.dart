@@ -48,19 +48,19 @@ import 'package:projects/data/models/from_api/error.dart';
 
 class ProjectApi {
   Future<ApiDTO<List<Project>>> getProjects() async {
-    var url = await locator.get<CoreApi>().projectsUrl();
+    final url = await locator.get<CoreApi>().projectsUrl();
 
-    var result = ApiDTO<List<Project>>();
+    final result = ApiDTO<List<Project>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => Project.fromJson(i))
+            .map((i) => Project.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -85,14 +85,14 @@ class ProjectApi {
 // &__=291475
 // &FilterValue=searchquerry
   Future<PageDTO<List<ProjectDetailed>>> getProjectsByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    String projectManagerFilter,
-    String participantFilter,
-    String otherFilter,
-    String statusFilter,
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    String? projectManagerFilter,
+    String? participantFilter,
+    String? otherFilter,
+    String? statusFilter,
   }) async {
     var url = await locator.get<CoreApi>().projectsByParamsBaseUrl();
 
@@ -122,19 +122,19 @@ class ProjectApi {
       url += statusFilter;
     }
 
-    var result = PageDTO<List<ProjectDetailed>>();
+    final result = PageDTO<List<ProjectDetailed>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['total'] as int;
 
         result.response = (responseJson['response'] as List)
-            .map((i) => ProjectDetailed.fromJson(i))
+            .map((i) => ProjectDetailed.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -143,20 +143,22 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectDetailed>> getProjectById({int projectId}) async {
-    var url = await locator.get<CoreApi>().projectByIdUrl(projectId);
+  Future<ApiDTO<ProjectDetailed>> getProjectById(
+      {required int projectId}) async {
+    final url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
-    var result = ApiDTO<ProjectDetailed>();
+    final result = ApiDTO<ProjectDetailed>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         {
-          var responseJson = json.decode(response.body);
-          result.response = ProjectDetailed.fromJson(responseJson['response']);
+          final responseJson = json.decode(response.body);
+          result.response = ProjectDetailed.fromJson(
+              responseJson['response'] as Map<String, dynamic>);
         }
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -166,18 +168,18 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<Status>>> getStatuses() async {
-    var url = await locator.get<CoreApi>().statusesUrl();
-    var result = ApiDTO<List<Status>>();
+    final url = await locator.get<CoreApi>().statusesUrl();
+    final result = ApiDTO<List<Status>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => Status.fromJson(i))
+            .map((i) => Status.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -187,18 +189,18 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<ProjectTag>>> getProjectTags() async {
-    var url = await locator.get<CoreApi>().projectTags();
-    var result = ApiDTO<List<ProjectTag>>();
+    final url = await locator.get<CoreApi>().projectTags();
+    final result = ApiDTO<List<ProjectTag>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => ProjectTag.fromJson(i))
+            .map((i) => ProjectTag.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -208,8 +210,8 @@ class ProjectApi {
   }
 
   Future<PageDTO<List<ProjectTag>>> getTagsPaginated({
-    int startIndex,
-    String query,
+    int? startIndex,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().projectTags();
 
@@ -217,17 +219,17 @@ class ProjectApi {
 
     if (startIndex != null) url += '?&Count=25&StartIndex=$startIndex';
 
-    var result = PageDTO<List<ProjectTag>>();
+    final result = PageDTO<List<ProjectTag>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => ProjectTag.fromJson(i))
+            .map((i) => ProjectTag.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -236,20 +238,21 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectDetailed>> createProject({NewProjectDTO project}) async {
-    var url = await locator.get<CoreApi>().createProjectUrl();
+  Future<ApiDTO<ProjectDetailed>> createProject({required NewProjectDTO project}) async {
+    final url = await locator.get<CoreApi>().createProjectUrl();
 
-    var result = ApiDTO<ProjectDetailed>();
-    var body = project.toJson();
+    final result = ApiDTO<ProjectDetailed>();
+    final body = project.toJson();
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = ProjectDetailed.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = ProjectDetailed.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -259,20 +262,20 @@ class ProjectApi {
   }
 
   Future<ApiDTO<Map<String, dynamic>>> editProject(
-      {EditProjectDTO project, int projectId}) async {
-    var url = await locator.get<CoreApi>().projectByIdUrl(projectId);
+      {required EditProjectDTO project, required int projectId}) async {
+    final url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
-    var result = ApiDTO<Map<String, dynamic>>();
-    var body = project.toJson();
+    final result = ApiDTO<Map<String, dynamic>>();
+    final body = project.toJson();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        final responseJson = json.decode(response.body);
+        result.response = responseJson['response'] as Map<String, dynamic>;
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -281,20 +284,22 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<List<PortalUser>>> getProjectTeam(String projectID) async {
-    var url = await locator.get<CoreApi>().projectTeamUrl(projectID);
+  Future<ApiDTO<List<PortalUser>>> getProjectTeam(
+      {required int projectID}) async {
+    final url =
+        await locator.get<CoreApi>().projectTeamUrl(projectID: projectID);
 
-    var result = ApiDTO<List<PortalUser>>();
+    final result = ApiDTO<List<PortalUser>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => PortalUser.fromJson(i))
+            .map((i) => PortalUser.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -303,19 +308,20 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<PortalUser>> deleteProject({int projectId}) async {
-    var url = await locator.get<CoreApi>().projectByIDUrl(projectId);
+  Future<ApiDTO<PortalUser>> deleteProject({required int projectId}) async {
+    final url = await locator.get<CoreApi>().projectByIDUrl(projectId);
 
-    var result = ApiDTO<PortalUser>();
+    final result = ApiDTO<PortalUser>();
 
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalUser.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = PortalUser.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -325,20 +331,23 @@ class ProjectApi {
   }
 
   Future<ApiDTO<ProjectDetailed>> updateProjectStatus(
-      {int projectId, String newStatus}) async {
-    var url = await locator.get<CoreApi>().updateProjectStatusUrl(projectId);
+      {required int projectId, required String newStatus}) async {
+    final url = await locator
+        .get<CoreApi>()
+        .updateProjectStatusUrl(projectId: projectId);
 
-    var result = ApiDTO<ProjectDetailed>();
-    var body = {'status': newStatus};
+    final result = ApiDTO<ProjectDetailed>();
+    final body = {'status': newStatus};
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = ProjectDetailed.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = ProjectDetailed.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -347,19 +356,21 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<FollowProject>> followProject({int projectId}) async {
-    var url = await locator.get<CoreApi>().followProjectUrl(projectId);
+  Future<ApiDTO<FollowProject>> followProject({required int projectId}) async {
+    final url =
+        await locator.get<CoreApi>().followProjectUrl(projectId: projectId);
 
-    var result = ApiDTO<FollowProject>();
+    final result = ApiDTO<FollowProject>();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url);
+      final response = await locator.get<CoreApi>().putRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = FollowProject.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = FollowProject.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -368,21 +379,22 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectTag>> createTag({String name}) async {
-    var url = await locator.get<CoreApi>().createTagUrl();
+  Future<ApiDTO<ProjectTag>> createTag({required String name}) async {
+    final url = await locator.get<CoreApi>().createTagUrl();
 
-    var result = ApiDTO<ProjectTag>();
+    final result = ApiDTO<ProjectTag>();
 
-    var body = {'data': name};
+    final body = {'data': name};
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = ProjectTag.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = ProjectTag.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -392,23 +404,24 @@ class ProjectApi {
   }
 
   Future<ApiDTO<List<PortalUser>>> addToProjectTeam(
-      String projectID, List<String> users) async {
-    var url = await locator.get<CoreApi>().projectTeamUrl(projectID);
+      {required int projectID, required List<String> users}) async {
+    final url =
+        await locator.get<CoreApi>().projectTeamUrl(projectID: projectID);
 
-    var result = ApiDTO<List<PortalUser>>();
+    final result = ApiDTO<List<PortalUser>>();
 
-    var body = {'participants': users, 'notify': true};
+    final body = {'participants': users, 'notify': true};
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => PortalUser.fromJson(i))
+            .map((i) => PortalUser.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -417,18 +430,19 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<SecrityInfo>> getProjectSecurityinfo() async {
-    var url = await locator.get<CoreApi>().getProjectSecurityinfoUrl();
+  Future<ApiDTO<SecurityInfo>> getProjectSecurityinfo() async {
+    final url = await locator.get<CoreApi>().getProjectSecurityInfoUrl();
 
-    var result = ApiDTO<SecrityInfo>();
+    final result = ApiDTO<SecurityInfo>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = SecrityInfo.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = SecurityInfo.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

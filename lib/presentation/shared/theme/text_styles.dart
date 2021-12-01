@@ -45,7 +45,7 @@ class TextStyleHelper {
     // color: AppColors.onBackground
   );
 
-  static TextStyle body2({Color color}) {
+  static TextStyle body2({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w400,
@@ -55,7 +55,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle button({Color color}) {
+  static TextStyle button({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w500,
@@ -65,7 +65,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle caption({Color color}) {
+  static TextStyle caption({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontSize: 12,
@@ -77,7 +77,7 @@ class TextStyleHelper {
 
   static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
 
-  static TextStyle h6({Color color}) {
+  static TextStyle h6({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w500,
@@ -87,7 +87,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle headline3({Color color}) {
+  static TextStyle headline3({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w400,
@@ -96,7 +96,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle headline4({Color color}) {
+  static TextStyle headline4({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w400,
@@ -106,7 +106,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle headline5({Color color}) {
+  static TextStyle headline5({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w400,
@@ -115,7 +115,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle headline6({Color color}) {
+  static TextStyle headline6({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w500,
@@ -125,7 +125,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle headline7({Color color}) {
+  static TextStyle headline7({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontWeight: FontWeight.w500,
@@ -135,7 +135,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle headerStyle({Color color}) {
+  static TextStyle headerStyle({Color? color}) {
     return TextStyle(
       color: color,
       fontFamily: 'Roboto',
@@ -145,7 +145,7 @@ class TextStyleHelper {
     );
   }
 
-  static TextStyle overline({Color color}) {
+  static TextStyle overline({Color? color}) {
     return TextStyle(
       color: color,
       fontFamily: 'Roboto',
@@ -163,7 +163,7 @@ class TextStyleHelper {
       height: 1.25,
       letterSpacing: 0.15);
 
-  static TextStyle status({Color color}) {
+  static TextStyle status({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         color: color,
@@ -210,7 +210,7 @@ class TextStyleHelper {
     fontWeight: FontWeight.w500,
   );
 
-  static TextStyle subtitle1({Color color}) {
+  static TextStyle subtitle1({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontSize: 16,
@@ -220,7 +220,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static TextStyle subtitle2({Color color}) {
+  static TextStyle subtitle2({Color? color}) {
     return TextStyle(
         fontFamily: 'Roboto',
         fontSize: 14,

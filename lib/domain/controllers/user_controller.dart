@@ -40,35 +40,35 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/internal/locator.dart';
 
 class UserController extends GetxController {
-  final _api = locator<AuthService>();
-  var lock = Lock();
+  final AuthService _api = locator<AuthService>();
+  final _lock = Lock();
 
-  PortalUser user;
-  SecrityInfo securityInfo;
-  var loaded = false.obs;
+  PortalUser? user;
+  SecurityInfo? securityInfo;
+  RxBool loaded = false.obs;
 
-  Future getUserInfo() async {
-    await lock.synchronized(() async {
+  Future<void> getUserInfo() async {
+    await _lock.synchronized(() async {
       if (user != null) return;
-      var data = await _api.getSelfInfo();
+      final data = await _api.getSelfInfo();
       user = data.response;
       loaded.value = securityInfo != null;
     });
   }
 
   Future getSecurityInfo() async {
-    await lock.synchronized(() async {
+    await _lock.synchronized(() async {
       securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
 
       loaded.value = user != null;
     });
   }
 
-  Future<String> getUserId() async {
-    if (user == null || user.id == null) {
+  Future<String?> getUserId() async {
+    if (user == null || user!.id == null) {
       await getUserInfo();
     }
-    return user.id;
+    return user!.id;
   }
 
   void clear() {

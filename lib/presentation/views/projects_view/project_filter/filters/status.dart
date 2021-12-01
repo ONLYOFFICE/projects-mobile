@@ -33,9 +33,9 @@
 part of '../projects_filter.dart';
 
 class _Status extends StatelessWidget {
-  final ProjectsFilterController filterController;
+  final ProjectsFilterController? filterController;
 
-  const _Status({Key key, this.filterController}) : super(key: key);
+  const _Status({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +46,18 @@ class _Status extends StatelessWidget {
           FilterElement(
               title: tr('active'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['active'],
-              onTap: () => filterController.changeStatus('active')),
+              isSelected: filterController!.status['active'],
+              onTap: () => filterController!.changeStatus('active')),
           FilterElement(
               title: tr('paused'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['paused'],
-              onTap: () => filterController.changeStatus('paused')),
+              isSelected: filterController!.status['paused'],
+              onTap: () => filterController!.changeStatus('paused')),
           FilterElement(
               title: tr('closed'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['closed'],
-              onTap: () => filterController.changeStatus('closed')),
+              isSelected: filterController!.status['closed'],
+              onTap: () => filterController!.changeStatus('closed')),
         ],
       ),
     );

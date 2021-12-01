@@ -55,7 +55,7 @@ part 'filters/milestone_responsible.dart';
 
 class MilestoneFilterScreen extends StatelessWidget {
   const MilestoneFilterScreen({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

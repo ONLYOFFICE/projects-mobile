@@ -45,19 +45,19 @@ import 'package:projects/presentation/views/task_detailed/comments/new_comment_v
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TaskCommentsView extends StatelessWidget {
-  final TaskItemController controller;
+  final TaskItemController? controller;
   const TaskCommentsView({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.value == true &&
-            controller.task.value.comments != null) {
-          var comments = controller.task.value.comments;
+        if (controller!.loaded.value == true &&
+            controller!.task.value.comments != null) {
+          var comments = controller!.task.value.comments!;
           return Column(
             children: [
               if (comments.isEmpty)
@@ -70,12 +70,12 @@ class TaskCommentsView extends StatelessWidget {
               if (comments.isNotEmpty)
                 Expanded(
                   child: SmartRefresher(
-                    controller: controller.commentsRefreshController,
+                    controller: controller!.commentsRefreshController,
                     onRefresh: () async =>
-                        await controller.reloadTask(showLoading: true),
+                        await controller!.reloadTask(showLoading: true),
                     child: ListView.separated(
                       itemCount: comments.length,
-                      controller: controller.commentsListController,
+                      controller: controller!.commentsListController,
                       padding: const EdgeInsets.only(top: 32, bottom: 40),
                       separatorBuilder: (BuildContext context, int index) {
                         return SizedBox(
@@ -85,20 +85,20 @@ class TaskCommentsView extends StatelessWidget {
                       itemBuilder: (BuildContext context, int index) {
                         return CommentsThread(
                           comment: comments[index],
-                          taskId: controller.task.value.id,
+                          taskId: controller!.task.value.id,
                         );
                       },
                     ),
                   ),
                 ),
-              if (controller?.task?.value?.canCreateComment == null ||
-                  controller?.task?.value?.canCreateComment == true)
+              if (controller?.task.value.canCreateComment == null ||
+                  controller?.task.value.canCreateComment == true)
                 AddCommentButton(
                   onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewCommentView(),
                     arguments: {
                       'controller': Get.put(NewTaskCommentController(
-                          idFrom: controller.task.value.id))
+                          idFrom: controller!.task.value.id))
                     },
                   ),
                 ),

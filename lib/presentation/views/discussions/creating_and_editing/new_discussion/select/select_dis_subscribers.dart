@@ -50,12 +50,13 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectDiscussionSubscribers extends StatelessWidget {
-  const SelectDiscussionSubscribers({Key key}) : super(key: key);
+  const SelectDiscussionSubscribers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var usersDataSource = Get.find<UsersDataSource>();
-    DiscussionActionsController controller = Get.arguments['controller'];
+    final usersDataSource = Get.find<UsersDataSource>();
+    final controller =
+        Get.arguments['controller'] as DiscussionActionsController;
 
     controller.setupSubscribersSelection();
 

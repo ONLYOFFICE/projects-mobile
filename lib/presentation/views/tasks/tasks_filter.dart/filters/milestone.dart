@@ -34,7 +34,8 @@ part of '../tasks_filter.dart';
 
 class _Milestone extends StatelessWidget {
   final BaseTaskFilterController filterController;
-  const _Milestone({Key key, this.filterController}) : super(key: key);
+  const _Milestone({Key? key, required this.filterController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,27 +46,27 @@ class _Milestone extends StatelessWidget {
           FilterElement(
               title: tr('milestonesWithMyTasks'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.milestone['my'],
+              isSelected: filterController.milestone['my'] as bool?,
               onTap: () => filterController.changeMilestone('my')),
           FilterElement(
               title: tr('noMilestone'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.milestone['no'],
+              isSelected: filterController.milestone['no'] as bool?,
               onTap: () => filterController.changeMilestone('no')),
           FilterElement(
-              title: filterController.milestone['other'].isEmpty
+              title: filterController.milestone['other'].isEmpty as bool
                   ? tr('otherMilestones')
-                  : filterController.milestone['other'],
-              isSelected: filterController.milestone['other'].isNotEmpty,
+                  : filterController.milestone['other'] as String,
+              isSelected:
+                  filterController.milestone['other'].isNotEmpty as bool?,
               onTap: () async {
                 var milestone = await Get.find<NavigationController>()
                     .toScreen(const SelectMilestoneScreen());
                 filterController.changeMilestone('other', milestone);
               },
               cancelButtonEnabled:
-                  filterController.milestone['other'].isNotEmpty,
-              onCancelTap: () =>
-                  filterController.changeMilestone('other', null)),
+                  filterController.milestone['other'].isNotEmpty as bool?,
+              onCancelTap: () => filterController.changeMilestone('other')),
         ],
       ),
     );

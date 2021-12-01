@@ -39,11 +39,12 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
 class UsersFromGroups extends StatelessWidget {
-  const UsersFromGroups({Key key}) : super(key: key);
+  const UsersFromGroups({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    DiscussionActionsController controller = Get.arguments['controller'];
+    final controller =
+        Get.arguments['controller'] as DiscussionActionsController;
 
     var groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();

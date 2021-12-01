@@ -41,8 +41,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class ProjectDiscussionsScreen extends StatelessWidget {
   final ProjectDiscussionsController controller;
   const ProjectDiscussionsScreen({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

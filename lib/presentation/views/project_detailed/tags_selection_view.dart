@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/tag_itemDTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 
@@ -48,7 +49,7 @@ import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart'
 
 class TagsSelectionView extends StatelessWidget {
   const TagsSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -138,9 +139,9 @@ class TagsSelectionView extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   const _Header({
-    Key key,
-    @required this.title,
-    @required this.controller,
+    Key? key,
+    required this.title,
+    required this.controller,
   }) : super(key: key);
 
   final String title;
@@ -180,8 +181,8 @@ class _Header extends StatelessWidget {
 
 class _TagsSearchBar extends StatelessWidget {
   const _TagsSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;
@@ -210,9 +211,9 @@ class _TagsSearchBar extends StatelessWidget {
 
 class _TagsList extends StatelessWidget {
   const _TagsList({
-    Key key,
-    @required this.controller,
-    @required this.onTapFunction,
+    Key? key,
+    required this.controller,
+    required this.onTapFunction,
   }) : super(key: key);
   final Function onTapFunction;
   final controller;
@@ -225,13 +226,13 @@ class _TagsList extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemBuilder: (c, i) => TagItem(
-              tagItemDTO: controller.tags[i],
+              tagItemDTO: controller.tags[i] as TagItemDTO?,
               onTapFunction: () {
                 controller.changeTagSelection(controller.tags[i]);
               },
             ),
-            itemExtent: 65.0,
-            itemCount: controller.tags.length,
+            itemExtent: 65,
+            itemCount: controller.tags.length as int?,
           ),
         )
       ],

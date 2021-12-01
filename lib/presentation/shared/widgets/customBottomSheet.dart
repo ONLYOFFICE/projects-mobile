@@ -34,15 +34,15 @@ import 'package:bottom_sheet/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 void showCustomBottomSheet({
-  @required context,
-  @required double headerHeight,
+  required BuildContext context,
+  required double headerHeight,
   // ignore: use_function_type_syntax_for_parameters
-  @required Widget headerBuilder(context, bottomSheetOffset),
+  required Widget headerBuilder(context, bottomSheetOffset),
   // ignore: use_function_type_syntax_for_parameters
-  @required SliverChildDelegate builder(context, bottomSheetOffset),
-  double initHeight,
-  double maxHeight,
-  BoxDecoration decoration,
+  required SliverChildDelegate builder(context, bottomSheetOffset),
+  double? initHeight,
+  double? maxHeight,
+  BoxDecoration? decoration,
 }) async {
   var heightWithoutStatusBar = _getMaxHeight(context);
 
@@ -57,11 +57,11 @@ void showCustomBottomSheet({
       anchors: [
         0,
         initHeight ?? heightWithoutStatusBar - 0.1,
-        maxHeight ?? initHeight
+        maxHeight ?? initHeight!
       ]);
 }
 
-double _getMaxHeight(context) {
+double _getMaxHeight(BuildContext context) {
   var screenHeight = MediaQuery.of(context).size.height;
   var statusBarHeight = MediaQuery.of(context).padding.top == 0
       ? 32

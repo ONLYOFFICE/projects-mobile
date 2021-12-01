@@ -42,7 +42,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 
 class ColorThemeSelectionScreen extends StatelessWidget {
-  const ColorThemeSelectionScreen({Key key}) : super(key: key);
+  const ColorThemeSelectionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,11 +89,11 @@ class ColorThemeSelectionScreen extends StatelessWidget {
 
 class _ColorThemeTile extends StatelessWidget {
   final String text;
-  final bool isSelected;
-  final Function onTap;
+  final bool? isSelected;
+  final Function? onTap;
   const _ColorThemeTile({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
     this.isSelected,
     this.onTap,
   }) : super(key: key);
@@ -101,14 +101,14 @@ class _ColorThemeTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTap,
+      onTap: onTap as void Function()?,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 14, 28, 14),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(text, style: TextStyleHelper.projectTitle),
-            if (isSelected)
+            if (isSelected!)
               Icon(
                 Icons.check_rounded,
                 color: Get.theme.colors().onBackground.withOpacity(0.6),

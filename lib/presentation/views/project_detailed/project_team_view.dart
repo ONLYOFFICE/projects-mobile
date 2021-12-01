@@ -46,14 +46,14 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTeamView extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailed? projectDetailed;
 
   final fabAction;
 
   const ProjectTeamView({
-    Key key,
-    @required this.projectDetailed,
-    @required this.fabAction,
+    Key? key,
+    required this.projectDetailed,
+    required this.fabAction,
   }) : super(key: key);
 
   @override
@@ -73,7 +73,7 @@ class ProjectTeamView extends StatelessWidget {
               () => Visibility(
                 visible: projectTeamDataSource.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: fabAction,
+                  onPressed: fabAction as Function(),
                   child: AppIcon(
                     icon: SvgIcons.fab_user,
                     color: Get.theme.colors().onPrimarySurface,
@@ -90,8 +90,8 @@ class ProjectTeamView extends StatelessWidget {
 
 class _Content extends StatelessWidget {
   const _Content({
-    Key key,
-    @required this.projectTeamDataSource,
+    Key? key,
+    required this.projectTeamDataSource,
   }) : super(key: key);
 
   final ProjectTeamController projectTeamDataSource;

@@ -40,8 +40,8 @@ import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 Future<void> showsDiscussionStatusesBS({
-  context,
-  DiscussionItemController controller,
+  required BuildContext context,
+  DiscussionItemController? controller,
 }) async {
   var initSize = _getInititalSize();
   showCustomBottomSheet(
@@ -84,10 +84,10 @@ Future<void> showsDiscussionStatusesBS({
                 children: [
                   const SizedBox(height: 4),
                   InkWell(
-                    onTap: () async => controller.updateMessageStatus(0),
+                    onTap: () async => controller!.updateMessageStatus(0),
                     child: StatusTile(
                       title: tr('open'),
-                      selected: controller.status.value == 0,
+                      selected: controller!.status.value == 0,
                     ),
                   ),
                   InkWell(

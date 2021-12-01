@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
-import 'package:projects/domain/controllers/base/base_search_controller.dart';
 import 'package:projects/domain/controllers/milestones/milestones_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestone_search_controller.dart';
@@ -43,13 +42,13 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/common/
 
 class SelectMilestoneScreen extends StatelessWidget
     with SelectItemWithSearchMixin {
-  const SelectMilestoneScreen({Key key}) : super(key: key);
+  const SelectMilestoneScreen({Key? key}) : super(key: key);
 
   @override
   String get appBarText => tr('selectMilestone');
 
   @override
-  BaseSearchController get searchController =>
+  MilestoneSearchController get searchController =>
       Get.put(MilestoneSearchController());
 
   @override
@@ -71,7 +70,7 @@ class SelectMilestoneScreen extends StatelessWidget
 }
 
 class _MilestoneList extends StatelessWidget with SelectItemListMixin {
-  const _MilestoneList({Key key}) : super(key: key);
+  const _MilestoneList({Key? key}) : super(key: key);
 
   @override
   PaginationController get paginationController =>
@@ -79,7 +78,8 @@ class _MilestoneList extends StatelessWidget with SelectItemListMixin {
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
-        Milestone milestone = paginationController.data[i];
+        // TODO: casting type
+        final Milestone milestone = paginationController.data[i] as Milestone;
         return SelectItemTile(
             title: milestone.title,
             onSelect: () => Get.back(
@@ -89,8 +89,8 @@ class _MilestoneList extends StatelessWidget with SelectItemListMixin {
 
 class _SearchResult extends StatelessWidget with SelectItemListMixin {
   const _SearchResult({
-    Key key,
-    this.paginationController,
+    Key? key,
+    required this.paginationController,
   }) : super(key: key);
 
   @override
@@ -98,7 +98,8 @@ class _SearchResult extends StatelessWidget with SelectItemListMixin {
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
-        Milestone milestone = paginationController.data[i];
+        // TODO: casting type
+        final Milestone milestone = paginationController.data[i] as Milestone;
         return SelectItemTile(
             title: milestone.title,
             onSelect: () => Get.back(

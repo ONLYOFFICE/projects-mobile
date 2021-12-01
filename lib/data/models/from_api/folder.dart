@@ -34,13 +34,13 @@ import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class FoldersResponse {
-  List<PortalFile> files;
-  List<Folder> folders;
-  Folder current;
-  List<int> pathParts;
-  int startIndex;
-  int count;
-  int total;
+  List<PortalFile>? files;
+  List<Folder>? folders;
+  Folder? current;
+  List<int>? pathParts;
+  int? startIndex;
+  int? count;
+  int? total;
 
   FoldersResponse(
       {this.files,
@@ -54,33 +54,35 @@ class FoldersResponse {
   FoldersResponse.fromJson(Map<String, dynamic> json) {
     if (json['files'] != null) {
       files = <PortalFile>[];
-      json['files'].forEach((v) {
-        files.add(PortalFile.fromJson(v));
+      json['files'].forEach((e) {
+        files!.add(PortalFile.fromJson(e as Map<String, dynamic>));
       });
     }
     if (json['folders'] != null) {
       folders = <Folder>[];
-      json['folders'].forEach((v) {
-        folders.add(Folder.fromJson(v));
+      json['folders'].forEach((e) {
+        folders!.add(Folder.fromJson(e as Map<String, dynamic>));
       });
     }
-    current = json['current'] != null ? Folder.fromJson(json['current']) : null;
-    pathParts = json['pathParts'].cast<int>();
-    startIndex = json['startIndex'];
-    count = json['count'];
-    total = json['total'];
+    current = json['current'] != null
+        ? Folder.fromJson(json['current'] as Map<String, dynamic>)
+        : null;
+    pathParts = (json['pathParts'] as List).cast<int>();
+    startIndex = json['startIndex'] as int?;
+    count = json['count'] as int?;
+    total = json['total'] as int?;
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
     if (files != null) {
-      data['files'] = files.map((v) => v.toJson()).toList();
+      data['files'] = files!.map((v) => v.toJson()).toList();
     }
     if (folders != null) {
-      data['folders'] = folders.map((v) => v.toJson()).toList();
+      data['folders'] = folders!.map((v) => v.toJson()).toList();
     }
     if (current != null) {
-      data['current'] = current.toJson();
+      data['current'] = current!.toJson();
     }
     data['pathParts'] = pathParts;
     data['startIndex'] = startIndex;
@@ -91,18 +93,18 @@ class FoldersResponse {
 }
 
 class Folder {
-  int parentId;
-  int filesCount;
-  int foldersCount;
-  int id;
-  String title;
-  int access;
-  bool shared;
-  int rootFolderType;
-  PortalUser updatedBy;
-  DateTime created;
-  PortalUser createdBy;
-  DateTime updated;
+  int? parentId;
+  int? filesCount;
+  int? foldersCount;
+  int? id;
+  String? title;
+  int? access;
+  bool? shared;
+  int? rootFolderType;
+  PortalUser? updatedBy;
+  DateTime? created;
+  PortalUser? createdBy;
+  DateTime? updated;
 
   Folder(
       {this.parentId,
@@ -119,22 +121,22 @@ class Folder {
       this.updated});
 
   Folder.fromJson(Map<String, dynamic> json) {
-    parentId = json['parentId'];
-    filesCount = json['filesCount'];
-    foldersCount = json['foldersCount'];
-    id = json['id'];
-    title = json['title'];
-    access = json['access'];
-    shared = json['shared'];
-    rootFolderType = json['rootFolderType'];
+    parentId = json['parentId'] as int?;
+    filesCount = json['filesCount'] as int?;
+    foldersCount = json['foldersCount'] as int?;
+    id = json['id'] as int?;
+    title = json['title'] as String?;
+    access = json['access'] as int?;
+    shared = json['shared'] as bool?;
+    rootFolderType = json['rootFolderType'] as int?;
     updatedBy = json['updatedBy'] != null
-        ? PortalUser.fromJson(json['updatedBy'])
+        ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
         : null;
-    created = DateTime.parse(json['created']);
+    created = DateTime.parse(json['created'] as String);
     createdBy = json['createdBy'] != null
-        ? PortalUser.fromJson(json['createdBy'])
+        ? PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>)
         : null;
-    updated = DateTime.parse(json['updated']);
+    updated = DateTime.parse(json['updated'] as String);
   }
 
   Map<String, dynamic> toJson() {
@@ -148,11 +150,11 @@ class Folder {
     data['shared'] = shared;
     data['rootFolderType'] = rootFolderType;
     if (updatedBy != null) {
-      data['updatedBy'] = updatedBy.toJson();
+      data['updatedBy'] = updatedBy!.toJson();
     }
     data['created'] = created?.toIso8601String();
     if (createdBy != null) {
-      data['createdBy'] = createdBy.toJson();
+      data['createdBy'] = createdBy!.toJson();
     }
     data['updated'] = updated?.toIso8601String();
     return data;

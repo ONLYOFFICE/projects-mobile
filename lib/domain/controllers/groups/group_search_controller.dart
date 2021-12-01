@@ -46,7 +46,7 @@ class GroupSearchController extends BaseSearchController {
   @override
   PaginationController get paginationController => _paginationController;
 
-  String _query;
+  String? _query;
 
   @override
   void onInit() {
@@ -61,7 +61,7 @@ class GroupSearchController extends BaseSearchController {
   }
 
   @override
-  Future search({needToClear = true, String query}) async {
+  Future search({bool needToClear = true, String? query}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;
@@ -76,9 +76,9 @@ class GroupSearchController extends BaseSearchController {
     loaded.value = true;
   }
 
-  Future _performSearch({needToClear = true, String query}) async {
+  Future _performSearch({bool needToClear = true, String? query}) async {
     // now the result is incorrect
-    var result = await _service.getGroupsByExtendedFilter(
+    final result = await _service.getGroupsByExtendedFilter(
       startIndex: paginationController.startIndex,
       query: query,
     );

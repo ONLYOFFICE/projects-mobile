@@ -37,6 +37,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
@@ -56,27 +57,27 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
-  const TasksView({Key key}) : super(key: key);
+  const TasksView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.isRegistered<TasksController>(tag: 'TasksView')
+    final controller = Get.isRegistered<TasksController>(tag: 'TasksView')
         ? Get.find<TasksController>(tag: 'TasksView')
         : Get.put(
             TasksController(
               Get.find<TaskFilterController>(),
-              Get.find<PaginationController>(),
+              Get.find<PaginationController<PortalTask>>(),
             ),
             tag: 'TasksView');
 
     controller.setup(PresetTaskFilters.saved);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadTasks();
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
     scrollController.addListener(
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
@@ -101,7 +102,7 @@ class TasksView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             showBackButton: false,
             titleText: controller.screenName,
             elevation: value,
@@ -171,13 +172,13 @@ class TasksView extends StatelessWidget {
 }
 
 class TasksHeader extends StatelessWidget {
-  TasksHeader({Key key, @required this.controller}) : super(key: key);
+  const TasksHeader({Key? key, required this.controller}) : super(key: key);
 
-  final controller;
+  final TasksController controller;
 
   @override
   Widget build(BuildContext context) {
-    var options = Column(
+    final options = Column(
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),

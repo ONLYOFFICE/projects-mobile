@@ -39,13 +39,14 @@ import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class CommentEditingView extends StatelessWidget {
-  const CommentEditingView({Key key}) : super(key: key);
+  const CommentEditingView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String commentId = Get.arguments['commentId'];
-    String commentBody = Get.arguments['commentBody'];
-    CommentItemController itemController = Get.arguments['itemController'];
+    var commentId = Get.arguments['commentId'] as String?;
+    var commentBody = Get.arguments['commentBody'] as String?;
+    var itemController =
+        Get.arguments['itemController'] as CommentItemController?;
 
     var controller = Get.put(CommentEditingController(
       commentBody: commentBody,

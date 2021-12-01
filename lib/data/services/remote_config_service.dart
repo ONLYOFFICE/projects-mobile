@@ -35,7 +35,7 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 class RemoteConfigService {
   RemoteConfigService._privateConstructor();
 
-  static RemoteConfig remoteConfigPackingProperty;
+  static RemoteConfig? remoteConfigPackingProperty;
 
   static RemoteConfig get _remoteConfig {
     return remoteConfigPackingProperty ??= RemoteConfig.instance;

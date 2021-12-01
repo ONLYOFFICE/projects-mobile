@@ -42,8 +42,8 @@ class TaskTitle extends StatelessWidget {
   final bool showCaption;
   final bool focusOnTitle;
   const TaskTitle({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.showCaption = false,
     this.focusOnTitle = true,
   }) : super(key: key);
@@ -74,7 +74,7 @@ class TaskTitle extends StatelessWidget {
                       hintText: tr('taskTitle'),
                       contentPadding: const EdgeInsets.symmetric(vertical: 0),
                       hintStyle: TextStyleHelper.headline6(
-                          color: controller.setTitleError.value == true
+                          color: controller.setTitleError!.value == true
                               ? Get.theme.colors().colorError
                               : Get.theme.colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none)),

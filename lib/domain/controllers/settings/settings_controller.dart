@@ -34,6 +34,7 @@ import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
 import 'package:launch_review/launch_review.dart';
@@ -46,26 +47,24 @@ import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/constants.dart';
-
 import 'package:projects/internal/locator.dart';
-import 'package:flutter/material.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/settings/analytics_screen.dart';
 import 'package:restart_app/restart_app.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsController extends GetxController {
-  final _service = locator<SettingsService>();
-  final _packageInfoService = locator<PackageInfoService>();
-  final _deviceInfoService = locator<DeviceInfoService>();
-  final _storage = locator<Storage>();
+  final SettingsService _service = locator<SettingsService>();
+  final PackageInfoService _packageInfoService = locator<PackageInfoService>();
+  final DeviceInfoService _deviceInfoService = locator<DeviceInfoService>();
+  final Storage _storage = locator<Storage>();
 
-  String appVersion;
-  String buildNumber;
+  String? appVersion;
+  String? buildNumber;
 
-  var loaded = false.obs;
-  var currentTheme = ''.obs;
-  RxBool isPasscodeEnable;
+  RxBool loaded = false.obs;
+  RxString currentTheme = ''.obs;
+  late RxBool isPasscodeEnable;
   RxBool shareAnalytics = true.obs;
 
   String get versionAndBuildNumber => '$appVersion ($buildNumber)';
@@ -76,7 +75,7 @@ class SettingsController extends GetxController {
 
     // ignore: unawaited_futures
     RemoteConfigService.fetchAndActivate();
-    var isPassEnable = await _service.isPasscodeEnable;
+    final isPassEnable = await _service.isPasscodeEnable;
     isPasscodeEnable = isPassEnable.obs;
 
     appVersion = await _packageInfoService.version;
@@ -85,19 +84,19 @@ class SettingsController extends GetxController {
     var themeMode = await _storage.read('themeMode');
     if (themeMode == null) {
       themeMode = 'sameAsSystem';
-      await _storage.write(themeMode, themeMode);
+      await _storage.write(themeMode as String, themeMode);
     }
 
-    var analytics = await _storage.read('shareAnalytics');
+    final analytics = await _storage.read('shareAnalytics');
 
     if (analytics == null) {
       await _storage.write('shareAnalytics', true);
       shareAnalytics.value = true;
     } else {
-      shareAnalytics.value = analytics;
+      shareAnalytics.value = analytics as bool;
     }
 
-    currentTheme.value = themeMode;
+    currentTheme.value = themeMode as String;
     loaded.value = true;
 
     super.onInit();
@@ -153,19 +152,19 @@ class SettingsController extends GetxController {
     }
   }
 
-  void onClearCachePressed() async {
-    var appDir = (await getTemporaryDirectory()).path;
+  Future<void> onClearCachePressed() async {
+    final appDir = (await getTemporaryDirectory()).path;
     await DefaultCacheManager().emptyCache();
     await Directory(appDir).delete(recursive: true);
   }
 
-  void onHelpPressed() async {
+  Future<void> onHelpPressed() async {
     await launch(Const.Urls.help);
   }
 
-  void onSupportPressed(context) async {
-    var device = await _deviceInfoService.deviceInfo;
-    var os = await _deviceInfoService.osReleaseVersion;
+  Future<void> onSupportPressed(BuildContext context) async {
+    final device = await _deviceInfoService.deviceInfo;
+    final os = await _deviceInfoService.osReleaseVersion;
 
     var body = '';
     body += '\n\n\n\n\n';
@@ -175,7 +174,7 @@ class SettingsController extends GetxController {
     body += '\nAndroid version: $os';
 
     // TODO change to ONLYOFFICE Projects IOS Feedback on ios
-    var url =
+    final url =
         '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
 
     await _service.openEmailApp(url, context);

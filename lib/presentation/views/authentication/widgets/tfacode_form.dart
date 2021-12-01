@@ -39,7 +39,7 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class CodeForm extends StatefulWidget {
-  CodeForm({Key key}) : super(key: key);
+  CodeForm({Key? key}) : super(key: key);
   @override
   _CodeFormState createState() => _CodeFormState();
 }

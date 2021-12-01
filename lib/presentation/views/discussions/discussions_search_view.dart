@@ -43,11 +43,11 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 
 class DiscussionsSearchScreen extends StatelessWidget {
-  const DiscussionsSearchScreen({Key key}) : super(key: key);
+  const DiscussionsSearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(DiscussionSearchController());
+    final controller = Get.put(DiscussionSearchController());
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),

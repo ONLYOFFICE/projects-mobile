@@ -49,7 +49,7 @@ import 'package:projects/presentation/views/projects_view/widgets/search_bar.dar
 
 class ProjectManagerSelectionView extends StatelessWidget {
   const ProjectManagerSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -82,25 +82,26 @@ class ProjectManagerSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.usersLoaded.value &&
+          if (controller.usersLoaded.value as bool &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               !usersDataSource.isSearchResult.value) {
             return UsersDefault(
-              selfUserItem: controller.selfUserItem,
+              selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection,
+              onTapFunction: controller.changePMSelection as void Function(
+                  PortalUserItemController),
               withoutGuests: true,
             );
           }
           if (usersDataSource.nothingFound.value == true) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection,
+              onTapFunction: controller.changePMSelection as Function(),
               withoutVisitors: true,
             );
           }
@@ -113,18 +114,18 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
 class UsersSearchResult extends StatelessWidget {
   const UsersSearchResult({
-    Key key,
-    @required this.usersDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.usersDataSource,
+    required this.onTapFunction,
     this.withoutVisitors = false,
   }) : super(key: key);
-  final Function onTapFunction;
+  final Function? onTapFunction;
   final UsersDataSource usersDataSource;
   final bool withoutVisitors;
 
   @override
   Widget build(BuildContext context) {
-    var users = withoutVisitors
+    final users = withoutVisitors
         ? usersDataSource.usersWithoutVisitors
         : usersDataSource.usersList;
     return Column(
@@ -141,7 +142,7 @@ class UsersSearchResult extends StatelessWidget {
                 userController: users[i],
                 onTapFunction: onTapFunction,
               ),
-              itemExtent: 65.0,
+              itemExtent: 65,
               itemCount: users.length,
             ),
           ),
@@ -153,15 +154,15 @@ class UsersSearchResult extends StatelessWidget {
 
 class UsersDefault extends StatelessWidget {
   const UsersDefault({
-    Key key,
-    @required this.selfUserItem,
-    @required this.usersDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.selfUserItem,
+    required this.usersDataSource,
+    required this.onTapFunction,
     this.withoutGuests = false,
   }) : super(key: key);
-  final Function onTapFunction;
-  final PortalUserItemController selfUserItem;
-  final usersDataSource;
+  final Function? onTapFunction;
+  final PortalUserItemController? selfUserItem;
+  final UsersDataSource usersDataSource;
   final bool withoutGuests;
 
   @override
@@ -206,7 +207,7 @@ class UsersDefault extends StatelessWidget {
               shrinkWrap: true,
               itemBuilder: (c, i) => PortalUserItem(
                   userController: users[i], onTapFunction: onTapFunction),
-              itemExtent: 65.0,
+              itemExtent: 65,
               itemCount: users.length,
             )
           ]),

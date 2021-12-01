@@ -43,20 +43,17 @@ import 'package:projects/presentation/views/fullscreen_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 
 class NavigationController extends GetxController {
-  var tabIndex = 0.obs;
-  var onMoreView = false.obs;
+  RxInt tabIndex = 0.obs;
+  RxBool onMoreView = false.obs;
   final _userController = Get.find<UserController>();
-  Rx<PortalUserItemController> selfUserItem = PortalUserItemController().obs;
+  late Rx<PortalUserItemController> selfUserItem;
 
   int treeLength = 0;
 
   @override
   void onInit() {
-    _userController
-        .getUserInfo()
-        .then((value) => selfUserItem.value =
-            PortalUserItemController(portalUser: _userController.user))
-        .obs;
+    _userController.getUserInfo().then((value) => selfUserItem =
+        Rx(PortalUserItemController(portalUser: _userController.user!)));
 
     super.onInit();
   }
@@ -119,8 +116,8 @@ class NavigationController extends GetxController {
 
   Future toScreen(
     Widget widget, {
-    bool preventDuplicates,
-    Map<String, dynamic> arguments,
+    bool? preventDuplicates,
+    Map<String, dynamic>? arguments,
   }) async {
     if (Get.find<PlatformController>().isMobile) {
       return await Get.to(
@@ -139,7 +136,7 @@ class NavigationController extends GetxController {
   }
 
   void to(Widget widget,
-      {bool preventDuplicates, Map<String, dynamic> arguments}) {
+      {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
         () => widget,

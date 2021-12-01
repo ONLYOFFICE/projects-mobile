@@ -48,8 +48,8 @@ import 'package:projects/presentation/views/task_editing_view/elements/status_se
 
 class TaskEditingView extends StatelessWidget {
   const TaskEditingView({
-    Key key,
-    @required this.task,
+    Key? key,
+    required this.task,
   }) : super(key: key);
 
   final PortalTask task;
@@ -90,7 +90,7 @@ class TaskEditingView extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () async {
                     FocusScope.of(context).unfocus();
-                    WidgetsBinding.instance.addPostFrameCallback((_) async {
+                    WidgetsBinding.instance!.addPostFrameCallback((_) async {
                       await statusSelectionBS(
                         context: context,
                         controller: controller,
@@ -114,7 +114,7 @@ class TaskEditingView extends StatelessWidget {
                           child: Padding(
                               padding: const EdgeInsets.only(top: 8, bottom: 8),
                               child: Obx(() => Text(
-                                  controller.newStatus.value.title,
+                                  controller.newStatus.value!.title!,
                                   style: TextStyleHelper.subtitle2())))),
                       const Icon(Icons.arrow_drop_down_sharp)
                     ],

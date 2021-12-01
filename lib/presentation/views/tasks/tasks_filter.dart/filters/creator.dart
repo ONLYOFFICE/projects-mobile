@@ -34,7 +34,7 @@ part of '../tasks_filter.dart';
 
 class _Creator extends StatelessWidget {
   final BaseTaskFilterController filterController;
-  const _Creator({Key key, this.filterController}) : super(key: key);
+  const _Creator({Key? key, required this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +45,15 @@ class _Creator extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.creator['me'],
+              isSelected: filterController.creator['me'] as bool?,
               onTap: () => filterController.changeCreator('me')),
           FilterElement(
-            title: filterController.creator['other'].isEmpty
+            title: filterController.creator['other'].isEmpty as bool
                 ? tr('otherUser')
-                : filterController.creator['other'],
-            isSelected: filterController.creator['other'].isNotEmpty,
-            cancelButtonEnabled: filterController.creator['other'].isNotEmpty,
+                : filterController.creator['other'] as String,
+            isSelected: filterController.creator['other'].isNotEmpty as bool?,
+            cancelButtonEnabled:
+                filterController.creator['other'].isNotEmpty as bool,
             onTap: () async {
               var newUser = await Get.find<NavigationController>()
                   .toScreen(const SelectUserScreen());

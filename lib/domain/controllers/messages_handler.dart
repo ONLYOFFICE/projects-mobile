@@ -40,34 +40,35 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class MessagesHandler {
-  static String _lastMessage;
+  static String? _lastMessage;
 
-  static var isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen);
+  static ValueNotifier<bool> isDisplayed =
+      ValueNotifier<bool>(Get.isSnackbarOpen ?? false);
 
   static final Queue _a = Queue();
 
   static void showSnackBar({
-    @required BuildContext context,
-    @required String text,
+    required BuildContext context,
+    required String text,
     bool showOkButton = false,
-    String buttonText,
-    Function buttonOnTap,
+    String? buttonText,
+    Function? buttonOnTap,
   }) async {
     try {
       if (text == _lastMessage)
-        ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar();
+        ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar();
 
       _a.addLast(text);
       isDisplayed.value = true;
 
-      await ScaffoldMessenger.maybeOf(context)
+      await ScaffoldMessenger.maybeOf(context)!
           .showSnackBar(
             _styledSnackBar(
               context: context,
               text: text,
               showOkButton: showOkButton,
               buttonText: buttonText,
-              buttonOnTap: buttonOnTap,
+              buttonOnTap: buttonOnTap as dynamic Function()?,
             ),
           )
           .closed;
@@ -83,11 +84,11 @@ class MessagesHandler {
 }
 
 SnackBar _styledSnackBar({
-  @required BuildContext context,
-  @required String text,
+  required BuildContext context,
+  required String text,
   bool showOkButton = false,
-  String buttonText,
-  Function() buttonOnTap,
+  String? buttonText,
+  Function()? buttonOnTap,
 }) {
   // to prevent the button from being pressed again. There could be errors
   // if you click "open a new page" several times in a row, for example.
@@ -110,7 +111,7 @@ SnackBar _styledSnackBar({
                   child: GestureDetector(
                     onTap: () {
                       setState(() => wasPressed = true);
-                      return buttonOnTap();
+                      return buttonOnTap!();
                     },
                     child: SizedBox(
                       height: 16,
@@ -134,7 +135,7 @@ SnackBar _styledSnackBar({
                   child: GestureDetector(
                     onTap: () {
                       setState(() => wasPressed = true);
-                      ScaffoldMessenger.maybeOf(context)
+                      ScaffoldMessenger.maybeOf(context)!
                           .removeCurrentSnackBar();
                     },
                     child: SizedBox(

@@ -44,9 +44,9 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:projects/presentation/views/new_task/task_description.dart';
 
 class DescriptionTile extends StatefulWidget {
-  final TaskActionsController controller;
+  final TaskActionsController? controller;
   DescriptionTile({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 
@@ -56,14 +56,14 @@ class DescriptionTile extends StatefulWidget {
 
 class _DescriptionTileState extends State<DescriptionTile>
     with TickerProviderStateMixin {
-  bool _isExpanded;
+  late bool _isExpanded;
 
-  AnimationController _controller;
+  late AnimationController _controller;
 
   final Animatable<double> _halfTween = Tween<double>(begin: 0, end: 0.245);
   final Animatable<double> _turnsTween = CurveTween(curve: Curves.easeIn);
 
-  Animation<double> _iconTurns;
+  late Animation<double> _iconTurns;
 
   @override
   void initState() {
@@ -83,7 +83,7 @@ class _DescriptionTileState extends State<DescriptionTile>
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    double _height = _isExpanded ? null : 61;
+    double? _height = _isExpanded ? null : 61;
 
     void changeExpansion() {
       setState(() {
@@ -99,11 +99,11 @@ class _DescriptionTileState extends State<DescriptionTile>
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isNotEmpty = widget.controller.descriptionText.value.isNotEmpty;
+        bool _isNotEmpty = widget.controller!.descriptionText!.value.isNotEmpty;
         var _color = _isNotEmpty
             ? Get.theme.colors().onBackground
             : Get.theme.colors().onBackground.withOpacity(0.4);
-        var text = widget.controller.descriptionText.value;
+        var text = widget.controller!.descriptionText!.value;
         var textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(

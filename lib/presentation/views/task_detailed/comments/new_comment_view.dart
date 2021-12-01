@@ -40,11 +40,11 @@ import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class NewCommentView extends StatelessWidget {
-  const NewCommentView({Key key}) : super(key: key);
+  const NewCommentView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    NewCommentController controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'] as NewCommentController;
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(

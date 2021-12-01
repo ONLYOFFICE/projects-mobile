@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -40,40 +41,40 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/internal/locator.dart';
 
 class MilestonesDataSource extends GetxController {
-  final _api = locator<MilestoneService>();
+  final MilestoneService _api = locator<MilestoneService>();
 
   final paginationController =
-      Get.put(PaginationController(), tag: 'MilestonesDataSource');
+      Get.put(PaginationController<Milestone>(), tag: 'MilestonesDataSource');
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
 
-  var searchQuery = '';
+  String searchQuery = '';
 
-  ProjectDetailed _projectDetailed;
+  ProjectDetailed? _projectDetailed;
 
   MilestonesSortController get sortController => _sortController;
   MilestonesFilterController get filterController => _filterController;
 
   int get itemCount => paginationController.data.length;
-  RxList get itemList => paginationController.data;
+  RxList<Milestone> get itemList => paginationController.data;
 
   RxBool loaded = false.obs;
 
-  var hasFilters = false.obs;
+  RxBool hasFilters = false.obs;
 
-  int _projectId;
+  int? _projectId;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   MilestonesDataSource() {
-    _sortController.updateSortDelegate = () async => await loadMilestones();
+    _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
-    paginationController.loadDelegate = () async => await _getMilestones();
+    paginationController.loadDelegate = () async => _getMilestones();
     paginationController.refreshDelegate =
-        () async => await _getMilestones(needToClear: true);
+        () async => _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 
@@ -84,8 +85,8 @@ class MilestonesDataSource extends GetxController {
     loaded.value = true;
   }
 
-  Future _getMilestones({needToClear = false}) async {
-    var result = await _api.milestonesByFilter(
+  Future _getMilestones({bool needToClear = false}) async {
+    final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId != null ? _projectId.toString() : null,
@@ -96,28 +97,30 @@ class MilestonesDataSource extends GetxController {
       query: searchQuery,
     );
 
-    paginationController.total.value = result.length;
+    if (result != null) {
+      paginationController.total.value = result.length;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result);
+      paginationController.data.addAll(result);
+    }
   }
 
-  Future<void> setup({ProjectDetailed projectDetailed, int projectId}) async {
+  Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {
     loaded.value = false;
     _projectDetailed = projectDetailed;
-    _projectId = projectId ?? projectDetailed.id;
+    _projectId = projectId ?? projectDetailed!.id;
     _filterController.projectId = _projectId.toString();
 
     // ignore: unawaited_futures
     loadMilestones();
 
-    fabIsVisible.value = _canCreate();
+    fabIsVisible.value = _canCreate()!;
   }
 
-  bool _canCreate() => _projectDetailed == null
+  bool? _canCreate() => _projectDetailed == null
       ? false
-      : _projectDetailed.security['canCreateMilestone'];
+      : _projectDetailed!.security!['canCreateMilestone'] as bool;
 
   void loadMilestonesWithFilterByName(String searchText) {
     searchQuery = searchText;

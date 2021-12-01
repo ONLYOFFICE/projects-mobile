@@ -34,11 +34,11 @@ part of '../get_code_views.dart';
 
 class _Step1 extends StatelessWidget {
   const _Step1({
-    Key key,
+    Key? key,
     this.topPadding,
   }) : super(key: key);
 
-  final double topPadding;
+  final double? topPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,7 @@ class _Step1 extends StatelessWidget {
             icon: PngIcons.download_GA,
             hasDarkVersion: true,
             isPng: true,
-            height: 184.5.h,
+            height: 184.5.h as double?,
           ),
           const SizedBox(height: 23),
           Padding(
@@ -102,7 +102,7 @@ double getTopPadding(bool isMobile, double height) {
   if (isMobile) return 0;
 
   const contentArea = 550;
-  var freeArea = height - Get.statusBarHeight - 128;
+  final freeArea = height - Get.statusBarHeight - 128;
 
   if (freeArea - contentArea > 0) return (freeArea - contentArea) / 3;
   return 0;

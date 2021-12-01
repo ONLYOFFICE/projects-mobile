@@ -31,16 +31,16 @@
  */
 
 class AccountData {
-  String portal;
-  String scheme;
-  String userId;
-  String email;
-  String displayName;
-  String provider;
-  String accessToken;
-  String avatar;
-  String webDav;
-  String expires;
+  String? portal;
+  String? scheme;
+  String? userId;
+  String? email;
+  String? displayName;
+  String? provider;
+  String? accessToken;
+  String? avatar;
+  String? webDav;
+  String? expires;
 
   AccountData({
     this.portal,
@@ -56,16 +56,16 @@ class AccountData {
   });
 
   AccountData.fromJson(Map<String, dynamic> json) {
-    portal = json['portal'];
-    scheme = json['scheme'];
-    userId = json['userId'];
-    email = json['email'];
-    displayName = json['displayName'];
-    provider = json['provider'];
-    accessToken = json['accessToken'];
-    avatar = json['avatar'];
-    webDav = json['webDav'];
-    expires = json['expires'];
+    portal = json['portal'] as String?;
+    scheme = json['scheme'] as String?;
+    userId = json['userId'] as String?;
+    email = json['email'] as String?;
+    displayName = json['displayName'] as String?;
+    provider = json['provider'] as String?;
+    accessToken = json['accessToken'] as String?;
+    avatar = json['avatar'] as String?;
+    webDav = json['webDav'] as String?;
+    expires = json['expires'] as String?;
   }
 
   Map<String, dynamic> toJson() {
