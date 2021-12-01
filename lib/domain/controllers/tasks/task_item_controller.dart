@@ -198,6 +198,7 @@ class TaskItemController extends GetxController {
   Future<void> initTaskStatus(PortalTask? portalTask) async {
     isStatusLoaded.value = false;
     final statusesController = Get.find<TaskStatusesController>();
+    await statusesController.getStatuses();
     final receivedStatus = await statusesController.getTaskStatus(portalTask);
     if (receivedStatus != null && !receivedStatus.isNull) {
       status.value = receivedStatus;
