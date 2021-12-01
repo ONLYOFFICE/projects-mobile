@@ -43,7 +43,7 @@ class PasscodeCheckingController extends GetxController {
     _canUseFingerprint = canUseFingerprint;
   }
 
-  late bool _canUseFingerprint;
+  bool _canUseFingerprint = false;
 
   final PasscodeService _service = locator<PasscodeService>();
   final LocalAuthenticationService _authService =
