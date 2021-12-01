@@ -155,9 +155,8 @@ class TasksController extends BaseController {
     if (result != null) {
       paginationController.total.value = result.total;
 
+      if (needToClear) paginationController.data.clear();
       if (result.total != 0) {
-        if (needToClear) paginationController.data.clear();
-
         paginationController.data.addAll(result.response ?? <PortalTask>[]);
         expandedCardView.value = paginationController.data.isNotEmpty;
       }

@@ -82,10 +82,11 @@ class GroupApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.total = responseJson['total'] as int;
+        result.total = responseJson['count'] as int;
         {
           result.response = (responseJson['response'] as List)
-              .map((i) => PortalGroup.fromJson(i as Map<String, dynamic>))
+              .cast<Map<String, dynamic>>()
+              .map((i) => PortalGroup.fromJson(i))
               .toList();
         }
       } else {

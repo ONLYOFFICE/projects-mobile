@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -49,9 +50,9 @@ class GroupMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'];
 
-    var groupsDataSource = Get.find<GroupsDataSource>();
+    final groupsDataSource = Get.find<GroupsDataSource>();
 
     groupsDataSource.getGroups();
     return Scaffold(
@@ -75,10 +76,11 @@ class GroupMembersSelectionView extends StatelessWidget {
               groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
-              onTapFunction: controller.selectGroupMembers as Function(),
+              onTapFunction: controller.selectGroupMembers as Function(
+                  PortalGroupItemController),
             );
           } else if (groupsDataSource.loaded.value == true) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           return const ListLoadingSkeleton();
         },
@@ -93,7 +95,7 @@ class GroupsOverview extends StatelessWidget {
     required this.groupsDataSource,
     required this.onTapFunction,
   }) : super(key: key);
-  final Function? onTapFunction;
+  final Function(PortalGroupItemController)? onTapFunction;
   final GroupsDataSource groupsDataSource;
 
   @override
