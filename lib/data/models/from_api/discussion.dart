@@ -104,7 +104,7 @@ class Discussion {
         canEdit: json['canEdit'] as bool?,
         id: json['id'] as int?,
         title: json['title'] as String?,
-        description: json['description'] as String?,
+        description: json['description'],
         projectOwner: json['projectOwner'] != null
             ? ProjectOwner.fromJson(
                 json['projectOwner'] as Map<String, dynamic>)

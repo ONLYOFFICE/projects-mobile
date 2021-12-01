@@ -358,7 +358,11 @@ class TaskFilterController extends BaseTaskFilterController {
     );
 
     if (result != null) {
-      suitableResultCount.value = result.response!.length;
+      if (result.response != null) {
+        suitableResultCount.value = result.response!.length;
+      } else {
+        suitableResultCount.value = 0;
+      }
     }
   }
 
@@ -519,14 +523,14 @@ class TaskFilterController extends BaseTaskFilterController {
             Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
         _statusFilter = savedFilters['status']['value'] as String;
 
-        final deadLineFilters = Map<String, Object?>.from(
+        final deadLineFilters = Map<String, Object>.from(
             savedFilters['deadline']['buttons'] as Map);
 
-        var customDeadlineFilters = deadLineFilters['custom'];
+        var customDeadlineFilters =
+            Map<dynamic, dynamic>.from(deadLineFilters['custom'] as Map);
 
         customDeadlineFilters = stringsToDateTime(
-            customDeadlineFilters as Map<dynamic, dynamic>?,
-            ['startDate', 'stopDate']);
+            customDeadlineFilters, ['startDate', 'stopDate'])!;
 
         deadLineFilters['custom'] = customDeadlineFilters;
 
@@ -535,7 +539,7 @@ class TaskFilterController extends BaseTaskFilterController {
 
         hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
-        printWarning('Discussions filter loading error: $e');
+        printWarning('Tasks filter loading error: $e');
         await loadFilters();
       }
     } else {
