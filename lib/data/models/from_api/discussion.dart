@@ -94,7 +94,7 @@ class Discussion {
                 .toList()
             : null,
         comments: json['comments'] != null
-            ? ((json['files'] as List).cast<Map<String, dynamic>>())
+            ? ((json['comments'] as List).cast<Map<String, dynamic>>())
                 .map((e) => PortalComment.fromJson(e))
                 .toList()
             : null,
