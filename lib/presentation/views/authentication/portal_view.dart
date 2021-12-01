@@ -51,10 +51,9 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    (Get.isRegistered<AccountManagerController>()
+    Get.isRegistered<AccountManagerController>()
         ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController()))
-      ..setup();
+        : Get.put(AccountManagerController()).setup();
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -107,7 +106,7 @@ class PortalInputView extends StatelessWidget {
                           child: WideButton(
                             text: tr('next'),
                             onPressed: () async =>
-                                await controller.getPortalCapabilities(),
+                                controller.getPortalCapabilities(),
                           ),
                         ),
                         SizedBox(height: Get.height * 0.222),

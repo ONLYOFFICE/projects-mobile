@@ -37,8 +37,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
@@ -242,7 +240,7 @@ class LoginController extends GetxController {
       if (_capabilities != null) {
         capabilities = _capabilities;
         setState(ViewState.Idle);
-        await Get.to(() => LoginView());
+        await Get.to(() => const LoginView());
       }
 
       setState(ViewState.Idle);

@@ -51,18 +51,18 @@ class AccountTile extends StatelessWidget {
       onTap: () {
         userController?.onTap();
       },
-      child: Container(
+      child: SizedBox(
         height: 48,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: 72,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: CircleAvatar(
-                  radius: 20.0,
+                  radius: 20,
                   backgroundColor: Get.theme.colors().bgDescription,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),

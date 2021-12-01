@@ -46,7 +46,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class AccountUserController extends GetxController {
   final _downloadService = locator<DownloadService>();
 
-  var userTitle = ''.obs;
+  RxString userTitle = ''.obs;
 
   AccountUserController({this.accountData}) {
     if (accountData != null) setupUser();
@@ -71,7 +71,7 @@ class AccountUserController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      var avatarBytes =
+      final avatarBytes =
           await _downloadService.downloadImage(accountData!.avatar!);
       if (avatarBytes == null) return;
 
@@ -79,7 +79,7 @@ class AccountUserController extends GetxController {
       // ignore: unnecessary_cast
       avatar.value = Image.memory(avatarData.value) as Widget;
     } catch (e) {
-      print(e);
+      debugPrint(e.toString());
       return;
     }
   }
@@ -100,5 +100,5 @@ class AccountUserController extends GetxController {
     locator<EventHub>().fire('loginSuccess');
   }
 
-  Future<void> onTap() async => await loginToSavedAccount();
+  Future<void> onTap() async => loginToSavedAccount();
 }

@@ -55,7 +55,7 @@ class AccountManagerController extends GetxController {
     if (accounts.isNotEmpty) {
       await showBarModalBottomSheet(
         context: Get.context!,
-        builder: (context) => AccountManagerView(),
+        builder: (context) => const AccountManagerView(),
       );
     }
   }

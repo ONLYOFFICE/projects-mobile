@@ -69,15 +69,13 @@ class AccountManagerView extends StatelessWidget {
               userController:
                   AccountUserController(accountData: controller.accounts[i]),
             ),
-            itemExtent: 65.0,
+            itemExtent: 65,
             itemCount: controller.accounts.length,
           ),
           const SizedBox(height: 34),
           InkWell(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
+            onTap: Get.back,
+            child: SizedBox(
               height: 48,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
