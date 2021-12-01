@@ -86,7 +86,7 @@ dependencies:
 #  event_hub: ^0.1.1
   event_hub:
     git:
-      url: git://github.com/mayyuu/event_hub.git
+      url: git://github.com/ONLYOFFICE/event_hub
   connectivity_plus: ^2.0.3
   html_editor_enhanced: ^2.4.0+1
   flutter_widget_from_html: ^0.8.2

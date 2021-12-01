@@ -70,18 +70,17 @@ class TaskStatusesController extends GetxController {
 
   Future<Status?> getTaskStatus(PortalTask? task) async {
     if (!loaded.isFalse) {
-      final status = await _findStatus(task!);
+      final status = _findStatus(task!);
       if (status == null && !loaded.isFalse) {
         printWarning('TASK ID ${task.id} STATUS DIDNT FIND');
         await _updateStatuses();
-        await _findStatus(task);
+        _findStatus(task);
       }
       return status;
     }
   }
 
-  Future<Status?> _findStatus(PortalTask task) async {
-    // TODO async???
+  Status? _findStatus(PortalTask task) {
     Status status;
 
     if (task.customTaskStatus != null) {

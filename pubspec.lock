@@ -328,8 +328,8 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "4674e595657de7bc8d2967773028e940718be1f5"
-      url: "git://github.com/mayyuu/event_hub.git"
+      resolved-ref: "9767a849db23b0045b856b153580e1226e543033"
+      url: "git://github.com/ONLYOFFICE/event_hub"
     source: git
     version: "0.1.1"
   extended_tabs:
