@@ -33,15 +33,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
-import 'package:projects/presentation/views/authentication/account_manager.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -52,12 +51,10 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      Get.bottomSheet(
-        const AccountManagerView(),
-        isScrollControlled: true,
-      );
-    });
+    (Get.isRegistered<AccountManagerController>()
+        ? Get.find<AccountManagerController>()
+        : Get.put(AccountManagerController()))
+      ..setup();
 
     return Scaffold(
       body: SingleChildScrollView(

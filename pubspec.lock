@@ -11,10 +11,12 @@ packages:
   accountmanager:
     dependency: "direct main"
     description:
-      name: accountmanager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.1"
+      path: "."
+      ref: HEAD
+      resolved-ref: "5b4751ccfe9a881aff2a2ba4e29720df461a22b6"
+      url: "git://github.com/Kiruel/flutter-account-manager-plugin.git"
+    source: git
+    version: "0.2.0"
   analyzer:
     dependency: transitive
     description:
@@ -762,7 +764,7 @@ packages:
       name: local_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.6"
+    version: "1.1.8"
   logging:
     dependency: transitive
     description:
@@ -791,6 +793,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.9.7"
+  modal_bottom_sheet:
+    dependency: "direct main"
+    description:
+      name: modal_bottom_sheet
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   nested:
     dependency: transitive
     description:
@@ -1365,4 +1374,4 @@ packages:
     version: "3.1.0"
 sdks:
   dart: ">=2.14.0 <3.0.0"
-  flutter: ">=2.5.1"
+  flutter: ">=2.5.0"

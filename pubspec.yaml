@@ -51,7 +51,7 @@ dependencies:
   # formatting input in textfields // надо поменять, тк он и сам текст форматирует
   flutter_masked_text: ^0.8.0
   # for biometric authentication
-  local_auth: ^1.1.6
+  local_auth: ^1.1.8
   # to get device location country
   devicelocale: ^0.4.1
   # for sms 2FA
@@ -87,8 +87,12 @@ dependencies:
   connectivity_plus: ^1.1.0
   html_editor_enhanced: ^2.3.0
   flutter_widget_from_html: ^0.7.0
-  accountmanager: ^0.2.1
+  # accountmanager: ^0.2.1
+  accountmanager:
+    git:
+      url: git://github.com/Kiruel/flutter-account-manager-plugin.git
   permission_handler: ^8.3.0
+  modal_bottom_sheet: ^2.0.0
 
 dependency_overrides:
   flutter_colorpicker: ^0.6.0

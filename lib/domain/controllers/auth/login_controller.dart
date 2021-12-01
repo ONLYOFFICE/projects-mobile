@@ -45,6 +45,7 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/portalInfoController.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -101,15 +102,13 @@ class LoginController extends GetxController {
         return;
       }
       if (result.response.token != null) {
-        await saveToken(result);
-        await sendRegistrationType();
-        setState(ViewState.Idle);
-        clearInputFields();
-        await AnalyticsService.shared.logEvent(
-            AnalyticsService.Events.loginPortal, {
-          AnalyticsService.Params.Key.portal:
-              await _secureStorage.getString('portalName')
-        });
+        await saveLoginData(
+            token: result.response.token, expires: result.response.expires);
+
+        await Get.find<AccountManagerController>().addAccount(
+            tokenString: result.response.token,
+            expires: result.response.expires);
+
         locator<EventHub>().fire('loginSuccess');
       } else if (result.response.tfa == true) {
         _email = email;
@@ -140,6 +139,19 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<void> saveLoginData({String token, String expires}) async {
+    await saveToken(token, expires);
+    await sendRegistrationType();
+    setState(ViewState.Idle);
+    clearInputFields();
+
+    await AnalyticsService.shared.logEvent(
+        AnalyticsService.Events.loginPortal, {
+      AnalyticsService.Params.Key.portal:
+          await _secureStorage.getString('portalName')
+    });
+  }
+
   Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
     var result;
@@ -166,9 +178,9 @@ class LoginController extends GetxController {
     return result ?? true;
   }
 
-  Future saveToken(ApiDTO<AuthToken> result) async {
-    await _secureStorage.putString('token', result.response.token);
-    await _secureStorage.putString('expires', result.response.expires);
+  Future saveToken(token, expires) async {
+    await _secureStorage.putString('token', token);
+    await _secureStorage.putString('expires', expires);
   }
 
   Future<bool> sendCode(String code, {String userName, String password}) async {
@@ -186,15 +198,19 @@ class LoginController extends GetxController {
     }
 
     if (result.response.token != null) {
-      await saveToken(result);
-      await sendRegistrationType();
-      setState(ViewState.Idle);
-      clearInputFields();
-      await AnalyticsService.shared.logEvent(
-          AnalyticsService.Events.loginPortal, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName')
-      });
+      await saveLoginData(
+          token: result.response.token, expires: result.response.expires);
+      await Get.find<AccountManagerController>().addAccount(
+          tokenString: result.response.token, expires: result.response.expires);
+      // await saveToken(result.response.token, result.response.expires);
+      // await sendRegistrationType();
+      // setState(ViewState.Idle);
+      // clearInputFields();
+      // await AnalyticsService.shared.logEvent(
+      //     AnalyticsService.Events.loginPortal, {
+      //   AnalyticsService.Params.Key.portal:
+      //       await _secureStorage.getString('portalName')
+      // });
       locator<EventHub>().fire('loginSuccess');
     } else if (result.response.tfa) {
       setState(ViewState.Idle);

@@ -16,20 +16,11 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterFragmentActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        println("other message")
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun provideSplashScreen(): SplashScreen {
-        println("other message")
         return MainSplashScreen(this)
     }
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        Log.d("t" ,"other message")
         GeneratedPluginRegistrant.registerWith(flutterEngine)
     }
 }

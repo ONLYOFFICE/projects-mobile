@@ -30,21 +30,23 @@
  *
  */
 
+import 'dart:convert';
+
 import 'package:accountmanager/accountmanager.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:projects/data/models/account_data.dart';
+import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 
 class AccountManagerController extends GetxController {
   static const accountType = 'com.onlyoffice.account';
   static const tokenType = 'com.onlyoffice.auth';
+  static const key = 'account_data';
 
-  @override
-  void onInit() {
-    // var t;
-    // fetchName().then((value) => {t = value});
-
-    super.onInit();
-  }
+  List<AccountData> accounts;
 
   @override
   void onClose() {
@@ -52,27 +54,72 @@ class AccountManagerController extends GetxController {
   }
 
   Future setup() async {
-    var s = await fetchName();
+    accounts = await fetchAccounts();
+
+    if (accounts.isNotEmpty) {
+      await showBarModalBottomSheet(
+        context: Get.context,
+        builder: (context) => const AccountManagerView(),
+      );
+    }
   }
 
-  Future<String> fetchName() async {
-    var name = '';
+  Future<void> addAccount({String tokenString, String expires}) async {
     if (await Permission.contacts.request().isGranted) {
       try {
-        var accounts = await AccountManager.getAccounts();
+        var portalInfo = Get.find<PortalInfoController>();
+        await portalInfo.setup();
 
-        // var account = accounts
+        var account =
+            Account(name: portalInfo.portalName, accountType: accountType);
 
-        // var t = AccountManager.getAccessToken(account, authTokenType)
+        if (await AccountManager.addAccount(account)) {
+          var accessToken =
+              AccessToken(tokenType: tokenType, token: tokenString);
 
-        var account = Account(name: 'User 007', accountType: accountType);
-        var token =
-            AccountManager.getAccessToken(account, 'com.onlyoffice.auth');
+          await AccountManager.setAccessToken(account, accessToken);
+
+          await Get.find<UserController>().getUserInfo();
+
+          var user = Get.find<UserController>().user;
+          var data = AccountData(
+              portal: Get.find<PortalInfoController>().portalName,
+              email: user.email,
+              expires: expires,
+              displayName: user.displayName,
+              avatar: user.avatar);
+          await AccountManager.setUserData(
+              account, key, json.encode(data.toJson()));
+        }
       } catch (e, s) {
         print(e);
         print(s);
       }
     }
-    return name;
+  }
+
+  Future<List<AccountData>> fetchAccounts() async {
+    var accountsList = <AccountData>[];
+    if (await Permission.contacts.request().isGranted) {
+      try {
+        var accounts = await AccountManager.getAccounts();
+
+        for (var account in accounts) {
+          if (account.accountType == accountType) {
+            var value = await AccountManager.getUserData(account, key);
+            var accountData = AccountData.fromJson(json.decode(value));
+            var accesstoken =
+                await AccountManager.getAccessToken(account, tokenType);
+            accountData.accessToken = accesstoken.token;
+
+            accountsList.add(accountData);
+          }
+        }
+      } catch (e, s) {
+        print(e);
+        print(s);
+      }
+    }
+    return accountsList;
   }
 }

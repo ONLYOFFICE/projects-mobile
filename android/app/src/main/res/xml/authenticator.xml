@@ -4,4 +4,4 @@
      android:accountType="com.onlyoffice.account"
      android:icon="@mipmap/ic_launcher"
      android:smallIcon="@mipmap/ic_launcher"
-     android:label="Documents"/>
+     android:label="@string/app_name_full"/>
