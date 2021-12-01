@@ -358,11 +358,7 @@ class TaskFilterController extends BaseTaskFilterController {
     );
 
     if (result != null) {
-      if (result.response != null) {
-        suitableResultCount.value = result.response!.length;
-      } else {
-        suitableResultCount.value = 0;
-      }
+      suitableResultCount.value = result.response!.length;
     }
   }
 

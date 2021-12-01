@@ -263,12 +263,12 @@ class TaskApi {
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
         result.total = responseJson['total'] as int;
-        if (result.total != 0) {
-          result.response =
-              ((responseJson['response'] as List).cast<Map<String, dynamic>>())
-                  .map((i) => PortalTask.fromJson(i))
+
+        result.response =
+              (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map((i) => PortalTask.fromJson(i))
                   .toList();
-        }
       } else {
         result.error = response as CustomError;
       }
