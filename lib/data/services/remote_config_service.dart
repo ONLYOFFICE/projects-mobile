@@ -65,7 +65,7 @@ class RemoteConfigService {
 
 // Fetch remote values
   static Future<void> fetchAndActivate() async =>
-      await _remoteConfig.fetchAndActivate();
+      _remoteConfig.fetchAndActivate();
 
   /// Gets the value for a given key as a bool.
   static bool getBool(String key) {
@@ -96,6 +96,6 @@ class RemoteConfigService {
 class _RemoteConfigKeys {
   const _RemoteConfigKeys();
 
-  final linkTermsOfService = 'link_terms_of_service';
-  final linkPrivacyPolicy = 'link_privacy_policy';
+  String get linkTermsOfService => 'link_terms_of_service';
+  String get linkPrivacyPolicy => 'link_privacy_policy';
 }

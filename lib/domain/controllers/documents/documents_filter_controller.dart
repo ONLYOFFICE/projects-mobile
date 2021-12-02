@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -76,8 +75,7 @@ class DocumentsFilterController extends BaseFilterController {
   bool get _hasFilters => _typeFilter.isNotEmpty || _authorFilter.isNotEmpty;
 
   @override
-  String get filtersTitle =>
-      plural('documentsFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('documentsFilterConfirm', suitableResultCount.value);
 
   DocumentsFilterController() {
     suitableResultCount = (-1).obs;
@@ -97,13 +95,12 @@ class DocumentsFilterController extends BaseFilterController {
 
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
 
 // _getSavedFilters();
   }
 
-  Future<void> changeAuthorFilter(String filter,
-      [dynamic newValue = '']) async {
+  Future<void> changeAuthorFilter(String filter, [dynamic newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
     _authorFilter = '';
 
@@ -143,8 +140,7 @@ class DocumentsFilterController extends BaseFilterController {
         author['groups'] = '';
         author['no'] = !(author['no'] as bool);
         if (author['no'] as bool) {
-          _authorFilter =
-              '&userIdOrGroupId=00000000-0000-0000-0000-000000000000';
+          _authorFilter = '&userIdOrGroupId=00000000-0000-0000-0000-000000000000';
         }
         break;
       default:
@@ -169,8 +165,7 @@ class DocumentsFilterController extends BaseFilterController {
 
     switch (filter) {
       case 'folders':
-        if (contentTypes['folders'] as bool)
-          _typeFilter = '&filterType=FoldersOnly';
+        if (contentTypes['folders'] as bool) _typeFilter = '&filterType=FoldersOnly';
         break;
 
       case 'documents':
@@ -186,8 +181,7 @@ class DocumentsFilterController extends BaseFilterController {
         break;
 
       case 'images':
-        if (contentTypes['images'] as bool)
-          _typeFilter = '&filterType=ImagesOnly';
+        if (contentTypes['images'] as bool) _typeFilter = '&filterType=ImagesOnly';
         break;
 
       case 'spreadsheets':
@@ -197,13 +191,11 @@ class DocumentsFilterController extends BaseFilterController {
         break;
 
       case 'media':
-        if (contentTypes['media'] as bool)
-          _typeFilter = '&filterType=MediaOnly';
+        if (contentTypes['media'] as bool) _typeFilter = '&filterType=MediaOnly';
         break;
 
       case 'archives':
-        if (contentTypes['archives'] as bool)
-          _typeFilter = '&filterType=ArchiveOnly';
+        if (contentTypes['archives'] as bool) _typeFilter = '&filterType=ArchiveOnly';
         break;
 
       case 'allFiles':
@@ -266,7 +258,7 @@ class DocumentsFilterController extends BaseFilterController {
 
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
   }
 
   // UNUSED
@@ -276,10 +268,7 @@ class DocumentsFilterController extends BaseFilterController {
       'documentsFilters',
       {
         'contentTypes': {'buttons': contentTypes, 'value': _typeFilter},
-        'searchSettings': {
-          'buttons': searchSettings,
-          'value': _searchSettingsFilter
-        },
+        'searchSettings': {'buttons': searchSettings, 'value': _searchSettingsFilter},
         'author': {'buttons': author, 'value': _authorFilter},
         'hasFilters': _hasFilters,
       },
@@ -328,12 +317,9 @@ class DocumentsFilterController extends BaseFilterController {
         searchSettings = Map.from(
           savedFilters['searchSettings']['buttons'] as Map<String, dynamic>,
         ).obs;
-        _searchSettingsFilter =
-            savedFilters['searchSettings']['value'] as String;
+        _searchSettingsFilter = savedFilters['searchSettings']['value'] as String;
 
-        author =
-            Map.from(savedFilters['author']['buttons'] as Map<String, dynamic>)
-                .obs;
+        author = Map.from(savedFilters['author']['buttons'] as Map<String, dynamic>).obs;
         _authorFilter = savedFilters['author']['value'] as String;
 
         hasFilters.value = savedFilters['hasFilters'] as bool;

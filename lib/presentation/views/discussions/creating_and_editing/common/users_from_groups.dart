@@ -43,10 +43,9 @@ class UsersFromGroups extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller =
-        Get.arguments['controller'] as DiscussionActionsController;
+    final controller = Get.arguments['controller'] as DiscussionActionsController;
 
-    var groupsDataSource = Get.find<GroupsDataSource>();
+    final groupsDataSource = Get.find<GroupsDataSource>();
     groupsDataSource.getGroups();
 
     return Scaffold(
@@ -61,8 +60,7 @@ class UsersFromGroups extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (groupsDataSource.loaded.value == true &&
-              groupsDataSource.groupsList.isNotEmpty) {
+          if (groupsDataSource.loaded.value == true && groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
               onTapFunction: controller.selectGroupMembers,

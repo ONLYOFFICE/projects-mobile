@@ -221,7 +221,7 @@ class AppIcon extends StatelessWidget {
   final bool isPng;
   final bool hasDarkVersion;
 
-  AppIcon({
+  const AppIcon({
     Key? key,
     required this.icon,
     this.color,

@@ -45,26 +45,22 @@ class _CreatingDate extends StatelessWidget {
           FilterElement(
               title: tr('today'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController!.creationDate['today'] as bool?,
-              onTap: () => filterController!.changeCreationDate(('today'))),
+              isSelected: filterController!.creationDate['today'] as bool,
+              onTap: () => filterController!.changeCreationDate('today')),
           FilterElement(
               title: tr('last7Days'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController!.creationDate['last7Days'] as bool?,
-              onTap: () => filterController!.changeCreationDate(('last7Days'))),
+              isSelected: filterController!.creationDate['last7Days'] as bool,
+              onTap: () => filterController!.changeCreationDate('last7Days')),
           FilterElement(
               title: tr('customPeriod'),
-              isSelected:
-                  filterController!.creationDate['custom']['selected'] as bool?,
+              isSelected: filterController!.creationDate['custom']['selected'] as bool,
               onTap: () async {
-                var pickedRange =
-                    await Get.find<NavigationController>().toScreen(
+                final pickedRange = await Get.find<NavigationController>().toScreen(
                   StyledDateRangePickerDialog(
                     initialDateRange: DateTimeRange(
-                      start: filterController!.creationDate['custom']
-                          ['startDate'] as DateTime,
-                      end: filterController!.creationDate['custom']['stopDate']
-                          as DateTime,
+                      start: filterController!.creationDate['custom']['startDate'] as DateTime,
+                      end: filterController!.creationDate['custom']['stopDate'] as DateTime,
                     ),
                   ),
                 );

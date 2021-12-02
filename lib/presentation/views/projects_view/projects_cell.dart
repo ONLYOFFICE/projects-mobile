@@ -45,7 +45,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
-import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
+import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
@@ -58,18 +58,18 @@ class ProjectCell extends StatelessWidget {
     final itemController = Get.find<ProjectCellController>();
     itemController.setup(item);
 
-    return Container(
+    return SizedBox(
       height: 72,
       child: InkWell(
-        onTap: () => Get.find<NavigationController>().to(ProjectDetailedView(),
-            arguments: {'projectDetailed': itemController.projectData}),
+        onTap: () => Get.find<NavigationController>()
+            .to(ProjectDetailedView(), arguments: {'projectDetailed': itemController.projectData}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (item.canEdit!)
               InkWell(
-                onTap: () async => showsStatusesBS(
-                    context: context, itemController: itemController),
+                onTap: () async =>
+                    showsStatusesBS(context: context, itemController: itemController),
                 child: ProjectIcon(itemController: itemController),
               )
             else
@@ -120,50 +120,47 @@ class ProjectIcon extends StatelessWidget {
       children: [
         const SizedBox(width: 16),
         Obx(() {
-          var color = itemController.canEdit.value == true
+          final color = itemController.canEdit.value == true
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
-          return Container(
-            // width: 48,
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Container(
-                  width: 40,
-                  height: 40,
+          return Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 20,
+                  height: 20,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    border: Border.all(
+                      width: 1,
+                      color: Get.theme.colors().primary.withOpacity(0.1),
+                    ),
+                    color: Get.theme.colors().background,
                     shape: BoxShape.circle,
                   ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Get.theme.colors().primary.withOpacity(0.1),
-                      ),
-                      color: Get.theme.colors().background,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: AppIcon(
-                        icon: SvgIcons.project_icon,
-                        color: const Color(0xff666666),
-                        width: 12,
-                        height: 12,
-                      ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: AppIcon(
+                      icon: SvgIcons.project_icon,
+                      color: Color(0xff666666),
+                      width: 12,
+                      height: 12,
                     ),
                   ),
                 ),
-                AppIcon(icon: itemController.statusImage, color: color),
-              ],
-            ),
+              ),
+              AppIcon(icon: itemController.statusImage, color: color),
+            ],
           );
         }),
         const SizedBox(width: 16),
@@ -199,15 +196,15 @@ class _Content extends StatelessWidget {
                     decoration: TextDecoration.lineThrough,
                     color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else if (itemController.status.value == 2) {
-                style = TextStyleHelper.projectTitle.copyWith(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6));
+                style = TextStyleHelper.projectTitle
+                    .copyWith(color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else {
                 style = TextStyleHelper.projectTitle;
               }
               return CellAtributedTitle(
                 text: item!.title,
                 style: style,
-                atributeIcon: AppIcon(icon: SvgIcons.lock),
+                atributeIcon: const AppIcon(icon: SvgIcons.lock),
                 atributeIconVisible: itemController.isPrivate.value == true,
               );
             },
@@ -215,7 +212,7 @@ class _Content extends StatelessWidget {
           Row(
             children: [
               Obx(() {
-                var color = itemController.canEdit.value == true
+                final color = itemController.canEdit.value == true
                     ? Get.theme.colors().primary
                     : Get.theme.colors().onBackground;
                 return Text(
@@ -260,9 +257,7 @@ class _Suffix extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            AppIcon(
-                icon: SvgIcons.check_square,
-                color: Get.theme.colors().onSurface),
+            AppIcon(icon: SvgIcons.check_square, color: Get.theme.colors().onSurface),
             const SizedBox(width: 3),
             Text(
               item!.taskCount.toString(),
@@ -278,14 +273,12 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS(
-    {required BuildContext context, dynamic itemController}) async {
-  var _statusesController = Get.find<ProjectStatusesController>();
+void showsStatusesBS({required BuildContext context, dynamic itemController}) async {
+  final _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight:
-        _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight: _getInititalSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
@@ -311,9 +304,7 @@ void showsStatusesBS(
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(
-                      width: 1,
-                      color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -337,8 +328,8 @@ void showsStatusesBS(
                               color: itemController.projectData.canEdit as bool
                                   ? Get.theme.colors().primary
                                   : Get.theme.colors().onBackground),
-                          selected: _statusesController.statuses[i] ==
-                              itemController.projectData.status),
+                          selected:
+                              _statusesController.statuses[i] == itemController.projectData.status),
                     ),
                   const SizedBox(height: 16),
                 ],
@@ -352,6 +343,6 @@ void showsStatusesBS(
 }
 
 double _getInititalSize({required int statusCount}) {
-  var size = (statusCount * 50 + 65) / Get.height;
+  final size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

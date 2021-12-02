@@ -68,13 +68,11 @@ class TFASmsController extends GetxController {
 
   String? get phoneNoise => _phoneNoise;
 
-  String get number {
-    var number = '+${_phoneCodeController.text}${_phoneNumberController!.text}';
-    number = number.replaceAll(RegExp(r' |-|[()]'), '');
-    return number;
-  }
+  String get number => '+${_phoneCodeController.text}${_phoneNumberController!.text}'
+      .replaceAll(RegExp(' |-|[()]'), '');
 
   @override
+  // ignore: avoid_void_async
   void onInit() async {
     loaded = false.obs;
     await _numberService.init();
@@ -85,13 +83,12 @@ class TFASmsController extends GetxController {
 
     try {
       deviceCountry = _countries!
-          .firstWhere((element) =>
-              element.countryCode.toLowerCase().contains(_locale.toLowerCase()))
+          .firstWhere(
+              (element) => element.countryCode.toLowerCase().contains(_locale.toLowerCase()))
           .obs;
       _phoneCodeController.text = deviceCountry.value!.phoneCode;
       _phoneNumberController = MaskedTextController(
-          mask: deleteNumberPrefix(
-              deviceCountry.value!.phoneMaskFixedLineNational));
+          mask: deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineNational));
     } catch (e) {
       debugPrint(e.toString());
     }
@@ -132,8 +129,7 @@ class TFASmsController extends GetxController {
 
   void onSearch(String text) {
     countriesToShow.value = _countries!
-        .where((element) =>
-            element.countryName!.toLowerCase().contains(text.toLowerCase()))
+        .where((element) => element.countryName!.toLowerCase().contains(text.toLowerCase()))
         .toList()
         .obs;
   }
@@ -142,8 +138,8 @@ class TFASmsController extends GetxController {
     deviceCountry.value = country;
     countriesToShow.value = _countries!;
     _phoneCodeController.text = country.phoneCode;
-    _phoneNumberController!.updateMask(
-        deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineNational));
+    _phoneNumberController!
+        .updateMask(deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineNational));
     _phoneNumberController!.clear();
     Get.back();
   }
@@ -153,8 +149,7 @@ class TFASmsController extends GetxController {
   }
 
   String get numberHint {
-    return deleteNumberPrefix(
-            deviceCountry.value!.phoneMaskFixedLineInternational)
+    return deleteNumberPrefix(deviceCountry.value!.phoneMaskFixedLineInternational)
         .replaceAll('0', '_');
   }
 

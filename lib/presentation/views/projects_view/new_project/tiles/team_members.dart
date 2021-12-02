@@ -52,13 +52,11 @@ class TeamMembersTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.selectedTeamMembers.isNotEmpty as bool;
+        final _isNotEmpty = controller.selectedTeamMembers.isNotEmpty as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('team')}:' : null,
-          text: _isNotEmpty
-              ? controller.teamMembersTitle as String
-              : tr('addTeamMembers'),
+          text: _isNotEmpty ? controller.teamMembersTitle as String : tr('addTeamMembers'),
           icon: SvgIcons.users,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
@@ -75,9 +73,8 @@ class TeamMembersTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const TeamMembersSelectionView(),
-              arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const TeamMembersSelectionView(), arguments: {'controller': controller}),
         );
       },
     );

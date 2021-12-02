@@ -66,8 +66,8 @@ class _TaskCellState extends State<TaskCell> {
       TaskItemController(widget.task),
       tag: widget.task.id.toString(),
     );
-    WidgetsBinding.instance!.addPostFrameCallback(
-        (_) async => await itemController.initTaskStatus(widget.task));
+    WidgetsBinding.instance!
+        .addPostFrameCallback((_) async => await itemController.initTaskStatus(widget.task));
     super.initState();
   }
 
@@ -75,7 +75,7 @@ class _TaskCellState extends State<TaskCell> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () => Get.find<NavigationController>()
-          .to(TaskDetailedView(), arguments: {'controller': itemController}),
+          .to(const TaskDetailedView(), arguments: {'controller': itemController}),
       child: SizedBox(
         height: 72,
         child: Row(
@@ -116,8 +116,7 @@ class _StatusText extends StatelessWidget {
   final TaskItemController? controller;
 
   bool get _loading =>
-      controller!.isStatusLoaded.isFalse ||
-      controller?.status.value.isNull != false;
+      controller!.isStatusLoaded.isFalse || controller?.status.value.isNull != false;
 
   @override
   Widget build(BuildContext context) {
@@ -133,12 +132,11 @@ class _StatusText extends StatelessWidget {
               child: Text(controller!.status.value.title!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.status(
-                      color: controller!.getStatusTextColor)),
+                  style: TextStyleHelper.status(color: controller!.getStatusTextColor)),
             ),
             Text(' • ',
-                style: TextStyleHelper.caption(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                style:
+                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ],
         );
       },
@@ -169,7 +167,7 @@ class _SecondColumn extends StatelessWidget {
               CellAtributedTitle(
                 text: itemController!.task.value.title,
                 style: TextStyleHelper.projectTitle,
-                atributeIcon: AppIcon(icon: SvgIcons.high_priority),
+                atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
                 atributeIconVisible: itemController!.task.value.priority == 1,
               ),
               Wrap(
@@ -203,7 +201,7 @@ class _ThirdColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _now = DateTime.now();
+    final _now = DateTime.now();
 
     DateTime? _deadline;
     if (controller!.task.value.deadline != null)
@@ -220,19 +218,16 @@ class _ThirdColumn extends StatelessWidget {
                 stringDate: controller!.task.value.deadline!,
               ),
               style: _deadline.isBefore(_now)
-                  ? TextStyleHelper.caption(
-                      color: Get.theme.colors().colorError)
-                  : TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface)),
+                  ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
+                  : TextStyleHelper.caption(color: Get.theme.colors().onSurface)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
+            const AppIcon(icon: SvgIcons.subtasks, color: Color(0xff666666)),
             const SizedBox(width: 5),
             Text(controller!.task.value.subtasks!.length.toString(),
-                style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ],
         ),
       ],

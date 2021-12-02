@@ -42,66 +42,62 @@ class ListLoadingSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _decoration = BoxDecoration(
-        color: Get.theme.colors().bgDescription,
-        borderRadius: BorderRadius.circular(2));
+    final _decoration = BoxDecoration(
+        color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(2));
 
-    return Container(
-      child: Column(
-        children: [
-          LinearProgressIndicator(
-            minHeight: 4,
-            backgroundColor: Get.theme.colors().primary,
-            valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffb5c4d2)),
+    return Column(
+      children: [
+        LinearProgressIndicator(
+          minHeight: 4,
+          backgroundColor: Get.theme.colors().primary,
+          valueColor: const AlwaysStoppedAnimation<Color>(Color(0xffb5c4d2)),
+        ),
+        Shimmer.fromColors(
+          baseColor: Get.theme.colors().bgDescription,
+          highlightColor: Colors.white,
+          child: Column(
+            children: [
+              const SizedBox(height: 22),
+              for (var i = 0; i < 4; i++)
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(
+                        bottom: 32,
+                        left: 16,
+                        right: 16,
+                      ),
+                      height: 40,
+                      width: 40,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: Get.theme.colors().bgDescription),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(height: 12, decoration: _decoration),
+                          Container(
+                              height: 12,
+                              margin: const EdgeInsets.only(top: 6),
+                              width: Get.width / 3,
+                              decoration: _decoration)
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      width: 41,
+                      height: 12,
+                      decoration: _decoration,
+                    )
+                  ],
+                )
+            ],
           ),
-          Shimmer.fromColors(
-            baseColor: Get.theme.colors().bgDescription,
-            highlightColor: Colors.white,
-            child: Column(
-              children: [
-                const SizedBox(height: 22),
-                for (var i = 0; i < 4; i++)
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.only(
-                          bottom: 32,
-                          left: 16,
-                          right: 16,
-                        ),
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Get.theme.colors().bgDescription),
-                      ),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(height: 12, decoration: _decoration),
-                            Container(
-                                height: 12,
-                                margin: const EdgeInsets.only(top: 6),
-                                width: Get.width / 3,
-                                decoration: _decoration)
-                          ],
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 16),
-                        width: 41,
-                        height: 12,
-                        decoration: _decoration,
-                      )
-                    ],
-                  )
-              ],
-            ),
-          )
-        ],
-      ),
+        )
+      ],
     );
   }
 }

@@ -67,7 +67,7 @@ class _CodeViewState extends State<CodeView> {
                 child: Column(
                   children: [
                     //TODO fix dark theme icon
-                    AppIcon(
+                    const AppIcon(
                       hasDarkVersion: true,
                       icon: PngIcons.code_light,
                       darkThemeIcon: PngIcons.code_dark,
@@ -78,8 +78,7 @@ class _CodeViewState extends State<CodeView> {
                     SizedBox(height: Get.height * 0.0347),
                     Text(tr('tfaTitle'),
                         textAlign: TextAlign.center,
-                        style: TextStyleHelper.headline5(
-                            color: Get.theme.colors().onSurface)),
+                        style: TextStyleHelper.headline5(color: Get.theme.colors().onSurface)),
                     SizedBox(height: Get.height * 0.0222),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -87,8 +86,7 @@ class _CodeViewState extends State<CodeView> {
                         tr('tfaGAcodeDescription'),
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.body2(
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6)),
+                            color: Get.theme.colors().onSurface.withOpacity(0.6)),
                       ),
                     ),
                     SizedBox(height: Get.height * 0.0333),
@@ -105,8 +103,7 @@ class _CodeViewState extends State<CodeView> {
                       padding: const EdgeInsets.symmetric(horizontal: 40),
                       child: WideButton(
                         text: tr('confirm'),
-                        onPressed: () async =>
-                            await controller.sendCode(codeController.text),
+                        onPressed: () async => await controller.sendCode(codeController.text),
                       ),
                     ),
                     // Center(

@@ -44,7 +44,7 @@ class ProjectSearchView extends StatelessWidget {
   ProjectSearchView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(ProjectSearchController());
+    final controller = Get.put(ProjectSearchController());
     controller.clearSearch();
     return Scaffold(
       backgroundColor: Get.theme.backgroundColor,
@@ -55,8 +55,7 @@ class ProjectSearchView extends StatelessWidget {
           children: <Widget>[
             if (controller.loaded.value == false) const ListLoadingSkeleton(),
             if (controller.nothingFound.value == true) const NothingFound(),
-            if (controller.loaded.value == true &&
-                controller.searchResult.isNotEmpty)
+            if (controller.loaded.value == true && controller.searchResult.isNotEmpty)
               Expanded(
                 child: SmartRefresher(
                   enablePullDown: false,
@@ -64,8 +63,7 @@ class ProjectSearchView extends StatelessWidget {
                   controller: controller.refreshController,
                   onLoading: controller.onLoading,
                   child: ListView.builder(
-                    itemBuilder: (c, i) =>
-                        ProjectCell(item: controller.searchResult[i]),
+                    itemBuilder: (c, i) => ProjectCell(item: controller.searchResult[i]),
                     itemCount: controller.searchResult.length,
                   ),
                 ),

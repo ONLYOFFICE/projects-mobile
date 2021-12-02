@@ -37,7 +37,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class FilterElement extends StatelessWidget {
-  final bool? isSelected;
+  final bool isSelected;
   final String? title;
   final Color? titleColor;
   final bool? cancelButtonEnabled;
@@ -64,9 +64,7 @@ class FilterElement extends StatelessWidget {
         decoration: BoxDecoration(
           border: Border.all(color: Get.theme.colors().outline, width: 0.5),
           borderRadius: BorderRadius.circular(16),
-          color: isSelected!
-              ? Get.theme.colors().primary
-              : Get.theme.colors().bgDescription,
+          color: isSelected ? Get.theme.colors().primary : Get.theme.colors().bgDescription,
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -76,7 +74,7 @@ class FilterElement extends StatelessWidget {
               child: Text(title!,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.body2(
-                      color: isSelected!
+                      color: isSelected
                           ? Get.theme.colors().onPrimarySurface
                           : titleColor ?? Get.theme.colors().primary)),
             ),
@@ -85,8 +83,7 @@ class FilterElement extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 9),
                   child: InkWell(
                       onTap: onCancelTap,
-                      child: const Icon(Icons.cancel,
-                          color: Colors.white, size: 18))),
+                      child: const Icon(Icons.cancel, color: Colors.white, size: 18))),
           ],
         ),
       ),

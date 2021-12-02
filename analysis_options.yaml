@@ -10,7 +10,28 @@ linter:
     prefer_typing_uninitialized_variables: false
     directives_ordering: false
     require_trailing_commas: false
+    flutter_style_todos: false
+
+    # enable following rules when problems cleaned
+    curly_braces_in_flow_control_structures: false
+    type_annotate_public_apis: false
+    avoid_redundant_argument_values: false
+    avoid_setters_without_getters: false
+    avoid_void_async: false
+    use_setters_to_change_properties: false
+    library_private_types_in_public_api: false
+    unnecessary_await_in_return: false
+    avoid_positional_boolean_parameters: false
+    avoid_print: false
+    prefer_asserts_with_message: false
+
+    cast_nullable_to_non_nullable: false
+    cancel_subscriptions: false
+    unnecessary_null_comparison: false
+    prefer_const_constructors_in_immutables: false
+    
 
 analyzer:
   strong-mode:
     implicit-dynamic: true
+    

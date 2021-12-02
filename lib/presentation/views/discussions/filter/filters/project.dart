@@ -45,42 +45,36 @@ class _Project extends StatelessWidget {
           FilterElement(
               title: tr('myProjects'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController!.project['my'] as bool?,
+              isSelected: filterController!.project['my'] as bool,
               onTap: () => filterController!.changeProject('my')),
           FilterElement(
               title: filterController!.project['other'].isEmpty as bool
                   ? tr('otherProjects')
                   : filterController!.project['other'] as String,
-              isSelected:
-                  filterController!.project['other'].isNotEmpty as bool?,
-              cancelButtonEnabled:
-                  filterController!.project['other'].isNotEmpty as bool?,
+              isSelected: filterController!.project['other'].isNotEmpty as bool,
+              cancelButtonEnabled: filterController!.project['other'].isNotEmpty as bool,
               onTap: () async {
-                var selectedProject = await Get.find<NavigationController>()
-                    .toScreen(SelectProjectScreen());
-                filterController!.changeProject('other', selectedProject);
+                final selectedProject =
+                    await Get.find<NavigationController>().toScreen(SelectProjectScreen());
+                await filterController!.changeProject('other', selectedProject);
               },
-              onCancelTap: () =>
-                  filterController!.changeProject('other', null)),
+              onCancelTap: () => filterController!.changeProject('other', null)),
           FilterElement(
               title: filterController!.project['withTag'].isEmpty as bool
                   ? tr('withTag')
                   : filterController!.project['withTag'] as String,
-              isSelected:
-                  filterController!.project['withTag'].isNotEmpty as bool?,
-              cancelButtonEnabled:
-                  filterController!.project['withTag'].isNotEmpty as bool?,
+              isSelected: filterController!.project['withTag'].isNotEmpty as bool,
+              cancelButtonEnabled: filterController!.project['withTag'].isNotEmpty as bool,
               onTap: () async {
-                var selectedTag = await Get.find<NavigationController>()
-                    .toScreen(const SelectTagScreen());
-                filterController!.changeProject('withTag', selectedTag);
+                final selectedTag =
+                    await Get.find<NavigationController>().toScreen(const SelectTagScreen());
+                await filterController!.changeProject('withTag', selectedTag);
               },
-              onCancelTap: () =>
-                  filterController!.changeProject('withTag', null)),
+              onCancelTap: () => filterController!.changeProject('withTag', null)),
           FilterElement(
               title: tr('withoutTag'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController!.project['withoutTag'] as bool?,
+              isSelected: filterController!.project['withoutTag'] as bool,
               onTap: () => filterController!.changeProject('withoutTag')),
         ],
       ),

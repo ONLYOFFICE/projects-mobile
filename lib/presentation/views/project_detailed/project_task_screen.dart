@@ -56,16 +56,14 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed? projectDetailed;
 
-  const ProjectTaskScreen({Key? key, required this.projectDetailed})
-      : super(key: key);
+  const ProjectTaskScreen({Key? key, required this.projectDetailed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var taskStatusesController = Get.find<TaskStatusesController>();
+    final taskStatusesController = Get.find<TaskStatusesController>();
     taskStatusesController.getStatuses();
 
-    var controller = Get.find<ProjectTasksController>()
-      ..setup(projectDetailed!);
+    final controller = Get.find<ProjectTasksController>()..setup(projectDetailed!);
 
     return Stack(
       children: [
@@ -78,9 +76,8 @@ class ProjectTaskScreen extends StatelessWidget {
               () => Visibility(
                 visible: controller.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>().to(
-                      const NewTaskView(),
-                      arguments: {'projectDetailed': projectDetailed}),
+                  onPressed: () => Get.find<NavigationController>()
+                      .to(const NewTaskView(), arguments: {'projectDetailed': projectDetailed}),
                   child: AppIcon(
                     icon: SvgIcons.add_fab,
                     color: Get.theme.colors().onPrimarySurface,
@@ -127,18 +124,15 @@ class _Content extends StatelessWidget {
               controller.filterController.hasFilters.value)
             Expanded(
               child: Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
               ),
             ),
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isNotEmpty)
+          if (controller.loaded.value == true && controller.paginationController.data.isNotEmpty)
             Expanded(
               child: PaginationListView(
                 paginationController: controller.paginationController,
                 child: ListView.builder(
-                  itemBuilder: (c, i) =>
-                      TaskCell(task: controller.paginationController.data[i]),
+                  itemBuilder: (c, i) => TaskCell(task: controller.paginationController.data[i]),
                   itemExtent: 72,
                   itemCount: controller.paginationController.data.length,
                 ),
@@ -159,45 +153,32 @@ class Header extends StatelessWidget {
   final ProjectTasksController controller;
   @override
   Widget build(BuildContext context) {
-    var options = Column(
+    final options = Column(
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(
-            sortParameter: 'deadline',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'priority',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'create_on',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'start_date',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'title', sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'sort_order',
-            sortController: controller.sortController),
+        SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+        SortTile(sortParameter: 'priority', sortController: controller.sortController),
+        SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+        SortTile(sortParameter: 'start_date', sortController: controller.sortController),
+        SortTile(sortParameter: 'title', sortController: controller.sortController),
+        SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
         const SizedBox(height: 20)
       ],
     );
 
-    var sortButton = Container(
+    final sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
-          Get.bottomSheet(SortView(sortOptions: options),
-              isScrollControlled: true);
+          Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
         },
         child: Row(
           children: <Widget>[
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -226,8 +207,8 @@ class Header extends StatelessWidget {
     );
 
     return Visibility(
-      visible: controller.itemList.isNotEmpty ||
-          controller.filterController.hasFilters.value == true,
+      visible:
+          controller.itemList.isNotEmpty || controller.filterController.hasFilters.value == true,
       child: Column(
         children: <Widget>[
           Container(
@@ -237,20 +218,16 @@ class Header extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 sortButton,
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () async => Get.find<NavigationController>()
-                            .toScreen(const TasksFilterScreen(),
-                                preventDuplicates: false,
-                                arguments: {
-                              'filterController': controller.filterController
-                            }),
-                        child: FiltersButton(controler: controller),
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () async => Get.find<NavigationController>().toScreen(
+                          const TasksFilterScreen(),
+                          preventDuplicates: false,
+                          arguments: {'filterController': controller.filterController}),
+                      child: FiltersButton(controler: controller),
+                    ),
+                  ],
                 ),
               ],
             ),

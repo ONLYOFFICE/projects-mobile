@@ -46,7 +46,7 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/select_
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
-part 'filters/type.dart';
+part 'filters/document_type.dart';
 part 'filters/search_settings.dart';
 part 'filters/author.dart';
 
@@ -57,14 +57,12 @@ class DocumentsFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterController =
-        Get.arguments['filterController'] as DocumentsFilterController;
+    final filterController = Get.arguments['filterController'] as DocumentsFilterController;
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         onLeadingPressed: () {
           filterController.restoreFilters();
@@ -72,8 +70,7 @@ class DocumentsFilterScreen extends StatelessWidget {
         },
         titleText: tr('filter'),
         showBackButton: true,
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
@@ -81,8 +78,7 @@ class DocumentsFilterScreen extends StatelessWidget {
           TextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
-                  style: TextStyleHelper.button(
-                      color: Get.theme.colors().systemBlue))),
+                  style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),
           SizedBox(width: platformController.isMobile ? 8 : 12),
         ],
       ),
@@ -95,7 +91,7 @@ class DocumentsFilterScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12.5),
-                  _Type(filterController: filterController),
+                  _DocumentType(filterController: filterController),
                   _Author(filterController: filterController),
                   // _SearchSettings(filterController: filterController),
                 ],

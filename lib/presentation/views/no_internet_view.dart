@@ -48,7 +48,7 @@ class NoInternetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var icon = Get.theme.brightness == Brightness.light
+    final icon = Get.theme.brightness == Brightness.light
         ? SvgIcons.no_internet
         : SvgIcons.no_internet.replaceFirst('.', '_dark.');
 
@@ -79,8 +79,7 @@ class NoInternetScreen extends StatelessWidget {
                 Text(
                   tr('noInternetConnectionTitle'),
                   textAlign: TextAlign.center,
-                  style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -100,22 +99,17 @@ class NoInternetScreen extends StatelessWidget {
                         await Connectivity().checkConnectivity();
                       },
                       style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith<
-                                EdgeInsetsGeometry>(
+                        padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
                             (_) => const EdgeInsets.fromLTRB(10, 10, 10, 12)),
-                        backgroundColor:
-                            MaterialStateProperty.resolveWith<Color>(
-                                (_) => Get.theme.colors().primary),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6)),
+                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                            (_) => Get.theme.colors().primary),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
                         ),
                       ),
                       child: Text(tr('tryAgain'),
                           textAlign: TextAlign.center,
-                          style: TextStyleHelper.button(
-                              color: Get.theme.colors().onPrimary)),
+                          style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
                     ),
                   ),
                 ),

@@ -45,17 +45,15 @@ class ModalScreenView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,
-      body: Container(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 80),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: Container(
-                width: 480,
-                height: 608,
-                child: contentView,
-              ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 80),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox(
+              width: 480,
+              height: 608,
+              child: contentView,
             ),
           ),
         ),

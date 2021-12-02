@@ -45,19 +45,18 @@ class _Author extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController!.author['me'] as bool?,
+              isSelected: filterController!.author['me'] as bool,
               onTap: () => filterController!.changeAuthor('me')),
           FilterElement(
             title: filterController!.author['other'].isEmpty as bool
                 ? tr('otherUser')
                 : filterController!.author['other'] as String,
-            isSelected: filterController!.author['other'].isNotEmpty as bool?,
-            cancelButtonEnabled:
-                filterController!.author['other'].isNotEmpty as bool?,
+            isSelected: filterController!.author['other'].isNotEmpty as bool,
+            cancelButtonEnabled: filterController!.author['other'].isNotEmpty as bool?,
             onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
-              filterController!.changeAuthor('other', newUser);
+              final newUser =
+                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
+              await filterController!.changeAuthor('other', newUser);
             },
             onCancelTap: () => filterController!.changeAuthor('other', null),
           ),

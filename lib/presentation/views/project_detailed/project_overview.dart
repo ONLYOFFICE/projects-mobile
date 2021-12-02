@@ -80,9 +80,7 @@ class ProjectOverview extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 20),
                   child: InfoTile(
                     caption: tr('description'),
-                    icon: AppIcon(
-                        icon: SvgIcons.description,
-                        color: const Color(0xff707070)),
+                    icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
                     subtitleWidget: ReadMoreText(
                       projectController!.descriptionText.value,
                       trimLines: 3,
@@ -92,20 +90,16 @@ class ProjectOverview extends StatelessWidget {
                       delimiter: ' ',
                       trimCollapsedText: tr('showMore'),
                       trimExpandedText: tr('showLess'),
-                      moreStyle: TextStyleHelper.body2(
-                          color: Get.theme.colors().links),
-                      lessStyle: TextStyleHelper.body2(
-                          color: Get.theme.colors().links),
+                      moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
+                      lessStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
                     ),
                   ),
                 ),
               Obx(() => InfoTile(
-                    icon: AppIcon(
-                        icon: SvgIcons.user, color: const Color(0xff707070)),
+                    icon: const AppIcon(icon: SvgIcons.user, color: Color(0xff707070)),
                     caption: tr('projectManager'),
                     subtitle: projectController!.managerText.value,
-                    subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Get.theme.colors().onSurface),
+                    subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                   )),
               const SizedBox(height: 20),
               Obx(
@@ -114,30 +108,25 @@ class ProjectOverview extends StatelessWidget {
                     tabController!.animateTo(5);
                   },
                   child: InfoTileWithButton(
-                    icon: AppIcon(
-                        icon: SvgIcons.users, color: const Color(0xff707070)),
+                    icon: const AppIcon(icon: SvgIcons.users, color: Color(0xff707070)),
                     onTapFunction: () {
                       tabController!.animateTo(5);
                     },
                     caption: tr('team'),
                     iconData: Icons.navigate_next,
-                    subtitle: plural(
-                        'members', projectController!.teamMembersCount.value),
-                    subtitleStyle: TextStyleHelper.subtitle1(
-                        color: Get.theme.colors().onSurface),
+                    subtitle: plural('members', projectController!.teamMembersCount.value),
+                    subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.calendar, color: const Color(0xff707070)),
+                  icon: const AppIcon(icon: SvgIcons.calendar, color: Color(0xff707070)),
                   caption: tr('creationDate'),
                   subtitle: projectController!.creationDateText.value)),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.tag, color: const Color(0xff707070)),
+                  icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
                   caption: tr('tags'),
                   subtitle: projectController!.tagsText.value)),
             ],
@@ -153,13 +142,12 @@ class ProjectOverview extends StatelessWidget {
 class ProjectStatusButton extends StatelessWidget {
   final projectController;
 
-  const ProjectStatusButton({Key? key, required this.projectController})
-      : super(key: key);
+  const ProjectStatusButton({Key? key, required this.projectController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    bool canEdit = projectController.projectData.canEdit as bool;
+    final bool canEdit = projectController.projectData.canEdit as bool;
     return Padding(
       padding: const EdgeInsets.only(left: 72),
       child: Column(
@@ -168,8 +156,7 @@ class ProjectStatusButton extends StatelessWidget {
           OutlinedButton(
             onPressed: canEdit
                 ? () => {
-                      showsStatusesBS(
-                          context: context, itemController: projectController),
+                      showsStatusesBS(context: context, itemController: projectController),
                     }
                 : null,
             style: ButtonStyle(
@@ -195,10 +182,7 @@ class ProjectStatusButton extends StatelessWidget {
                         style: TextStyleHelper.subtitle2(
                           color: canEdit
                               ? Get.theme.colors().primary
-                              : Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.75),
+                              : Get.theme.colors().onBackground.withOpacity(0.75),
                         ),
                       ),
                     ),

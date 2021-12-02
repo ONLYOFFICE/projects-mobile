@@ -111,15 +111,15 @@ class PortalUser {
     title = json['title'] as String?;
     if (json['contacts'] != null) {
       contacts = <Contact>[];
-      ((json['contacts'] as List).cast<Map<String, dynamic>>()).forEach((e) {
+      for (final e in (json['contacts'] as List).cast<Map<String, dynamic>>()) {
         contacts!.add(Contact.fromJson(e));
-      });
+      }
     }
     if (json['groups'] != null) {
       groups = <PortalGroup>[];
-      (json['groups'] as List).forEach((e) {
+      for (final e in json['groups'] as List) {
         groups!.add(PortalGroup.fromJson((e as Map).cast<String, dynamic>()));
-      });
+      }
     }
     avatarMedium = json['avatarMedium'] as String?;
     avatar = json['avatar'] as String?;

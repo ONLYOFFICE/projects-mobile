@@ -32,7 +32,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/services/project_service.dart';
@@ -81,7 +80,7 @@ class ProjectSearchController extends GetxController {
       _startIndex -= PAGINATION_LENGTH;
       return;
     }
-    _performSearch();
+    await _performSearch();
     refreshController.loadComplete();
   }
 
@@ -98,8 +97,8 @@ class ProjectSearchController extends GetxController {
     switchToSearchView.value = true;
     searchResult.clear();
 
-    final result = await _api.getProjectsByParams(
-        startIndex: _startIndex, query: _query.toLowerCase());
+    final result =
+        await _api.getProjectsByParams(startIndex: _startIndex, query: _query.toLowerCase());
 
     if (result != null) {
       _totalProjects = result.total;

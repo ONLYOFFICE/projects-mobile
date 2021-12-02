@@ -81,8 +81,7 @@ class TaskItemController extends GetxController {
   Color get getStatusBGColor =>
       _statusHandler.getBackgroundColor(status.value, task.value.canEdit!);
 
-  Color get getStatusTextColor =>
-      _statusHandler.getTextColor(status.value, task.value.canEdit!);
+  Color get getStatusTextColor => _statusHandler.getTextColor(status.value, task.value.canEdit!);
 
   String? get displayName {
     if (task.value.responsibles!.isEmpty) return tr('noResponsible');
@@ -116,8 +115,7 @@ class TaskItemController extends GetxController {
 
   void scrollToLastComment() {
     if (commentsListController.hasClients) {
-      commentsListController
-          .jumpTo(commentsListController.position.maxScrollExtent);
+      commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
     }
   }
 
@@ -145,7 +143,7 @@ class TaskItemController extends GetxController {
     await Clipboard.setData(ClipboardData(text: link));
   }
 
-  Future accept(BuildContext context) async {
+  Future accept() async {
     final controller = Get.put(TaskEditingController(task: task.value));
     controller.addResponsible(
       PortalUserItemController(
@@ -153,7 +151,7 @@ class TaskItemController extends GetxController {
         portalUser: Get.find<UserController>().user!,
       ),
     );
-    await controller.acceptTask(context);
+    await controller.acceptTask();
   }
 
   Future copyTask({PortalTask? portalTask}) async {
@@ -166,11 +164,8 @@ class TaskItemController extends GetxController {
     }
 
     final newTask = NewTaskDTO(
-      deadline:
-          taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline!) : null,
-      startDate: taskFrom.startDate != null
-          ? DateTime.parse(taskFrom.startDate!)
-          : null,
+      deadline: taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline!) : null,
+      startDate: taskFrom.startDate != null ? DateTime.parse(taskFrom.startDate!) : null,
       description: taskFrom.description,
       milestoneid: taskFrom.milestoneId,
       priority: taskFrom.priority == 1 ? 'high' : 'normal',
@@ -181,17 +176,16 @@ class TaskItemController extends GetxController {
       copySubtasks: true,
     );
 
-    final copiedTask =
-        await _api.copyTask(copyFrom: task.value.id!, newTask: newTask);
+    final copiedTask = await _api.copyTask(copyFrom: task.value.id!, newTask: newTask);
 
     if (copiedTask != null) {
       locator<EventHub>().fire('needToRefreshTasks');
 
-      final newTaskController = Get.put(TaskItemController(copiedTask),
-          tag: copiedTask.id.toString());
+      final newTaskController =
+          Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
 
       Get.find<NavigationController>()
-          .to(TaskDetailedView(), arguments: {'controller': newTaskController});
+          .to(const TaskDetailedView(), arguments: {'controller': newTaskController});
     }
   }
 
@@ -214,13 +208,11 @@ class TaskItemController extends GetxController {
       await initTaskStatus(task.value);
     }
 
-    final team = Get.find<ProjectTeamController>()
-      ..setup(projectId: task.value.projectOwner!.id);
+    final team = Get.find<ProjectTeamController>()..setup(projectId: task.value.projectOwner!.id);
 
     await team.getTeam();
     final responsibles = team.usersList
-        .where((user) =>
-            task.value.responsibles!.any((element) => user.id == element!.id))
+        .where((user) => task.value.responsibles!.any((element) => user.id == element!.id))
         .toList();
     task.value.responsibles!.clear();
     for (final user in responsibles) {
@@ -243,29 +235,23 @@ class TaskItemController extends GetxController {
   }) async {
     if (newStatusId == status.value.id) return;
 
-    if (newStatusType == 2 &&
-        task.value.status != newStatusType &&
-        task.value.hasOpenSubtasks) {
+    if (newStatusType == 2 && task.value.status != newStatusType && task.value.hasOpenSubtasks) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('closingTask'),
         contentText: tr('closingTaskWithActiveSubtasks'),
         acceptText: tr('closeTask').toUpperCase(),
         onAcceptTap: () async {
-          await _changeTaskStatus(
-              id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+          await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
           Get.back();
         },
       ));
     } else {
-      await _changeTaskStatus(
-          id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+      await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
     }
   }
 
   Future _changeTaskStatus(
-      {required int id,
-      required int newStatusId,
-      required int newStatusType}) async {
+      {required int id, required int newStatusId, required int newStatusType}) async {
     loaded.value = false;
     final t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);

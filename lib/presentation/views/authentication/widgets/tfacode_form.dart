@@ -39,7 +39,7 @@ import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class CodeForm extends StatefulWidget {
-  CodeForm({Key? key}) : super(key: key);
+  const CodeForm({Key? key}) : super(key: key);
   @override
   _CodeFormState createState() => _CodeFormState();
 }
@@ -56,7 +56,7 @@ class _CodeFormState extends State<CodeForm> {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
+    final controller = Get.find<LoginController>();
 
     final codeField = TextFormField(
       controller: codeController,
@@ -64,46 +64,41 @@ class _CodeFormState extends State<CodeForm> {
       keyboardType: TextInputType.number,
       style: TextStyleHelper.mainStyle,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+        contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
         hintText: tr('tfaCode'),
         // border:
         //     OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
     );
 
-    var onLoginPressed = () async {
-      await controller.sendCode(codeController.text);
-    };
     final loginButon = Material(
-      elevation: 5.0,
-      borderRadius: BorderRadius.circular(30.0),
+      elevation: 5,
+      borderRadius: BorderRadius.circular(30),
       color: const Color(0xff01A0C7),
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
-        padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: onLoginPressed,
+        padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+        onPressed: () => controller.sendCode(codeController.text),
         child: Text(tr('send'),
             textAlign: TextAlign.center,
-            style: TextStyleHelper.mainStyle.copyWith(
-                color: Get.theme.backgroundColor, fontWeight: FontWeight.bold)),
+            style: TextStyleHelper.mainStyle
+                .copyWith(color: Get.theme.backgroundColor, fontWeight: FontWeight.bold)),
       ),
     );
 
-    return Container(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            const SizedBox(height: 10.0),
-            codeField,
-            const SizedBox(height: 10.0),
-            Obx(() => controller.state.value == ViewState.Busy
-                ? const CircularProgressIndicator()
-                : loginButon),
-            const SizedBox(height: 15.0),
-          ],
-        ),
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          const SizedBox(height: 10),
+          codeField,
+          const SizedBox(height: 10),
+          Obx(() => controller.state.value == ViewState.Busy
+              ? const CircularProgressIndicator()
+              : loginButon),
+          const SizedBox(height: 15),
+        ],
       ),
     );
   }

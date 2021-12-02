@@ -72,11 +72,10 @@ class NewProjectController extends BaseProjectEditorController {
   Future<void> confirm(BuildContext context) async {
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value = (selectedProjectManager.value == null ||
-        selectedProjectManager.value!.id == null);
+    needToFillManager.value =
+        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true)
-      return;
+    if (needToFillTitle.value == true || needToFillManager.value == true) return;
 
     final participants = <Participant>[];
 

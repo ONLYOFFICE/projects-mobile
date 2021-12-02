@@ -1,3 +1,4 @@
+// ignore_for_file: file_names
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -36,14 +37,14 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
+import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 Future<void> showsDiscussionStatusesBS({
   required BuildContext context,
   DiscussionItemController? controller,
 }) async {
-  var initSize = _getInititalSize();
+  final initSize = _getInititalSize();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
@@ -74,9 +75,7 @@ Future<void> showsDiscussionStatusesBS({
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(
-                    width: 1,
-                    color: Get.theme.colors().outline.withOpacity(0.5)),
+                top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
               ),
             ),
             child: Obx(

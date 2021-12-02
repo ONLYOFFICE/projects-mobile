@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -44,7 +44,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class ProfileController extends GetxController {
-  final DownloadService? _downloadService = locator<DownloadService>();
+  final DownloadService _downloadService = locator<DownloadService>();
 
   var portalInfoController = Get.find<PortalInfoController>();
   var userController = Get.find<UserController>();
@@ -62,10 +62,11 @@ class ProfileController extends GetxController {
 
   // ignore: unnecessary_cast
   Rx<Widget> avatar = (AppIcon(
-          width: 120,
-          height: 120,
-          icon: SvgIcons.avatar,
-          color: Get.theme.colors().onSurface) as Widget)
+    width: 120,
+    height: 120,
+    icon: SvgIcons.avatar,
+    color: Get.theme.colors().onSurface,
+  ) as Widget)
       .obs;
 
   Future<void> setup() async {
@@ -98,10 +99,8 @@ class ProfileController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      var avatarBytes = await _downloadService!.downloadImage(
-          (user.value?.avatar ??
-              user.value?.avatarMedium ??
-              user.value?.avatarSmall!)!);
+      final avatarBytes = await _downloadService.downloadImage(
+          (user.value?.avatar ?? user.value?.avatarMedium ?? user.value?.avatarSmall!)!);
       if (avatarBytes == null) return;
 
       // ignore: unnecessary_cast

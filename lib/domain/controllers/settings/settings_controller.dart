@@ -162,7 +162,7 @@ class SettingsController extends GetxController {
     await launch(Const.Urls.help);
   }
 
-  Future<void> onSupportPressed(BuildContext context) async {
+  Future<void> onSupportPressed() async {
     final device = await _deviceInfoService.deviceInfo;
     final os = await _deviceInfoService.osReleaseVersion;
 
@@ -174,10 +174,9 @@ class SettingsController extends GetxController {
     body += '\nAndroid version: $os';
 
     // TODO change to ONLYOFFICE Projects IOS Feedback on ios
-    final url =
-        '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
+    final url = '${Const.Urls.supportMail}?subject=ONLYOFFICE Projects Android Feedback&body=$body';
 
-    await _service.openEmailApp(url, context);
+    await _service.openEmailApp(url, Get.context!);
   }
 
   Future<void> onRateAppPressed() async {
@@ -189,13 +188,11 @@ class SettingsController extends GetxController {
   }
 
   Future<void> onTermsOfServicePressed() async => await launch(
-        RemoteConfigService.getString(
-            RemoteConfigService.Keys.linkTermsOfService),
+        RemoteConfigService.getString(RemoteConfigService.Keys.linkTermsOfService),
       );
 
   Future<void> onPrivacyPolicyPressed() async => await launch(
-        RemoteConfigService.getString(
-            RemoteConfigService.Keys.linkPrivacyPolicy),
+        RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
       );
 
   Future<void> onAnalyticsPressed() async =>

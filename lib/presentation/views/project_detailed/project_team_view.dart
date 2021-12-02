@@ -58,7 +58,7 @@ class ProjectTeamView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var projectTeamDataSource = Get.find<ProjectTeamController>()
+    final projectTeamDataSource = Get.find<ProjectTeamController>()
       ..setup(projectDetailed: projectDetailed)
       ..getTeam();
 
@@ -115,14 +115,12 @@ class _Content extends StatelessWidget {
                       itemBuilder: (c, i) => PortalUserItem(
                           userController: projectTeamDataSource.usersList[i],
                           onTapFunction: (value) => {
-                                Get.find<NavigationController>().toScreen(
-                                    const ProfileScreen(),
+                                Get.find<NavigationController>().toScreen(const ProfileScreen(),
                                     arguments: {
-                                      'portalUser': projectTeamDataSource
-                                          .usersList[i].portalUser
+                                      'portalUser': projectTeamDataSource.usersList[i].portalUser
                                     })
                               }),
-                      itemExtent: 65.0,
+                      itemExtent: 65,
                       itemCount: projectTeamDataSource.usersList.length,
                     )
                   ],

@@ -55,7 +55,7 @@ class SubtasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var _task = controller!.task.value;
+    final _task = controller!.task.value;
     return Obx(
       () {
         if (controller!.loaded.value == true) {
@@ -111,8 +111,8 @@ class _FAB extends StatelessWidget {
       right: 16,
       bottom: 24,
       child: StyledFloatingActionButton(
-        onPressed: () => Get.find<NavigationController>()
-            .to(const CreatingAndEditingSubtaskView(), arguments: {
+        onPressed: () =>
+            Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(), arguments: {
           'taskId': _task!.id,
           'projectId': _task!.projectOwner!.id,
           'forEditing': false,

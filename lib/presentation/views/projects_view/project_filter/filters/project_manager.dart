@@ -34,8 +34,7 @@ part of '../projects_filter.dart';
 
 class _ProjectManager extends StatelessWidget {
   final ProjectsFilterController filterController;
-  const _ProjectManager({Key? key, required this.filterController})
-      : super(key: key);
+  const _ProjectManager({Key? key, required this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,24 +45,21 @@ class _ProjectManager extends StatelessWidget {
           FilterElement(
             title: tr('me'),
             titleColor: Get.theme.colors().onSurface,
-            isSelected: filterController.projectManager['me'] as bool?,
+            isSelected: filterController.projectManager['me'] as bool,
             onTap: () => filterController.changeProjectManager('me'),
           ),
           FilterElement(
             title: filterController.projectManager['other'].isEmpty as bool
                 ? tr('otherUser')
                 : filterController.projectManager['other'] as String,
-            isSelected:
-                filterController.projectManager['other'].isNotEmpty as bool?,
-            cancelButtonEnabled:
-                filterController.projectManager['other'].isNotEmpty as bool?,
+            isSelected: filterController.projectManager['other'].isNotEmpty as bool,
+            cancelButtonEnabled: filterController.projectManager['other'].isNotEmpty as bool?,
             onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
+              final newUser =
+                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
               await filterController.changeProjectManager('other', newUser);
             },
-            onCancelTap: () =>
-                filterController.changeProjectManager('other', null),
+            onCancelTap: () => filterController.changeProjectManager('other', null),
           ),
         ],
       ),

@@ -37,7 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/main_controller.dart';
 
 class MainView extends StatelessWidget {
-  MainView({Key? key}) : super(key: key);
+  const MainView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

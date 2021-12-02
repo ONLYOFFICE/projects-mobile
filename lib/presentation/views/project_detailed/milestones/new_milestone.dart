@@ -51,8 +51,8 @@ class NewMilestoneView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var newMilestoneController = Get.find<NewMilestoneController>();
-    var projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
+    final newMilestoneController = Get.find<NewMilestoneController>();
+    final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
     newMilestoneController.setup(projectDetailed);
 
     return WillPopScope(
@@ -140,12 +140,11 @@ class MilestoneInput extends StatelessWidget {
         () => TextField(
           maxLines: 2,
           controller: controller.titleController,
-          style:
-              TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+          style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
           cursorColor: Get.theme.colors().primary.withOpacity(0.87),
           decoration: InputDecoration(
               hintText: tr('milestoneTitle'),
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+              contentPadding: EdgeInsets.zero,
               hintStyle: TextStyleHelper.headline6(
                   color: controller.needToSetTitle.value
                       ? Get.theme.colors().colorError
@@ -168,12 +167,10 @@ class DescriptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        final _isSletected =
-            newMilestoneController.descriptionText.value.isNotEmpty;
+        final _isSletected = newMilestoneController.descriptionText.value.isNotEmpty;
         return NewItemTile(
-            text: _isSletected
-                ? newMilestoneController.descriptionText.value
-                : tr('addDescription'),
+            text:
+                _isSletected ? newMilestoneController.descriptionText.value : tr('addDescription'),
             maxLines: 1,
             icon: SvgIcons.description,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
@@ -181,8 +178,7 @@ class DescriptionTile extends StatelessWidget {
             caption: _isSletected ? tr('description') : null,
             isSelected: _isSletected,
             suffix: _isSletected
-                ? Icon(Icons.navigate_next,
-                    size: 24, color: Get.theme.colors().onBackground)
+                ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
                 : null,
             onTap: () => Get.find<NavigationController>()
                     .toScreen(const NewMilestoneDescription(), arguments: {
@@ -206,27 +202,22 @@ class ProjectTile extends StatelessWidget {
       () {
         final _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
         return NewItemTile(
-            text: _isSelected
-                ? controller.slectedProjectTitle.value
-                : tr('selectProject'),
+            text: _isSelected ? controller.slectedProjectTitle.value : tr('selectProject'),
             icon: SvgIcons.project,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
             selectedIconColor: Get.theme.colors().onBackground,
-            textColor: controller.needToSelectProject.value
-                ? Get.theme.colors().colorError
-                : null,
+            textColor: controller.needToSelectProject.value ? Get.theme.colors().colorError : null,
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
                 ? IconButton(
-                    icon: Icon(Icons.navigate_next,
-                        size: 24, color: Get.theme.colors().onBackground),
+                    icon:
+                        Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
-                  Get.find<NavigationController>()
-                      .toScreen(const SelectProjectView(), arguments: {
+                  Get.find<NavigationController>().toScreen(const SelectProjectView(), arguments: {
                     'controller': controller,
                   }),
                 });
@@ -249,26 +240,20 @@ class ResponsibleTile extends StatelessWidget {
       //var _isSelected = controller.responsible != null;
       return NewItemTile(
         isSelected: controller.responsible?.value != null,
-        caption:
-            controller.responsible?.value != null ? tr('assignedTo') : null,
+        caption: controller.responsible?.value != null ? tr('assignedTo') : null,
         text: controller.responsible?.value != null
             ? '${controller.responsible?.value?.portalUser.displayName}'
             : tr('addResponsible'),
-        textColor: controller.needToSelectResponsible.value
-            ? Get.theme.colors().colorError
-            : null,
+        textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
         suffix: controller.responsible?.value != null
-            ? Icon(Icons.navigate_next,
-                size: 24, color: Get.theme.colors().onBackground)
+            ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
             : null,
         icon: SvgIcons.person,
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
         selectedIconColor: Get.theme.colors().onBackground,
         onTap: () => {
-          if (!FocusScope.of(context).hasPrimaryFocus)
-            {FocusScope.of(context).unfocus()},
-          Get.find<NavigationController>().toScreen(
-              const ProjectTeamResponsibleSelectionView(),
+          if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
+          Get.find<NavigationController>().toScreen(const ProjectTeamResponsibleSelectionView(),
               arguments: {'controller': controller})
         },
       );
@@ -295,19 +280,16 @@ class DueDateTile extends StatelessWidget {
             text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
             caption: _isSelected ? tr('dueDate') : null,
             isSelected: _isSelected,
-            textColor: controller.needToSetDueDate.value
-                ? Get.theme.colors().colorError
-                : null,
+            textColor: controller.needToSetDueDate.value ? Get.theme.colors().colorError : null,
             suffix: _isSelected
                 ? IconButton(
-                    icon: Icon(Icons.close_rounded,
-                        size: 24, color: Get.theme.colors().onBackground),
+                    icon:
+                        Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
-                  if (!FocusScope.of(context).hasPrimaryFocus)
-                    {FocusScope.of(context).unfocus()},
+                  if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
                   controller.onDueDateTilePressed()
                 });
       },

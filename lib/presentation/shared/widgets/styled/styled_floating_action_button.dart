@@ -53,7 +53,7 @@ class StyledFloatingActionButton extends StatelessWidget {
       valueListenable: MessagesHandler.isDisplayed,
       builder: (context, bool value, _) {
         // ignore: omit_local_variable_types
-        double padding = value ? 60.0 : 0.0;
+        final double padding = value ? 60.0 : 0.0;
         return AnimatedPadding(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.only(bottom: padding),
@@ -67,10 +67,7 @@ class StyledFloatingActionButton extends StatelessWidget {
                     spreadRadius: 1,
                     offset: const Offset(0, 1)),
                 const BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                    offset: Offset(0, 4)),
+                    color: Colors.black12, blurRadius: 5, spreadRadius: 1, offset: Offset(0, 4)),
               ],
             ),
             child: FloatingActionButton(

@@ -54,12 +54,11 @@ class DiscussionTitleTextField extends StatelessWidget {
             maxLines: null,
             controller: controller.titleController,
             onChanged: controller.changeTitle,
-            style: TextStyleHelper.headline6(
-                color: Get.theme.colors().onBackground),
+            style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
             cursorColor: Get.theme.colors().primary.withOpacity(0.87),
             decoration: InputDecoration(
                 hintText: tr('discussionTitle'),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                contentPadding: EdgeInsets.zero,
                 hintStyle: TextStyleHelper.headline6(
                   color: controller.setTitleError.value == true
                       ? Get.theme.colors().colorError

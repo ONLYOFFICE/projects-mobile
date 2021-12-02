@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/tag_itemDTO.dart';
+import 'package:projects/data/models/tag_item_DTO.dart';
 
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -51,7 +51,7 @@ class TagItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTapFunction as void Function()?,
-      child: Container(
+      child: SizedBox(
         height: 48,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -67,9 +67,7 @@ class TagItem extends StatelessWidget {
             Obx(() {
               if (tagItemDTO!.isSelected!.value == true) {
                 return SizedBox(
-                    width: 72,
-                    child: Icon(Icons.check_box,
-                        color: Get.theme.colors().primary));
+                    width: 72, child: Icon(Icons.check_box, color: Get.theme.colors().primary));
               } else {
                 return const SizedBox(
                   width: 72,

@@ -31,7 +31,6 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 
@@ -63,12 +62,10 @@ class ProjectDiscussionsController extends GetxController {
 
   ProjectDiscussionsController(ProjectDetailed projectDetailed) {
     setup(projectDetailed);
-    _sortController.updateSortDelegate =
-        () async => await loadProjectDiscussions();
+    _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
 
     paginationController.loadDelegate = () async => await _getDiscussions();
-    paginationController.refreshDelegate =
-        () async => await _getDiscussions(needToClear: true);
+    paginationController.refreshDelegate = () async => await _getDiscussions(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 
@@ -80,7 +77,7 @@ class ProjectDiscussionsController extends GetxController {
     fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() => _projectDetailed.security!['canCreateMessage'] as bool?;
+  bool? _canCreate() => _projectDetailed.security!['canCreateMessage'];
 
   RxList get itemList => paginationController.data;
 
@@ -111,7 +108,6 @@ class ProjectDiscussionsController extends GetxController {
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
       .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() =>
-      Get.find<NavigationController>().to(const NewDiscussionScreen(),
-          arguments: {'projectId': projectId, 'projectTitle': projectTitle});
+  void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
+      arguments: {'projectId': projectId, 'projectTitle': projectTitle});
 }

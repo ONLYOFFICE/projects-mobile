@@ -49,16 +49,14 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller']..setupResponsibleSelection();
+    final controller = Get.arguments['controller']..setupResponsibleSelection();
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectResponsible'),
         bottom: SearchField(
           hintText: tr('usersSearch'),
@@ -83,8 +81,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             return SmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled as bool,
-              controller: controller.teamController.refreshController
-                  as RefreshController,
+              controller: controller.teamController.refreshController as RefreshController,
               onLoading: controller.teamController.onLoading as Function(),
               child: ListView(
                 children: <Widget>[
@@ -93,13 +90,12 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => PortalUserItem(
-                          userController: controller.teamController.usersList[i]
-                              as PortalUserItemController,
-                          onTapFunction: controller.addResponsible as void
-                              Function(PortalUserItemController)),
+                          userController:
+                              controller.teamController.usersList[i] as PortalUserItemController,
+                          onTapFunction:
+                              controller.addResponsible as void Function(PortalUserItemController)),
                       itemExtent: 65,
-                      itemCount:
-                          controller.teamController.usersList.length as int,
+                      itemCount: controller.teamController.usersList.length as int,
                     )
                   ]),
                 ],
@@ -115,8 +111,7 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
             return SmartRefresher(
               enablePullDown: false,
               enablePullUp: controller.teamController.pullUpEnabled as bool,
-              controller: controller.teamController.refreshController
-                  as RefreshController,
+              controller: controller.teamController.refreshController as RefreshController,
               onLoading: controller.teamController.onLoading as Function(),
               child: ListView(
                 children: <Widget>[
@@ -125,13 +120,11 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => PortalUserItem(
-                          userController: controller.teamController
-                              .searchResult[i] as PortalUserItemController,
-                          onTapFunction:
-                              controller.addResponsible as Function()),
+                          userController:
+                              controller.teamController.searchResult[i] as PortalUserItemController,
+                          onTapFunction: controller.addResponsible as Function()),
                       itemExtent: 65,
-                      itemCount:
-                          controller.teamController.searchResult.length as int,
+                      itemCount: controller.teamController.searchResult.length as int,
                     )
                   ]),
                 ],

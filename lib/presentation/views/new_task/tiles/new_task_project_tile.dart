@@ -51,23 +51,19 @@ class NewTaskProjectTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty =
-            controller.selectedProjectTitle?.value.isNotEmpty as bool;
+        final _isNotEmpty = controller.selectedProjectTitle?.value.isNotEmpty as bool;
 
         return NewItemTile(
-          text: _isNotEmpty
-              ? controller.selectedProjectTitle?.value as String
-              : tr('selectProject'),
+          text:
+              _isNotEmpty ? controller.selectedProjectTitle?.value as String : tr('selectProject'),
           icon: SvgIcons.project,
-          textColor: controller.needToSelectProject == true
-              ? Get.theme.colors().colorError
-              : null,
+          textColor: controller.needToSelectProject == true ? Get.theme.colors().colorError : null,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          onTap: () => Get.find<NavigationController>()
-              .toScreen(const SelectProjectView(), arguments: {
+          onTap: () =>
+              Get.find<NavigationController>().toScreen(const SelectProjectView(), arguments: {
             'controller': controller,
           }),
         );

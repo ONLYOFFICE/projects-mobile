@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_field_initializers_in_const_classes
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *

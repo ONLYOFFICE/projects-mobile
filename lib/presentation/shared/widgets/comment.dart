@@ -111,8 +111,7 @@ class Comment extends StatelessWidget {
                       },
                       child: Text(
                         tr('reply'),
-                        style: TextStyleHelper.caption(
-                            color: Get.theme.colors().primary),
+                        style: TextStyleHelper.caption(color: Get.theme.colors().primary),
                       ),
                     ),
                 ],
@@ -172,11 +171,9 @@ class _CommentAuthor extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 35),
               child: PopupMenuButton(
-                onSelected: (String value) =>
-                    _onSelected(value, context, controller),
+                onSelected: (String value) => _onSelected(value, controller),
                 icon: Icon(Icons.more_vert_rounded,
-                    size: 25,
-                    color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                    size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem(
@@ -193,8 +190,7 @@ class _CommentAuthor extends StatelessWidget {
                         value: 'Delete',
                         child: Text(
                           tr('delete'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().colorError),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
                         ),
                       ),
                   ];
@@ -216,7 +212,7 @@ class _DeletedComment extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(tr('commentDeleted'), style: TextStyleHelper.body2()),
       ),
     );
@@ -225,18 +221,17 @@ class _DeletedComment extends StatelessWidget {
 
 Future<void> _onSelected(
   String value,
-  BuildContext context,
   CommentItemController controller,
 ) async {
   switch (value) {
     case 'Copy link':
-      await controller.copyLink(context);
+      await controller.copyLink();
       break;
     case 'Edit':
       controller.toCommentEditingView();
       break;
     case 'Delete':
-      await controller.deleteComment(context);
+      await controller.deleteComment();
       break;
     default:
   }

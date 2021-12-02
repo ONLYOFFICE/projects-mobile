@@ -45,18 +45,17 @@ class _Creator extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.creator['me'] as bool?,
+              isSelected: filterController.creator['me'] as bool,
               onTap: () => filterController.changeCreator('me')),
           FilterElement(
             title: filterController.creator['other'].isEmpty as bool
                 ? tr('otherUser')
                 : filterController.creator['other'] as String,
-            isSelected: filterController.creator['other'].isNotEmpty as bool?,
-            cancelButtonEnabled:
-                filterController.creator['other'].isNotEmpty as bool,
+            isSelected: filterController.creator['other'].isNotEmpty as bool,
+            cancelButtonEnabled: filterController.creator['other'].isNotEmpty as bool,
             onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
+              final newUser =
+                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
               filterController.changeCreator('other', newUser);
             },
             onCancelTap: () => filterController.changeCreator('other', null),

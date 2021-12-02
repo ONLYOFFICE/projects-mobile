@@ -50,12 +50,11 @@ class TagsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.tags.isNotEmpty as bool;
+        final _isNotEmpty = controller.tags.isNotEmpty as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('tags')}:' : null,
-          text:
-              _isNotEmpty ? controller.tagsText.value as String : tr('addTag'),
+          text: _isNotEmpty ? controller.tagsText.value as String : tr('addTag'),
           icon: SvgIcons.tag,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,

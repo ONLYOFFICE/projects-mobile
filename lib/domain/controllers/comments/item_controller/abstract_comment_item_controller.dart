@@ -30,16 +30,15 @@
  *
  */
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
 
 abstract class CommentItemController {
   final Rx<PortalComment>? comment = null;
 
-  Future<void> copyLink(BuildContext context);
+  Future<void> copyLink();
 
-  Future<void> deleteComment(BuildContext context);
+  Future<void> deleteComment();
 
   void toCommentEditingView();
 }

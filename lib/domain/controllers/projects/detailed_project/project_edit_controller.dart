@@ -67,16 +67,14 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = false;
 
     oldProjectDTO = null;
-    statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed!.status)]);
+    statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed!.status)]);
 
     projectTitleText.value = _projectDetailed!.title!;
     descriptionText.value = _projectDetailed!.description!;
 
     isPrivate.value = _projectDetailed!.isPrivate!;
 
-    final projectById =
-        await _projectService.getProjectById(projectId: _projectDetailed!.id!);
+    final projectById = await _projectService.getProjectById(projectId: _projectDetailed!.id!);
     if (projectById != null) {
       tags.clear();
       if (projectById.tags != null) {
@@ -106,8 +104,8 @@ class ProjectEditController extends BaseProjectEditorController {
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
-    selectedTeamMembers.removeWhere(
-        (element) => element.portalUser.id == selectedProjectManager.value!.id);
+    selectedTeamMembers
+        .removeWhere((element) => element.portalUser.id == selectedProjectManager.value!.id);
 
     final participants = <Participant>[];
 
@@ -136,18 +134,16 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = true;
   }
 
-  Future<bool> updateStatus({int? newStatusId}) async =>
-      Get.find<ProjectStatusesController>().updateStatus(
-          newStatusId: newStatusId, projectData: _projectDetailed!);
+  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
+      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed!);
 
   Future<void> confirmChanges() async {
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value = (selectedProjectManager.value == null ||
-        selectedProjectManager.value!.id == null);
+    needToFillManager.value =
+        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true)
-      return;
+    if (needToFillTitle.value == true || needToFillManager.value == true) return;
 
     final participants = <Participant>[];
 
@@ -174,8 +170,8 @@ class ProjectEditController extends BaseProjectEditorController {
       notify: notificationEnabled.value,
     );
 
-    final success = await _projectService.editProject(
-        project: newProject, projectId: _projectDetailed!.id!);
+    final success =
+        await _projectService.editProject(project: newProject, projectId: _projectDetailed!.id!);
     if (success) {
       {
         locator<EventHub>().fire('needToRefreshProjects');
@@ -197,8 +193,7 @@ class ProjectEditController extends BaseProjectEditorController {
 
     var i = 0;
     while (!edited && oldProjectDTO!.participants!.length > i) {
-      if (oldProjectDTO!.participants![i].iD !=
-          selectedTeamMembers[i].portalUser.id) {
+      if (oldProjectDTO!.participants![i].iD != selectedTeamMembers[i].portalUser.id) {
         edited = true;
       }
       i++;

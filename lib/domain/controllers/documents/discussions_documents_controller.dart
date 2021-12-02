@@ -46,7 +46,7 @@ import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
@@ -72,8 +72,7 @@ class DiscussionsDocumentsController extends GetxController {
   String? _entityType;
 
   String? get entityType => _entityType;
-  set entityType(String? value) =>
-      {_entityType = value, _filterController!.entityType = value};
+  set entityType(String? value) => {_entityType = value, _filterController!.entityType = value};
 
   int? _currentFolderId;
   int? get currentFolder => _currentFolderId;
@@ -99,13 +98,10 @@ class DiscussionsDocumentsController extends GetxController {
     _sortController = sortController;
     _paginationController = paginationController;
     _filterController = filterController;
-    _filterController!.applyFiltersDelegate =
-        () async => {}; // await refreshContent();
-    sortController.updateSortDelegate =
-        () async => {}; //await refreshContent();
+    _filterController!.applyFiltersDelegate = () async => {}; // await refreshContent();
+    sortController.updateSortDelegate = () async => {}; //await refreshContent();
     paginationController.loadDelegate = () async => {}; //await _getDocuments();
-    paginationController.refreshDelegate =
-        () async => {}; //await refreshContent();
+    paginationController.refreshDelegate = () async => {}; //await refreshContent();
 
     paginationController.pullDownEnabled = true;
 
@@ -133,7 +129,7 @@ class DiscussionsDocumentsController extends GetxController {
   void downloadFolder() {}
 
   Future<bool> deleteFolder(Folder element) async {
-    var result = await _api.deleteFolder(
+    final result = await _api.deleteFolder(
       folderId: element.id.toString(),
     );
 
@@ -154,10 +150,10 @@ class DiscussionsDocumentsController extends GetxController {
   }
 
   Future openFile(PortalFile selectedFile) async {
-    var userController = Get.find<UserController>();
+    final userController = Get.find<UserController>();
 
     await userController.getUserInfo();
-    var body = <String, dynamic>{
+    final body = <String, dynamic>{
       'portal': '${portalInfoController.portalName}',
       'email': '${userController.user!.email}',
       'file': <String, int?>{'id': selectedFile.id},
@@ -168,15 +164,14 @@ class DiscussionsDocumentsController extends GetxController {
       }
     };
 
-    var bodyString = jsonEncode(body);
-    var stringToBase64 = utf8.fuse(base64);
-    var encodedBody = stringToBase64.encode(bodyString);
-    var urlString = '${Const.Urls.openDocument}$encodedBody';
+    final bodyString = jsonEncode(body);
+    final stringToBase64 = utf8.fuse(base64);
+    final encodedBody = stringToBase64.encode(bodyString);
+    final urlString = '${Const.Urls.openDocument}$encodedBody';
 
     if (await canLaunch(urlString)) {
       await launch(urlString);
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.openEditor, {
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.openEditor, {
         AnalyticsService.Params.Key.portal: portalInfoController.portalName,
         AnalyticsService.Params.Key.extension: extension(selectedFile.title!)
       });

@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
@@ -49,8 +48,7 @@ class DiscussionSearchController extends BaseController {
   String? _query;
 
   final _paginationController = PaginationController<Discussion>();
-  PaginationController<Discussion> get paginationController =>
-      _paginationController;
+  PaginationController<Discussion> get paginationController => _paginationController;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -61,8 +59,7 @@ class DiscussionSearchController extends BaseController {
   void onInit() {
     screenName = tr('discussionsSearch');
     paginationController.startIndex = 0;
-    _paginationController.loadDelegate =
-        () => _performSearch(needToClear: false);
+    _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query!);
     super.onInit();
   }

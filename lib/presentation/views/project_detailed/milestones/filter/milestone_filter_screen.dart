@@ -60,14 +60,12 @@ class MilestoneFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BaseFilterController filterController =
-        Get.find<MilestonesFilterController>();
+    final BaseFilterController filterController = Get.find<MilestonesFilterController>();
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         onLeadingPressed: () {
           filterController.restoreFilters();
@@ -75,8 +73,7 @@ class MilestoneFilterScreen extends StatelessWidget {
         },
         titleText: tr('filter'),
         showBackButton: true,
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
@@ -84,8 +81,7 @@ class MilestoneFilterScreen extends StatelessWidget {
           TextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
-                  style: TextStyleHelper.button(
-                      color: Get.theme.colors().systemBlue))),
+                  style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),
           SizedBox(width: platformController.isMobile ? 8 : 12),
         ],
       ),
@@ -96,12 +92,12 @@ class MilestoneFilterScreen extends StatelessWidget {
               width: double.infinity,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 12.5),
-                  const _Status(),
-                  const _MilestoneResponsible(),
-                  const _TaskResponsible(),
-                  const _DueDate(),
+                children: const [
+                  SizedBox(height: 12.5),
+                  _Status(),
+                  _MilestoneResponsible(),
+                  _TaskResponsible(),
+                  _DueDate(),
                 ],
               ),
             ),

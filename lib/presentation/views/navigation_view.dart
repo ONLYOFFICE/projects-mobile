@@ -56,7 +56,7 @@ class NavigationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<NavigationController>(
       builder: (controller) {
-        var platformController = Get.isRegistered<PlatformController>()
+        final platformController = Get.isRegistered<PlatformController>()
             ? Get.find<PlatformController>()
             : Get.put(PlatformController(), permanent: true);
 
@@ -91,7 +91,7 @@ class TabletLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NavigationController>();
+    final controller = Get.find<NavigationController>();
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -125,10 +125,7 @@ class TabletLayout extends StatelessWidget {
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_dashboard,
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.4),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_dashboard,
@@ -138,10 +135,7 @@ class TabletLayout extends StatelessWidget {
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.4),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,
@@ -151,10 +145,7 @@ class TabletLayout extends StatelessWidget {
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_projects,
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.4),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.tab_bar_projects,
@@ -164,10 +155,7 @@ class TabletLayout extends StatelessWidget {
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.discussions,
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.4),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.discussions,
@@ -177,10 +165,7 @@ class TabletLayout extends StatelessWidget {
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.documents,
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.4),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.4),
                                   height: _iconSize),
                               selectedIcon: AppIcon(
                                   icon: SvgIcons.documents,
@@ -205,22 +190,17 @@ class TabletLayout extends StatelessWidget {
                                 height: 40,
                                 width: 40,
                                 child: CircleAvatar(
-                                  radius: 40.0,
-                                  backgroundColor:
-                                      Get.theme.colors().bgDescription,
+                                  radius: 40,
+                                  backgroundColor: Get.theme.colors().bgDescription,
                                   child: ClipOval(
                                     child: Obx(() {
-                                      return controller
-                                          .selfUserItem.value.avatar.value;
+                                      return controller.selfUserItem.value.avatar.value;
                                     }),
                                   ),
                                 ),
                               )),
-                          onPressed: () => controller
-                              .toScreen(const SelfProfileScreen(), arguments: {
-                            'showBackButton': true,
-                            'showSettingsButton': false
-                          }),
+                          onPressed: () => controller.toScreen(const SelfProfileScreen(),
+                              arguments: {'showBackButton': true, 'showSettingsButton': false}),
                         ),
                         IconButton(
                           iconSize: 64,
@@ -230,8 +210,7 @@ class TabletLayout extends StatelessWidget {
                             height: 24,
                             color: Get.theme.colors().onNavBar.withOpacity(0.4),
                           ),
-                          onPressed: () =>
-                              controller.toScreen(const SettingsScreen()),
+                          onPressed: () => controller.toScreen(const SettingsScreen()),
                         ),
                         const SizedBox(
                           height: 40,
@@ -244,8 +223,7 @@ class TabletLayout extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: contentView ??
-                Obx(() => _tabletPages[controller.tabIndex.value]),
+            child: contentView ?? Obx(() => _tabletPages[controller.tabIndex.value]),
           ),
         ],
       ),
@@ -272,7 +250,7 @@ class MobileLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var navigationController = Get.find<NavigationController>();
+    final navigationController = Get.find<NavigationController>();
 
     return Obx(
       () => Scaffold(
@@ -281,13 +259,12 @@ class MobileLayout extends StatelessWidget {
             _pages[navigationController.tabIndex.value],
             if (navigationController.onMoreView.value)
               GestureDetector(
-                onVerticalDragDown: (details) =>
-                    Get.find<NavigationController>()
-                        .changeTabIndex(navigationController.tabIndex.value),
+                onVerticalDragDown: (details) => Get.find<NavigationController>()
+                    .changeTabIndex(navigationController.tabIndex.value),
                 onTap: () => Get.find<NavigationController>()
                     .changeTabIndex(navigationController.tabIndex.value),
                 child: Container(
-                  padding: const EdgeInsets.all(0),
+                  padding: EdgeInsets.zero,
                   color: Colors.transparent,
                 ),
               ),
@@ -297,17 +274,15 @@ class MobileLayout extends StatelessWidget {
           height: navigationController.onMoreView.value ? 300 : 56,
           child: Column(
             children: [
-              if (navigationController.onMoreView.value)
-                const Expanded(child: MoreView()),
+              if (navigationController.onMoreView.value) const Expanded(child: MoreView()),
               BottomNavigationBar(
-                unselectedItemColor:
-                    Get.theme.colors().onNavBar.withOpacity(0.4),
+                unselectedItemColor: Get.theme.colors().onNavBar.withOpacity(0.4),
                 selectedItemColor: Get.theme.colors().onNavBar,
                 onTap: navigationController.changeTabIndex,
-                currentIndex: navigationController.onMoreView.value ||
-                        navigationController.tabIndex.value > 3
-                    ? 3
-                    : navigationController.tabIndex.value,
+                currentIndex:
+                    navigationController.onMoreView.value || navigationController.tabIndex.value > 3
+                        ? 3
+                        : navigationController.tabIndex.value,
                 showSelectedLabels: true,
                 showUnselectedLabels: true,
                 type: BottomNavigationBarType.fixed,

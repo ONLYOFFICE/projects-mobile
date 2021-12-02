@@ -90,11 +90,11 @@ class DocumentsMoveOrCopyController extends GetxController {
     _paginationController = paginationController;
 
     _filterController = filterController;
-    _filterController.applyFiltersDelegate = () async => await refreshContent();
+    _filterController.applyFiltersDelegate = () async => refreshContent();
 
-    sortController.updateSortDelegate = () async => await refreshContent();
-    paginationController.loadDelegate = () async => await _getDocuments();
-    paginationController.refreshDelegate = () async => await refreshContent();
+    sortController.updateSortDelegate = () async => refreshContent();
+    paginationController.loadDelegate = () async => _getDocuments();
+    paginationController.refreshDelegate = () async => refreshContent();
 
     paginationController.pullDownEnabled = true;
   }
@@ -150,8 +150,7 @@ class DocumentsMoveOrCopyController extends GetxController {
 
     paginationController.total.value = result.total!;
 
-    if (_currentFolder != null && result.current != null)
-      _screenName = result.current!.title;
+    if (_currentFolder != null && result.current != null) _screenName = result.current!.title;
 
     paginationController.data.addAll(result.folders!);
     paginationController.data.addAll(result.files!);
@@ -196,7 +195,7 @@ class DocumentsMoveOrCopyController extends GetxController {
   void onFilePopupMenuSelected(value, PortalFile element) {}
 
   Future moveFolder() async {
-    var result = await _api.moveDocument(
+    final result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -204,14 +203,13 @@ class DocumentsMoveOrCopyController extends GetxController {
     if (result != null) {
       Get.close(foldersCount);
 
-      MessagesHandler.showSnackBar(
-          context: Get.context!, text: tr('folderMoved'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFolder() async {
-    var result = await _api.copyDocument(
+    final result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -219,14 +217,13 @@ class DocumentsMoveOrCopyController extends GetxController {
     if (result != null) {
       Get.close(foldersCount);
 
-      MessagesHandler.showSnackBar(
-          context: Get.context!, text: tr('folderCopied'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future moveFile() async {
-    var result = await _api.moveDocument(
+    final result = await _api.moveDocument(
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -234,14 +231,13 @@ class DocumentsMoveOrCopyController extends GetxController {
     if (result != null) {
       Get.close(foldersCount);
 
-      MessagesHandler.showSnackBar(
-          context: Get.context!, text: tr('fileMoved'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFile() async {
-    var result = await _api.copyDocument(
+    final result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
     );
@@ -249,8 +245,7 @@ class DocumentsMoveOrCopyController extends GetxController {
     if (result != null) {
       Get.close(foldersCount);
 
-      MessagesHandler.showSnackBar(
-          context: Get.context!, text: tr('fileCopied'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
     }
     locator<EventHub>().fire('needToRefreshDocuments');
   }

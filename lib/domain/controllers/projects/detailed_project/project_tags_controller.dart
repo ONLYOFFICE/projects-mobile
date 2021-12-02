@@ -32,7 +32,7 @@
 
 import 'package:get/get.dart';
 
-import 'package:projects/data/models/tag_itemDTO.dart';
+import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -64,7 +64,7 @@ class ProjectTagsController extends GetxController {
     final allTags = await _api.getProjectTags();
 
     if (projController?.tags != null) {
-      for (var value in projController?.tags) {
+      for (final value in projController?.tags) {
         projectDetailedTags.add(value as String?);
       }
     }
@@ -87,7 +87,7 @@ class ProjectTagsController extends GetxController {
 
   Future<void> confirm() async {
     _projController.tags.clear();
-    for (var tag in tags) {
+    for (final tag in tags) {
       if (tag.isSelected!.value) {
         _projController.tags.add(tag.tag!.title);
       }
@@ -100,7 +100,7 @@ class ProjectTagsController extends GetxController {
     tag.isSelected!.value = !tag.isSelected!.value;
 
     _projController.tags.clear();
-    for (var tag in tags) {
+    for (final tag in tags) {
       if (tag.isSelected!.value) {
         _projController.tags.add(tag.tag!.title);
       }

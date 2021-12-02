@@ -45,7 +45,7 @@ extension CustomList<T> on List<T> {
 }
 
 String formatedDateFromString({required DateTime now, required String stringDate}) {
-  var date = DateTime.tryParse(stringDate.split('T')[0])!;
+  final date = DateTime.tryParse(stringDate.split('T')[0])!;
 
   if (now.year == date.year) {
     final formatter = DateFormat.MMMMd(Get.locale!.languageCode);

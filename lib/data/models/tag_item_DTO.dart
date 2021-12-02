@@ -1,3 +1,4 @@
+// ignore_for_file: file_names
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -30,42 +31,14 @@
  *
  */
 
-import 'package:bottom_sheet/bottom_sheet.dart';
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
 
-void showCustomBottomSheet({
-  required BuildContext context,
-  required double headerHeight,
-  // ignore: use_function_type_syntax_for_parameters
-  required Widget headerBuilder(context, bottomSheetOffset),
-  // ignore: use_function_type_syntax_for_parameters
-  required SliverChildDelegate builder(context, bottomSheetOffset),
-  double? initHeight,
-  double? maxHeight,
-  BoxDecoration? decoration,
-}) async {
-  var heightWithoutStatusBar = _getMaxHeight(context);
-
-  await showStickyFlexibleBottomSheet(
-      context: context,
-      headerBuilder: headerBuilder,
-      bodyBuilder: builder,
-      headerHeight: headerHeight,
-      decoration: decoration,
-      initHeight: initHeight ?? heightWithoutStatusBar - 0.1,
-      maxHeight: maxHeight ?? initHeight,
-      anchors: [
-        0,
-        initHeight ?? heightWithoutStatusBar - 0.1,
-        maxHeight ?? initHeight!
-      ]);
-}
-
-double _getMaxHeight(BuildContext context) {
-  var screenHeight = MediaQuery.of(context).size.height;
-  var statusBarHeight = MediaQuery.of(context).padding.top == 0
-      ? 32
-      : MediaQuery.of(context).padding.top;
-
-  return (screenHeight - statusBarHeight - 8) / screenHeight;
+class TagItemDTO {
+  TagItemDTO({
+    this.isSelected,
+    this.tag,
+  });
+  RxBool? isSelected;
+  ProjectTag? tag;
 }
