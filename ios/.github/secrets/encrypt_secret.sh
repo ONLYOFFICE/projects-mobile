@@ -5,6 +5,7 @@ cd $BASE_DIR
 
 SECRETS=(
     "../../Resources/GoogleService-Info-prod.plist"
+    "../../Runner/Internal.plist"
 )
 
 if [ -z "$GIT_IOS_PROJECTS_PASSPHRASE" ]

@@ -15,6 +15,8 @@ import flutter_downloader
             GeneratedPluginRegistrant.register(with: registry)
         })
         
+        AccountsManager.start()
+        
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 }
