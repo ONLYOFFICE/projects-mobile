@@ -50,8 +50,10 @@ class DiscussionSearchController extends BaseController {
   String? _query;
 
   final _paginationController = PaginationController<Discussion>();
-  PaginationController<Discussion> get paginationController => _paginationController;
-  String _searchQuery = '';
+
+  PaginationController<Discussion> get paginationController =>
+      _paginationController;
+  String? _searchQuery;
   Timer? _searchDebounce;
 
   TextEditingController searchInputController = TextEditingController();
