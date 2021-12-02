@@ -62,7 +62,7 @@ class StyledButtomSheet extends StatelessWidget {
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 8),
               child: SizedBox(
                 height: 4,
                 width: 40,

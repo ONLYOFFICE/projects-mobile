@@ -40,9 +40,7 @@ import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
@@ -58,8 +56,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
-class NewDiscussionController extends GetxController
-    implements DiscussionActionsController {
+class NewDiscussionController extends GetxController implements DiscussionActionsController {
   final DiscussionsService _api = locator<DiscussionsService>();
 
   int? _selectedProjectId;
@@ -70,8 +67,7 @@ class NewDiscussionController extends GetxController
   // final _userController = Get.find<UserController>();
   final UserService _userService = locator<UserService>();
   final _usersDataSource = Get.find<UsersDataSource>();
-  List<PortalGroupItemController> selectedGroups =
-      <PortalGroupItemController>[];
+  List<PortalGroupItemController> selectedGroups = <PortalGroupItemController>[];
   final _manualSelectedPersons = [];
 
   @override
@@ -155,14 +151,12 @@ class NewDiscussionController extends GetxController
   void addTeam() {
     if (_selectedProjectId == null) return;
 
-    final team = Get.find<ProjectTeamController>()
-      ..setup(projectId: _selectedProjectId);
+    final team = Get.find<ProjectTeamController>()..setup(projectId: _selectedProjectId);
 
     team.getTeam().then((value) {
       _team = List.of(team.usersList);
       for (final item in team.usersList) {
-        if (item.portalUser.status != null &&
-            item.portalUser.status != UserStatus.Terminated) {
+        if (item.portalUser.status != null && item.portalUser.status != UserStatus.Terminated) {
           item.selectionMode.value = UserSelectionMode.Multiple;
           item.isSelected.value = true;
           addSubscriber(item);
@@ -279,15 +273,12 @@ class NewDiscussionController extends GetxController
   }
 
   @override
-  void addSubscriber(PortalUserItemController user,
-      {fromUsersDataSource = false}) {
-    if (user.isSelected.value == true &&
-        !subscribers.any((it) => it.id == user.id)) {
+  void addSubscriber(PortalUserItemController user, {fromUsersDataSource = false}) {
+    if (user.isSelected.value == true && !subscribers.any((it) => it.id == user.id)) {
       subscribers.add(user);
       user.isSelected.value = true;
     } else {
-      subscribers.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      subscribers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
       user.isSelected.value = false;
     }
   }
@@ -298,16 +289,15 @@ class NewDiscussionController extends GetxController
       print(group.portalGroup!.id);
       selectedGroups.add(group);
     } else {
-      selectedGroups.removeWhere(
-          (element) => group.portalGroup!.id == element.portalGroup!.id);
+      selectedGroups.removeWhere((element) => group.portalGroup!.id == element.portalGroup!.id);
     }
   }
 
   @override
   Future<void> confirmGroupSelection() async {
     for (final group in selectedGroups) {
-      final groupMembers = await _userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup!.id);
+      final groupMembers =
+          await _userService.getProfilesByExtendedFilter(groupId: group.portalGroup!.id);
 
       if (groupMembers != null) {
         if (groupMembers.response!.isNotEmpty) {
@@ -378,8 +368,8 @@ class NewDiscussionController extends GetxController
             text: tr('discussionCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
-              return Get.find<NavigationController>().to(DiscussionDetailed(),
-                  arguments: {'discussion': createdDiss});
+              return Get.find<NavigationController>()
+                  .to(DiscussionDetailed(), arguments: {'discussion': createdDiss});
             });
       }
     }

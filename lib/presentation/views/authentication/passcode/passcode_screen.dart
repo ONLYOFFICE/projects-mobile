@@ -57,7 +57,7 @@ class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
   String get errorText => tr('incorrectPIN');
 
   @override
-  void onBackPressed() => null;
+  void onBackPressed() => {};
 
   @override
   bool get hasBackButton => false;
@@ -66,8 +66,7 @@ class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
   void onDeletePressed() => passcodeCheckingController.deleteNumber();
 
   @override
-  void onNumberPressed(int number) =>
-      passcodeCheckingController.addNumberToPasscode(number);
+  void onNumberPressed(int number) => passcodeCheckingController.addNumberToPasscode(number);
 
   @override
   Widget get keyboardLastRow {
@@ -79,13 +78,10 @@ class PasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
               !passcodeCheckingController.isFingerprintEnable) {
             return const SizedBox(width: 72.53);
           }
-          return FingerprintButton(
-              onTap: passcodeCheckingController.useFingerprint);
+          return FingerprintButton(onTap: passcodeCheckingController.useFingerprint);
         }),
         const SizedBox(width: 20.53),
-        PasscodeNumber(
-            number: 0,
-            onPressed: passcodeCheckingController.addNumberToPasscode),
+        PasscodeNumber(number: 0, onPressed: passcodeCheckingController.addNumberToPasscode),
         const SizedBox(width: 20.53),
         DeleteButton(onTap: passcodeCheckingController.deleteNumber),
       ],

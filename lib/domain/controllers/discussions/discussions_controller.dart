@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
@@ -50,8 +49,7 @@ import 'package:projects/presentation/views/discussions/discussions_search_view.
 
 class DiscussionsController extends BaseController {
   final DiscussionsService _api = locator<DiscussionsService>();
-  final ProjectsWithPresets projectsWithPresets =
-      locator<ProjectsWithPresets>();
+  final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
   PaginationController? _paginationController;
 
   PaginationController? get paginationController => _paginationController;
@@ -76,15 +74,15 @@ class DiscussionsController extends BaseController {
     _paginationController = paginationController;
     _filterController = filterController;
     _filterController!.applyFiltersDelegate = () async => loadDiscussions();
-    _sortController.updateSortDelegate = () async => await loadDiscussions();
-    paginationController.loadDelegate = () async => await _getDiscussions();
-    paginationController.refreshDelegate = () async => await refreshData();
+    _sortController.updateSortDelegate = () async => loadDiscussions();
+    paginationController.loadDelegate = () async => _getDiscussions();
+    paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    _userController.loaded.listen((_loaded) async =>
-        {if (_loaded) fabIsVisible.value = await getFabVisibility()});
+    _userController.loaded
+        .listen((_loaded) async => {if (_loaded) fabIsVisible.value = await getFabVisibility()});
 
     locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
@@ -138,12 +136,10 @@ class DiscussionsController extends BaseController {
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
       .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() =>
-      Get.find<NavigationController>().to(const NewDiscussionScreen());
+  void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen());
 
   @override
-  void showSearch() =>
-      Get.find<NavigationController>().to(const DiscussionsSearchScreen());
+  void showSearch() => Get.find<NavigationController>().to(const DiscussionsSearchScreen());
 
   Future<bool> getFabVisibility() async {
     var fabVisibility = false;
@@ -152,17 +148,14 @@ class DiscussionsController extends BaseController {
 
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
-        (selfUser.listAdminModules != null &&
-            selfUser.listAdminModules!.contains('projects'))) {
+        (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
       if (projectsWithPresets.activeProjectsController!.itemList.isEmpty)
         await projectsWithPresets.activeProjectsController!.loadProjects();
-      fabVisibility =
-          projectsWithPresets.activeProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets.activeProjectsController!.itemList.isNotEmpty;
     } else {
       if (projectsWithPresets.myProjectsController!.itemList.isEmpty)
         await projectsWithPresets.myProjectsController!.loadProjects();
-      fabVisibility =
-          projectsWithPresets.myProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets.myProjectsController!.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

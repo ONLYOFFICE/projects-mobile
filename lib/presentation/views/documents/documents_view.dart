@@ -65,11 +65,10 @@ class PortalDocumentsView extends StatelessWidget {
       controller.initialSetup();
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return DocumentsScreen(
       controller: controller,
@@ -105,11 +104,10 @@ class FolderContentView extends StatelessWidget {
       controller.setupFolder(folderName: folderName!, folderId: folderId);
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return DocumentsScreen(
       controller: controller,
@@ -144,8 +142,7 @@ class DocumentsSearchView extends StatelessWidget {
     documentsController.entityType = Get.arguments['entityType'] as String?;
 
     SchedulerBinding.instance!.addPostFrameCallback((_) {
-      documentsController.setupSearchMode(
-          folderName: folderName, folderId: folderId);
+      documentsController.setupSearchMode(folderName: folderName, folderId: folderId);
     });
 
     return DocumentsScreen(
@@ -179,13 +176,9 @@ class DocumentsScreen extends StatelessWidget {
       appBar: appBar,
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
-          if (controller.loaded.value == true &&
-              controller.nothingFound.value == true) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('notFound')));
+          if (controller.loaded.value == false) return const ListLoadingSkeleton();
+          if (controller.loaded.value == true && controller.nothingFound.value == true) {
+            return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty as bool &&
@@ -193,27 +186,23 @@ class DocumentsScreen extends StatelessWidget {
               controller.searchMode.value == false) {
             return Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.documents_not_created,
-                    text: tr('noDocumentsCreated')));
+                    icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty as bool &&
               controller.filterController.hasFilters.value as bool &&
               controller.searchMode.value == false) {
             return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
+                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
           }
           return PaginationListView(
-            paginationController:
-                controller.paginationController as PaginationController,
+            paginationController: controller.paginationController as PaginationController,
             child: ListView.separated(
               controller: scrollController,
               itemCount: controller.paginationController.data.length as int,
-              separatorBuilder: (BuildContext context, int index) =>
-                  const SizedBox(height: 10),
+              separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
               itemBuilder: (BuildContext context, int index) {
-                var element = controller.paginationController.data[index];
+                final element = controller.paginationController.data[index];
                 return element is Folder
                     ? FolderCell(
                         entity: element,
@@ -248,8 +237,7 @@ class DocsTitle extends StatelessWidget {
             child: Obx(
               () => Text(
                 controller.screenName.value,
-                style: TextStyleHelper.headerStyle(
-                    color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
             ),
           ),
@@ -259,13 +247,12 @@ class DocsTitle extends StatelessWidget {
             children: <Widget>[
               InkResponse(
                 onTap: () {
-                  Get.find<NavigationController>().to(DocumentsSearchView(),
-                      preventDuplicates: false,
-                      arguments: {
-                        'folderName': controller.screenName.value,
-                        'folderId': controller.currentFolder,
-                        'documentsController': controller,
-                      });
+                  Get.find<NavigationController>()
+                      .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                    'folderName': controller.screenName.value,
+                    'folderId': controller.currentFolder,
+                    'documentsController': controller,
+                  });
                 },
                 child: AppIcon(
                   width: 24,
@@ -279,9 +266,7 @@ class DocsTitle extends StatelessWidget {
                 onTap: () async => Get.find<NavigationController>().toScreen(
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
-                    arguments: {
-                      'filterController': controller.filterController
-                    }),
+                    arguments: {'filterController': controller.filterController}),
                 child: FiltersButton(controler: controller),
               ),
             ],
@@ -297,7 +282,7 @@ class DocsBottom extends StatelessWidget {
   final controller;
   @override
   Widget build(BuildContext context) {
-    var sortButton = Container(
+    final sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
         onTap: () {
@@ -311,8 +296,7 @@ class DocsBottom extends StatelessWidget {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value as String,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -349,21 +333,17 @@ class DocsBottom extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               sortButton,
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Obx(
-                      () => Text(
-                        tr('total', args: [
-                          controller.paginationController.total.value.toString()
-                        ]),
-                        style: TextStyleHelper.body2(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6),
-                        ),
+              Row(
+                children: <Widget>[
+                  Obx(
+                    () => Text(
+                      tr('total', args: [controller.paginationController.total.value.toString()]),
+                      style: TextStyleHelper.body2(
+                        color: Get.theme.colors().onSurface.withOpacity(0.6),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),

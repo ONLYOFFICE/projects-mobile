@@ -46,16 +46,14 @@ class ColorThemeSelectionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<SettingsController>();
+    final controller = Get.find<SettingsController>();
     final platformController = Get.find<PlatformController>();
 
     return Obx(
       () => Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('colorTheme'),
           backButtonIcon: const Icon(Icons.arrow_back_rounded),
         ),

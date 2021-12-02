@@ -45,7 +45,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(PasscodeSettingsController());
+    final controller = Get.put(PasscodeSettingsController());
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(
@@ -54,12 +54,10 @@ class PasscodeSettingsScreen extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
           titleText: tr('passcodeLock'),
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           onLeadingPressed: controller.leavePasscodeSettingsScreen,
           backButtonIcon: const Icon(Icons.arrow_back_rounded),
         ),
@@ -75,8 +73,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                       () => SwitchListTile(
                         value: controller.isPasscodeEnable.value,
                         activeColor: Get.theme.colors().primary,
-                        onChanged: (value) async =>
-                            controller.onPasscodeTilePressed(value),
+                        onChanged: (value) async => controller.onPasscodeTilePressed(value),
                         // controller.tryEnablingPasscode(),
                         title: Text(
                           tr('enablePasscode'),
@@ -84,7 +81,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (controller.isPasscodeEnable == true)
+                    if (controller.isPasscodeEnable.value == true)
                       Padding(
                         padding: const EdgeInsets.only(left: 7),
                         child: TextButton(
@@ -110,8 +107,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: " - ${tr('passcodeLockDescription')}",
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.w400),
+                              style: const TextStyle(fontWeight: FontWeight.w400),
                             ),
                           ],
                         ),

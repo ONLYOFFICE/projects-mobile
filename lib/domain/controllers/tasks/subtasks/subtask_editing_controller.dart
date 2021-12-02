@@ -45,8 +45,7 @@ import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_contro
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class SubtaskEditingController extends GetxController
-    implements SubtaskActionController {
+class SubtaskEditingController extends GetxController implements SubtaskActionController {
   SubtaskEditingController(this.subtaskController);
 
   final subtaskController;
@@ -81,34 +80,29 @@ class SubtaskEditingController extends GetxController
 
     status = subtask.status!.obs;
     if (_subtask!.responsible != null) {
-      _previusSelectedResponsible
-          .add(PortalUserItemController(portalUser: _subtask!.responsible!));
-      responsibles
-          .add(PortalUserItemController(portalUser: _subtask!.responsible!));
+      _previusSelectedResponsible.add(PortalUserItemController(portalUser: _subtask!.responsible!));
+      responsibles.add(PortalUserItemController(portalUser: _subtask!.responsible!));
     }
     setupResponsibleSelection(projectId);
   }
 
   void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
-      teamController.setup(
-          projectId: projectId, withoutVisitors: true, withoutBlocked: true);
+      teamController.setup(projectId: projectId, withoutVisitors: true, withoutBlocked: true);
 
-      await teamController
-          .getTeam()
-          .then((value) => _getSelectedResponsibles());
+      await teamController.getTeam().then((value) => _getSelectedResponsibles());
     } else {
       await _getSelectedResponsibles();
     }
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in teamController.usersList) {
+    for (final element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
-    for (var selectedMember in responsibles) {
-      for (var user in teamController.usersList) {
+    for (final selectedMember in responsibles) {
+      for (final user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -126,8 +120,7 @@ class SubtaskEditingController extends GetxController
     if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
-      responsibles.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -169,8 +162,7 @@ class SubtaskEditingController extends GetxController
     else
       responsible = null;
 
-    if (responsible != _previousResponsibleId ||
-        _titleController.text != _previousTitle) {
+    if (responsible != _previousResponsibleId || _titleController.text != _previousTitle) {
       Get.dialog(Container(
         margin: const EdgeInsets.symmetric(horizontal: 24),
         child: StyledAlertDialog(
@@ -195,12 +187,11 @@ class SubtaskEditingController extends GetxController
     if (titleController.text.isEmpty)
       setTiltleError!.value = true;
     else {
-      var responsible =
-          responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
+      final responsible = responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
 
-      var data = {'responsible': responsible, 'title': _titleController.text};
+      final data = {'responsible': responsible, 'title': _titleController.text};
 
-      var editedSubtask = await _api.updateSubtask(
+      final editedSubtask = await _api.updateSubtask(
         taskId: _subtask!.taskId!,
         subtaskId: _subtask!.id!,
         data: data,
@@ -210,8 +201,7 @@ class SubtaskEditingController extends GetxController
 
         subtaskController.subtask.value = editedSubtask;
 
-        locator<EventHub>()
-            .fire('needToRefreshParentTask', [editedSubtask.taskId]);
+        locator<EventHub>().fire('needToRefreshParentTask', [editedSubtask.taskId]);
 
         Get.back();
       }

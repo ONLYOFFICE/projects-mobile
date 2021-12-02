@@ -60,7 +60,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<MilestonesDataSource>();
+    final controller = Get.find<MilestonesDataSource>();
     controller.setup(projectDetailed: projectDetailed);
     return Stack(
       children: [
@@ -73,8 +73,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
               () => Visibility(
                 visible: controller.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>().to(
-                      const NewMilestoneView(),
+                  onPressed: () => Get.find<NavigationController>().to(const NewMilestoneView(),
                       arguments: {'projectDetailed': projectDetailed}),
                   child: AppIcon(
                     icon: SvgIcons.fab_milestone,
@@ -112,8 +111,7 @@ class _Content extends StatelessWidget {
             Expanded(
               child: Center(
                 child: EmptyScreen(
-                    icon: SvgIcons.milestone_not_created,
-                    text: tr('noMilestonesCreated')),
+                    icon: SvgIcons.milestone_not_created, text: tr('noMilestonesCreated')),
               ),
             ),
           if (controller.loaded.value == true &&
@@ -121,18 +119,16 @@ class _Content extends StatelessWidget {
               controller.filterController.hasFilters.value)
             Expanded(
               child: Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
+                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
               ),
             ),
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isNotEmpty)
+          if (controller.loaded.value == true && controller.paginationController.data.isNotEmpty)
             Expanded(
               child: PaginationListView(
                 paginationController: controller.paginationController,
                 child: ListView.builder(
-                  itemBuilder: (c, i) => MilestoneCell(
-                      milestone: controller.paginationController.data[i]),
+                  itemBuilder: (c, i) =>
+                      MilestoneCell(milestone: controller.paginationController.data[i]),
                   itemExtent: 72,
                   itemCount: controller.paginationController.data.length,
                 ),
@@ -152,36 +148,29 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var options = Column(
+    final options = Column(
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(
-            sortParameter: 'deadline',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'create_on',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'title', sortController: controller.sortController),
+        SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+        SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+        SortTile(sortParameter: 'title', sortController: controller.sortController),
         const SizedBox(height: 20)
       ],
     );
 
-    var sortButton = Container(
+    final sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
         onTap: () {
-          Get.bottomSheet(SortView(sortOptions: options),
-              isScrollControlled: true);
+          Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
         },
         child: Row(
           children: <Widget>[
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -189,6 +178,7 @@ class Header extends StatelessWidget {
               () => (controller.sortController.currentSortOrder == 'ascending')
                   ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
                       width: 20,
                       height: 20,
                     )
@@ -197,6 +187,7 @@ class Header extends StatelessWidget {
                       transform: Matrix4.rotationX(math.pi),
                       child: AppIcon(
                         icon: SvgIcons.sorting_4_ascend,
+                        color: Get.theme.colors().primary,
                         width: 20,
                         height: 20,
                       ),
@@ -208,8 +199,8 @@ class Header extends StatelessWidget {
     );
 
     return Visibility(
-      visible: controller.itemList.isNotEmpty ||
-          controller.filterController.hasFilters.value == true,
+      visible:
+          controller.itemList.isNotEmpty || controller.filterController.hasFilters.value == true,
       child: Column(
         children: <Widget>[
           Container(
@@ -219,16 +210,14 @@ class Header extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 sortButton,
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () async => Get.find<NavigationController>()
-                            .toScreen(const MilestoneFilterScreen()),
-                        child: FiltersButton(controler: controller),
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: <Widget>[
+                    InkWell(
+                      onTap: () async =>
+                          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
+                      child: FiltersButton(controler: controller),
+                    ),
+                  ],
                 ),
               ],
             ),

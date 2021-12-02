@@ -38,7 +38,7 @@ import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:projects/data/models/account_data.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 
@@ -66,12 +66,10 @@ class AccountManagerController extends GetxController {
         final portalInfo = Get.find<PortalInfoController>();
         await portalInfo.setup();
 
-        final account =
-            Account(name: portalInfo.portalName!, accountType: accountType);
+        final account = Account(name: portalInfo.portalName!, accountType: accountType);
 
         if (await AccountManager.addAccount(account)) {
-          final accessToken =
-              AccessToken(tokenType: tokenType, token: tokenString!);
+          final accessToken = AccessToken(tokenType: tokenType, token: tokenString!);
 
           await AccountManager.setAccessToken(account, accessToken);
 
@@ -84,8 +82,7 @@ class AccountManagerController extends GetxController {
               expires: expires,
               displayName: user.displayName,
               avatar: user.avatar);
-          await AccountManager.setUserData(
-              account, key, json.encode(data.toJson()));
+          await AccountManager.setUserData(account, key, json.encode(data.toJson()));
         }
       } catch (e, s) {
         debugPrint(e.toString());
@@ -103,10 +100,8 @@ class AccountManagerController extends GetxController {
         for (final account in accounts) {
           if (account.accountType == accountType) {
             final value = await AccountManager.getUserData(account, key);
-            final accountData = AccountData.fromJson(
-                json.decode(value!) as Map<String, dynamic>);
-            final accesstoken =
-                await AccountManager.getAccessToken(account, tokenType);
+            final accountData = AccountData.fromJson(json.decode(value!) as Map<String, dynamic>);
+            final accesstoken = await AccountManager.getAccessToken(account, tokenType);
             accountData.accessToken = accesstoken?.token;
 
             accountsList.add(accountData);

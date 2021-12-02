@@ -36,21 +36,19 @@ import 'package:local_auth/local_auth.dart';
 class LocalAuthenticationService {
   final _localAuth = LocalAuthentication();
 
-  Future<List<BiometricType>> get availableBiometrics async =>
-      await _localAuth.getAvailableBiometrics();
+  Future<List<BiometricType>> get availableBiometrics async => _localAuth.getAvailableBiometrics();
 
   Future<bool> get isFingerprintAvailable async {
     final canCheckBiometrics = await _localAuth.canCheckBiometrics;
     final biometrics = await availableBiometrics;
-    final isFingerprintAvailable =
-        biometrics.contains(BiometricType.fingerprint);
+    final isFingerprintAvailable = biometrics.contains(BiometricType.fingerprint);
     final isDeviceSupported = await _localAuth.isDeviceSupported();
 
     return canCheckBiometrics && isFingerprintAvailable && isDeviceSupported;
   }
 
   Future<bool> authenticate({String? signInTitle}) async {
-    return await _localAuth.authenticate(
+    return _localAuth.authenticate(
       localizedReason: ' ',
       androidAuthStrings: AndroidAuthMessages(
         biometricHint: '',

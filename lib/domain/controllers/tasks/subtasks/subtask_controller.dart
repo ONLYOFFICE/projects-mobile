@@ -56,14 +56,11 @@ class SubtaskController extends GetxController {
     this.subtask = subtask.obs;
   }
 
-  bool get canEdit =>
-      subtask.value!.canEdit! && parentTask!.status != SubtaskStatus.CLOSED;
+  bool get canEdit => subtask.value!.canEdit! && parentTask!.status != SubtaskStatus.CLOSED;
   bool get canCreateSubtask =>
-      parentTask!.canCreateSubtask! &&
-      parentTask!.status != SubtaskStatus.CLOSED;
+      parentTask!.canCreateSubtask! && parentTask!.status != SubtaskStatus.CLOSED;
 
-  void acceptSubtask(
-    BuildContext context, {
+  void acceptSubtask({
     required int taskId,
     required int subtaskId,
   }) async {
@@ -71,16 +68,15 @@ class SubtaskController extends GetxController {
     final selfUser = _userController.user!;
     final data = {'responsible': selfUser.id, 'title': subtask.value!.title};
 
-    final result = await _api.acceptSubtask(
-        data: data, taskId: taskId, subtaskId: subtaskId);
+    final result = await _api.acceptSubtask(data: data, taskId: taskId, subtaskId: subtaskId);
 
     if (result != null) {
       subtask.value = result;
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('subtaskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)!.hideCurrentSnackBar,
       );
     }
   }
@@ -90,7 +86,7 @@ class SubtaskController extends GetxController {
     required int taskId,
     required int subtaskId,
   }) async {
-    var result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
+    final result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
       MessagesHandler.showSnackBar(context: context, text: tr('subtaskCopied'));
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
@@ -103,7 +99,7 @@ class SubtaskController extends GetxController {
     required int subtaskId,
     bool closePage = false,
   }) async {
-    var result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
+    final result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
 
@@ -125,15 +121,14 @@ class SubtaskController extends GetxController {
       else
         newStatus = 'open';
 
-      var data = {'status': newStatus};
+      final data = {'status': newStatus};
 
-      var result = await _api.updateSubtaskStatus(
-          data: data, taskId: taskId, subtaskId: subtaskId);
+      final result =
+          await _api.updateSubtaskStatus(data: data, taskId: taskId, subtaskId: subtaskId);
 
       if (result != null) subtask.value = result;
     } else {
-      MessagesHandler.showSnackBar(
-          context: context, text: tr('cantEditSubtask'));
+      MessagesHandler.showSnackBar(context: context, text: tr('cantEditSubtask'));
     }
   }
 
@@ -142,9 +137,9 @@ class SubtaskController extends GetxController {
     required int subtaskId,
   }) async {
     if (subtask.value!.canEdit!) {
-      var data = {'title': subtask.value!.title, 'responsible': null};
+      final data = {'title': subtask.value!.title, 'responsible': null};
 
-      var result = await _api.updateSubtask(
+      final result = await _api.updateSubtask(
         data: data,
         taskId: taskId,
         subtaskId: subtaskId,

@@ -54,8 +54,7 @@ class DescriptionTile extends StatefulWidget {
   _DescriptionTileState createState() => _DescriptionTileState();
 }
 
-class _DescriptionTileState extends State<DescriptionTile>
-    with TickerProviderStateMixin {
+class _DescriptionTileState extends State<DescriptionTile> with TickerProviderStateMixin {
   late bool _isExpanded;
 
   late AnimationController _controller;
@@ -69,8 +68,7 @@ class _DescriptionTileState extends State<DescriptionTile>
   void initState() {
     super.initState();
     _isExpanded = false;
-    _controller = AnimationController(
-        duration: const Duration(milliseconds: 250), vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
     _iconTurns = _controller.drive(_halfTween.chain(_turnsTween));
   }
 
@@ -83,7 +81,7 @@ class _DescriptionTileState extends State<DescriptionTile>
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    double? _height = _isExpanded ? null : 61;
+    final double? _height = _isExpanded ? null : 61;
 
     void changeExpansion() {
       setState(() {
@@ -99,17 +97,16 @@ class _DescriptionTileState extends State<DescriptionTile>
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isNotEmpty = widget.controller!.descriptionText!.value.isNotEmpty;
-        var _color = _isNotEmpty
+        final bool _isNotEmpty = widget.controller!.descriptionText!.value.isNotEmpty;
+        final _color = _isNotEmpty
             ? Get.theme.colors().onBackground
             : Get.theme.colors().onBackground.withOpacity(0.4);
-        var text = widget.controller!.descriptionText!.value;
-        var textSize = _textSize(text, TextStyleHelper.subtitle1());
+        final text = widget.controller!.descriptionText!.value;
+        final textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const TaskDescription(),
-              arguments: {'controller': widget.controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const TaskDescription(), arguments: {'controller': widget.controller}),
           child: Column(
             children: [
               AnimatedSize(
@@ -120,13 +117,10 @@ class _DescriptionTileState extends State<DescriptionTile>
                   child: Row(
                     children: [
                       SizedBox(
-                          width: 72,
-                          child: AppIcon(
-                              icon: SvgIcons.description, color: _color)),
+                          width: 72, child: AppIcon(icon: SvgIcons.description, color: _color)),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: _isNotEmpty ? 10 : 18),
+                          padding: EdgeInsets.symmetric(vertical: _isNotEmpty ? 10 : 18),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
@@ -134,15 +128,10 @@ class _DescriptionTileState extends State<DescriptionTile>
                               if (_isNotEmpty)
                                 Text('${tr('description')}:',
                                     style: TextStyleHelper.caption(
-                                        color: Get.theme
-                                            .colors()
-                                            .onBackground
-                                            .withOpacity(0.75))),
+                                        color: Get.theme.colors().onBackground.withOpacity(0.75))),
                               Flexible(
-                                child: Text(
-                                    _isNotEmpty ? text : tr('addDescription'),
-                                    style: TextStyleHelper.subtitle1(
-                                        color: _color)),
+                                child: Text(_isNotEmpty ? text : tr('addDescription'),
+                                    style: TextStyleHelper.subtitle1(color: _color)),
                               ),
                             ],
                           ),
@@ -178,15 +167,13 @@ class _DescriptionTileState extends State<DescriptionTile>
 
 Size _textSize(String text, TextStyle style) {
   final textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: 1,
-      textDirection: _ui.TextDirection.ltr)
+      text: TextSpan(text: text, style: style), maxLines: 1, textDirection: _ui.TextDirection.ltr)
     ..layout(minWidth: 0, maxWidth: double.infinity);
   return textPainter.size;
 }
 
 bool _needToExpand(double size, String text) {
-  var freeSize = Get.width - 72 - 59;
+  final freeSize = Get.width - 72 - 59;
   if ('\n'.allMatches(text).length + 1 > 1) return true;
   if (freeSize > size) return false;
   return true;

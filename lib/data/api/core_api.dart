@@ -294,6 +294,7 @@ class CoreApi {
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -330,6 +331,7 @@ class CoreApi {
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -366,6 +368,7 @@ class CoreApi {
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -400,6 +403,7 @@ class CoreApi {
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {

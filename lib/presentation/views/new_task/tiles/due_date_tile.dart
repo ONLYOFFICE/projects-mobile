@@ -52,7 +52,7 @@ class DueDateTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isSelected = controller.dueDateText!.value.isNotEmpty;
+        final bool _isSelected = controller.dueDateText!.value.isNotEmpty;
         return NewItemTile(
           icon: SvgIcons.due_date,
           text: _isSelected ? controller.dueDateText!.value : tr('setDueDate'),
@@ -62,8 +62,7 @@ class DueDateTile extends StatelessWidget {
           selectedIconColor: Get.theme.colors().onBackground,
           suffix: _isSelected
               ? IconButton(
-                  icon: Icon(Icons.close_rounded,
-                      size: 24, color: Get.theme.colors().onBackground),
+                  icon: Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
                   onPressed: () => controller.changeDueDate(null))
               : null,
           suffixPadding: const EdgeInsets.only(right: 10),

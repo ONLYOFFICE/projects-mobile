@@ -43,8 +43,9 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/2fa_sms_screen.dart';
@@ -75,8 +76,7 @@ class LoginController extends GetxController {
   String? _email;
   String? _tfaKey;
 
-  String get portalAdress =>
-      portalAdressController.text.replaceFirst('https://', '');
+  String get portalAdress => portalAdressController.text.replaceFirst('https://', '');
   String? get tfaKey => _tfaKey;
 
   @override
@@ -102,12 +102,10 @@ class LoginController extends GetxController {
       }
 
       if (result.response!.token != null) {
-        await saveLoginData(
-            token: result.response!.token, expires: result.response!.expires);
+        await saveLoginData(token: result.response!.token, expires: result.response!.expires);
 
-        await Get.find<AccountManagerController>().addAccount(
-            tokenString: result.response!.token,
-            expires: result.response!.expires);
+        await Get.find<AccountManagerController>()
+            .addAccount(tokenString: result.response!.token, expires: result.response!.expires);
 
         locator<EventHub>().fire('loginSuccess');
       } else if (result.response!.tfa == true) {
@@ -150,11 +148,8 @@ class LoginController extends GetxController {
     setState(ViewState.Idle);
     clearInputFields();
 
-    await AnalyticsService.shared.logEvent(
-        AnalyticsService.Events.loginPortal, {
-      AnalyticsService.Params.Key.portal:
-          await _secureStorage.getString('portalName')
-    });
+    await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
+        {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
   }
 
   Future<bool> _checkEmailAndPass() async {
@@ -188,8 +183,7 @@ class LoginController extends GetxController {
     await _secureStorage.putString('expires', expires);
   }
 
-  Future<bool> sendCode(String code,
-      {String? userName, String? password}) async {
+  Future<bool> sendCode(String code, {String? userName, String? password}) async {
     setState(ViewState.Busy);
 
     _email ??= userName;
@@ -204,11 +198,9 @@ class LoginController extends GetxController {
     }
 
     if (result.response!.token != null) {
-      await saveLoginData(
-          token: result.response!.token, expires: result.response!.expires);
-      await Get.find<AccountManagerController>().addAccount(
-          tokenString: result.response!.token,
-          expires: result.response!.expires);
+      await saveLoginData(token: result.response!.token, expires: result.response!.expires);
+      await Get.find<AccountManagerController>()
+          .addAccount(tokenString: result.response!.token, expires: result.response!.expires);
 
       locator<EventHub>().fire('loginSuccess');
     } else if (result.response!.tfa!) {
@@ -221,8 +213,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
-    portalAdressController.text =
-        portalAdressController.text.removeAllWhitespace;
+    portalAdressController.text = portalAdressController.text.removeAllWhitespace;
 
     if (!portalAdressController.text.isURL) {
       portalFieldError.value = true;
@@ -234,8 +225,7 @@ class LoginController extends GetxController {
     } else {
       setState(ViewState.Busy);
 
-      final _capabilities =
-          await _portalService.portalCapabilities(portalAdressController.text);
+      final _capabilities = await _portalService.portalCapabilities(portalAdressController.text);
 
       if (_capabilities != null) {
         capabilities = _capabilities;

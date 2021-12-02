@@ -58,24 +58,21 @@ class NewDiscussionTextScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('text'),
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
               : const Icon(Icons.close),
           onLeadingPressed: controller.leaveTextView,
           actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmText)
+            IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirmText)
           ],
         ),
         body: HtmlTextEditor(
           initialText: controller.text.value,
+          // ignore: unnecessary_cast
           textController: controller.textController as HtmlEditorController,
           hintText: tr('discussionText'),
         ),

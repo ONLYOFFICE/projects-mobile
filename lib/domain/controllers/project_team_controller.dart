@@ -33,7 +33,6 @@
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
-import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 
@@ -53,8 +52,7 @@ class ProjectTeamController extends GetxController {
   int totalProfiles = 0;
   int _projectId = 0;
   RxBool isSearchResult = false.obs;
-  RxList<PortalUserItemController> searchResult =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> searchResult = <PortalUserItemController>[].obs;
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
   bool _withoutVisitors = false;
@@ -110,18 +108,16 @@ class ProjectTeamController extends GetxController {
       return;
     }
 
-    var _userController = Get.find<UserController>();
+    final _userController = Get.find<UserController>();
     await _userController.getUserInfo();
-    var selfUser = _userController.user!;
+    final selfUser = _userController.user!;
 
-    if (_projectDetailed != null &&
-        _projectDetailed!.security!['canEditTeam'] as bool) {
+    if (_projectDetailed != null && _projectDetailed!.security!['canEditTeam'] as bool) {
       fabIsVisible.value = true;
     } else {
       if (selfUser.isAdmin! ||
           selfUser.isOwner! ||
-          (selfUser.listAdminModules != null &&
-              selfUser.listAdminModules!.contains('projects'))) {
+          (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
         fabIsVisible.value = true;
       }
     }
@@ -138,8 +134,8 @@ class ProjectTeamController extends GetxController {
       isSearchResult.value = false;
     }
     isSearchResult.value = true;
-    searchResult.addAll(usersList.where((user) =>
-        user.displayName!.toLowerCase().contains(query.toLowerCase())));
+    searchResult.addAll(
+        usersList.where((user) => user.displayName!.toLowerCase().contains(query.toLowerCase())));
 
     nothingFound.value = searchResult.isEmpty;
   }

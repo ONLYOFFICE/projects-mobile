@@ -52,20 +52,20 @@ class PortalUserItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = userController!.portalUser;
+    final user = userController!.portalUser;
     return InkWell(
       onTap: () {
         userController!.onTap();
-        if (onTapFunction != null) onTapFunction!(userController);
+        onTapFunction?.call(userController);
       },
-      child: Container(
+      child: SizedBox(
         height: 48,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: 72,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: Stack(
@@ -74,7 +74,7 @@ class PortalUserItem extends StatelessWidget {
                     Opacity(
                       opacity: user.status == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
-                        radius: 20.0,
+                        radius: 20,
                         backgroundColor: Get.theme.colors().bgDescription,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
@@ -84,33 +84,25 @@ class PortalUserItem extends StatelessWidget {
                         ),
                       ),
                     ),
-                    if (user.status == null ||
-                        user.status == UserStatus.Terminated)
-                      Positioned(
+                    if (user.status == null || user.status == UserStatus.Terminated)
+                      const Positioned(
                           bottom: 0,
                           right: 15,
-                          child: AppIcon(
-                              icon: SvgIcons.userBlocked,
-                              width: 16,
-                              height: 16)),
+                          child: AppIcon(icon: SvgIcons.userBlocked, width: 16, height: 16)),
                     if (((user.isAdmin != null && user.isAdmin!) ||
                             (user.isAdmin != null && user.isOwner!)) &&
                         user.status != UserStatus.Terminated)
-                      Positioned(
+                      const Positioned(
                           bottom: 0,
                           right: 15,
-                          child: AppIcon(
-                              icon: SvgIcons.userAdmin, width: 16, height: 16)),
+                          child: AppIcon(icon: SvgIcons.userAdmin, width: 16, height: 16)),
                     if (user.isVisitor != null &&
                         user.isVisitor! &&
                         user.status != UserStatus.Terminated)
-                      Positioned(
+                      const Positioned(
                           bottom: 0,
                           right: 15,
-                          child: AppIcon(
-                              icon: SvgIcons.userVisitor,
-                              width: 16,
-                              height: 16)),
+                          child: AppIcon(icon: SvgIcons.userVisitor, width: 16, height: 16)),
                   ],
                 ),
               ),
@@ -137,12 +129,10 @@ class PortalUserItem extends StatelessWidget {
                                 () => userController!.userTitle != null &&
                                         userController!.userTitle.isNotEmpty
                                     ? Text(
-                                        userController!.userTitle
-                                            .replaceAll(' ', '\u00A0'),
+                                        userController!.userTitle.replaceAll(' ', '\u00A0'),
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyleHelper.body2(
-                                          color:
-                                              Get.theme.colors().onBackground,
+                                          color: Get.theme.colors().onBackground,
                                         ),
                                       )
                                     : const SizedBox(),
@@ -157,17 +147,13 @@ class PortalUserItem extends StatelessWidget {
               ),
             ),
             Obx(() {
-              if (userController!.selectionMode.value ==
-                  UserSelectionMode.Multiple) {
+              if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
                 if (userController!.isSelected.value == true) {
                   return SizedBox(
-                      width: 72,
-                      child: Icon(Icons.check_box,
-                          color: Get.theme.colors().primary));
+                      width: 72, child: Icon(Icons.check_box, color: Get.theme.colors().primary));
                 } else {
                   return const SizedBox(
-                      width: 72,
-                      child: Icon(Icons.check_box_outline_blank_outlined));
+                      width: 72, child: Icon(Icons.check_box_outline_blank_outlined));
                 }
               } else {
                 if (userController!.isSelected.value == true) {

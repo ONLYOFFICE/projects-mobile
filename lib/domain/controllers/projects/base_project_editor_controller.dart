@@ -36,7 +36,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 import 'package:projects/data/services/user_service.dart';
@@ -70,8 +69,7 @@ abstract class BaseProjectEditorController extends GetxController {
   RxBool isPrivate = true.obs;
   RxBool isFolowed = false.obs;
 
-  RxList<PortalUserItemController> selectedTeamMembers =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> selectedTeamMembers = <PortalUserItemController>[].obs;
 
   Rx<PortalUser?> selectedProjectManager = PortalUser().obs;
   RxBool needToFillManager = false.obs;
@@ -87,8 +85,7 @@ abstract class BaseProjectEditorController extends GetxController {
   @override
   void onInit() {
     _userController.getUserInfo().then((value) => {
-          selfUserItem =
-              PortalUserItemController(portalUser: _userController.user!),
+          selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
     super.onInit();
@@ -144,35 +141,32 @@ abstract class BaseProjectEditorController extends GetxController {
       managerName.value = selectedProjectManager.value!.displayName!;
       isPMSelected.value = true;
 
-      selectedTeamMembers.removeWhere((element) =>
-          selectedProjectManager.value!.id == element.portalUser.id);
+      selectedTeamMembers
+          .removeWhere((element) => selectedProjectManager.value!.id == element.portalUser.id);
 
-      for (var element in usersDataSourse.usersList) {
-        element.isSelected.value =
-            element.portalUser.id == selectedProjectManager.value!.id;
+      for (final element in usersDataSourse.usersList) {
+        element.isSelected.value = element.portalUser.id == selectedProjectManager.value!.id;
       }
       selfUserItem!.isSelected.value =
           selfUserItem!.portalUser.id == selectedProjectManager.value!.id;
 
-      selectedTeamMembers.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
 
       Get.back();
     } else {
-      selectedTeamMembers.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
       removeManager();
     }
   }
 
   void removeManager() {
-    selectedTeamMembers.removeWhere(
-        (element) => selectedProjectManager.value!.id == element.portalUser.id);
+    selectedTeamMembers
+        .removeWhere((element) => selectedProjectManager.value!.id == element.portalUser.id);
     managerName.value = '';
     selectedProjectManager.value = null;
     isPMSelected.value = false;
 
-    for (var element in usersDataSourse.usersList) {
+    for (final element in usersDataSourse.usersList) {
       element.isSelected.value = false;
     }
     selfUserItem!.isSelected.value = false;
@@ -182,8 +176,7 @@ abstract class BaseProjectEditorController extends GetxController {
     if (user.isSelected.value == true) {
       selectedTeamMembers.add(user);
     } else {
-      selectedTeamMembers.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      selectedTeamMembers.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
     if (selfUserItem!.portalUser.id == user.portalUser.id) {
       selfUserItem!.isSelected.value = user.isSelected.value;
@@ -194,19 +187,18 @@ abstract class BaseProjectEditorController extends GetxController {
     if (selectedTeamMembers.length == 1) {
       selectedTeamMembers.clear();
     } else {
-      Get.find<NavigationController>().toScreen(
-          const TeamMembersSelectionView(),
-          arguments: {'controller': this});
+      Get.find<NavigationController>()
+          .toScreen(const TeamMembersSelectionView(), arguments: {'controller': this});
     }
   }
 
   Future<void> setupTeamMembers() async {
-    for (var element in usersDataSourse.usersList) {
+    for (final element in usersDataSourse.usersList) {
       element.isSelected.value = false;
     }
 
-    for (var selectedMember in selectedTeamMembers) {
-      for (var user in usersDataSourse.usersList) {
+    for (final selectedMember in selectedTeamMembers) {
+      for (final user in usersDataSourse.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -218,9 +210,8 @@ abstract class BaseProjectEditorController extends GetxController {
   }
 
   Future<void> setupPMSelection() async {
-    for (var element in usersDataSourse.usersList) {
-      element.isSelected.value =
-          element.portalUser.id == selectedProjectManager.value?.id;
+    for (final element in usersDataSourse.usersList) {
+      element.isSelected.value = element.portalUser.id == selectedProjectManager.value?.id;
       element.selectionMode.value = selectionMode;
     }
 
@@ -233,8 +224,8 @@ abstract class BaseProjectEditorController extends GetxController {
     usersLoaded.value = false;
 
     await _userController.getUserInfo();
-    var selfUser = _userController.user;
-    selfUserItem = PortalUserItemController(portalUser: selfUser!);
+
+    selfUserItem = PortalUserItemController(portalUser: _userController.user!);
     selfUserItem!.selectionMode.value = selectionMode;
     usersDataSourse.selfUserItem = selfUserItem;
     usersDataSourse.selectionMode = selectionMode;
@@ -256,8 +247,7 @@ abstract class BaseProjectEditorController extends GetxController {
     if (group.isSelected.value == true) {
       selectedGroups.add(group);
     } else {
-      selectedGroups.removeWhere(
-          (element) => group.portalGroup!.id == element.portalGroup!.id);
+      selectedGroups.removeWhere((element) => group.portalGroup!.id == element.portalGroup!.id);
     }
   }
 
@@ -267,8 +257,8 @@ abstract class BaseProjectEditorController extends GetxController {
 
   Future<void> confirmGroupSelection() async {
     for (final group in selectedGroups) {
-      final groupMembers = await _userService.getProfilesByExtendedFilter(
-          groupId: group.portalGroup!.id);
+      final groupMembers =
+          await _userService.getProfilesByExtendedFilter(groupId: group.portalGroup!.id);
 
       if (groupMembers != null) {
         if (groupMembers.response!.isNotEmpty) {
@@ -281,8 +271,7 @@ abstract class BaseProjectEditorController extends GetxController {
       }
     }
 
-    selectedTeamMembers.value =
-        selectedTeamMembers.distinct((d) => d.portalUser.id!).toList();
+    selectedTeamMembers.value = selectedTeamMembers.distinct((d) => d.portalUser.id!).toList();
     await setupTeamMembers();
 
     await usersDataSourse.updateUsers();

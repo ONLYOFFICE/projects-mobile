@@ -33,8 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
@@ -112,8 +110,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   }
 
   @override
-  String get filtersTitle =>
-      plural('tasksFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('tasksFilterConfirm', suitableResultCount.value);
 
   ProjectTaskFilterController() {
     suitableResultCount = (-1).obs;
@@ -132,8 +129,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         responsible['groups'] = '';
         responsible['no'] = false;
         responsible['me'] = !(responsible['me'] as bool);
-        if (responsible['me'] as bool)
-          _responsibleFilter = '&participant=$_selfId';
+        if (responsible['me'] as bool) _responsibleFilter = '&participant=$_selfId';
         break;
       case 'other':
         responsible['me'] = false;
@@ -163,13 +159,12 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         responsible['groups'] = '';
         responsible['no'] = !(responsible['no'] as bool);
         if (responsible['no'] as bool) {
-          _responsibleFilter =
-              '&participant=00000000-0000-0000-0000-000000000000';
+          _responsibleFilter = '&participant=00000000-0000-0000-0000-000000000000';
         }
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -190,7 +185,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         _creatorFilter = '&creator=${newValue["id"]}';
       }
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -235,7 +230,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -301,16 +296,15 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
       deadline['overdue'] = !(deadline['overdue'] as bool);
-      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
-      if (deadline['overdue'] as bool)
-        _deadlineFilter = '&deadlineStop=$dueDate&status=open';
+      final dueDate = formatter.format(DateTime.now()).substring(0, 10);
+      if (deadline['overdue'] as bool) _deadlineFilter = '&deadlineStop=$dueDate&status=open';
     }
     if (filter == 'today') {
       deadline['overdue'] = false;
       deadline['upcoming'] = false;
       deadline['custom']['selected'] = false;
       deadline['today'] = !(deadline['today'] as bool);
-      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
+      final dueDate = formatter.format(DateTime.now()).substring(0, 10);
       if (deadline['today'] as bool)
         _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
     }
@@ -319,10 +313,9 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
       deadline['upcoming'] = !(deadline['upcoming'] as bool);
-      var startDate = formatter.format(DateTime.now()).substring(0, 10);
-      var stopDate = formatter
-          .format(DateTime.now().add(const Duration(days: 7)))
-          .substring(0, 10);
+      final startDate = formatter.format(DateTime.now()).substring(0, 10);
+      final stopDate =
+          formatter.format(DateTime.now().add(const Duration(days: 7))).substring(0, 10);
       if (deadline['upcoming'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
@@ -330,17 +323,16 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['upcoming'] = false;
-      deadline['custom']['selected'] =
-          !(deadline['custom']['selected'] as bool);
+      deadline['custom']['selected'] = !(deadline['custom']['selected'] as bool);
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start!).substring(0, 10);
-      var stopDate = formatter.format(stop!).substring(0, 10);
+      final startDate = formatter.format(start!).substring(0, 10);
+      final stopDate = formatter.format(stop!).substring(0, 10);
       if (deadline['custom']['selected'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -371,7 +363,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
 
     _updateFilterState();
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
   }
 
   @override
@@ -414,7 +406,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
     _statusFilter = '';
     _deadlineFilter = '';
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> setupPreset(PresetTaskFilters preset) async {
@@ -429,17 +421,15 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
         break;
       case PresetTaskFilters.upcomming:
         _statusFilter = '&status=1';
-        var startDate = formatter.format(DateTime.now());
-        var stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        final startDate = formatter.format(DateTime.now());
+        final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
         _responsibleFilter = '&participant=$_selfId';
         responsible['me'] = true;
         break;
       case PresetTaskFilters.last:
-        var startDate = formatter.format(DateTime.now());
-        var stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        final startDate = formatter.format(DateTime.now());
+        final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
 
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
         break;
@@ -466,11 +456,7 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
       'overdue': false,
       'today': false,
       'upcoming': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+      'custom': {'selected': false, 'startDate': DateTime.now(), 'stopDate': DateTime.now()}
     }.obs;
 
     // _selfId = await Get.find<UserController>().getUserId();

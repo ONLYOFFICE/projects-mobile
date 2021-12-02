@@ -47,7 +47,7 @@ class DiscussionsHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var options = Column(
+    final options = Column(
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),

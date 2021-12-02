@@ -45,8 +45,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
-class TaskCommentItemController extends GetxController
-    implements CommentItemController {
+class TaskCommentItemController extends GetxController implements CommentItemController {
   final CommentsService _api = locator<CommentsService>();
 
   @override
@@ -56,12 +55,9 @@ class TaskCommentItemController extends GetxController
   TaskCommentItemController({this.comment, this.taskId});
 
   @override
-  Future<void> copyLink(BuildContext context) async {
-    final projectId = Get.find<TaskItemController>(tag: taskId.toString())
-        .task
-        .value
-        .projectOwner!
-        .id;
+  Future<void> copyLink() async {
+    final projectId =
+        Get.find<TaskItemController>(tag: taskId.toString()).task.value.projectOwner!.id;
 
     final link = await _api.getTaskCommentLink(
       commentId: comment!.value.commentId!,
@@ -71,30 +67,29 @@ class TaskCommentItemController extends GetxController
 // TODO: refactoring needed
     if (link != null) {
       await Clipboard.setData(ClipboardData(text: link));
-      MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
     }
   }
 
   @override
-  Future<void> deleteComment(BuildContext context) async {
+  Future<void> deleteComment() async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
       onAcceptTap: () async {
-        final response =
-            await _api.deleteComment(commentId: comment!.value.commentId!);
+        final response = await _api.deleteComment(commentId: comment!.value.commentId!);
         if (response != null) {
           Get.back();
 
           locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
           MessagesHandler.showSnackBar(
-            context: context,
+            context: Get.context!,
             text: tr('commentDeleted'),
             buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
+            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
           );
         }
       },

@@ -51,8 +51,7 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class TaskEditingController extends GetxController
-    implements TaskActionsController {
+class TaskEditingController extends GetxController implements TaskActionsController {
   PortalTask task;
   final TaskService _api = locator<TaskService>();
 
@@ -134,14 +133,9 @@ class TaskEditingController extends GetxController
     super.onInit();
   }
 
-  // it was used before, but now it is a just placeholder
-  @override
-  void init() {}
-
   void _initDates() {
-    var now = DateTime.now();
-    _newStartDate =
-        task.startDate != null ? DateTime.parse(task.startDate!) : null;
+    final now = DateTime.now();
+    _newStartDate = task.startDate != null ? DateTime.parse(task.startDate!) : null;
     _newDueDate = task.deadline != null ? DateTime.parse(task.deadline!) : null;
 
     startDateText = task.startDate != null
@@ -220,7 +214,7 @@ class TaskEditingController extends GetxController
   void changeStartDate(DateTime? newDate) {
     if (newDate != null) {
       // ignore: omit_local_variable_types
-      bool verificationResult = checkDate(newDate, _newDueDate);
+      final bool verificationResult = checkDate(newDate, _newDueDate);
       if (verificationResult) {
         startDateText!.value = formatedDate(newDate);
         _newStartDate = newDate;
@@ -236,7 +230,7 @@ class TaskEditingController extends GetxController
   void changeDueDate(DateTime? newDate) {
     if (newDate != null) {
       // ignore: omit_local_variable_types
-      bool verificationResult = checkDate(_newStartDate, newDate);
+      final bool verificationResult = checkDate(_newStartDate, newDate);
       if (verificationResult) {
         dueDateText!.value = formatedDate(newDate);
         _newDueDate = newDate;
@@ -289,25 +283,21 @@ class TaskEditingController extends GetxController
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
-          projectId: task.projectOwner!.id,
-          withoutVisitors: true,
-          withoutBlocked: true);
+          projectId: task.projectOwner!.id, withoutVisitors: true, withoutBlocked: true);
 
-      await teamController
-          .getTeam()
-          .then((value) => _getSelectedResponsibles());
+      await teamController.getTeam().then((value) => _getSelectedResponsibles());
     } else {
       await _getSelectedResponsibles();
     }
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in teamController.usersList) {
+    for (final element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
-    for (var selectedMember in responsibles!) {
-      for (var user in teamController.usersList) {
+    for (final selectedMember in responsibles!) {
+      for (final user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -319,8 +309,7 @@ class TaskEditingController extends GetxController
     if (user.isSelected.value == true) {
       responsibles!.add(user);
     } else {
-      responsibles!.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      responsibles!.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -372,8 +361,8 @@ class TaskEditingController extends GetxController
       }
       final responsibleIds = <String?>[];
 
-      for (var item in responsibles!) responsibleIds.add(item.id as String?);
-      var newTask = NewTaskDTO(
+      for (final item in responsibles!) responsibleIds.add(item.id as String?);
+      final newTask = NewTaskDTO(
         description: descriptionText!.value,
         deadline: _newDueDate,
         id: task.id,
@@ -395,7 +384,7 @@ class TaskEditingController extends GetxController
     }
   }
 
-  Future<void> acceptTask(BuildContext context) async {
+  Future<void> acceptTask() async {
     final newTask = NewTaskDTO(
       description: descriptionText!.value,
       deadline: _newDueDate,
@@ -414,10 +403,10 @@ class TaskEditingController extends GetxController
     if (updatedTask != null) {
       _taskItemController.task.value = updatedTask;
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('taskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)!.hideCurrentSnackBar,
       );
     }
   }

@@ -46,17 +46,13 @@ class _SearchSettings extends StatelessWidget {
           FilterElement(
               title: tr('inContent'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected:
-                  filterController.searchSettings['in_content'] as bool?,
-              onTap: () =>
-                  filterController.changeSearchSettingsFilter('in_content')),
+              isSelected: filterController.searchSettings['in_content'] as bool,
+              onTap: () => filterController.changeSearchSettingsFilter('in_content')),
           FilterElement(
               title: tr('excludeSubfolders'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.searchSettings['exclude_subfolders']
-                  as bool?,
-              onTap: () => filterController
-                  .changeSearchSettingsFilter('exclude_subfolders')),
+              isSelected: filterController.searchSettings['exclude_subfolders'] as bool,
+              onTap: () => filterController.changeSearchSettingsFilter('exclude_subfolders')),
         ],
       ),
     );

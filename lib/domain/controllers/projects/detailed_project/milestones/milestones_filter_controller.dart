@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -42,8 +41,8 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class MilestonesFilterController extends BaseFilterController {
-  final MilestoneService? _api = locator<MilestoneService>();
-  final Storage? _storage = locator<Storage>();
+  final MilestoneService _api = locator<MilestoneService>();
+  final Storage _storage = locator<Storage>();
 
   final _sortController = Get.find<MilestonesSortController>();
   Function? applyFiltersDelegate;
@@ -94,8 +93,7 @@ class MilestonesFilterController extends BaseFilterController {
   }
 
   @override
-  String get filtersTitle =>
-      plural('milestonesFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('milestonesFilterConfirm', suitableResultCount.value);
 
   MilestonesFilterController() {
     suitableResultCount = (-1).obs;
@@ -125,7 +123,7 @@ class MilestonesFilterController extends BaseFilterController {
         _milestoneResponsibleFilter = '&milestoneResponsible=${newValue["id"]}';
       }
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> changeTasksResponsible(String filter, [newValue = '']) async {
@@ -134,8 +132,7 @@ class MilestonesFilterController extends BaseFilterController {
     if (filter == 'me') {
       taskResponsible!['other'] = '';
       taskResponsible!['me'] = !(taskResponsible!['me'] as bool);
-      if (taskResponsible!['me'] as bool)
-        _taskResponsibleFilter = '&participant=$_selfId';
+      if (taskResponsible!['me'] as bool) _taskResponsibleFilter = '&participant=$_selfId';
     }
     if (filter == 'other') {
       taskResponsible!['me'] = false;
@@ -147,11 +144,10 @@ class MilestonesFilterController extends BaseFilterController {
       }
     }
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
-  Future<void> changeDeadline(String filter,
-      {DateTime? start, DateTime? stop}) async {
+  Future<void> changeDeadline(String filter, {DateTime? start, DateTime? stop}) async {
     _deadlineFilter = '';
     final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
@@ -160,16 +156,15 @@ class MilestonesFilterController extends BaseFilterController {
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
       deadline['overdue'] = !(deadline['overdue'] as bool);
-      var dueDate = formatter.format(DateTime.now());
-      if (deadline['overdue'] as bool)
-        _deadlineFilter = '&deadlineStop=$dueDate';
+      final dueDate = formatter.format(DateTime.now());
+      if (deadline['overdue'] as bool) _deadlineFilter = '&deadlineStop=$dueDate';
     }
     if (filter == 'today') {
       deadline['overdue'] = false;
       deadline['upcoming'] = false;
       deadline['custom']['selected'] = false;
       deadline['today'] = !(deadline['today'] as bool);
-      var dueDate = formatter.format(DateTime.now());
+      final dueDate = formatter.format(DateTime.now());
       if (deadline['today'] as bool)
         _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
     }
@@ -178,9 +173,8 @@ class MilestonesFilterController extends BaseFilterController {
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
       deadline['upcoming'] = !(deadline['upcoming'] as bool);
-      var startDate = formatter.format(DateTime.now());
-      var stopDate =
-          formatter.format(DateTime.now().add(const Duration(days: 7)));
+      final startDate = formatter.format(DateTime.now());
+      final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
       if (deadline['upcoming'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
@@ -188,17 +182,16 @@ class MilestonesFilterController extends BaseFilterController {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['upcoming'] = false;
-      deadline['custom']['selected'] =
-          !(deadline['custom']['selected'] as bool);
+      deadline['custom']['selected'] = !(deadline['custom']['selected'] as bool);
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start!);
-      var stopDate = formatter.format(stop!);
+      final startDate = formatter.format(start!);
+      final stopDate = formatter.format(stop!);
       if (deadline['custom']['selected'] as bool)
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
     }
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   void changeStatus(String filter, [newValue = '']) async {
@@ -227,7 +220,7 @@ class MilestonesFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -235,7 +228,7 @@ class MilestonesFilterController extends BaseFilterController {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    final result = await _api!.milestonesByFilter(
+    final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: _projectId.toString(),
@@ -276,7 +269,7 @@ class MilestonesFilterController extends BaseFilterController {
     _deadlineFilter = '';
     _statusFilter = '';
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -284,7 +277,7 @@ class MilestonesFilterController extends BaseFilterController {
     hasFilters.value = _hasFilters;
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
 
     _updateFilterState();
   }
@@ -292,10 +285,10 @@ class MilestonesFilterController extends BaseFilterController {
   // UNUSED
   @override
   Future<void> saveFilters() async {
-    var d = Map.from(deadline);
+    final d = Map.from(deadline);
 
-    var startDate = deadline['custom']['startDate'].toIso8601String();
-    var stopDate = deadline['custom']['stopDate'].toIso8601String();
+    final startDate = deadline['custom']['startDate'].toIso8601String();
+    final stopDate = deadline['custom']['stopDate'].toIso8601String();
 
     d['custom'] = {
       'selected': deadline['custom']['selected'],
@@ -303,17 +296,14 @@ class MilestonesFilterController extends BaseFilterController {
       'stopDate': stopDate,
     };
 
-    await _storage!.write(
+    await _storage.write(
       'milestonesFilter',
       {
         'milestoneResponsible': {
           'buttons': milestoneResponsible,
           'value': _milestoneResponsibleFilter
         },
-        'taskResponsible': {
-          'buttons': taskResponsible,
-          'value': _taskResponsibleFilter
-        },
+        'taskResponsible': {'buttons': taskResponsible, 'value': _taskResponsibleFilter},
         'status': {'buttons': status, 'value': _statusFilter},
         'deadline': {'buttons': d, 'value': _deadlineFilter},
         'hasFilters': _hasFilters,
@@ -329,11 +319,7 @@ class MilestonesFilterController extends BaseFilterController {
       'overdue': false,
       'today': false,
       'upcoming': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+      'custom': {'selected': false, 'startDate': DateTime.now(), 'stopDate': DateTime.now()}
     }.obs;
     status = {'active': false, 'paused': false, 'closed': false}.obs;
     _currentAppliedMilestoneResponsible = Map.from(milestoneResponsible!);
@@ -347,26 +333,20 @@ class MilestonesFilterController extends BaseFilterController {
   // UNUSED
   // ignore: unused_element
   Future<void> _getSavedFilters() async {
-    var savedFilters =
-        await _storage!.read('milestoneFilters', returnCopy: true);
+    final savedFilters = await _storage.read('milestoneFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
-        milestoneResponsible =
-            Map.from(savedFilters['milestoneResponsible']['buttons'] as Map)
-                .obs;
-        _milestoneResponsibleFilter =
-            savedFilters['milestoneResponsible']['value'] as String;
+        milestoneResponsible = Map.from(savedFilters['milestoneResponsible']['buttons'] as Map).obs;
+        _milestoneResponsibleFilter = savedFilters['milestoneResponsible']['value'] as String;
 
-        taskResponsible =
-            Map.from(savedFilters['taskResponsible']['buttons'] as Map).obs;
-        _taskResponsibleFilter =
-            savedFilters['taskResponsible']['value'] as String;
+        taskResponsible = Map.from(savedFilters['taskResponsible']['buttons'] as Map).obs;
+        _taskResponsibleFilter = savedFilters['taskResponsible']['value'] as String;
 
         status = Map.from(savedFilters['status']['buttons'] as Map).obs;
         _statusFilter = savedFilters['status']['value'] as String;
 
-        Map d = savedFilters['deadline']['buttons'] as Map;
+        final d = savedFilters['deadline']['buttons'] as Map;
         d['custom'] = {
           'selected': d['custom']['selected'],
           'startDate': DateTime.parse(d['custom']['startDate'] as String),

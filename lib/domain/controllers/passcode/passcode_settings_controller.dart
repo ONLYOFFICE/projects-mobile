@@ -58,9 +58,9 @@ class PasscodeSettingsController extends GetxController {
   @override
   Future<void> onInit() async {
     loaded.value = false;
-    var isPassEnable = await _service.isPasscodeEnable;
-    var isFinEnable = await _service.isFingerprintEnable;
-    var isFinAvailable = await _service.isFingerprintAvailable;
+    final isPassEnable = await _service.isPasscodeEnable;
+    final isFinEnable = await _service.isFingerprintEnable;
+    final isFinAvailable = await _service.isFingerprintAvailable;
     isPasscodeEnable = isPassEnable.obs;
     if (isFinAvailable) {
       isFingerprintEnable = isFinEnable.obs;
@@ -94,7 +94,7 @@ class PasscodeSettingsController extends GetxController {
         await _service.setPasscode(_passcode);
         try {
           // update code in main passcode controller
-          Get.find<PasscodeCheckingController>().updatePasscode();
+          await Get.find<PasscodeCheckingController>().updatePasscode();
           // ignore: empty_catches
         } catch (_) {}
         _onPasscodeSaved();
@@ -107,7 +107,7 @@ class PasscodeSettingsController extends GetxController {
   }
 
   void cancelEnablingPasscode() async {
-    var isPassEnable = await _service.isPasscodeEnable;
+    final isPassEnable = await _service.isPasscodeEnable;
     isPasscodeEnable.value = isPassEnable;
     leave();
   }
@@ -190,8 +190,7 @@ class PasscodeSettingsController extends GetxController {
 
   Future<void> tryChangingPasscode() async {
     await Get.to(
-        () => EnterCurrentPasscodeScreen(
-            onPass: () => Get.to(() => EditPasscodeScreen1())),
+        () => EnterCurrentPasscodeScreen(onPass: () => Get.to(() => EditPasscodeScreen1())),
         preventDuplicates: false);
   }
 

@@ -32,7 +32,6 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/api/subtasks_api.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';

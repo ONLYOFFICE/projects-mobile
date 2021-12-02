@@ -58,13 +58,11 @@ class GroupsDataSource extends GetxController {
 
     if (result == null || result.isEmpty) {
     } else {
-      result.forEach(
-        (element) {
-          final portalUser = PortalGroupItemController(portalGroup: element);
+      for (final element in result) {
+        final portalUser = PortalGroupItemController(portalGroup: element);
 
-          groupsList.add(portalUser);
-        },
-      );
+        groupsList.add(portalUser);
+      }
     }
   }
 

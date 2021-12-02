@@ -55,9 +55,8 @@ class TaskCommentsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller!.loaded.value == true &&
-            controller!.task.value.comments != null) {
-          var comments = controller!.task.value.comments!;
+        if (controller!.loaded.value == true && controller!.task.value.comments != null) {
+          final comments = controller!.task.value.comments!;
           return Column(
             children: [
               if (comments.isEmpty)
@@ -71,8 +70,7 @@ class TaskCommentsView extends StatelessWidget {
                 Expanded(
                   child: SmartRefresher(
                     controller: controller!.commentsRefreshController,
-                    onRefresh: () async =>
-                        await controller!.reloadTask(showLoading: true),
+                    onRefresh: () async => await controller!.reloadTask(showLoading: true),
                     child: ListView.separated(
                       itemCount: comments.length,
                       controller: controller!.commentsListController,
@@ -97,8 +95,8 @@ class TaskCommentsView extends StatelessWidget {
                   onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewCommentView(),
                     arguments: {
-                      'controller': Get.put(NewTaskCommentController(
-                          idFrom: controller!.task.value.id))
+                      'controller':
+                          Get.put(NewTaskCommentController(idFrom: controller!.task.value.id))
                     },
                   ),
                 ),

@@ -36,7 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class TextStyleHelper {
-  static final body1 = const TextStyle(
+  static const body1 = TextStyle(
     fontFamily: 'Roboto',
     fontWeight: FontWeight.w400,
     fontSize: 16,
@@ -75,7 +75,7 @@ class TextStyleHelper {
         color: color);
   }
 
-  static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20.0);
+  static const mainStyle = TextStyle(fontFamily: 'Roboto', fontSize: 20);
 
   static TextStyle h6({Color? color}) {
     return TextStyle(
@@ -206,7 +206,7 @@ class TextStyleHelper {
   );
 
   static const subHeaderStyle = TextStyle(
-    fontSize: 14.0,
+    fontSize: 14,
     fontWeight: FontWeight.w500,
   );
 

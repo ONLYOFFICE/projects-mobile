@@ -55,17 +55,16 @@ class PortalDiscussionsView extends StatelessWidget {
   const PortalDiscussionsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<DiscussionsController>();
+    final controller = Get.find<DiscussionsController>();
 
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       appBar: PreferredSize(
@@ -91,12 +90,10 @@ class PortalDiscussionsView extends StatelessWidget {
               ),
               IconButton(
                   icon: FiltersButton(controler: controller),
-                  onPressed: () async => Get.find<NavigationController>()
-                          .toScreen(const DiscussionsFilterScreen(),
-                              preventDuplicates: false,
-                              arguments: {
-                            'filterController': controller.filterController
-                          })),
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                      const DiscussionsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController})),
               const SizedBox(width: 3),
             ],
             bottom: DiscussionsHeader(
@@ -117,8 +114,7 @@ class PortalDiscussionsView extends StatelessWidget {
           ),
         ),
       ),
-      body: DiscussionsList(
-          controller: controller, scrollController: scrollController),
+      body: DiscussionsList(controller: controller, scrollController: scrollController),
     );
   }
 }
@@ -162,8 +158,7 @@ class DiscussionsList extends StatelessWidget {
           );
 
         return PaginationListView(
-          paginationController:
-              controller.paginationController as PaginationController,
+          paginationController: controller.paginationController as PaginationController,
           child: ListView.separated(
             itemCount: controller.paginationController.data.length as int,
             padding: const EdgeInsets.only(bottom: 65),
@@ -173,10 +168,8 @@ class DiscussionsList extends StatelessWidget {
             },
             itemBuilder: (BuildContext context, int index) {
               return DiscussionTile(
-                discussion:
-                    controller.paginationController.data[index] as Discussion,
-                onTap: () => controller
-                    .toDetailed(controller.paginationController.data[index]),
+                discussion: controller.paginationController.data[index] as Discussion,
+                onTap: () => controller.toDetailed(controller.paginationController.data[index]),
               );
             },
           ),

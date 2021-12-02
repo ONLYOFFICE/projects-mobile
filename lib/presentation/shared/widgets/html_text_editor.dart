@@ -56,11 +56,10 @@ class HtmlTextEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     print('has error $hasError');
     return HtmlEditor(
-      plugins: [],
+      plugins: const [],
       controller: textController ?? HtmlEditorController(),
       htmlToolbarOptions: HtmlToolbarOptions(
-        textStyle:
-            TextStyleHelper.body2(color: Get.theme.colors().onBackground),
+        textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
         defaultToolbarButtons: const [
           StyleButtons(),
           FontSettingButtons(fontSizeUnit: false),

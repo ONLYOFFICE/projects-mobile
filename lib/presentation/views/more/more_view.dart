@@ -71,8 +71,7 @@ class MoreView extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(
-                        color: Get.theme.colors().outline, width: 0.5),
+                    bottom: BorderSide(color: Get.theme.colors().outline, width: 0.5),
                   ),
                 ),
                 child: Row(
@@ -94,32 +93,22 @@ class MoreView extends StatelessWidget {
                             ),
                           ),
                           if (portalUser.status.value == UserStatus.Terminated)
-                            Positioned(
+                            const Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: AppIcon(
-                                    icon: SvgIcons.userBlocked,
-                                    width: 16,
-                                    height: 16)),
-                          if ((portalUser.isAdmin.value ||
-                                  portalUser.isOwner.value) &&
+                                child: AppIcon(icon: SvgIcons.userBlocked, width: 16, height: 16)),
+                          if ((portalUser.isAdmin.value || portalUser.isOwner.value) &&
                               portalUser.status.value != UserStatus.Terminated)
-                            Positioned(
+                            const Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: AppIcon(
-                                    icon: SvgIcons.userAdmin,
-                                    width: 16,
-                                    height: 16)),
+                                child: AppIcon(icon: SvgIcons.userAdmin, width: 16, height: 16)),
                           if (portalUser.isVisitor.value &&
                               portalUser.status.value != UserStatus.Terminated)
-                            Positioned(
+                            const Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: AppIcon(
-                                    icon: SvgIcons.userVisitor,
-                                    width: 16,
-                                    height: 16)),
+                                child: AppIcon(icon: SvgIcons.userVisitor, width: 16, height: 16)),
                         ],
                       ),
                     ),
@@ -133,8 +122,7 @@ class MoreView extends StatelessWidget {
                               portalUser.username.value,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyleHelper.subtitle1(
-                                  color: Get.theme.colors().onNavBar),
+                              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onNavBar),
                             );
                           }),
                           Obx(() {
@@ -143,10 +131,7 @@ class MoreView extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleHelper.body2(
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.6)),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.6)),
                             );
                           }),
                         ],
@@ -193,9 +178,7 @@ class _MoreTile extends StatelessWidget {
               width: 56,
               child: AppIcon(icon: iconPath),
             ),
-            Text(text,
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onNavBar)),
+            Text(text, style: TextStyleHelper.subtitle1(color: Get.theme.colors().onNavBar)),
           ],
         ),
       ),

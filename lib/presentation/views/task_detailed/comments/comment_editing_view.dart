@@ -43,12 +43,11 @@ class CommentEditingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var commentId = Get.arguments['commentId'] as String?;
-    var commentBody = Get.arguments['commentBody'] as String?;
-    var itemController =
-        Get.arguments['itemController'] as CommentItemController?;
+    final commentId = Get.arguments['commentId'] as String?;
+    final commentBody = Get.arguments['commentBody'] as String?;
+    final itemController = Get.arguments['itemController'] as CommentItemController?;
 
-    var controller = Get.put(CommentEditingController(
+    final controller = Get.put(CommentEditingController(
       commentBody: commentBody,
       commentId: commentId,
       itemController: itemController,
@@ -56,7 +55,7 @@ class CommentEditingView extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        controller.leavePage();
+        await controller.leavePage();
         return false;
       },
       child: Scaffold(

@@ -49,9 +49,9 @@ class PaginationListView<T> extends StatelessWidget {
     return SmartRefresher(
         footer: CustomFooter(
           builder: (BuildContext context, LoadStatus? mode) {
-            return Container(
+            return const SizedBox(
               height: 55,
-              child: const Center(child: CircularProgressIndicator()),
+              child: Center(child: CircularProgressIndicator()),
             );
           },
         ),

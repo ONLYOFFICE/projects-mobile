@@ -33,7 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/tag_itemDTO.dart';
+import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 
@@ -54,18 +54,17 @@ class TagsSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var projController = Get.arguments['controller'];
+    final projController = Get.arguments['controller'];
 
-    var controller = Get.put(ProjectTagsController());
+    final controller = Get.put(ProjectTagsController());
     controller.setup(projController);
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       floatingActionButton: AnimatedPadding(
-        padding: const EdgeInsets.only(bottom: 0),
+        padding: EdgeInsets.zero,
         duration: const Duration(milliseconds: 100),
         child: Obx(
           () => Visibility(
@@ -81,16 +80,13 @@ class TagsSelectionView extends StatelessWidget {
         ),
       ),
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         title: _Header(
           controller: controller,
           title: tr('tags'),
         ),
         actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () => controller.confirm())
+          IconButton(icon: const Icon(Icons.check_rounded), onPressed: () => controller.confirm())
         ],
         bottom: _TagsSearchBar(controller: controller),
       ),
@@ -103,9 +99,8 @@ class TagsSelectionView extends StatelessWidget {
               controller: controller,
               onTapFunction: () => {},
             );
-          } else if (controller.loaded.value == true &&
-              controller.tags.isEmpty) {
-            return Column(children: [const NothingFound()]);
+          } else if (controller.loaded.value == true && controller.tags.isEmpty) {
+            return Column(children: const [NothingFound()]);
           } else
             return const ListLoadingSkeleton();
         },
@@ -114,7 +109,7 @@ class TagsSelectionView extends StatelessWidget {
   }
 
   Future showTagAddingDialog(controller) async {
-    var inputController = TextEditingController();
+    final inputController = TextEditingController();
 
     await Get.dialog(StyledAlertDialog(
       titleText: tr('enterTag'),
@@ -151,29 +146,26 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyleHelper.headline6(
-                          color: Get.theme.colors().onSurface),
-                    ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -196,7 +188,7 @@ class _TagsSearchBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           const SizedBox(width: 20),
-          Container(
+          SizedBox(
             height: 24,
             width: 24,
             child: InkWell(

@@ -49,22 +49,20 @@ class CommentsThread extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var padding = <int, EdgeInsetsGeometry>{
+    final padding = <int, EdgeInsetsGeometry>{
       0: const EdgeInsets.fromLTRB(12, 0, 16, 0),
       1: const EdgeInsets.fromLTRB(20, 29, 16, 0),
       2: const EdgeInsets.fromLTRB(44, 29, 16, 0)
     };
 
     // ignore: omit_local_variable_types
-    List<_SortedComment> visited = sortComments(comment);
+    final List<_SortedComment> visited = sortComments(comment);
 
     return Column(
       children: [
         for (var i = 0; i < visited.length; i++)
           Padding(
-            padding: visited[i].comment.show
-                ? padding[visited[i].paddingLevel]!
-                : EdgeInsets.zero,
+            padding: visited[i].comment.show ? padding[visited[i].paddingLevel]! : EdgeInsets.zero,
             child: Comment(
               comment: visited[i].comment,
               taskId: taskId,
@@ -77,12 +75,12 @@ class CommentsThread extends StatelessWidget {
 }
 
 List<_SortedComment> sortComments(PortalComment initComment) {
-  var visited = <_SortedComment>[];
+  final visited = <_SortedComment>[];
 
   visited.add(_SortedComment(initComment, 0));
 
   void dfs(PortalComment comment, int paddingLevel) {
-    var a = visited.firstWhereOrNull(
+    final a = visited.firstWhereOrNull(
       (element) {
         return element.comment.commentId == comment.commentId;
       },
@@ -90,13 +88,13 @@ List<_SortedComment> sortComments(PortalComment initComment) {
 
     if (a == null) {
       visited.add(_SortedComment(comment, paddingLevel));
-      for (var item in comment.commentList!) {
+      for (final item in comment.commentList!) {
         dfs(item, 2);
       }
     }
   }
 
-  for (var comment in initComment.commentList!) {
+  for (final comment in initComment.commentList!) {
     dfs(comment, 1);
   }
   return visited;

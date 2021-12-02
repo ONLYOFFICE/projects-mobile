@@ -42,8 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class MessagesHandler {
   static String? _lastMessage;
 
-  static ValueNotifier<bool> isDisplayed =
-      ValueNotifier<bool>(Get.isSnackbarOpen ?? false);
+  static ValueNotifier<bool> isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen ?? false);
 
   static final Queue _a = Queue();
 
@@ -55,8 +54,7 @@ class MessagesHandler {
     Function? buttonOnTap,
   }) async {
     try {
-      if (text == _lastMessage)
-        ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar();
+      if (text == _lastMessage) ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar();
 
       _a.addLast(text);
       isDisplayed.value = true;
@@ -96,22 +94,19 @@ SnackBar _styledSnackBar({
   return SnackBar(
     content: StatefulBuilder(
       builder: (context, setState) {
-        return Container(
+        return SizedBox(
           height: 48,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                  child: Text(text,
-                      style:
-                          TextStyleHelper.body2(color: lightColors.surface))),
+              Flexible(child: Text(text, style: TextStyleHelper.body2(color: lightColors.surface))),
               if (buttonText != null && buttonText.isNotEmpty && !wasPressed)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: GestureDetector(
                     onTap: () {
                       setState(() => wasPressed = true);
-                      return buttonOnTap!();
+                      buttonOnTap?.call();
                     },
                     child: SizedBox(
                       height: 16,
@@ -119,10 +114,7 @@ SnackBar _styledSnackBar({
                         child: Text(
                           buttonText,
                           style: TextStyleHelper.button(
-                                  color: Get.theme
-                                      .colors()
-                                      .primary
-                                      .withOpacity(0.5))
+                                  color: Get.theme.colors().primary.withOpacity(0.5))
                               .copyWith(height: 1),
                         ),
                       ),
@@ -135,8 +127,7 @@ SnackBar _styledSnackBar({
                   child: GestureDetector(
                     onTap: () {
                       setState(() => wasPressed = true);
-                      ScaffoldMessenger.maybeOf(context)!
-                          .removeCurrentSnackBar();
+                      ScaffoldMessenger.maybeOf(context)!.removeCurrentSnackBar();
                     },
                     child: SizedBox(
                       height: 16,
@@ -144,10 +135,7 @@ SnackBar _styledSnackBar({
                       child: Center(
                         child: Text(tr('ok'),
                             style: TextStyleHelper.button(
-                                    color: Get.theme
-                                        .colors()
-                                        .primary
-                                        .withOpacity(0.5))
+                                    color: Get.theme.colors().primary.withOpacity(0.5))
                                 .copyWith(height: 1)),
                       ),
                     ),

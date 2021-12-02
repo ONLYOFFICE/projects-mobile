@@ -31,7 +31,6 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -43,11 +42,10 @@ import 'package:projects/data/services/task/task_service.dart';
 class ProjectTasksController extends GetxController {
   final TaskService _api = locator<TaskService>();
 
-  final paginationController = Get.put(PaginationController<PortalTask>(),
-      tag: 'ProjectTasksController');
+  final paginationController =
+      Get.put(PaginationController<PortalTask>(), tag: 'ProjectTasksController');
 
-  final _sortController =
-      Get.put(TasksSortController(), tag: 'ProjectTasksController');
+  final _sortController = Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
   final _filterController = Get.find<ProjectTaskFilterController>();
 
@@ -68,8 +66,7 @@ class ProjectTasksController extends GetxController {
     _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate =
-        () async => await _getTasks(needToClear: true);
+    paginationController.refreshDelegate = () async => await _getTasks(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 
@@ -113,5 +110,5 @@ class ProjectTasksController extends GetxController {
     fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() => _projectDetailed.security!['canCreateTask'] as bool?;
+  bool? _canCreate() => _projectDetailed.security!['canCreateTask'];
 }

@@ -56,17 +56,15 @@ class DiscussionProjectTile extends StatelessWidget {
         ignoring: ignoring,
         child: NewItemTile(
           icon: SvgIcons.project,
-          text: controller.selectedProjectTitle.value.isNotEmpty as bool
+          text: controller.selectedProjectTitle.value.isNotEmpty
               ? controller.selectedProjectTitle.value as String?
               : tr('chooseProject'),
-          textColor: controller.selectProjectError == true
-              ? Get.theme.colors().colorError
-              : null,
-          isSelected: controller.selectedProjectTitle.value.isNotEmpty as bool,
+          textColor:
+              controller.selectProjectError.value == true ? Get.theme.colors().colorError : null,
+          isSelected: controller.selectedProjectTitle.value.isNotEmpty,
           selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const SelectProjectView(),
-              arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const SelectProjectView(), arguments: {'controller': controller}),
         ),
       ),
     );

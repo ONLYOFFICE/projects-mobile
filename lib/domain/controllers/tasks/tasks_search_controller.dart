@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
@@ -49,8 +48,7 @@ class TasksSearchController extends BaseController {
   late String _query;
 
   final _paginationController = PaginationController<PortalTask>();
-  PaginationController<PortalTask> get paginationController =>
-      _paginationController;
+  PaginationController<PortalTask> get paginationController => _paginationController;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -58,8 +56,7 @@ class TasksSearchController extends BaseController {
   void onInit() {
     screenName = tr('tasksSearch');
     paginationController.startIndex = 0;
-    _paginationController.loadDelegate =
-        () => _performSearch(needToClear: false);
+    _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query);
     super.onInit();
   }

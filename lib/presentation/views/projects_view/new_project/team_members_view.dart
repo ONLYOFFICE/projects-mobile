@@ -58,11 +58,10 @@ class TeamMembersSelectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
-    var usersDataSource = Get.find<UsersDataSource>();
+    final controller = Get.arguments['controller'];
+    final usersDataSource = Get.find<UsersDataSource>();
 
-    usersDataSource.selectedProjectManager =
-        controller.selectedProjectManager.value as PortalUser?;
+    usersDataSource.selectedProjectManager = controller.selectedProjectManager.value as PortalUser?;
     controller.selectionMode = UserSelectionMode.Multiple;
     usersDataSource.selectionMode = UserSelectionMode.Multiple;
 
@@ -71,11 +70,9 @@ class TeamMembersSelectionView extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
@@ -95,11 +92,9 @@ class TeamMembersSelectionView extends StatelessWidget {
               usersDataSource.usersList.isNotEmpty &&
               usersDataSource.isSearchResult.value == false) {
             return UsersDefault(
-              selfUserItem:
-                  controller.selfUserItem as PortalUserItemController?,
+              selfUserItem: controller.selfUserItem as PortalUserItemController?,
               usersDataSource: usersDataSource,
-              onTapFunction: controller.selectTeamMember as void Function(
-                  PortalUserItemController),
+              onTapFunction: controller.selectTeamMember as void Function(PortalUserItemController),
             );
           }
           if (usersDataSource.nothingFound.value == true) {
@@ -132,7 +127,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 60,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -150,16 +145,13 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: TextStyleHelper.headline6(
-                              color: Get.theme.colors().onSurface),
+                          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                         ),
                       ),
                       Expanded(
                         child: Text(
-                          plural('person',
-                              controller.selectedTeamMembers.length as int),
-                          style: TextStyleHelper.caption(
-                              color: Get.theme.colors().onSurface),
+                          plural('person', controller.selectedTeamMembers.length as int),
+                          style: TextStyleHelper.caption(color: Get.theme.colors().onSurface),
                         ),
                       ),
                     ],
@@ -169,8 +161,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                 return Expanded(
                   child: Text(
                     title,
-                    style: TextStyleHelper.headline6(
-                        color: Get.theme.colors().onSurface),
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                   ),
                 );
             },
@@ -214,13 +205,12 @@ class TeamMembersSearchBar extends StatelessWidget {
         children: <Widget>[
           Expanded(child: UsersSearchBar(controller: usersDataSource)),
           const SizedBox(width: 20),
-          Container(
+          SizedBox(
             height: 24,
             width: 24,
             child: InkWell(
               onTap: () {
-                Get.find<NavigationController>().toScreen(
-                    const GroupMembersSelectionView(),
+                Get.find<NavigationController>().toScreen(const GroupMembersSelectionView(),
                     arguments: {'controller': controller});
               },
               child: AppIcon(

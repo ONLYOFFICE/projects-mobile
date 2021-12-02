@@ -45,8 +45,7 @@ class PaginationController<T> extends GetxController {
   late Function loadDelegate;
 
   bool pullDownEnabled = false;
-  bool get pullUpEnabled =>
-      total.value == null ? false : data.length != total.value;
+  bool get pullUpEnabled => data.length != total.value;
 
   Future<void> onRefresh() async {
     startIndex = 0;

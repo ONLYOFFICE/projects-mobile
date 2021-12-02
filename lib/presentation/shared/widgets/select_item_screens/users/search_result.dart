@@ -48,8 +48,7 @@ class _SearchResult extends StatelessWidget {
         child: ListView.builder(
           itemCount: searchController.paginationController.data.length,
           itemBuilder: (BuildContext context, int index) {
-            PortalUser user =
-                searchController.paginationController.data[index] as PortalUser;
+            final user = searchController.paginationController.data[index] as PortalUser;
             return _UserTile(user: user);
           },
         ),

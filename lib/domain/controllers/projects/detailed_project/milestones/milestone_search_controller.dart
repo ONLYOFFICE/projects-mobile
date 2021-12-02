@@ -39,8 +39,7 @@ import 'package:projects/internal/locator.dart';
 class MilestoneSearchController extends BaseSearchController {
   final MilestoneService _service = locator<MilestoneService>();
 
-  final _paginationController =
-      Get.put(PaginationController(), tag: 'MilestoneSearchController');
+  final _paginationController = Get.put(PaginationController(), tag: 'MilestoneSearchController');
 
   @override
   PaginationController get paginationController => _paginationController;

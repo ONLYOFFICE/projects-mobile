@@ -58,7 +58,7 @@ class DiscussionSubscribersView extends StatelessWidget {
         if (controller!.loaded.value == false)
           return const ListLoadingSkeleton();
         else {
-          var discussion = controller!.discussion.value;
+          final discussion = controller!.discussion.value;
           return Stack(
             children: [
               SmartRefresher(
@@ -66,23 +66,17 @@ class DiscussionSubscribersView extends StatelessWidget {
                 onRefresh: controller!.onRefresh,
                 child: ListView.separated(
                   itemCount: discussion.subscribers!.length,
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 16),
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(height: 24);
                   },
-                  itemBuilder: (BuildContext context, int index) =>
-                      PortalUserItem(
-                          userController: PortalUserItemController(
-                              portalUser: discussion.subscribers![index]),
-                          onTapFunction: (value) => {
-                                Get.find<NavigationController>().toScreen(
-                                    const ProfileScreen(),
-                                    arguments: {
-                                      'portalUser':
-                                          discussion.subscribers![index]
-                                    })
-                              }),
+                  itemBuilder: (BuildContext context, int index) => PortalUserItem(
+                      userController:
+                          PortalUserItemController(portalUser: discussion.subscribers![index]),
+                      onTapFunction: (value) => {
+                            Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                                arguments: {'portalUser': discussion.subscribers![index]})
+                          }),
                 ),
               ),
               Align(
@@ -93,8 +87,7 @@ class DiscussionSubscribersView extends StatelessWidget {
                     () => Visibility(
                       visible: controller!.fabIsVisible.value,
                       child: StyledFloatingActionButton(
-                        onPressed: () =>
-                            controller!.toSubscribersManagingScreen(context),
+                        onPressed: () => controller!.toSubscribersManagingScreen(context),
                         child: AppIcon(
                           icon: SvgIcons.add_fab,
                           color: Get.theme.colors().onPrimarySurface,

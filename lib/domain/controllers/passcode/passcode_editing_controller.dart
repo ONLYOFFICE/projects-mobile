@@ -38,7 +38,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/settings/passcode/edit/edit_passcode_screen2.dart';
 
 class PasscodeEditingController extends GetxController {
-  final PasscodeService? _service = locator<PasscodeService>();
+  final PasscodeService _service = locator<PasscodeService>();
   String _passcode = '';
   String _passcodeCheck = '';
 
@@ -71,10 +71,10 @@ class PasscodeEditingController extends GetxController {
     }
     if (_passcodeCheck.length == 4) {
       if (_passcode == _passcodeCheck) {
-        await _service!.setPasscode(_passcode);
+        await _service.setPasscode(_passcode);
         try {
           // update code in main passcode controller
-          Get.find<PasscodeCheckingController>().updatePasscode();
+          await Get.find<PasscodeCheckingController>().updatePasscode();
           // ignore: empty_catches
         } catch (_) {}
         _onPasscodeSaved();

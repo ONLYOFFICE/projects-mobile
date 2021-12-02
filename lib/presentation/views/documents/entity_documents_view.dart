@@ -56,10 +56,7 @@ class EntityDocumentsView extends StatelessWidget {
   final DocumentsController documentsController;
 
   const EntityDocumentsView(
-      {Key? key,
-      this.folderName,
-      this.folderId,
-      required this.documentsController})
+      {Key? key, this.folderName, this.folderId, required this.documentsController})
       : super(key: key);
 
   @override
@@ -67,8 +64,7 @@ class EntityDocumentsView extends StatelessWidget {
     final scrollController = ScrollController();
     final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return DocumentsScreen(
       controller: documentsController,
@@ -94,20 +90,15 @@ class TaskDocumentsView extends StatelessWidget {
   final int? folderId;
   final DocumentsController documentsController;
 
-  TaskDocumentsView(
-      {Key? key,
-      this.folderName,
-      this.folderId,
-      required this.documentsController})
+  TaskDocumentsView({Key? key, this.folderName, this.folderId, required this.documentsController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return DocumentsScreen(
       controller: documentsController,
@@ -136,11 +127,10 @@ class DiscussionsDocumentsView extends StatelessWidget {
     final documentsController = Get.find<DiscussionsDocumentsController>();
     final discussionController = Get.find<DiscussionItemController>();
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Obx(
       () {
@@ -174,7 +164,7 @@ class _DocsTitle extends StatelessWidget {
   final DocumentsController controller;
   @override
   Widget build(BuildContext context) {
-    var sortButton = Container(
+    final sortButton = Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
         onTap: () {
@@ -187,9 +177,8 @@ class _DocsTitle extends StatelessWidget {
           children: <Widget>[
             Obx(
               () => Text(
-                controller.sortController.currentSortTitle.value as String,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                controller.sortController.currentSortTitle.value,
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -219,8 +208,8 @@ class _DocsTitle extends StatelessWidget {
 
     return Obx(
       () => Visibility(
-        visible: controller.itemList.isNotEmpty as bool ||
-            controller.filterController.hasFilters.value == true,
+        visible:
+            controller.itemList.isNotEmpty || controller.filterController.hasFilters.value == true,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
           child: Row(
@@ -236,13 +225,12 @@ class _DocsTitle extends StatelessWidget {
                 children: <Widget>[
                   InkResponse(
                     onTap: () {
-                      Get.find<NavigationController>().to(DocumentsSearchView(),
-                          preventDuplicates: false,
-                          arguments: {
-                            'folderName': controller.screenName.value,
-                            'folderId': controller.currentFolder,
-                            'entityType': controller.entityType,
-                          });
+                      Get.find<NavigationController>()
+                          .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                        'folderName': controller.screenName.value,
+                        'folderId': controller.currentFolder,
+                        'entityType': controller.entityType,
+                      });
                     },
                     child: AppIcon(
                       width: 24,
@@ -253,12 +241,10 @@ class _DocsTitle extends StatelessWidget {
                   ),
                   const SizedBox(width: 24),
                   InkResponse(
-                    onTap: () async => Get.find<NavigationController>()
-                        .toScreen(const DocumentsFilterScreen(),
-                            preventDuplicates: false,
-                            arguments: {
-                          'filterController': controller.filterController
-                        }),
+                    onTap: () async => Get.find<NavigationController>().toScreen(
+                        const DocumentsFilterScreen(),
+                        preventDuplicates: false,
+                        arguments: {'filterController': controller.filterController}),
                     child: FiltersButton(controler: controller),
                   ),
                 ],

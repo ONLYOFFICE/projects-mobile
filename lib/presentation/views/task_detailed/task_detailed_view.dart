@@ -53,14 +53,13 @@ import 'package:projects/presentation/views/task_editing_view/task_editing_view.
 part 'app_bar_menu.dart';
 
 class TaskDetailedView extends StatefulWidget {
-  TaskDetailedView({Key? key}) : super(key: key);
+  const TaskDetailedView({Key? key}) : super(key: key);
 
   @override
   _TaskDetailedViewState createState() => _TaskDetailedViewState();
 }
 
-class _TaskDetailedViewState extends State<TaskDetailedView>
-    with SingleTickerProviderStateMixin {
+class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerProviderStateMixin {
   TabController? _tabController;
   // ignore: prefer_final_fields
   var _activeIndex = 0.obs;
@@ -75,9 +74,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
     taskItemController.firstReload.value = true;
 
     // to get full info about task
-    taskItemController
-        .reloadTask()
-        .then((value) => taskItemController.setLoaded = true);
+    taskItemController.reloadTask().then((value) => taskItemController.setLoaded = true);
 
     _tabController = TabController(vsync: this, length: tabsAmount);
 
@@ -119,8 +116,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
                 labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor:
-                    Get.theme.colors().onSurface.withOpacity(0.6),
+                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
@@ -140,9 +136,7 @@ class _TaskDetailedViewState extends State<TaskDetailedView>
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          TaskOverviewScreen(
-              taskController: taskItemController,
-              tabController: _tabController),
+          TaskOverviewScreen(taskController: taskItemController, tabController: _tabController),
           SubtasksView(controller: taskItemController),
           TaskDocumentsView(
             folderId: taskItemController.task.value.id,

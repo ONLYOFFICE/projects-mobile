@@ -51,18 +51,16 @@ class TasksSearchScreen extends StatelessWidget {
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
+          if (controller.loaded.value == false) return const ListLoadingSkeleton();
           if (controller.nothingFound.isTrue)
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           else {
             return PaginationListView(
               paginationController: controller.paginationController,
               child: ListView.builder(
                 itemCount: controller.paginationController.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return TaskCell(
-                      task: controller.paginationController.data[index]);
+                  return TaskCell(task: controller.paginationController.data[index]);
                 },
               ),
             );

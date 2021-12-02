@@ -53,8 +53,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/task_detailed_view.dart';
 
-class NewTaskController extends GetxController
-    implements TaskActionsController {
+class NewTaskController extends GetxController implements TaskActionsController {
   final TaskService _api = locator<TaskService>();
   late ProjectTeamController teamController;
 
@@ -225,13 +224,9 @@ class NewTaskController extends GetxController
   Future<void> setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
-          projectId: _selectedProjectId,
-          withoutVisitors: true,
-          withoutBlocked: true);
+          projectId: _selectedProjectId, withoutVisitors: true, withoutBlocked: true);
 
-      await teamController
-          .getTeam()
-          .then((value) => _getSelectedResponsibles());
+      await teamController.getTeam().then((value) => _getSelectedResponsibles());
     } else {
       await _getSelectedResponsibles();
     }
@@ -255,8 +250,7 @@ class NewTaskController extends GetxController
     if (user.isSelected.value == true) {
       responsibles!.add(user);
     } else {
-      responsibles!.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      responsibles!.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -333,10 +327,10 @@ class NewTaskController extends GetxController
           text: tr('taskCreated'),
           buttonText: tr('open').toUpperCase(),
           buttonOnTap: () {
-            final itemController = Get.put(TaskItemController(createdTask),
-                tag: createdTask.id.toString());
-            return Get.find<NavigationController>().to(TaskDetailedView(),
-                arguments: {'controller': itemController});
+            final itemController =
+                Get.put(TaskItemController(createdTask), tag: createdTask.id.toString());
+            return Get.find<NavigationController>()
+                .to(const TaskDetailedView(), arguments: {'controller': itemController});
           });
 
       locator<EventHub>().fire('needToRefreshProjects');

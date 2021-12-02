@@ -66,8 +66,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   RxString projectTitleText = ''.obs;
 
   RxString managerText = ''.obs;
-  RxList<PortalUserItemController> teamMembers =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> teamMembers = <PortalUserItemController>[].obs;
   RxInt teamMembersCount = 0.obs;
 
   RxString creationDateText = ''.obs;
@@ -92,12 +91,10 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   ProjectDetailsController() {
     _userController.getUserInfo().whenComplete(() => {
-          selfUserItem =
-              PortalUserItemController(portalUser: _userController.user!),
+          selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
-    _subscription =
-        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    _subscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (markedToDelete) {
         _subscription.cancel();
         return;
@@ -115,8 +112,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   void addProjectDetailsListeners(void Function() listenerFunction) {
-    _projectDetailedsubscription =
-        _projectDetailed.listen((p0) => listenerFunction());
+    _projectDetailedsubscription = _projectDetailed.listen((p0) => listenerFunction());
   }
 
   String decodeImageString(String image) {
@@ -130,20 +126,17 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
 
-    creationDateText.value =
-        formatter.format(DateTime.parse(_projectDetailed.value!.created!));
+    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
 
-    await _projectService
-        .getProjectById(projectId: _projectDetailed.value!.id!)
-        .then((value) => {
-              _projectDetailed.value = value,
-              fillProjectInfo(),
-              if (value?.tags != null)
-                {
-                  tags.addAll(value!.tags!),
-                  tagsText.value = value.tags!.join(', '),
-                }
-            });
+    await _projectService.getProjectById(projectId: _projectDetailed.value!.id!).then((value) => {
+          _projectDetailed.value = value,
+          fillProjectInfo(),
+          if (value?.tags != null)
+            {
+              tags.addAll(value!.tags!),
+              tagsText.value = value.tags!.join(', '),
+            }
+        });
 
     tasksCount.value = _projectDetailed.value!.taskCountTotal!;
 
@@ -163,18 +156,17 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> fillProjectInfo() async {
     teamMembersCount.value = _projectDetailed.value!.participantCount!;
 
-    var tream = Get.find<ProjectTeamController>()
-      ..setup(projectDetailed: _projectDetailed.value);
+    final tream = Get.find<ProjectTeamController>()..setup(projectDetailed: _projectDetailed.value);
     // ignore: unawaited_futures
     tream.getTeam().then((value) => {
           teamMembers.clear(),
           teamMembers.addAll(tream.usersList),
-          teamMembers.removeWhere((element) =>
-              element.portalUser.id == _projectDetailed.value!.responsible!.id),
+          teamMembers.removeWhere(
+              (element) => element.portalUser.id == _projectDetailed.value!.responsible!.id),
         });
 
-    statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed.value!.status)]);
+    statusText.value =
+        tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed.value!.status)]);
 
     projectTitleText.value = _projectDetailed.value!.title!;
     descriptionText.value = _projectDetailed.value!.description!;
@@ -185,8 +177,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed.value = await _projectService.getProjectById(
-        projectId: _projectDetailed.value!.id!);
+    _projectDetailed.value =
+        await _projectService.getProjectById(projectId: _projectDetailed.value!.id!);
     loaded.value = true;
 
     await setup(_projectDetailed.value!);
@@ -197,7 +189,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     selectedTeamMembers.clear();
 
-    for (var user in teamMembers) {
+    for (final user in teamMembers) {
       selectedTeamMembers.add(user);
     }
     Get.find<NavigationController>()
@@ -208,13 +200,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future deleteProject() async {
     markedToDelete = true;
-    return _projectService.deleteProject(
-        projectId: _projectDetailed.value!.id!);
+    return _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
   }
 
-  Future<bool> updateStatus({int? newStatusId}) async =>
-      Get.find<ProjectStatusesController>().updateStatus(
-          newStatusId: newStatusId, projectData: _projectDetailed.value!);
+  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
+      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
 
   Future followProject() async {
     await _projectService.followProject(projectId: _projectDetailed.value!.id!);

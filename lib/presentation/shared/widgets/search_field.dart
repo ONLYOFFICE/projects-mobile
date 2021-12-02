@@ -83,25 +83,18 @@ class SearchField extends StatelessWidget {
             filled: true,
             fillColor: color ?? Get.theme.colors().bgDescription,
             border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide:
-                    const BorderSide(width: 0, style: BorderStyle.none)),
-            labelStyle: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.4)),
-            hintStyle: TextStyleHelper.body2(
-                color: Get.theme.colors().onSurface.withOpacity(0.4)),
-            contentPadding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide.none,
+            ),
+            labelStyle: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+            hintStyle: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             suffixIcon: showClearIcon
                 ? GestureDetector(
                     onTap: onClearPressed,
-                    child: const SizedBox(
-                        height: 32,
-                        width: 32,
-                        child: Icon(Icons.clear_rounded)))
+                    child: const SizedBox(height: 32, width: 32, child: Icon(Icons.clear_rounded)))
                 : GestureDetector(
-                    onTap: onSuffixTap,
-                    child: SizedBox(height: 32, child: suffixIcon))),
+                    onTap: onSuffixTap, child: SizedBox(height: 32, child: suffixIcon))),
       ),
     );
   }

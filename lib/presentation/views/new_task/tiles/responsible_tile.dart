@@ -55,7 +55,7 @@ class ResponsibleTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isSelected = controller.responsibles.isNotEmpty as bool;
+        final bool _isSelected = controller.responsibles.isNotEmpty as bool;
         return NewItemTile(
           isSelected: _isSelected,
           caption: _isSelected ? '${tr('assignedTo')}:' : null,
@@ -65,13 +65,11 @@ class ResponsibleTile extends StatelessWidget {
           text: _isSelected
               ? controller.responsibles.length as int == 1
                   ? controller.responsibles[0]?.displayName as String
-                  : plural(
-                      'responsibles', controller.responsibles.length as int)
+                  : plural('responsibles', controller.responsibles.length as int)
               : tr('addResponsible'),
           suffix: _isSelected
               ? suffixIcon ??
-                  Icon(Icons.navigate_next,
-                      size: 24, color: Get.theme.colors().onBackground)
+                  Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
               : null,
           suffixPadding: const EdgeInsets.only(right: 21),
           icon: SvgIcons.person,

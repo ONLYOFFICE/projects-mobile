@@ -69,14 +69,12 @@ class InfoTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (caption != null)
-                  Text(caption!,
-                      style: captionStyle ?? TextStyleHelper.caption()),
+                  Text(caption!, style: captionStyle ?? TextStyleHelper.caption()),
                 if (subtitleWidget != null) subtitleWidget!,
                 if (subtitleWidget == null && subtitle != null)
                   Text(subtitle!,
                       style: subtitleStyle ??
-                          TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface))
+                          TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface))
               ],
             ),
           ),
@@ -110,30 +108,27 @@ class InfoTileWithButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        children: [
-          SizedBox(width: 72, child: icon),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(caption!, style: captionStyle ?? TextStyleHelper.caption()),
-                Text(subtitle!,
-                    style: subtitleStyle ?? TextStyleHelper.subtitle1())
-              ],
-            ),
+    return Row(
+      children: [
+        SizedBox(width: 72, child: icon),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(caption!, style: captionStyle ?? TextStyleHelper.caption()),
+              Text(subtitle!, style: subtitleStyle ?? TextStyleHelper.subtitle1())
+            ],
           ),
-          InkResponse(
-            onTap: onTapFunction,
-            child: Icon(
-              iconData,
-              color: Get.theme.colors().onBackground.withOpacity(0.6),
-            ),
+        ),
+        InkResponse(
+          onTap: onTapFunction,
+          child: Icon(
+            iconData,
+            color: Get.theme.colors().onBackground.withOpacity(0.6),
           ),
-          const SizedBox(width: 23),
-        ],
-      ),
+        ),
+        const SizedBox(width: 23),
+      ],
     );
   }
 }

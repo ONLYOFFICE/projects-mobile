@@ -48,55 +48,52 @@ class AdvancedOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Theme(
-                  data: Get.theme.copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    expandedAlignment: Alignment.topLeft,
-                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    tilePadding: const EdgeInsets.only(right: 25),
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 72,
-                          child: AppIcon(
-                              icon: SvgIcons.preferences,
-                              height: 24,
-                              width: 24,
-                              color: Get.theme.colors().onBackground),
-                        ),
-                        Text(
-                          tr('advancedOptions'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface),
-                        ),
-                      ],
-                    ),
-                    children: options,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Theme(
+                data: Get.theme.copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  expandedAlignment: Alignment.topLeft,
+                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                  tilePadding: const EdgeInsets.only(right: 25),
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 72,
+                        child: AppIcon(
+                            icon: SvgIcons.preferences,
+                            height: 24,
+                            width: 24,
+                            color: Get.theme.colors().onBackground),
+                      ),
+                      Text(
+                        tr('advancedOptions'),
+                        style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                      ),
+                    ],
                   ),
+                  children: options,
                 ),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 72,
-                  endIndent: 0,
-                  color: Get.theme.colors().outline,
-                ),
-              ],
-            ),
+              ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                indent: 72,
+                endIndent: 0,
+                color: Get.theme.colors().outline,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -147,8 +144,7 @@ class OptionWithSwitch extends StatelessWidget {
                 () => Switch(
                   value: switchValue.value,
                   onChanged: switchOnChanged as void Function(bool)?,
-                  activeTrackColor:
-                      Get.theme.colors().primary.withOpacity(0.54),
+                  activeTrackColor: Get.theme.colors().primary.withOpacity(0.54),
                   activeColor: Get.theme.colors().primary,
                 ),
               ),

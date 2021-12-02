@@ -46,8 +46,7 @@ class PasscodeCheckingController extends GetxController {
   bool _canUseFingerprint = false;
 
   final PasscodeService _service = locator<PasscodeService>();
-  final LocalAuthenticationService _authService =
-      locator<LocalAuthenticationService>();
+  final LocalAuthenticationService _authService = locator<LocalAuthenticationService>();
 
   RxBool passcodeCheckFailed = false.obs;
   RxInt passcodeLen = 0.obs;
@@ -82,7 +81,7 @@ class PasscodeCheckingController extends GetxController {
         await _getFingerprintAvailability();
       } else {
         locator<EventHub>().fire('correctPasscodeChecked');
-        await Get.offAll(() => MainView());
+        await Get.offAll(() => const MainView());
       }
     } catch (_) {
       loaded.value = false;
@@ -115,7 +114,7 @@ class PasscodeCheckingController extends GetxController {
           await onPass();
         } else {
           locator<EventHub>().fire('correctPasscodeChecked');
-          await Get.offAll(() => MainView());
+          await Get.offAll(() => const MainView());
         }
       }
     }

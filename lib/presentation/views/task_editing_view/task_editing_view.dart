@@ -56,8 +56,7 @@ class TaskEditingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var controller =
-        Get.put(TaskEditingController(task: task), permanent: false);
+    final controller = Get.put(TaskEditingController(task: task), permanent: false);
 
     // controller.init();
     return WillPopScope(
@@ -70,9 +69,7 @@ class TaskEditingView extends StatelessWidget {
           titleText: tr('editTask'),
           onLeadingPressed: controller.discardChanges,
           actions: [
-            IconButton(
-                icon: const Icon(Icons.done_rounded),
-                onPressed: () => controller.confirm())
+            IconButton(icon: const Icon(Icons.done_rounded), onPressed: () => controller.confirm())
           ],
         ),
         body: SingleChildScrollView(
@@ -80,10 +77,7 @@ class TaskEditingView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              TaskTitle(
-                  controller: controller,
-                  showCaption: true,
-                  focusOnTitle: false),
+              TaskTitle(controller: controller, showCaption: true, focusOnTitle: false),
               const SizedBox(height: 22),
               Padding(
                 padding: const EdgeInsets.only(left: 72, right: 16),
@@ -98,13 +92,11 @@ class TaskEditingView extends StatelessWidget {
                     });
                   },
                   style: ButtonStyle(
-                    backgroundColor:
-                        MaterialStateProperty.resolveWith<Color>((_) {
+                    backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
                       return const Color(0xff81C4FF).withOpacity(0.1);
                     }),
                     side: MaterialStateProperty.resolveWith((_) {
-                      return const BorderSide(
-                          color: Colors.transparent, width: 1.5);
+                      return const BorderSide(color: Colors.transparent, width: 1.5);
                     }),
                   ),
                   child: Row(
@@ -113,8 +105,7 @@ class TaskEditingView extends StatelessWidget {
                       Flexible(
                           child: Padding(
                               padding: const EdgeInsets.only(top: 8, bottom: 8),
-                              child: Obx(() => Text(
-                                  controller.newStatus.value!.title!,
+                              child: Obx(() => Text(controller.newStatus.value!.title!,
                                   style: TextStyleHelper.subtitle2())))),
                       const Icon(Icons.arrow_drop_down_sharp)
                     ],

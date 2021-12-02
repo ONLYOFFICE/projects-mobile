@@ -44,8 +44,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
-class DiscussionCommentItemController extends GetxController
-    implements CommentItemController {
+class DiscussionCommentItemController extends GetxController implements CommentItemController {
   final CommentsService _api = locator<CommentsService>();
 
   @override
@@ -55,9 +54,8 @@ class DiscussionCommentItemController extends GetxController
   DiscussionCommentItemController({required this.comment, this.discussionId});
 
   @override
-  Future<void> copyLink(BuildContext context) async {
-    final projectId =
-        Get.find<DiscussionItemController>().discussion.value.projectOwner!.id;
+  Future<void> copyLink() async {
+    final projectId = Get.find<DiscussionItemController>().discussion.value.projectOwner!.id;
 
     final link = await _api.getDiscussionCommentLink(
       commentId: comment.value.commentId!,
@@ -68,29 +66,28 @@ class DiscussionCommentItemController extends GetxController
     // TODO: refactoring needed
     if (link != null) {
       await Clipboard.setData(ClipboardData(text: link));
-      MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
     }
   }
 
   @override
-  Future deleteComment(BuildContext context) async {
+  Future deleteComment() async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
       onAcceptTap: () async {
-        final response =
-            await _api.deleteComment(commentId: comment.value.commentId!);
+        final response = await _api.deleteComment(commentId: comment.value.commentId!);
         if (response != null) {
           // ignore: unawaited_futures
           Get.find<DiscussionItemController>().onRefresh(showLoading: false);
           Get.back();
           MessagesHandler.showSnackBar(
-            context: context,
+            context: Get.context!,
             text: tr('commentDeleted'),
             buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
+            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
           );
         }
       },

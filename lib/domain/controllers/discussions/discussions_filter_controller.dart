@@ -33,8 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -101,8 +99,7 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   @override
-  String get filtersTitle =>
-      plural('discussionsFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('discussionsFilterConfirm', suitableResultCount.value);
 
   DiscussionsFilterController() {
     suitableResultCount = (-1).obs;
@@ -227,9 +224,8 @@ class DiscussionsFilterController extends BaseFilterController {
       creationDate['today'] = false;
       creationDate['custom']['selected'] = false;
       creationDate['last7Days'] = !(creationDate['last7Days'] as bool);
-      final startDate = formatter
-          .format(DateTime.now().add(const Duration(days: -7)))
-          .substring(0, 10);
+      final startDate =
+          formatter.format(DateTime.now().add(const Duration(days: -7))).substring(0, 10);
       final stopDate = formatter.format(DateTime.now()).substring(0, 10);
 
       if (creationDate['last7Days'] as bool) {
@@ -239,8 +235,7 @@ class DiscussionsFilterController extends BaseFilterController {
     if (filter == 'custom') {
       creationDate['today'] = false;
       creationDate['last7Days'] = false;
-      creationDate['custom']['selected'] =
-          !(creationDate['custom']['selected'] as bool);
+      creationDate['custom']['selected'] = !(creationDate['custom']['selected'] as bool);
       creationDate['custom']['startDate'] = start;
       creationDate['custom']['stopDate'] = stop;
       final startDate = formatter.format(start!).substring(0, 10);
@@ -311,7 +306,7 @@ class DiscussionsFilterController extends BaseFilterController {
   Future<void> applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
 
     await saveFilters();
   }
@@ -368,11 +363,7 @@ class DiscussionsFilterController extends BaseFilterController {
     creationDate = {
       'today': false,
       'last7Days': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+      'custom': {'selected': false, 'startDate': DateTime.now(), 'stopDate': DateTime.now()}
     }.obs;
     other = {'subscribed': false}.obs;
 
@@ -386,36 +377,34 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    final savedFilters =
-        await _storage.read('discussionFilters', returnCopy: true);
+    final savedFilters = await _storage.read('discussionFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
-        author.value = Map<String, Object>.from(
-            savedFilters['author']['buttons'] as Map<dynamic, dynamic>);
+        author.value =
+            Map<String, Object>.from(savedFilters['author']['buttons'] as Map<dynamic, dynamic>);
         _authorFilter = savedFilters['author']['value'] as String;
 
-        project.value = Map<String, Object>.from(
-            savedFilters['project']['buttons'] as Map<dynamic, dynamic>);
+        project.value =
+            Map<String, Object>.from(savedFilters['project']['buttons'] as Map<dynamic, dynamic>);
         _projectFilter = savedFilters['project']['value'] as String;
 
-        status.value = Map<String, bool>.from(
-            savedFilters['status']['buttons'] as Map<dynamic, dynamic>);
+        status.value =
+            Map<String, bool>.from(savedFilters['status']['buttons'] as Map<dynamic, dynamic>);
         _statusFilter = savedFilters['status']['value'] as String;
 
         final Map creation = Map<String, Object>.from(
             savedFilters['creationDate']['buttons'] as Map<dynamic, dynamic>);
         creation['custom'] = {
           'selected': creation['custom']['selected'],
-          'startDate':
-              DateTime.parse(creation['custom']['startDate'] as String),
+          'startDate': DateTime.parse(creation['custom']['startDate'] as String),
           'stopDate': DateTime.parse(creation['custom']['stopDate'] as String),
         };
         creationDate.value = creation;
         _creationDateFilter = savedFilters['creationDate']['value'] as String;
 
-        other.value = Map<String, bool>.from(
-            savedFilters['other']['buttons'] as Map<dynamic, dynamic>);
+        other.value =
+            Map<String, bool>.from(savedFilters['other']['buttons'] as Map<dynamic, dynamic>);
         _otherFilter = savedFilters['other']['value'] as String;
 
         hasFilters.value = savedFilters['hasFilters'] as bool;

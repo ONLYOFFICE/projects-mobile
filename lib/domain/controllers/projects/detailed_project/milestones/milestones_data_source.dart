@@ -73,8 +73,7 @@ class MilestonesDataSource extends GetxController {
     _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
     paginationController.loadDelegate = () async => _getMilestones();
-    paginationController.refreshDelegate =
-        () async => _getMilestones(needToClear: true);
+    paginationController.refreshDelegate = () async => _getMilestones(needToClear: true);
     paginationController.pullDownEnabled = true;
   }
 
@@ -89,7 +88,7 @@ class MilestonesDataSource extends GetxController {
     final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectId: _projectId != null ? _projectId.toString() : null,
+      projectId: _projectId?.toString(),
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
@@ -118,9 +117,8 @@ class MilestonesDataSource extends GetxController {
     fabIsVisible.value = _canCreate()!;
   }
 
-  bool? _canCreate() => _projectDetailed == null
-      ? false
-      : _projectDetailed!.security!['canCreateMilestone'] as bool;
+  bool? _canCreate() =>
+      _projectDetailed == null ? false : _projectDetailed!.security!['canCreateMilestone'] as bool;
 
   void loadMilestonesWithFilterByName(String searchText) {
     searchQuery = searchText;

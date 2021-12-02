@@ -60,9 +60,8 @@ class SubtaskCell extends StatelessWidget {
     return ConstrainedBox(
       constraints: const BoxConstraints(minHeight: 56),
       child: InkWell(
-        onTap: () => Get.find<NavigationController>().to(
-            const SubtaskDetailedView(),
-            arguments: {'controller': subtaskController}),
+        onTap: () => Get.find<NavigationController>()
+            .to(const SubtaskDetailedView(), arguments: {'controller': subtaskController}),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -78,26 +77,18 @@ class SubtaskCell extends StatelessWidget {
                         Text(subtask.title!,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: subtaskController.subtask.value!.status ==
-                                    SubtaskStatus.CLOSED
-                                ? TextStyleHelper.subtitle1(
-                                        color: const Color(0xff9C9C9C))
-                                    .copyWith(
-                                        decoration: TextDecoration.lineThrough)
+                            style: subtaskController.subtask.value!.status == SubtaskStatus.CLOSED
+                                ? TextStyleHelper.subtitle1(color: const Color(0xff9C9C9C))
+                                    .copyWith(decoration: TextDecoration.lineThrough)
                                 : TextStyleHelper.subtitle1()),
                         Text(
-                            subtaskController
-                                    .subtask.value!.responsible?.displayName ??
+                            subtaskController.subtask.value!.responsible?.displayName ??
                                 tr('nobody'),
                             style: TextStyleHelper.caption(
                                 color:
-                                    subtaskController.subtask.value!.status ==
-                                            SubtaskStatus.CLOSED
+                                    subtaskController.subtask.value!.status == SubtaskStatus.CLOSED
                                         ? const Color(0xffc2c2c2)
-                                        : Get.theme
-                                            .colors()
-                                            .onBackground
-                                            .withOpacity(0.6))),
+                                        : Get.theme.colors().onBackground.withOpacity(0.6))),
                       ],
                     ),
                   ),
@@ -111,26 +102,23 @@ class SubtaskCell extends StatelessWidget {
                         itemBuilder: (context) {
                           return [
                             if (subtaskController.canEdit &&
-                                subtaskController.subtask.value!.responsible ==
-                                    null)
+                                subtaskController.subtask.value!.responsible == null)
                               PopupMenuItem(
                                   value: 'acceptSubtask',
                                   child: Text(tr('acceptSubtask'),
                                       style: TextStyleHelper.subtitle1())),
                             if (subtaskController.canCreateSubtask &&
-                                subtaskController.subtask.value!.status ==
-                                    SubtaskStatus.OPEN)
+                                subtaskController.subtask.value!.status == SubtaskStatus.OPEN)
                               PopupMenuItem(
                                   value: 'copySubtask',
-                                  child: Text(tr('copySubtask'),
-                                      style: TextStyleHelper.subtitle1())),
+                                  child:
+                                      Text(tr('copySubtask'), style: TextStyleHelper.subtitle1())),
                             if (subtask.canEdit!)
                               PopupMenuItem(
                                   value: 'delete',
                                   child: Text(tr('delete'),
                                       style: TextStyleHelper.subtitle1(
-                                          color:
-                                              Get.theme.colors().colorError))),
+                                          color: Get.theme.colors().colorError))),
                           ];
                         },
                       ),
@@ -147,19 +135,16 @@ class SubtaskCell extends StatelessWidget {
   }
 }
 
-void _onSelected(
-    BuildContext context, value, SubtaskController controller) async {
+void _onSelected(BuildContext context, value, SubtaskController controller) async {
   print(value);
   switch (value) {
     case 'acceptSubtask':
-      controller.acceptSubtask(context,
-          taskId: controller.subtask.value!.taskId!,
-          subtaskId: controller.subtask.value!.id!);
+      controller.acceptSubtask(
+          taskId: controller.subtask.value!.taskId!, subtaskId: controller.subtask.value!.id!);
       break;
     case 'copySubtask':
       controller.copySubtask(context,
-          taskId: controller.subtask.value!.taskId!,
-          subtaskId: controller.subtask.value!.id!);
+          taskId: controller.subtask.value!.taskId!, subtaskId: controller.subtask.value!.id!);
       break;
     case 'delete':
       controller.deleteSubtask(

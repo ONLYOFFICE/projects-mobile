@@ -53,10 +53,9 @@ class DiscussionsSearchScreen extends StatelessWidget {
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
+          if (controller.loaded.value == false) return const ListLoadingSkeleton();
           if (controller.nothingFound.isTrue)
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           else {
             return PaginationListView(
               paginationController: controller.paginationController,
@@ -65,10 +64,8 @@ class DiscussionsSearchScreen extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return DiscussionTile(
                     discussion: controller.paginationController.data[index],
-                    onTap: () => Get.find<NavigationController>()
-                        .to(DiscussionDetailed(), arguments: {
-                      'discussion': controller.paginationController.data[index]
-                    }),
+                    onTap: () => Get.find<NavigationController>().to(DiscussionDetailed(),
+                        arguments: {'discussion': controller.paginationController.data[index]}),
                   );
                 },
               ),

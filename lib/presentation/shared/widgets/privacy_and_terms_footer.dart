@@ -49,27 +49,24 @@ class PrivacyAndTermsFooter extends StatelessWidget {
     RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
-    final textTermsOfService =
-        tr('privacyAndTermsFooter.termsOfServiceWithLink');
-    final beforeText =
-        fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
+    final textTermsOfService = tr('privacyAndTermsFooter.termsOfServiceWithLink');
+    final beforeText = fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
     final betweenText = fullText.substring(
         fullText.indexOf(textPrivacyPolicy) + textPrivacyPolicy.length,
         fullText.indexOf(textTermsOfService));
-    final afterText = fullText.substring(
-        fullText.indexOf(textTermsOfService) + textTermsOfService.length);
+    final afterText =
+        fullText.substring(fullText.indexOf(textTermsOfService) + textTermsOfService.length);
 
     final textSpanPrivacyPolicy = TextSpan(
       style: TextStyle(
         decoration: TextDecoration.underline,
         color: Theme.of(context).colors().links,
       ),
-      text: '$textPrivacyPolicy',
+      text: textPrivacyPolicy,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           launch(
-            RemoteConfigService.getString(
-                RemoteConfigService.Keys.linkPrivacyPolicy),
+            RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
           );
         },
     );
@@ -78,12 +75,11 @@ class PrivacyAndTermsFooter extends StatelessWidget {
         decoration: TextDecoration.underline,
         color: Theme.of(context).colors().links,
       ),
-      text: '$textTermsOfService',
+      text: textTermsOfService,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           launch(
-            RemoteConfigService.getString(
-                RemoteConfigService.Keys.linkTermsOfService),
+            RemoteConfigService.getString(RemoteConfigService.Keys.linkTermsOfService),
           );
         },
     );

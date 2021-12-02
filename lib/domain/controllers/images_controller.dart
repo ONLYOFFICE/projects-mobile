@@ -31,7 +31,7 @@
  */
 
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 
 class ImagesController {
   final _portalInfo = Get.find<PortalInfoController>();

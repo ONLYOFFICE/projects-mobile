@@ -104,8 +104,7 @@ class TaskFilterController extends BaseTaskFilterController {
   }
 
   @override
-  String get filtersTitle =>
-      plural('tasksFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('tasksFilterConfirm', suitableResultCount.value);
 
   TaskFilterController() {
     suitableResultCount = (-1).obs;
@@ -156,8 +155,7 @@ class TaskFilterController extends BaseTaskFilterController {
         responsible['groups'] = '';
         responsible['no'] = !(responsible['no'] as bool);
         if (responsible['no'] as bool) {
-          _responsibleFilter =
-              '&participant=00000000-0000-0000-0000-000000000000';
+          _responsibleFilter = '&participant=00000000-0000-0000-0000-000000000000';
         }
         break;
       default:
@@ -315,9 +313,8 @@ class TaskFilterController extends BaseTaskFilterController {
       deadline['custom']['selected'] = false;
       deadline['upcoming'] = !(deadline['upcoming'] as bool);
       final startDate = formatter.format(DateTime.now()).substring(0, 10);
-      final stopDate = formatter
-          .format(DateTime.now().add(const Duration(days: 7)))
-          .substring(0, 10);
+      final stopDate =
+          formatter.format(DateTime.now().add(const Duration(days: 7))).substring(0, 10);
       if (deadline['upcoming'] as bool) {
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
       }
@@ -326,8 +323,7 @@ class TaskFilterController extends BaseTaskFilterController {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['upcoming'] = false;
-      deadline['custom']['selected'] =
-          !(deadline['custom']['selected'] as bool);
+      deadline['custom']['selected'] = !(deadline['custom']['selected'] as bool);
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
       final startDate = formatter.format(start!).substring(0, 10);
@@ -366,7 +362,7 @@ class TaskFilterController extends BaseTaskFilterController {
   Future<void> applyFilters() async {
     hasFilters.value = _hasFilters;
     await saveFilters();
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
   }
 
   @override
@@ -425,16 +421,14 @@ class TaskFilterController extends BaseTaskFilterController {
       case PresetTaskFilters.upcomming:
         _statusFilter = '&status=1';
         final startDate = formatter.format(DateTime.now());
-        final stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
         _responsibleFilter = '&participant=$_selfId';
         responsible['me'] = true;
         break;
       case PresetTaskFilters.last:
         final startDate = formatter.format(DateTime.now());
-        final stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
 
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
         break;
@@ -455,10 +449,7 @@ class TaskFilterController extends BaseTaskFilterController {
     dLine['custom'] = dlineCustom;
 
     final map = {
-      'responsible': {
-        'buttons': Map.from(responsible),
-        'value': _responsibleFilter
-      },
+      'responsible': {'buttons': Map.from(responsible), 'value': _responsibleFilter},
       'creator': {'buttons': Map.from(creator), 'value': _creatorFilter},
       'project': {'buttons': Map.from(project), 'value': _projectFilter},
       'milestone': {'buttons': Map.from(milestone), 'value': _milestoneFilter},
@@ -486,11 +477,7 @@ class TaskFilterController extends BaseTaskFilterController {
       'overdue': false,
       'today': false,
       'upcoming': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+      'custom': {'selected': false, 'startDate': DateTime.now(), 'stopDate': DateTime.now()}
     }.obs;
   }
 
@@ -499,34 +486,28 @@ class TaskFilterController extends BaseTaskFilterController {
 
     if (savedFilters != null) {
       try {
-        responsible.value = Map<String, Object>.from(
-            savedFilters['responsible']['buttons'] as Map);
+        responsible.value = Map<String, Object>.from(savedFilters['responsible']['buttons'] as Map);
         _responsibleFilter = savedFilters['responsible']['value'] as String;
 
-        creator.value =
-            Map<String, Object>.from(savedFilters['creator']['buttons'] as Map);
+        creator.value = Map<String, Object>.from(savedFilters['creator']['buttons'] as Map);
         _creatorFilter = savedFilters['creator']['value'] as String;
 
-        project.value =
-            Map<String, Object>.from(savedFilters['project']['buttons'] as Map);
+        project.value = Map<String, Object>.from(savedFilters['project']['buttons'] as Map);
         _projectFilter = savedFilters['project']['value'] as String;
 
-        milestone.value = Map<String, Object>.from(
-            savedFilters['milestone']['buttons'] as Map);
+        milestone.value = Map<String, Object>.from(savedFilters['milestone']['buttons'] as Map);
         _milestoneFilter = savedFilters['milestone']['value'] as String;
 
-        status.value =
-            Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
+        status.value = Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
         _statusFilter = savedFilters['status']['value'] as String;
 
-        final deadLineFilters = Map<String, Object>.from(
-            savedFilters['deadline']['buttons'] as Map);
+        final deadLineFilters =
+            Map<String, Object>.from(savedFilters['deadline']['buttons'] as Map);
 
-        var customDeadlineFilters =
-            Map<dynamic, dynamic>.from(deadLineFilters['custom'] as Map);
+        var customDeadlineFilters = Map<dynamic, dynamic>.from(deadLineFilters['custom'] as Map);
 
-        customDeadlineFilters = stringsToDateTime(
-            customDeadlineFilters, ['startDate', 'stopDate'])!;
+        customDeadlineFilters =
+            stringsToDateTime(customDeadlineFilters, ['startDate', 'stopDate'])!;
 
         deadLineFilters['custom'] = customDeadlineFilters;
 

@@ -52,7 +52,7 @@ class SubtaskDetailedView extends StatelessWidget {
 
     return Obx(
       () {
-        var _subtask = controller.subtask.value!;
+        final _subtask = controller.subtask.value!;
         return Scaffold(
           appBar: StyledAppBar(
             actions: [
@@ -60,8 +60,7 @@ class SubtaskDetailedView extends StatelessWidget {
                 PopupMenuButton(
                   icon: const Icon(Icons.more_vert, size: 26),
                   offset: const Offset(0, 25),
-                  onSelected: (dynamic value) =>
-                      _onSelected(context, value, controller),
+                  onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
                       if (controller.canEdit && _subtask.responsible == null)
@@ -84,8 +83,7 @@ class SubtaskDetailedView extends StatelessWidget {
                           value: 'delete',
                           child: Text(
                             tr('delete'),
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
                           ),
                         ),
                     ];
@@ -106,11 +104,8 @@ class SubtaskDetailedView extends StatelessWidget {
                         Obx(() => Expanded(
                               child: Text(_subtask.title!,
                                   style: controller.subtask.value!.status == 2
-                                      ? TextStyleHelper.subtitle1(
-                                              color: const Color(0xff9C9C9C))
-                                          .copyWith(
-                                              decoration:
-                                                  TextDecoration.lineThrough)
+                                      ? TextStyleHelper.subtitle1(color: const Color(0xff9C9C9C))
+                                          .copyWith(decoration: TextDecoration.lineThrough)
                                       : TextStyleHelper.subtitle1()),
                             )),
                         const SizedBox(width: 4),
@@ -127,25 +122,19 @@ class SubtaskDetailedView extends StatelessWidget {
                         width: 72,
                         child: AppIcon(
                             icon: SvgIcons.person,
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6))),
+                            color: Get.theme.colors().onSurface.withOpacity(0.6))),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(tr('assignedTo'),
                               style: TextStyleHelper.caption(
-                                  color: Get.theme
-                                      .colors()
-                                      .onBackground
-                                      .withOpacity(0.75))),
+                                  color: Get.theme.colors().onBackground.withOpacity(0.75))),
                           Text(
-                            _subtask.responsible?.displayName ??
-                                tr('noResponsible'),
+                            _subtask.responsible?.displayName ?? tr('noResponsible'),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().onSurface),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                           ),
                         ],
                       ),
@@ -153,8 +142,7 @@ class SubtaskDetailedView extends StatelessWidget {
                     if (_subtask.responsible != null && _subtask.canEdit!)
                       IconButton(
                         icon: Icon(Icons.clear_rounded,
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6)),
+                            color: Get.theme.colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
                             taskId: _subtask.taskId!, subtaskId: _subtask.id!),
                       )
@@ -173,14 +161,12 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
   switch (value) {
     case 'accept':
       controller.acceptSubtask(
-        context,
         taskId: controller.subtask.value!.taskId!,
         subtaskId: controller.subtask.value!.id!,
       );
       break;
     case 'edit':
-      Get.find<NavigationController>()
-          .to(const CreatingAndEditingSubtaskView(), arguments: {
+      Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(), arguments: {
         'taskId': controller.subtask.value!.taskId,
         'projectId': controller.parentTask!.projectOwner!.id,
         'forEditing': true,

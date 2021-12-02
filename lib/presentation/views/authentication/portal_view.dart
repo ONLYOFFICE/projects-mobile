@@ -60,8 +60,7 @@ class PortalInputView extends StatelessWidget {
         child: Obx(
           () => controller.state.value == ViewState.Busy
               ? SizedBox(
-                  height: Get.height,
-                  child: const Center(child: CircularProgressIndicator()))
+                  height: Get.height, child: const Center(child: CircularProgressIndicator()))
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -70,11 +69,10 @@ class PortalInputView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         SizedBox(height: Get.height * 0.165),
-                        AppIcon(icon: SvgIcons.app_logo),
+                        const AppIcon(icon: SvgIcons.app_logo),
                         SizedBox(height: Get.height * 0.044),
                         Text(tr('appName'),
-                            textAlign: TextAlign.center,
-                            style: TextStyleHelper.headline6()),
+                            textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
                         SizedBox(height: Get.height * 0.111),
                         Obx(
                           () => AuthTextField(
@@ -91,22 +89,15 @@ class PortalInputView extends StatelessWidget {
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.85),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.19)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.25),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.04)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
                           ]),
                           child: WideButton(
                             text: tr('next'),
-                            onPressed: () async =>
-                                controller.getPortalCapabilities(),
+                            onPressed: () async => controller.getPortalCapabilities(),
                           ),
                         ),
                         SizedBox(height: Get.height * 0.222),

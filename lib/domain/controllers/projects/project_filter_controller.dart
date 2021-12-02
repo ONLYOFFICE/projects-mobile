@@ -32,8 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -70,11 +68,10 @@ class ProjectsFilterController extends BaseFilterController {
   late RxMap<String, dynamic> projectManager;
   late RxMap<String, dynamic> teamMember;
   late RxMap<String, dynamic> other;
-  late RxMap<String, bool> status;
+  late RxMap<String, dynamic> status;
 
   @override
-  String get filtersTitle =>
-      plural('projectsFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('projectsFilterConfirm', suitableResultCount.value);
 
   ProjectsFilterController() {
     suitableResultCount = (-1).obs;
@@ -100,8 +97,7 @@ class ProjectsFilterController extends BaseFilterController {
     if (filter == 'me') {
       projectManager['other'] = '';
       projectManager['me'] = !(projectManager['me'] as bool);
-      if (projectManager['me'] as bool)
-        _projectManagerFilter = '&manager=$_selfId';
+      if (projectManager['me'] as bool) _projectManagerFilter = '&manager=$_selfId';
     }
     if (filter == 'other') {
       projectManager['me'] = false;
@@ -112,7 +108,7 @@ class ProjectsFilterController extends BaseFilterController {
         _projectManagerFilter = '&manager=${newValue["id"]}';
       }
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> changeTeamMember(String filter, [newValue = '']) async {
@@ -132,7 +128,7 @@ class ProjectsFilterController extends BaseFilterController {
         _teamMemberFilter = '&participant=${newValue["id"]}';
       }
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> changeOther(String filter, [newValue = '']) async {
@@ -163,7 +159,7 @@ class ProjectsFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   void changeStatus(String filter, [newValue = '']) async {
@@ -192,7 +188,7 @@ class ProjectsFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -233,7 +229,7 @@ class ProjectsFilterController extends BaseFilterController {
     _otherFilter = '';
     _statusFilter = '';
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -241,7 +237,7 @@ class ProjectsFilterController extends BaseFilterController {
     hasFilters.value = _hasFilters;
     suitableResultCount.value = -1;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate!();
+    applyFiltersDelegate?.call();
 
     await saveFilters();
   }
@@ -283,14 +279,8 @@ class ProjectsFilterController extends BaseFilterController {
     await _storage.write(
       'projectFilters',
       {
-        'projectManager': {
-          'buttons': Map.from(projectManager),
-          'value': _projectManagerFilter
-        },
-        'teamMember': {
-          'buttons': Map.from(teamMember),
-          'value': _teamMemberFilter
-        },
+        'projectManager': {'buttons': Map.from(projectManager), 'value': _projectManagerFilter},
+        'teamMember': {'buttons': Map.from(teamMember), 'value': _teamMemberFilter},
         'other': {'buttons': Map.from(other), 'value': _otherFilter},
         'status': {'buttons': Map.from(status), 'value': _statusFilter},
         'hasFilters': _hasFilters,
@@ -307,25 +297,21 @@ class ProjectsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    var savedFilters = await _storage.read('projectFilters');
+    final savedFilters = await _storage.read('projectFilters');
 
     if (savedFilters != null) {
       try {
-        projectManager.value = Map<String, Object>.from(
-            savedFilters['projectManager']['buttons'] as Map);
-        _projectManagerFilter =
-            savedFilters['projectManager']['value'] as String;
+        projectManager.value =
+            Map<String, Object>.from(savedFilters['projectManager']['buttons'] as Map);
+        _projectManagerFilter = savedFilters['projectManager']['value'] as String;
 
-        teamMember.value = Map<String, Object>.from(
-            savedFilters['teamMember']['buttons'] as Map);
+        teamMember.value = Map<String, Object>.from(savedFilters['teamMember']['buttons'] as Map);
         _teamMemberFilter = savedFilters['teamMember']['value'] as String;
 
-        other.value =
-            Map<String, Object>.from(savedFilters['other']['buttons'] as Map);
+        other.value = Map<String, Object>.from(savedFilters['other']['buttons'] as Map);
         _otherFilter = savedFilters['other']['value'] as String;
 
-        status.value =
-            Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
+        status.value = Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
         _statusFilter = savedFilters['status']['value'] as String;
 
         hasFilters.value = savedFilters['hasFilters'] as bool;
@@ -340,11 +326,4 @@ class ProjectsFilterController extends BaseFilterController {
   }
 }
 
-enum PresetProjectFilters {
-  active,
-  myProjects,
-  myFollowedProjects,
-  saved,
-  myMembership,
-  myManaged
-}
+enum PresetProjectFilters { active, myProjects, myFollowedProjects, saved, myMembership, myManaged }

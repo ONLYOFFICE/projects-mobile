@@ -39,7 +39,7 @@ class ThemeService {
   final Storage? storage = locator<Storage>();
 
   ThemeMode savedThemeMode() {
-    var themeMode = storage!.getValue('themeMode');
+    final themeMode = storage!.getValue('themeMode');
 
     switch (themeMode) {
       case 'darkTheme':

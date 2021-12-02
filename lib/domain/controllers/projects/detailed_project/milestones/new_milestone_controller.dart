@@ -78,8 +78,7 @@ class NewMilestoneController extends GetxController {
 
   PortalUserItemController? _previusSelectedResponsible;
   Rx<PortalUserItemController?>? responsible;
-  RxList<PortalUserItemController?> teamMembers =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController?> teamMembers = <PortalUserItemController>[].obs;
 
   Future<void> setup(ProjectDetailed? projectDetailed) async {
     if (projectDetailed != null) {
@@ -88,14 +87,11 @@ class NewMilestoneController extends GetxController {
       needToSelectProject.value = false;
 
       teamController = Get.find<ProjectTeamController>()
-        ..setup(
-            projectDetailed: projectDetailed,
-            withoutVisitors: true,
-            withoutBlocked: true);
+        ..setup(projectDetailed: projectDetailed, withoutVisitors: true, withoutBlocked: true);
 
       await teamController.getTeam();
 
-      for (var user in teamController.usersList) {
+      for (final user in teamController.usersList) {
         teamMembers.add(user);
       }
     }
@@ -146,8 +142,7 @@ class NewMilestoneController extends GetxController {
   }
 
   void leaveResponsiblesSelectionView() {
-    if (_previusSelectedResponsible == null ||
-        _previusSelectedResponsible == responsible!.value) {
+    if (_previusSelectedResponsible == null || _previusSelectedResponsible == responsible!.value) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -169,13 +164,13 @@ class NewMilestoneController extends GetxController {
   }
 
   Future<void> _applyUsersSelection() async {
-    for (var element in teamController.usersList) {
+    for (final element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
 
     if (responsible != null) {
-      for (var user in teamController.usersList) {
+      for (final user in teamController.usersList) {
         if (responsible!.value!.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -192,8 +187,8 @@ class NewMilestoneController extends GetxController {
   void changeDueDate(DateTime? newDate) {
     if (newDate != null) {
       _dueDate = newDate;
-      dueDateText.value = formatedDateFromString(
-          now: DateTime.now(), stringDate: newDate.toString());
+      dueDateText.value =
+          formatedDateFromString(now: DateTime.now(), stringDate: newDate.toString());
       Get.back();
     } else {
       _dueDate = null;
@@ -214,7 +209,7 @@ class NewMilestoneController extends GetxController {
         needToSelectResponsible.value ||
         needToSetDueDate.value) return;
 
-    var milestone = NewMilestoneDTO(
+    final milestone = NewMilestoneDTO(
       title: titleController.text,
       description: descriptionController.value.text,
       deadline: dueDate,
@@ -224,11 +219,10 @@ class NewMilestoneController extends GetxController {
       notifyResponsible: notificationEnabled.value,
     );
 
-    var success = await _api.createMilestone(
-        projectId: _selectedProjectId!, milestone: milestone);
+    final success =
+        await _api.createMilestone(projectId: _selectedProjectId!, milestone: milestone);
     if (success) {
-      MessagesHandler.showSnackBar(
-          context: context, text: tr('milestoneCreated'));
+      MessagesHandler.showSnackBar(context: context, text: tr('milestoneCreated'));
       locator<EventHub>().fire('needToRefreshProjects');
       Get.back();
     }
@@ -256,16 +250,11 @@ class NewMilestoneController extends GetxController {
   }
 
   void setKeyMilestone(bool value) => keyMilestone.value = value;
-  void enableRemindBeforeDueDate(bool value) =>
-      remindBeforeDueDate.value = value;
+  void enableRemindBeforeDueDate(bool value) => remindBeforeDueDate.value = value;
 
   void onDueDateTilePressed() {
     Get.find<NavigationController>().toScreen(const SelectDateView(),
-        arguments: {
-          'controller': this,
-          'startDate': false,
-          'initialDate': _dueDate
-        });
+        arguments: {'controller': this, 'startDate': false, 'initialDate': _dueDate});
   }
 
   void enableNotification(bool value) {

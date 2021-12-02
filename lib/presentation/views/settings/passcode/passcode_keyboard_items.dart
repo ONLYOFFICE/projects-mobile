@@ -165,7 +165,7 @@ class FingerprintButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: onTap,
-      child: SizedBox(
+      child: const SizedBox(
         height: 72,
         width: 72,
         child: Center(child: AppIcon(icon: SvgIcons.finger_print)),
