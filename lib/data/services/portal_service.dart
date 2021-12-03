@@ -41,8 +41,8 @@ import 'package:projects/internal/locator.dart';
 class PortalService {
   final PortalApi _api = locator<PortalApi>();
 
-  Future<Capabilities?> portalCapabilities(String portalName) async {
-    final capabilities = await _api.getCapabilities(portalName);
+  Future<Capabilities?> portalCapabilities() async {
+    final capabilities = await _api.getCapabilities();
 
     final success = capabilities.response != null;
 

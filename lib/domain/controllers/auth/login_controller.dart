@@ -217,7 +217,9 @@ class LoginController extends GetxController {
     } else {
       setState(ViewState.Busy);
 
-      final _capabilities = await _portalService.portalCapabilities(portalAdressController.text);
+      locator.get<CoreApi>().setPortalName(portalAdressController.text);
+
+      final _capabilities = await _portalService.portalCapabilities();
 
       if (_capabilities != null) {
         capabilities = _capabilities;

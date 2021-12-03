@@ -43,19 +43,44 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class AuthApi {
-  Future<ApiDTO<AuthToken>> loginByUsername(
-      {required String email, required String pass}) async {
+  Future<ApiDTO<AuthToken>> loginByUsername({required String email, required String pass}) async {
+    final url = await locator.get<CoreApi>().authUrl();
+    final body = {'userName': email, 'password': pass};
+
+    var result = ApiDTO<AuthToken>();
+    try {
+      final response = await locator.get<CoreApi>().postRequest(url, body);
+
+      if (response is http.Response) {
+        result.response =
+            AuthToken.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
+        await locator.get<CoreApi>().savePortalName();
+      } else {
+        if (response is CustomError && response.message == 'Redirect') {
+          locator.get<CoreApi>().redirectPortal();
+          result = await loginByUsernameRedirected(email, pass);
+        } else
+          result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<AuthToken>> loginByUsernameRedirected(String email, String pass) async {
     final url = await locator.get<CoreApi>().authUrl();
     final body = {'userName': email, 'password': pass};
 
     final result = ApiDTO<AuthToken>();
     try {
-      final dynamic response =
-          await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        result.response = AuthToken.fromJson(
-            json.decode(response.body)['response'] as Map<String, dynamic>);
+        result.response =
+            AuthToken.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
+        await locator.get<CoreApi>().savePortalName();
       } else {
         result.error = response as CustomError;
       }
@@ -72,22 +97,15 @@ class AuthApi {
     required String code,
   }) async {
     final url = await locator.get<CoreApi>().tfaUrl(code: code);
-    final body = {
-      'userName': email,
-      'password': pass,
-      'accessToken': '',
-      'provider': ''
-    };
+    final body = {'userName': email, 'password': pass, 'accessToken': '', 'provider': ''};
 
     final result = ApiDTO<AuthToken>();
     try {
-      final dynamic response =
-          await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
-        result.response = AuthToken.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = AuthToken.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -107,8 +125,7 @@ class AuthApi {
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
-        result.response = PortalUser.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -124,13 +141,11 @@ class AuthApi {
 
     final result = ApiDTO<dynamic>();
     try {
-      final dynamic response =
-          await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
-        result.response = AuthToken.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = AuthToken.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -146,13 +161,11 @@ class AuthApi {
 
     final result = ApiDTO<dynamic>();
     try {
-      final dynamic response =
-          await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
-        result.response = AuthToken.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = AuthToken.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -171,8 +184,7 @@ class AuthApi {
     final body = {'email': email};
 
     try {
-      final dynamic response =
-          await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
@@ -192,14 +204,12 @@ class AuthApi {
 
     final result = ApiDTO<dynamic>();
 
-    final type =
-        Platform.isAndroid ? Platforms.AndroidProjects : Platforms.IosProjects;
+    final type = Platform.isAndroid ? Platforms.AndroidProjects : Platforms.IosProjects;
 
     final body = {'type': type};
 
     try {
-      final dynamic response =
-          await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         final dynamic responseJson = json.decode(response.body);
