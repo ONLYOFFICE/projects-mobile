@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -47,6 +48,7 @@ class PortalInputView extends StatelessWidget {
   PortalInputView({Key? key}) : super(key: key);
 
   final LoginController controller = Get.find<LoginController>();
+  final checkBoxValue = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -93,12 +95,27 @@ class PortalInputView extends StatelessWidget {
                                 color: Get.theme.colors().onBackground.withOpacity(0.04)),
                           ]),
                           child: WideButton(
-                            text: tr('next'),
-                            onPressed: () async => await controller.getPortalCapabilities(),
-                          ),
+                              text: tr('next'),
+                              color: Get.deviceLocale!.languageCode == 'zh' && !checkBoxValue.value
+                                  ? Get.theme.colors().bgDescription
+                                  : Get.theme.colors().primary,
+                              onPressed: () async {
+                                if (Get.deviceLocale!.languageCode == 'zh' &&
+                                    !checkBoxValue.value) {
+                                  MessagesHandler.showSnackBar(
+                                      context: context, text: tr('privacyAndTermsFooter.total'));
+
+                                  return;
+                                }
+                                checkBoxValue.value = false;
+                                await controller.getPortalCapabilities();
+                              }),
                         ),
                         const Spacer(),
-                        const PrivacyAndTermsFooter(),
+                        if (Get.deviceLocale!.languageCode == 'zh')
+                          PrivacyAndTermsFooter.withCheckbox(checkBoxValue: checkBoxValue)
+                        else
+                          PrivacyAndTermsFooter(),
                         const SizedBox(height: 36),
                       ],
                     ),
