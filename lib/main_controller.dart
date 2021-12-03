@@ -157,20 +157,22 @@ class MainController extends GetxController {
         token == null ||
         token.isEmpty ||
         portalName == null ||
-        portalName.isEmpty) return false;
+        portalName.isEmpty ||
+        !portalName.isURL) return false;
 
     final expiration = DateTime.parse(expirationDate);
     if (expiration.isBefore(DateTime.now())) return false;
 
     final isAuthValid = await locator<AuthService>().checkAuthorization();
-    if (!isAuthValid) await logout();
-
-    await cookieManager.setCookies([
-      Cookie('asc_auth_key', token)
-        ..domain = portalName.replaceFirst('https://', '')
-        ..expires = DateTime.now().add(const Duration(days: 10))
-        ..httpOnly = false
-    ]);
+    if (!isAuthValid)
+      await logout();
+    else
+      await cookieManager.setCookies([
+        Cookie('asc_auth_key', token)
+          ..domain = portalName.split('//')[1]
+          ..expires = DateTime.now().add(const Duration(days: 10))
+          ..httpOnly = false
+      ]);
 
     return isAuthValid;
   }
