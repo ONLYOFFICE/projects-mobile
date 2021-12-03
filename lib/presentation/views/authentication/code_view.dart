@@ -66,6 +66,7 @@ class _CodeViewState extends State<CodeView> {
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Column(
                   children: [
+                    SizedBox(height: Get.height * 0.165),
                     //TODO fix dark theme icon
                     const AppIcon(
                       hasDarkVersion: true,

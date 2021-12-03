@@ -70,8 +70,7 @@ class ProfileController extends GetxController {
       .obs;
 
   Future<void> setup() async {
-    // ignore: unawaited_futures
-    userController.getUserInfo();
+    await userController.getUserInfo();
     await portalInfoController.setup();
 
     user.value = userController.user;
