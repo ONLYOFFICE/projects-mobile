@@ -78,7 +78,8 @@ class LoginController extends GetxController {
   String? _email;
   String? _tfaKey;
 
-  String get portalAdress => portalAdressController.text.replaceFirst('https://', '');
+  String get portalAdress =>
+      portalAdressController.text.isURL ? portalAdressController.text.split('//')[1] : '';
   String? get tfaKey => _tfaKey;
 
   final cookieManager = WebviewCookieManager();

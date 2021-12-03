@@ -61,10 +61,7 @@ class PortalInfoController extends GetxController {
     await lock.synchronized(() async {
       _portalUri ??= await locator.get<CoreApi>().getPortalURI();
       _headers ??= await locator.get<CoreApi>().getHeaders();
-      if (_portalUri!.contains('https'))
-        _portalName ??= _portalUri!.replaceFirst('https://', '');
-      else
-        _portalName ??= _portalUri!.replaceFirst('http://', '');
+      _portalName ??= _portalUri!.split('//')[1];
     });
   }
 }
