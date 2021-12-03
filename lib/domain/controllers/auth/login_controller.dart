@@ -31,6 +31,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
@@ -53,6 +54,7 @@ import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_cod
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -78,6 +80,8 @@ class LoginController extends GetxController {
 
   String get portalAdress => portalAdressController.text.replaceFirst('https://', '');
   String? get tfaKey => _tfaKey;
+
+  final cookieManager = WebviewCookieManager();
 
   @override
   void onInit() {
@@ -107,6 +111,14 @@ class LoginController extends GetxController {
         clearInputFields();
         await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
             {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
+
+        await cookieManager.setCookies([
+          Cookie('asc_auth_key', result.response!.token!)
+            ..domain = portalAdress
+            ..expires = DateTime.now().add(const Duration(days: 10))
+            ..httpOnly = false
+        ]);
+
         locator<EventHub>().fire('loginSuccess');
       } else if (result.response!.tfa == true) {
         _email = email;
@@ -271,6 +283,8 @@ class LoginController extends GetxController {
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
+
+    await cookieManager.clearCookies();
 
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();

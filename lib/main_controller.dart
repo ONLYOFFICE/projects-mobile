@@ -33,6 +33,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:event_hub/event_hub.dart';
@@ -52,6 +53,7 @@ import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/no_internet_view.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class MainController extends GetxController {
   final SecureStorage _secureStorage = locator<SecureStorage>();
@@ -68,6 +70,8 @@ class MainController extends GetxController {
   bool correctPasscodeChecked = false;
 
   var subscriptions = <StreamSubscription>[];
+
+  final cookieManager = WebviewCookieManager();
 
   MainController() {
     Connectivity().checkConnectivity().then((result) => {
@@ -161,6 +165,13 @@ class MainController extends GetxController {
     final isAuthValid = await locator<AuthService>().checkAuthorization();
     if (!isAuthValid) await logout();
 
+    await cookieManager.setCookies([
+      Cookie('asc_auth_key', token)
+        ..domain = portalName.replaceFirst('https://', '')
+        ..expires = DateTime.now().add(const Duration(days: 10))
+        ..httpOnly = false
+    ]);
+
     return isAuthValid;
   }
 
@@ -174,6 +185,8 @@ class MainController extends GetxController {
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
+
+    await cookieManager.clearCookies();
 
     Get.find<PortalInfoController>().logout();
   }

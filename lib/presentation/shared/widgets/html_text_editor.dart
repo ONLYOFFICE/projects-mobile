@@ -33,6 +33,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
@@ -56,9 +58,13 @@ class HtmlTextEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     print('has error $hasError');
     return HtmlEditor(
-      plugins: const [],
       controller: textController ?? HtmlEditorController(),
       htmlToolbarOptions: HtmlToolbarOptions(
+        mediaUploadInterceptor: (file, type) async {
+          final result = await locator<CommentsService>().uploadImages(file);
+          textController!.insertHtml('<img alt="" src="$result">');
+          return false;
+        },
         textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
         defaultToolbarButtons: const [
           StyleButtons(),
@@ -81,7 +87,6 @@ class HtmlTextEditor extends StatelessWidget {
             audio: false,
             table: false,
             hr: false,
-            otherFile: false,
           ),
         ],
       ),

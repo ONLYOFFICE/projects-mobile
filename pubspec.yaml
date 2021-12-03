@@ -91,6 +91,7 @@ dependencies:
   html_editor_enhanced: ^2.4.0+1
   flutter_widget_from_html: ^0.8.2
   collection: ^1.15.0-nullsafety.4
+  webview_cookie_manager: ^2.0.6
 
 dependency_overrides:
   flutter_colorpicker: ^1.0.0

@@ -249,6 +249,9 @@ class CoreApi {
   Future<String> getProjectSecurityInfoUrl() async =>
       '${await getPortalURI()}/api/$version/project/securityinfo';
 
+  Future<String> getUploadImagesUrl() async =>
+      '${await getPortalURI()}/fckuploader.ashx?newEditor=true&esid=projects_comments&CKEditor=commentEditorcommentsObj&CKEditorFuncNum=75&langCode=ru';
+
   Future<dynamic> getRequest(String url) async {
     try {
       debugPrint(url);
