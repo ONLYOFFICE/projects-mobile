@@ -49,6 +49,7 @@ class PortalInputView extends StatelessWidget {
 
   final LoginController controller = Get.find<LoginController>();
   final checkBoxValue = false.obs;
+  final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
   @override
   Widget build(BuildContext context) {
@@ -61,15 +62,14 @@ class PortalInputView extends StatelessWidget {
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: BoxConstraints(
-                        maxWidth: 480, maxHeight: MediaQuery.of(context).size.height),
+                    constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        SizedBox(height: Get.height * 0.165),
+                        SizedBox(height: Get.height * 0.2),
                         const AppIcon(icon: SvgIcons.app_logo),
-                        SizedBox(height: Get.height * 0.044),
+                        SizedBox(height: Get.height * 0.01),
                         Text(tr('appName'),
                             textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
                         SizedBox(height: Get.height * 0.111),
@@ -96,12 +96,14 @@ class PortalInputView extends StatelessWidget {
                           ]),
                           child: WideButton(
                               text: tr('next'),
-                              color: Get.deviceLocale!.languageCode == 'zh' && !checkBoxValue.value
+                              textColor: needAgreement && !checkBoxValue.value
+                                  ? Get.theme.colors().onBackground.withOpacity(0.5)
+                                  : null,
+                              color: needAgreement && !checkBoxValue.value
                                   ? Get.theme.colors().bgDescription
-                                  : Get.theme.colors().primary,
+                                  : null,
                               onPressed: () async {
-                                if (Get.deviceLocale!.languageCode == 'zh' &&
-                                    !checkBoxValue.value) {
+                                if (needAgreement && !checkBoxValue.value) {
                                   MessagesHandler.showSnackBar(
                                       context: context, text: tr('privacyAndTermsFooter.total'));
 
@@ -111,12 +113,11 @@ class PortalInputView extends StatelessWidget {
                                 await controller.getPortalCapabilities();
                               }),
                         ),
-                        const Spacer(),
-                        if (Get.deviceLocale!.languageCode == 'zh')
+                        if (needAgreement)
                           PrivacyAndTermsFooter.withCheckbox(checkBoxValue: checkBoxValue)
                         else
-                          PrivacyAndTermsFooter(),
-                        const SizedBox(height: 36),
+                          const Spacer(),
+                        if (needAgreement) const Spacer() else PrivacyAndTermsFooter()
                       ],
                     ),
                   ),
