@@ -36,6 +36,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -47,6 +48,8 @@ class PortalInputView extends StatelessWidget {
   PortalInputView({Key key}) : super(key: key);
 
   final LoginController controller = Get.find<LoginController>();
+  final checkBoxValue = false.obs;
+  final needAgreement = Get.deviceLocale.languageCode == 'zh';
 
   @override
   Widget build(BuildContext context) {
@@ -60,13 +63,14 @@ class PortalInputView extends StatelessWidget {
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: const BoxConstraints(maxWidth: 480),
+                    constraints:
+                        BoxConstraints(maxWidth: 480, maxHeight: Get.height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
-                        SizedBox(height: Get.height * 0.165),
+                        SizedBox(height: Get.height * 0.2),
                         AppIcon(icon: SvgIcons.app_logo),
-                        SizedBox(height: Get.height * 0.044),
+                        SizedBox(height: Get.height * 0.01),
                         Text(tr('appName'),
                             textAlign: TextAlign.center,
                             style: TextStyleHelper.headline6()),
@@ -99,14 +103,37 @@ class PortalInputView extends StatelessWidget {
                                     .withOpacity(0.04)),
                           ]),
                           child: WideButton(
-                            text: tr('next'),
-                            onPressed: () async =>
-                                await controller.getPortalCapabilities(),
-                          ),
+                              text: tr('next'),
+                              textColor: needAgreement && !checkBoxValue.value
+                                  ? Get.theme
+                                      .colors()
+                                      .onBackground
+                                      .withOpacity(0.5)
+                                  : null,
+                              color: needAgreement && !checkBoxValue.value
+                                  ? Get.theme.colors().bgDescription
+                                  : null,
+                              onPressed: () async {
+                                if (needAgreement && !checkBoxValue.value) {
+                                  MessagesHandler.showSnackBar(
+                                      context: context,
+                                      text: tr('privacyAndTermsFooter.total'));
+
+                                  return;
+                                }
+                                checkBoxValue.value = false;
+                                await controller.getPortalCapabilities();
+                              }),
                         ),
-                        SizedBox(height: Get.height * 0.222),
-                        const PrivacyAndTermsFooter(),
-                        const SizedBox(height: 36),
+                        if (needAgreement)
+                          PrivacyAndTermsFooter.withCheckbox(
+                              checkBoxValue: checkBoxValue)
+                        else
+                          const Spacer(),
+                        if (needAgreement)
+                          const Spacer()
+                        else
+                          PrivacyAndTermsFooter()
                       ],
                     ),
                   ),

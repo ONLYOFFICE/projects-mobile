@@ -137,7 +137,7 @@ class LoginView extends StatelessWidget {
                       //         capabilities: controller.capabilities.providers)
                       //     : const SizedBox(height: 15.0),
                       SizedBox(height: Get.height * 0.18),
-                      const PrivacyAndTermsFooter(),
+                      PrivacyAndTermsFooter(),
                     ],
                   ),
                 ),

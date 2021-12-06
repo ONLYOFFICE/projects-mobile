@@ -40,22 +40,36 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyAndTermsFooter extends StatelessWidget {
-  const PrivacyAndTermsFooter({
+  PrivacyAndTermsFooter({
     Key key,
   }) : super(key: key);
 
+  PrivacyAndTermsFooter.withCheckbox({
+    Key key,
+    this.checkBoxValue,
+  }) : super(key: key);
+
+  RxBool checkBoxValue;
+
   @override
   Widget build(BuildContext context) {
+    final needAgreement =
+        Get.deviceLocale.languageCode == 'zh' && checkBoxValue != null;
+
     RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
     final textTermsOfService =
         tr('privacyAndTermsFooter.termsOfServiceWithLink');
-    final beforeText =
-        fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
-    final betweenText = fullText.substring(
-        fullText.indexOf(textPrivacyPolicy) + textPrivacyPolicy.length,
-        fullText.indexOf(textTermsOfService));
+
+    final beforeText = needAgreement
+        ? tr('privacyAndTermsAgreement.beforeText')
+        : fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
+    final betweenText = needAgreement
+        ? tr('privacyAndTermsAgreement.betweenText')
+        : fullText.substring(
+            fullText.indexOf(textPrivacyPolicy) + textPrivacyPolicy.length,
+            fullText.indexOf(textTermsOfService));
     final afterText = fullText.substring(
         fullText.indexOf(textTermsOfService) + textTermsOfService.length);
 
@@ -87,18 +101,40 @@ class PrivacyAndTermsFooter extends StatelessWidget {
           );
         },
     );
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        style: TextStyleHelper.body2(
-          color: Get.theme.colors().onSurface.withOpacity(0.6),
-        ),
+    return Container(
+      margin: const EdgeInsets.only(top: 16, bottom: 36),
+      child: Row(
         children: [
-          TextSpan(text: beforeText),
-          textSpanPrivacyPolicy,
-          TextSpan(text: betweenText),
-          textSpanTermsOfService,
-          TextSpan(text: afterText),
+          if (needAgreement)
+            Obx(
+              () => Checkbox(
+                activeColor: Get.theme.colors().primary,
+                value: checkBoxValue.value,
+                onChanged: (bool value) {
+                  checkBoxValue.value = value ?? false;
+                },
+              ),
+            ),
+          Expanded(
+            child: SizedBox(
+              width: double.infinity,
+              child: RichText(
+                textAlign: needAgreement ? TextAlign.left : TextAlign.center,
+                text: TextSpan(
+                  style: TextStyleHelper.body2(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                  ),
+                  children: [
+                    TextSpan(text: beforeText),
+                    textSpanPrivacyPolicy,
+                    TextSpan(text: betweenText),
+                    textSpanTermsOfService,
+                    TextSpan(text: afterText),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
