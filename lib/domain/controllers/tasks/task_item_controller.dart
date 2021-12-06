@@ -249,9 +249,9 @@ class TaskItemController extends GetxController {
   Future<void> openStatuses(BuildContext context) async {
     if (task.value.canEdit! && isStatusLoaded.isTrue) {
       if (Get.find<PlatformController>().isMobile) {
-        await showsStatusesBS(context: context, taskItemController: this);
+         showsStatusesBS(context: context, taskItemController: this);
       } else {
-        await showsStatusesPM(context: context, taskItemController: this);
+        showsStatusesPM(context: context, taskItemController: this);
       }
     }
   }

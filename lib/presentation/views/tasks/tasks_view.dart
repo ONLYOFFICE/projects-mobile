@@ -206,11 +206,11 @@ class TasksHeader extends StatelessWidget {
 
 class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _TasksSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final TasksController controller;
 
   List<SortTile> _getSortTile() {
     return [
@@ -237,7 +237,7 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
     return TextButton(
       onPressed: () async {
         if (Get.find<PlatformController>().isMobile) {
-          var options = Column(
+          final options = Column(
             children: [
               const SizedBox(height: 14.5),
               const Divider(height: 9, thickness: 1),

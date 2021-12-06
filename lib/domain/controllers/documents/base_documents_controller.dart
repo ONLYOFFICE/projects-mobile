@@ -30,14 +30,11 @@
  *
  */
 
-import 'package:get/get.dart';
+import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 
-abstract class BaseController extends GetxController {
-  late String screenName;
-  RxList<dynamic> get itemList;
-  final hasFilters = false.obs;
+abstract class BaseDocumentsController {
+  DocumentsSortController get sortController;
 
-  final showAll = false.obs;
-  final expandedCardView = true.obs;
-  void showSearch() {}
+  PaginationController get paginationController;
 }

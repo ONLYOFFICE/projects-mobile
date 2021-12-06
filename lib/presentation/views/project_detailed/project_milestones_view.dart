@@ -185,8 +185,8 @@ class Header extends StatelessWidget {
 class _ProjectMilestonesSortButton extends StatelessWidget
     with ShowPopupMenuMixin {
   const _ProjectMilestonesSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final MilestonesDataSource controller;

@@ -191,11 +191,11 @@ class Header extends StatelessWidget {
 
 class _ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _ProjectTasksSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final ProjectTasksController controller;
 
   List<SortTile> _getSortTile() {
     return [

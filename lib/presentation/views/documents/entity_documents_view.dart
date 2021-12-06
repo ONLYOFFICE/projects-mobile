@@ -217,11 +217,11 @@ class _DocsTitle extends StatelessWidget {
 class _ProjectDocumentsSortButton extends StatelessWidget
     with ShowPopupMenuMixin {
   const _ProjectDocumentsSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final DocumentsController controller;
 
   @override
   Widget build(BuildContext context) {

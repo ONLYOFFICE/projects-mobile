@@ -214,7 +214,7 @@ class Bottom extends StatelessWidget {
                 Obx(
                   () => Text(
                     tr('total', args: [
-                      controller.paginationController?.total?.value.toString()
+                      controller.paginationController.total.value.toString()
                     ]),
                     style: TextStyleHelper.body2(
                       color: Get.theme.colors().onSurface.withOpacity(0.6),
@@ -232,11 +232,11 @@ class Bottom extends StatelessWidget {
 
 class _ProjectsSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _ProjectsSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final ProjectsController controller;
 
   List<SortTile> _getSortTile() {
     return [

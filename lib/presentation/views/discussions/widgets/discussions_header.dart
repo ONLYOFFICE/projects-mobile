@@ -44,8 +44,9 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DiscussionsHeader extends StatelessWidget {
-  final DiscussionsController? controller;
-  DiscussionsHeader({Key? key, this.controller}) : super(key: key);
+  final DiscussionsController controller;
+
+  DiscussionsHeader({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +64,7 @@ class DiscussionsHeader extends StatelessWidget {
             Obx(
               () => Text(
                 tr('total', args: [
-                  controller.paginationController.total.value.toString()
+                  controller.paginationController!.total.value.toString()
                 ]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
@@ -79,8 +80,8 @@ class DiscussionsHeader extends StatelessWidget {
 
 class _DiscussionSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _DiscussionSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final DiscussionsController controller;
@@ -102,7 +103,7 @@ class _DiscussionSortButton extends StatelessWidget with ShowPopupMenuMixin {
     return TextButton(
       onPressed: () async {
         if (Get.find<PlatformController>().isMobile) {
-          var options = Column(
+          final options = Column(
             children: [
               const SizedBox(height: 14.5),
               const Divider(height: 9, thickness: 1),

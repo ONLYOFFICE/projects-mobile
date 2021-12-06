@@ -35,6 +35,7 @@ import 'dart:convert';
 
 import 'package:event_hub/event_hub.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -53,7 +54,8 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsController extends GetxController {
+class DocumentsController extends GetxController
+    implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 

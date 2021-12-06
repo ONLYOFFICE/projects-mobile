@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
@@ -47,7 +48,8 @@ void showsStatusesBS(
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight: _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight:
+        _getInitialSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
@@ -109,9 +111,10 @@ void showsStatusesBS(
 }
 
 Future<void> showsStatusesPM(
-    {context, TaskItemController taskItemController}) async {
-  var _statusesController = Get.find<TaskStatusesController>();
-  var items = <PopupMenuEntry<dynamic>>[
+    {required BuildContext context,
+    required TaskItemController taskItemController}) async {
+  final _statusesController = Get.find<TaskStatusesController>();
+  final items = <PopupMenuEntry<dynamic>>[
     for (var i = 0; i < _statusesController.statuses.length; i++)
       PopupMenuItem(
         height: 36,
@@ -120,13 +123,13 @@ Future<void> showsStatusesPM(
           child: InkWell(
             onTap: () async {
               await taskItemController.tryChangingStatus(
-                  id: taskItemController.task.value.id,
-                  newStatusId: _statusesController.statuses[i].id,
-                  newStatusType: _statusesController.statuses[i].statusType);
+                  id: taskItemController.task.value.id!,
+                  newStatusId: _statusesController.statuses[i].id!,
+                  newStatusType: _statusesController.statuses[i].statusType!);
               Get.back();
             },
             child: StatusTileTablet(
-                title: _statusesController.statuses[i].title,
+                title: _statusesController.statuses[i].title!,
                 icon: StatusIcon(
                   canEditTask: taskItemController.task.value.canEdit,
                   status: _statusesController.statuses[i],
@@ -139,9 +142,9 @@ Future<void> showsStatusesPM(
   ];
 
 // calculate the menu position, ofsset dy: 50
-  final offset = const Offset(0, 50);
+  const offset = Offset(0, 50);
   final button = context.findRenderObject() as RenderBox;
-  final overlay = Get.overlayContext.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
   final position = RelativeRect.fromRect(
     Rect.fromPoints(
       button.localToGlobal(
@@ -159,7 +162,7 @@ Future<void> showsStatusesPM(
   await showMenu(context: context, position: position, items: items);
 }
 
-double _getInititalSize({required int statusCount}) {
+double _getInitialSize({required int statusCount}) {
   final size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

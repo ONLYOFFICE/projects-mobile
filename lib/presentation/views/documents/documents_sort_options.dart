@@ -32,6 +32,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:projects/domain/controllers/base/base_sort_controller.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsSortOption extends StatelessWidget {
@@ -40,7 +42,7 @@ class DocumentsSortOption extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final dynamic controller;
+  final BaseDocumentsController controller;
 
   List<SortTile> getSortTile() {
     return [

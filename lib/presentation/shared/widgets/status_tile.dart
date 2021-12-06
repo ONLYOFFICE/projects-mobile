@@ -91,7 +91,10 @@ class StatusTileTablet extends StatelessWidget {
   final bool selected;
 
   const StatusTileTablet(
-      {Key key, this.icon, this.title, this.selected = false})
+      {Key? key,
+      required this.icon,
+      required this.title,
+      this.selected = false})
       : super(key: key);
 
   @override

@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
@@ -45,7 +46,7 @@ import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:readmore/readmore.dart';
 
 class ProjectOverview extends StatelessWidget {
-  final ProjectDetailsController? projectController;
+  final ProjectDetailsController projectController;
   final TabController? tabController;
 
   const ProjectOverview({
@@ -145,14 +146,15 @@ class ProjectOverview extends StatelessWidget {
 }
 
 class ProjectStatusButton extends StatelessWidget {
-  final projectController;
+  final BaseProjectEditorController projectController;
 
-  const ProjectStatusButton({Key? key, required this.projectController}) : super(key: key);
+  const ProjectStatusButton({Key? key, required this.projectController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-   final bool canEdit = projectController.projectData.canEdit;
+    final bool canEdit = projectController.projectData!.canEdit!;
     return OutlinedButton(
       onPressed: canEdit
           ? () => {

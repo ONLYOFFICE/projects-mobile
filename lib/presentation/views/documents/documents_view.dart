@@ -38,6 +38,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -287,7 +288,8 @@ class DocsTitle extends StatelessWidget {
 
 class DocsBottom extends StatelessWidget {
   DocsBottom({Key? key, required this.controller}) : super(key: key);
-  final controller;
+  final BaseDocumentsController controller;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -299,21 +301,19 @@ class DocsBottom extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _DocumentsSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    Obx(
-                      () => Text(
-                        tr('total', args: [
-                          controller.paginationController.total.value.toString()
-                        ]),
-                        style: TextStyleHelper.body2(
-                          color: Get.theme.colors().onSurface.withOpacity(0.6),
-                        ),
+              Row(
+                children: <Widget>[
+                  Obx(
+                    () => Text(
+                      tr('total', args: [
+                        controller.paginationController.total.value.toString()
+                      ]),
+                      style: TextStyleHelper.body2(
+                        color: Get.theme.colors().onSurface.withOpacity(0.6),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -325,11 +325,11 @@ class DocsBottom extends StatelessWidget {
 
 class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _DocumentsSortButton({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final BaseDocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +381,7 @@ class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
           children: <Widget>[
             Obx(
               () => Text(
-                controller.sortController.currentSortTitle.value as String,
+                controller.sortController.currentSortTitle.value,
                 style: TextStyleHelper.projectsSorting
                     .copyWith(color: Get.theme.colors().primary),
               ),

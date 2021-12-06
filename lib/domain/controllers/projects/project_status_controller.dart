@@ -39,11 +39,12 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectStatusesController extends GetxController {
-  RxList statuses = <int>[0, 1, 2].obs;
+  RxList<int> statuses = <int>[0, 1, 2].obs;
   RxList statusImagesDecoded = <String>[].obs;
   RxBool loaded = false.obs;
 
   String getStatusName(int value) => ProjectStatus.toName(value);
+
   String getStatusImageString(int value) => ProjectStatus.toImageString(value);
 
   Future<bool> updateStatus(

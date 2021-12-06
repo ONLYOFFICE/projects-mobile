@@ -38,7 +38,6 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 Future<void> showsDiscussionStatusesBS({
@@ -110,10 +109,10 @@ Future<void> showsDiscussionStatusesBS({
 }
 
 Future<void> showsDiscussionStatusesPM({
-  context,
-  DiscussionItemController controller,
+  required BuildContext context,
+  required DiscussionItemController controller,
 }) async {
-  var items = <PopupMenuEntry<dynamic>>[
+  final items = <PopupMenuEntry<dynamic>>[
     PopupMenuItem(
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
@@ -159,9 +158,9 @@ Future<void> showsDiscussionStatusesPM({
   ];
 
 // calculate the menu position, ofsset dy: 50
-  final offset = const Offset(0, 50);
+  const offset = Offset(0, 50);
   final button = context.findRenderObject() as RenderBox;
-  final overlay = Get.overlayContext.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
   final position = RelativeRect.fromRect(
     Rect.fromPoints(
       button.localToGlobal(

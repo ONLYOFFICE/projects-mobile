@@ -39,6 +39,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -46,7 +47,8 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsMoveOrCopyController extends GetxController {
+class DocumentsMoveOrCopyController extends GetxController
+    implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
 
   RxBool hasFilters = false.obs;

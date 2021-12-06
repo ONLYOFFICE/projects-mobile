@@ -35,6 +35,7 @@ import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -119,5 +120,15 @@ class NewProjectController extends BaseProjectEditorController {
     // ignore: unawaited_futures
     Get.find<NavigationController>()
         .toScreen(const TagsSelectionView(), arguments: {'controller': this});
+  }
+
+  @override
+  // TODO: implement projectData
+  ProjectDetailed? get projectData => throw UnimplementedError();
+
+  @override
+  Future<bool> updateStatus({int? newStatusId}) {
+    // TODO: implement updateStatus
+    throw UnimplementedError();
   }
 }
