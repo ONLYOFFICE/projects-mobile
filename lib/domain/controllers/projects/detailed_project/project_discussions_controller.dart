@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -66,17 +67,26 @@ class ProjectDiscussionsController extends GetxController {
         () async => await loadProjectDiscussions();
 
     paginationController.loadDelegate = () async => await _getDiscussions();
-    paginationController.refreshDelegate =
-        () async => await _getDiscussions(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
   }
 
-  void setup(ProjectDetailed projectDetailed) {
+  void setup(ProjectDetailed projectDetailed) async {
     _projectDetailed = projectDetailed;
     projectId = projectDetailed.id;
     projectTitle = projectDetailed.title;
-
     fabIsVisible.value = _canCreate();
+
+    await loadProjectDiscussions();
+  }
+
+  Future<void> refreshData() async {
+    loaded.value = false;
+
+    //await _getDiscussions(needToClear: true);
+    locator<EventHub>().fire('needToRefreshDetails', _projectDetailed.id);
+
+    loaded.value = true;
   }
 
   bool _canCreate() => _projectDetailed.security['canCreateMessage'];
@@ -85,23 +95,27 @@ class ProjectDiscussionsController extends GetxController {
 
   Future loadProjectDiscussions() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
     await _getDiscussions(needToClear: true);
+
     loaded.value = true;
   }
 
-  Future _getDiscussions({needToClear = false}) async {
+  Future<bool> _getDiscussions({needToClear = false}) async {
     var result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: projectId.toString(),
     );
+    if (result == null) return Future.value(false);
+
     paginationController.total.value = result.total;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result.response);
+
+    return Future.value(true);
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()

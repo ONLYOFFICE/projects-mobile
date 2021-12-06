@@ -68,9 +68,18 @@ class TaskItemController extends GetxController {
 
   var loaded = false.obs;
   var isStatusLoaded = false.obs;
-  var refreshController = RefreshController();
-  var subtaskRefreshController = RefreshController();
-  var commentsRefreshController = RefreshController();
+
+  RefreshController get refreshController {
+    return RefreshController();
+  }
+
+  RefreshController get subtaskRefreshController {
+    return RefreshController();
+  }
+
+  RefreshController get commentsRefreshController {
+    return RefreshController();
+  }
 
   set setLoaded(bool value) => loaded.value = value;
 

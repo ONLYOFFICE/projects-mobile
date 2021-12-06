@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -66,21 +67,31 @@ class ProjectTasksController extends GetxController {
     _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate =
-        () async => await _getTasks(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
   }
 
   RxList get itemList => paginationController.data;
 
-  Future loadTasks() async {
+  Future<void> refreshData() async {
     loaded.value = false;
-    paginationController.startIndex = 0;
-    await _getTasks(needToClear: true);
+
+    //await _getTasks(needToClear: true);
+    locator<EventHub>().fire('needToRefreshDetails', _projectDetailed.id);
+
     loaded.value = true;
   }
 
-  Future _getTasks({needToClear = false}) async {
+  Future loadTasks() async {
+    loaded.value = false;
+
+    paginationController.startIndex = 0;
+    await _getTasks(needToClear: true);
+
+    loaded.value = true;
+  }
+
+  Future<bool> _getTasks({needToClear = false}) async {
     var result = await _api.getTasksByParams(
         startIndex: paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
@@ -91,11 +102,14 @@ class ProjectTasksController extends GetxController {
         milestoneFilter: _filterController.milestoneFilter,
         deadlineFilter: _filterController.deadlineFilter,
         projectId: _projectId.toString());
+
+    if (result == null) return Future.value(false);
+
     paginationController.total.value = result.total;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result.response);
+
+    return Future.value(true);
   }
 
   Future<void> setup(ProjectDetailed projectDetailed) async {
@@ -103,11 +117,9 @@ class ProjectTasksController extends GetxController {
     _projectDetailed = projectDetailed;
     _projectId = projectDetailed.id;
     _filterController.projectId = _projectId.toString();
-
-// ignore: unawaited_futures
-    loadTasks();
-
     fabIsVisible.value = _canCreate();
+
+    await loadTasks();
   }
 
   bool _canCreate() => _projectDetailed.security['canCreateTask'];

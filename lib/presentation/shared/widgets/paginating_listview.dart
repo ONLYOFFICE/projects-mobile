@@ -31,6 +31,7 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationListView<T> extends StatelessWidget {
@@ -40,7 +41,7 @@ class PaginationListView<T> extends StatelessWidget {
     @required this.child,
   }) : super(key: key);
 
-  final paginationController;
+  final PaginationController paginationController;
   final child;
 
   @override

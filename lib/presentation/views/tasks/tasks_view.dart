@@ -134,36 +134,39 @@ class TasksView extends StatelessWidget {
         () {
           if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
             return const ListLoadingSkeleton();
-          if (controller.loaded.value &&
-              controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated')));
-          }
-          if (controller.loaded.value &&
-              controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value) {
-            return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-            );
-          }
+
           return PaginationListView(
-            paginationController: controller.paginationController,
-            child: ListView.builder(
-              // controller: controller.scrollController,
-              controller: scrollController,
-              itemCount: controller.paginationController.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return TaskCell(
-                    task: controller.paginationController.data[index]);
-              },
-            ),
-          );
+              paginationController: controller.paginationController,
+              child: (() {
+                if (controller.loaded.value &&
+                    controller.taskStatusesLoaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    !controller.filterController.hasFilters.value)
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.task_not_created,
+                          text: tr('noTasksCreated')));
+
+                if (controller.loaded.value &&
+                    controller.taskStatusesLoaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    controller.filterController.hasFilters.value) {
+                  return Center(
+                    child: EmptyScreen(
+                        icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                  );
+                }
+                if (controller.loaded.value &&
+                    controller.paginationController.data.isNotEmpty)
+                  return ListView.builder(
+                    controller: scrollController,
+                    itemCount: controller.paginationController.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return TaskCell(
+                          task: controller.paginationController.data[index]);
+                    },
+                  );
+              }()));
         },
       ),
     );

@@ -80,12 +80,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   bool markedToDelete = false;
 
-  final Rx<ProjectDetailed> _projectDetailed = ProjectDetailed().obs;
-
-  StreamSubscription _subscription;
-  StreamSubscription _projectDetailedsubscription;
-
+  final _projectDetailed = ProjectDetailed().obs;
   ProjectDetailed get projectData => _projectDetailed.value;
+
+  StreamSubscription _refreshProjectsSubscription;
+  StreamSubscription _refreshDetailsSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -95,68 +94,84 @@ class ProjectDetailsController extends BaseProjectEditorController {
               PortalUserItemController(portalUser: _userController.user),
         });
 
-    _subscription =
-        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (markedToDelete) {
-        _subscription.cancel();
-        return;
-      }
+    _refreshProjectsSubscription = locator<EventHub>().on(
+      'needToRefreshProjects',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshProjectsSubscription.cancel();
+          return;
+        }
 
-      refreshData();
-    });
+        if (data != _projectDetailed.value.id) return;
+
+        refreshData();
+      },
+    );
+
+    _refreshDetailsSubscription = locator<EventHub>().on(
+      'needToRefreshDetails',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshDetailsSubscription.cancel();
+          return;
+        }
+
+        if (data != _projectDetailed.value.id) return;
+
+        refreshProjectDetails();
+      },
+    );
   }
 
   @override
   void onClose() {
-    _subscription.cancel();
-    _projectDetailedsubscription.cancel();
+    _refreshProjectsSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
     super.onClose();
-  }
-
-  void addProjectDetailsListeners(void Function() listenerFunction) {
-    _projectDetailedsubscription =
-        _projectDetailed.listen((p0) => listenerFunction());
   }
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<void> setup(projectDetailed) async {
-    _projectDetailed.value = projectDetailed;
+  Future<bool> refreshProjectDetails() async {
+    var ret = await _projectService.getProjectById(
+        projectId: _projectDetailed.value.id);
 
+    if (ret != null) _projectDetailed.value = ret;
     await fillProjectInfo();
-
-    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
-
-    creationDateText.value =
-        formatter.format(DateTime.parse(_projectDetailed.value.created));
-
-    await _projectService
-        .getProjectById(projectId: _projectDetailed.value.id)
-        .then((value) => {
-              _projectDetailed.value = value,
-              fillProjectInfo(),
-              if (value?.tags != null)
-                {
-                  tags.addAll(value.tags),
-                  tagsText.value = value.tags.join(', '),
-                }
-            });
+    if (ret?.tags != null) {
+      tags.addAll(ret.tags);
+      tagsText.value = ret.tags.join(', ');
+    }
 
     tasksCount.value = _projectDetailed.value.taskCountTotal;
 
+    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
+    creationDateText.value =
+        formatter.format(DateTime.parse(_projectDetailed.value.created));
+
+    return Future.value(true);
+  }
+
+  Future<void> setup(projectDetailed) async {
+    _projectDetailed.value = projectDetailed;
+
+    await refreshProjectDetails();
+
     await _docApi
         .getFilesByParams(folderId: _projectDetailed.value.projectFolder)
-        .then((value) => docsCount.value = value.files.length);
+        .then(
+      (value) {
+        if (value != null) docsCount.value = value.files.length;
+      },
+    );
 
     await locator<MilestoneService>()
-        .milestonesByFilter(
-          projectId: _projectDetailed.value.id.toString(),
-        )
-        .then((value) => {
-              if (value != null) {milestoneCount.value = value.length}
-            });
+        .milestonesByFilter(projectId: _projectDetailed.value.id.toString())
+        .then((value) {
+      if (value != null) milestoneCount.value = value.length;
+    });
   }
 
   Future<void> fillProjectInfo() async {
@@ -184,11 +199,10 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed.value = await _projectService.getProjectById(
-        projectId: _projectDetailed.value.id);
-    loaded.value = true;
 
     await setup(_projectDetailed.value);
+
+    loaded.value = true;
   }
 
   Future manageTeamMembers() async {
