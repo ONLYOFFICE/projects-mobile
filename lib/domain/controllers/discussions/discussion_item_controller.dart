@@ -40,10 +40,8 @@ import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/new_comment/new_discussion_comment_controller.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
-import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
@@ -59,7 +57,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 class DiscussionItemController extends GetxController {
   final _api = locator<DiscussionItemService>();
 
-  var discussion = Discussion().obs;
+  final Rx<Discussion> discussion = Discussion().obs;
   var status = 0.obs;
 
   var loaded = true.obs;
@@ -188,15 +186,10 @@ class DiscussionItemController extends GetxController {
             Get.back();
             MessagesHandler.showSnackBar(
                 context: context, text: tr('discussionDeleted'));
-            await Get.find<DiscussionsController>().loadDiscussions();
-            //TODO refactoring needed
-            try {
-              locator<EventHub>().fire('needToRefreshProjects');
-              // ignore: unawaited_futures
-              Get.find<ProjectDiscussionsController>().loadProjectDiscussions();
-            } catch (e) {
-              printError(e);
-            }
+
+            locator<EventHub>()
+                .fire('needToRefreshDetails', [discussion.value.project.id]);
+            locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
           }
         } catch (e) {
           printError(e);

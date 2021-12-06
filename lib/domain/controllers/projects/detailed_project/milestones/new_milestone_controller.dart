@@ -228,7 +228,7 @@ class NewMilestoneController extends GetxController {
     if (success) {
       MessagesHandler.showSnackBar(
           context: context, text: tr('milestoneCreated'));
-      locator<EventHub>().fire('needToRefreshProjects');
+      locator<EventHub>().fire('needToRefreshMilestones', [_selectedProjectId]);
       Get.back();
     }
   }

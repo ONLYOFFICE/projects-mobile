@@ -176,7 +176,7 @@ class ProjectEditController extends BaseProjectEditorController {
         project: newProject, projectId: _projectDetailed.id);
     if (success) {
       {
-        locator<EventHub>().fire('needToRefreshProjects');
+        locator<EventHub>().fire('needToRefreshProjects', ['all']);
       }
 
       Get.back();

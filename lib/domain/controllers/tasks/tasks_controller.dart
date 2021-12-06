@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -60,6 +62,7 @@ class TasksController extends BaseController {
   final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
   final loaded = false.obs;
+
   final taskStatusesLoaded = false.obs;
   TasksSortController get sortController => _sortController;
 
@@ -68,6 +71,9 @@ class TasksController extends BaseController {
 
   var fabIsVisible = false.obs;
   var _withFAB = true;
+
+  StreamSubscription _visibilityChangedSubscription;
+  StreamSubscription _refreshTasksSubscription;
 
   @override
   Future<void> onInit() async {
@@ -96,15 +102,24 @@ class TasksController extends BaseController {
           if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
         });
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription = locator<EventHub>()
+        .on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data ? false : await getFabVisibility();
     });
 
-    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription =
+        locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
     });
 
     loaded.value = true;
+  }
+
+  @override
+  void onClose() {
+    _visibilityChangedSubscription.cancel();
+    _refreshTasksSubscription.cancel();
+    super.onClose();
   }
 
   @override
@@ -167,6 +182,7 @@ class TasksController extends BaseController {
     if (!_withFAB) return false;
     var fabVisibility = false;
     await _userController.getUserInfo();
+    if (_userController.user == null) return false;
     var selfUser = _userController.user;
     if (selfUser.isAdmin ||
         selfUser.isOwner ||

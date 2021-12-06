@@ -247,7 +247,6 @@ void _onSelected(value, controller, context) async {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
-        // 'Are you sure you want to delete these project?\nNote: this action cannot be undone.',
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
@@ -259,7 +258,7 @@ void _onSelected(value, controller, context) async {
               context: context,
               text: tr('projectDeleted'),
             );
-            locator<EventHub>().fire('needToRefreshProjects');
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
           } else {
             print('ERROR');
           }

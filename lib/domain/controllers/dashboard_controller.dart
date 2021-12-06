@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
@@ -48,13 +50,27 @@ class DashboardController extends GetxController {
   final tasksWithPresets = locator<TasksWithPresets>();
 
   var screenName = tr('dashboard').obs;
+
   TasksController _myTaskController;
+  TasksController get myTaskController => _myTaskController;
+
   TasksController _upcomingTaskscontroller;
+  TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
 
   ProjectsController _myProjectsController;
+  ProjectsController get myProjectsController => _myProjectsController;
+
   ProjectsController _folowedProjectsController;
+  ProjectsController get folowedProjectsController =>
+      _folowedProjectsController;
+
   ProjectsController _activeProjectsController;
+  ProjectsController get activeProjectsController => _activeProjectsController;
+
   var scrollController = ScrollController();
+
+  StreamSubscription _refreshProjectsSubscription;
+  StreamSubscription _refreshTasksSubscription;
 
   Future setup() async {
     _myTaskController = tasksWithPresets.myTasksController;
@@ -70,15 +86,22 @@ class DashboardController extends GetxController {
     folowedProjectsController.screenName = tr('projectsIFolow');
     activeProjectsController.screenName = tr('activeProjects');
 
-    refreshController = RefreshController();
-
-    locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      refreshProjectsData();
+    _refreshProjectsSubscription =
+        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data.any((elem) => elem == 'all')) refreshProjectsData();
     });
 
-    locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription =
+        locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
     });
+  }
+
+  @override
+  void onClose() {
+    _refreshProjectsSubscription.cancel();
+    _refreshTasksSubscription.cancel();
+    super.onClose();
   }
 
   void onRefresh() async {
@@ -119,12 +142,4 @@ class DashboardController extends GetxController {
     folowedProjectsController.refreshData();
     activeProjectsController.refreshData();
   }
-
-  TasksController get myTaskController => _myTaskController;
-  TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
-
-  ProjectsController get myProjectsController => _myProjectsController;
-  ProjectsController get folowedProjectsController =>
-      _folowedProjectsController;
-  ProjectsController get activeProjectsController => _activeProjectsController;
 }

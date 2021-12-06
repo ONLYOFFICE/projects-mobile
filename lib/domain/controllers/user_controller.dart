@@ -60,7 +60,6 @@ class UserController extends GetxController {
   Future getSecurityInfo() async {
     var ret = await lock.synchronized(() async {
       securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
-
       loaded.value = user != null;
       return Future.value(loaded.value);
     });

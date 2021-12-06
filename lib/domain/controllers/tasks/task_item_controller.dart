@@ -105,21 +105,33 @@ class TaskItemController extends GetxController {
 
   var commentsListController = ScrollController();
 
+  StreamSubscription _refreshParentTaskSubscription;
+  StreamSubscription _scrollToLastCommentSubscription;
+
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
-    locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+    _refreshParentTaskSubscription =
+        locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         var showLoading = (data as List).length > 1 ? data[1] : false;
         await reloadTask(showLoading: showLoading);
       }
     });
 
-    locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+    _scrollToLastCommentSubscription =
+        locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         scrollToLastComment();
       }
     });
+  }
+
+  @override
+  void onClose() {
+    _refreshParentTaskSubscription.cancel();
+    _scrollToLastCommentSubscription.cancel();
+    super.onClose();
   }
 
   void scrollToLastComment() {
