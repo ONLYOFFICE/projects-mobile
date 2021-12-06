@@ -138,43 +138,47 @@ class DiscussionsList extends StatelessWidget {
     } catch (_) {}
 
     return Obx(() {
-      if (controller.loaded == false) {
+      if (!(controller.loaded.value as bool)) {
         return const ListLoadingSkeleton();
-      } else {
-        if (controller.paginationController.data.isEmpty as bool && hasFilters!)
-          return Center(
-            child: EmptyScreen(
-              icon: SvgIcons.not_found,
-              text: tr('noDiscussionsMatching'),
-            ),
-          );
-
-        if (controller.paginationController.data.isEmpty as bool)
-          return Center(
-            child: EmptyScreen(
-              icon: SvgIcons.comments_not_created,
-              text: tr('noDiscussionsCreated'),
-            ),
-          );
-
-        return PaginationListView(
-          paginationController: controller.paginationController as PaginationController,
-          child: ListView.separated(
-            itemCount: controller.paginationController.data.length as int,
-            padding: const EdgeInsets.only(bottom: 65),
-            controller: scrollController,
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 12);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return DiscussionTile(
-                discussion: controller.paginationController.data[index] as Discussion,
-                onTap: () => controller.toDetailed(controller.paginationController.data[index]),
-              );
-            },
-          ),
-        );
       }
+      return PaginationListView(
+          paginationController: controller.paginationController as PaginationController,
+          child: () {
+            if (controller.loaded.value as bool &&
+                controller.paginationController.data.isEmpty as bool &&
+                hasFilters as bool)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.not_found,
+                  text: tr('noDiscussionsMatching'),
+                ),
+              );
+
+            if (controller.loaded.value as bool &&
+                controller.paginationController.data.isEmpty as bool)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.comments_not_created,
+                  text: tr('noDiscussionsCreated'),
+                ),
+              );
+            if (controller.loaded.value as bool &&
+                controller.paginationController.data.isNotEmpty as bool)
+              return ListView.separated(
+                itemCount: controller.paginationController.data.length as int,
+                padding: const EdgeInsets.only(bottom: 65),
+                controller: scrollController,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 12);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return DiscussionTile(
+                    discussion: controller.paginationController.data[index] as Discussion,
+                    onTap: () => controller.toDetailed(controller.paginationController.data[index]),
+                  );
+                },
+              );
+          }() as Widget);
     });
   }
 }

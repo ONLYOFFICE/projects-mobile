@@ -79,8 +79,7 @@ class TasksView extends StatelessWidget {
     final scrollController = ScrollController();
     final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -118,12 +117,10 @@ class TasksView extends StatelessWidget {
               ),
               IconButton(
                 icon: FiltersButton(controler: controller),
-                onPressed: () async => Get.find<NavigationController>()
-                    .toScreen(const TasksFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {
-                      'filterController': controller.filterController
-                    }),
+                onPressed: () async => Get.find<NavigationController>().toScreen(
+                    const TasksFilterScreen(),
+                    preventDuplicates: false,
+                    arguments: {'filterController': controller.filterController}),
               ),
               const SizedBox(width: 4),
             ],
@@ -135,36 +132,35 @@ class TasksView extends StatelessWidget {
         () {
           if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
             return const ListLoadingSkeleton();
-          if (controller.loaded.value &&
-              controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated')));
-          }
-          if (controller.loaded.value &&
-              controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value) {
-            return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-            );
-          }
+
           return PaginationListView(
-            paginationController: controller.paginationController,
-            child: ListView.builder(
-              // controller: controller.scrollController,
-              controller: scrollController,
-              itemCount: controller.paginationController.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return TaskCell(
-                    task: controller.paginationController.data[index]);
-              },
-            ),
-          );
+              paginationController: controller.paginationController,
+              child: () {
+                if (controller.loaded.value &&
+                    controller.taskStatusesLoaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    !controller.filterController.hasFilters.value)
+                  return Center(
+                      child:
+                          EmptyScreen(icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
+
+                if (controller.loaded.value &&
+                    controller.taskStatusesLoaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    controller.filterController.hasFilters.value) {
+                  return Center(
+                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                  );
+                }
+                if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                  return ListView.builder(
+                    controller: scrollController,
+                    itemCount: controller.paginationController.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return TaskCell(task: controller.paginationController.data[index]);
+                    },
+                  );
+              }() as Widget);
         },
       ),
     );
@@ -182,23 +178,12 @@ class TasksHeader extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(
-            sortParameter: 'deadline',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'priority',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'create_on',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'start_date',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'title', sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'sort_order',
-            sortController: controller.sortController),
+        SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+        SortTile(sortParameter: 'priority', sortController: controller.sortController),
+        SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+        SortTile(sortParameter: 'start_date', sortController: controller.sortController),
+        SortTile(sortParameter: 'title', sortController: controller.sortController),
+        SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
         const SizedBox(height: 20)
       ],
     );
@@ -227,8 +212,7 @@ class TasksHeader extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Obx(
-                      () => (controller.sortController.currentSortOrder ==
-                              'ascending')
+                      () => (controller.sortController.currentSortOrder == 'ascending')
                           ? AppIcon(
                               icon: SvgIcons.sorting_4_ascend,
                               color: Get.theme.colors().primary,
@@ -252,9 +236,7 @@ class TasksHeader extends StatelessWidget {
             ),
             Obx(
               () => Text(
-                tr('total', args: [
-                  controller.paginationController.total.value.toString()
-                ]),
+                tr('total', args: [controller.paginationController.total.value.toString()]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),

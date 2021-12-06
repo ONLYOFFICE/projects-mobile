@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -65,19 +66,29 @@ class ProjectDiscussionsController extends GetxController {
     _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
 
     paginationController.loadDelegate = () async => await _getDiscussions();
-    paginationController.refreshDelegate = () async => await _getDiscussions(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
   }
 
-  void setup(ProjectDetailed projectDetailed) {
+  void setup(ProjectDetailed projectDetailed) async {
     _projectDetailed = projectDetailed;
     projectId = projectDetailed.id;
     projectTitle = projectDetailed.title;
+    fabIsVisible.value = _canCreate();
 
-    fabIsVisible.value = _canCreate()!;
+    await loadProjectDiscussions();
   }
 
-  bool? _canCreate() => _projectDetailed.security!['canCreateMessage'];
+  Future<void> refreshData() async {
+    loaded.value = false;
+
+    //await _getDiscussions(needToClear: true);
+    locator<EventHub>().fire('needToRefreshDetails', [_projectDetailed.id]);
+
+    loaded.value = true;
+  }
+
+  bool _canCreate() => _projectDetailed.security!['canCreateMessage'] ?? false;
 
   RxList get itemList => paginationController.data;
 
@@ -97,7 +108,6 @@ class ProjectDiscussionsController extends GetxController {
       sortOrder: _sortController.currentSortOrder,
       projectId: projectId.toString(),
     );
-
     if (result == null) return Future.value(false);
 
     paginationController.total.value = result.total;

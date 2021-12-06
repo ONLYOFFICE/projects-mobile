@@ -61,7 +61,7 @@ class _AppBarMenu extends StatelessWidget {
             ),
           PopupMenuItem(
             value: 'followTask',
-            child: Text(task.isSubscribed! ? tr('unfollowTask') : tr('followTask')),
+            child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
           ),
           if (controller!.canEdit)
             PopupMenuItem(
@@ -114,7 +114,7 @@ void _onSelected(value, TaskItemController controller) async {
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);
           if (result) {
-            locator<EventHub>().fire('needToRefreshProjects');
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
             locator<EventHub>().fire('needToRefreshTasks');
 
             Get.back();

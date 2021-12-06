@@ -43,7 +43,7 @@ import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class DiscussionTile extends StatelessWidget {
-  final Discussion? discussion;
+  final Discussion discussion;
   final Function()? onTap;
   const DiscussionTile({
     Key? key,
@@ -60,14 +60,14 @@ class DiscussionTile extends StatelessWidget {
         child: Row(
           children: [
             _Image(
-              image: discussion!.createdBy!.avatar ??
-                  discussion!.createdBy!.avatarMedium ??
-                  discussion!.createdBy!.avatarSmall,
+              image: discussion.createdBy!.avatar ??
+                  discussion.createdBy!.avatarMedium ??
+                  discussion.createdBy!.avatarSmall,
             ),
             const SizedBox(width: 16),
             _DiscussionInfo(discussion: discussion),
             const SizedBox(width: 11.33),
-            _CommentsCount(commentsCount: discussion!.commentsCount),
+            _CommentsCount(commentsCount: discussion.commentsCount),
           ],
         ),
       ),
@@ -116,21 +116,18 @@ class _DiscussionInfo extends StatelessWidget {
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyleHelper.projectTitle.copyWith(
-              color: discussion!.status == 1
-                  ? Get.theme.colors().onBackground.withOpacity(0.6)
-                  : null,
+              color:
+                  discussion!.status == 1 ? Get.theme.colors().onBackground.withOpacity(0.6) : null,
             ),
           ),
           RichText(
             text: TextSpan(
-              style: TextStyleHelper.caption(
-                  color: Get.theme.colors().onSurface.withOpacity(0.6)),
+              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
               children: [
                 if (discussion!.status == 1)
                   TextSpan(
                       text: '${tr('archived')} • ',
-                      style: TextStyleHelper.status(
-                          color: Get.theme.colors().onBackground)),
+                      style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
                 TextSpan(text: formatedDate(discussion!.created!)),
                 const TextSpan(text: ' • '),
                 TextSpan(
@@ -157,13 +154,10 @@ class _CommentsCount extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        AppIcon(
-            icon: SvgIcons.comments,
-            color: Get.theme.colors().onBackground.withOpacity(0.6)),
+        AppIcon(icon: SvgIcons.comments, color: Get.theme.colors().onBackground.withOpacity(0.6)),
         const SizedBox(width: 5.33),
         Text(commentsCount.toString(),
-            style: TextStyleHelper.body2(
-                color: Get.theme.colors().onBackground.withOpacity(0.6))),
+            style: TextStyleHelper.body2(color: Get.theme.colors().onBackground.withOpacity(0.6))),
       ],
     );
   }

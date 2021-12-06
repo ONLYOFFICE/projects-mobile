@@ -68,9 +68,18 @@ class TaskItemController extends GetxController {
 
   RxBool loaded = false.obs;
   RxBool isStatusLoaded = false.obs;
-  RefreshController refreshController = RefreshController();
-  RefreshController subtaskRefreshController = RefreshController();
-  RefreshController commentsRefreshController = RefreshController();
+
+  RefreshController get refreshController {
+    return RefreshController();
+  }
+
+  RefreshController get subtaskRefreshController {
+    return RefreshController();
+  }
+
+  RefreshController get commentsRefreshController {
+    return RefreshController();
+  }
 
   set setLoaded(bool value) => loaded.value = value;
 
@@ -96,21 +105,33 @@ class TaskItemController extends GetxController {
 
   final commentsListController = ScrollController();
 
+  late StreamSubscription _refreshParentTaskSubscription;
+  late StreamSubscription _scrollToLastCommentSubscription;
+
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
-    locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+    _refreshParentTaskSubscription =
+        locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         final showLoading = data.length > 1 ? data[1] as bool : false;
         await reloadTask(showLoading: showLoading);
       }
     });
 
-    locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+    _scrollToLastCommentSubscription =
+        locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         scrollToLastComment();
       }
     });
+  }
+
+  @override
+  void onClose() {
+    _refreshParentTaskSubscription.cancel();
+    _scrollToLastCommentSubscription.cancel();
+    super.onClose();
   }
 
   void scrollToLastComment() {

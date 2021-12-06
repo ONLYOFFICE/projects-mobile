@@ -317,7 +317,8 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
                           newStatusId: _statusesController.statuses[i],
                         ) as bool;
                         if (success) {
-                          locator<EventHub>().fire('needToRefreshProjects');
+                          locator<EventHub>()
+                              .fire('needToRefreshProjects', ['all']);
                         }
                         Get.back();
                       },
