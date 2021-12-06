@@ -45,7 +45,13 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardController extends GetxController {
-  late RefreshController refreshController;
+  RefreshController _refreshController = RefreshController();
+  RefreshController get refreshController {
+    if (!_refreshController.isLoading && !_refreshController.isRefresh)
+      _refreshController = RefreshController();
+    return _refreshController;
+  }
+
   final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
   final TasksWithPresets tasksWithPresets = locator<TasksWithPresets>();
 
@@ -113,12 +119,12 @@ class DashboardController extends GetxController {
       // ignore: unawaited_futures
       ..getSecurityInfo();
 
-    refreshController.refreshCompleted();
+    _refreshController.refreshCompleted();
   }
 
   void onLoading() async {
     loadContent();
-    refreshController.loadComplete();
+    _refreshController.loadComplete();
   }
 
   void loadContent() {

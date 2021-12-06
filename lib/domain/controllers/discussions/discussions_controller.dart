@@ -96,7 +96,7 @@ class DiscussionsController extends BaseController {
 
     _refreshDiscussionsSubscription =
         locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
-      if (data == 'all') await loadDiscussions();
+      if (data.any((elem) => elem == 'all') as bool) await loadDiscussions();
     });
   }
 

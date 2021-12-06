@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
@@ -77,14 +78,17 @@ class MilestonesDataSource extends GetxController {
     _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
     paginationController.loadDelegate = () async => _getMilestones();
-    paginationController.refreshDelegate = () async => _getMilestones(needToClear: true);
+    paginationController.refreshDelegate = () async => loadMilestones();
     paginationController.pullDownEnabled = true;
   }
 
   Future loadMilestones() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
+    locator<EventHub>().fire('needToRefreshMilestones', ['all']);
+
     loaded.value = true;
   }
 

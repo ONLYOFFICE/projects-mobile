@@ -97,12 +97,11 @@ class TasksController extends BaseController {
     paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
 
-    getFabVisibility().then((value) => fabIsVisible.value = value);
-
     _userController.loaded.listen((_loaded) async =>
         {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription =
+        locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
 

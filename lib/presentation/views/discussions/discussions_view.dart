@@ -132,9 +132,9 @@ class DiscussionsList extends StatelessWidget {
   Widget build(BuildContext context) {
     // a temporary solution for the discussion page in projects
     // where there are no filters yet
-    bool? hasFilters = false;
+    var hasFilters = false;
     try {
-      hasFilters = controller?.filterController?.hasFilters?.value as bool?;
+      hasFilters = controller?.filterController?.hasFilters?.value as bool;
     } catch (_) {}
 
     return Obx(() {
@@ -146,14 +146,13 @@ class DiscussionsList extends StatelessWidget {
           child: () {
             if (controller.loaded.value as bool &&
                 controller.paginationController.data.isEmpty as bool &&
-                hasFilters as bool)
+                hasFilters)
               return Center(
                 child: EmptyScreen(
                   icon: SvgIcons.not_found,
                   text: tr('noDiscussionsMatching'),
                 ),
               );
-
             if (controller.loaded.value as bool &&
                 controller.paginationController.data.isEmpty as bool)
               return Center(

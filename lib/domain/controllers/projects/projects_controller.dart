@@ -75,7 +75,6 @@ class ProjectsController extends BaseController {
   var _withFAB = true;
 
   StreamSubscription? fabSubscription;
-  late StreamSubscription refreshSubscription;
   late StreamSubscription _refreshProjectsSubscription;
 
   ProjectsController(
@@ -111,7 +110,6 @@ class ProjectsController extends BaseController {
   @override
   void onClose() {
     fabSubscription?.cancel();
-    refreshSubscription.cancel();
     _refreshProjectsSubscription.cancel();
     super.onClose();
   }

@@ -51,8 +51,7 @@ class DiscussionSearchController extends BaseController {
 
   final _paginationController = PaginationController<Discussion>();
 
-  PaginationController<Discussion> get paginationController =>
-      _paginationController;
+  PaginationController<Discussion> get paginationController => _paginationController;
   String? _searchQuery;
   Timer? _searchDebounce;
 
@@ -81,7 +80,7 @@ class DiscussionSearchController extends BaseController {
 
         if (needToClear) paginationController.startIndex = 0;
 
-        if (query == null || query.isEmpty) {
+        if (query.isEmpty) {
           clearSearch();
         } else {
           await _performSearch(needToClear: needToClear);

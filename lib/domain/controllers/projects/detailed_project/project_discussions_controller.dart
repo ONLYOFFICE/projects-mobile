@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -61,6 +63,8 @@ class ProjectDiscussionsController extends GetxController {
 
   var fabIsVisible = false.obs;
 
+  late StreamSubscription _refreshDiscussionsSubscription;
+
   ProjectDiscussionsController(ProjectDetailed projectDetailed) {
     setup(projectDetailed);
     _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
@@ -68,6 +72,17 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.loadDelegate = () async => await _getDiscussions();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
+
+    _refreshDiscussionsSubscription =
+        locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+      if (data.any((elem) => elem == 'all') as bool) await loadProjectDiscussions();
+    });
+  }
+
+  @override
+  void onClose() {
+    _refreshDiscussionsSubscription.cancel();
+    super.onClose();
   }
 
   void setup(ProjectDetailed projectDetailed) async {

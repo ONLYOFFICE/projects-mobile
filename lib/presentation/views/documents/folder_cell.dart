@@ -233,9 +233,9 @@ Future<void> _onFolderPopupMenuSelected(
     case 'copyLink':
       final portalDomain = controller.portalInfoController.portalUri;
 
-      final link = '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
+      if (portalDomain != null && selectedFolder.id != null) {
+        final link = '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
 
-      if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
         MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
       }

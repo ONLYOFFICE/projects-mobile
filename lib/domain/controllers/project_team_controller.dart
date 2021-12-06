@@ -51,7 +51,8 @@ class ProjectTeamController extends GetxController {
 
   RefreshController _refreshController = RefreshController();
   RefreshController get refreshController {
-    _refreshController = RefreshController();
+    if (!_refreshController.isLoading && !_refreshController.isRefresh)
+      _refreshController = RefreshController();
     return _refreshController;
   }
 

@@ -63,7 +63,7 @@ class ProjectDetailedView extends StatefulWidget {
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  final RxInt _activeIndex = 0.obs;
+  final _activeIndex = 0.obs;
 
   final ProjectDetailsController projectController = Get.find<ProjectDetailsController>();
   final DocumentsController documentsController = Get.find<DocumentsController>();
@@ -74,10 +74,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
     documentsController.setupFolder(
         folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
-
-    documentsController.filesCount.listen((count) {
-      projectController.docsCount.value = count;
-    });
 
     projectController.setup(projectDetailed).then((value) {
       projectDetailed = projectController.projectData!;
@@ -111,13 +107,14 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            projectController.projectData!.canEdit!
-                ? IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => Get.find<NavigationController>().to(
-                        EditProjectView(projectDetailed: projectController.projectData),
-                        arguments: {'projectDetailed': projectController.projectData}))
-                : const SizedBox(),
+            if (projectController.projectData!.canEdit!)
+              IconButton(
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () => Get.find<NavigationController>().to(
+                      EditProjectView(projectDetailed: projectController.projectData),
+                      arguments: {'projectDetailed': projectController.projectData}))
+            else
+              const SizedBox(),
             if (!(projectController.projectData!.security!['isInTeam'] as bool) ||
                 projectController.projectData!.canDelete!)
               _ProjectContextMenu(controller: projectController)
@@ -148,7 +145,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
-                      count: projectController.docsCount.value),
+                      count: documentsController.filesCount.value),
                   CustomTab(
                       title: tr('team'),
                       currentTab: _activeIndex.value == 5,

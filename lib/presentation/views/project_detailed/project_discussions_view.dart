@@ -48,7 +48,7 @@ class ProjectDiscussionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProjectDiscussionsController(projectDetailed)..setup(projectDetailed);
+    final controller = ProjectDiscussionsController(projectDetailed);
 
     return Stack(
       children: [

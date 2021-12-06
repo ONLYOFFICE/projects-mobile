@@ -74,17 +74,14 @@ class ProjectDetailsController extends BaseProjectEditorController {
   RxString statusText = ''.obs;
   RxInt tasksCount = 0.obs;
   RxInt docsCount = (-1).obs;
-
   RxInt milestoneCount = (-1).obs;
+
   int currentTab = -1.obs;
 
   bool markedToDelete = false;
 
   final Rx<ProjectDetailed?> _projectDetailed = ProjectDetailed().obs;
   ProjectDetailed? get projectData => _projectDetailed.value;
-
-  late StreamSubscription _subscription;
-  late StreamSubscription _projectDetailedsubscription;
 
   late StreamSubscription _refreshProjectsSubscription;
   late StreamSubscription _refreshDetailsSubscription;
@@ -127,7 +124,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
       'needToRefreshMilestones',
       (dynamic data) {
         if (markedToDelete) {
-          _refreshDetailsSubscription.cancel();
+          _refreshMilestonesSubscription.cancel();
           return;
         }
 
@@ -151,11 +148,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<bool> refreshProjectDetails() async {
     final response = await _projectService.getProjectById(projectId: _projectDetailed.value!.id!);
-
     if (response != null) _projectDetailed.value = response;
+
     await fillProjectInfo();
-    if (response?.tags != null) {
-      tags.addAll(response!.tags!);
+    if (response!.tags != null) {
+      tags.addAll(response.tags!);
       tagsText.value = response.tags!.join(', ');
     }
 

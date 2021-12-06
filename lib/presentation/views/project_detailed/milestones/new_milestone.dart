@@ -63,15 +63,16 @@ class NewMilestoneView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Get.theme.colors().backgroundColor,
         appBar: StyledAppBar(
-            titleText: tr('newMilestone'),
-            actions: [
-              IconButton(
-                  icon: const Icon(Icons.check_rounded),
-                  onPressed: () => newMilestoneController.confirm(context))
-            ],
-            leading: IconButton(
-                icon: const Icon(Icons.arrow_back_rounded),
-                onPressed: () => newMilestoneController.discard())),
+          titleText: tr('newMilestone'),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => newMilestoneController.confirm(context))
+          ],
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back_rounded),
+              onPressed: newMilestoneController.discard),
+        ),
         body: SingleChildScrollView(
           child: Obx(
             () => Column(

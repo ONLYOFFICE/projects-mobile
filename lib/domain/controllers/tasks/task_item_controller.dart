@@ -240,6 +240,8 @@ class TaskItemController extends GetxController {
       task.value.responsibles!.add(user.portalUser);
     }
 
+    locator<EventHub>().fire('needToRefreshTasks');
+
     if (showLoading) loaded.value = true;
   }
 

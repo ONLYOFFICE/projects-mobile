@@ -208,7 +208,7 @@ class DocumentsScreen extends StatelessWidget {
                     separatorBuilder: (BuildContext context, int index) =>
                         const SizedBox(height: 10),
                     itemBuilder: (BuildContext context, int index) {
-                      var element = controller.paginationController.data[index];
+                      final element = controller.paginationController.data[index];
                       return element is Folder
                           ? FolderCell(
                               entity: element,

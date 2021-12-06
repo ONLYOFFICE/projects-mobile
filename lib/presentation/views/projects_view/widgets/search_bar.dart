@@ -67,16 +67,13 @@ class UsersSearchBar extends StatelessWidget {
             child: TextField(
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController,
-              decoration:
-                  InputDecoration.collapsed(hintText: tr('usersSearch')),
+              decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),
               onSubmitted: controller.searchUsers,
               onChanged: controller.searchUsers,
             ),
           ),
           InkWell(
-            onTap: () {
-              controller.clearSearch();
-            },
+            onTap: controller.clearSearch,
             child: const Icon(Icons.close, color: Colors.blue),
           )
         ],

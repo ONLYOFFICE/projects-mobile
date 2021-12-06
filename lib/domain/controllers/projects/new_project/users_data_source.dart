@@ -109,7 +109,7 @@ class UsersDataSource extends GetxController {
     if (needToClear) usersList.clear();
 
     PageDTO<List<PortalUser>>? result;
-    if (_query == null || _query.isEmpty) {
+    if (_query.isEmpty) {
       result = await _api.getProfilesByExtendedFilter(startIndex: _startIndex);
       isSearchResult.value = false;
     } else {
@@ -131,19 +131,16 @@ class UsersDataSource extends GetxController {
       }
 
       if (withoutSelf) {
-        usersList.removeWhere(
-            (element) => selfUserItem?.portalUser.id == element.id);
+        usersList.removeWhere((element) => selfUserItem?.portalUser.id == element.id);
       }
 
-      usersList.removeWhere((element) =>
-          selectedProjectManager != null &&
-          selectedProjectManager!.id == element.id);
+      usersList.removeWhere(
+          (element) => selectedProjectManager != null && selectedProjectManager!.id == element.id);
 
       selfIsVisible.value = !(selectedProjectManager != null &&
           selectedProjectManager!.id == selfUserItem!.portalUser.id);
 
-      usersList.removeWhere(
-          (item) => item.portalUser.status == UserStatus.Terminated);
+      usersList.removeWhere((item) => item.portalUser.status == UserStatus.Terminated);
 
       if (applyUsersSelection != null) {
         await applyUsersSelection!();
@@ -164,8 +161,7 @@ class UsersDataSource extends GetxController {
     nothingFound.value = false;
   }
 
-  Future getProfiles(
-      {required bool needToClear, bool withoutSelf = false}) async {
+  Future getProfiles({required bool needToClear, bool withoutSelf = false}) async {
     _clear();
     loaded.value = false;
     await _loadUsers(needToClear: needToClear, withoutSelf: withoutSelf);

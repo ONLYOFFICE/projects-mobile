@@ -77,7 +77,7 @@ class ProjectTasksController extends GetxController {
     loaded.value = false;
 
     //await _getTasks(needToClear: true);
-    locator<EventHub>().fire('needToRefreshDetails', [_projectDetailed.id]);
+    locator<EventHub>().fire('needToRefreshProjects', ['all']);
 
     loaded.value = true;
   }

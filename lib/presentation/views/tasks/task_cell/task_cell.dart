@@ -55,7 +55,7 @@ class TaskCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var itemController = TaskItemController(task);
+    final itemController = TaskItemController(task);
     Get.put(
       itemController,
       tag: task.id.toString(),
