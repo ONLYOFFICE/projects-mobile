@@ -74,18 +74,18 @@ class ProjectDetailsController extends BaseProjectEditorController {
   RxString statusText = ''.obs;
   RxInt tasksCount = 0.obs;
   RxInt docsCount = (-1).obs;
-
   RxInt milestoneCount = (-1).obs;
+
   int currentTab = -1.obs;
 
   bool markedToDelete = false;
 
   final Rx<ProjectDetailed?> _projectDetailed = ProjectDetailed().obs;
-
-  late StreamSubscription _subscription;
-  late StreamSubscription _projectDetailedsubscription;
-
   ProjectDetailed? get projectData => _projectDetailed.value;
+
+  late StreamSubscription _refreshProjectsSubscription;
+  late StreamSubscription _refreshDetailsSubscription;
+  late StreamSubscription _refreshMilestonesSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -94,63 +94,98 @@ class ProjectDetailsController extends BaseProjectEditorController {
           selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
-    _subscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (markedToDelete) {
-        _subscription.cancel();
-        return;
-      }
+    _refreshProjectsSubscription = locator<EventHub>().on(
+      'needToRefreshProjects',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshProjectsSubscription.cancel();
+          return;
+        }
 
-      refreshData();
-    });
+        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
+          refreshData();
+      },
+    );
+
+    _refreshDetailsSubscription = locator<EventHub>().on(
+      'needToRefreshDetails',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshDetailsSubscription.cancel();
+          return;
+        }
+
+        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
+          refreshProjectDetails();
+      },
+    );
+
+    _refreshMilestonesSubscription = locator<EventHub>().on(
+      'needToRefreshMilestones',
+      (dynamic data) {
+        if (markedToDelete) {
+          _refreshMilestonesSubscription.cancel();
+          return;
+        }
+
+        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
+          refreshProjectMilestones();
+      },
+    );
   }
 
   @override
   void onClose() {
-    _subscription.cancel();
-    _projectDetailedsubscription.cancel();
+    _refreshProjectsSubscription.cancel();
+    _refreshDetailsSubscription.cancel();
+    _refreshMilestonesSubscription.cancel();
     super.onClose();
-  }
-
-  void addProjectDetailsListeners(void Function() listenerFunction) {
-    _projectDetailedsubscription = _projectDetailed.listen((p0) => listenerFunction());
   }
 
   String decodeImageString(String image) {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<void> setup(ProjectDetailed projectDetailed) async {
-    _projectDetailed.value = projectDetailed;
+  Future<bool> refreshProjectDetails() async {
+    final response = await _projectService.getProjectById(projectId: _projectDetailed.value!.id!);
+    if (response != null) _projectDetailed.value = response;
 
     await fillProjectInfo();
-
-    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
-
-    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
-
-    await _projectService.getProjectById(projectId: _projectDetailed.value!.id!).then((value) => {
-          _projectDetailed.value = value,
-          fillProjectInfo(),
-          if (value?.tags != null)
-            {
-              tags.addAll(value!.tags!),
-              tagsText.value = value.tags!.join(', '),
-            }
-        });
+    if (response!.tags != null) {
+      tags.addAll(response.tags!);
+      tagsText.value = response.tags!.join(', ');
+    }
 
     tasksCount.value = _projectDetailed.value!.taskCountTotal!;
 
-    await _docApi
-        .getFilesByParams(folderId: _projectDetailed.value!.projectFolder)
-        .then((value) => docsCount.value = value!.files!.length);
+    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
+    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
 
-    await locator<MilestoneService>()
-        .milestonesByFilter(
-          projectId: _projectDetailed.value!.id.toString(),
-        )
-        .then((value) => {
-              if (value != null) {milestoneCount.value = value.length}
-            });
+    return Future.value(true);
+  }
+
+  Future<bool> refreshProjectMilestones() async {
+    final response = await locator<MilestoneService>()
+        .milestonesByFilter(projectId: _projectDetailed.value!.id.toString());
+
+    if (response == null) return Future.value(false);
+
+    milestoneCount.value = response.length;
+
+    return Future.value(true);
+  }
+
+  Future<void> setup(ProjectDetailed projectDetailed) async {
+    _projectDetailed.value = projectDetailed;
+
+    await refreshProjectDetails();
+    await refreshProjectMilestones();
+
+    await _docApi.getFilesByParams(folderId: _projectDetailed.value!.projectFolder).then(
+      (value) {
+        if (value != null) docsCount.value = value.files!.length;
+      },
+    );
   }
 
   Future<void> fillProjectInfo() async {
@@ -177,11 +212,10 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   Future<void> refreshData() async {
     loaded.value = false;
-    _projectDetailed.value =
-        await _projectService.getProjectById(projectId: _projectDetailed.value!.id!);
-    loaded.value = true;
 
     await setup(_projectDetailed.value!);
+
+    loaded.value = true;
   }
 
   Future manageTeamMembers() async {

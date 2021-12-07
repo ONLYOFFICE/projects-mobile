@@ -47,26 +47,30 @@ class UserController extends GetxController {
   SecurityInfo? securityInfo;
   RxBool loaded = false.obs;
 
-  Future<void> getUserInfo() async {
-    await _lock.synchronized(() async {
-      if (user != null) return;
+  Future<bool> getUserInfo() async {
+    final response = await _lock.synchronized(() async {
+      if (user != null) return true;
       final data = await _api.getSelfInfo();
+      if (data.response == null) return Future.value(false);
       user = data.response;
       loaded.value = securityInfo != null;
+      return Future.value(loaded.value);
     });
+    return Future.value(response);
   }
 
   Future getSecurityInfo() async {
-    await _lock.synchronized(() async {
+    final response = await _lock.synchronized(() async {
       securityInfo ??= await locator<ProjectService>().getProjectSecurityinfo();
-
       loaded.value = user != null;
+      return Future.value(loaded.value);
     });
+    return Future.value(response);
   }
 
   Future<String?> getUserId() async {
     if (user == null || user!.id == null) {
-      await getUserInfo();
+      if (!await getUserInfo()) return null;
     }
     return user!.id;
   }

@@ -74,8 +74,7 @@ class ProjectOverview extends StatelessWidget {
               const SizedBox(height: 20),
               ProjectStatusButton(projectController: projectController),
               const SizedBox(height: 20),
-              if (projectController!.descriptionText != null &&
-                  projectController!.descriptionText.isNotEmpty)
+              if (projectController!.descriptionText.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: InfoTile(

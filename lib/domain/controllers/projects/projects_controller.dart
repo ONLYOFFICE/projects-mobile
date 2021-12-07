@@ -38,7 +38,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/data/models/from_api/project_tag.dart';
@@ -57,8 +56,7 @@ class ProjectsController extends BaseController {
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   late PaginationController<ProjectDetailed> _paginationController;
-  PaginationController<ProjectDetailed> get paginationController =>
-      _paginationController;
+  PaginationController<ProjectDetailed> get paginationController => _paginationController;
   @override
   RxList get itemList => _paginationController.data;
 
@@ -77,7 +75,7 @@ class ProjectsController extends BaseController {
   var _withFAB = true;
 
   StreamSubscription? fabSubscription;
-  StreamSubscription? refreshSubscription;
+  late StreamSubscription _refreshProjectsSubscription;
 
   ProjectsController(
     ProjectsFilterController filterController,
@@ -93,37 +91,39 @@ class ProjectsController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    refreshSubscription ??=
-        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      loadProjects();
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+      if (data.any((elem) => elem == 'all') as bool) {
+        loadProjects();
+        return;
+      }
     });
-    _userController.loaded.listen((_loaded) async => {
-          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
-        });
+
+    _userController.loaded.listen((_loaded) async =>
+        {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
 
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
-    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged',
-        (dynamic data) async {
+    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
+  }
+
+  @override
+  void onClose() {
+    fabSubscription?.cancel();
+    _refreshProjectsSubscription.cancel();
+    super.onClose();
   }
 
   Future<bool> getFabVisibility() async {
     if (!_withFAB) return false;
     await _userController.getUserInfo();
     await _userController.getSecurityInfo();
+    if (_userController.user == null) return Future.value(false);
     return _userController.user!.isAdmin! ||
         _userController.user!.isOwner! ||
         (_userController.user!.listAdminModules != null &&
             _userController.user!.listAdminModules!.contains('projects')) ||
         _userController.securityInfo!.canCreateProject!;
-  }
-
-  @override
-  void onClose() {
-    fabSubscription!.cancel();
-    refreshSubscription!.cancel();
-    super.onClose();
   }
 
   @override

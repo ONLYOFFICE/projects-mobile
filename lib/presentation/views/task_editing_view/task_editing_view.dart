@@ -69,7 +69,7 @@ class TaskEditingView extends StatelessWidget {
           titleText: tr('editTask'),
           onLeadingPressed: controller.discardChanges,
           actions: [
-            IconButton(icon: const Icon(Icons.done_rounded), onPressed: () => controller.confirm())
+            IconButton(icon: const Icon(Icons.done_rounded), onPressed: controller.confirm)
           ],
         ),
         body: SingleChildScrollView(

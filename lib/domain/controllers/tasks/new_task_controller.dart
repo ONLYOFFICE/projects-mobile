@@ -320,21 +320,21 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
     final createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
+      locator<EventHub>().fire('needToRefreshProjects', ['all']);
       locator<EventHub>().fire('needToRefreshTasks');
+
       Get.back();
       MessagesHandler.showSnackBar(
-          context: context,
-          text: tr('taskCreated'),
-          buttonText: tr('open').toUpperCase(),
-          buttonOnTap: () {
-            final itemController =
-                Get.put(TaskItemController(createdTask), tag: createdTask.id.toString());
-            return Get.find<NavigationController>()
-                .to(const TaskDetailedView(), arguments: {'controller': itemController});
-          });
-
-      locator<EventHub>().fire('needToRefreshProjects');
-      locator<EventHub>().fire('needToRefreshTasks');
+        context: context,
+        text: tr('taskCreated'),
+        buttonText: tr('open').toUpperCase(),
+        buttonOnTap: () {
+          final itemController =
+              Get.put(TaskItemController(createdTask), tag: createdTask.id.toString());
+          return Get.find<NavigationController>()
+              .to(const TaskDetailedView(), arguments: {'controller': itemController});
+        },
+      );
     }
   }
 

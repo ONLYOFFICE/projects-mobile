@@ -102,7 +102,7 @@ class NewProjectController extends BaseProjectEditorController {
 
     final result = await _api.createProject(project: newProject);
     if (result != null) {
-      locator<EventHub>().fire('needToRefreshProjects');
+      locator<EventHub>().fire('needToRefreshProjects', ['all']);
 
       MessagesHandler.showSnackBar(
         context: context,

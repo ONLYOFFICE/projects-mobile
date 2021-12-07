@@ -174,7 +174,7 @@ class ProjectEditController extends BaseProjectEditorController {
         await _projectService.editProject(project: newProject, projectId: _projectDetailed!.id!);
     if (success) {
       {
-        locator<EventHub>().fire('needToRefreshProjects');
+        locator<EventHub>().fire('needToRefreshProjects', ['all']);
       }
 
       Get.back();

@@ -47,48 +47,44 @@ class DiscussionCommentsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Obx(
-        () {
-          if (controller!.loaded.value == false)
-            return const ListLoadingSkeleton();
-          else {
-            return Stack(
-              children: [
-                SmartRefresher(
-                  controller: controller!.commentsRefreshController,
-                  onRefresh: controller!.onRefresh,
-                  child: ListView.separated(
-                    controller: controller!.commentsListController,
-                    itemCount: controller!.discussion.value.comments!.length,
-                    padding: const EdgeInsets.only(top: 32, bottom: 70),
-                    separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(
-                        height: controller!.discussion.value.comments![index].show
-                            ? 21
-                            : null,
-                      );
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      return CommentsThread(
-                        comment: controller!.discussion.value.comments![index],
-                        discussionId: controller!.discussion.value.id,
-                      );
-                    },
-                  ),
+    return Obx(
+      () {
+        if (controller!.loaded.value == false)
+          return const ListLoadingSkeleton();
+        else {
+          return Stack(
+            children: [
+              SmartRefresher(
+                controller: controller!.commentsRefreshController,
+                onRefresh: controller!.onRefresh,
+                child: ListView.separated(
+                  controller: controller!.commentsListController,
+                  itemCount: controller!.discussion.value.comments!.length,
+                  padding: const EdgeInsets.only(top: 32, bottom: 70),
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(
+                      height: controller!.discussion.value.comments![index].show ? 21 : null,
+                    );
+                  },
+                  itemBuilder: (BuildContext context, int index) {
+                    return CommentsThread(
+                      comment: controller!.discussion.value.comments![index],
+                      discussionId: controller!.discussion.value.id,
+                    );
+                  },
                 ),
-                if (controller!.discussion.value.canCreateComment == true)
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: AddCommentButton(
-                      onPressed: controller!.toNewCommentView,
-                    ),
-                  )
-              ],
-            );
-          }
-        },
-      ),
+              ),
+              if (controller!.discussion.value.canCreateComment == true)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: AddCommentButton(
+                    onPressed: controller!.toNewCommentView,
+                  ),
+                )
+            ],
+          );
+        }
+      },
     );
   }
 }

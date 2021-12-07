@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -64,47 +63,30 @@ class ProjectDetailedView extends StatefulWidget {
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
-  // ignore: prefer_final_fields
-  RxInt _activeIndex = 0.obs;
+  final _activeIndex = 0.obs;
 
-  ProjectDetailed projectDetailed =
-      Get.arguments['projectDetailed'] as ProjectDetailed;
-
-  late ProjectDetailsController projectController;
-  late ProjectDiscussionsController discussionsController;
-  final documentsController = Get.find<DocumentsController>();
+  final ProjectDetailsController projectController = Get.find<ProjectDetailsController>();
+  final DocumentsController documentsController = Get.find<DocumentsController>();
 
   @override
   void initState() {
-    super.initState();
-
-    discussionsController =
-        Get.put(ProjectDiscussionsController(projectDetailed));
-
-    projectController = Get.find<ProjectDetailsController>();
-    projectController
-        .setup(Get.arguments['projectDetailed'] as ProjectDetailed);
+    var projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
 
     documentsController.setupFolder(
-        folderName: projectDetailed.title!,
-        folderId: projectDetailed.projectFolder);
+        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
+
+    projectController.setup(projectDetailed).then((value) {
+      projectDetailed = projectController.projectData!;
+      documentsController.setupFolder(
+          folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
+    });
 
     _tabController = TabController(
       vsync: this,
       length: 6,
     );
 
-    projectController.addProjectDetailsListeners(() {
-      projectDetailed = projectController.projectData!;
-      discussionsController.setup(projectDetailed);
-      documentsController.setupFolder(
-          folderName: projectDetailed.title!,
-          folderId: projectDetailed.projectFolder);
-    });
-
-    documentsController.filesCount.listen((count) {
-      projectController.docsCount.value = count;
-    });
+    super.initState();
   }
 
   @override
@@ -125,18 +107,15 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            projectController.projectData!.canEdit!
-                ? IconButton(
-                    icon: const Icon(Icons.edit_outlined),
-                    onPressed: () => Get.find<NavigationController>().to(
-                            EditProjectView(
-                                projectDetailed: projectController.projectData),
-                            arguments: {
-                              'projectDetailed': projectController.projectData
-                            }))
-                : const SizedBox(),
-            if (!(projectController.projectData!.security!['isInTeam']
-                    as bool) ||
+            if (projectController.projectData!.canEdit!)
+              IconButton(
+                  icon: const Icon(Icons.edit_outlined),
+                  onPressed: () => Get.find<NavigationController>().to(
+                      EditProjectView(projectDetailed: projectController.projectData),
+                      arguments: {'projectDetailed': projectController.projectData}))
+            else
+              const SizedBox(),
+            if (!(projectController.projectData!.security!['isInTeam'] as bool) ||
                 projectController.projectData!.canDelete!)
               _ProjectContextMenu(controller: projectController)
           ],
@@ -147,8 +126,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
                 labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor:
-                    Get.theme.colors().onSurface.withOpacity(0.6),
+                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
@@ -167,7 +145,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
-                      count: projectController.docsCount.value),
+                      count: documentsController.filesCount.value),
                   CustomTab(
                       title: tr('team'),
                       currentTab: _activeIndex.value == 5,
@@ -176,13 +154,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          ProjectOverview(
-              projectController: projectController,
-              tabController: _tabController),
+          ProjectOverview(projectController: projectController, tabController: _tabController),
           ProjectTaskScreen(projectDetailed: projectController.projectData),
-          ProjectMilestonesScreen(
-              projectDetailed: projectController.projectData),
-          ProjectDiscussionsScreen(controller: discussionsController),
+          ProjectMilestonesScreen(projectDetailed: projectController.projectData),
+          ProjectDiscussionsScreen(projectDetailed: projectController.projectData!),
           EntityDocumentsView(
             folderId: projectController.projectData!.projectFolder,
             folderName: projectController.projectData!.title,
@@ -199,8 +174,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
 class _ProjectContextMenu extends StatelessWidget {
   final ProjectDetailsController controller;
-  const _ProjectContextMenu({Key? key, required this.controller})
-      : super(key: key);
+  const _ProjectContextMenu({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -227,8 +201,7 @@ class _ProjectContextMenu extends StatelessWidget {
               value: 'delete',
               child: Text(
                 tr('delete'),
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().colorError),
+                style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
               ),
             )
         ];
@@ -257,7 +230,6 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
-        // 'Are you sure you want to delete these project?\nNote: this action cannot be undone.',
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
@@ -269,7 +241,7 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
               context: context,
               text: tr('projectDeleted'),
             );
-            locator<EventHub>().fire('needToRefreshProjects');
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
           } else {
             print('ERROR');
           }
