@@ -59,14 +59,14 @@ class ProjectOverview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (projectController!.loaded.value == true) {
+        if (projectController.loaded.value == true) {
           return ListView(
             children: [
               const SizedBox(height: 26),
               Obx(
                 () => InfoTile(
                   caption: tr('project').toUpperCase(),
-                  subtitle: projectController!.projectTitleText.value,
+                  subtitle: projectController.projectTitleText.value,
                   subtitleStyle: TextStyleHelper.headline7(
                     color: Get.theme.colors().onBackground,
                   ),
@@ -81,14 +81,15 @@ class ProjectOverview extends StatelessWidget {
                         projectController: projectController)),
               ),
               const SizedBox(height: 20),
-              if (projectController!.descriptionText.isNotEmpty)
+              if (projectController.descriptionText.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: InfoTile(
                     caption: tr('description'),
-                    icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
+                    icon: const AppIcon(
+                        icon: SvgIcons.description, color: Color(0xff707070)),
                     subtitleWidget: ReadMoreText(
-                      projectController!.descriptionText.value,
+                      projectController.descriptionText.value,
                       trimLines: 3,
                       colorClickableText: Colors.pink,
                       style: TextStyleHelper.body1,
@@ -96,16 +97,20 @@ class ProjectOverview extends StatelessWidget {
                       delimiter: ' ',
                       trimCollapsedText: tr('showMore'),
                       trimExpandedText: tr('showLess'),
-                      moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
-                      lessStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
+                      moreStyle: TextStyleHelper.body2(
+                          color: Get.theme.colors().links),
+                      lessStyle: TextStyleHelper.body2(
+                          color: Get.theme.colors().links),
                     ),
                   ),
                 ),
               Obx(() => InfoTile(
-                    icon: const AppIcon(icon: SvgIcons.user, color: Color(0xff707070)),
+                icon: const AppIcon(
+                        icon: SvgIcons.user, color: Color(0xff707070)),
                     caption: tr('projectManager'),
-                    subtitle: projectController!.managerText.value,
-                    subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                    subtitle: projectController.managerText.value,
+                    subtitleStyle: TextStyleHelper.subtitle1(
+                        color: Get.theme.colors().onSurface),
                   )),
               const SizedBox(height: 20),
               Obx(
@@ -114,27 +119,32 @@ class ProjectOverview extends StatelessWidget {
                     tabController!.animateTo(5);
                   },
                   child: InfoTileWithButton(
-                    icon: const AppIcon(icon: SvgIcons.users, color: Color(0xff707070)),
+                    icon: const AppIcon(
+                        icon: SvgIcons.users, color: Color(0xff707070)),
                     onTapFunction: () {
                       tabController!.animateTo(5);
                     },
                     caption: tr('team'),
                     iconData: Icons.navigate_next,
-                    subtitle: plural('members', projectController!.teamMembersCount.value),
-                    subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                    subtitle: plural(
+                        'members', projectController.teamMembersCount.value),
+                    subtitleStyle: TextStyleHelper.subtitle1(
+                        color: Get.theme.colors().onSurface),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.calendar, color: Color(0xff707070)),
+                  icon: const AppIcon(
+                      icon: SvgIcons.calendar, color: Color(0xff707070)),
                   caption: tr('creationDate'),
-                  subtitle: projectController!.creationDateText.value)),
+                  subtitle: projectController.creationDateText.value)),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
+                  icon: const AppIcon(
+                      icon: SvgIcons.tag, color: Color(0xff707070)),
                   caption: tr('tags'),
-                  subtitle: projectController!.tagsText.value)),
+                  subtitle: projectController.tagsText.value)),
             ],
           );
         } else {

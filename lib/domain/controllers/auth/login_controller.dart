@@ -78,8 +78,12 @@ class LoginController extends GetxController {
   String? _email;
   String? _tfaKey;
 
-  String get portalAdress =>
-      portalAdressController.text.isURL ? portalAdressController.text.split('//')[1] : '';
+  String get portalAdress => portalAdressController.text.isURL
+      ? portalAdressController.text.substring(
+          !portalAdressController.text.contains('//')
+              ? 0
+              : portalAdressController.text.indexOf('//') + 2)
+      : '';
   String? get tfaKey => _tfaKey;
 
   final cookieManager = WebviewCookieManager();
