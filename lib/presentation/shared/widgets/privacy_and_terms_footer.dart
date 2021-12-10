@@ -35,6 +35,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/remote_config_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -46,14 +47,16 @@ class PrivacyAndTermsFooter extends StatelessWidget {
 
   PrivacyAndTermsFooter.withCheckbox({
     Key? key,
-    this.checkBoxValue,
-  }) : super(key: key);
+  }) : super(key: key) {
+    checkBoxValue = controller.checkBoxValue;
+  }
 
   RxBool? checkBoxValue;
+  final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
-    final needAgreement = Get.deviceLocale!.languageCode == 'zh' && checkBoxValue != null;
+    final needAgreement = controller.needAgreement && checkBoxValue != null;
 
     RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');

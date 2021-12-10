@@ -33,6 +33,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -46,6 +47,7 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -84,6 +86,9 @@ class LoginController extends GetxController {
   String? get tfaKey => _tfaKey;
 
   final cookieManager = WebviewCookieManager();
+
+  final checkBoxValue = false.obs;
+  final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
   @override
   void onInit() {
@@ -219,6 +224,11 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
+    if (needAgreement && !checkBoxValue.value) {
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('privacyAndTermsFooter.total'));
+      return;
+    }
+
     portalAdressController.text = portalAdressController.text.removeAllWhitespace;
 
     if (!portalAdressController.text.isURL) {
@@ -237,6 +247,7 @@ class LoginController extends GetxController {
 
       if (_capabilities != null) {
         capabilities = _capabilities;
+        checkBoxValue.value = false;
         setState(ViewState.Idle);
         await Get.to(() => const LoginView());
       }

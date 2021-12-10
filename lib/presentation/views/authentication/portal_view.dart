@@ -36,7 +36,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -46,10 +45,7 @@ import 'package:projects/presentation/views/authentication/widgets/wide_button.d
 
 class PortalInputView extends StatelessWidget {
   PortalInputView({Key? key}) : super(key: key);
-
-  final LoginController controller = Get.find<LoginController>();
-  final checkBoxValue = false.obs;
-  final needAgreement = Get.deviceLocale!.languageCode == 'zh';
+  final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -95,29 +91,21 @@ class PortalInputView extends StatelessWidget {
                                 color: Get.theme.colors().onBackground.withOpacity(0.04)),
                           ]),
                           child: WideButton(
-                              text: tr('next'),
-                              textColor: needAgreement && !checkBoxValue.value
-                                  ? Get.theme.colors().onBackground.withOpacity(0.5)
-                                  : null,
-                              color: needAgreement && !checkBoxValue.value
-                                  ? Get.theme.colors().bgDescription
-                                  : null,
-                              onPressed: () async {
-                                if (needAgreement && !checkBoxValue.value) {
-                                  MessagesHandler.showSnackBar(
-                                      context: context, text: tr('privacyAndTermsFooter.total'));
-
-                                  return;
-                                }
-                                checkBoxValue.value = false;
-                                await controller.getPortalCapabilities();
-                              }),
+                            text: tr('next'),
+                            textColor: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().onBackground.withOpacity(0.5)
+                                : null,
+                            color: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().bgDescription
+                                : null,
+                            onPressed: controller.getPortalCapabilities,
+                          ),
                         ),
-                        if (needAgreement)
-                          PrivacyAndTermsFooter.withCheckbox(checkBoxValue: checkBoxValue)
+                        if (controller.needAgreement)
+                          PrivacyAndTermsFooter.withCheckbox()
                         else
                           const Spacer(),
-                        if (needAgreement) const Spacer() else PrivacyAndTermsFooter()
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
                       ],
                     ),
                   ),
