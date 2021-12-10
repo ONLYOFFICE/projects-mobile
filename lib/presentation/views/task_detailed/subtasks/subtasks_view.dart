@@ -47,44 +47,48 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class SubtasksView extends StatelessWidget {
-  final TaskItemController? controller;
+  final TaskItemController controller;
+
   const SubtasksView({
     Key? key,
-    this.controller,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final _task = controller!.task.value;
+    final _task = controller.task.value;
     return Obx(
       () {
-        if (controller!.loaded.value == true) {
+        if (controller.loaded.value == true) {
           return Stack(
             children: [
-              if (_task.subtasks!.isEmpty)
-                Center(
-                  child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noSubtasksCreated'),
-                  ),
-                ),
-              if (_task.subtasks!.isNotEmpty)
-                SmartRefresher(
-                  controller: controller!.subtaskRefreshController,
-                  onRefresh: () => controller!.reloadTask(showLoading: true),
-                  child: ListView.builder(
-                    itemCount: _task.subtasks!.length,
-                    padding: const EdgeInsets.only(top: 6, bottom: 50),
-                    itemBuilder: (BuildContext context, int index) {
-                      return SubtaskCell(
-                        subtask: _task.subtasks![index],
-                        parentTask: _task,
-                      );
-                    },
-                  ),
-                ),
-              if (controller?.task.value.canCreateSubtask == true &&
-                  controller?.task.value.status != 2)
+              SmartRefresher(
+                controller: controller.subtaskRefreshController,
+                onRefresh: () => controller.reloadTask(showLoading: true),
+                child: () {
+                  if (_task.subtasks!.isEmpty)
+                    return Center(
+                      child: EmptyScreen(
+                        icon: SvgIcons.task_not_created,
+                        text: tr('noSubtasksCreated'),
+                      ),
+                    );
+
+                  if (_task.subtasks!.isNotEmpty)
+                    return ListView.builder(
+                      itemCount: _task.subtasks!.length,
+                      padding: const EdgeInsets.only(top: 6, bottom: 50),
+                      itemBuilder: (BuildContext context, int index) {
+                        return SubtaskCell(
+                          subtask: _task.subtasks![index],
+                          parentTask: _task,
+                        );
+                      },
+                    );
+                }(),
+              ),
+              if (controller.task.value.canCreateSubtask == true &&
+                  controller.task.value.status != 2)
                 _FAB(task: _task),
             ],
           );

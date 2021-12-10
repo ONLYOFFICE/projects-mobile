@@ -30,56 +30,11 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsSortOption extends StatelessWidget {
-  const DocumentsSortOption({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+abstract class BaseDocumentsController {
+  DocumentsSortController get sortController;
 
-  final BaseDocumentsController controller;
-
-  List<SortTile> getSortTile() {
-    return [
-      SortTile(
-        sortParameter: 'dateandtime',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'create_on',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'AZ',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'type',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'size',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'author',
-        sortController: controller.sortController,
-      ),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        ...getSortTile(),
-        const SizedBox(height: 20),
-      ],
-    );
-  }
+  PaginationController get paginationController;
 }

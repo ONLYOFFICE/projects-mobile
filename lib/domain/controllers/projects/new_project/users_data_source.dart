@@ -109,7 +109,7 @@ class UsersDataSource extends GetxController {
     if (needToClear) usersList.clear();
 
     PageDTO<List<PortalUser>>? result;
-    if (_query == null || _query.isEmpty) {
+    if (_query.isEmpty) {
       result = await _api.getProfilesByExtendedFilter(startIndex: _startIndex);
       isSearchResult.value = false;
     } else {

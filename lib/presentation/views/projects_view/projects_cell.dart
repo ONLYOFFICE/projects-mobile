@@ -37,6 +37,8 @@ import 'package:get/get.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -317,7 +319,8 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
                           newStatusId: _statusesController.statuses[i],
                         ) as bool;
                         if (success) {
-                          locator<EventHub>().fire('needToRefreshProjects');
+                          locator<EventHub>()
+                              .fire('needToRefreshProjects', ['all']);
                         }
                         Get.back();
                       },
@@ -340,6 +343,71 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
       );
     },
   );
+}
+
+void showStatuses(
+    {required BuildContext context,
+    required BaseProjectEditorController itemController}) async {
+  if (Get.find<PlatformController>().isMobile) {
+    showsStatusesBS(context: context, itemController: itemController);
+  } else {
+    showsStatusesPM(context: context, itemController: itemController);
+  }
+}
+
+void showsStatusesPM(
+    {required BuildContext context,
+    required BaseProjectEditorController itemController}) async {
+  final _statusesController = Get.find<ProjectStatusesController>();
+  final items = <PopupMenuEntry<dynamic>>[
+    for (var i = 0; i < _statusesController.statuses.length; i++)
+      PopupMenuItem(
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        child: Expanded(
+          child: InkWell(
+            onTap: () async {
+              final success = await itemController.updateStatus(
+                newStatusId: _statusesController.statuses[i],
+              );
+              if (success) {
+                locator<EventHub>().fire('needToRefreshProjects');
+              }
+              Get.back();
+            },
+            child: StatusTileTablet(
+                title: _statusesController.getStatusName(i),
+                icon: AppIcon(
+                    icon: _statusesController.getStatusImageString(i),
+                    color: itemController.projectData!.canEdit!
+                        ? Get.theme.colors().primary
+                        : Get.theme.colors().onBackground),
+                selected: _statusesController.statuses[i] ==
+                    itemController.projectData!.status),
+          ),
+        ),
+      ),
+  ];
+
+// calculate the menu position, ofsset dy: 50
+  final offset = const Offset(0, 50);
+  final button = context.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+  final position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(
+        offset,
+        ancestor: overlay,
+      ),
+      button.localToGlobal(
+        button.size.bottomRight(Offset.zero) + offset,
+        ancestor: overlay,
+      ),
+    ),
+    Offset.zero & overlay.size,
+  );
+
+  await showMenu(context: context, position: position, items: items);
 }
 
 double _getInititalSize({required int statusCount}) {

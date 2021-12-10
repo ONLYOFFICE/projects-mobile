@@ -43,8 +43,9 @@ import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class DiscussionTile extends StatelessWidget {
-  final Discussion? discussion;
+  final Discussion discussion;
   final Function()? onTap;
+
   const DiscussionTile({
     Key? key,
     required this.discussion,
@@ -60,14 +61,14 @@ class DiscussionTile extends StatelessWidget {
         child: Row(
           children: [
             _Image(
-              image: discussion!.createdBy!.avatar ??
-                  discussion!.createdBy!.avatarMedium ??
-                  discussion!.createdBy!.avatarSmall,
+              image: discussion.createdBy!.avatar ??
+                  discussion.createdBy!.avatarMedium ??
+                  discussion.createdBy!.avatarSmall,
             ),
             const SizedBox(width: 16),
             _DiscussionInfo(discussion: discussion),
             const SizedBox(width: 11.33),
-            _CommentsCount(commentsCount: discussion!.commentsCount),
+            _CommentsCount(commentsCount: discussion.commentsCount),
           ],
         ),
       ),

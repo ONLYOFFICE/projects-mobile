@@ -31,55 +31,33 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:get/get.dart';
 
-class DocumentsSortOption extends StatelessWidget {
-  const DocumentsSortOption({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+mixin ShowPopupMenuMixin on Widget {
+  Future<void> showPopupMenu(
+      {required BuildContext context,
+      required List<Widget> options,
+      required Offset offset}) async {
+    final items = options.map((e) => PopupMenuItem(child: e)).toList();
 
-  final BaseDocumentsController controller;
-
-  List<SortTile> getSortTile() {
-    return [
-      SortTile(
-        sortParameter: 'dateandtime',
-        sortController: controller.sortController,
+// calculate the menu position, offset dy: 50
+    // final offset = const Offset(0, 50);
+    final button = context.findRenderObject() as RenderBox;
+    final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+    final position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(
+          offset,
+          ancestor: overlay,
+        ),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero) + offset,
+          ancestor: overlay,
+        ),
       ),
-      SortTile(
-        sortParameter: 'create_on',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'AZ',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'type',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'size',
-        sortController: controller.sortController,
-      ),
-      SortTile(
-        sortParameter: 'author',
-        sortController: controller.sortController,
-      ),
-    ];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        ...getSortTile(),
-        const SizedBox(height: 20),
-      ],
+      Offset.zero & overlay.size,
     );
+
+    await showMenu(context: context, position: position, items: items);
   }
 }

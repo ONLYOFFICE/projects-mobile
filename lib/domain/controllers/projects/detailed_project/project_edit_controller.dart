@@ -54,12 +54,14 @@ class ProjectEditController extends BaseProjectEditorController {
   RxBool isSearchResult = false.obs;
   RxBool nothingFound = false.obs;
   RxString projectTitleText = ''.obs;
-  RxString statusText = ''.obs;
+
   var selectedTags;
 
   EditProjectDTO? oldProjectDTO;
 
   ProjectDetailed? _projectDetailed;
+
+  @override
   ProjectDetailed? get projectData => _projectDetailed;
 
   Future<void> setupEditor(ProjectDetailed? projectDetailed) async {
@@ -67,7 +69,8 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = false;
 
     oldProjectDTO = null;
-    statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed!.status)]);
+    statusText.value = tr('projectStatus',
+        args: [ProjectStatus.toName(_projectDetailed!.status)]);
 
     projectTitleText.value = _projectDetailed!.title!;
     descriptionText.value = _projectDetailed!.description!;
@@ -134,6 +137,7 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = true;
   }
 
+  @override
   Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
       .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed!);
 
@@ -174,7 +178,7 @@ class ProjectEditController extends BaseProjectEditorController {
         await _projectService.editProject(project: newProject, projectId: _projectDetailed!.id!);
     if (success) {
       {
-        locator<EventHub>().fire('needToRefreshProjects');
+        locator<EventHub>().fire('needToRefreshProjects', ['all']);
       }
 
       Get.back();

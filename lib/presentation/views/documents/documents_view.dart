@@ -38,9 +38,12 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -176,46 +179,61 @@ class DocumentsScreen extends StatelessWidget {
       appBar: appBar,
       body: Obx(
         () {
-          if (controller.loaded.value == false) return const ListLoadingSkeleton();
-          if (controller.loaded.value == true && controller.nothingFound.value == true) {
-            return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty as bool &&
-              !(controller.filterController.hasFilters.value as bool) &&
-              controller.searchMode.value == false) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty as bool &&
-              controller.filterController.hasFilters.value as bool &&
-              controller.searchMode.value == false) {
-            return Center(
-                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
-          }
+          if (!(controller.loaded.value as bool))
+            return const ListLoadingSkeleton();
+
           return PaginationListView(
-            paginationController: controller.paginationController as PaginationController,
-            child: ListView.separated(
-              controller: scrollController,
-              itemCount: controller.paginationController.data.length as int,
-              separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
-              itemBuilder: (BuildContext context, int index) {
-                final element = controller.paginationController.data[index];
-                return element is Folder
-                    ? FolderCell(
-                        entity: element,
-                        controller: controller as DocumentsController,
-                      )
-                    : FileCell(
-                        entity: element as PortalFile,
-                        index: index,
-                        controller: controller as DocumentsController,
-                      );
-              },
-            ),
-          );
+              paginationController:
+                  controller.paginationController as PaginationController,
+              child: () {
+                if (controller.loaded.value as bool &&
+                    controller.nothingFound.value as bool) {
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.not_found, text: tr('notFound')));
+                }
+                if (controller.loaded.value as bool &&
+                    controller.paginationController.data.isEmpty as bool &&
+                    !(controller.filterController.hasFilters.value as bool) &&
+                    !(controller.searchMode.value as bool)) {
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.documents_not_created,
+                          text: tr('noDocumentsCreated')));
+                }
+                if (controller.loaded.value as bool &&
+                    controller.paginationController.data.isEmpty as bool &&
+                    controller.filterController.hasFilters.value as bool &&
+                    !(controller.searchMode.value as bool)) {
+                  return Center(
+                      child: EmptyScreen(
+                          icon: SvgIcons.not_found,
+                          text: tr('noDocumentsMatching')));
+                }
+                if (controller.loaded.value as bool &&
+                    controller.paginationController.data.isNotEmpty as bool)
+                  return ListView.separated(
+                    controller: scrollController,
+                    itemCount:
+                        controller.paginationController.data.length as int,
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (BuildContext context, int index) {
+                      final element =
+                          controller.paginationController.data[index];
+                      return element is Folder
+                          ? FolderCell(
+                              entity: element,
+                              controller: controller as DocumentsController,
+                            )
+                          : FileCell(
+                              entity: element as PortalFile,
+                              index: index,
+                              controller: controller as DocumentsController,
+                            );
+                    },
+                  );
+              }() as Widget);
         },
       ),
     );
@@ -279,24 +297,102 @@ class DocsTitle extends StatelessWidget {
 
 class DocsBottom extends StatelessWidget {
   DocsBottom({Key? key, required this.controller}) : super(key: key);
-  final controller;
+  final BaseDocumentsController controller;
+
   @override
   Widget build(BuildContext context) {
-    final sortButton = Container(
+    return Column(
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              _DocumentsSortButton(controller: controller),
+              Row(
+                children: <Widget>[
+                  Obx(
+                    () => Text(
+                      tr('total', args: [
+                        controller.paginationController.total.value.toString()
+                      ]),
+                      style: TextStyleHelper.body2(
+                        color: Get.theme.colors().onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _DocumentsSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final BaseDocumentsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: DocumentsSortOption(controller: controller)),
-            isScrollControlled: true,
-          );
+        onTap: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            await Get.bottomSheet(
+              SortView(
+                  sortOptions: DocumentsSortOption(controller: controller)),
+              isScrollControlled: true,
+            );
+          } else {
+            final options = [
+              SortTile(
+                sortParameter: 'dateandtime',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'create_on',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'AZ',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'type',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'size',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'author',
+                sortController: controller.sortController,
+              ),
+            ];
+            await showPopupMenu(
+              context: context,
+              options: options,
+              offset: const Offset(0, 30),
+            );
+          }
         },
         child: Row(
           children: <Widget>[
             Obx(
               () => Text(
-                controller.sortController.currentSortTitle.value as String,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+                controller.sortController.currentSortTitle.value,
+                style: TextStyleHelper.projectsSorting
+                    .copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -322,33 +418,6 @@ class DocsBottom extends StatelessWidget {
           ],
         ),
       ),
-    );
-
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              sortButton,
-              Row(
-                children: <Widget>[
-                  Obx(
-                    () => Text(
-                      tr('total', args: [controller.paginationController.total.value.toString()]),
-                      style: TextStyleHelper.body2(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

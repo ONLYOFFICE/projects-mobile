@@ -80,13 +80,16 @@ class TagsSelectionView extends StatelessWidget {
         ),
       ),
       appBar: StyledAppBar(
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor:
+            platformController.isMobile ? null : Get.theme.colors().surface,
         title: _Header(
           controller: controller,
           title: tr('tags'),
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.check_rounded), onPressed: () => controller.confirm())
+          IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: controller.confirm)
         ],
         bottom: _TagsSearchBar(controller: controller),
       ),

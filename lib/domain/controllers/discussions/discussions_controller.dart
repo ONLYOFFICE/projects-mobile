@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
@@ -66,6 +68,9 @@ class DiscussionsController extends BaseController {
   RxBool loaded = false.obs;
   RxBool fabIsVisible = false.obs;
 
+  late StreamSubscription _visibilityChangedSubscription;
+  late StreamSubscription _refreshDiscussionsSubscription;
+
   DiscussionsController(
     DiscussionsFilterController filterController,
     PaginationController paginationController,
@@ -81,12 +86,25 @@ class DiscussionsController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    _userController.loaded
-        .listen((_loaded) async => {if (_loaded) fabIsVisible.value = await getFabVisibility()});
+    _userController.loaded.listen((_loaded) async =>
+        {if (_loaded) fabIsVisible.value = await getFabVisibility()});
 
-    locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription = locator<EventHub>()
+        .on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
+
+    _refreshDiscussionsSubscription = locator<EventHub>()
+        .on('needToRefreshDiscussions', (dynamic data) async {
+      if (data.any((elem) => elem == 'all') as bool) await loadDiscussions();
+    });
+  }
+
+  @override
+  void onClose() {
+    _visibilityChangedSubscription.cancel();
+    _refreshDiscussionsSubscription.cancel();
+    super.onClose();
   }
 
   @override
@@ -124,13 +142,13 @@ class DiscussionsController extends BaseController {
       projectId: projectId,
     );
 
-    if (result != null) {
-      paginationController!.total.value = result.total;
+    if (result == null) return Future.value(false);
 
-      if (needToClear) paginationController!.data.clear();
+    paginationController!.total.value = result.total;
+    if (needToClear) paginationController!.data.clear();
+    paginationController!.data.addAll(result.response ?? <Discussion>[]);
 
-      paginationController!.data.addAll(result.response ?? <Discussion>[]);
-    }
+    return Future.value(true);
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()

@@ -45,6 +45,7 @@ import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
@@ -68,9 +69,18 @@ class TaskItemController extends GetxController {
 
   RxBool loaded = false.obs;
   RxBool isStatusLoaded = false.obs;
-  RefreshController refreshController = RefreshController();
-  RefreshController subtaskRefreshController = RefreshController();
-  RefreshController commentsRefreshController = RefreshController();
+
+  RefreshController get refreshController {
+    return RefreshController();
+  }
+
+  RefreshController get subtaskRefreshController {
+    return RefreshController();
+  }
+
+  RefreshController get commentsRefreshController {
+    return RefreshController();
+  }
 
   set setLoaded(bool value) => loaded.value = value;
 
@@ -96,26 +106,39 @@ class TaskItemController extends GetxController {
 
   final commentsListController = ScrollController();
 
+  late StreamSubscription _refreshParentTaskSubscription;
+  late StreamSubscription _scrollToLastCommentSubscription;
+
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
-    locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+    _refreshParentTaskSubscription =
+        locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         final showLoading = data.length > 1 ? data[1] as bool : false;
         await reloadTask(showLoading: showLoading);
       }
     });
 
-    locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+    _scrollToLastCommentSubscription =
+        locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         scrollToLastComment();
       }
     });
   }
 
+  @override
+  void onClose() {
+    _refreshParentTaskSubscription.cancel();
+    _scrollToLastCommentSubscription.cancel();
+    super.onClose();
+  }
+
   void scrollToLastComment() {
     if (commentsListController.hasClients) {
-      commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
+      commentsListController
+          .jumpTo(commentsListController.position.maxScrollExtent);
     }
   }
 
@@ -212,19 +235,26 @@ class TaskItemController extends GetxController {
 
     await team.getTeam();
     final responsibles = team.usersList
-        .where((user) => task.value.responsibles!.any((element) => user.id == element!.id))
+        .where((user) =>
+            task.value.responsibles!.any((element) => user.id == element!.id))
         .toList();
     task.value.responsibles!.clear();
     for (final user in responsibles) {
       task.value.responsibles!.add(user.portalUser);
     }
 
+    locator<EventHub>().fire('needToRefreshTasks');
+
     if (showLoading) loaded.value = true;
   }
 
-  void openStatuses(BuildContext context) {
+  Future<void> openStatuses(BuildContext context) async {
     if (task.value.canEdit! && isStatusLoaded.isTrue) {
-      showsStatusesBS(context: context, taskItemController: this);
+      if (Get.find<PlatformController>().isMobile) {
+        showsStatusesBS(context: context, taskItemController: this);
+      } else {
+        showsStatusesPM(context: context, taskItemController: this);
+      }
     }
   }
 

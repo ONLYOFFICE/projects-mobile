@@ -48,11 +48,20 @@ class ProjectTeamController extends GetxController {
   RxBool loaded = true.obs;
   RxBool nothingFound = false.obs;
   var _startIndex = 0;
-  RefreshController refreshController = RefreshController();
+
+  RefreshController _refreshController = RefreshController();
+
+  RefreshController get refreshController {
+    if (!_refreshController.isLoading && !_refreshController.isRefresh)
+      _refreshController = RefreshController();
+    return _refreshController;
+  }
+
   int totalProfiles = 0;
   int _projectId = 0;
   RxBool isSearchResult = false.obs;
-  RxList<PortalUserItemController> searchResult = <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> searchResult =
+      <PortalUserItemController>[].obs;
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
   bool _withoutVisitors = false;
@@ -66,58 +75,64 @@ class ProjectTeamController extends GetxController {
   Future onLoading() async {
     _startIndex += 25;
     if (_startIndex >= totalProfiles) {
-      refreshController.loadComplete();
+      _refreshController.loadComplete();
       _startIndex -= 25;
       return;
     }
     await _loadTeam();
-    refreshController.loadComplete();
+    _refreshController.loadComplete();
   }
 
-  Future<void> _loadTeam({bool needToClear = false}) async {
+  Future<bool> _loadTeam({bool needToClear = false}) async {
     final result = await _api.getProjectTeam(_projectId);
 
-    if (result != null) {
-      totalProfiles = result.length;
+    if (result == null) return Future.value(false);
 
-      if (needToClear) usersList.clear();
+    totalProfiles = result.length;
 
-      for (final element in result) {
-        if (_withoutVisitors && element.isVisitor!) continue;
-        if (_withoutBlocked && element.status == UserStatus.Terminated) {
-          continue;
-        }
+    if (needToClear) usersList.clear();
 
-        final portalUser = PortalUserItemController(portalUser: element);
-        portalUser.selectionMode.value = selectionMode;
-        usersList.add(portalUser);
+    for (final element in result) {
+      if (_withoutVisitors && element.isVisitor!) continue;
+      if (_withoutBlocked && element.status == UserStatus.Terminated) {
+        continue;
       }
 
-      nothingFound.value = usersList.isEmpty;
+      final portalUser = PortalUserItemController(portalUser: element);
+      portalUser.selectionMode.value = selectionMode;
+      usersList.add(portalUser);
     }
+
+    nothingFound.value = usersList.isEmpty;
+
+    return Future.value(true);
   }
 
-  Future getTeam({bool needToClear = true}) async {
+  Future<bool> getTeam({bool needToClear = true}) async {
     loaded.value = false;
+
     await _loadTeam(needToClear: needToClear);
 
     if (_projectDetailed?.status == ProjectStatusCode.closed.index) {
       fabIsVisible.value = false;
 
       loaded.value = true;
-      return;
+      return Future.value(true);
     }
 
     final _userController = Get.find<UserController>();
-    await _userController.getUserInfo();
+    final response = await _userController.getUserInfo();
+    if (!response) return Future.value(false);
     final selfUser = _userController.user!;
 
-    if (_projectDetailed != null && _projectDetailed!.security!['canEditTeam'] as bool) {
+    if (_projectDetailed != null &&
+        _projectDetailed!.security!['canEditTeam'] as bool) {
       fabIsVisible.value = true;
     } else {
       if (selfUser.isAdmin! ||
           selfUser.isOwner! ||
-          (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
+          (selfUser.listAdminModules != null &&
+              selfUser.listAdminModules!.contains('projects'))) {
         fabIsVisible.value = true;
       }
     }
@@ -125,6 +140,7 @@ class ProjectTeamController extends GetxController {
     if (selfUser.isVisitor!) fabIsVisible.value = false;
 
     loaded.value = true;
+    return Future.value(true);
   }
 
   void searchUsers(String query) {

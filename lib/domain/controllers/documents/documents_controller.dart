@@ -35,6 +35,7 @@ import 'dart:convert';
 
 import 'package:event_hub/event_hub.dart';
 import 'package:launch_review/launch_review.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
@@ -53,7 +54,8 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsController extends GetxController {
+class DocumentsController extends GetxController
+    implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
@@ -74,11 +76,13 @@ class DocumentsController extends GetxController {
   late PaginationController _paginationController;
   Timer? _searchDebounce;
 
+  @override
   PaginationController get paginationController => _paginationController;
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   int? _currentFolderId;
+
   int? get currentFolder => _currentFolderId;
 
   var screenName = tr('documents').obs;
@@ -86,10 +90,15 @@ class DocumentsController extends GetxController {
   RxInt filesCount = RxInt(-1);
 
   late DocumentsSortController _sortController;
+
+  @override
   DocumentsSortController get sortController => _sortController;
 
   late DocumentsFilterController _filterController;
+
   DocumentsFilterController get filterController => _filterController;
+
+  late StreamSubscription _refreshDocumentsSubscription;
 
   DocumentsController(
     DocumentsFilterController filterController,
@@ -99,25 +108,33 @@ class DocumentsController extends GetxController {
     _sortController = sortController;
     _paginationController = paginationController;
     _filterController = filterController;
-    _filterController.applyFiltersDelegate = () async => refreshContent();
-    sortController.updateSortDelegate = () async => refreshContent();
-    paginationController.loadDelegate = () async => _getDocuments();
-    paginationController.refreshDelegate = () async => refreshContent();
+    _filterController.applyFiltersDelegate = () async => await refreshContent();
+    sortController.updateSortDelegate = () async => await refreshContent();
+    _paginationController.loadDelegate = () async => await _getDocuments();
+    _paginationController.refreshDelegate = () async => await refreshContent();
 
-    paginationController.pullDownEnabled = true;
+    _paginationController.pullDownEnabled = true;
 
     portalInfoController.setup();
 
-    locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
+    _refreshDocumentsSubscription =
+        locator<EventHub>().on('needToRefreshDocuments', (dynamic data) {
       refreshContent();
     });
+  }
+
+  @override
+  void onClose() {
+    _refreshDocumentsSubscription.cancel();
+    super.onClose();
   }
 
   Future<void> refreshContent() async {
     if (_currentFolderId == null) {
       await initialSetup();
     } else
-      await setupFolder(folderId: _currentFolderId, folderName: screenName.value);
+      await setupFolder(
+          folderId: _currentFolderId, folderName: screenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -145,15 +162,16 @@ class DocumentsController extends GetxController {
     _currentFolderId = null;
 
     _filterController.folderId = null;
-    paginationController.startIndex = 0;
-    if (paginationController.data.isNotEmpty) paginationController.data.clear();
+    _paginationController.startIndex = 0;
+    if (_paginationController.data.isNotEmpty)
+      _paginationController.data.clear();
   }
 
   Future _getDocuments() async {
     final result = await _api.getFilesByParams(
       folderId: _currentFolderId,
       query: _query,
-      startIndex: paginationController.startIndex,
+      startIndex: _paginationController.startIndex,
       sortBy: sortController.currentSortfilter,
       sortOrder: sortController.currentSortOrder,
       typeFilter: _filterController.typeFilter,
@@ -161,19 +179,23 @@ class DocumentsController extends GetxController {
       entityType: _entityType,
     );
 
-    if (result == null) return;
+    if (result == null) return Future.value(false);
 
     if (result.total != null) paginationController.total.value = result.total!;
 
-    if (_currentFolderId != null && result.current != null) _screenName = result.current!.title;
+    if (_currentFolderId != null && result.current != null)
+      _screenName = result.current!.title;
 
-    if (result.folders != null) paginationController.data.addAll(result.folders!);
+    if (result.folders != null)
+      _paginationController.data.addAll(result.folders!);
     if (result.files != null) {
-      paginationController.data.addAll(result.files!);
+      _paginationController.data.addAll(result.files!);
       filesCount.value = result.files!.length;
     }
 
     screenName.value = _screenName ?? tr('documents');
+
+    return Future.value(true);
   }
 
   void clearSearch() {
@@ -182,8 +204,8 @@ class DocumentsController extends GetxController {
     searchInputController.clear();
     nothingFound.value = false;
 
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
+    _paginationController.startIndex = 0;
+    _paginationController.data.clear();
   }
 
   void newSearch(String query) {
@@ -212,7 +234,7 @@ class DocumentsController extends GetxController {
 
     await _getDocuments();
 
-    if (paginationController.data.isEmpty) {
+    if (_paginationController.data.isEmpty) {
       nothingFound.value = true;
     }
 

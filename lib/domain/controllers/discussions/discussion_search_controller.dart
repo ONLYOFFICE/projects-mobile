@@ -81,7 +81,7 @@ class DiscussionSearchController extends BaseController {
 
         if (needToClear) paginationController.startIndex = 0;
 
-        if (query == null || query.isEmpty) {
+        if (query.isEmpty) {
           clearSearch();
         } else {
           await _performSearch(needToClear: needToClear);

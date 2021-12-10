@@ -63,10 +63,11 @@ class PortalUserItemController extends GetxController {
 
   // ignore: unnecessary_cast
   Rx<Widget> avatar = (AppIcon(
-          width: 40,
-          height: 40,
-          icon: SvgIcons.avatar,
-          color: Get.theme.colors().onSurface) as Widget)
+    width: 40,
+    height: 40,
+    icon: SvgIcons.avatar,
+    color: Get.theme.colors().onSurface,
+  ) as Widget)
       .obs;
 
   String? get displayName => portalUser.displayName;
@@ -74,10 +75,11 @@ class PortalUserItemController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      final avatarBytes = await _downloadService.downloadImage(
-          portalUser.avatar ??
-              portalUser.avatarMedium ??
-              portalUser.avatarSmall!);
+      final avatarUrl = portalUser.avatar ??
+          portalUser.avatarMedium ??
+          portalUser.avatarSmall;
+      if (avatarUrl == null) return;
+      final avatarBytes = await _downloadService.downloadImage(avatarUrl);
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;

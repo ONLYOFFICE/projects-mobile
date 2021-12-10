@@ -32,6 +32,7 @@
 
 import 'dart:async';
 
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
@@ -77,18 +78,21 @@ class MilestonesDataSource extends GetxController {
     _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
     paginationController.loadDelegate = () async => _getMilestones();
-    paginationController.refreshDelegate = () async => _getMilestones(needToClear: true);
+    paginationController.refreshDelegate = () async => loadMilestones();
     paginationController.pullDownEnabled = true;
   }
 
   Future loadMilestones() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
+    locator<EventHub>().fire('needToRefreshMilestones', ['all']);
+
     loaded.value = true;
   }
 
-  Future _getMilestones({bool needToClear = false}) async {
+  Future<bool> _getMilestones({bool needToClear = false}) async {
     final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
@@ -99,14 +103,13 @@ class MilestonesDataSource extends GetxController {
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );
+    if (result == null) return Future.value(false);
 
-    if (result != null) {
-      paginationController.total.value = result.length;
+    paginationController.total.value = result.length;
+    if (needToClear) paginationController.data.clear();
+    paginationController.data.addAll(result);
 
-      if (needToClear) paginationController.data.clear();
-
-      paginationController.data.addAll(result);
-    }
+    return Future.value(true);
   }
 
   Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {

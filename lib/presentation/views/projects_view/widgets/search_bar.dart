@@ -74,9 +74,7 @@ class UsersSearchBar extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: () {
-              controller.clearSearch();
-            },
+            onTap: controller.clearSearch,
             child: const Icon(Icons.close, color: Colors.blue),
           )
         ],

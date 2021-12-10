@@ -60,7 +60,7 @@ class PortalApi {
           locator.get<CoreApi>().redirectPortal();
           result = await getCapabilitiesRedirected();
         }
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       String? error;
@@ -72,7 +72,7 @@ class PortalApi {
   }
 
   Future<ApiDTO<Capabilities>> getCapabilitiesRedirected() async {
-    var url = await locator.get<CoreApi>().getCapabilitiesUrl();
+    final url = await locator.get<CoreApi>().getCapabilitiesUrl();
 
     final result = ApiDTO<Capabilities>();
     try {
@@ -80,7 +80,8 @@ class PortalApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body) as Map<String, dynamic>;
-        result.response = Capabilities.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Capabilities.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }

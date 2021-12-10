@@ -39,6 +39,5 @@ abstract class BaseController extends GetxController {
 
   final showAll = false.obs;
   final expandedCardView = true.obs;
-
   void showSearch() {}
 }
