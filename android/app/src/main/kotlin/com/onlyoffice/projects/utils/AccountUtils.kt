@@ -34,10 +34,9 @@ class AccountUtils(private val context: Context) {
         return accounts
     }
 
-
-
     fun addAccount(id: String): String {
-        val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), null, null, null, null)
+        val cursor =
+            context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), null, null, null, null)
         val accounts: Array<String> = parseAccounts(cursor)
         cursor?.close()
         return accounts[0]
@@ -61,16 +60,22 @@ class AccountUtils(private val context: Context) {
             while (cursor.moveToNext()) {
                 val jsonObject = JSONObject()
                 val names = cursor.columnNames
-                val columns = cursor.columnCount
-                repeat(columns) { index ->
+                repeat(cursor.columnCount) { index ->
                     if (cursor.getColumnName(index) == "token" || cursor.getColumnName(index) == "password") {
-                        jsonObject.put(names[index], CryptUtils.decryptAES128(cursor.getString(index), jsonObject.getString("id")))
+                        jsonObject.put(
+                            names[index], CryptUtils.decryptAES128(
+                                cursor.getString(index), cursor.getString(
+                                    cursor.getColumnIndex(
+                                        names[0]
+                                    )
+                                )
+                            )
+                        )
                     } else {
                         jsonObject.put(names[index], cursor.getString(index))
 
                     }
                 }
-
                 arrayList[cursor.position] = jsonObject.toString()
             }
             return arrayList
