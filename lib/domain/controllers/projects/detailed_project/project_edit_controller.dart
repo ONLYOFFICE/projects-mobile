@@ -54,12 +54,14 @@ class ProjectEditController extends BaseProjectEditorController {
   RxBool isSearchResult = false.obs;
   RxBool nothingFound = false.obs;
   RxString projectTitleText = ''.obs;
-  RxString statusText = ''.obs;
+
   var selectedTags;
 
   EditProjectDTO? oldProjectDTO;
 
   ProjectDetailed? _projectDetailed;
+
+  @override
   ProjectDetailed? get projectData => _projectDetailed;
 
   Future<void> setupEditor(ProjectDetailed? projectDetailed) async {
@@ -134,6 +136,7 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = true;
   }
 
+  @override
   Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
       .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed!);
 

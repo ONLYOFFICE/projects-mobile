@@ -71,7 +71,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   RxString creationDateText = ''.obs;
 
-  RxString statusText = ''.obs;
   RxInt tasksCount = 0.obs;
   RxInt docsCount = (-1).obs;
   RxInt milestoneCount = (-1).obs;
@@ -81,6 +80,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
   bool markedToDelete = false;
 
   final Rx<ProjectDetailed?> _projectDetailed = ProjectDetailed().obs;
+
+  @override
   ProjectDetailed? get projectData => _projectDetailed.value;
 
   late StreamSubscription _refreshProjectsSubscription;
@@ -237,6 +238,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return _projectService.deleteProject(projectId: _projectDetailed.value!.id!);
   }
 
+  @override
   Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
       .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed.value!);
 

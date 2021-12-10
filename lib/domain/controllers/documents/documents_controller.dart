@@ -76,11 +76,13 @@ class DocumentsController extends GetxController
   late PaginationController _paginationController;
   Timer? _searchDebounce;
 
+  @override
   PaginationController get paginationController => _paginationController;
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   int? _currentFolderId;
+
   int? get currentFolder => _currentFolderId;
 
   var screenName = tr('documents').obs;
@@ -88,9 +90,12 @@ class DocumentsController extends GetxController
   RxInt filesCount = RxInt(-1);
 
   late DocumentsSortController _sortController;
+
+  @override
   DocumentsSortController get sortController => _sortController;
 
   late DocumentsFilterController _filterController;
+
   DocumentsFilterController get filterController => _filterController;
 
   late StreamSubscription _refreshDocumentsSubscription;

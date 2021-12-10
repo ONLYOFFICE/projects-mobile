@@ -68,22 +68,30 @@ class DocumentsMoveOrCopyController extends GetxController
   String? mode;
 
   int? _targetId;
+
   int? get target => _targetId;
 
   late PaginationController _paginationController;
+
+  @override
   PaginationController get paginationController => _paginationController;
+
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   Folder? _currentFolder;
+
   Folder? get currentFolder => _currentFolder;
 
   var screenName = tr('chooseSection').obs;
 
   late DocumentsSortController _sortController;
+
+  @override
   DocumentsSortController get sortController => _sortController;
 
   late DocumentsFilterController _filterController;
+
   DocumentsFilterController get filterController => _filterController;
 
   DocumentsMoveOrCopyController(
