@@ -105,7 +105,10 @@ class _Content extends StatelessWidget {
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Header(),
+          Visibility(
+              visible:
+                  controller.itemList.isNotEmpty || controller.filterController.hasFilters.value,
+              child: Header()),
           (() {
             if (!controller.loaded.value) return const ListLoadingSkeleton();
 
@@ -167,8 +170,8 @@ class Header extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () async => Get.find<NavigationController>()
-                          .toScreen(const MilestoneFilterScreen()),
+                      onTap: () async =>
+                          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
                       child: FiltersButton(controler: controller),
                     ),
                   ],
@@ -182,8 +185,7 @@ class Header extends StatelessWidget {
   }
 }
 
-class _ProjectMilestonesSortButton extends StatelessWidget
-    with ShowPopupMenuMixin {
+class _ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _ProjectMilestonesSortButton({
     Key? key,
     required this.controller,
@@ -193,13 +195,9 @@ class _ProjectMilestonesSortButton extends StatelessWidget
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(
-          sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
     ];
   }
 
@@ -218,8 +216,7 @@ class _ProjectMilestonesSortButton extends StatelessWidget
                 const SizedBox(height: 20)
               ],
             );
-            await Get.bottomSheet(SortView(sortOptions: options),
-                isScrollControlled: true);
+            await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
           } else {
             await showPopupMenu(
               context: context,
@@ -233,8 +230,7 @@ class _ProjectMilestonesSortButton extends StatelessWidget
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
