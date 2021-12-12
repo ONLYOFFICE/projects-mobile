@@ -71,18 +71,21 @@ class EntityDocumentsView extends StatelessWidget {
     return DocumentsScreen(
       controller: documentsController,
       scrollController: scrollController,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 50),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            title: _DocsTitle(controller: documentsController),
-            showBackButton: false,
-            titleHeight: 50,
-            elevation: value,
-          ),
-        ),
-      ),
+      appBar: documentsController.itemList.isNotEmpty ||
+              documentsController.filterController.hasFilters.value
+          ? PreferredSize(
+              preferredSize: const Size(double.infinity, 50),
+              child: ValueListenableBuilder(
+                valueListenable: elevation,
+                builder: (_, double value, __) => StyledAppBar(
+                  title: _DocsTitle(controller: documentsController),
+                  showBackButton: false,
+                  titleHeight: 50,
+                  elevation: value,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
@@ -181,13 +184,12 @@ class _DocsTitle extends StatelessWidget {
               children: <Widget>[
                 InkResponse(
                   onTap: () {
-                    Get.find<NavigationController>().to(DocumentsSearchView(),
-                        preventDuplicates: false,
-                        arguments: {
-                          'folderName': controller.screenName.value,
-                          'folderId': controller.currentFolder,
-                          'entityType': controller.entityType,
-                        });
+                    Get.find<NavigationController>()
+                        .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                      'folderName': controller.screenName.value,
+                      'folderId': controller.currentFolder,
+                      'entityType': controller.entityType,
+                    });
                   },
                   child: AppIcon(
                     width: 24,
@@ -201,9 +203,7 @@ class _DocsTitle extends StatelessWidget {
                   onTap: () async => Get.find<NavigationController>().toScreen(
                       const DocumentsFilterScreen(),
                       preventDuplicates: false,
-                      arguments: {
-                        'filterController': controller.filterController
-                      }),
+                      arguments: {'filterController': controller.filterController}),
                   child: FiltersButton(controler: controller),
                 ),
               ],
@@ -215,8 +215,7 @@ class _DocsTitle extends StatelessWidget {
   }
 }
 
-class _ProjectDocumentsSortButton extends StatelessWidget
-    with ShowPopupMenuMixin {
+class _ProjectDocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const _ProjectDocumentsSortButton({
     Key? key,
     required this.controller,
@@ -232,8 +231,7 @@ class _ProjectDocumentsSortButton extends StatelessWidget
         onTap: () async {
           if (Get.find<PlatformController>().isMobile) {
             await Get.bottomSheet(
-              SortView(
-                  sortOptions: DocumentsSortOption(controller: controller)),
+              SortView(sortOptions: DocumentsSortOption(controller: controller)),
               isScrollControlled: true,
             );
           } else {
@@ -276,8 +274,7 @@ class _ProjectDocumentsSortButton extends StatelessWidget
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),

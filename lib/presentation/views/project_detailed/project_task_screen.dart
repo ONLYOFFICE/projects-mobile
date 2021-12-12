@@ -108,7 +108,10 @@ class _Content extends StatelessWidget {
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Header(controller: controller),
+          Visibility(
+              visible:
+                  controller.itemList.isNotEmpty || controller.filterController.hasFilters.value,
+              child: Header(controller: controller)),
           (() {
             if (!controller.loaded.value) return const ListLoadingSkeleton();
 
@@ -129,15 +132,12 @@ class _Content extends StatelessWidget {
                       controller.paginationController.data.isEmpty &&
                       controller.filterController.hasFilters.value)
                     return Center(
-                      child: EmptyScreen(
-                          icon: SvgIcons.not_found,
-                          text: tr('noTasksMatching')),
+                      child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
                     );
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isNotEmpty)
+                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
                     return ListView.builder(
-                      itemBuilder: (c, i) => TaskCell(
-                          task: controller.paginationController.data[i]),
+                      itemBuilder: (c, i) =>
+                          TaskCell(task: controller.paginationController.data[i]),
                       itemExtent: 72,
                       itemCount: controller.paginationController.data.length,
                     );
@@ -174,12 +174,10 @@ class Header extends StatelessWidget {
                 child: Row(
                   children: <Widget>[
                     InkWell(
-                      onTap: () async => Get.find<NavigationController>()
-                          .toScreen(const TasksFilterScreen(),
-                              preventDuplicates: false,
-                              arguments: {
-                            'filterController': controller.filterController
-                          }),
+                      onTap: () async => Get.find<NavigationController>().toScreen(
+                          const TasksFilterScreen(),
+                          preventDuplicates: false,
+                          arguments: {'filterController': controller.filterController}),
                       child: FiltersButton(controler: controller),
                     ),
                   ],
@@ -203,21 +201,12 @@ class _ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(
-          sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'priority', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'start_date',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'title', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'sort_order',
-          sortController: controller.sortController),
+      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(sortParameter: 'priority', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'start_date', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
     ];
   }
 
@@ -236,8 +225,7 @@ class _ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
                 const SizedBox(height: 20)
               ],
             );
-            await Get.bottomSheet(SortView(sortOptions: options),
-                isScrollControlled: true);
+            await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
           } else {
             await showPopupMenu(
               context: context,
@@ -251,8 +239,7 @@ class _ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
