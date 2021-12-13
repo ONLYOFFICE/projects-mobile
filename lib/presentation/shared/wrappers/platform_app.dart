@@ -537,7 +537,7 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
 
   @override
   createMaterialWidget(BuildContext context) {
-    return GetMaterialApp();
+    //return GetMaterialApp();
     /* final dataRouter = materialRouter?.call(context, platform(context));
 
     if (routeInformationParser != null ||
@@ -601,64 +601,54 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
             useInheritedMediaQuery ??
             false,
       );
-    } else {
-      final data = material?.call(context, platform(context));
-      return MaterialApp(
-        key: data?.widgetKey ?? widgetKey,
-        navigatorKey: data?.navigatorKey ?? navigatorKey,
-        home: data?.home ?? home,
-        routes: data?.routes ?? routes ?? const <String, WidgetBuilder>{},
-        initialRoute: data?.initialRoute ?? initialRoute,
-        onGenerateRoute: data?.onGenerateRoute ?? onGenerateRoute,
-        onUnknownRoute: data?.onUnknownRoute ?? onUnknownRoute,
-        navigatorObservers: data?.navigatorObservers ??
-            navigatorObservers ??
-            const <NavigatorObserver>[],
-        builder: data?.builder ?? builder,
-        title: data?.title ?? title ?? '',
-        onGenerateTitle: data?.onGenerateTitle ?? onGenerateTitle,
-        color: data?.color ?? color,
-        locale: data?.locale ?? locale,
-        localizationsDelegates:
-            data?.localizationsDelegates ?? localizationsDelegates,
-        localeListResolutionCallback:
-            data?.localeListResolutionCallback ?? localeListResolutionCallback,
-        localeResolutionCallback:
-            data?.localeResolutionCallback ?? localeResolutionCallback,
-        supportedLocales: data?.supportedLocales ??
-            supportedLocales ??
-            const <Locale>[Locale('en', 'US')],
-        showPerformanceOverlay:
-            data?.showPerformanceOverlay ?? showPerformanceOverlay ?? false,
-        checkerboardRasterCacheImages: data?.checkerboardRasterCacheImages ??
-            checkerboardRasterCacheImages ??
-            false,
-        checkerboardOffscreenLayers: data?.checkerboardOffscreenLayers ??
-            checkerboardOffscreenLayers ??
-            false,
-        showSemanticsDebugger:
-            data?.showSemanticsDebugger ?? showSemanticsDebugger ?? false,
-        debugShowCheckedModeBanner: data?.debugShowCheckedModeBanner ??
-            debugShowCheckedModeBanner ??
-            true,
-        theme: (data?.theme ?? Theme.of(context))
-            .copyWith(platform: TargetPlatform.android),
-        debugShowMaterialGrid: data?.debugShowMaterialGrid ?? false,
-        darkTheme: data?.darkTheme?.copyWith(platform: TargetPlatform.android),
-        themeMode: data?.themeMode ?? ThemeMode.system,
-        shortcuts: data?.shortcuts ?? shortcuts,
-        actions: data?.actions ?? actions,
-        onGenerateInitialRoutes:
-            data?.onGenerateInitialRoutes ?? onGenerateInitialRoutes,
-        highContrastDarkTheme: data?.highContrastDarkTheme,
-        highContrastTheme: data?.highContrastTheme,
-        restorationScopeId: data?.restorationScopeId ?? restorationScopeId,
-        scaffoldMessengerKey: data?.scaffoldMessengerKey,
-        scrollBehavior: data?.scrollBehavior ?? scrollBehavior,
-        useInheritedMediaQuery:
-            data?.useInheritedMediaQuery ?? useInheritedMediaQuery ?? false,
-      ); 
-    }*/
+    } else {*/
+    final data = material?.call(context, platform(context));
+    return GetMaterialApp(
+      key: data?.widgetKey ?? widgetKey,
+      navigatorKey: data?.navigatorKey ?? navigatorKey,
+      home: data?.home ?? home,
+      routes: data?.routes ?? routes ?? const <String, WidgetBuilder>{},
+      initialRoute: data?.initialRoute ?? initialRoute,
+      onGenerateRoute: data?.onGenerateRoute ?? onGenerateRoute,
+      onUnknownRoute: data?.onUnknownRoute ?? onUnknownRoute,
+      navigatorObservers:
+          data?.navigatorObservers ?? navigatorObservers ?? const <NavigatorObserver>[],
+      builder: data?.builder ?? builder,
+      title: data?.title ?? title ?? '',
+      onGenerateTitle: data?.onGenerateTitle ?? onGenerateTitle,
+      color: data?.color ?? color,
+      locale: data?.locale ?? locale,
+      localizationsDelegates: data?.localizationsDelegates ?? localizationsDelegates,
+      localeListResolutionCallback:
+          data?.localeListResolutionCallback ?? localeListResolutionCallback,
+      localeResolutionCallback: data?.localeResolutionCallback ?? localeResolutionCallback,
+      supportedLocales:
+          data?.supportedLocales ?? supportedLocales ?? const <Locale>[Locale('en', 'US')],
+      showPerformanceOverlay: data?.showPerformanceOverlay ?? showPerformanceOverlay ?? false,
+      checkerboardRasterCacheImages:
+          data?.checkerboardRasterCacheImages ?? checkerboardRasterCacheImages ?? false,
+      checkerboardOffscreenLayers:
+          data?.checkerboardOffscreenLayers ?? checkerboardOffscreenLayers ?? false,
+      showSemanticsDebugger: data?.showSemanticsDebugger ?? showSemanticsDebugger ?? false,
+      debugShowCheckedModeBanner:
+          data?.debugShowCheckedModeBanner ?? debugShowCheckedModeBanner ?? true,
+      theme: (data?.theme ?? Theme.of(context)).copyWith(platform: TargetPlatform.android),
+      debugShowMaterialGrid: data?.debugShowMaterialGrid ?? false,
+      darkTheme: data?.darkTheme?.copyWith(platform: TargetPlatform.android),
+      themeMode: data?.themeMode ?? ThemeMode.system,
+      shortcuts: data?.shortcuts ?? shortcuts,
+      actions: data?.actions ?? actions,
+      onGenerateInitialRoutes: data?.onGenerateInitialRoutes ?? onGenerateInitialRoutes,
+      highContrastDarkTheme: data?.highContrastDarkTheme,
+      highContrastTheme: data?.highContrastTheme,
+      //restorationScopeId: data?.restorationScopeId ?? restorationScopeId,
+      scaffoldMessengerKey: data?.scaffoldMessengerKey,
+      scrollBehavior: data?.scrollBehavior ?? scrollBehavior,
+      getPages: getPages,
+      /* useInheritedMediaQuery:
+            data?.useInheritedMediaQuery ?? useInheritedMediaQuery ?? false, */
+    );
+    /*}*/
   }
 
   @override
