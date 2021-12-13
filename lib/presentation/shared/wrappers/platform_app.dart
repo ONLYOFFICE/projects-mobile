@@ -451,6 +451,10 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
   final bool? useInheritedMediaQuery;
 
   final List<GetPage>? getPages;
+  final ThemeData? theme;
+  final ThemeData? darkTheme;
+  final ThemeMode? themeMode;
+  final CupertinoThemeData? cupertinoTheme;
 
   const PlatformApp(
       {Key? key,
@@ -484,7 +488,11 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
       this.useInheritedMediaQuery,
       this.material,
       this.cupertino,
-      this.getPages})
+      this.getPages,
+      this.theme,
+      this.darkTheme,
+      this.themeMode,
+      this.cupertinoTheme})
       : routeInformationProvider = null,
         routeInformationParser = null,
         routerDelegate = null,
@@ -632,10 +640,10 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
       showSemanticsDebugger: data?.showSemanticsDebugger ?? showSemanticsDebugger ?? false,
       debugShowCheckedModeBanner:
           data?.debugShowCheckedModeBanner ?? debugShowCheckedModeBanner ?? true,
-      theme: (data?.theme ?? Theme.of(context)).copyWith(platform: TargetPlatform.android),
+      theme: theme,
       debugShowMaterialGrid: data?.debugShowMaterialGrid ?? false,
-      darkTheme: data?.darkTheme?.copyWith(platform: TargetPlatform.android),
-      themeMode: data?.themeMode ?? ThemeMode.system,
+      darkTheme: darkTheme,
+      themeMode: themeMode ?? ThemeMode.system,
       shortcuts: data?.shortcuts ?? shortcuts,
       actions: data?.actions ?? actions,
       onGenerateInitialRoutes: data?.onGenerateInitialRoutes ?? onGenerateInitialRoutes,
@@ -739,7 +747,7 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
       showSemanticsDebugger: data?.showSemanticsDebugger ?? showSemanticsDebugger ?? false,
       debugShowCheckedModeBanner:
           data?.debugShowCheckedModeBanner ?? debugShowCheckedModeBanner ?? true,
-      theme: data?.theme,
+      theme: cupertinoTheme,
       shortcuts: data?.shortcuts ?? shortcuts,
       actions: data?.actions ?? actions,
       onGenerateInitialRoutes: data?.onGenerateInitialRoutes ?? onGenerateInitialRoutes,

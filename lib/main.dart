@@ -140,9 +140,10 @@ class App extends GetMaterialApp {
         supportedLocales: context.supportedLocales,
         locale: context.deviceLocale,
         title: 'ONLYOFFICE',
-        //theme: lightTheme,
-        //darkTheme: darkTheme,
-        //themeMode: ThemeService().savedThemeMode(),
+        theme: lightTheme,
+        darkTheme: darkTheme,
+        themeMode: ThemeService().savedThemeMode(),
+        cupertinoTheme: cupertinoTheme,
       ),
     );
   }
