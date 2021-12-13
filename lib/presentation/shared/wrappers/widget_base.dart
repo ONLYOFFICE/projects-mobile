@@ -10,11 +10,9 @@ import 'package:flutter/widgets.dart';
 import 'platform.dart';
 
 typedef T PlatformBuilder<T>(BuildContext context, PlatformTarget platform);
-typedef T PlatformIndexBuilder<T>(
-    BuildContext context, PlatformTarget platform, int index);
+typedef T PlatformIndexBuilder<T>(BuildContext context, PlatformTarget platform, int index);
 
-abstract class PlatformWidgetBase<I extends Widget, A extends Widget>
-    extends StatelessWidget {
+abstract class PlatformWidgetBase<I extends Widget, A extends Widget> extends StatelessWidget {
   const PlatformWidgetBase({Key? key}) : super(key: key);
 
   @override
@@ -25,11 +23,10 @@ abstract class PlatformWidgetBase<I extends Widget, A extends Widget>
       return createCupertinoWidget(context);
     }
 
-    return throw new UnsupportedError(
-        'This platform is not supported: $defaultTargetPlatform');
+    return throw new UnsupportedError('This platform is not supported: $defaultTargetPlatform');
   }
 
-  I createCupertinoWidget(BuildContext context);
+  Widget createCupertinoWidget(BuildContext context);
 
-  A createMaterialWidget(BuildContext context);
+  Widget createMaterialWidget(BuildContext context);
 }

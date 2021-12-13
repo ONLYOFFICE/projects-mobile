@@ -81,8 +81,7 @@ class CupertinoTextButtonData extends _BaseData {
   final bool originalStyle;
 }
 
-class PlatformTextButton
-    extends PlatformWidgetBase<CupertinoButton, TextButton> {
+class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton> {
   final Key? widgetKey;
 
   final VoidCallback? onPressed;
@@ -94,12 +93,17 @@ class PlatformTextButton
   final PlatformBuilder<CupertinoTextButtonData>? cupertino;
   final PlatformBuilder<MaterialTextButtonData>? material;
 
+  Color? color;
+  Color? disabledColor;
+
   PlatformTextButton({
     this.widgetKey,
     this.onPressed,
     this.child,
     this.padding,
     this.alignment,
+    this.color,
+    this.disabledColor,
     this.material,
     this.cupertino,
   });
@@ -120,26 +124,25 @@ class PlatformTextButton
         autofocus: data?.autofocus ?? false,
         clipBehavior: data?.clipBehavior ?? Clip.none,
         focusNode: data?.focusNode,
-        style: data?.style ??
-            TextButton.styleFrom(padding: padding, alignment: alignment),
+        style: data?.style ?? TextButton.styleFrom(padding: padding, alignment: alignment),
       );
     }
 
     return TextButton(
-      key: data?.widgetKey ?? widgetKey,
+      //key: data?.widgetKey ?? widgetKey,
       child: data?.child ?? child!,
       onPressed: data?.onPressed ?? onPressed,
       onLongPress: data?.onLongPress,
       autofocus: data?.autofocus ?? false,
       clipBehavior: data?.clipBehavior ?? Clip.none,
       focusNode: data?.focusNode,
-      style: data?.style ??
-          TextButton.styleFrom(padding: padding, alignment: alignment),
+      //style: data?.style ?? TextButton.styleFrom(padding: padding, alignment: alignment),
+      style: TextButton.styleFrom(backgroundColor: color, minimumSize: Size(double.infinity, 0)),
     );
   }
 
   @override
-  CupertinoButton createCupertinoWidget(BuildContext context) {
+  Widget createCupertinoWidget(BuildContext context) {
     final data = cupertino?.call(context, platform(context));
 
     if (data?.originalStyle ?? false) {
@@ -147,29 +150,28 @@ class PlatformTextButton
         key: data?.widgetKey ?? widgetKey,
         child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ??
-            const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
         minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
-        disabledColor:
-            data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
+        disabledColor: data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: data?.alignment ?? alignment ?? Alignment.center,
       );
     } else {
-      return CupertinoButton(
-        key: data?.widgetKey ?? widgetKey,
-        child: data?.child ?? child!,
-        onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ??
-            const BorderRadius.all(const Radius.circular(8.0)),
-        minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
-        padding: data?.padding ?? padding,
-        pressedOpacity: data?.pressedOpacity ?? 0.4,
-        disabledColor:
-            data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
-        alignment: data?.alignment ?? alignment ?? Alignment.center,
-        color: data?.color,
+      return SizedBox(
+        width: double.infinity,
+        child: CupertinoButton(
+          //key: data?.widgetKey ?? widgetKey,
+          child: data?.child ?? child!,
+          onPressed: data?.onPressed ?? onPressed,
+          borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(6)),
+          //minSize: 200,
+          //padding: EdgeInsets.symmetric(horizontal: 40),
+          pressedOpacity: data?.pressedOpacity ?? 0.4,
+          color: color,
+          disabledColor: disabledColor!,
+          alignment: data?.alignment ?? alignment ?? Alignment.center,
+        ),
       );
     }
   }
