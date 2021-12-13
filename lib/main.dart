@@ -46,6 +46,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/theme_service.dart';
+import 'package:projects/presentation/shared/wrappers/platform_app.dart';
 
 void main() async {
   HttpOverrides.global = DevHttpOverrides();
@@ -132,16 +133,16 @@ class App extends GetMaterialApp {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-      child: GetMaterialApp(
+      child: PlatformApp(
         initialRoute: initialPage,
         getPages: getxPages(),
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,
         locale: context.deviceLocale,
         title: 'ONLYOFFICE',
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        themeMode: ThemeService().savedThemeMode(),
+        //theme: lightTheme,
+        //darkTheme: darkTheme,
+        //themeMode: ThemeService().savedThemeMode(),
       ),
     );
   }
