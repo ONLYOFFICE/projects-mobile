@@ -121,7 +121,7 @@ Future<bool> isAuthorized() async {
   return true;
 }
 
-class App extends GetMaterialApp {
+class App extends StatelessWidget {
   final String? initialPage;
 
   const App({Key? key, this.initialPage}) : super(key: key);
