@@ -13,7 +13,7 @@ class App : FlutterApplication() {
         super.onCreate()
         accountUtils = AccountUtils(this)
         if (PackagesUtils.isPackageExist(this, "com.onlyoffice.documents")) {
-            accountUtils?.getAccounts()
+            // Check
         }
     }
 }
