@@ -66,9 +66,9 @@ class DashboardView extends StatelessWidget {
           return [
             PlatformWidget(
               material: (context, target) => SliverAppBar(
+                backgroundColor: Get.theme.colors().background,
                 pinned: true,
-                floating: true,
-                title: Text(dashboardController.screenName.value),
+                title: Title(controller: dashboardController),
               ),
               cupertino: (context, target) => CupertinoSliverNavigationBar(
                 largeTitle: Text(dashboardController.screenName.value),
@@ -149,8 +149,7 @@ class DashboardCardView extends StatelessWidget {
             children: <Widget>[
               InkWell(
                 onTap: () => {
-                  controller.expandedCardView.value =
-                      !(controller.expandedCardView.value as bool)
+                  controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
                 },
                 child: Container(
                   height: 60,
@@ -164,8 +163,7 @@ class DashboardCardView extends StatelessWidget {
                           Text(
                             overline.toUpperCase(),
                             style: TextStyleHelper.overline(
-                              color:
-                                  Get.theme.colors().onSurface.withOpacity(0.6),
+                              color: Get.theme.colors().onSurface.withOpacity(0.6),
                             ),
                           ),
                           Text(
@@ -187,8 +185,7 @@ class DashboardCardView extends StatelessWidget {
                             child: Center(
                               child: Obx(
                                 () => Text(
-                                  controller.paginationController.total.value
-                                      .toString(),
+                                  controller.paginationController.total.value.toString(),
                                   textAlign: TextAlign.center,
                                   style: TextStyleHelper.subtitle2(),
                                 ),
@@ -214,15 +211,13 @@ class DashboardCardView extends StatelessWidget {
                       () => Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          if (controller is ProjectsController &&
-                              controller.loaded.value as bool)
+                          if (controller is ProjectsController && controller.loaded.value as bool)
                             Expanded(
                               child: ProjectCardContent(
                                 controller: controller as ProjectsController,
                               ),
                             ),
-                          if (controller is TasksController &&
-                              controller.loaded.value as bool)
+                          if (controller is TasksController && controller.loaded.value as bool)
                             Expanded(
                               child: TaskCardContent(
                                 controller: controller as TasksController,
@@ -248,13 +243,9 @@ class DashboardCardView extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    tr('dashboardNoActive',
-                                        args: [overline.toLowerCase()]),
+                                    tr('dashboardNoActive', args: [overline.toLowerCase()]),
                                     style: TextStyleHelper.subtitle1(
-                                      color: Get.theme
-                                          .colors()
-                                          .onSurface
-                                          .withOpacity(0.6),
+                                      color: Get.theme.colors().onSurface.withOpacity(0.6),
                                     ),
                                   ),
                                 ],
@@ -268,9 +259,7 @@ class DashboardCardView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           if (controller.loaded.value as bool &&
-                              (controller.paginationController.total.value
-                                      as int) >
-                                  2)
+                              (controller.paginationController.total.value as int) > 2)
                             SizedBox(
                               height: 50,
                               child: Column(
@@ -282,9 +271,7 @@ class DashboardCardView extends StatelessWidget {
                                           controller is ProjectsController
                                               ? const ProjectsDashboardMoreView()
                                               : const TasksDashboardMoreView(),
-                                          arguments: {
-                                            'controller': controller
-                                          }),
+                                          arguments: {'controller': controller}),
                                     },
                                     child: !(controller.showAll.value as bool)
                                         ? Text(
@@ -329,8 +316,7 @@ class Title extends StatelessWidget {
             child: Obx(
               () => Text(
                 controller.screenName.value,
-                style: TextStyleHelper.headerStyle(
-                    color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
             ),
           ),
@@ -401,8 +387,8 @@ class TaskCardContent extends StatelessWidget {
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
-                      itemBuilder: (c, i) => TaskCell(
-                          task: controller.paginationController.data[i]),
+                      itemBuilder: (c, i) =>
+                          TaskCell(task: controller.paginationController.data[i]),
                       itemCount: controller.paginationController.data.length,
                     ),
                   ]),
@@ -418,8 +404,7 @@ class TaskCardContent extends StatelessWidget {
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
                       itemBuilder: (c, i) => i < 2
-                          ? TaskCell(
-                              task: controller.paginationController.data[i])
+                          ? TaskCell(task: controller.paginationController.data[i])
                           : const SizedBox(),
                       itemCount: controller.paginationController.data.length,
                     ),

@@ -334,10 +334,10 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
 
     final hintText = this.hintText;
     final decoration = hintText == null
-        ? (data?.decoration ?? const InputDecoration())
+        ? (data?.decoration ?? this.decoration ?? const InputDecoration())
         : _inputDecorationWithHint(
             hintText,
-            data?.decoration ?? const InputDecoration(),
+            data?.decoration ?? this.decoration ?? const InputDecoration(),
           );
 
     return TextFormField(

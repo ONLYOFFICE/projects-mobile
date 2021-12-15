@@ -35,6 +35,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double titleHeight;
@@ -50,7 +52,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function()? onLeadingPressed;
   final Color? backgroundColor;
 
-  final Icon backButtonIcon;
+  final Icon? backButtonIcon;
 
   StyledAppBar({
     Key? key,
@@ -62,7 +64,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
-    this.backButtonIcon = const Icon(Icons.arrow_back_rounded),
+    this.backButtonIcon,
     this.title,
     this.titleHeight = 56,
     this.titleText,
@@ -96,8 +98,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       //   statusBarIconBrightness: Brightness.dark,
       // ),
       leading: leading == null && showBackButton
-          ? IconButton(
-              icon: backButtonIcon,
+          ? PlatformIconButton(
+              icon: Icon(PlatformIcons(context).back),
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
