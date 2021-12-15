@@ -27,8 +27,8 @@ class AccountUtils(private val context: Context) {
         return time
     }
 
-    fun getAccounts(): Array<String> {
-        val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS"), null, null, null, null)
+    fun getAccounts(login: String? = null): Array<String> {
+        val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS"), null, null, arrayOf(login), null)
         val accounts: Array<String> = parseAccounts(cursor)
         cursor?.close()
         return accounts
