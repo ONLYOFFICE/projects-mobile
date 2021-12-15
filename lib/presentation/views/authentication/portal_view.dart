@@ -31,7 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
@@ -40,6 +40,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_scaffold.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -54,8 +56,7 @@ class PortalInputView extends StatelessWidget {
         child: Obx(
           () => controller.state.value == ViewState.Busy
               ? SizedBox(
-                  height: Get.height,
-                  child: const Center(child: CircularProgressIndicator()))
+                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator()))
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -85,29 +86,18 @@ class PortalInputView extends StatelessWidget {
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.85),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.19)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.25),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.04)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
                           ]),
                           child: WideButton(
                             text: tr('next'),
-                            textColor: controller.needAgreement &&
-                                    !controller.checkBoxValue.value
-                                ? Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.5)
+                            textColor: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().onBackground.withOpacity(0.5)
                                 : null,
-                            color: controller.needAgreement &&
-                                    !controller.checkBoxValue.value
+                            color: controller.needAgreement && !controller.checkBoxValue.value
                                 ? Get.theme.colors().bgDescription
                                 : null,
                             onPressed: controller.getPortalCapabilities,
@@ -117,10 +107,7 @@ class PortalInputView extends StatelessWidget {
                           PrivacyAndTermsFooter.withCheckbox()
                         else
                           const Spacer(),
-                        if (controller.needAgreement)
-                          const Spacer()
-                        else
-                          PrivacyAndTermsFooter()
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
                       ],
                     ),
                   ),

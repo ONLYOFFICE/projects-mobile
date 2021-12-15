@@ -545,7 +545,6 @@ class PlatformApp extends PlatformWidgetBase<GetCupertinoApp, GetMaterialApp> {
 
   @override
   createMaterialWidget(BuildContext context) {
-    //return GetMaterialApp();
     /* final dataRouter = materialRouter?.call(context, platform(context));
 
     if (routeInformationParser != null ||

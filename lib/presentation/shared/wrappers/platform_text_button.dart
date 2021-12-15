@@ -162,15 +162,16 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
         width: double.infinity,
         child: CupertinoButton(
           //key: data?.widgetKey ?? widgetKey,
-          child: data?.child ?? child!,
           onPressed: data?.onPressed ?? onPressed,
           borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(6)),
           //minSize: 200,
           //padding: EdgeInsets.symmetric(horizontal: 40),
           pressedOpacity: data?.pressedOpacity ?? 0.4,
           color: color,
-          disabledColor: disabledColor!,
+          disabledColor: disabledColor ?? CupertinoColors.quaternarySystemFill,
           alignment: data?.alignment ?? alignment ?? Alignment.center,
+          //key: data?.widgetKey ?? widgetKey,
+          child: data?.child ?? child!,
         ),
       );
     }

@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_form_field.dart';
 
 class AuthTextField extends StatelessWidget {
   final bool obscureText;
@@ -59,7 +60,7 @@ class AuthTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return PlatformTextFormField(
       controller: controller,
       autofillHints: [autofillHint!],
       onChanged: onChanged,
@@ -68,16 +69,13 @@ class AuthTextField extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       style: TextStyleHelper.subtitle1(
-        color: hasError
-            ? Get.theme.colors().colorError
-            : Get.theme.colors().onSurface,
+        color: hasError ? Get.theme.colors().colorError : Get.theme.colors().onSurface,
       ),
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.only(left: 12, bottom: 8),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
         // labelText: hintText,
-        labelStyle: TextStyleHelper.caption(
-            color: Get.theme.colors().onSurface.withOpacity(0.6)),
+        labelStyle: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
         hintText: hintText,
         hintStyle: TextStyleHelper.subtitle1(
           color: !hasError
@@ -85,9 +83,11 @@ class AuthTextField extends StatelessWidget {
               : Get.theme.colors().colorError,
         ),
         focusedBorder: UnderlineInputBorder(
-            borderSide: BorderSide(
-                color: Get.theme.colors().onSurface.withOpacity(0.42))),
+            borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
       ),
+      cupertinoDecoration: BoxDecoration(
+          border:
+              Border(bottom: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42)))),
     );
   }
 }

@@ -160,8 +160,7 @@ class PlatformScaffold extends PlatformWidgetBase<Widget, Scaffold> {
       backgroundColor: data?.backgroundColor ?? backgroundColor,
       body: data?.body ?? body,
       appBar: data?.appBar ?? appBar?.createMaterialWidget(context),
-      bottomNavigationBar:
-          data?.bottomNavBar ?? bottomNavBar?.createMaterialWidget(context),
+      bottomNavigationBar: data?.bottomNavBar ?? bottomNavBar?.createMaterialWidget(context),
       drawer: data?.drawer,
       endDrawer: data?.endDrawer,
       floatingActionButton: data?.floatingActionButton,
@@ -170,16 +169,14 @@ class PlatformScaffold extends PlatformWidgetBase<Widget, Scaffold> {
       persistentFooterButtons: data?.persistentFooterButtons,
       primary: data?.primary ?? true,
       bottomSheet: data?.bottomSheet,
-      drawerDragStartBehavior:
-          data?.drawerDragStartBehavior ?? DragStartBehavior.start,
+      drawerDragStartBehavior: data?.drawerDragStartBehavior ?? DragStartBehavior.start,
       extendBody: data?.extendBody ?? false,
       resizeToAvoidBottomInset: data?.resizeToAvoidBottomInset,
       drawerScrimColor: data?.drawerScrimColor,
       drawerEdgeDragWidth: data?.drawerEdgeDragWidth,
       extendBodyBehindAppBar: data?.extendBodyBehindAppBar ?? false,
       drawerEnableOpenDragGesture: data?.drawerEnableOpenDragGesture ?? true,
-      endDrawerEnableOpenDragGesture:
-          data?.endDrawerEnableOpenDragGesture ?? true,
+      endDrawerEnableOpenDragGesture: data?.endDrawerEnableOpenDragGesture ?? true,
       onDrawerChanged: data?.onDrawerChanged,
       onEndDrawerChanged: data?.onEndDrawerChanged,
       restorationId: data?.restorationId,
@@ -190,18 +187,15 @@ class PlatformScaffold extends PlatformWidgetBase<Widget, Scaffold> {
   Widget createCupertinoWidget(BuildContext context) {
     final data = cupertino?.call(context, platform(context));
 
-    var navigationBar =
-        data?.navigationBar ?? appBar?.createCupertinoWidget(context);
+    var navigationBar = data?.navigationBar ?? appBar?.createCupertinoWidget(context);
 
     final providerState = PlatformProvider.of(context);
-    final useLegacyMaterial =
-        providerState?.settings.legacyIosUsesMaterialWidgets ?? false;
+    final useLegacyMaterial = providerState?.settings.legacyIosUsesMaterialWidgets ?? false;
     final useMaterial = providerState?.settings.iosUsesMaterialWidgets ?? false;
 
     Widget result;
     if (bottomNavBar != null) {
-      var tabBar =
-          data?.bottomTabBar ?? bottomNavBar?.createCupertinoWidget(context);
+      var tabBar = data?.bottomTabBar ?? bottomNavBar?.createCupertinoWidget(context);
 
       //https://docs.flutter.io/flutter/cupertino/CupertinoTabScaffold-class.html
       result = CupertinoTabScaffold(
@@ -237,21 +231,21 @@ class PlatformScaffold extends PlatformWidgetBase<Widget, Scaffold> {
       result = CupertinoPageScaffold(
         key: data?.widgetKey ?? widgetKey,
         backgroundColor: data?.backgroundColor ?? backgroundColor,
+        navigationBar: navigationBar,
+        resizeToAvoidBottomInset: data?.resizeToAvoidBottomInset ?? true,
         child: iosContentPad(
           context,
           child.withMaterial(useMaterial),
           navigationBar,
           null,
         ),
-        navigationBar: navigationBar,
-        resizeToAvoidBottomInset: data?.resizeToAvoidBottomInset ?? true,
       );
     }
 
     // Ensure that there is Material widget at the root page level
     // as there can be Material widgets used on ios
-    return result.withMaterial(useLegacyMaterial &&
-        context.findAncestorWidgetOfExactType<Material>() == null);
+    return result.withMaterial(
+        useLegacyMaterial && context.findAncestorWidgetOfExactType<Material>() == null);
   }
 
   Widget iosContentPad(BuildContext context, Widget child,
@@ -266,8 +260,7 @@ class PlatformScaffold extends PlatformWidgetBase<Widget, Scaffold> {
     double bottom = 0;
 
     if (iosContentPadding && navigationBar != null) {
-      final double topPadding =
-          navigationBar.preferredSize.height + existingMediaQuery.padding.top;
+      final double topPadding = navigationBar.preferredSize.height + existingMediaQuery.padding.top;
 
       final obstruct = navigationBar.shouldFullyObstruct(context);
 

@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -68,8 +69,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
   })  : assert(titleText == null || title == null),
         assert(leading == null || onLeadingPressed == null),
-        preferredSize = Size.fromHeight(
-            bottom != null ? titleHeight + bottomHeight : titleHeight),
+        preferredSize = Size.fromHeight(bottom != null ? titleHeight + bottomHeight : titleHeight),
         super(key: key);
 
   @override
@@ -84,7 +84,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-      backgroundColor: backgroundColor,
+      //backgroundColor: backgroundColor,
+      backgroundColor: CupertinoColors.white, // TODO
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
@@ -100,24 +101,20 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
-      toolbarTextStyle:
-          TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
       actions: actions,
       // ignore: prefer_if_null_operators
       title: title != null
-          ? PreferredSize(
-              preferredSize: Size.fromHeight(titleHeight), child: title!)
+          ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null
               ? Text(
                   titleText!,
-                  style: TextStyleHelper.headerStyle(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                 )
               : null,
       bottom: bottom == null
           ? null
-          : PreferredSize(
-              preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
+          : PreferredSize(preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
     );
   }
 }

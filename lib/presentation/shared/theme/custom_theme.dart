@@ -131,7 +131,7 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
 
 final CupertinoThemeData cupertinoTheme = CupertinoThemeData(
   brightness: Brightness.light,
-  primaryColor: const Color(0xff3E9CF0),
+  primaryColor: CupertinoColors.white,
   barBackgroundColor: lightColors.backgroundColor,
   scaffoldBackgroundColor: lightColors.backgroundColor,
 );

@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart'
-    show CupertinoTextFormFieldRow, CupertinoColors;
+import 'package:flutter/cupertino.dart' show CupertinoTextFormFieldRow, CupertinoColors;
 import 'package:flutter/material.dart'
     show InputCounterWidgetBuilder, InputDecoration, TextFormField;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'platform.dart';
 import 'widget_base.dart';
@@ -220,8 +221,7 @@ class CupertinoTextFormFieldData {
   });
 }
 
-class PlatformTextFormField
-    extends PlatformWidgetBase<CupertinoTextFormFieldRow, TextFormField> {
+class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow, TextFormField> {
   final Key? widgetKey;
   final TextEditingController? controller;
   final String? initialValue;
@@ -271,56 +271,61 @@ class PlatformTextFormField
   final PlatformBuilder<MaterialTextFormFieldData>? material;
   final PlatformBuilder<CupertinoTextFormFieldData>? cupertino;
 
-  const PlatformTextFormField({
-    Key? key,
-    this.widgetKey,
-    this.controller,
-    this.initialValue,
-    this.focusNode,
-    TextInputType? keyboardType,
-    this.textCapitalization = TextCapitalization.none,
-    this.textInputAction,
-    this.style,
-    this.strutStyle,
-    this.textAlign,
-    this.textAlignVertical,
-    this.autofocus,
-    this.readOnly,
-    this.toolbarOptions,
-    this.showCursor,
-    this.obscuringCharacter,
-    this.obscureText,
-    this.autocorrect,
-    this.smartDashesType,
-    this.smartQuotesType,
-    this.enableSuggestions,
-    this.maxLines = 1,
-    this.minLines,
-    this.expands,
-    this.maxLength,
-    this.onChanged,
-    this.onTap,
-    this.onEditingComplete,
-    this.onFieldSubmitted,
-    this.onSaved,
-    this.validator,
-    this.inputFormatters,
-    this.enabled,
-    this.cursorWidth,
-    this.cursorHeight,
-    this.cursorColor,
-    this.keyboardAppearance,
-    this.scrollPadding,
-    this.enableInteractiveSelection,
-    this.selectionControls,
-    this.scrollPhysics,
-    this.autofillHints,
-    this.autovalidateMode,
-    this.hintText,
-    this.material,
-    this.cupertino,
-  })  : keyboardType = keyboardType ??
-            (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
+  final InputDecoration? decoration;
+  final BoxDecoration? cupertinoDecoration;
+
+  const PlatformTextFormField(
+      {Key? key,
+      this.widgetKey,
+      this.controller,
+      this.initialValue,
+      this.focusNode,
+      TextInputType? keyboardType,
+      this.textCapitalization = TextCapitalization.none,
+      this.textInputAction,
+      this.style,
+      this.strutStyle,
+      this.textAlign,
+      this.textAlignVertical,
+      this.autofocus,
+      this.readOnly,
+      this.toolbarOptions,
+      this.showCursor,
+      this.obscuringCharacter,
+      this.obscureText,
+      this.autocorrect,
+      this.smartDashesType,
+      this.smartQuotesType,
+      this.enableSuggestions,
+      this.maxLines = 1,
+      this.minLines,
+      this.expands,
+      this.maxLength,
+      this.onChanged,
+      this.onTap,
+      this.onEditingComplete,
+      this.onFieldSubmitted,
+      this.onSaved,
+      this.validator,
+      this.inputFormatters,
+      this.enabled,
+      this.cursorWidth,
+      this.cursorHeight,
+      this.cursorColor,
+      this.keyboardAppearance,
+      this.scrollPadding,
+      this.enableInteractiveSelection,
+      this.selectionControls,
+      this.scrollPhysics,
+      this.autofillHints,
+      this.autovalidateMode,
+      this.hintText,
+      this.material,
+      this.cupertino,
+      this.decoration,
+      this.cupertinoDecoration})
+      : keyboardType =
+            keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
         super(key: key);
 
   @override
@@ -342,9 +347,7 @@ class PlatformTextFormField
       focusNode: data?.focusNode ?? focusNode,
       decoration: decoration,
       keyboardType: data?.keyboardType ?? keyboardType,
-      textCapitalization: data?.textCapitalization ??
-          textCapitalization ??
-          TextCapitalization.none,
+      textCapitalization: data?.textCapitalization ?? textCapitalization ?? TextCapitalization.none,
       textInputAction: data?.textInputAction ?? textInputAction,
       style: data?.style ?? style,
       strutStyle: data?.strutStyle ?? strutStyle,
@@ -376,11 +379,9 @@ class PlatformTextFormField
       cursorHeight: data?.cursorHeight ?? cursorHeight,
       cursorColor: data?.cursorColor ?? cursorColor,
       keyboardAppearance: data?.keyboardAppearance ?? keyboardAppearance,
-      scrollPadding:
-          data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
-      enableInteractiveSelection: data?.enableInteractiveSelection ??
-          enableInteractiveSelection ??
-          true,
+      scrollPadding: data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
+      enableInteractiveSelection:
+          data?.enableInteractiveSelection ?? enableInteractiveSelection ?? true,
       selectionControls: data?.selectionControls ?? selectionControls,
       scrollPhysics: data?.scrollPhysics ?? scrollPhysics,
       autofillHints: data?.autofillHints ?? autofillHints,
@@ -390,8 +391,7 @@ class PlatformTextFormField
       cursorRadius: data?.cursorRadius,
       buildCounter: data?.buildCounter,
       scrollController: data?.scrollController,
-      enableIMEPersonalizedLearning:
-          data?.enableIMEPersonalizedLearning ?? true,
+      enableIMEPersonalizedLearning: data?.enableIMEPersonalizedLearning ?? true,
       restorationId: data?.restorationId,
       //autovalidate: , deprecated
       //maxLengthEnforced: , deprecated
@@ -407,11 +407,9 @@ class PlatformTextFormField
       controller: data?.controller ?? controller,
       initialValue: data?.initialValue ?? initialValue,
       focusNode: data?.focusNode ?? focusNode,
-      decoration: data?.decoration,
+      decoration: data?.decoration ?? cupertinoDecoration,
       keyboardType: data?.keyboardType ?? keyboardType,
-      textCapitalization: data?.textCapitalization ??
-          textCapitalization ??
-          TextCapitalization.none,
+      textCapitalization: data?.textCapitalization ?? textCapitalization ?? TextCapitalization.none,
       textInputAction: data?.textInputAction ?? textInputAction,
       style: data?.style ?? style,
       strutStyle: data?.strutStyle ?? strutStyle,
@@ -443,24 +441,20 @@ class PlatformTextFormField
       cursorHeight: data?.cursorHeight ?? cursorHeight,
       cursorColor: data?.cursorColor ?? cursorColor,
       keyboardAppearance: data?.keyboardAppearance ?? keyboardAppearance,
-      scrollPadding:
-          data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
-      enableInteractiveSelection: data?.enableInteractiveSelection ??
-          enableInteractiveSelection ??
-          true,
+      scrollPadding: data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
+      enableInteractiveSelection:
+          data?.enableInteractiveSelection ?? enableInteractiveSelection ?? true,
       selectionControls: data?.selectionControls ?? selectionControls,
       scrollPhysics: data?.scrollPhysics ?? scrollPhysics,
       autofillHints: data?.autofillHints ?? autofillHints,
-      autovalidateMode: data?.autovalidateMode ??
-          autovalidateMode ??
-          AutovalidateMode.disabled,
+      autovalidateMode: data?.autovalidateMode ?? autovalidateMode ?? AutovalidateMode.disabled,
       prefix: data?.prefix,
-      padding: data?.padding ?? const EdgeInsets.all(6.0),
-      placeholder: data?.placeholder ?? hintText,
+      padding: data?.padding ?? decoration?.contentPadding ?? const EdgeInsets.all(6.0),
+      placeholder: data?.placeholder ?? hintText ?? decoration!.hintText,
       placeholderStyle: data?.placeholderStyle ??
-          const TextStyle(
+          TextStyle(
             fontWeight: FontWeight.w400,
-            color: CupertinoColors.placeholderText,
+            color: decoration?.hintStyle?.color ?? CupertinoColors.placeholderText,
           ),
       textDirection: data?.textDirection,
     );

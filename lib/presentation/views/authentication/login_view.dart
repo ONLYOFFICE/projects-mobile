@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -39,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
@@ -61,7 +63,7 @@ class LoginView extends StatelessWidget {
                 style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             Center(
               child: Container(
-                color: Get.theme.backgroundColor,
+                //color: Get.theme.backgroundColor,
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
                   padding: const EdgeInsets.all(36),
@@ -110,7 +112,7 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 4),
-                      TextButton(
+                      PlatformTextButton(
                         onPressed: () async => Get.to<PasswordRecoveryScreen1>(
                           () => const PasswordRecoveryScreen1(),
                           arguments: {'email': controller.emailController.text},
