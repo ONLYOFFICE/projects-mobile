@@ -47,6 +47,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
@@ -78,7 +79,7 @@ class PortalDiscussionsView extends StatelessWidget {
             titleText: tr('discussions'),
             elevation: value,
             actions: [
-              IconButton(
+              PlatformIconButton(
                 icon: AppIcon(
                   width: 24,
                   height: 24,
@@ -88,7 +89,7 @@ class PortalDiscussionsView extends StatelessWidget {
                 onPressed: controller.showSearch,
                 // onPressed: () => controller.showSearch(),
               ),
-              IconButton(
+              PlatformIconButton(
                   icon: FiltersButton(controler: controller),
                   onPressed: () async => Get.find<NavigationController>().toScreen(
                       const DiscussionsFilterScreen(),
@@ -142,8 +143,7 @@ class DiscussionsList extends StatelessWidget {
         return const ListLoadingSkeleton();
       }
       return PaginationListView(
-          paginationController:
-              controller.paginationController as PaginationController,
+          paginationController: controller.paginationController as PaginationController,
           child: () {
             if (controller.loaded.value as bool &&
                 controller.paginationController.data.isEmpty as bool &&
@@ -173,10 +173,8 @@ class DiscussionsList extends StatelessWidget {
                 },
                 itemBuilder: (BuildContext context, int index) {
                   return DiscussionTile(
-                    discussion: controller.paginationController.data[index]
-                        as Discussion,
-                    onTap: () => controller.toDetailed(
-                        controller.paginationController.data[index]),
+                    discussion: controller.paginationController.data[index] as Discussion,
+                    onTap: () => controller.toDetailed(controller.paginationController.data[index]),
                   );
                 },
               );

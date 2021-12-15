@@ -116,7 +116,7 @@ class PlatformIcons {
       isMaterial(context) ? Icons.check_box_outlined : CupertinoIcons.checkmark_square;
 
   /// Icons: Icons.check : CupertinoIcons.check_mark
-  IconData get checkMark => isMaterial(context) ? Icons.check : CupertinoIcons.check_mark;
+  IconData get checkMark => isMaterial(context) ? Icons.check_rounded : CupertinoIcons.check_mark;
 
   /// Icons: Icons.check_circle : CupertinoIcons.check_mark_circled
   IconData get checkMarkCircled =>
@@ -217,10 +217,10 @@ class PlatformIcons {
   IconData get downArrow => isMaterial(context) ? Icons.arrow_downward : CupertinoIcons.down_arrow;
 
   /// Icons: Icons.more_horiz : CupertinoIcons.ellipsis
-  IconData get edit => isMaterial(context) ? Icons.edit : CupertinoIcons.pencil;
+  IconData get edit => isMaterial(context) ? Icons.edit_outlined : CupertinoIcons.pencil;
 
   /// Icons: Icons.more_horiz : CupertinoIcons.ellipsis
-  IconData get ellipsis => isMaterial(context) ? Icons.more_horiz : CupertinoIcons.ellipsis;
+  IconData get ellipsis => isMaterial(context) ? Icons.more_vert : CupertinoIcons.ellipsis_vertical;
 
   /// Icons: Icons.error : CupertinoIcons.exclamationmark_circle_fill
   IconData get error =>

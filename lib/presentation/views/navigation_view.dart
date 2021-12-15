@@ -37,6 +37,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
 import 'package:projects/presentation/views/discussions/discussions_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
@@ -179,7 +180,7 @@ class TabletLayout extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
+                        PlatformIconButton(
                           iconSize: 64,
                           icon: SizedBox(
                               width: 72,
@@ -199,7 +200,7 @@ class TabletLayout extends StatelessWidget {
                           onPressed: () => controller.toScreen(const SelfProfileScreen(),
                               arguments: {'showBackButton': true, 'showSettingsButton': false}),
                         ),
-                        IconButton(
+                        PlatformIconButton(
                           iconSize: 64,
                           icon: AppIcon(
                             icon: SvgIcons.settings,

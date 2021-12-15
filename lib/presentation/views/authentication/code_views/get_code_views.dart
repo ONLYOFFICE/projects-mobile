@@ -46,6 +46,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 import 'package:launch_review/launch_review.dart';
 
@@ -78,8 +80,8 @@ class _GetCodeViewsState extends State<GetCodeViews> {
   Widget build(BuildContext context) {
     // additional padding at the top on tablets
     // ignore: omit_local_variable_types
-    final double padding = getTopPadding(
-        _platformController.isMobile, MediaQuery.of(context).size.height);
+    final double padding =
+        getTopPadding(_platformController.isMobile, MediaQuery.of(context).size.height);
 
     final pages = [
       _Step1(topPadding: padding),
@@ -90,8 +92,8 @@ class _GetCodeViewsState extends State<GetCodeViews> {
 
     return Scaffold(
       appBar: StyledAppBar(
-          leading: IconButton(
-              icon: const Icon(Icons.close_rounded), onPressed: Get.back)),
+          leading:
+              PlatformIconButton(icon: Icon(PlatformIcons(context).clear), onPressed: Get.back)),
       body: SizedBox(
         height: Get.height - MediaQuery.of(context).padding.top - 56,
         child: Stack(

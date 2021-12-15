@@ -35,6 +35,7 @@ import 'package:get/get.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class FilterElement extends StatelessWidget {
   final bool isSelected;
@@ -83,7 +84,8 @@ class FilterElement extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 9),
                   child: InkWell(
                       onTap: onCancelTap,
-                      child: const Icon(Icons.cancel, color: Colors.white, size: 18))),
+                      child: Icon(PlatformIcons(context).clearThickCircled,
+                          color: Colors.white, size: 18))),
           ],
         ),
       ),

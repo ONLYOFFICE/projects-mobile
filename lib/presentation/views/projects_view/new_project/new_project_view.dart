@@ -34,6 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';
@@ -63,8 +65,8 @@ class NewProject extends StatelessWidget {
           onLeadingPressed: controller.discardChanges,
           elevation: 2,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.check_outlined),
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
               onPressed: () => controller.confirm(context),
             )
           ],

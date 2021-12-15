@@ -41,6 +41,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
 
 class CreatingAndEditingSubtaskView extends StatelessWidget {
@@ -74,8 +76,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
           onLeadingPressed: controller.leavePage,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
               onPressed: () =>
                   controller.confirm(context: context, taskId: taskId ?? -1), // TODO FIX
             )
@@ -137,8 +139,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                 child: ResponsibleTile(
                   controller: controller,
                   enableUnderline: false,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear_rounded,
+                  suffixIcon: PlatformIconButton(
+                    icon: Icon(PlatformIcons(context).clear,
                         size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6)),
                     onPressed: controller.deleteResponsible,
                   ),

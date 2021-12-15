@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class UsersSearchBar extends StatelessWidget {
   const UsersSearchBar({
@@ -67,15 +68,14 @@ class UsersSearchBar extends StatelessWidget {
             child: TextField(
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController,
-              decoration:
-                  InputDecoration.collapsed(hintText: tr('usersSearch')),
+              decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),
               onSubmitted: controller.searchUsers,
               onChanged: controller.searchUsers,
             ),
           ),
           InkWell(
             onTap: controller.clearSearch,
-            child: const Icon(Icons.close, color: Colors.blue),
+            child: Icon(PlatformIcons(context).clear, color: Colors.blue),
           )
         ],
       ),

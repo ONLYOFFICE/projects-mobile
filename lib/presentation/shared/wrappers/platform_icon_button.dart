@@ -16,12 +16,7 @@ const double _kMinInteractiveDimensionCupertino = 44.0;
 
 abstract class _BaseData {
   _BaseData(
-      {this.widgetKey,
-      this.icon,
-      this.onPressed,
-      this.padding,
-      this.color,
-      this.disabledColor});
+      {this.widgetKey, this.icon, this.onPressed, this.padding, this.color, this.disabledColor});
 
   final Key? widgetKey;
   final Widget? icon;
@@ -114,23 +109,25 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
   final Color? color;
   final EdgeInsets? padding;
   final Color? disabledColor;
+  final double? iconSize;
 
   final PlatformBuilder<MaterialIconButtonData>? material;
   final PlatformBuilder<CupertinoIconButtonData>? cupertino;
 
-  PlatformIconButton({
-    Key? key,
-    this.widgetKey,
-    this.icon,
-    this.cupertinoIcon,
-    this.materialIcon,
-    this.onPressed,
-    this.color,
-    this.disabledColor,
-    this.padding,
-    this.material,
-    this.cupertino,
-  }) : super(key: key);
+  PlatformIconButton(
+      {Key? key,
+      this.widgetKey,
+      this.icon,
+      this.cupertinoIcon,
+      this.materialIcon,
+      this.onPressed,
+      this.color,
+      this.disabledColor,
+      this.padding,
+      this.material,
+      this.cupertino,
+      this.iconSize})
+      : super(key: key);
 
   @override
   Widget createMaterialWidget(BuildContext context) {
@@ -148,7 +145,7 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
       alignment: data?.alignment ?? Alignment.center,
       disabledColor: data?.disabledColor ?? disabledColor,
       highlightColor: data?.highlightColor,
-      iconSize: data?.iconSize ?? 24.0,
+      iconSize: data?.iconSize ?? iconSize ?? 24.0,
       splashColor: data?.splashColor,
       tooltip: data?.tooltip,
       focusColor: data?.focusColor,
@@ -176,13 +173,10 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
       onPressed: data?.onPressed ?? onPressed ?? null,
       padding: data?.padding ?? padding,
       color: data?.color ?? color,
-      borderRadius: data?.borderRadius ??
-          const BorderRadius.all(const Radius.circular(8.0)),
+      borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
       minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
       pressedOpacity: data?.pressedOpacity ?? 0.4,
-      disabledColor: data?.disabledColor ??
-          disabledColor ??
-          CupertinoColors.quaternarySystemFill,
+      disabledColor: data?.disabledColor ?? disabledColor ?? CupertinoColors.quaternarySystemFill,
       alignment: data?.alignment ?? Alignment.center,
     );
   }

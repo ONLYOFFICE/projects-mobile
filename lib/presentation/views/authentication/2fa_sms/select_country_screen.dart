@@ -38,6 +38,8 @@ import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class SelectCountryScreen extends StatelessWidget {
   const SelectCountryScreen({Key? key}) : super(key: key);
@@ -51,14 +53,12 @@ class SelectCountryScreen extends StatelessWidget {
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
-          titleText:
-              controller.searching.value == true ? null : tr('selectCountry'),
-          title:
-              controller.searching.value == true ? const _SarchField() : null,
+          titleText: controller.searching.value == true ? null : tr('selectCountry'),
+          title: controller.searching.value == true ? const _SarchField() : null,
           actions: [
             if (controller.searching.value == false)
-              IconButton(
-                icon: const Icon(Icons.search),
+              PlatformIconButton(
+                icon: Icon(PlatformIcons(context).search),
                 onPressed: controller.onSearchPressed,
               )
           ],
@@ -66,10 +66,8 @@ class SelectCountryScreen extends StatelessWidget {
         body: ListView.builder(
           itemCount: controller.countriesToShow.length,
           itemBuilder: (BuildContext context, int index) {
-            if (controller.countriesToShow[index].countryName![0] !=
-                previousContrysFirstLetter) {
-              previousContrysFirstLetter =
-                  controller.countriesToShow[index].countryName![0];
+            if (controller.countriesToShow[index].countryName![0] != previousContrysFirstLetter) {
+              previousContrysFirstLetter = controller.countriesToShow[index].countryName![0];
               return _CountryWithCodeTile(
                 showFirstLetter: true,
                 showBorder: index != 0,
@@ -77,8 +75,7 @@ class SelectCountryScreen extends StatelessWidget {
               );
             }
 
-            return _CountryWithCodeTile(
-                country: controller.countriesToShow[index]);
+            return _CountryWithCodeTile(country: controller.countriesToShow[index]);
           },
         ),
       ),
@@ -134,23 +131,18 @@ class _CountryWithCodeTile extends StatelessWidget {
                   child: showFirstLetter
                       ? Text(country.countryName![0],
                           style: TextStyleHelper.headline5(
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.6)))
+                              color: Get.theme.colors().onBackground.withOpacity(0.6)))
                       : null,
                 ),
                 Expanded(
                   child: Text(
                     country.countryName!,
-                    style: TextStyleHelper.body2(
-                        color: Get.theme.colors().onBackground),
+                    style: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
                   ),
                 ),
                 Text(
                   '+ ${country.phoneCode}',
-                  style: TextStyleHelper.subtitle2(
-                      color: Get.theme.colors().primarySurface),
+                  style: TextStyleHelper.subtitle2(color: Get.theme.colors().primarySurface),
                 ),
               ],
             ),

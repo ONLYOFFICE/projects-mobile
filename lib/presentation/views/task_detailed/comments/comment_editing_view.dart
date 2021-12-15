@@ -37,6 +37,8 @@ import 'package:projects/domain/controllers/comments/comment_editing_controller.
 import 'package:projects/domain/controllers/comments/item_controller/abstract_comment_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class CommentEditingView extends StatelessWidget {
   const CommentEditingView({Key? key}) : super(key: key);
@@ -63,8 +65,8 @@ class CommentEditingView extends StatelessWidget {
           titleText: tr('commentEditing'),
           onLeadingPressed: controller.leavePage,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
               onPressed: () async => controller.confirm(),
             ),
           ],

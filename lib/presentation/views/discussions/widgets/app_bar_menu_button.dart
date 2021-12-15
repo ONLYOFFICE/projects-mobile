@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class AppBarMenuButton extends StatelessWidget {
   final DiscussionItemController? controller;
@@ -46,7 +47,7 @@ class AppBarMenuButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
+      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
       offset: const Offset(0, 25),
       // onSelected: (value) => _onSelected(value, controller),
       onSelected: (String value) => _onSelected(context, controller, value),
@@ -60,16 +61,14 @@ class AppBarMenuButton extends StatelessWidget {
           PopupMenuItem(
             value: 'Subscribe',
             child: Text(
-              controller!.isSubscribed
-                  ? tr('unsubscribeFromComments')
-                  : tr('subscribeToComments'),
+              controller!.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
             ),
           ),
           if (controller!.discussion.value.canEdit!)
             PopupMenuItem(
               value: 'Delete',
-              textStyle: Get.theme.popupMenuTheme.textStyle!
-                  .copyWith(color: Get.theme.colors().colorError),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  ?.copyWith(color: Get.theme.colors().colorError),
               child: Text(
                 tr('deleteDiscussion'),
               ),
@@ -80,8 +79,7 @@ class AppBarMenuButton extends StatelessWidget {
   }
 }
 
-void _onSelected(BuildContext context, DiscussionItemController? controller,
-    String value) async {
+void _onSelected(BuildContext context, DiscussionItemController? controller, String value) async {
   switch (value) {
     case 'Edit':
       await controller!.toDiscussionEditingScreen();

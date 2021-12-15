@@ -42,6 +42,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/task_detailed/task_team.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
@@ -142,8 +144,8 @@ class TaskOverviewScreen extends StatelessWidget {
                       subtitle: task.responsibles!.length >= 2
                           ? plural('responsibles', task.responsibles!.length)
                           : task.responsibles![0]!.displayName,
-                      suffix: IconButton(
-                          icon: Icon(Icons.navigate_next,
+                      suffix: PlatformIconButton(
+                          icon: Icon(PlatformIcons(context).rightChevron,
                               size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6)),
                           onPressed: () {
                             Get.find<NavigationController>()

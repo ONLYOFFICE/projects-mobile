@@ -36,6 +36,7 @@ import 'package:projects/data/models/tag_item_DTO.dart';
 
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class TagItem extends StatelessWidget {
   final TagItemDTO? tagItemDTO;
@@ -67,11 +68,13 @@ class TagItem extends StatelessWidget {
             Obx(() {
               if (tagItemDTO!.isSelected!.value == true) {
                 return SizedBox(
-                    width: 72, child: Icon(Icons.check_box, color: Get.theme.colors().primary));
+                    width: 72,
+                    child: Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
+                        color: Get.theme.colors().primary));
               } else {
-                return const SizedBox(
+                return SizedBox(
                   width: 72,
-                  child: Icon(Icons.check_box_outline_blank_outlined),
+                  child: Icon(PlatformIcons(context).checkBoxBlankOutlineRounded),
                 );
               }
             }),

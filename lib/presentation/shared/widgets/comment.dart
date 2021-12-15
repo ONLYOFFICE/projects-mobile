@@ -44,6 +44,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 
 class Comment extends StatelessWidget {
@@ -191,7 +192,7 @@ class _CommentAuthor extends StatelessWidget {
               padding: const EdgeInsets.only(left: 35),
               child: PopupMenuButton(
                 onSelected: (String value) => _onSelected(value, controller),
-                icon: Icon(Icons.more_vert_rounded,
+                icon: Icon(PlatformIcons(context).ellipsis,
                     size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [

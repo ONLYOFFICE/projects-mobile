@@ -45,6 +45,8 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {
@@ -80,16 +82,16 @@ class TagsSelectionView extends StatelessWidget {
         ),
       ),
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         title: _Header(
           controller: controller,
           title: tr('tags'),
         ),
         actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: controller.confirm)
+          PlatformIconButton(
+            icon: Icon(PlatformIcons(context).checkMark),
+            onPressed: controller.confirm,
+          )
         ],
         bottom: _TagsSearchBar(controller: controller),
       ),

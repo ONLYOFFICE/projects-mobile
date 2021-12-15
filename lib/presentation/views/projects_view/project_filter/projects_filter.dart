@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/filters/filter_element_widg
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_tag_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 part 'filters/status.dart';
 part 'filters/other.dart';
@@ -56,13 +57,11 @@ class ProjectsFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterController =
-        Get.arguments['filterController'] as ProjectsFilterController;
+    final filterController = Get.arguments['filterController'] as ProjectsFilterController;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         titleText: tr('filter'),
         showBackButton: true,
@@ -70,17 +69,15 @@ class ProjectsFilterScreen extends StatelessWidget {
           filterController.restoreFilters();
           Get.back();
         },
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         actions: [
           TextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
-                  style: TextStyleHelper.button(
-                      color: Get.theme.colors().systemBlue))),
+                  style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),
           SizedBox(width: platformController.isMobile ? 8 : 12),
         ],
       ),

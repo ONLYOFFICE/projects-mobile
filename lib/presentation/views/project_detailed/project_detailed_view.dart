@@ -45,6 +45,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
@@ -65,24 +67,20 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   TabController? _tabController;
   final _activeIndex = 0.obs;
 
-  final ProjectDetailsController projectController =
-      Get.find<ProjectDetailsController>();
-  final DocumentsController documentsController =
-      Get.find<DocumentsController>();
+  final ProjectDetailsController projectController = Get.find<ProjectDetailsController>();
+  final DocumentsController documentsController = Get.find<DocumentsController>();
 
   @override
   void initState() {
     var projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
 
     documentsController.setupFolder(
-        folderName: projectDetailed.title!,
-        folderId: projectDetailed.projectFolder);
+        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
 
     projectController.setup(projectDetailed).then((value) {
       projectDetailed = projectController.projectData!;
       documentsController.setupFolder(
-          folderName: projectDetailed.title!,
-          folderId: projectDetailed.projectFolder);
+          folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
     });
 
     _tabController = TabController(
@@ -112,18 +110,14 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         appBar: StyledAppBar(
           actions: [
             if (projectController.projectData!.canEdit!)
-              IconButton(
-                  icon: const Icon(Icons.edit_outlined),
+              PlatformIconButton(
+                  icon: Icon(PlatformIcons(context).edit),
                   onPressed: () => Get.find<NavigationController>().to(
-                          EditProjectView(
-                              projectDetailed: projectController.projectData),
-                          arguments: {
-                            'projectDetailed': projectController.projectData
-                          }))
+                      EditProjectView(projectDetailed: projectController.projectData),
+                      arguments: {'projectDetailed': projectController.projectData}))
             else
               const SizedBox(),
-            if (!(projectController.projectData!.security!['isInTeam']
-                    as bool) ||
+            if (!(projectController.projectData!.security!['isInTeam'] as bool) ||
                 projectController.projectData!.canDelete!)
               _ProjectContextMenu(controller: projectController)
           ],
@@ -134,8 +128,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
                 labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor:
-                    Get.theme.colors().onSurface.withOpacity(0.6),
+                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   Tab(text: tr('overview')),
@@ -163,14 +156,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ),
         ),
         body: TabBarView(controller: _tabController, children: [
-          ProjectOverview(
-              projectController: projectController,
-              tabController: _tabController),
+          ProjectOverview(projectController: projectController, tabController: _tabController),
           ProjectTaskScreen(projectDetailed: projectController.projectData),
-          ProjectMilestonesScreen(
-              projectDetailed: projectController.projectData),
-          ProjectDiscussionsScreen(
-              projectDetailed: projectController.projectData!),
+          ProjectMilestonesScreen(projectDetailed: projectController.projectData),
+          ProjectDiscussionsScreen(projectDetailed: projectController.projectData!),
           EntityDocumentsView(
             folderId: projectController.projectData!.projectFolder,
             folderName: projectController.projectData!.title,
@@ -188,13 +177,12 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 class _ProjectContextMenu extends StatelessWidget {
   final ProjectDetailsController controller;
 
-  const _ProjectContextMenu({Key? key, required this.controller})
-      : super(key: key);
+  const _ProjectContextMenu({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
+      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
       offset: const Offset(0, 25),
       onSelected: (dynamic value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
@@ -211,13 +199,12 @@ class _ProjectContextMenu extends StatelessWidget {
             ),
           if (controller.projectData?.canDelete as bool)
             PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle!
-                  .copyWith(color: Get.theme.colors().colorError),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  ?.copyWith(color: Get.theme.colors().colorError),
               value: 'delete',
               child: Text(
                 tr('delete'),
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().colorError),
+                style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
               ),
             )
         ];

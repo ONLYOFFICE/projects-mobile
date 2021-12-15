@@ -39,6 +39,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';
@@ -57,8 +59,7 @@ class NewTaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<NewTaskController>();
-    final projectDetailed =
-        Get.arguments['projectDetailed'] as ProjectDetailed?;
+    final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed?;
     controller.init(projectDetailed);
 
     return WillPopScope(
@@ -71,8 +72,8 @@ class NewTaskView extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('newTask'),
           actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
+            PlatformIconButton(
+                icon: Icon(PlatformIcons(context).checkMark),
                 onPressed: () => controller.confirm(context))
           ],
           onLeadingPressed: controller.discardTask,
@@ -86,8 +87,7 @@ class NewTaskView extends StatelessWidget {
                 // unfocus title
                 Listener(
                   onPointerDown: (_) {
-                    if (controller.title!.isNotEmpty &&
-                        controller.titleFocus.hasFocus)
+                    if (controller.title!.isNotEmpty && controller.titleFocus.hasFocus)
                       controller.titleFocus.unfocus();
                   },
                   child: Column(
@@ -100,8 +100,7 @@ class NewTaskView extends StatelessWidget {
                       if (controller.responsibles!.isNotEmpty)
                         NotifyResponsiblesTile(controller: controller),
                       DescriptionTile(controller: controller),
-                      GestureDetector(
-                          child: StartDateTile(controller: controller)),
+                      GestureDetector(child: StartDateTile(controller: controller)),
                       DueDateTile(controller: controller),
                       const SizedBox(height: 5),
                       PriorityTile(controller: controller)

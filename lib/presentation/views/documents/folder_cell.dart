@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 
@@ -84,7 +85,8 @@ class FolderCell extends StatelessWidget {
                     context,
                     controller,
                   ),
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(PlatformIcons(context).ellipsis,
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -234,8 +236,7 @@ Future<void> _onFolderPopupMenuSelected(
       final portalDomain = controller.portalInfoController.portalUri;
 
       if (portalDomain != null && selectedFolder.id != null) {
-        final link =
-            '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
+        final link = '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
 
         await Clipboard.setData(ClipboardData(text: link));
         MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));

@@ -40,7 +40,7 @@ class _AppBarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final task = controller!.task.value;
     return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
+      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
       offset: const Offset(0, 25),
       onSelected: (dynamic value) => _onSelected(value, controller!),
       itemBuilder: (context) {
@@ -61,9 +61,7 @@ class _AppBarMenu extends StatelessWidget {
             ),
           PopupMenuItem(
             value: 'followTask',
-            child: Text((task.isSubscribed ?? false)
-                ? tr('unfollowTask')
-                : tr('followTask')),
+            child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
           ),
           if (controller!.canEdit)
             PopupMenuItem(
@@ -72,8 +70,8 @@ class _AppBarMenu extends StatelessWidget {
             ),
           if (task.canDelete!)
             PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle!
-                  .copyWith(color: Get.theme.colors().colorError),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  ?.copyWith(color: Get.theme.colors().colorError),
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
             )
@@ -122,8 +120,7 @@ void _onSelected(value, TaskItemController controller) async {
             Get.back();
             Get.back();
 
-            MessagesHandler.showSnackBar(
-                context: Get.context!, text: tr('taskDeleted'));
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
           } else {
             print('ERROR');
           }
