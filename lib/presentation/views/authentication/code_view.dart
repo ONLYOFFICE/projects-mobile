@@ -62,7 +62,7 @@ class _CodeViewState extends State<CodeView> {
           body: SingleChildScrollView(
             child: Center(
               child: Container(
-                color: Get.theme.backgroundColor,
+                //color: Get.theme.backgroundColor,
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Column(
                   children: [

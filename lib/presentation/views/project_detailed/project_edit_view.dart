@@ -59,8 +59,7 @@ class EditProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final editProjectController = Get.find<ProjectEditController>();
-    editProjectController
-        .setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
+    editProjectController.setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     return WillPopScope(
       onWillPop: () async {
@@ -68,7 +67,7 @@ class EditProjectView extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
+        //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('editProject'),
           elevation: 1,
@@ -94,8 +93,7 @@ class EditProjectView extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 72),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: ProjectStatusButton(
-                            projectController: editProjectController)),
+                        child: ProjectStatusButton(projectController: editProjectController)),
                   ),
                   const SizedBox(height: 20),
                   ProjectDescriptionTile(controller: editProjectController),

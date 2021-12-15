@@ -57,7 +57,7 @@ class NewProject extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
+        //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('project'),
           onLeadingPressed: controller.discardChanges,
@@ -71,8 +71,8 @@ class NewProject extends StatelessWidget {
         ),
         body: Listener(
           onPointerDown: (_) {
-            if (controller.titleController.text.isNotEmpty &&
-                controller.titleFocus.hasFocus) controller.titleFocus.unfocus();
+            if (controller.titleController.text.isNotEmpty && controller.titleFocus.hasFocus)
+              controller.titleFocus.unfocus();
           },
           child: ListView(
             children: [
@@ -98,8 +98,7 @@ class NewProject extends StatelessWidget {
                     },
                   ),
                   Obx(() {
-                    if (controller.selfUserItem?.id ==
-                        controller.selectedProjectManager.value?.id)
+                    if (controller.selfUserItem?.id == controller.selectedProjectManager.value?.id)
                       return OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: false.obs,

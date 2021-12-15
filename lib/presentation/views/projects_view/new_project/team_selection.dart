@@ -56,7 +56,7 @@ class GroupMembersSelectionView extends StatelessWidget {
 
     groupsDataSource.getGroups();
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('addMembersOf'),
         elevation: 2,
@@ -72,12 +72,10 @@ class GroupMembersSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (groupsDataSource.loaded.value == true &&
-              groupsDataSource.groupsList.isNotEmpty) {
+          if (groupsDataSource.loaded.value == true && groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
-              onTapFunction: controller.selectGroupMembers as Function(
-                  PortalGroupItemController),
+              onTapFunction: controller.selectGroupMembers as Function(PortalGroupItemController),
             );
           } else if (groupsDataSource.loaded.value == true) {
             return Column(children: const [NothingFound()]);
@@ -115,8 +113,7 @@ class GroupsOverview extends StatelessWidget {
         },
         itemBuilder: (BuildContext c, int i) {
           return PortalGroupItem(
-              groupController: groupsDataSource.groupsList[i],
-              onTapFunction: onTapFunction);
+              groupController: groupsDataSource.groupsList[i], onTapFunction: onTapFunction);
         },
       ),
     );

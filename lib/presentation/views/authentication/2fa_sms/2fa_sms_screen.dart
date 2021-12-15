@@ -63,7 +63,7 @@ class TFASmsScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Center(
                 child: Container(
-                  color: Get.theme.backgroundColor,
+                  //color: Get.theme.backgroundColor,
                   constraints: const BoxConstraints(maxWidth: 480),
                   child: Column(
                     children: [
@@ -74,16 +74,12 @@ class TFASmsScreen extends StatelessWidget {
                       ),
                       SizedBox(height: h(11.54)),
                       Text(tr('tfaSMSTitle'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface)),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)),
                       SizedBox(height: h(12.54)),
                       Text(tr('tfaSMSCaption'),
                           textAlign: TextAlign.center,
                           style: TextStyleHelper.body2(
-                              color: Get.theme
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6))),
+                              color: Get.theme.colors().onSurface.withOpacity(0.6))),
                       SizedBox(height: h(6.54)),
                       const _CountrySelection(),
                       SizedBox(height: h(24)),
@@ -123,14 +119,11 @@ class _CountrySelection extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 2),
             child: TextButton(
-              onPressed: () =>
-                  Get.to<SelectCountryScreen>(const SelectCountryScreen()),
+              onPressed: () => Get.to<SelectCountryScreen>(const SelectCountryScreen()),
               child: Obx(
                 () => Text(
-                  controller.deviceCountry.value?.countryName ??
-                      tr('chooseCountry'),
-                  style: TextStyleHelper.subtitle1(
-                      color: Get.theme.colors().primary),
+                  controller.deviceCountry.value?.countryName ?? tr('chooseCountry'),
+                  style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
                 ),
               ),
             ),
@@ -145,14 +138,12 @@ class _CountrySelection extends StatelessWidget {
                   child: TextField(
                     controller: controller.phoneCodeController,
                     onChanged: (value) {},
-                    autofocus:
-                        controller.deviceCountry.value?.phoneCode == null,
+                    autofocus: controller.deviceCountry.value?.phoneCode == null,
                     decoration: InputDecoration(
                       isDense: true,
-                      contentPadding: const EdgeInsets.only(
-                          bottom: 12, top: 16, left: 12, right: 5),
-                      prefixIconConstraints:
-                          const BoxConstraints(minWidth: 10, minHeight: 0),
+                      contentPadding:
+                          const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
+                      prefixIconConstraints: const BoxConstraints(minWidth: 10, minHeight: 0),
                       prefixIcon: Text(
                         '+',
                         style: TextStyleHelper.subtitle1(),
@@ -164,14 +155,13 @@ class _CountrySelection extends StatelessWidget {
                 Flexible(
                   flex: 4,
                   child: TextField(
-                    autofocus:
-                        controller.deviceCountry.value?.phoneCode != null,
+                    autofocus: controller.deviceCountry.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: controller.numberHint,
-                      contentPadding: const EdgeInsets.only(
-                          bottom: 12, top: 16, left: 12, right: 5),
+                      contentPadding:
+                          const EdgeInsets.only(bottom: 12, top: 16, left: 12, right: 5),
                     ),
                   ),
                 )

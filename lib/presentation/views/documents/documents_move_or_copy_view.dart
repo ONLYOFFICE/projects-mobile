@@ -198,7 +198,7 @@ class _DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () {
@@ -322,7 +322,7 @@ class MoveDocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () => Column(

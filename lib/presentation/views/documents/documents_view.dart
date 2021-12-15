@@ -175,22 +175,17 @@ class DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () {
-          if (!(controller.loaded.value as bool))
-            return const ListLoadingSkeleton();
+          if (!(controller.loaded.value as bool)) return const ListLoadingSkeleton();
 
           return PaginationListView(
-              paginationController:
-                  controller.paginationController as PaginationController,
+              paginationController: controller.paginationController as PaginationController,
               child: () {
-                if (controller.loaded.value as bool &&
-                    controller.nothingFound.value as bool) {
-                  return Center(
-                      child: EmptyScreen(
-                          icon: SvgIcons.not_found, text: tr('notFound')));
+                if (controller.loaded.value as bool && controller.nothingFound.value as bool) {
+                  return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
                 }
                 if (controller.loaded.value as bool &&
                     controller.paginationController.data.isEmpty as bool &&
@@ -198,29 +193,25 @@ class DocumentsScreen extends StatelessWidget {
                     !(controller.searchMode.value as bool)) {
                   return Center(
                       child: EmptyScreen(
-                          icon: SvgIcons.documents_not_created,
-                          text: tr('noDocumentsCreated')));
+                          icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
                 }
                 if (controller.loaded.value as bool &&
                     controller.paginationController.data.isEmpty as bool &&
                     controller.filterController.hasFilters.value as bool &&
                     !(controller.searchMode.value as bool)) {
                   return Center(
-                      child: EmptyScreen(
-                          icon: SvgIcons.not_found,
-                          text: tr('noDocumentsMatching')));
+                      child:
+                          EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
                 }
                 if (controller.loaded.value as bool &&
                     controller.paginationController.data.isNotEmpty as bool)
                   return ListView.separated(
                     controller: scrollController,
-                    itemCount:
-                        controller.paginationController.data.length as int,
+                    itemCount: controller.paginationController.data.length as int,
                     separatorBuilder: (BuildContext context, int index) =>
                         const SizedBox(height: 10),
                     itemBuilder: (BuildContext context, int index) {
-                      final element =
-                          controller.paginationController.data[index];
+                      final element = controller.paginationController.data[index];
                       return element is Folder
                           ? FolderCell(
                               entity: element,
@@ -314,9 +305,7 @@ class DocsBottom extends StatelessWidget {
                 children: <Widget>[
                   Obx(
                     () => Text(
-                      tr('total', args: [
-                        controller.paginationController.total.value.toString()
-                      ]),
+                      tr('total', args: [controller.paginationController.total.value.toString()]),
                       style: TextStyleHelper.body2(
                         color: Get.theme.colors().onSurface.withOpacity(0.6),
                       ),
@@ -348,8 +337,7 @@ class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
         onTap: () async {
           if (Get.find<PlatformController>().isMobile) {
             await Get.bottomSheet(
-              SortView(
-                  sortOptions: DocumentsSortOption(controller: controller)),
+              SortView(sortOptions: DocumentsSortOption(controller: controller)),
               isScrollControlled: true,
             );
           } else {
@@ -391,8 +379,7 @@ class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
