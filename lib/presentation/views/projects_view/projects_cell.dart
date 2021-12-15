@@ -88,7 +88,7 @@ class ProjectCell extends StatelessWidget {
                           item: item,
                           itemController: itemController,
                         ),
-                        const SizedBox(width: 8),
+                        const Spacer(),
                         _Suffix(
                           item: item,
                           controller: itemController,
@@ -261,10 +261,14 @@ class _Suffix extends StatelessWidget {
           children: <Widget>[
             AppIcon(icon: SvgIcons.check_square, color: Get.theme.colors().onSurface),
             const SizedBox(width: 3),
-            Text(
-              item!.taskCount.toString(),
-              style: TextStyleHelper.projectCompleatedTasks.copyWith(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+            SizedBox(
+              width: 20,
+              child: Text(
+                item!.taskCount.toString(),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyleHelper.projectCompleatedTasks.copyWith(
+                  color: Get.theme.colors().onSurface.withOpacity(0.6),
+                ),
               ),
             ),
             const SizedBox(width: 16)
@@ -319,8 +323,7 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
                           newStatusId: _statusesController.statuses[i],
                         ) as bool;
                         if (success) {
-                          locator<EventHub>()
-                              .fire('needToRefreshProjects', ['all']);
+                          locator<EventHub>().fire('needToRefreshProjects', ['all']);
                         }
                         Get.back();
                       },
@@ -346,8 +349,7 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
 }
 
 void showStatuses(
-    {required BuildContext context,
-    required BaseProjectEditorController itemController}) async {
+    {required BuildContext context, required BaseProjectEditorController itemController}) async {
   if (Get.find<PlatformController>().isMobile) {
     showsStatusesBS(context: context, itemController: itemController);
   } else {
@@ -356,8 +358,7 @@ void showStatuses(
 }
 
 void showsStatusesPM(
-    {required BuildContext context,
-    required BaseProjectEditorController itemController}) async {
+    {required BuildContext context, required BaseProjectEditorController itemController}) async {
   final _statusesController = Get.find<ProjectStatusesController>();
   final items = <PopupMenuEntry<dynamic>>[
     for (var i = 0; i < _statusesController.statuses.length; i++)
@@ -382,8 +383,7 @@ void showsStatusesPM(
                     color: itemController.projectData!.canEdit!
                         ? Get.theme.colors().primary
                         : Get.theme.colors().onBackground),
-                selected: _statusesController.statuses[i] ==
-                    itemController.projectData!.status),
+                selected: _statusesController.statuses[i] == itemController.projectData!.status),
           ),
         ),
       ),

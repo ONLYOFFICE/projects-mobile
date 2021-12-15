@@ -66,8 +66,8 @@ class TaskCell extends StatelessWidget {
     );
 
     return InkWell(
-      onTap: () => Get.find<NavigationController>().to(const TaskDetailedView(),
-          arguments: {'controller': itemController}),
+      onTap: () => Get.find<NavigationController>()
+          .to(const TaskDetailedView(), arguments: {'controller': itemController}),
       child: SizedBox(
         height: 72,
         child: Row(
@@ -218,8 +218,14 @@ class _ThirdColumn extends StatelessWidget {
           children: [
             const AppIcon(icon: SvgIcons.subtasks, color: Color(0xff666666)),
             const SizedBox(width: 5),
-            Text(controller!.task.value.subtasks!.length.toString(),
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            SizedBox(
+              width: 20,
+              child: Text(
+                controller!.task.value.subtasks!.length.toString(),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+              ),
+            ),
           ],
         ),
       ],

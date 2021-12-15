@@ -211,30 +211,6 @@ class DashboardCardView extends StatelessWidget {
                       () => Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          if (controller is ProjectsController && controller.loaded.value as bool)
-                            Expanded(
-                              child: ProjectCardContent(
-                                controller: controller as ProjectsController,
-                              ),
-                            ),
-                          if (controller is TasksController && controller.loaded.value as bool)
-                            Expanded(
-                              child: TaskCardContent(
-                                controller: controller as TasksController,
-                              ),
-                            ),
-                          if (!(controller.loaded.value as bool))
-                            const SizedBox(
-                              height: 100,
-                              child: Center(child: CircularProgressIndicator()),
-                            ),
-                        ],
-                      ),
-                    ),
-                    Obx(
-                      () => Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
                           if (controller.loaded.value as bool &&
                               controller.paginationController.total.value == 0)
                             SizedBox(
@@ -250,6 +226,27 @@ class DashboardCardView extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                            ),
+                          if (controller is ProjectsController &&
+                              controller.loaded.value as bool &&
+                              controller.paginationController.total.value as int > 0)
+                            Expanded(
+                              child: ProjectCardContent(
+                                controller: controller as ProjectsController,
+                              ),
+                            ),
+                          if (controller is TasksController &&
+                              controller.loaded.value as bool &&
+                              controller.paginationController.total.value as int > 0)
+                            Expanded(
+                              child: TaskCardContent(
+                                controller: controller as TasksController,
+                              ),
+                            ),
+                          if (!(controller.loaded.value as bool))
+                            const SizedBox(
+                              height: 100,
+                              child: Center(child: CircularProgressIndicator()),
                             ),
                         ],
                       ),
@@ -351,12 +348,15 @@ class ProjectCardContent extends StatelessWidget {
           if (controller.loaded.value)
             Column(children: [
               ListView.builder(
+                padding: EdgeInsets.zero,
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (c, i) => i < 2
                     ? ProjectCell(item: controller.paginationController.data[i])
                     : const SizedBox(),
-                itemCount: controller.paginationController.data.length,
+                itemCount: controller.paginationController.data.length > 2
+                    ? 2
+                    : controller.paginationController.data.length,
               ),
             ]),
         ],
@@ -377,40 +377,26 @@ class TaskCardContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.showAll.value == true
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (controller.loaded.value)
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) =>
-                          TaskCell(task: controller.paginationController.data[i]),
-                      itemCount: controller.paginationController.data.length,
-                    ),
-                  ]),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (controller.loaded.value)
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => i < 2
-                          ? TaskCell(task: controller.paginationController.data[i])
-                          : const SizedBox(),
-                      itemCount: controller.paginationController.data.length,
-                    ),
-                  ]),
-              ],
-            ),
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (controller.loaded.value)
+            Column(children: [
+              ListView.builder(
+                padding: EdgeInsets.zero,
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (c, i) => i < 2
+                    ? TaskCell(task: controller.paginationController.data[i])
+                    : const SizedBox(),
+                itemCount: controller.paginationController.data.length > 2
+                    ? 2
+                    : controller.paginationController.data.length,
+              ),
+            ]),
+        ],
+      ),
     );
   }
 }
