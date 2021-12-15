@@ -70,8 +70,8 @@ class _AppBarMenu extends StatelessWidget {
             ),
           if (task.canDelete!)
             PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle!
-                  .copyWith(color: Get.theme.colors().colorError),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  ?.copyWith(color: Get.theme.colors().colorError),
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
             )

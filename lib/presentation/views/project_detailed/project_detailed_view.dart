@@ -196,8 +196,8 @@ class _ProjectContextMenu extends StatelessWidget {
             ),
           if (controller.projectData?.canDelete as bool)
             PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle!
-                  .copyWith(color: Get.theme.colors().colorError),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  ?.copyWith(color: Get.theme.colors().colorError),
               value: 'delete',
               child: Text(
                 tr('delete'),
