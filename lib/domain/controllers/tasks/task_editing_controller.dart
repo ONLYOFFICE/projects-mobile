@@ -406,7 +406,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
         context: Get.context!,
         text: tr('taskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)!.hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
       );
     }
   }
