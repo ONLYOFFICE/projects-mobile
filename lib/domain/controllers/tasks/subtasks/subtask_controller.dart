@@ -76,7 +76,7 @@ class SubtaskController extends GetxController {
         context: Get.context!,
         text: tr('subtaskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)!.hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
       );
     }
   }
