@@ -71,6 +71,8 @@ class SvgIcons {
   static const String message = 'lib/assets/images/icons/message.svg';
   static const String password_recovery =
       'lib/assets/images/icons/password_recovery.svg';
+  static const String ios_sort =
+      'lib/assets/images/icons/ios_sortbutton_icon.svg';
   static const String preferences = 'lib/assets/images/icons/preferences.svg';
   static const String preferences_active =
       'lib/assets/images/icons/preferences_active.svg';
