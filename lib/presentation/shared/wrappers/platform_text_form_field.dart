@@ -449,7 +449,7 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
       autofillHints: data?.autofillHints ?? autofillHints,
       autovalidateMode: data?.autovalidateMode ?? autovalidateMode ?? AutovalidateMode.disabled,
       prefix: data?.prefix,
-      padding: data?.padding ?? decoration?.contentPadding ?? const EdgeInsets.all(6.0),
+      padding: data?.padding ?? /*  decoration?.contentPadding ??*/ EdgeInsets.zero,
       placeholder: data?.placeholder ?? hintText ?? decoration!.hintText,
       placeholderStyle: data?.placeholderStyle ??
           TextStyle(
