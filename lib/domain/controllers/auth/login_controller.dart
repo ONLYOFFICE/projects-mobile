@@ -231,7 +231,7 @@ class LoginController extends GetxController {
 
     portalAdressController.text = portalAdressController.text.removeAllWhitespace;
 
-    if (!portalAdressController.text.isURL) {
+    if (!(portalAdressController.text.isURL || portalAdressController.text.isIPv4)) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
