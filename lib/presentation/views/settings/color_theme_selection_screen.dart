@@ -109,7 +109,7 @@ class _ColorThemeTile extends StatelessWidget {
             Text(text, style: TextStyleHelper.projectTitle),
             if (isSelected!)
               Icon(
-                Icons.check_rounded,
+                PlatformIcons(context).checkMark,
                 color: Get.theme.colors().onBackground.withOpacity(0.6),
               )
           ],

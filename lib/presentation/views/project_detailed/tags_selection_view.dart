@@ -74,7 +74,7 @@ class TagsSelectionView extends StatelessWidget {
             child: StyledFloatingActionButton(
               onPressed: () => showTagAddingDialog(controller),
               child: Icon(
-                Icons.add_rounded,
+                PlatformIcons(context).plus,
                 color: Get.theme.colors().onPrimarySurface,
               ),
             ),
