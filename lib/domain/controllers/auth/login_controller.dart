@@ -91,6 +91,12 @@ class LoginController extends GetxController {
   final checkBoxValue = false.obs;
   final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
+  final _state = ViewState.Idle.obs;
+  Rx<ViewState> get state => _state;
+  void setState(ViewState viewState) {
+    state.value = viewState;
+  }
+
   @override
   void onInit() {
     _emailController = TextEditingController();
@@ -115,7 +121,7 @@ class LoginController extends GetxController {
       if (result.response!.token != null) {
         await saveToken(result);
         await sendRegistrationType();
-        setState(ViewState.Idle);
+
         clearInputFields();
         await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
             {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
@@ -128,6 +134,8 @@ class LoginController extends GetxController {
         ]);
 
         locator<EventHub>().fire('loginSuccess');
+
+        setState(ViewState.Idle);
       } else if (result.response!.tfa == true) {
         _email = email;
         _pass = password;
@@ -272,12 +280,6 @@ class LoginController extends GetxController {
   String? passValidator(String? value) {
     if (value == null || value.isEmpty) return 'Введите пароль';
     return null;
-  }
-
-  Rx<ViewState> get state => ViewState.Idle.obs;
-
-  void setState(ViewState viewState) {
-    state.value = viewState;
   }
 
   Future<bool> sendRegistrationType() async {

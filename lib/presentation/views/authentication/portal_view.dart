@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
@@ -41,7 +40,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
-import 'package:projects/presentation/shared/wrappers/platform_scaffold.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -51,13 +49,15 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Obx(
-          () => controller.state.value == ViewState.Busy
-              ? SizedBox(
-                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator()))
-              : Center(
+    return Obx(
+      () => controller.state.value == ViewState.Busy
+          ? Scaffold(
+              body: SizedBox(
+                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator())),
+            )
+          : Scaffold(
+              body: SingleChildScrollView(
+                child: Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
@@ -112,8 +112,8 @@ class PortalInputView extends StatelessWidget {
                     ),
                   ),
                 ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }
