@@ -50,12 +50,15 @@ class PlatformCircularProgressIndicator
     extends PlatformWidgetBase<CupertinoActivityIndicator, CircularProgressIndicator> {
   final Key? widgetKey;
 
+  Color? color;
+
   final PlatformBuilder<MaterialProgressIndicatorData>? material;
   final PlatformBuilder<CupertinoProgressIndicatorData>? cupertino;
 
   PlatformCircularProgressIndicator({
     Key? key,
     this.widgetKey,
+    this.color,
     this.material,
     this.cupertino,
   }) : super(key: key);
@@ -72,7 +75,7 @@ class PlatformCircularProgressIndicator
       valueColor: data?.valueColor,
       semanticsLabel: data?.semanticsLabel,
       semanticsValue: data?.semanticsValue,
-      color: data?.color,
+      color: data?.color ?? color,
     );
   }
 

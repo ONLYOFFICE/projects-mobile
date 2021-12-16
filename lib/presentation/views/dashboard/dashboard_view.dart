@@ -41,6 +41,7 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
@@ -244,9 +245,9 @@ class DashboardCardView extends StatelessWidget {
                               ),
                             ),
                           if (!(controller.loaded.value as bool))
-                            const SizedBox(
+                            SizedBox(
                               height: 100,
-                              child: Center(child: CircularProgressIndicator()),
+                              child: Center(child: PlatformCircularProgressIndicator()),
                             ),
                         ],
                       ),

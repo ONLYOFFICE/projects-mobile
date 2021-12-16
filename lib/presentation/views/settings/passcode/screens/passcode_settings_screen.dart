@@ -39,6 +39,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class PasscodeSettingsScreen extends StatelessWidget {
@@ -130,7 +131,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                 ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: PlatformCircularProgressIndicator());
             }
           },
         ),
