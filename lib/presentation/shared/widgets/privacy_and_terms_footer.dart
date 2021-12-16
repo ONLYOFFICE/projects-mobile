@@ -58,7 +58,6 @@ class PrivacyAndTermsFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     final needAgreement = controller.needAgreement && checkBoxValue != null;
 
-    RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
     final textTermsOfService = tr('privacyAndTermsFooter.termsOfServiceWithLink');

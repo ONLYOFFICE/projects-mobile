@@ -45,6 +45,7 @@ import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
+import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -304,6 +305,8 @@ class LoginController extends GetxController {
 
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();
+
+    await RemoteConfigService.fetchAndActivate();
 
     locator<EventHub>().fire('logoutSuccess');
   }
