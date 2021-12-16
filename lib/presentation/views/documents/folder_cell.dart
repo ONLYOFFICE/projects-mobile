@@ -31,11 +31,11 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -45,7 +45,9 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_dialog_action.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
@@ -278,38 +280,93 @@ Future<void> _onFolderPopupMenuSelected(
   }
 }
 
-void _renameFolder(DocumentsController? controller, Folder element, BuildContext context) {
+void _renameFolder(DocumentsController? controller, Folder element, BuildContext context) async {
   final inputController = TextEditingController();
   inputController.text = element.title!;
 
-  Get.dialog(
-    StyledAlertDialog(
-      titleText: tr('renameFolder'),
-      content: TextField(
-        autofocus: true,
-        textInputAction: TextInputAction.search,
-        controller: inputController,
-        decoration: InputDecoration.collapsed(
-          hintText: tr('enterFolderName'),
+  await showPlatformDialog(
+    context: context,
+    builder: (_) => PlatformAlertDialog(
+      material: (_, __) => MaterialAlertDialogData(
+        title: Text(tr('renameFolder')),
+        content: TextField(
+          autofocus: true,
+          textInputAction: TextInputAction.search,
+          controller: inputController,
+          decoration: InputDecoration.collapsed(
+            hintText: tr('enterFolderName'),
+          ),
+          onSubmitted: (value) {
+            controller!.newSearch(value);
+          },
         ),
-        onSubmitted: (value) {
-          controller!.newSearch(value);
-        },
+        actions: <Widget>[
+          PlatformDialogAction(
+            child: Text(
+              tr('cancel'),
+              style: TextStyleHelper.button(),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          PlatformDialogAction(
+            child: Text(
+              tr('confirm').toUpperCase(),
+              style: TextStyleHelper.button(color: Get.theme.colors().colorError),
+            ),
+            onPressed: () async {
+              if (inputController.text != element.title) {
+                final success = await controller!.renameFolder(element, inputController.text);
+                if (success) {
+                  MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+                  Get.back();
+                  await controller.refreshContent();
+                }
+              } else
+                Get.back();
+            },
+          ),
+        ],
       ),
-      acceptText: tr('confirm'),
-      cancelText: tr('cancel'),
-      onAcceptTap: () async {
-        if (inputController.text != element.title) {
-          final success = await controller!.renameFolder(element, inputController.text);
-          if (success) {
-            MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
-            Get.back();
-            await controller.refreshContent();
-          }
-        } else
-          Get.back();
-      },
-      onCancelTap: Get.back,
+      cupertino: (_, __) => CupertinoAlertDialogData(
+        title: Text(tr('renameFolder')),
+        content: CupertinoTextField(
+          autofocus: true,
+          textInputAction: TextInputAction.search,
+          controller: inputController,
+          // decoration: InputDecoration.collapsed(
+          //   hintText: tr('enterFolderName'),
+          // ),
+          onSubmitted: (value) {
+            controller!.newSearch(value);
+          },
+        ),
+        actions: <Widget>[
+          PlatformDialogAction(
+            child: Text(
+              tr('cancel'),
+              style: TextStyleHelper.button(),
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          PlatformDialogAction(
+            child: Text(
+              tr('confirm').toUpperCase(),
+              style: TextStyleHelper.button(color: Get.theme.colors().colorError),
+            ),
+            onPressed: () async {
+              if (inputController.text != element.title) {
+                final success = await controller!.renameFolder(element, inputController.text);
+                if (success) {
+                  MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
+                  Get.back();
+                  await controller.refreshContent();
+                }
+              } else
+                Get.back();
+            },
+          ),
+        ],
+      ),
     ),
   );
 }

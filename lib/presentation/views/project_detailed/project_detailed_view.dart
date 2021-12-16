@@ -43,13 +43,15 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_dialog_action.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
-import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_milestones_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
@@ -230,26 +232,77 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
       break;
 
     case 'delete':
-      await Get.dialog(StyledAlertDialog(
-        titleText: tr('deleteProject'),
-        contentText: tr('deleteProjectAlert'),
-        acceptText: tr('delete').toUpperCase(),
-        onCancelTap: () async => Get.back(),
-        onAcceptTap: () async {
-          final result = await controller.deleteProject();
-          if (result != null) {
-            Get.back();
-            Get.back();
-            MessagesHandler.showSnackBar(
-              context: context,
-              text: tr('projectDeleted'),
-            );
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
-          } else {
-            print('ERROR');
-          }
-        },
-      ));
+      await showPlatformDialog(
+        context: context,
+        builder: (_) => PlatformAlertDialog(
+          material: (_, __) => MaterialAlertDialogData(
+            title: Text(tr('deleteProject')),
+            content: Text(tr('deleteProjectAlert')),
+            actions: <Widget>[
+              PlatformDialogAction(
+                child: Text(
+                  tr('cancel'),
+                  style: TextStyleHelper.button(),
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+              PlatformDialogAction(
+                child: Text(
+                  tr('delete').toUpperCase(),
+                  style: TextStyleHelper.button(color: Get.theme.colors().colorError),
+                ),
+                onPressed: () async {
+                  final result = await controller.deleteProject();
+                  if (result != null) {
+                    Get.back();
+                    Get.back();
+                    MessagesHandler.showSnackBar(
+                      context: context,
+                      text: tr('projectDeleted'),
+                    );
+                    locator<EventHub>().fire('needToRefreshProjects', ['all']);
+                  } else {
+                    print('ERROR');
+                  }
+                },
+              ),
+            ],
+          ),
+          cupertino: (_, __) => CupertinoAlertDialogData(
+            title: Text(tr('deleteProject')),
+            content: Text(tr('deleteProjectAlert')),
+            actions: <Widget>[
+              PlatformDialogAction(
+                child: Text(
+                  tr('cancel'),
+                  style: TextStyleHelper.button(),
+                ),
+                onPressed: () => Navigator.pop(context),
+              ),
+              PlatformDialogAction(
+                child: Text(
+                  tr('delete'),
+                  style: TextStyleHelper.button(color: Get.theme.colors().colorError),
+                ),
+                onPressed: () async {
+                  final result = await controller.deleteProject();
+                  if (result != null) {
+                    Get.back();
+                    Get.back();
+                    MessagesHandler.showSnackBar(
+                      context: context,
+                      text: tr('projectDeleted'),
+                    );
+                    locator<EventHub>().fire('needToRefreshProjects', ['all']);
+                  } else {
+                    print('ERROR');
+                  }
+                },
+              ),
+            ],
+          ),
+        ),
+      );
       break;
     default:
   }
