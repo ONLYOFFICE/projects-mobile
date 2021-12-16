@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
@@ -65,6 +66,7 @@ class PortalApi {
     } catch (e) {
       String? error;
       if (e is SocketException) error = e.osError?.message;
+      if (e is FormatException) error = tr('unknownHost');
       result.error = CustomError(message: error ?? e.toString());
     }
 
@@ -87,6 +89,7 @@ class PortalApi {
     } catch (e) {
       String? error;
       if (e is SocketException) error = e.osError?.message;
+      if (e is FormatException) error = tr('unknownHost');
       result.error = CustomError(message: error ?? e.toString());
     }
     return result;
