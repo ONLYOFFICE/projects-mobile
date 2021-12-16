@@ -61,8 +61,8 @@ class ConfirmFiltersButton extends StatelessWidget {
             style: ButtonStyle(
               padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
                   (_) => const EdgeInsets.fromLTRB(10, 10, 10, 12)),
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (_) => Get.theme.colors().primary),
+              backgroundColor:
+                  MaterialStateProperty.resolveWith<Color>((_) => Get.theme.colors().primary),
               shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
               ),
@@ -73,8 +73,7 @@ class ConfirmFiltersButton extends StatelessWidget {
                 //   filterController.suitableResultCount.value.toString(),
                 //   filterController.filtersTitle
                 // ]),
-                style: TextStyleHelper.button(
-                    color: Get.theme.colors().onPrimary)),
+                style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
           ),
         ),
       ),

@@ -50,8 +50,7 @@ class SVG {
     );
   }
 
-  static Widget createSizedFromString(
-      String imageString, double width, double height,
+  static Widget createSizedFromString(String imageString, double width, double height,
       [Color? color]) {
     return SvgPicture.string(
       imageString,

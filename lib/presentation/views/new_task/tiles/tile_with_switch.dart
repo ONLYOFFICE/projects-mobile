@@ -54,11 +54,9 @@ class TileWithSwitch extends StatelessWidget {
           children: [
             Expanded(
                 child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 72, top: 18, bottom: 18),
+                    padding: const EdgeInsets.only(left: 72, top: 18, bottom: 18),
                     child: Text(title,
-                        style: TextStyleHelper.subtitle1(
-                            color: Get.theme.colors().onSurface)))),
+                        style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface)))),
             Switch(
               value: isSelected,
               onChanged: onChanged,

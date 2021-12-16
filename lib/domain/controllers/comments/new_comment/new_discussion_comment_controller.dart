@@ -68,16 +68,14 @@ class NewDiscussionCommentController extends NewCommentController {
       await emptyTitleError();
     } else {
       setTitleError.value = false;
-      final newComment =
-          await _api.addMessageComment(content: text, messageId: idFrom!);
+      final newComment = await _api.addMessageComment(content: text, messageId: idFrom!);
       if (newComment != null) {
         _textController.clear();
         final discussionController = Get.find<DiscussionItemController>();
         await discussionController.onRefresh(showLoading: false);
         discussionController.scrollToLastComment();
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       }
     }
   }
@@ -100,8 +98,7 @@ class NewDiscussionCommentController extends NewCommentController {
         // ignore: unawaited_futures
         discussionController.onRefresh();
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       }
     }
   }

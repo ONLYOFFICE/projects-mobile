@@ -329,10 +329,10 @@ class NewTaskController extends GetxController implements TaskActionsController 
         text: tr('taskCreated'),
         buttonText: tr('open').toUpperCase(),
         buttonOnTap: () {
-          final itemController = Get.put(TaskItemController(createdTask),
-              tag: createdTask.id.toString());
-          return Get.find<NavigationController>().to(const TaskDetailedView(),
-              arguments: {'controller': itemController});
+          final itemController =
+              Get.put(TaskItemController(createdTask), tag: createdTask.id.toString());
+          return Get.find<NavigationController>()
+              .to(const TaskDetailedView(), arguments: {'controller': itemController});
         },
       );
     }

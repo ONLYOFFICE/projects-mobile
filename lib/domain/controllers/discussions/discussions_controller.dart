@@ -86,16 +86,16 @@ class DiscussionsController extends BaseController {
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
 
-    _userController.loaded.listen((_loaded) async =>
-        {if (_loaded) fabIsVisible.value = await getFabVisibility()});
+    _userController.loaded
+        .listen((_loaded) async => {if (_loaded) fabIsVisible.value = await getFabVisibility()});
 
-    _visibilityChangedSubscription = locator<EventHub>()
-        .on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription =
+        locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
 
-    _refreshDiscussionsSubscription = locator<EventHub>()
-        .on('needToRefreshDiscussions', (dynamic data) async {
+    _refreshDiscussionsSubscription =
+        locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
       if (data.any((elem) => elem == 'all') as bool) await loadDiscussions();
     });
   }

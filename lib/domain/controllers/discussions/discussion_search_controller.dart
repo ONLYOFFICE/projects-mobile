@@ -51,8 +51,7 @@ class DiscussionSearchController extends BaseController {
 
   final _paginationController = PaginationController<Discussion>();
 
-  PaginationController<Discussion> get paginationController =>
-      _paginationController;
+  PaginationController<Discussion> get paginationController => _paginationController;
   String? _searchQuery;
   Timer? _searchDebounce;
 

@@ -103,8 +103,7 @@ class TasksView extends StatelessWidget {
                 pinned: true,
                 title: Text(
                   controller.screenName,
-                  style: TextStyleHelper.headerStyle(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                 ),
                 actions: [
                   IconButton(
@@ -118,12 +117,10 @@ class TasksView extends StatelessWidget {
                   ),
                   IconButton(
                     icon: FiltersButton(controler: controller),
-                    onPressed: () async => Get.find<NavigationController>()
-                        .toScreen(const TasksFilterScreen(),
-                            preventDuplicates: false,
-                            arguments: {
-                          'filterController': controller.filterController
-                        }),
+                    onPressed: () async => Get.find<NavigationController>().toScreen(
+                        const TasksFilterScreen(),
+                        preventDuplicates: false,
+                        arguments: {'filterController': controller.filterController}),
                   ),
                   const SizedBox(width: 4),
                 ],
@@ -152,12 +149,10 @@ class TasksView extends StatelessWidget {
                     ),
                     IconButton(
                       icon: FiltersButton(controler: controller),
-                      onPressed: () async => Get.find<NavigationController>()
-                          .toScreen(const TasksFilterScreen(),
-                              preventDuplicates: false,
-                              arguments: {
-                            'filterController': controller.filterController
-                          }),
+                      onPressed: () async => Get.find<NavigationController>().toScreen(
+                          const TasksFilterScreen(),
+                          preventDuplicates: false,
+                          arguments: {'filterController': controller.filterController}),
                     ),
                   ],
                 ),
@@ -167,8 +162,7 @@ class TasksView extends StatelessWidget {
         },
         body: Obx(
           () {
-            if (!controller.loaded.value ||
-                !controller.taskStatusesLoaded.value)
+            if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
               return const ListLoadingSkeleton();
 
             return PaginationListView(
@@ -180,27 +174,22 @@ class TasksView extends StatelessWidget {
                       !controller.filterController.hasFilters.value)
                     return Center(
                         child: EmptyScreen(
-                            icon: SvgIcons.task_not_created,
-                            text: tr('noTasksCreated')));
+                            icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
 
                   if (controller.loaded.value &&
                       controller.taskStatusesLoaded.value &&
                       controller.paginationController.data.isEmpty &&
                       controller.filterController.hasFilters.value) {
                     return Center(
-                      child: EmptyScreen(
-                          icon: SvgIcons.not_found,
-                          text: tr('noTasksMatching')),
+                      child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
                     );
                   }
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isNotEmpty)
+                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
                     return ListView.builder(
                       // controller: scrollController,
                       itemCount: controller.paginationController.data.length,
                       itemBuilder: (BuildContext context, int index) {
-                        return TaskCell(
-                            task: controller.paginationController.data[index]);
+                        return TaskCell(task: controller.paginationController.data[index]);
                       },
                     );
                 }() as Widget);
@@ -231,9 +220,7 @@ class TasksHeader extends StatelessWidget {
             ),
             Obx(
               () => Text(
-                tr('total', args: [
-                  controller.paginationController.total.value.toString()
-                ]),
+                tr('total', args: [controller.paginationController.total.value.toString()]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
@@ -256,21 +243,12 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(
-          sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'priority', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'start_date',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'title', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'sort_order',
-          sortController: controller.sortController),
+      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(sortParameter: 'priority', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'start_date', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
     ];
   }
 
@@ -306,8 +284,7 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -358,10 +335,7 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
           }
         },
         icon: AppIcon(
-            width: 24,
-            height: 24,
-            icon: SvgIcons.ios_sort,
-            color: Get.theme.colors().primary),
+            width: 24, height: 24, icon: SvgIcons.ios_sort, color: Get.theme.colors().primary),
       ),
     );
   }

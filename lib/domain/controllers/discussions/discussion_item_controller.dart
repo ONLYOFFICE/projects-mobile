@@ -206,11 +206,9 @@ class DiscussionItemController extends GetxController {
           if (result != null) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(
-                context: context, text: tr('discussionDeleted'));
+            MessagesHandler.showSnackBar(context: context, text: tr('discussionDeleted'));
 
-            locator<EventHub>()
-                .fire('needToRefreshDetails', [discussion.value.project!.id]);
+            locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);
             locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
           }
         } catch (e) {

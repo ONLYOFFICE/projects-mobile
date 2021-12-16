@@ -135,8 +135,7 @@ class CupertinoDialogActionData extends _BaseData {
   final TextStyle? textStyle;
 }
 
-class PlatformDialogAction
-    extends PlatformWidgetBase<CupertinoDialogAction, Widget> {
+class PlatformDialogAction extends PlatformWidgetBase<CupertinoDialogAction, Widget> {
   final Key? widgetKey;
   final Widget? child;
   final void Function()? onPressed;

@@ -72,8 +72,7 @@ class MaterialTabScaffoldData extends _BaseData {
 
   final Widget Function(BuildContext context, int index)? bodyBuilder;
   final MaterialTabController? controller;
-  final PreferredSizeWidget? Function(BuildContext context, int index)?
-      appBarBuilder;
+  final PreferredSizeWidget? Function(BuildContext context, int index)? appBarBuilder;
   final Widget? drawer;
   final Widget? endDrawer;
   final Widget? floatingActionButton;
@@ -136,12 +135,10 @@ class CupertinoTabScaffoldData extends _BaseData {
 
   final List<BottomNavigationBarItem>? items;
 
-  final CupertinoTabViewData Function(BuildContext context, int index)?
-      tabViewDataBuilder;
+  final CupertinoTabViewData Function(BuildContext context, int index)? tabViewDataBuilder;
 
   final Widget Function(BuildContext context, int index)? bodyBuilder;
-  final ObstructingPreferredSizeWidget? Function(
-      BuildContext context, int index)? appBarBuilder;
+  final ObstructingPreferredSizeWidget? Function(BuildContext context, int index)? appBarBuilder;
   final bool? resizeToAvoidBottomInset;
   final bool? resizeToAvoidBottomInsetTab;
   final Color? tabsBackgroundColor;
@@ -176,8 +173,7 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
 
   final List<BottomNavigationBarItem>? items;
 
-  final PlatformAppBar? Function(BuildContext context, int index)?
-      appBarBuilder;
+  final PlatformAppBar? Function(BuildContext context, int index)? appBarBuilder;
 
   final String? restorationId;
 
@@ -204,15 +200,13 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
           (material != null && materialBuilder == null) || material == null,
         ),
         assert(
-          (material == null && materialBuilder != null) ||
-              materialBuilder == null,
+          (material == null && materialBuilder != null) || materialBuilder == null,
         ),
         assert(
           (cupertino != null && cupertinoBuilder == null) || cupertino == null,
         ),
         assert(
-          (cupertino == null && cupertinoBuilder != null) ||
-              cupertinoBuilder == null,
+          (cupertino == null && cupertinoBuilder != null) || cupertinoBuilder == null,
         ),
         super(key: key);
 
@@ -230,8 +224,7 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
       animation: controller!,
       builder: (context, _) => _buildAndroid(
         context,
-        materialBuilder?.call(context, platform(context), controller.index) ??
-            data,
+        materialBuilder?.call(context, platform(context), controller.index) ?? data,
         controller,
       ),
     );
@@ -258,9 +251,7 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
         bodyBuilder?.call(context, controller.index);
 
     final appBar = data?.appBarBuilder?.call(context, controller.index) ??
-        appBarBuilder
-            ?.call(context, controller.index)
-            ?.createMaterialWidget(context);
+        appBarBuilder?.call(context, controller.index)?.createMaterialWidget(context);
 
     return Scaffold(
       key: data?.widgetKey ?? widgetKey,
@@ -276,16 +267,14 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
       persistentFooterButtons: data?.persistentFooterButtons,
       primary: data?.primary ?? true,
       bottomSheet: data?.bottomSheet,
-      drawerDragStartBehavior:
-          data?.drawerDragStartBehavior ?? DragStartBehavior.start,
+      drawerDragStartBehavior: data?.drawerDragStartBehavior ?? DragStartBehavior.start,
       extendBody: data?.extendBody ?? false,
       resizeToAvoidBottomInset: data?.resizeToAvoidBottomInset,
       drawerScrimColor: data?.drawerScrimColor,
       drawerEdgeDragWidth: data?.drawerEdgeDragWidth,
       extendBodyBehindAppBar: data?.extendBodyBehindAppBar ?? false,
       drawerEnableOpenDragGesture: data?.drawerEnableOpenDragGesture ?? true,
-      endDrawerEnableOpenDragGesture:
-          data?.endDrawerEnableOpenDragGesture ?? true,
+      endDrawerEnableOpenDragGesture: data?.endDrawerEnableOpenDragGesture ?? true,
       onDrawerChanged: data?.onDrawerChanged,
       onEndDrawerChanged: data?.onEndDrawerChanged,
       restorationId: data?.restorationId ?? restorationId,
@@ -338,8 +327,7 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
     final tabBar = navBar.createCupertinoWidget(context);
 
     final providerState = PlatformProvider.of(context);
-    final useLegacyMaterial =
-        providerState?.settings.legacyIosUsesMaterialWidgets ?? false;
+    final useLegacyMaterial = providerState?.settings.legacyIosUsesMaterialWidgets ?? false;
     final useMaterial = providerState?.settings.iosUsesMaterialWidgets ?? false;
 
     final result = CupertinoTabScaffold(
@@ -352,18 +340,12 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
         if (data?.useCupertinoTabView ?? false) {
           return CupertinoTabView(
             // key Not used
-            defaultTitle:
-                data?.tabViewDataBuilder?.call(context, index).defaultTitle,
-            navigatorKey:
-                data?.tabViewDataBuilder?.call(context, index).navigatorKey,
-            navigatorObservers: data?.tabViewDataBuilder
-                    ?.call(context, index)
-                    .navigatorObservers ??
+            defaultTitle: data?.tabViewDataBuilder?.call(context, index).defaultTitle,
+            navigatorKey: data?.tabViewDataBuilder?.call(context, index).navigatorKey,
+            navigatorObservers: data?.tabViewDataBuilder?.call(context, index).navigatorObservers ??
                 const <NavigatorObserver>[],
-            onGenerateRoute:
-                data?.tabViewDataBuilder?.call(context, index).onGenerateRoute,
-            onUnknownRoute:
-                data?.tabViewDataBuilder?.call(context, index).onUnknownRoute,
+            onGenerateRoute: data?.tabViewDataBuilder?.call(context, index).onGenerateRoute,
+            onUnknownRoute: data?.tabViewDataBuilder?.call(context, index).onUnknownRoute,
             routes: data?.tabViewDataBuilder?.call(context, index).routes,
             builder: (context) {
               return _buildCupertinoPageScaffold(
@@ -391,8 +373,8 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
 
     // Ensure that there is Material widget at the root page level
     // as there can be Material widgets used on ios
-    return result.withMaterial(useLegacyMaterial &&
-        context.findAncestorWidgetOfExactType<Material>() == null);
+    return result.withMaterial(
+        useLegacyMaterial && context.findAncestorWidgetOfExactType<Material>() == null);
   }
 
   CupertinoPageScaffold _buildCupertinoPageScaffold(
@@ -405,8 +387,7 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
     final appBar = data?.appBarBuilder?.call(context, index) ??
         appBarBuilder?.call(context, index)?.createCupertinoWidget(context);
 
-    final child = data?.bodyBuilder?.call(context, index) ??
-        bodyBuilder?.call(context, index);
+    final child = data?.bodyBuilder?.call(context, index) ?? bodyBuilder?.call(context, index);
 
     assert(child != null);
 
@@ -440,8 +421,7 @@ class PlatformTabScaffold extends PlatformWidgetBase<Widget, Widget> {
     double bottom = 0;
 
     if (iosContentPadding && navigationBar != null) {
-      final double topPadding =
-          navigationBar.preferredSize.height + existingMediaQuery.padding.top;
+      final double topPadding = navigationBar.preferredSize.height + existingMediaQuery.padding.top;
 
       final obstruct = navigationBar.shouldFullyObstruct(context);
 

@@ -61,8 +61,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
     RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
-    final textTermsOfService =
-        tr('privacyAndTermsFooter.termsOfServiceWithLink');
+    final textTermsOfService = tr('privacyAndTermsFooter.termsOfServiceWithLink');
 
     final beforeText = needAgreement
         ? tr('privacyAndTermsAgreement.beforeText')

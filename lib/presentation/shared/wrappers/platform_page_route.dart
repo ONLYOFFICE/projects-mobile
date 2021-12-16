@@ -6,8 +6,7 @@
 
 import 'package:flutter/cupertino.dart' show CupertinoPageRoute;
 import 'package:flutter/material.dart' show MaterialPageRoute;
-import 'package:flutter/widgets.dart'
-    show PageRoute, BuildContext, RouteSettings, WidgetBuilder;
+import 'package:flutter/widgets.dart' show PageRoute, BuildContext, RouteSettings, WidgetBuilder;
 
 import 'platform.dart';
 import 'widget_base.dart';

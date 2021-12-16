@@ -7,22 +7,12 @@
 import 'dart:ui' as ui show BoxHeightStyle, BoxWidthStyle;
 
 import 'package:flutter/cupertino.dart'
-    show
-        CupertinoColors,
-        CupertinoDynamicColor,
-        CupertinoTextField,
-        OverlayVisibilityMode;
+    show CupertinoColors, CupertinoDynamicColor, CupertinoTextField, OverlayVisibilityMode;
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart'
-    show InputDecoration, TextField, InputCounterWidgetBuilder;
+import 'package:flutter/material.dart' show InputDecoration, TextField, InputCounterWidgetBuilder;
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart'
-    show
-        Brightness,
-        TextInputFormatter,
-        TextInputType,
-        TextInputAction,
-        TextCapitalization;
+    show Brightness, TextInputFormatter, TextInputType, TextInputAction, TextCapitalization;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
@@ -284,8 +274,7 @@ class CupertinoTextFieldData {
   final TextDirection? textDirection;
 }
 
-class PlatformTextField
-    extends PlatformWidgetBase<CupertinoTextField, TextField> {
+class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField> {
   final Key? widgetKey;
 
   final PlatformBuilder<MaterialTextFieldData>? material;
@@ -401,8 +390,8 @@ class PlatformTextField
     this.makeCupertinoDecorationNull = false,
     this.material,
     this.cupertino,
-  })  : keyboardType = keyboardType ??
-            (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
+  })  : keyboardType =
+            keyboardType ?? (maxLines == 1 ? TextInputType.text : TextInputType.multiline),
         super(key: key);
 
   @override
@@ -436,27 +425,21 @@ class PlatformTextField
       onChanged: data?.onChanged ?? onChanged,
       onEditingComplete: data?.onEditingComplete ?? onEditingComplete,
       onSubmitted: data?.onSubmitted ?? onSubmitted,
-      scrollPadding:
-          data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
+      scrollPadding: data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20),
       style: data?.style ?? style,
       textAlign: data?.textAlign ?? textAlign ?? TextAlign.start,
-      textCapitalization: data?.textCapitalization ??
-          textCapitalization ??
-          TextCapitalization.none,
+      textCapitalization: data?.textCapitalization ?? textCapitalization ?? TextCapitalization.none,
       textInputAction: data?.textInputAction ?? textInputAction,
       decoration: decoration,
       textDirection: data?.textDirection,
       buildCounter: data?.buildCounter,
-      dragStartBehavior: data?.dragStartBehavior ??
-          dragStartBehavior ??
-          DragStartBehavior.start,
+      dragStartBehavior: data?.dragStartBehavior ?? dragStartBehavior ?? DragStartBehavior.start,
       expands: data?.expands ?? expands ?? false,
       minLines: data?.minLines ?? minLines,
       scrollPhysics: data?.scrollPhysics ?? scrollPhysics,
       strutStyle: data?.strutStyle ?? strutStyle,
-      enableInteractiveSelection: data?.enableInteractiveSelection ??
-          enableInteractiveSelection ??
-          true,
+      enableInteractiveSelection:
+          data?.enableInteractiveSelection ?? enableInteractiveSelection ?? true,
       scrollController: data?.scrollController ?? scrollController,
       onTap: data?.onTap ?? onTap,
       readOnly: data?.readOnly ?? readOnly ?? false,
@@ -466,12 +449,10 @@ class PlatformTextField
       enableSuggestions: data?.enableSuggestions ?? true,
       smartQuotesType: data?.smartQuotesType ?? smartQuotesType,
       smartDashesType: data?.smartDashesType ?? smartDashesType,
-      selectionHeightStyle: data?.selectionHeightStyle ??
-          selectionHeightStyle ??
-          ui.BoxHeightStyle.tight,
-      selectionWidthStyle: data?.selectionWidthStyle ??
-          selectionWidthStyle ??
-          ui.BoxWidthStyle.tight,
+      selectionHeightStyle:
+          data?.selectionHeightStyle ?? selectionHeightStyle ?? ui.BoxHeightStyle.tight,
+      selectionWidthStyle:
+          data?.selectionWidthStyle ?? selectionWidthStyle ?? ui.BoxWidthStyle.tight,
       obscuringCharacter: data?.obscuringCharacter ?? obscuringCharacter ?? '•',
       autofillHints: data?.autofillHints ?? autofillHints,
       mouseCursor: data?.mouseCursor ?? MouseCursor.defer,
@@ -480,9 +461,8 @@ class PlatformTextField
       restorationId: data?.restorationId ?? restorationId,
       maxLengthEnforcement: data?.maxLengthEnforcement ?? maxLengthEnforcement,
       selectionControls: data?.selectionControls ?? selectionControls,
-      enableIMEPersonalizedLearning: data?.enableIMEPersonalizedLearning ??
-          enableIMEPersonalizedLearning ??
-          true,
+      enableIMEPersonalizedLearning:
+          data?.enableIMEPersonalizedLearning ?? enableIMEPersonalizedLearning ?? true,
       //maxLengthEnforced: deprecated
     );
   }
@@ -496,10 +476,8 @@ class PlatformTextField
       autocorrect: data?.autocorrect ?? autocorrect ?? true,
       autofocus: data?.autofocus ?? autofocus ?? false,
       controller: data?.controller ?? controller,
-      cursorColor:
-          data?.cursorColor ?? cursorColor ?? CupertinoColors.activeBlue,
-      cursorRadius:
-          data?.cursorRadius ?? cursorRadius ?? const Radius.circular(2.0),
+      cursorColor: data?.cursorColor ?? cursorColor ?? CupertinoColors.activeBlue,
+      cursorRadius: data?.cursorRadius ?? cursorRadius ?? const Radius.circular(2.0),
       cursorWidth: data?.cursorWidth ?? cursorWidth ?? 2.0,
       enabled: data?.enabled ?? enabled,
       focusNode: data?.focusNode ?? focusNode,
@@ -512,18 +490,13 @@ class PlatformTextField
       onChanged: data?.onChanged ?? onChanged,
       onEditingComplete: data?.onEditingComplete ?? onEditingComplete,
       onSubmitted: data?.onSubmitted ?? onSubmitted,
-      scrollPadding:
-          data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20.0),
+      scrollPadding: data?.scrollPadding ?? scrollPadding ?? const EdgeInsets.all(20.0),
       style: data?.style ?? style,
       textAlign: data?.textAlign ?? textAlign ?? TextAlign.start,
-      textCapitalization: data?.textCapitalization ??
-          textCapitalization ??
-          TextCapitalization.none,
+      textCapitalization: data?.textCapitalization ?? textCapitalization ?? TextCapitalization.none,
       textInputAction: data?.textInputAction ?? textInputAction,
       decoration: data?.decoration ??
-          (makeCupertinoDecorationNull
-              ? null
-              : kDefaultRoundedBorderDecoration),
+          (makeCupertinoDecorationNull ? null : kDefaultRoundedBorderDecoration),
       clearButtonMode: data?.clearButtonMode ?? OverlayVisibilityMode.never,
       padding: data?.padding ?? const EdgeInsets.all(6.0),
       placeholder: data?.placeholder ?? hintText,
@@ -536,16 +509,13 @@ class PlatformTextField
       prefixMode: data?.prefixMode ?? OverlayVisibilityMode.always,
       suffix: data?.suffix,
       suffixMode: data?.suffixMode ?? OverlayVisibilityMode.always,
-      dragStartBehavior: data?.dragStartBehavior ??
-          dragStartBehavior ??
-          DragStartBehavior.start,
+      dragStartBehavior: data?.dragStartBehavior ?? dragStartBehavior ?? DragStartBehavior.start,
       expands: data?.expands ?? expands ?? false,
       minLines: data?.minLines ?? minLines,
       scrollPhysics: data?.scrollPhysics ?? scrollPhysics,
       strutStyle: data?.strutStyle ?? strutStyle,
-      enableInteractiveSelection: data?.enableInteractiveSelection ??
-          enableInteractiveSelection ??
-          true,
+      enableInteractiveSelection:
+          data?.enableInteractiveSelection ?? enableInteractiveSelection ?? true,
       scrollController: data?.scrollController ?? scrollController,
       onTap: data?.onTap ?? onTap,
       readOnly: data?.readOnly ?? readOnly ?? false,
@@ -555,21 +525,18 @@ class PlatformTextField
       enableSuggestions: data?.enableSuggestions ?? true,
       smartQuotesType: data?.smartQuotesType ?? smartQuotesType,
       smartDashesType: data?.smartDashesType ?? smartDashesType,
-      selectionHeightStyle: data?.selectionHeightStyle ??
-          selectionHeightStyle ??
-          ui.BoxHeightStyle.tight,
-      selectionWidthStyle: data?.selectionWidthStyle ??
-          selectionWidthStyle ??
-          ui.BoxWidthStyle.tight,
+      selectionHeightStyle:
+          data?.selectionHeightStyle ?? selectionHeightStyle ?? ui.BoxHeightStyle.tight,
+      selectionWidthStyle:
+          data?.selectionWidthStyle ?? selectionWidthStyle ?? ui.BoxWidthStyle.tight,
       obscuringCharacter: data?.obscuringCharacter ?? obscuringCharacter ?? '•',
       autofillHints: data?.autofillHints ?? autofillHints,
       cursorHeight: data?.cursorHeight ?? cursorHeight,
       restorationId: data?.restorationId ?? restorationId,
       maxLengthEnforcement: data?.maxLengthEnforcement ?? maxLengthEnforcement,
       selectionControls: data?.selectionControls ?? selectionControls,
-      enableIMEPersonalizedLearning: data?.enableIMEPersonalizedLearning ??
-          enableIMEPersonalizedLearning ??
-          true,
+      enableIMEPersonalizedLearning:
+          data?.enableIMEPersonalizedLearning ?? enableIMEPersonalizedLearning ?? true,
       textDirection: data?.textDirection,
       //maxLengthEnforced: deprecated
     );

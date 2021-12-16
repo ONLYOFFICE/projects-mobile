@@ -75,17 +75,13 @@ class _Step4 extends StatelessWidget {
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                     labelText: tr('code'),
-                    contentPadding:
-                        const EdgeInsets.only(left: 12, bottom: 8, top: 2),
+                    contentPadding: const EdgeInsets.only(left: 12, bottom: 8, top: 2),
                     focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(
-                            width: 0.5,
-                            color:
-                                Get.theme.colors().onSurface.withOpacity(0.6))),
+                            width: 0.5, color: Get.theme.colors().onSurface.withOpacity(0.6))),
                     labelStyle: TextStyleHelper.caption(
                         color: Get.theme.colors().onSurface.withOpacity(0.6))),
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
               ),
             ),
           ),
@@ -108,8 +104,7 @@ class _Step4 extends StatelessWidget {
               constraints: const BoxConstraints(maxWidth: 480),
               child: WideButton(
                 text: tr('confirm'),
-                onPressed: () async =>
-                    await controller.sendCode(codeController.text),
+                onPressed: () async => await controller.sendCode(codeController.text),
               ),
             ),
           ),

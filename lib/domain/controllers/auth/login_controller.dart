@@ -226,13 +226,11 @@ class LoginController extends GetxController {
 
   Future<void> getPortalCapabilities() async {
     if (needAgreement && !checkBoxValue.value) {
-      MessagesHandler.showSnackBar(
-          context: Get.context!, text: tr('privacyAndTermsFooter.total'));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('privacyAndTermsFooter.total'));
       return;
     }
 
-    portalAdressController.text =
-        portalAdressController.text.removeAllWhitespace;
+    portalAdressController.text = portalAdressController.text.removeAllWhitespace;
 
     if (!portalAdressController.text.isURL) {
       portalFieldError.value = true;

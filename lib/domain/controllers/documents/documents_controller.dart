@@ -54,8 +54,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsController extends GetxController
-    implements BaseDocumentsController {
+class DocumentsController extends GetxController implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
@@ -133,8 +132,7 @@ class DocumentsController extends GetxController
     if (_currentFolderId == null) {
       await initialSetup();
     } else
-      await setupFolder(
-          folderId: _currentFolderId, folderName: screenName.value);
+      await setupFolder(folderId: _currentFolderId, folderName: screenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -163,8 +161,7 @@ class DocumentsController extends GetxController
 
     _filterController.folderId = null;
     _paginationController.startIndex = 0;
-    if (_paginationController.data.isNotEmpty)
-      _paginationController.data.clear();
+    if (_paginationController.data.isNotEmpty) _paginationController.data.clear();
   }
 
   Future _getDocuments() async {
@@ -183,11 +180,9 @@ class DocumentsController extends GetxController
 
     if (result.total != null) paginationController.total.value = result.total!;
 
-    if (_currentFolderId != null && result.current != null)
-      _screenName = result.current!.title;
+    if (_currentFolderId != null && result.current != null) _screenName = result.current!.title;
 
-    if (result.folders != null)
-      _paginationController.data.addAll(result.folders!);
+    if (result.folders != null) _paginationController.data.addAll(result.folders!);
     if (result.files != null) {
       _paginationController.data.addAll(result.files!);
       filesCount.value = result.files!.length;

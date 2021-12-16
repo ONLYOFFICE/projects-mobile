@@ -67,17 +67,15 @@ class ProjectDiscussionsController extends GetxController {
 
   ProjectDiscussionsController(ProjectDetailed projectDetailed) {
     setup(projectDetailed);
-    _sortController.updateSortDelegate =
-        () async => await loadProjectDiscussions();
+    _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
 
     paginationController.loadDelegate = () async => await _getDiscussions();
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    _refreshDiscussionsSubscription = locator<EventHub>()
-        .on('needToRefreshDiscussions', (dynamic data) async {
-      if (data.any((elem) => elem == 'all') as bool)
-        await loadProjectDiscussions();
+    _refreshDiscussionsSubscription =
+        locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+      if (data.any((elem) => elem == 'all') as bool) await loadProjectDiscussions();
     });
   }
 

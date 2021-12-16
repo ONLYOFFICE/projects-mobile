@@ -71,8 +71,8 @@ class AddCommentButton extends StatelessWidget {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(tr('addComment'),
-                style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onBackground.withOpacity(0.4))),
+                style:
+                    TextStyleHelper.body2(color: Get.theme.colors().onBackground.withOpacity(0.4))),
           ),
         ),
       ),

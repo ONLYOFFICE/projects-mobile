@@ -46,8 +46,8 @@ class CupertinoProgressIndicatorData {
   final double? radius;
 }
 
-class PlatformCircularProgressIndicator extends PlatformWidgetBase<
-    CupertinoActivityIndicator, CircularProgressIndicator> {
+class PlatformCircularProgressIndicator
+    extends PlatformWidgetBase<CupertinoActivityIndicator, CircularProgressIndicator> {
   final Key? widgetKey;
 
   final PlatformBuilder<MaterialProgressIndicatorData>? material;

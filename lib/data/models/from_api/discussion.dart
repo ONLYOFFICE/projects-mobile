@@ -106,8 +106,7 @@ class Discussion {
         title: json['title'] as String?,
         description: json['description'],
         projectOwner: json['projectOwner'] != null
-            ? ProjectOwner.fromJson(
-                json['projectOwner'] as Map<String, dynamic>)
+            ? ProjectOwner.fromJson(json['projectOwner'] as Map<String, dynamic>)
             : null,
         commentsCount: json['commentsCount'] as int?,
         text: json['text'] as String?,
@@ -115,15 +114,11 @@ class Discussion {
         updatedBy: json['updatedBy'] != null
             ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
             : null,
-        created: json['created'] != null
-            ? DateTime.parse(json['created'] as String)
-            : null,
+        created: json['created'] != null ? DateTime.parse(json['created'] as String) : null,
         createdBy: json['createdBy'] != null
             ? PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>)
             : null,
-        updated: json['updated'] != null
-            ? DateTime.parse(json['updated'] as String)
-            : null,
+        updated: json['updated'] != null ? DateTime.parse(json['updated'] as String) : null,
       );
 
   Map<String, dynamic> toJson() => {

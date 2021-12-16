@@ -6,8 +6,7 @@
 
 import 'package:flutter/cupertino.dart' show CupertinoSwitch;
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart'
-    show MaterialStateProperty, MaterialTapTargetSize, Switch;
+import 'package:flutter/material.dart' show MaterialStateProperty, MaterialTapTargetSize, Switch;
 import 'package:flutter/rendering.dart' show MouseCursor;
 import 'package:flutter/widgets.dart';
 
@@ -140,9 +139,7 @@ class PlatformSwitch extends PlatformWidgetBase<CupertinoSwitch, Switch> {
       inactiveThumbImage: data?.inactiveThumbImage,
       inactiveTrackColor: data?.inactiveTrackColor,
       materialTapTargetSize: data?.materialTapTargetSize,
-      dragStartBehavior: data?.dragStartBehavior ??
-          dragStartBehavior ??
-          DragStartBehavior.start,
+      dragStartBehavior: data?.dragStartBehavior ?? dragStartBehavior ?? DragStartBehavior.start,
       autofocus: data?.autofocus ?? false,
       focusColor: data?.focusColor,
       focusNode: data?.focusNode,
@@ -166,9 +163,7 @@ class PlatformSwitch extends PlatformWidgetBase<CupertinoSwitch, Switch> {
       value: data?.value ?? value,
       onChanged: data?.onChanged ?? onChanged,
       activeColor: data?.activeColor ?? activeColor,
-      dragStartBehavior: data?.dragStartBehavior ??
-          dragStartBehavior ??
-          DragStartBehavior.start,
+      dragStartBehavior: data?.dragStartBehavior ?? dragStartBehavior ?? DragStartBehavior.start,
       trackColor: data?.trackColor,
       thumbColor: data?.thumbColor,
     );

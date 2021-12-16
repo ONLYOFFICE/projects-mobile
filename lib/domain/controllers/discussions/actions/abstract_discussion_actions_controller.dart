@@ -55,8 +55,7 @@ abstract class DiscussionActionsController {
   late RxBool selectProjectError;
 
   void setupSubscribersSelection();
-  void addSubscriber(PortalUserItemController user,
-      {bool fromUsersDataSource = false});
+  void addSubscriber(PortalUserItemController user, {bool fromUsersDataSource = false});
   void removeSubscriber(PortalUserItemController user);
 
   void changeTitle(String newText);

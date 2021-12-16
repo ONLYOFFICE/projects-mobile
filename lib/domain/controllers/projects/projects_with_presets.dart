@@ -75,8 +75,7 @@ class ProjectsWithPresets {
     _myProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_myProjectPaginationController'),
         ),
         tag: '_myProjectsController')!
@@ -88,8 +87,7 @@ class ProjectsWithPresets {
     _folowedProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_folowedProjectPaginationController'),
           // Get.find<PaginationController<ProjectDetailed>>(
           //     tag: '_folowedProjectPaginationController'),
@@ -106,8 +104,7 @@ class ProjectsWithPresets {
     _activeProjectsController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_activeProjectPaginationController'),
           // Get.put<PaginationController<ProjectDetailed>>(
           //     PaginationController<ProjectDetailed>()),
@@ -124,8 +121,7 @@ class ProjectsWithPresets {
     _myMembershipProjectController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_myMembershipProjectPaginationController'),
         ),
         tag: '_myMembershipProjectController')!
@@ -137,8 +133,7 @@ class ProjectsWithPresets {
     _myManagedProjectController = Get.put(
         ProjectsController(
           Get.find<ProjectsFilterController>(),
-          Get.put<PaginationController<ProjectDetailed>>(
-              PaginationController<ProjectDetailed>(),
+          Get.put<PaginationController<ProjectDetailed>>(PaginationController<ProjectDetailed>(),
               tag: '_myManagedProjectPaginationController'),
         ),
         tag: '_myManagedProjectController')!

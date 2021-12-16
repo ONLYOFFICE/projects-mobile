@@ -53,20 +53,17 @@ class _AppBarTitle extends StatelessWidget {
               ? TextField(
                   autofocus: true,
                   controller: searchController.textController,
-                  decoration:
-                      InputDecoration.collapsed(hintText: tr('enterQuery')),
+                  decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
                   style: TextStyleHelper.headline6(
                     color: Get.theme.colors().onSurface,
                   ),
-                  onSubmitted: (value) async =>
-                      await searchController.search(query: value),
+                  onSubmitted: (value) async => await searchController.search(query: value),
                 )
               : Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
                     appBarText,
-                    style: TextStyleHelper.headerStyle(
-                        color: Get.theme.colors().onSurface),
+                    style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                   ),
                 ),
         ));

@@ -68,8 +68,7 @@ class MaterialAppBarData extends _BaseData {
     this.shadowColor,
     this.toolbarHeight,
     this.leadingWidth,
-    @Deprecated('This property is obsolete and is false by default. ')
-        this.backwardsCompatibility,
+    @Deprecated('This property is obsolete and is false by default. ') this.backwardsCompatibility,
     this.foregroundColor,
     this.systemOverlayStyle,
     this.titleTextStyle,
@@ -146,8 +145,7 @@ class CupertinoNavigationBarData extends _BaseData {
   final bool noMaterialParent;
 }
 
-class PlatformAppBar
-    extends PlatformWidgetBase<CupertinoNavigationBar, PreferredSizeWidget> {
+class PlatformAppBar extends PlatformWidgetBase<CupertinoNavigationBar, PreferredSizeWidget> {
   final Key? widgetKey;
 
   final Widget? title;
@@ -225,8 +223,8 @@ class PlatformAppBar
 
     final providerState = PlatformProvider.of(context);
     final noMaterialParent = data?.noMaterialParent ?? false;
-    final useMaterial = (!noMaterialParent) &&
-        (providerState?.settings.iosUsesMaterialWidgets ?? false);
+    final useMaterial =
+        (!noMaterialParent) && (providerState?.settings.iosUsesMaterialWidgets ?? false);
 
     final heroTag = data?.heroTag;
     if (heroTag != null) {
@@ -234,9 +232,8 @@ class PlatformAppBar
         key: data?.widgetKey ?? widgetKey,
         middle: data?.title ?? title,
         backgroundColor: data?.backgroundColor ?? backgroundColor,
-        automaticallyImplyLeading: data?.automaticallyImplyLeading ??
-            automaticallyImplyLeading ??
-            true,
+        automaticallyImplyLeading:
+            data?.automaticallyImplyLeading ?? automaticallyImplyLeading ?? true,
         automaticallyImplyMiddle: data?.automaticallyImplyMiddle ?? true,
         previousPageTitle: data?.previousPageTitle,
         padding: data?.padding,

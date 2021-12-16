@@ -1,5 +1,4 @@
-import 'package:flutter/cupertino.dart'
-    show CupertinoActionSheet, CupertinoActionSheetAction;
+import 'package:flutter/cupertino.dart' show CupertinoActionSheet, CupertinoActionSheetAction;
 import 'package:flutter/material.dart'
     show
         PopupMenuButton,
@@ -187,8 +186,7 @@ class PlatformPopupMenu extends StatelessWidget {
       itemBuilder: data?.itemBuilder ??
           (context) => options.map(
                 (option) {
-                  final data =
-                      option.material?.call(context, platform(context));
+                  final data = option.material?.call(context, platform(context));
                   return PopupMenuItem(
                     value: option,
                     child: data?.child ?? Text(option.label),

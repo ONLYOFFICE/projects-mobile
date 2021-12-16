@@ -69,10 +69,8 @@ class TaskTeamView extends StatelessWidget {
                     userController: PortalUserItemController(
                         portalUser: controller.task.value.responsibles![i]!),
                     onTapFunction: (value) => {
-                          Get.find<NavigationController>()
-                              .toScreen(const ProfileScreen(), arguments: {
-                            'portalUser': controller.task.value.responsibles![i]
-                          })
+                          Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                              arguments: {'portalUser': controller.task.value.responsibles![i]})
                         }),
                 itemExtent: 65,
                 itemCount: controller.task.value.responsibles!.length,

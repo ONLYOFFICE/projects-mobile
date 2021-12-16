@@ -81,8 +81,7 @@ class CupertinoElevatedButtonData extends _BaseData {
   final bool originalStyle;
 }
 
-class PlatformElevatedButton
-    extends PlatformWidgetBase<CupertinoButton, ElevatedButton> {
+class PlatformElevatedButton extends PlatformWidgetBase<CupertinoButton, ElevatedButton> {
   final Key? widgetKey;
 
   final VoidCallback? onPressed;
@@ -120,8 +119,7 @@ class PlatformElevatedButton
         autofocus: data?.autofocus ?? false,
         clipBehavior: data?.clipBehavior ?? Clip.none,
         focusNode: data?.focusNode,
-        style: data?.style ??
-            ElevatedButton.styleFrom(padding: padding, alignment: alignment),
+        style: data?.style ?? ElevatedButton.styleFrom(padding: padding, alignment: alignment),
       );
     }
 
@@ -133,8 +131,7 @@ class PlatformElevatedButton
       autofocus: data?.autofocus ?? false,
       clipBehavior: data?.clipBehavior ?? Clip.none,
       focusNode: data?.focusNode,
-      style: data?.style ??
-          ElevatedButton.styleFrom(padding: padding, alignment: alignment),
+      style: data?.style ?? ElevatedButton.styleFrom(padding: padding, alignment: alignment),
     );
   }
 
@@ -146,13 +143,11 @@ class PlatformElevatedButton
         key: data?.widgetKey ?? widgetKey,
         child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ??
-            const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
         minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
-        disabledColor:
-            data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
+        disabledColor: data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: data?.alignment ?? alignment ?? Alignment.center,
         color: data?.color,
       );
@@ -161,13 +156,11 @@ class PlatformElevatedButton
         key: data?.widgetKey ?? widgetKey,
         child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ??
-            const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
         minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
-        disabledColor:
-            data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
+        disabledColor: data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: data?.alignment ?? alignment ?? Alignment.center,
       );
     }

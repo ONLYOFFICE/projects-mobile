@@ -94,8 +94,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
                 labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor:
-                    Get.theme.colors().onSurface.withOpacity(0.6),
+                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   CustomTab(

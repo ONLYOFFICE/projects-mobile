@@ -104,10 +104,8 @@ class ProjectApi {
       url += '&FilterValue=$query';
     }
 
-    if (sortBy != null &&
-        sortBy.isNotEmpty &&
-        sortOrder != null &&
-        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+    if (sortBy != null && sortBy.isNotEmpty && sortOrder != null && sortOrder.isNotEmpty)
+      url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
     if (projectManagerFilter != null) {
       url += projectManagerFilter;
@@ -143,8 +141,7 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<ProjectDetailed>> getProjectById(
-      {required int projectId}) async {
+  Future<ApiDTO<ProjectDetailed>> getProjectById({required int projectId}) async {
     final url = await locator.get<CoreApi>().projectByIdUrl(projectId);
 
     final result = ApiDTO<ProjectDetailed>();
@@ -154,8 +151,8 @@ class ProjectApi {
       if (response is http.Response) {
         {
           final responseJson = json.decode(response.body);
-          result.response = ProjectDetailed.fromJson(
-              responseJson['response'] as Map<String, dynamic>);
+          result.response =
+              ProjectDetailed.fromJson(responseJson['response'] as Map<String, dynamic>);
         }
       } else {
         result.error = response as CustomError;
@@ -249,8 +246,8 @@ class ProjectApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = ProjectDetailed.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response =
+            ProjectDetailed.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -284,10 +281,8 @@ class ProjectApi {
     return result;
   }
 
-  Future<ApiDTO<List<PortalUser>>> getProjectTeam(
-      {required int projectID}) async {
-    final url =
-        await locator.get<CoreApi>().projectTeamUrl(projectID: projectID);
+  Future<ApiDTO<List<PortalUser>>> getProjectTeam({required int projectID}) async {
+    final url = await locator.get<CoreApi>().projectTeamUrl(projectID: projectID);
 
     final result = ApiDTO<List<PortalUser>>();
     try {
@@ -318,8 +313,7 @@ class ProjectApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = PortalUser.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -332,9 +326,7 @@ class ProjectApi {
 
   Future<ApiDTO<ProjectDetailed>> updateProjectStatus(
       {required int projectId, required String newStatus}) async {
-    final url = await locator
-        .get<CoreApi>()
-        .updateProjectStatusUrl(projectId: projectId);
+    final url = await locator.get<CoreApi>().updateProjectStatusUrl(projectId: projectId);
 
     final result = ApiDTO<ProjectDetailed>();
     final body = {'status': newStatus};
@@ -344,8 +336,8 @@ class ProjectApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = ProjectDetailed.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response =
+            ProjectDetailed.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -357,8 +349,7 @@ class ProjectApi {
   }
 
   Future<ApiDTO<FollowProject>> followProject({required int projectId}) async {
-    final url =
-        await locator.get<CoreApi>().followProjectUrl(projectId: projectId);
+    final url = await locator.get<CoreApi>().followProjectUrl(projectId: projectId);
 
     final result = ApiDTO<FollowProject>();
 
@@ -367,8 +358,7 @@ class ProjectApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = FollowProject.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = FollowProject.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -391,8 +381,7 @@ class ProjectApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = ProjectTag.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = ProjectTag.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -405,8 +394,7 @@ class ProjectApi {
 
   Future<ApiDTO<List<PortalUser>>> addToProjectTeam(
       {required int projectID, required List<String> users}) async {
-    final url =
-        await locator.get<CoreApi>().projectTeamUrl(projectID: projectID);
+    final url = await locator.get<CoreApi>().projectTeamUrl(projectID: projectID);
 
     final result = ApiDTO<List<PortalUser>>();
 
@@ -439,8 +427,7 @@ class ProjectApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = SecurityInfo.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = SecurityInfo.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }

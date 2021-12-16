@@ -106,10 +106,8 @@ class FilesApi {
       url += authorFilter;
     }
 
-    if (sortBy != null &&
-        sortBy.isNotEmpty &&
-        sortOrder != null &&
-        sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
+    if (sortBy != null && sortBy.isNotEmpty && sortOrder != null && sortOrder.isNotEmpty)
+      url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
     final result = ApiDTO<FoldersResponse>();
 
@@ -126,8 +124,8 @@ class FilesApi {
           result.response = FoldersResponse();
           result.response!.files = taskFiles;
         } else {
-          result.response = FoldersResponse.fromJson(
-              responseJson['response'] as Map<String, dynamic>);
+          result.response =
+              FoldersResponse.fromJson(responseJson['response'] as Map<String, dynamic>);
         }
       } else {
         result.error = response as CustomError;
@@ -139,8 +137,7 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<Folder>> renameFolder(
-      {required String folderId, required String newTitle}) async {
+  Future<ApiDTO<Folder>> renameFolder({required String folderId, required String newTitle}) async {
     final url = await locator.get<CoreApi>().getFolderByIdUrl(folderId);
     final body = {'title': newTitle};
 
@@ -151,8 +148,7 @@ class FilesApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response =
-            Folder.fromJson(responseJson['response'] as Map<String, dynamic>);
+        result.response = Folder.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -163,8 +159,7 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO<PortalFile>> renameFile(
-      {required String fileId, required String newTitle}) async {
+  Future<ApiDTO<PortalFile>> renameFile({required String fileId, required String newTitle}) async {
     final url = await locator.get<CoreApi>().getFileByIdUrl(fileId);
     final body = {'title': newTitle};
 
@@ -175,8 +170,7 @@ class FilesApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = PortalFile.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = PortalFile.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -254,8 +248,8 @@ class FilesApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = MoveFolderResponse.fromJson(
-            responseJson['response'][0] as Map<String, dynamic>);
+        result.response =
+            MoveFolderResponse.fromJson(responseJson['response'][0] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }
@@ -293,8 +287,8 @@ class FilesApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.response = MoveFolderResponse.fromJson(
-            responseJson['response'][0] as Map<String, dynamic>);
+        result.response =
+            MoveFolderResponse.fromJson(responseJson['response'][0] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }

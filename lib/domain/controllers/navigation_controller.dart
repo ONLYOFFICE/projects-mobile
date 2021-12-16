@@ -54,8 +54,8 @@ class NavigationController extends GetxController {
 
   @override
   void onInit() {
-    _userController.getUserInfo().then((value) => selfUserItem.value =
-        PortalUserItemController(portalUser: _userController.user!));
+    _userController.getUserInfo().then((value) =>
+        selfUserItem.value = PortalUserItemController(portalUser: _userController.user!));
 
     super.onInit();
   }
@@ -67,15 +67,13 @@ class NavigationController extends GetxController {
   }
 
   void showMoreView() {
-    if (onMoreView.value != true)
-      locator<EventHub>().fire('moreViewVisibilityChanged', true);
+    if (onMoreView.value != true) locator<EventHub>().fire('moreViewVisibilityChanged', true);
 
     onMoreView.value = true;
   }
 
   void hideMoreView() {
-    if (onMoreView.value != false)
-      locator<EventHub>().fire('moreViewVisibilityChanged', false);
+    if (onMoreView.value != false) locator<EventHub>().fire('moreViewVisibilityChanged', false);
 
     onMoreView.value = false;
   }
@@ -137,8 +135,7 @@ class NavigationController extends GetxController {
     }
   }
 
-  void to(Widget widget,
-      {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
+  void to(Widget widget, {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
         () => widget,

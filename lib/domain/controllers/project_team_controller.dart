@@ -60,8 +60,7 @@ class ProjectTeamController extends GetxController {
   int totalProfiles = 0;
   int _projectId = 0;
   RxBool isSearchResult = false.obs;
-  RxList<PortalUserItemController> searchResult =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> searchResult = <PortalUserItemController>[].obs;
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
   bool _withoutVisitors = false;
@@ -125,14 +124,12 @@ class ProjectTeamController extends GetxController {
     if (!response) return Future.value(false);
     final selfUser = _userController.user!;
 
-    if (_projectDetailed != null &&
-        _projectDetailed!.security!['canEditTeam'] as bool) {
+    if (_projectDetailed != null && _projectDetailed!.security!['canEditTeam'] as bool) {
       fabIsVisible.value = true;
     } else {
       if (selfUser.isAdmin! ||
           selfUser.isOwner! ||
-          (selfUser.listAdminModules != null &&
-              selfUser.listAdminModules!.contains('projects'))) {
+          (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
         fabIsVisible.value = true;
       }
     }

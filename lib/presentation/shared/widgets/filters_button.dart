@@ -54,9 +54,7 @@ class FiltersButton extends StatelessWidget {
               : Get.theme.brightness == Brightness.dark
                   ? SvgIcons.preferences_active_dark_theme
                   : SvgIcons.preferences_active,
-          color: controler.filterController.hasFilters == false
-              ? Get.theme.colors().primary
-              : null,
+          color: controler.filterController.hasFilters == false ? Get.theme.colors().primary : null,
         ),
       ),
     );

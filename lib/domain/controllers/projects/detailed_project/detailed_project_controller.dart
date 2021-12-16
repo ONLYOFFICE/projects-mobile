@@ -92,8 +92,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   ProjectDetailsController() {
     _userController.getUserInfo().whenComplete(() => {
-          selfUserItem =
-              PortalUserItemController(portalUser: _userController.user!),
+          selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
     _refreshProjectsSubscription = locator<EventHub>().on(
@@ -104,9 +103,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
-        if (data.any(
-                (elem) => elem == _projectDetailed.value!.id || elem == 'all')
-            as bool) refreshData();
+        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
+          refreshData();
       },
     );
 
@@ -118,9 +116,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
-        if (data.any(
-                (elem) => elem == _projectDetailed.value!.id || elem == 'all')
-            as bool) refreshProjectDetails();
+        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
+          refreshProjectDetails();
       },
     );
 
@@ -132,9 +129,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
           return;
         }
 
-        if (data.any(
-                (elem) => elem == _projectDetailed.value!.id || elem == 'all')
-            as bool) refreshProjectMilestones();
+        if (data.any((elem) => elem == _projectDetailed.value!.id || elem == 'all') as bool)
+          refreshProjectMilestones();
       },
     );
   }
@@ -152,8 +148,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   }
 
   Future<bool> refreshProjectDetails() async {
-    final response = await _projectService.getProjectById(
-        projectId: _projectDetailed.value!.id!);
+    final response = await _projectService.getProjectById(projectId: _projectDetailed.value!.id!);
     if (response != null) _projectDetailed.value = response;
 
     await fillProjectInfo();
@@ -165,8 +160,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     tasksCount.value = _projectDetailed.value!.taskCountTotal!;
 
     final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
-    creationDateText.value =
-        formatter.format(DateTime.parse(_projectDetailed.value!.created!));
+    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.value!.created!));
 
     return Future.value(true);
   }
@@ -188,9 +182,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     await refreshProjectDetails();
     await refreshProjectMilestones();
 
-    await _docApi
-        .getFilesByParams(folderId: _projectDetailed.value!.projectFolder)
-        .then(
+    await _docApi.getFilesByParams(folderId: _projectDetailed.value!.projectFolder).then(
       (value) {
         if (value != null) docsCount.value = value.files!.length;
       },
@@ -200,8 +192,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
   Future<void> fillProjectInfo() async {
     teamMembersCount.value = _projectDetailed.value!.participantCount!;
 
-    final tream = Get.find<ProjectTeamController>()
-      ..setup(projectDetailed: _projectDetailed.value);
+    final tream = Get.find<ProjectTeamController>()..setup(projectDetailed: _projectDetailed.value);
     // ignore: unawaited_futures
     tream.getTeam().then((value) => {
           teamMembers.clear(),

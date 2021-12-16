@@ -51,13 +51,11 @@ import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 class TasksController extends BaseController {
   final TaskService _api = locator<TaskService>();
 
-  final ProjectsWithPresets? projectsWithPresets =
-      locator<ProjectsWithPresets>();
+  final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
 
   late PaginationController<PortalTask> _paginationController;
 
-  PaginationController<PortalTask> get paginationController =>
-      _paginationController;
+  PaginationController<PortalTask> get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
 
@@ -83,9 +81,7 @@ class TasksController extends BaseController {
 
   @override
   Future<void> onInit() async {
-    await taskStatusesController
-        .getStatuses()
-        .then((value) => taskStatusesLoaded.value = true);
+    await taskStatusesController.getStatuses().then((value) => taskStatusesLoaded.value = true);
     super.onInit();
   }
 
@@ -102,17 +98,15 @@ class TasksController extends BaseController {
     paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
 
-    _userController.loaded.listen((_loaded) async => {
-          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
-        });
+    _userController.loaded.listen((_loaded) async =>
+        {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
 
-    _visibilityChangedSubscription = locator<EventHub>()
-        .on('moreViewVisibilityChanged', (dynamic data) async {
+    _visibilityChangedSubscription =
+        locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
 
-    _refreshTasksSubscription =
-        locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
     });
 
@@ -181,8 +175,7 @@ class TasksController extends BaseController {
   }
 
   @override
-  void showSearch() =>
-      Get.find<NavigationController>().to(const TasksSearchScreen());
+  void showSearch() => Get.find<NavigationController>().to(const TasksSearchScreen());
 
   Future<bool> getFabVisibility() async {
     if (!_withFAB) return false;
@@ -192,19 +185,16 @@ class TasksController extends BaseController {
     final selfUser = _userController.user!;
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
-        (selfUser.listAdminModules != null &&
-            selfUser.listAdminModules!.contains('projects'))) {
+        (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
       if (projectsWithPresets!.activeProjectsController!.itemList.isEmpty) {
         await projectsWithPresets!.activeProjectsController!.loadProjects();
       }
-      fabVisibility =
-          projectsWithPresets!.activeProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets!.activeProjectsController!.itemList.isNotEmpty;
     } else {
       if (projectsWithPresets!.myProjectsController!.itemList.isEmpty) {
         await projectsWithPresets!.myProjectsController!.loadProjects();
       }
-      fabVisibility =
-          projectsWithPresets!.myProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets!.myProjectsController!.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

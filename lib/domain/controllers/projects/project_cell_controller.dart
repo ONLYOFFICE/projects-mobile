@@ -69,7 +69,6 @@ class ProjectCellController extends GetxController {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<bool> updateStatus({int? newStatusId}) async =>
-      Get.find<ProjectStatusesController>()
-          .updateStatus(newStatusId: newStatusId, projectData: projectData);
+  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
+      .updateStatus(newStatusId: newStatusId, projectData: projectData);
 }

@@ -57,8 +57,7 @@ class SettingsService {
             cancelText: tr('close'),
             acceptText: tr('goToForum'),
             acceptColor: Get.theme.colors().primary,
-            onAcceptTap: () async =>
-                launch(Const.Urls.forumSupport),
+            onAcceptTap: () async => launch(Const.Urls.forumSupport),
           );
         },
       );

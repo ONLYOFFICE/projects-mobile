@@ -354,8 +354,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
             text: tr('discussionCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
-              return Get.find<NavigationController>().to(DiscussionDetailed(),
-                  arguments: {'discussion': createdDiss});
+              return Get.find<NavigationController>()
+                  .to(DiscussionDetailed(), arguments: {'discussion': createdDiss});
             });
       }
     }

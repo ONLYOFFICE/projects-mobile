@@ -73,9 +73,7 @@ class SettingTile extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: enableUnderline
-            ? Border(
-                bottom: BorderSide(
-                    color: Get.theme.colors().outline.withOpacity(0.5)))
+            ? Border(bottom: BorderSide(color: Get.theme.colors().outline.withOpacity(0.5)))
             : null,
       ),
       child: SizedBox(
@@ -100,9 +98,7 @@ class SettingTile extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: loverText != null && loverText!.isNotEmpty
-                              ? 8
-                              : 18),
+                          vertical: loverText != null && loverText!.isNotEmpty ? 8 : 18),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -117,10 +113,7 @@ class SettingTile extends StatelessWidget {
                           if (loverText != null && loverText!.isNotEmpty)
                             Text(loverText!,
                                 style: TextStyleHelper.body2(
-                                    color: Get.theme
-                                        .colors()
-                                        .onBackground
-                                        .withOpacity(0.75))),
+                                    color: Get.theme.colors().onBackground.withOpacity(0.75))),
                         ],
                       ),
                     ),
@@ -137,10 +130,7 @@ class SettingTile extends StatelessWidget {
                         child: Text(
                           suffixText!,
                           style: TextStyleHelper.body2(
-                              color: Theme.of(context)
-                                  .colors()
-                                  .onSurface
-                                  .withOpacity(0.6)),
+                              color: Theme.of(context).colors().onSurface.withOpacity(0.6)),
                         ),
                       ),
                     ),

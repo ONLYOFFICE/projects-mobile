@@ -63,9 +63,7 @@ class DiscussionCommentsView extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 32, bottom: 70),
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(
-                      height: controller!.discussion.value.comments![index].show
-                          ? 21
-                          : null,
+                      height: controller!.discussion.value.comments![index].show ? 21 : null,
                     );
                   },
                   itemBuilder: (BuildContext context, int index) {

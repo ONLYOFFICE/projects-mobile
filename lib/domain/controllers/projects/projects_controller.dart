@@ -56,8 +56,7 @@ class ProjectsController extends BaseController {
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   late PaginationController<ProjectDetailed> _paginationController;
-  PaginationController<ProjectDetailed> get paginationController =>
-      _paginationController;
+  PaginationController<ProjectDetailed> get paginationController => _paginationController;
 
   @override
   RxList get itemList => _paginationController.data;
@@ -94,21 +93,18 @@ class ProjectsController extends BaseController {
     paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
 
-    _refreshProjectsSubscription =
-        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (data.any((elem) => elem == 'all') as bool) {
         loadProjects();
         return;
       }
     });
 
-    _userController.loaded.listen((_loaded) async => {
-          if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()
-        });
+    _userController.loaded.listen((_loaded) async =>
+        {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});
 
     getFabVisibility().then((visibility) => fabIsVisible.value = visibility);
-    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged',
-        (dynamic data) async {
+    fabSubscription ??= locator<EventHub>().on('moreViewVisibilityChanged', (dynamic data) async {
       fabIsVisible.value = data as bool ? false : await getFabVisibility();
     });
   }

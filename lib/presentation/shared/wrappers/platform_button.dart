@@ -230,8 +230,7 @@ class CupertinoFilledButtonData extends _BaseData {
 
 @Deprecated(
     'Use PlatformTextButton or PlatformElevatedButton instead. Material FlatButton and RaisedButton are deprecated.')
-class PlatformButton
-    extends PlatformWidgetBase<CupertinoButton, MaterialButton> {
+class PlatformButton extends PlatformWidgetBase<CupertinoButton, MaterialButton> {
   final Key? widgetKey;
 
   final void Function()? onPressed;
@@ -345,14 +344,12 @@ class PlatformButton
         key: filledData.widgetKey ?? widgetKey,
         child: filledData.child ?? child!,
         onPressed: filledData.onPressed ?? onPressed,
-        borderRadius: filledData.borderRadius ??
-            const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: filledData.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
         minSize: filledData.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: filledData.padding ?? padding,
         pressedOpacity: filledData.pressedOpacity ?? 0.4,
-        disabledColor: filledData.disabledColor ??
-            disabledColor ??
-            CupertinoColors.quaternarySystemFill,
+        disabledColor:
+            filledData.disabledColor ?? disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: filledData.alignment ?? Alignment.center,
       );
     }
@@ -365,15 +362,12 @@ class PlatformButton
       key: data?.widgetKey ?? widgetKey,
       child: data?.child ?? child!,
       onPressed: data?.onPressed ?? onPressed,
-      borderRadius: data?.borderRadius ??
-          const BorderRadius.all(const Radius.circular(8.0)),
+      borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
       color: data?.color ?? color,
       minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
       padding: data?.padding ?? padding,
       pressedOpacity: data?.pressedOpacity ?? 0.4,
-      disabledColor: data?.disabledColor ??
-          disabledColor ??
-          CupertinoColors.quaternarySystemFill,
+      disabledColor: data?.disabledColor ?? disabledColor ?? CupertinoColors.quaternarySystemFill,
       alignment: data?.alignment ?? Alignment.center,
     );
   }

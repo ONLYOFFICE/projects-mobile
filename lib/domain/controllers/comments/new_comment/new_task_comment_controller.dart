@@ -68,8 +68,7 @@ class NewTaskCommentController extends NewCommentController {
       await emptyTitleError();
     } else {
       setTitleError.value = false;
-      final newComment =
-          await _api.addTaskComment(content: text, taskId: idFrom!);
+      final newComment = await _api.addTaskComment(content: text, taskId: idFrom!);
       if (newComment != null) {
         _textController.clear();
 
@@ -77,8 +76,7 @@ class NewTaskCommentController extends NewCommentController {
         locator<EventHub>().fire('scrollToLastComment', [idFrom]);
 
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       }
     }
   }
@@ -101,8 +99,7 @@ class NewTaskCommentController extends NewCommentController {
         locator<EventHub>().fire('needToRefreshParentTask', [idFrom, true]);
 
         Get.back();
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('commentCreated'));
+        MessagesHandler.showSnackBar(context: context, text: tr('commentCreated'));
       }
     }
   }

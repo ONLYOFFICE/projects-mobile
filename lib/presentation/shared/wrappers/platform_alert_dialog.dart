@@ -11,8 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'platform.dart';
 import 'widget_base.dart';
 
-const EdgeInsets _defaultInsetPadding =
-    EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0);
+const EdgeInsets _defaultInsetPadding = EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0);
 
 abstract class _BaseData {
   _BaseData({
@@ -50,11 +49,7 @@ class MaterialAlertDialogData extends _BaseData {
     this.clipBehavior,
     this.insetPadding,
     this.actionsAlignment,
-  }) : super(
-            widgetKey: widgetKey,
-            actions: actions,
-            content: content,
-            title: title);
+  }) : super(widgetKey: widgetKey, actions: actions, content: content, title: title);
 
   final EdgeInsetsGeometry? contentPadding;
   final String? semanticLabel;
@@ -84,11 +79,7 @@ class CupertinoAlertDialogData extends _BaseData {
     this.actionScrollController,
     this.insetAnimationCurve,
     this.insetAnimationDuration,
-  }) : super(
-            widgetKey: widgetKey,
-            actions: actions,
-            content: content,
-            title: title);
+  }) : super(widgetKey: widgetKey, actions: actions, content: content, title: title);
 
   final ScrollController? scrollController;
   final ScrollController? actionScrollController;
@@ -96,8 +87,7 @@ class CupertinoAlertDialogData extends _BaseData {
   final Duration? insetAnimationDuration;
 }
 
-class PlatformAlertDialog
-    extends PlatformWidgetBase<CupertinoAlertDialog, AlertDialog> {
+class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, AlertDialog> {
   final Key? widgetKey;
   final List<Widget>? actions;
   final Widget? content;
@@ -124,8 +114,7 @@ class PlatformAlertDialog
       key: data?.widgetKey ?? widgetKey,
       actions: data?.actions ?? actions,
       content: data?.content ?? content,
-      contentPadding: data?.contentPadding ??
-          const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+      contentPadding: data?.contentPadding ?? const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
       semanticLabel: data?.semanticLabel,
       title: data?.title ?? title,
       titlePadding: data?.titlePadding,
@@ -159,8 +148,7 @@ class PlatformAlertDialog
       actionScrollController: data?.actionScrollController,
       title: data?.title ?? title,
       insetAnimationCurve: curve ?? Curves.decelerate,
-      insetAnimationDuration:
-          data?.insetAnimationDuration ?? Duration(milliseconds: 100),
+      insetAnimationDuration: data?.insetAnimationDuration ?? Duration(milliseconds: 100),
     );
   }
 }

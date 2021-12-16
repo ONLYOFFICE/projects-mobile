@@ -69,8 +69,7 @@ class ProjectEditController extends BaseProjectEditorController {
     loaded.value = false;
 
     oldProjectDTO = null;
-    statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed!.status)]);
+    statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed!.status)]);
 
     projectTitleText.value = _projectDetailed!.title!;
     descriptionText.value = _projectDetailed!.description!;

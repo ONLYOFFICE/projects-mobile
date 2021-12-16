@@ -80,8 +80,7 @@ class PortalApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body) as Map<String, dynamic>;
-        result.response = Capabilities.fromJson(
-            responseJson['response'] as Map<String, dynamic>);
+        result.response = Capabilities.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
       }

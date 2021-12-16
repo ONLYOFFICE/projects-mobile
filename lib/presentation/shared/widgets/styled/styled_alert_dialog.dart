@@ -58,8 +58,7 @@ class StyledAlertDialog extends StatelessWidget {
     this.onAcceptTap,
     // Default: pop window
     this.onCancelTap,
-  })  : assert(titleText != null || title != null,
-            content != null || contentText != null),
+  })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
   @override
@@ -76,15 +75,13 @@ class StyledAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: onCancelTap ?? Get.back,
-          child:
-              Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
+          child: Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
         ),
         TextButton(
           onPressed: onAcceptTap,
           child: Text(
             acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(
-                color: acceptColor ?? Get.theme.colors().colorError),
+            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
       ],
@@ -111,8 +108,7 @@ class SingleButtonDialog extends StatelessWidget {
     this.titleText,
     this.contentText,
     this.onAcceptTap,
-  })  : assert(titleText != null || title != null,
-            content != null || contentText != null),
+  })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
   @override
@@ -136,8 +132,7 @@ class SingleButtonDialog extends StatelessWidget {
           onPressed: onAcceptTap,
           child: Text(
             acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(
-                color: acceptColor ?? Get.theme.colors().colorError),
+            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
       ],

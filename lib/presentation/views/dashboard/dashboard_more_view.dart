@@ -56,8 +56,7 @@ class ProjectsDashboardMoreView extends StatelessWidget {
     final scrollController = ScrollController();
     final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
@@ -95,25 +94,21 @@ class ProjectsDashboardMoreView extends StatelessWidget {
               controller.paginationController.data.isEmpty &&
               !controller.filterController!.hasFilters.value) {
             return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.project_not_created,
-                  text: tr('noProjectsCreated')),
+              child: EmptyScreen(icon: SvgIcons.project_not_created, text: tr('noProjectsCreated')),
             );
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController!.hasFilters.value) {
             return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
+              child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
             );
           }
           return PaginationListView<ProjectDetailed>(
             paginationController: controller.paginationController,
             child: ListView.builder(
               controller: scrollController,
-              itemBuilder: (c, i) =>
-                  ProjectCell(item: controller.paginationController.data[i]),
+              itemBuilder: (c, i) => ProjectCell(item: controller.paginationController.data[i]),
               itemCount: controller.paginationController.data.length,
             ),
           );
@@ -135,8 +130,7 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Text(
               controller.screenName,
-              style: TextStyleHelper.headerStyle(
-                  color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
             ),
           ),
           Row(

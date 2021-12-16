@@ -58,7 +58,6 @@ class Project {
     status = json['status'] as int?;
     canEdit = json['canEdit'] as bool?;
     isPrivate = json['isPrivate'] as bool?;
-    responsible =
-        PortalUser.fromJson(json['responsible'] as Map<String, dynamic>);
+    responsible = PortalUser.fromJson(json['responsible'] as Map<String, dynamic>);
   }
 }

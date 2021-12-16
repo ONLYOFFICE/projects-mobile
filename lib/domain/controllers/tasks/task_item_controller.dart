@@ -137,8 +137,7 @@ class TaskItemController extends GetxController {
 
   void scrollToLastComment() {
     if (commentsListController.hasClients) {
-      commentsListController
-          .jumpTo(commentsListController.position.maxScrollExtent);
+      commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
     }
   }
 
@@ -235,8 +234,7 @@ class TaskItemController extends GetxController {
 
     await team.getTeam();
     final responsibles = team.usersList
-        .where((user) =>
-            task.value.responsibles!.any((element) => user.id == element!.id))
+        .where((user) => task.value.responsibles!.any((element) => user.id == element!.id))
         .toList();
     task.value.responsibles!.clear();
     for (final user in responsibles) {

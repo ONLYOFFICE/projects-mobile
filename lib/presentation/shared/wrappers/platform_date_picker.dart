@@ -1,12 +1,7 @@
 import 'package:flutter/cupertino.dart'
     show CupertinoDatePicker, CupertinoDatePickerMode, DatePickerDateOrder;
 import 'package:flutter/material.dart'
-    show
-        Theme,
-        showDatePicker,
-        SelectableDayPredicate,
-        DatePickerEntryMode,
-        DatePickerMode;
+    show Theme, showDatePicker, SelectableDayPredicate, DatePickerEntryMode, DatePickerMode;
 import 'package:flutter/widgets.dart';
 
 import 'platform.dart';

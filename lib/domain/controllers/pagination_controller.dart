@@ -65,9 +65,9 @@ class PaginationController<T> extends GetxController {
     // update the user data in case of changing user rights on the server side
     Get.find<UserController>()
       ..clear()
-    // ignore: unawaited_futures
+      // ignore: unawaited_futures
       ..getUserInfo()
-    // ignore: unawaited_futures
+      // ignore: unawaited_futures
       ..getSecurityInfo();
   }
 

@@ -63,9 +63,7 @@ class DiscussionsHeader extends StatelessWidget {
             ),
             Obx(
               () => Text(
-                tr('total', args: [
-                  controller.paginationController!.total.value.toString()
-                ]),
+                tr('total', args: [controller.paginationController!.total.value.toString()]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
@@ -88,13 +86,9 @@ class _DiscussionSortButton extends StatelessWidget with ShowPopupMenuMixin {
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'title', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'comments', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'comments', sortController: controller.sortController),
     ];
   }
 
@@ -129,8 +123,7 @@ class _DiscussionSortButton extends StatelessWidget with ShowPopupMenuMixin {
           Obx(
             () => Text(
               controller.sortController.currentSortTitle.value,
-              style: TextStyleHelper.projectsSorting
-                  .copyWith(color: Get.theme.colors().primary),
+              style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
             ),
           ),
           const SizedBox(width: 8),

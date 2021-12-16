@@ -53,8 +53,7 @@ class ProjectDiscussionsScreen extends StatelessWidget {
 
     return Stack(
       children: [
-        DiscussionsList(
-            controller: controller, scrollController: ScrollController()),
+        DiscussionsList(controller: controller, scrollController: ScrollController()),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(

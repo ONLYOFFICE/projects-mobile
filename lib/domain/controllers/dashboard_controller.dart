@@ -53,8 +53,7 @@ class DashboardController extends GetxController {
     return _refreshController;
   }
 
-  final ProjectsWithPresets projectsWithPresets =
-      locator<ProjectsWithPresets>();
+  final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
   final TasksWithPresets tasksWithPresets = locator<TasksWithPresets>();
 
   var screenName = tr('dashboard').obs;
@@ -73,8 +72,7 @@ class DashboardController extends GetxController {
 
   ProjectsController? _folowedProjectsController;
 
-  ProjectsController? get folowedProjectsController =>
-      _folowedProjectsController;
+  ProjectsController? get folowedProjectsController => _folowedProjectsController;
 
   ProjectsController? _activeProjectsController;
 
@@ -99,13 +97,11 @@ class DashboardController extends GetxController {
     folowedProjectsController!.screenName = tr('projectsIFolow');
     activeProjectsController!.screenName = tr('activeProjects');
 
-    _refreshProjectsSubscription =
-        locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
+    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
       if (data.any((elem) => elem == 'all') as bool) refreshProjectsData();
     });
 
-    _refreshTasksSubscription =
-        locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
       refreshData();
     });
   }

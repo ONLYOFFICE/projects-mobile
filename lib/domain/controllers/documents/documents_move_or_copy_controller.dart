@@ -47,8 +47,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsMoveOrCopyController extends GetxController
-    implements BaseDocumentsController {
+class DocumentsMoveOrCopyController extends GetxController implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
 
   RxBool hasFilters = false.obs;
