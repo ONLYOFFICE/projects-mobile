@@ -318,6 +318,9 @@ class PlatformIcons {
   IconData get leftChevron =>
       isMaterial(context) ? Icons.chevron_left : CupertinoIcons.left_chevron;
 
+  IconData get downChevron =>
+      isMaterial(context) ? Icons.keyboard_arrow_down_rounded : CupertinoIcons.chevron_down;
+
   /// Icons: Icons.location_on : CupertinoIcons.location
   IconData get location => isMaterial(context) ? Icons.location_on : CupertinoIcons.location;
 
@@ -445,7 +448,7 @@ class PlatformIcons {
 
   // IconData get plusCircled =>
   //     isMaterial(context) ? Icons. : CupertinoIcons.plus_circled;
-
+  IconData get plus => isMaterial(context) ? Icons.add_rounded : CupertinoIcons.plus;
   // IconData get profileCircled =>
   //     isMaterial(context) ? Icons. : CupertinoIcons.profile_circled;
 

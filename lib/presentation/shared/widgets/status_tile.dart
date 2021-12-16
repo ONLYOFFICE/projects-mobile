@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class StatusTile extends StatelessWidget {
   final String? title;
@@ -73,7 +74,7 @@ class StatusTile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
-                Icons.done_rounded,
+                PlatformIcons(context).checkMark,
                 color: Get.theme.colors().primary,
               ),
             )

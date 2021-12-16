@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:readmore/readmore.dart';
 
@@ -118,7 +119,7 @@ class ProjectOverview extends StatelessWidget {
                       tabController!.animateTo(5);
                     },
                     caption: tr('team'),
-                    iconData: Icons.navigate_next,
+                    iconData: PlatformIcons(context).rightChevron,
                     subtitle: plural('members', projectController.teamMembersCount.value),
                     subtitleStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
                   ),
@@ -193,7 +194,7 @@ class ProjectStatusButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
-                Icons.keyboard_arrow_down_rounded,
+                PlatformIcons(context).downChevron,
                 color: Get.theme.colors().primary,
                 size: 19,
               ),

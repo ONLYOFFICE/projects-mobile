@@ -158,7 +158,7 @@ class MainController extends GetxController {
         token.isEmpty ||
         portalName == null ||
         portalName.isEmpty ||
-        !portalName.isURL) return false;
+        !(portalName.isURL || portalName.split('//')[1].isIPv4)) return false;
 
     final expiration = DateTime.parse(expirationDate);
     if (expiration.isBefore(DateTime.now())) return false;

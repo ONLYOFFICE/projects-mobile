@@ -162,7 +162,7 @@ class PortalUserItem extends StatelessWidget {
                   return SizedBox(
                     width: 72,
                     child: Icon(
-                      Icons.check,
+                      PlatformIcons(context).checkMark,
                       color: Get.theme.colors().primary,
                     ),
                   );

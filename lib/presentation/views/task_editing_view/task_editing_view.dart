@@ -112,7 +112,7 @@ class TaskEditingView extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 8, bottom: 8),
                               child: Obx(() => Text(controller.newStatus.value!.title!,
                                   style: TextStyleHelper.subtitle2())))),
-                      Icon(PlatformIcons(context).downArrow)
+                      Icon(PlatformIcons(context).downChevron)
                     ],
                   ),
                 ),
