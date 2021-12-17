@@ -106,7 +106,7 @@ class TeamMembersSelectionView extends StatelessWidget {
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.selectTeamMember as Function(),
+              onTapFunction: controller.selectTeamMember as Function(PortalUserItemController),
             );
           }
           return const ListLoadingSkeleton();
