@@ -62,7 +62,12 @@ class UsersDataSource extends GetxController {
   // var withoutSelf_remove = false;
   PortalUserItemController? selfUserItem;
 
-  RefreshController refreshController = RefreshController();
+  RefreshController _refreshController = RefreshController();
+  RefreshController get refreshController {
+    if (!_refreshController.isLoading && !_refreshController.isRefresh)
+      _refreshController = RefreshController();
+    return _refreshController;
+  }
 
   int totalProfiles = 0;
 

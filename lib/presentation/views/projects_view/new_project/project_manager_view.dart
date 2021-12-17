@@ -99,7 +99,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection as Function(),
+              onTapFunction: controller.changePMSelection as Function(PortalUserItemController),
               withoutVisitors: true,
             );
           }

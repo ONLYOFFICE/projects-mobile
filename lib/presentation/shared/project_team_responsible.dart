@@ -122,7 +122,8 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
                       itemBuilder: (c, i) => PortalUserItem(
                           userController:
                               controller.teamController.searchResult[i] as PortalUserItemController,
-                          onTapFunction: controller.addResponsible as Function()),
+                          onTapFunction:
+                              controller.addResponsible as Function(PortalUserItemController)),
                       itemExtent: 65,
                       itemCount: controller.teamController.searchResult.length as int,
                     )
