@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -43,9 +42,9 @@ import 'package:projects/domain/controllers/projects/project_cell_controller.dar
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
@@ -266,7 +265,7 @@ class _Suffix extends StatelessWidget {
               child: Text(
                 item!.taskCount.toString(),
                 overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.projectCompleatedTasks.copyWith(
+                style: TextStyleHelper.projectCompletedTasks.copyWith(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
               ),
@@ -390,7 +389,7 @@ void showsStatusesPM(
   ];
 
 // calculate the menu position, ofsset dy: 50
-  final offset = const Offset(0, 50);
+  const offset = Offset(0, 50);
   final button = context.findRenderObject() as RenderBox;
   final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
   final position = RelativeRect.fromRect(
