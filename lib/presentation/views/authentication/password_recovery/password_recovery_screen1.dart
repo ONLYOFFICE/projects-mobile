@@ -86,6 +86,7 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
                       controller: controller.emailController,
                       autofillHint: AutofillHints.email,
                       hintText: tr('email'),
+                      keyboardType: TextInputType.emailAddress,
                     ),
                   ),
                 ),

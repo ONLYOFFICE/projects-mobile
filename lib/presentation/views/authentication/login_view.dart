@@ -85,6 +85,7 @@ class LoginView extends StatelessWidget {
                                         validator: controller.emailValidator,
                                         autofillHint: AutofillHints.email,
                                         hasError: controller.emailFieldError.value,
+                                        keyboardType: TextInputType.emailAddress,
                                       ),
                                       SizedBox(height: Get.height * 0.0444),
                                       AuthTextField(
@@ -94,6 +95,7 @@ class LoginView extends StatelessWidget {
                                         validator: controller.passValidator,
                                         autofillHint: AutofillHints.password,
                                         obscureText: true,
+                                        keyboardType: TextInputType.visiblePassword,
                                       ),
                                     ],
                                   ),
