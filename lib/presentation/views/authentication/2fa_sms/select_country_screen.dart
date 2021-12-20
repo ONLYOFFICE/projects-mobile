@@ -142,7 +142,8 @@ class _CountryWithCodeTile extends StatelessWidget {
                 ),
                 Text(
                   '+ ${country.phoneCode}',
-                  style: TextStyleHelper.subtitle2(color: Get.theme.colors().primarySurface),
+                  style: TextStyleHelper.subtitle2(
+                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
                 ),
               ],
             ),
