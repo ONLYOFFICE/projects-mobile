@@ -44,11 +44,12 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key? key}) : super(key: key);
-  final controller = Get.find<LoginController>();
+  const PortalInputView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<LoginController>();
+
     return Obx(
       () => controller.state.value == ViewState.Busy
           ? Scaffold(
