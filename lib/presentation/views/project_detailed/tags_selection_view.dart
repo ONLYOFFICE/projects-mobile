@@ -31,21 +31,20 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
+
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform.dart';
-import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
-import 'package:projects/presentation/shared/wrappers/platform_dialog_action.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
@@ -73,7 +72,7 @@ class TagsSelectionView extends StatelessWidget {
           () => Visibility(
             visible: controller.fabIsVisible.value,
             child: StyledFloatingActionButton(
-              onPressed: () => showTagAddingDialog(controller, context),
+              onPressed: () => showTagAddingDialog(controller),
               child: Icon(
                 PlatformIcons(context).plus,
                 color: Get.theme.colors().onPrimarySurface,
@@ -114,76 +113,27 @@ class TagsSelectionView extends StatelessWidget {
     );
   }
 
-  Future showTagAddingDialog(ProjectTagsController controller, BuildContext context) async {
+  Future showTagAddingDialog(controller) async {
     final inputController = TextEditingController();
 
-    await showPlatformDialog(
-      context: context,
-      builder: (_) => PlatformAlertDialog(
-        material: (_, __) => MaterialAlertDialogData(
-          title: Text(tr('enterTag')),
-          content: TextField(
-            autofocus: true,
-            textInputAction: TextInputAction.done,
-            controller: inputController,
-            decoration: const InputDecoration.collapsed(hintText: ''),
-            onSubmitted: (value) {
-              controller.createTag(value);
-            },
-          ),
-          actions: <Widget>[
-            PlatformDialogAction(
-              child: Text(
-                tr('cancel'),
-                style: TextStyleHelper.button(),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-            PlatformDialogAction(
-              child: Text(
-                tr('confirm').toUpperCase(),
-                style: TextStyleHelper.button(color: Get.theme.colors().colorError),
-              ),
-              onPressed: () {
-                controller.createTag(inputController.text);
-                Get.back();
-              },
-            ),
-          ],
-        ),
-        cupertino: (_, __) => CupertinoAlertDialogData(
-          title: Text(tr('enterTag')),
-          content: CupertinoTextField(
-            autofocus: true,
-            textInputAction: TextInputAction.done,
-            controller: inputController,
-            // decoration: const InputDecoration.collapsed(hintText: ''),
-            onSubmitted: (value) {
-              controller.createTag(value);
-            },
-          ),
-          actions: <Widget>[
-            PlatformDialogAction(
-              child: Text(
-                tr('cancel'),
-                style: TextStyleHelper.button(),
-              ),
-              onPressed: () => Navigator.pop(context),
-            ),
-            PlatformDialogAction(
-              child: Text(
-                tr('confirm').toUpperCase(),
-                style: TextStyleHelper.button(color: Get.theme.colors().colorError),
-              ),
-              onPressed: () {
-                controller.createTag(inputController.text);
-                Get.back();
-              },
-            ),
-          ],
-        ),
+    await Get.dialog(StyledAlertDialog(
+      titleText: tr('enterTag'),
+      content: TextField(
+        autofocus: true,
+        textInputAction: TextInputAction.done,
+        controller: inputController,
+        decoration: const InputDecoration.collapsed(hintText: ''),
+        onSubmitted: (value) {
+          controller.createTag(value);
+        },
       ),
-    );
+      acceptText: tr('confirm').toUpperCase(),
+      onAcceptTap: () {
+        controller.createTag(inputController.text);
+        Get.back();
+      },
+      onCancelTap: Get.back,
+    ));
   }
 }
 

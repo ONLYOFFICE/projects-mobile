@@ -38,8 +38,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -200,17 +200,19 @@ class Bottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _ProjectsSortButton(controller: controller),
-          Row(
-            children: <Widget>[
-              Obx(
-                () => Text(
-                  tr('total', args: [controller.paginationController.total.value.toString()]),
-                  style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Obx(
+                  () => Text(
+                    tr('total', args: [controller.paginationController.total.value.toString()]),
+                    style: TextStyleHelper.body2(
+                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),

@@ -42,7 +42,7 @@ class _AppBarMenu extends StatelessWidget {
     return PopupMenuButton(
       icon: Icon(PlatformIcons(context).ellipsis, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (dynamic value) => _onSelected(value, controller!, context),
+      onSelected: (dynamic value) => _onSelected(value, controller!),
       itemBuilder: (context) {
         return [
           if (controller!.canEdit && task.responsibles!.isEmpty)
@@ -81,7 +81,7 @@ class _AppBarMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(value, TaskItemController controller, BuildContext context) async {
+void _onSelected(value, TaskItemController controller) async {
   final task = controller.task.value;
   switch (value) {
     case 'accept':
@@ -106,77 +106,26 @@ void _onSelected(value, TaskItemController controller, BuildContext context) asy
       break;
 
     case 'deleteTask':
-      await showPlatformDialog(
-        context: context,
-        builder: (_) => PlatformAlertDialog(
-          material: (_, __) => MaterialAlertDialogData(
-            title: Text(tr('deleteTaskTitle')),
-            content: Text(tr('deleteTaskAlert')),
-            actions: <Widget>[
-              PlatformDialogAction(
-                child: Text(
-                  tr('cancel'),
-                  style: TextStyleHelper.button(),
-                ),
-                onPressed: () => Navigator.pop(context),
-              ),
-              PlatformDialogAction(
-                child: Text(
-                  tr('delete').toUpperCase(),
-                  style: TextStyleHelper.button(color: Get.theme.colors().colorError),
-                ),
-                onPressed: () async {
-                  final result = await controller.deleteTask(taskId: task.id!);
-                  if (result) {
-                    locator<EventHub>().fire('needToRefreshProjects', ['all']);
-                    locator<EventHub>().fire('needToRefreshTasks');
+      await Get.dialog(StyledAlertDialog(
+        titleText: tr('deleteTaskTitle'),
+        contentText: tr('deleteTaskAlert'),
+        acceptText: tr('delete').toUpperCase(),
+        onCancelTap: () async => Get.back(),
+        onAcceptTap: () async {
+          final result = await controller.deleteTask(taskId: task.id!);
+          if (result) {
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
+            locator<EventHub>().fire('needToRefreshTasks');
 
-                    Get.back();
-                    Get.back();
+            Get.back();
+            Get.back();
 
-                    MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
-                  } else {
-                    print('ERROR');
-                  }
-                },
-              ),
-            ],
-          ),
-          cupertino: (_, __) => CupertinoAlertDialogData(
-            title: Text(tr('deleteTaskTitle')),
-            content: Text(tr('deleteTaskAlert')),
-            actions: <Widget>[
-              PlatformDialogAction(
-                child: Text(
-                  tr('cancel'),
-                  style: TextStyleHelper.button(),
-                ),
-                onPressed: () => Navigator.pop(context),
-              ),
-              PlatformDialogAction(
-                child: Text(
-                  tr('delete'),
-                  style: TextStyleHelper.button(color: Get.theme.colors().colorError),
-                ),
-                onPressed: () async {
-                  final result = await controller.deleteTask(taskId: task.id!);
-                  if (result) {
-                    locator<EventHub>().fire('needToRefreshProjects', ['all']);
-                    locator<EventHub>().fire('needToRefreshTasks');
-
-                    Get.back();
-                    Get.back();
-
-                    MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
-                  } else {
-                    print('ERROR');
-                  }
-                },
-              ),
-            ],
-          ),
-        ),
-      );
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
+          } else {
+            print('ERROR');
+          }
+        },
+      ));
       break;
     default:
   }
