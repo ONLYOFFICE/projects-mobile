@@ -338,6 +338,8 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
 
   final bool? enableIMEPersonalizedLearning;
 
+  final InputDecoration? decoration;
+
   PlatformTextField({
     Key? key,
     this.widgetKey,
@@ -387,7 +389,8 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     this.selectionControls,
     this.hintText,
     this.enableIMEPersonalizedLearning,
-    this.makeCupertinoDecorationNull = false,
+    this.makeCupertinoDecorationNull = true,
+    this.decoration,
     this.material,
     this.cupertino,
   })  : keyboardType =
@@ -399,12 +402,13 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
     final data = material?.call(context, platform(context));
 
     final hintText = this.hintText;
-    final decoration = hintText == null
-        ? (data?.decoration ?? const InputDecoration())
-        : _inputDecorationWithHint(
-            hintText,
-            data?.decoration ?? const InputDecoration(),
-          );
+    final decoration = this.decoration ??
+        (hintText == null
+            ? (data?.decoration ?? const InputDecoration())
+            : _inputDecorationWithHint(
+                hintText,
+                data?.decoration ?? const InputDecoration(),
+              ));
 
     return TextField(
       key: data?.widgetKey ?? widgetKey,

@@ -47,6 +47,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {
@@ -118,7 +119,7 @@ class TagsSelectionView extends StatelessWidget {
 
     await Get.dialog(StyledAlertDialog(
       titleText: tr('enterTag'),
-      content: TextField(
+      content: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.done,
         controller: inputController,

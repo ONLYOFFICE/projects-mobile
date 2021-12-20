@@ -70,7 +70,7 @@ class _Step4 extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 40),
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 480),
-              child: TextField(
+              child: PlatformTextField(
                 controller: codeController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(

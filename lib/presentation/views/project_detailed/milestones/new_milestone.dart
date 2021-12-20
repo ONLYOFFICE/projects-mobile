@@ -44,6 +44,7 @@ import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -141,7 +142,7 @@ class MilestoneInput extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 72, right: 25),
       child: Obx(
-        () => TextField(
+        () => PlatformTextField(
           maxLines: 2,
           controller: controller.titleController,
           style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),

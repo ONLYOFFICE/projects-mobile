@@ -38,6 +38,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -93,7 +94,7 @@ class _CodeViewState extends State<CodeView> {
                     SizedBox(height: Get.height * 0.0333),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 36),
-                      child: TextField(
+                      child: PlatformTextField(
                         controller: codeController,
                         textAlign: TextAlign.center,
                         style: TextStyleHelper.subtitle1(),

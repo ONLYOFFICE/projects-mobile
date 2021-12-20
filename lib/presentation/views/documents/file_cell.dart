@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class FileCell extends StatelessWidget {
@@ -244,7 +245,7 @@ void _renameFile(
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFile'),
-      content: TextField(
+      content: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,

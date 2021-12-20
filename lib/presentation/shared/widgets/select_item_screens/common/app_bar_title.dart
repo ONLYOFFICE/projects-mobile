@@ -50,7 +50,7 @@ class _AppBarTitle extends StatelessWidget {
           switchInCurve: Curves.easeOutSine,
           switchOutCurve: Curves.fastOutSlowIn,
           child: searchController.switchToSearchView.value == true
-              ? TextField(
+              ? PlatformTextField(
                   autofocus: true,
                   controller: searchController.textController,
                   decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),

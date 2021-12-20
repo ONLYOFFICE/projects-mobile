@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/authentication/2fa_sms/select_country_screen.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -136,7 +137,7 @@ class _CountrySelection extends StatelessWidget {
               children: [
                 Flexible(
                   flex: 1,
-                  child: TextField(
+                  child: PlatformTextField(
                     controller: controller.phoneCodeController,
                     onChanged: (value) {},
                     autofocus: controller.deviceCountry.value?.phoneCode == null,
@@ -155,7 +156,7 @@ class _CountrySelection extends StatelessWidget {
                 const SizedBox(width: 16),
                 Flexible(
                   flex: 4,
-                  child: TextField(
+                  child: PlatformTextField(
                     autofocus: controller.deviceCountry.value?.phoneCode != null,
                     controller: controller.phoneNumberController,
                     keyboardType: TextInputType.number,

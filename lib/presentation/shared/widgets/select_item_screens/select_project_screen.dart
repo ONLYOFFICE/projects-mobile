@@ -49,6 +49,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectScreen extends StatelessWidget {
@@ -94,7 +95,7 @@ class SelectProjectScreen extends StatelessWidget {
             switchInCurve: Curves.easeOutSine,
             switchOutCurve: Curves.fastOutSlowIn,
             child: searchController.switchToSearchView.isTrue
-                ? TextField(
+                ? PlatformTextField(
                     autofocus: true,
                     controller: searchFieldController,
                     decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),

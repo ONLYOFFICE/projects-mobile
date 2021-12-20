@@ -39,6 +39,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class NewProjectDescription extends StatelessWidget {
   const NewProjectDescription({Key? key}) : super(key: key);
@@ -68,7 +69,7 @@ class NewProjectDescription extends StatelessWidget {
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
-        child: TextField(
+        child: PlatformTextField(
           autofocus: true,
           controller: controller.descriptionController as TextEditingController,
           maxLines: null,

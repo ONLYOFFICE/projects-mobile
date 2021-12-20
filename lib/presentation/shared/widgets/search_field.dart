@@ -35,6 +35,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class SearchField extends StatelessWidget {
   final bool autofocus;
@@ -74,7 +75,7 @@ class SearchField extends StatelessWidget {
       height: height,
       width: width,
       margin: margin,
-      child: TextField(
+      child: PlatformTextField(
         controller: controller,
         onSubmitted: onSubmitted,
         onChanged: onChanged,

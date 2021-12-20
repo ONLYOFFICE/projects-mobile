@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class UsersSearchBar extends StatelessWidget {
   const UsersSearchBar({
@@ -65,7 +66,7 @@ class UsersSearchBar extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: TextField(
+            child: PlatformTextField(
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController,
               decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),

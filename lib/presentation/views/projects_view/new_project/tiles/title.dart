@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class ProjectTitleTile extends StatelessWidget {
   final controller;
@@ -60,7 +61,7 @@ class ProjectTitleTile extends StatelessWidget {
                 Text('${tr('projectTitle')}:',
                     style: TextStyleHelper.caption(
                         color: Get.theme.colors().onBackground.withOpacity(0.75))),
-              TextField(
+              PlatformTextField(
                   focusNode: focusOnTitle ? controller.titleFocus as FocusNode : null,
                   maxLines: null,
                   controller: controller.titleController as TextEditingController?,
