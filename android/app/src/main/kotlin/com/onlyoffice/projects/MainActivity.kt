@@ -12,7 +12,11 @@ import io.flutter.embedding.android.DrawableSplashScreen
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
+
+import io.flutter.plugin.common.MethodChannel
+import com.onlyoffice.projects.utils.AccountUtils
 import io.flutter.plugins.GeneratedPluginRegistrant
+
 
 class MainActivity : FlutterFragmentActivity() {
     override fun provideSplashScreen(): SplashScreen {
@@ -21,6 +25,31 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
+        
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "accountProvider").setMethodCallHandler {
+        call, result ->
+        val accountUtils = AccountUtils(this.applicationContext)
+            if (call.method == "getAccounts") {
+                val accounts = accountUtils.getAccounts()
+                val list = mutableListOf<HashMap<String, String>>()
+                for (account in accounts) {
+                    list.add(hashMapOf(
+                            "account" to account,
+                    ))
+                }
+                result.success(list)
+            // }
+            // else if (call.method == "addAccount") {    
+            //     val accountId = call.argument<String>("accountId")
+            //     val accountData = call.argument<String>("accountData")
+                
+            //     val wasAdded = accountUtils.addAccount(id: accountId, data: accountData)
+            //      result.success(wasAdded)
+                        
+            } else {
+                result.notImplemented()
+            }
+        }
     }
 }
 

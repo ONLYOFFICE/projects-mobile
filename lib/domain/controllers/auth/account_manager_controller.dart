@@ -32,14 +32,11 @@
 
 import 'dart:convert';
 
-import 'package:accountmanager/accountmanager.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:projects/data/models/account_data.dart';
-import 'package:projects/domain/controllers/portal_info_controller.dart';
-import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/account_provider.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 
 class AccountManagerController extends GetxController {
@@ -61,57 +58,51 @@ class AccountManagerController extends GetxController {
   }
 
   Future<void> addAccount({String? tokenString, String? expires}) async {
-    if (await Permission.contacts.request().isGranted) {
-      try {
-        final portalInfo = Get.find<PortalInfoController>();
-        await portalInfo.setup();
+    // try {
+    //   final portalInfo = Get.find<PortalInfoController>();
+    //   await portalInfo.setup();
 
-        final account = Account(name: portalInfo.portalName!, accountType: accountType);
+    //   final account = Account(name: portalInfo.portalName!, accountType: accountType);
 
-        if (await AccountManager.addAccount(account)) {
-          final accessToken = AccessToken(tokenType: tokenType, token: tokenString!);
+    //   if (await AccountManager.addAccount(account)) {
+    //     final accessToken = AccessToken(tokenType: tokenType, token: tokenString!);
 
-          await AccountManager.setAccessToken(account, accessToken);
+    //     await AccountManager.setAccessToken(account, accessToken);
 
-          await Get.find<UserController>().getUserInfo();
+    //     await Get.find<UserController>().getUserInfo();
 
-          final user = Get.find<UserController>().user;
-          final data = AccountData(
-              portal: Get.find<PortalInfoController>().portalName,
-              email: user!.email,
-              expires: expires,
-              displayName: user.displayName,
-              avatar: user.avatar);
-          await AccountManager.setUserData(account, key, json.encode(data.toJson()));
-        }
-      } catch (e, s) {
-        debugPrint(e.toString());
-        debugPrint(s.toString());
-      }
+    //     final user = Get.find<UserController>().user;
+    //     final data = AccountData(
+    //         portal: Get.find<PortalInfoController>().portalName,
+    //         email: user!.email,
+    //         expires: expires,
+    //         displayName: user.displayName,
+    //         avatar: user.avatar);
+    //     await AccountManager.setUserData(account, key, json.encode(data.toJson()));
+    //   }
+    // } catch (e, s) {
+    //   debugPrint(e.toString());
+    //   debugPrint(s.toString());
+    // }
+  }
+}
+
+Future<List<AccountData>> fetchAccounts() async {
+  final accountsList = <AccountData>[];
+
+  try {
+    final accounts = await AccountProvider.getAccounts();
+
+    for (final account in accounts) {
+      final dynamic responseJson = json.decode(account);
+      final accountData = AccountData.fromJson(responseJson as Map<String, dynamic>);
+
+      accountsList.add(accountData);
     }
+  } catch (e, s) {
+    debugPrint(e.toString());
+    debugPrint(s.toString());
   }
 
-  Future<List<AccountData>> fetchAccounts() async {
-    final accountsList = <AccountData>[];
-    if (await Permission.contacts.request().isGranted) {
-      try {
-        final accounts = await AccountManager.getAccounts();
-
-        for (final account in accounts) {
-          if (account.accountType == accountType) {
-            final value = await AccountManager.getUserData(account, key);
-            final accountData = AccountData.fromJson(json.decode(value!) as Map<String, dynamic>);
-            final accesstoken = await AccountManager.getAccessToken(account, tokenType);
-            accountData.accessToken = accesstoken?.token;
-
-            accountsList.add(accountData);
-          }
-        }
-      } catch (e, s) {
-        debugPrint(e.toString());
-        debugPrint(s.toString());
-      }
-    }
-    return accountsList;
-  }
+  return accountsList;
 }

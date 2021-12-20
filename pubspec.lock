@@ -8,15 +8,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "31.0.0"
-  accountmanager:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: HEAD
-      resolved-ref: "5b4751ccfe9a881aff2a2ba4e29720df461a22b6"
-      url: "git://github.com/Kiruel/flutter-account-manager-plugin.git"
-    source: git
-    version: "0.2.0"
   analyzer:
     dependency: transitive
     description:
@@ -44,7 +35,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.8.1"
+    version: "2.8.2"
   audio_session:
     dependency: transitive
     description:
@@ -149,7 +140,7 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   charcode:
     dependency: transitive
     description:
@@ -871,7 +862,7 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.10"
+    version: "0.12.11"
   meta:
     dependency: transitive
     description:
@@ -1012,20 +1003,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.1"
-  permission_handler:
-    dependency: "direct main"
-    description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "8.3.0"
-  permission_handler_platform_interface:
-    dependency: transitive
-    description:
-      name: permission_handler_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.7.0"
   petitparser:
     dependency: transitive
     description:
@@ -1268,7 +1245,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.2"
+    version: "0.4.3"
   timing:
     dependency: transitive
     description:
@@ -1359,7 +1336,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   very_good_analysis:
     dependency: "direct dev"
     description:

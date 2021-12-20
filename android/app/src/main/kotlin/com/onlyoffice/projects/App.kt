@@ -5,6 +5,8 @@ import com.onlyoffice.projects.utils.AccountUtils
 import com.onlyoffice.projects.utils.PackagesUtils
 import io.flutter.app.FlutterApplication
 
+import io.flutter.plugin.common.MethodChannel
+
 class App : FlutterApplication() {
 
     var accountUtils: AccountUtils? = null
@@ -14,7 +16,7 @@ class App : FlutterApplication() {
         accountUtils = AccountUtils(this)
         if (PackagesUtils.isPackageExist(this, "com.onlyoffice.documents")) {
             // Check
-        }
+        } 
     }
 }
 

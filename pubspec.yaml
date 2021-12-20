@@ -92,11 +92,7 @@ dependencies:
   html_editor_enhanced: ^2.4.0+1
   flutter_widget_from_html: ^0.8.2
   collection: ^1.15.0-nullsafety.4
-  # accountmanager: ^0.2.1
-  accountmanager:
-    git:
-      url: git://github.com/Kiruel/flutter-account-manager-plugin.git
-  permission_handler: ^8.3.0
+
   modal_bottom_sheet: ^2.0.0
   
 

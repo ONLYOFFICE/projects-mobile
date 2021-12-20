@@ -31,57 +31,87 @@
  */
 
 class AccountData {
-  String? portal;
-  String? scheme;
-  String? userId;
-  String? email;
-  String? displayName;
-  String? provider;
-  String? accessToken;
-  String? avatar;
-  String? webDav;
-  String? expires;
+  String id = '';
+  String login = '';
+  String portal = '';
+  String serverVersion = '';
+  String scheme = '';
+  String name = '';
+  String provider = '';
+  String avatarUrl = '';
+  String isSslCiphers = '';
+  String isSslState = '';
+  String isOnline = '';
+  String isWebDav = '';
+  String isOneDrive = '';
+  String isDropbox = '';
+  String isAdmin = '';
+  String isVisitor = '';
+  String token = '';
+  String password = '';
+  String expires = '';
 
-  AccountData({
-    this.portal,
-    this.scheme,
-    this.userId,
-    this.email,
-    this.displayName,
-    this.provider,
-    this.accessToken,
-    this.avatar,
-    this.webDav,
-    this.expires,
-  });
+  AccountData(
+      {this.id = '',
+      this.login = '',
+      this.portal = '',
+      this.serverVersion = '',
+      this.scheme = '',
+      this.name = '',
+      this.provider = '',
+      this.avatarUrl = '',
+      this.isSslCiphers = '',
+      this.isSslState = '',
+      this.isOnline = '',
+      this.isWebDav = '',
+      this.isOneDrive = '',
+      this.isDropbox = '',
+      this.isAdmin = '',
+      this.isVisitor = '',
+      this.token = '',
+      this.password = ''});
 
   AccountData.fromJson(Map<String, dynamic> json) {
-    portal = json['portal'] as String?;
-    scheme = json['scheme'] as String?;
-    userId = json['userId'] as String?;
-    email = json['email'] as String?;
-    displayName = json['displayName'] as String?;
-    provider = json['provider'] as String?;
-    accessToken = json['accessToken'] as String?;
-    avatar = json['avatar'] as String?;
-    webDav = json['webDav'] as String?;
-    expires = json['expires'] as String?;
+    id = json['id'] as String;
+    login = json['login'] as String;
+    portal = json['portal'] as String;
+    serverVersion = json['serverVersion'] as String;
+    scheme = json['scheme'] as String;
+    name = json['name'] as String;
+    provider = json['provider'] as String;
+    avatarUrl = json['avatarUrl'] as String;
+    isSslCiphers = json['isSslCiphers'] as String;
+    isSslState = json['isSslState'] as String;
+    isOnline = json['isOnline'] as String;
+    isWebDav = json['isWebDav'] as String;
+    isOneDrive = json['isOneDrive'] as String;
+    isDropbox = json['isDropbox'] as String;
+    isAdmin = json['isAdmin'] as String;
+    isVisitor = json['isVisitor'] as String;
+    token = json['token'] as String;
+    password = json['password'] as String;
   }
 
   Map<String, dynamic> toJson() {
     final data = <String, dynamic>{};
-
+    data['id'] = id;
+    data['login'] = login;
     data['portal'] = portal;
+    data['serverVersion'] = serverVersion;
     data['scheme'] = scheme;
-    data['userId'] = userId;
-    data['email'] = email;
-    data['displayName'] = displayName;
+    data['name'] = name;
     data['provider'] = provider;
-    data['accessToken'] = accessToken;
-    data['avatar'] = avatar;
-    data['webDav'] = webDav;
-    data['expires'] = expires;
-
+    data['avatarUrl'] = avatarUrl;
+    data['isSslCiphers'] = isSslCiphers;
+    data['isSslState'] = isSslState;
+    data['isOnline'] = isOnline;
+    data['isWebDav'] = isWebDav;
+    data['isOneDrive'] = isOneDrive;
+    data['isDropbox'] = isDropbox;
+    data['isAdmin'] = isAdmin;
+    data['isVisitor'] = isVisitor;
+    data['token'] = token;
+    data['password'] = password;
     return data;
   }
 }
