@@ -105,7 +105,7 @@ class LoginController extends GetxController {
         await saveLoginData(token: result.response!.token, expires: result.response!.expires);
 
         await Get.find<AccountManagerController>()
-            .addAccount(tokenString: result.response!.token, expires: result.response!.expires);
+            .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
         locator<EventHub>().fire('loginSuccess');
       } else if (result.response!.tfa == true) {
@@ -200,7 +200,7 @@ class LoginController extends GetxController {
     if (result.response!.token != null) {
       await saveLoginData(token: result.response!.token, expires: result.response!.expires);
       await Get.find<AccountManagerController>()
-          .addAccount(tokenString: result.response!.token, expires: result.response!.expires);
+          .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
       locator<EventHub>().fire('loginSuccess');
     } else if (result.response!.tfa!) {

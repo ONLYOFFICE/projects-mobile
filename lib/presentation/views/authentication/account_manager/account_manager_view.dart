@@ -66,15 +66,14 @@ class AccountManagerView extends StatelessWidget {
             physics: const ScrollPhysics(),
             shrinkWrap: true,
             itemBuilder: (c, i) => AccountTile(
-              userController:
-                  AccountUserController(accountData: controller.accounts[i]),
+              userController: AccountUserController(accountData: controller.accounts[i]),
             ),
             itemExtent: 65,
             itemCount: controller.accounts.length,
           ),
           const SizedBox(height: 34),
           InkWell(
-            onTap: Get.back,
+            onTap: () => controller.addAccount(tokenString: '', expires: ''),
             child: SizedBox(
               height: 48,
               child: Row(
@@ -99,8 +98,7 @@ class AccountManagerView extends StatelessWidget {
                               Text(
                                 'Add new account',
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(
-                                    color: Get.theme.colors().primary),
+                                style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
                               ),
                             ],
                           ),

@@ -36,8 +36,9 @@ import 'package:flutter/services.dart';
 class AccountProvider {
   static const MethodChannel _channel = MethodChannel('accountProvider');
 
-  static Future<bool?> addAccount(String account, String accountId) async {
-    return await _channel.invokeMethod('addAccount', {'account': account, 'accountId': accountId});
+  static Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
+    return await _channel
+        .invokeMethod('addAccount', {'accountData': accountData, 'accountId': accountId});
   }
 
   static Future<List<String>> getAccounts() async {

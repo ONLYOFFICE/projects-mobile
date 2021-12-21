@@ -36,6 +36,8 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
+import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/account_provider.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 
@@ -57,33 +59,28 @@ class AccountManagerController extends GetxController {
     }
   }
 
-  Future<void> addAccount({String? tokenString, String? expires}) async {
-    // try {
-    //   final portalInfo = Get.find<PortalInfoController>();
-    //   await portalInfo.setup();
+  Future<void> addAccount({required String tokenString, required String expires}) async {
+    try {
+      await AccountProvider.addAccount(accountData: '', accountId: '');
+      // final portalInfo = Get.find<PortalInfoController>();
+      // await portalInfo.setup();
+      // await Get.find<UserController>().getUserInfo();
+      // final user = Get.find<UserController>().user;
 
-    //   final account = Account(name: portalInfo.portalName!, accountType: accountType);
-
-    //   if (await AccountManager.addAccount(account)) {
-    //     final accessToken = AccessToken(tokenType: tokenType, token: tokenString!);
-
-    //     await AccountManager.setAccessToken(account, accessToken);
-
-    //     await Get.find<UserController>().getUserInfo();
-
-    //     final user = Get.find<UserController>().user;
-    //     final data = AccountData(
-    //         portal: Get.find<PortalInfoController>().portalName,
-    //         email: user!.email,
-    //         expires: expires,
-    //         displayName: user.displayName,
-    //         avatar: user.avatar);
-    //     await AccountManager.setUserData(account, key, json.encode(data.toJson()));
-    //   }
-    // } catch (e, s) {
-    //   debugPrint(e.toString());
-    //   debugPrint(s.toString());
-    // }
+      // final accountData = AccountData(
+      //     token: tokenString,
+      //     portal: Get.find<PortalInfoController>().portalName!,
+      //     login: user!.email!,
+      //     expires: expires,
+      //     name: user.displayName!,
+      //     id: user.id!,
+      //     avatarUrl: user.avatar!);
+      // await AccountProvider.addAccount(
+      //     accountData: json.encode(accountData.toJson()), accountId: user.id!);
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+    }
   }
 }
 

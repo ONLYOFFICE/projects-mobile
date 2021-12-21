@@ -51,25 +51,27 @@ class AccountData {
   String password = '';
   String expires = '';
 
-  AccountData(
-      {this.id = '',
-      this.login = '',
-      this.portal = '',
-      this.serverVersion = '',
-      this.scheme = '',
-      this.name = '',
-      this.provider = '',
-      this.avatarUrl = '',
-      this.isSslCiphers = '',
-      this.isSslState = '',
-      this.isOnline = '',
-      this.isWebDav = '',
-      this.isOneDrive = '',
-      this.isDropbox = '',
-      this.isAdmin = '',
-      this.isVisitor = '',
-      this.token = '',
-      this.password = ''});
+  AccountData({
+    this.id = '',
+    this.login = '',
+    this.portal = '',
+    this.serverVersion = '',
+    this.scheme = '',
+    this.name = '',
+    this.provider = '',
+    this.avatarUrl = '',
+    this.isSslCiphers = '',
+    this.isSslState = '',
+    this.isOnline = '',
+    this.isWebDav = '',
+    this.isOneDrive = '',
+    this.isDropbox = '',
+    this.isAdmin = '',
+    this.isVisitor = '',
+    this.token = '',
+    this.password = '',
+    this.expires = '',
+  });
 
   AccountData.fromJson(Map<String, dynamic> json) {
     id = json['id'] as String;
@@ -90,6 +92,8 @@ class AccountData {
     isVisitor = json['isVisitor'] as String;
     token = json['token'] as String;
     password = json['password'] as String;
+
+    // expires = json['expires'] as String;
   }
 
   Map<String, dynamic> toJson() {
@@ -112,6 +116,8 @@ class AccountData {
     data['isVisitor'] = isVisitor;
     data['token'] = token;
     data['password'] = password;
+
+    data['expires'] = expires;
     return data;
   }
 }

@@ -13,7 +13,9 @@ import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
 
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.MethodChannel.Result
 import com.onlyoffice.projects.utils.AccountUtils
 import io.flutter.plugins.GeneratedPluginRegistrant
 
@@ -28,28 +30,37 @@ class MainActivity : FlutterFragmentActivity() {
         
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "accountProvider").setMethodCallHandler {
         call, result ->
-        val accountUtils = AccountUtils(this.applicationContext)
-            if (call.method == "getAccounts") {
-                val accounts = accountUtils.getAccounts()
-                val list = mutableListOf<HashMap<String, String>>()
-                for (account in accounts) {
-                    list.add(hashMapOf(
-                            "account" to account,
-                    ))
-                }
-                result.success(list)
-            // }
-            // else if (call.method == "addAccount") {    
-            //     val accountId = call.argument<String>("accountId")
-            //     val accountData = call.argument<String>("accountData")
-                
-            //     val wasAdded = accountUtils.addAccount(id: accountId, data: accountData)
-            //      result.success(wasAdded)
-                        
-            } else {
-                result.notImplemented()
+            when (call.method) {
+                "getAccounts" -> getAccounts(result)
+                "addAccount" -> addAccount(call, result)
+
+                else -> result.notImplemented()
             }
         }
+    }
+
+    private fun getAccounts(result: Result) {
+         val accounts = AccountUtils(this.applicationContext).getAccounts()
+         val list = mutableListOf<HashMap<String, String>>()
+         for (account in accounts) {
+             list.add(hashMapOf(
+                     "account" to account,
+             ))
+         }
+         result.success(list)
+        
+    }
+
+    private fun addAccount(call: MethodCall, result: Result) {
+         var accountId = call.argument<String>("accountId")!!
+         var accountData = call.argument<String>("accountData")!!
+
+        //  val account = AccountUtils(this.applicationContext).addAccount(accountId, accountData)
+
+         val account = AccountUtils(this.applicationContext).addAccount("7cc0a8f5-8aca-4f62-9a57-64fb94d2bfda", "{\"id\":\"7cc0a8f5-8aca-4f62-9a57-64fb94d2bfda\",\"login\":\"Blocked.Blocked@onlyoffice.io\",\"portal\":\"alexanderyuzhin.teamlab.info/\",\"serverVersion\":\"\",\"scheme\":\"\",\"name\":\"Blocked Blocked\",\"provider\":\"\",\"avatarUrl\":\"https://dylnrgbh910l3.cloudfront.net/studio/tag/i11.6.0.559/skins/default/images/default_user_photo_size_82-82.png?_=1240520617\",\"isSslCiphers\":\"\",\"isSslState\":\"\",\"isOnline\":\"\",\"isWebDav\":\"\",\"isOneDrive\":\"\",\"isDropbox\":\"\",\"isAdmin\":\"\",\"isVisitor\":\"\",\"token\":\"iqVKPV5WHDCriPTdIIp8oWyAzvl+KVfx3sGmldq8ISHk8dKaGVxDPoYLHPCT/W5+TFEi/ZbHtsiR4muX9DJ5VVDICwpVdj0eSR3QPXHhtPicSqjt1eAr0rOGZ7HulqNnJ22rHw0CsjgXvEMQUzuBuuVIa72pHYgLnYeFXI1cWmo=\",\"password\":\"\",\"expires\":\"2021-12-27T18:43:41.3673166Z\"}")
+
+         val wasAdded = !account.isNullOrEmpty()
+         result.success(wasAdded)
     }
 }
 
