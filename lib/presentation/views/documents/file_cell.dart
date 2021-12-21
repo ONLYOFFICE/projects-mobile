@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
-
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -206,7 +205,7 @@ Future<void> _onFilePopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
         'target': selectedFile.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
         'refreshCalback': controller.refreshContent
       });
       break;
@@ -215,7 +214,7 @@ Future<void> _onFilePopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
         'target': selectedFile.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
         'refreshCalback': controller.refreshContent
       });
 

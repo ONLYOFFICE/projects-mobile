@@ -37,6 +37,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -45,7 +46,6 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/pages_setup.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/theme_service.dart';
-import 'package:projects/presentation/shared/wrappers/platform_app.dart';
 
 void main() async {
   HttpOverrides.global = DevHttpOverrides();
@@ -133,7 +133,7 @@ class App extends StatelessWidget {
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-      child: PlatformApp(
+      child: GetMaterialApp(
         initialRoute: initialPage,
         getPages: getxPages(),
         localizationsDelegates: context.localizationDelegates,
@@ -143,6 +143,7 @@ class App extends StatelessWidget {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: ThemeService().savedThemeMode(),
+        // cupertinoTheme: lightCupertinoTheme,
         //cupertinoTheme: cupertinoTheme,
       ),
     );

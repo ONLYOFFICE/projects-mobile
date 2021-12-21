@@ -90,7 +90,7 @@ class PortalDiscussionsView extends StatelessWidget {
                 // onPressed: () => controller.showSearch(),
               ),
               PlatformIconButton(
-                  icon: FiltersButton(controler: controller),
+                  icon: FiltersButton(controller: controller),
                   onPressed: () async => Get.find<NavigationController>().toScreen(
                       const DiscussionsFilterScreen(),
                       preventDuplicates: false,

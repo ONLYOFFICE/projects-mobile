@@ -31,6 +31,7 @@
  */
 
 import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +40,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
@@ -49,8 +51,6 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 
 class ProjectMilestonesScreen extends StatelessWidget {
@@ -166,16 +166,14 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _ProjectMilestonesSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async =>
-                          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
-                ),
+              Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () async =>
+                        Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
+                    child: FiltersButton(controller: controller),
+                  ),
+                ],
               ),
             ],
           ),

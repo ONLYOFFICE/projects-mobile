@@ -72,7 +72,11 @@ class DashboardView extends StatelessWidget {
                 title: Title(controller: dashboardController),
               ),
               cupertino: (context, target) => CupertinoSliverNavigationBar(
-                largeTitle: Text(dashboardController.screenName.value),
+                backgroundColor: Get.theme.colors().background,
+                largeTitle: Text(
+                  dashboardController.screenName.value,
+                  style: TextStyle(color: Get.theme.colors().onSurface),
+                ),
               ),
             )
           ];

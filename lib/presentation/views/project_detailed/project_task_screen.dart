@@ -31,29 +31,28 @@
  */
 
 import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
-
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectDetailed? projectDetailed;
@@ -170,18 +169,16 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _ProjectTasksSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async => Get.find<NavigationController>().toScreen(
-                          const TasksFilterScreen(),
-                          preventDuplicates: false,
-                          arguments: {'filterController': controller.filterController}),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
-                ),
+              Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () async => Get.find<NavigationController>().toScreen(
+                        const TasksFilterScreen(),
+                        preventDuplicates: false,
+                        arguments: {'filterController': controller.filterController}),
+                    child: FiltersButton(controller: controller),
+                  ),
+                ],
               ),
             ],
           ),

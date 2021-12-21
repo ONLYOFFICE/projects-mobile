@@ -30,6 +30,9 @@
  *
  */
 
+import 'package:easy_localization/easy_localization.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
@@ -37,4 +40,14 @@ abstract class BaseDocumentsController {
   DocumentsSortController get sortController;
 
   PaginationController get paginationController;
+
+  RxString screenName = tr('documents').obs;
+
+  DocumentsFilterController get filterController;
+
+  int? get currentFolderID;
+
+  RxBool loaded = false.obs;
+  RxBool nothingFound = false.obs;
+  RxBool searchMode = false.obs;
 }

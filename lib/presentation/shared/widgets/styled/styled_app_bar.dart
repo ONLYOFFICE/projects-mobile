@@ -86,8 +86,8 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
-      //backgroundColor: backgroundColor,
-      backgroundColor: CupertinoColors.white, // TODO
+      backgroundColor: backgroundColor,
+      // backgroundColor: CupertinoColors.white, // TODO
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
@@ -120,3 +120,122 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
+//
+// class MaterialMainAppBar extends StatelessWidget {
+//   const MaterialMainAppBar({Key? key, required this.controller, this.actions, this.bottom})
+//       : super(key: key);
+//
+//   final BaseController controller;
+//   final List<Widget>? actions;
+//   final PreferredSizeWidget? bottom;
+//   @override
+//   Widget build(BuildContext context) {
+//     return SliverAppBar(
+//       backgroundColor: Get.theme.colors().background,
+//       pinned: true,
+//       title: Text(
+//         controller.screenName,
+//         style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+//       ),
+//       actions: actions,
+//       bottom: bottom,
+//     );
+//   }
+// }
+//
+// class CupertinoAppBar extends StatelessWidget {
+//   const CupertinoAppBar(
+//       {Key? key, required this.controller, this.children = const [], this.isCollapsed = false})
+//       : super(key: key);
+//
+//   final BaseController controller;
+//   final List<Widget> children;
+//   final bool isCollapsed;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return isCollapsed
+//         ? SliverPersistentHeader(
+//             pinned: true,
+//             delegate: CupertinoCollapsedNavBar(
+//                 controller: controller, persistentHeight: 44 + MediaQuery.of(context).padding.top),
+//           )
+//         : CupertinoSliverNavigationBar(
+//             // border: Border.all(style: BorderStyle.none),
+//             backgroundColor: Get.theme.colors().background,
+//             padding: EdgeInsetsDirectional.zero,
+//             largeTitle: Text(
+//               controller.screenName,
+//               style: TextStyle(color: Get.theme.colors().onSurface),
+//             ),
+//             trailing: Row(
+//               mainAxisSize: MainAxisSize.min,
+//               mainAxisAlignment: MainAxisAlignment.end,
+//               children: children,
+//             ),
+//           );
+//   }
+// }
+//
+// class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
+//   const CupertinoCollapsedNavBar({required this.controller, required this.persistentHeight});
+//   final BaseDocumentsController controller;
+//   final double persistentHeight;
+//   @override
+//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+//     return CupertinoNavigationBar(
+//       backgroundColor: Get.theme.colors().background,
+//       middle: Obx(
+//         () => Text(
+//           controller.screenName.value,
+//           style: TextStyle(color: Get.theme.colors().onSurface),
+//         ),
+//       ),
+//       trailing: Row(
+//         mainAxisSize: MainAxisSize.min,
+//         mainAxisAlignment: MainAxisAlignment.end,
+//         children: [
+//           IconButton(
+//             icon: AppIcon(
+//               width: 24,
+//               height: 24,
+//               icon: SvgIcons.search,
+//               color: Get.theme.colors().primary,
+//             ),
+//             onPressed: () {
+//               Get.find<NavigationController>()
+//                   .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+//                 'folderName': controller.screenName.value,
+//                 'folderId': controller.currentFolderID,
+//                 'documentsController': controller,
+//               });
+//             },
+//           ),
+//           IconButton(
+//             icon: FiltersButton(controller: controller),
+//             onPressed: () async => Get.find<NavigationController>().toScreen(
+//                 const DocumentsFilterScreen(),
+//                 preventDuplicates: false,
+//                 arguments: {'filterController': controller.filterController}),
+//           ),
+//           IconButton(
+//             onPressed: () {},
+//             icon: Icon(CupertinoIcons.ellipsis_circle, color: Get.theme.colors().primary, size: 24),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+//
+//   @override
+//   double get maxExtent => persistentHeight;
+//
+//   @override
+//   double get minExtent => persistentHeight;
+//
+//   @override
+//   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+//     // TODO: implement shouldRebuild
+//     return false;
+//   }
+// }

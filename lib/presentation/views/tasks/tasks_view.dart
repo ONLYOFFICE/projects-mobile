@@ -116,7 +116,7 @@ class TasksView extends StatelessWidget {
                     onPressed: controller.showSearch,
                   ),
                   IconButton(
-                    icon: FiltersButton(controler: controller),
+                    icon: FiltersButton(controller: controller),
                     onPressed: () async => Get.find<NavigationController>().toScreen(
                         const TasksFilterScreen(),
                         preventDuplicates: false,
@@ -131,13 +131,16 @@ class TasksView extends StatelessWidget {
               ),
               cupertino: (context, target) => CupertinoSliverNavigationBar(
                 // border: Border.all(style: BorderStyle.none),
+                backgroundColor: Get.theme.colors().background,
                 padding: EdgeInsetsDirectional.zero,
-                largeTitle: Text(controller.screenName),
+                largeTitle: Text(
+                  controller.screenName,
+                  style: TextStyle(color: Get.theme.colors().onSurface),
+                ),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    _TasksSortButton(controller: controller),
                     IconButton(
                       icon: AppIcon(
                         width: 24,
@@ -148,11 +151,18 @@ class TasksView extends StatelessWidget {
                       onPressed: controller.showSearch,
                     ),
                     IconButton(
-                      icon: FiltersButton(controler: controller),
+                      icon: FiltersButton(controller: controller),
                       onPressed: () async => Get.find<NavigationController>().toScreen(
                           const TasksFilterScreen(),
                           preventDuplicates: false,
                           arguments: {'filterController': controller.filterController}),
+                    ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        CupertinoIcons.ellipsis_circle,
+                        color: Get.theme.colors().primary,
+                      ),
                     ),
                   ],
                 ),

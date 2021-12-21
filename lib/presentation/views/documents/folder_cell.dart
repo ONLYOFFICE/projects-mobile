@@ -35,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -253,7 +252,7 @@ Future<void> _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
       });
       break;
     case 'move':
@@ -261,7 +260,7 @@ Future<void> _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
       });
 
       break;

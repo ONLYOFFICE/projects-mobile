@@ -31,18 +31,16 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
@@ -298,7 +296,7 @@ class _Title extends StatelessWidget {
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {'filterController': controller.filterController}),
-                child: FiltersButton(controler: controller),
+                child: FiltersButton(controller: controller),
               ),
             ],
           ),
@@ -386,7 +384,7 @@ class MoveDocumentsScreen extends StatelessWidget {
                   onPressed: () => Get.close(controller.foldersCount),
                   child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                 ),
-                if (controller.mode == 'moveFolder' && controller.currentFolder != null)
+                if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
                   TextButton(
                     onPressed: controller.moveFolder,
                     child:

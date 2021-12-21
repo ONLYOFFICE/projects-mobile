@@ -43,16 +43,18 @@ import 'package:projects/domain/controllers/documents/base_documents_controller.
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
-
-import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/internal/locator.dart';
 
 class DocumentsMoveOrCopyController extends GetxController implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
 
   RxBool hasFilters = false.obs;
+  @override
   RxBool loaded = false.obs;
+  @override
   RxBool nothingFound = false.obs;
+  @override
   RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
@@ -60,6 +62,9 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
   String _query = '';
 
   int? initialFolderId;
+
+  @override
+  int? get currentFolderID => initialFolderId;
 
   Timer? _searchDebounce;
   int foldersCount = 0;
@@ -82,6 +87,7 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
 
   Folder? get currentFolder => _currentFolder;
 
+  @override
   var screenName = tr('chooseSection').obs;
 
   late DocumentsSortController _sortController;
@@ -91,6 +97,7 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
 
   late DocumentsFilterController _filterController;
 
+  @override
   DocumentsFilterController get filterController => _filterController;
 
   DocumentsMoveOrCopyController(
