@@ -45,7 +45,6 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
@@ -109,14 +108,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       () => Scaffold(
         appBar: StyledAppBar(
           actions: [
-            if (projectController.projectData!.canEdit!)
-              PlatformIconButton(
-                  icon: Icon(PlatformIcons(context).edit),
-                  onPressed: () => Get.find<NavigationController>().to(
-                      EditProjectView(projectDetailed: projectController.projectData),
-                      arguments: {'projectDetailed': projectController.projectData}))
-            else
-              const SizedBox(),
             if (!(projectController.projectData!.security!['isInTeam'] as bool) ||
                 projectController.projectData!.canDelete!)
               _ProjectContextMenu(controller: projectController)
@@ -188,16 +179,19 @@ class _ProjectContextMenu extends StatelessWidget {
       itemBuilder: (context) {
         return [
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
-          // if (controller.projectDetailed.canEdit)
-          //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          if (!(controller.projectData?.security?['isInTeam'] as bool))
+          if (controller.projectData!.canEdit!)
+            PopupMenuItem(
+              value: 'edit',
+              child: Text(tr('editProject')),
+            ),
+          if (!(controller.projectData!.security?['isInTeam'] as bool))
             PopupMenuItem(
               value: 'follow',
-              child: controller.projectData?.isFollow as bool
+              child: controller.projectData!.isFollow as bool
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
             ),
-          if (controller.projectData?.canDelete as bool)
+          if (controller.projectData!.canDelete as bool)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
@@ -219,11 +213,11 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
       controller.copyLink();
       break;
 
-    // case 'edit':
-    //   await Get.find<NavigationController>().navigateToFullscreen(
-    //       ProjectEditingView(),
-    //       arguments: {'projectDetailed': controller.projectDetailed});
-    //   break;
+    case 'edit':
+      Get.find<NavigationController>().to(
+          EditProjectView(projectDetailed: controller.projectData as ProjectDetailed),
+          arguments: {'projectDetailed': controller.projectData});
+      break;
 
     case 'follow':
       controller.followProject();

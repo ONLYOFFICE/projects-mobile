@@ -220,7 +220,7 @@ class PlatformIcons {
   IconData get edit => isMaterial(context) ? Icons.edit_outlined : CupertinoIcons.pencil;
 
   /// Icons: Icons.more_horiz : CupertinoIcons.ellipsis
-  IconData get ellipsis => isMaterial(context) ? Icons.more_vert : CupertinoIcons.ellipsis_vertical;
+  IconData get ellipsis => isMaterial(context) ? Icons.more_vert : CupertinoIcons.ellipsis;
 
   /// Icons: Icons.error : CupertinoIcons.exclamationmark_circle_fill
   IconData get error =>
