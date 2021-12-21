@@ -96,12 +96,21 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
   final PlatformBuilder<MaterialAlertDialogData>? material;
   final PlatformBuilder<CupertinoAlertDialogData>? cupertino;
 
+  EdgeInsets? titlePadding;
+  EdgeInsets? contentPadding;
+  EdgeInsets? insetPadding;
+  EdgeInsets? actionsPadding;
+
   PlatformAlertDialog({
     Key? key,
     this.widgetKey,
     this.actions,
     this.content,
     this.title,
+    this.titlePadding,
+    this.contentPadding,
+    this.insetPadding,
+    this.actionsPadding,
     this.material,
     this.cupertino,
   }) : super(key: key);
@@ -114,10 +123,12 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
       key: data?.widgetKey ?? widgetKey,
       actions: data?.actions ?? actions,
       content: data?.content ?? content,
-      contentPadding: data?.contentPadding ?? const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+      contentPadding: data?.contentPadding ??
+          contentPadding ??
+          const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
       semanticLabel: data?.semanticLabel,
       title: data?.title ?? title,
-      titlePadding: data?.titlePadding,
+      titlePadding: data?.titlePadding ?? titlePadding,
       contentTextStyle: data?.contentTextStyle,
       backgroundColor: data?.backgroundColor,
       elevation: data?.elevation,
@@ -125,11 +136,11 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
       titleTextStyle: data?.titleTextStyle,
       scrollable: data?.scrollable ?? false,
       actionsOverflowDirection: data?.actionsOverflowDirection,
-      actionsPadding: data?.actionsPadding ?? EdgeInsets.zero,
+      actionsPadding: data?.actionsPadding ?? actionsPadding ?? EdgeInsets.zero,
       buttonPadding: data?.buttonPadding,
       actionsOverflowButtonSpacing: data?.actionsOverflowButtonSpacing,
       clipBehavior: data?.clipBehavior ?? Clip.none,
-      insetPadding: data?.insetPadding ?? _defaultInsetPadding,
+      insetPadding: data?.insetPadding ?? insetPadding ?? _defaultInsetPadding,
       actionsAlignment: data?.actionsAlignment,
     );
   }

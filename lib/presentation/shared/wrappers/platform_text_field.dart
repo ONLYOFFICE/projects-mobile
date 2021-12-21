@@ -407,7 +407,7 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
             ? (data?.decoration ?? const InputDecoration())
             : _inputDecorationWithHint(
                 hintText,
-                data?.decoration ?? const InputDecoration(),
+                data?.decoration ?? this.decoration ?? const InputDecoration(),
               ));
 
     return TextField(

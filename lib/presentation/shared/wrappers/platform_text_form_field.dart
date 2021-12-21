@@ -333,12 +333,13 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
     final data = material?.call(context, platform(context));
 
     final hintText = this.hintText;
-    final decoration = hintText == null
-        ? (data?.decoration ?? this.decoration ?? const InputDecoration())
-        : _inputDecorationWithHint(
-            hintText,
-            data?.decoration ?? this.decoration ?? const InputDecoration(),
-          );
+    final decoration = this.decoration ??
+        (hintText == null
+            ? (data?.decoration ?? const InputDecoration())
+            : _inputDecorationWithHint(
+                hintText,
+                data?.decoration ?? this.decoration ?? const InputDecoration(),
+              ));
 
     return TextFormField(
       key: data?.widgetKey ?? widgetKey,
@@ -452,6 +453,7 @@ class PlatformTextFormField extends PlatformWidgetBase<CupertinoTextFormFieldRow
       padding: data?.padding ?? /*  decoration?.contentPadding ??*/ EdgeInsets.zero,
       placeholder: data?.placeholder ?? hintText ?? decoration!.hintText,
       placeholderStyle: data?.placeholderStyle ??
+          decoration?.hintStyle ??
           TextStyle(
             fontWeight: FontWeight.w400,
             color: decoration?.hintStyle?.color ?? CupertinoColors.placeholderText,
