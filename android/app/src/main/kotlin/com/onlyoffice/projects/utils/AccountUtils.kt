@@ -37,7 +37,7 @@ class AccountUtils(private val context: Context) {
     fun addAccount(id: String, data: String): String {
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             val bundle: Bundle = getBundle(data)
-            context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), null, bundle)
+            context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
         } else {
             val contentValues: ContentValues = getContentValues(data)
             context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues)
