@@ -502,16 +502,17 @@ class PlatformTextField extends PlatformWidgetBase<CupertinoTextField, TextField
       decoration: data?.decoration ??
           (makeCupertinoDecorationNull ? null : kDefaultRoundedBorderDecoration),
       clearButtonMode: data?.clearButtonMode ?? OverlayVisibilityMode.never,
-      padding: data?.padding ?? const EdgeInsets.all(6.0),
-      placeholder: data?.placeholder ?? hintText,
+      padding: data?.padding ?? decoration?.contentPadding ?? const EdgeInsets.all(6.0),
+      placeholder: data?.placeholder ?? hintText ?? decoration?.hintText,
       placeholderStyle: data?.placeholderStyle ??
+          decoration?.hintStyle ??
           const TextStyle(
             fontWeight: FontWeight.w400,
             color: CupertinoColors.placeholderText,
           ),
       prefix: data?.prefix,
       prefixMode: data?.prefixMode ?? OverlayVisibilityMode.always,
-      suffix: data?.suffix,
+      suffix: data?.suffix ?? decoration?.suffixIcon,
       suffixMode: data?.suffixMode ?? OverlayVisibilityMode.always,
       dragStartBehavior: data?.dragStartBehavior ?? dragStartBehavior ?? DragStartBehavior.start,
       expands: data?.expands ?? expands ?? false,
