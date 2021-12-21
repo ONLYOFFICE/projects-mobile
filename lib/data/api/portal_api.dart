@@ -31,7 +31,6 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +47,7 @@ class PortalApi {
   Future<ApiDTO<Capabilities>> getCapabilities() async {
     final url = await locator.get<CoreApi>().getCapabilitiesUrl();
 
-    var result = ApiDTO<Capabilities>();
+    final result = ApiDTO<Capabilities>();
     try {
       final response = await locator.get<CoreApi>().getRequest(url);
 
@@ -56,42 +55,12 @@ class PortalApi {
         result.response =
             Capabilities.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
       } else {
-        if (response is CustomError) {
-          // TODO need catch socket exception and check CustomError message == Connection refused
-          locator.get<CoreApi>().redirectPortal();
-          result = await getCapabilitiesRedirected();
-        }
         result.error = response as CustomError;
       }
     } catch (e) {
-      String? error;
-      if (e is SocketException) error = e.osError?.message;
-      if (e is FormatException) error = tr('unknownHost');
-      result.error = CustomError(message: error ?? e.toString());
+      result.error = CustomError(message: tr('portalNotFound'));
     }
 
-    return result;
-  }
-
-  Future<ApiDTO<Capabilities>> getCapabilitiesRedirected() async {
-    final url = await locator.get<CoreApi>().getCapabilitiesUrl();
-
-    final result = ApiDTO<Capabilities>();
-    try {
-      final dynamic response = await locator.get<CoreApi>().getRequest(url);
-
-      if (response is http.Response) {
-        final responseJson = json.decode(response.body) as Map<String, dynamic>;
-        result.response = Capabilities.fromJson(responseJson['response'] as Map<String, dynamic>);
-      } else {
-        result.error = response as CustomError;
-      }
-    } catch (e) {
-      String? error;
-      if (e is SocketException) error = e.osError?.message;
-      if (e is FormatException) error = tr('unknownHost');
-      result.error = CustomError(message: error ?? e.toString());
-    }
     return result;
   }
 }
