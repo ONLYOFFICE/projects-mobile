@@ -463,5 +463,5 @@
 		"beforeText": "I agree to the ",
 		"betweenText": " and the "
 	},
-	"unknownHost": "Unknown host"
+	"portalNotFound": "Portal not found. Check portal URL."
 }
