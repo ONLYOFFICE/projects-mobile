@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -81,7 +82,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   final documentsController = Get.find<DocumentsController>();
   final projectTasksController = Get.find<ProjectTasksController>();
   final projectMilestonesController = Get.find<MilestonesDataSource>();
-
+  final projectDiscussionsController =
+      Get.put<ProjectDiscussionsController>(ProjectDiscussionsController());
   final projectDocumentsController = Get.find<DocumentsController>();
 
   final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
@@ -91,6 +93,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     projectController.setup(projectDetailed);
     projectTasksController.setup(projectDetailed);
     projectMilestonesController.setup(projectDetailed: projectDetailed);
+    projectDiscussionsController.setup(projectDetailed: projectDetailed);
     projectDocumentsController.setupFolder(
         folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
 
@@ -158,7 +161,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('discussions'),
                       currentTab: _activeIndex.value == 3,
-                      count: projectController.projectData.discussionCount),
+                      count: projectDiscussionsController.itemList.length),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == 4,
@@ -179,7 +182,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
           ProjectMilestonesScreen(
             controller: projectMilestonesController,
           ),
-          ProjectDiscussionsScreen(projectDetailed: projectController.projectData),
+          ProjectDiscussionsScreen(controller: projectDiscussionsController),
           EntityDocumentsView(
             folderId: projectController.projectData.projectFolder,
             folderName: projectController.projectData.title,
