@@ -62,6 +62,15 @@ class ProjectDetailedView extends StatefulWidget {
   _ProjectDetailedViewState createState() => _ProjectDetailedViewState();
 }
 
+class ProjectDetailedTabs {
+  static const overview = 0;
+  static const tasks = 1;
+  static const milestones = 2;
+  static const discussions = 3;
+  static const documents = 4;
+  static const team = 5;
+}
+
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
@@ -107,6 +116,14 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     return Scaffold(
       appBar: StyledAppBar(
         actions: [
+          Obx(() {
+            if (_activeIndex.value == ProjectDetailedTabs.tasks)
+              return ProjectTasksSortButton(
+                controller: projectTasksController,
+              );
+
+            return const SizedBox();
+          }),
           if (!(projectController.projectData.security!['isInTeam'] as bool) ||
               projectController.projectData.canDelete!)
             _ProjectContextMenu(controller: projectController)
