@@ -141,36 +141,20 @@ class _Content extends StatelessWidget {
   }
 }
 
-class Header extends StatelessWidget {
-  Header({
+class ProjectMilestonesFilterButton extends StatelessWidget with ShowPopupMenuMixin {
+  const ProjectMilestonesFilterButton({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-  final controller = Get.find<MilestonesDataSource>();
+
+  final MilestonesDataSource controller;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              ProjectMilestonesSortButton(controller: controller),
-              Row(
-                children: <Widget>[
-                  InkWell(
-                    onTap: () async =>
-                        Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
-                    child: FiltersButton(controller: controller),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ],
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async =>
+          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
     );
   }
 }

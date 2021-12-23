@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart'
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
@@ -49,6 +50,7 @@ import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart'
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
+import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
   final ProjectTasksController projectTasksController;
@@ -133,6 +135,27 @@ class _Content extends StatelessWidget {
             );
           }()),
         ],
+      ),
+    );
+  }
+}
+
+class ProjectTasksFilterButton extends StatelessWidget with ShowPopupMenuMixin {
+  const ProjectTasksFilterButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProjectTasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+        const TasksFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
       ),
     );
   }

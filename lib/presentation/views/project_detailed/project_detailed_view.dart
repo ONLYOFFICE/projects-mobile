@@ -124,19 +124,27 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       appBar: StyledAppBar(
         actions: [
           Obx(() {
-            if (_activeIndex.value == ProjectDetailedTabs.tasks)
-              return ProjectTasksSortButton(
-                controller: projectTasksController,
+            if (_activeIndex.value == ProjectDetailedTabs.tasks &&
+                (projectTasksController.tasksList.isNotEmpty ||
+                    projectTasksController.filterController.hasFilters.value))
+              return Row(
+                children: [
+                  ProjectTasksFilterButton(controller: projectTasksController),
+                ],
               );
 
-            if (_activeIndex.value == ProjectDetailedTabs.milestones)
-              return ProjectMilestonesSortButton(controller: projectMilestonesController);
+            if (_activeIndex.value == ProjectDetailedTabs.milestones &&
+                (projectMilestonesController.itemList.isNotEmpty ||
+                    projectMilestonesController.filterController.hasFilters.value))
+              return Row(
+                children: [
+                  ProjectMilestonesFilterButton(controller: projectMilestonesController),
+                ],
+              );
 
             return const SizedBox();
           }),
-          if (!(projectController.projectData.security!['isInTeam'] as bool) ||
-              projectController.projectData.canDelete!)
-            _ProjectContextMenu(controller: projectController)
+          _ProjectContextMenu(controller: projectController)
         ],
         bottom: SizedBox(
           height: 40,
