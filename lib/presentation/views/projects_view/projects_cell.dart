@@ -51,23 +51,22 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
-  final ProjectDetailed item;
-  const ProjectCell({Key? key, required this.item}) : super(key: key);
+  final ProjectDetailed projectDetails;
+  const ProjectCell({Key? key, required this.projectDetails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final itemController = Get.find<ProjectCellController>();
-    itemController.setup(item);
+    final itemController = Get.find<ProjectCellController>()..setup(projectDetails);
 
     return SizedBox(
       height: 72,
       child: InkWell(
         onTap: () => Get.find<NavigationController>()
-            .to(ProjectDetailedView(), arguments: {'projectDetailed': itemController.projectData}),
+            .to(ProjectDetailedView(), arguments: {'projectDetailed': projectDetails}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (item.canEdit!)
+            if (projectDetails.canEdit!)
               InkWell(
                 onTap: () async =>
                     showsStatusesBS(context: context, itemController: itemController),
@@ -84,13 +83,12 @@ class ProjectCell extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _Content(
-                          item: item,
+                          item: projectDetails,
                           itemController: itemController,
                         ),
                         const Spacer(),
                         _Suffix(
-                          item: item,
-                          controller: itemController,
+                          projectDetailed: projectDetails,
                         ),
                       ],
                     ),
@@ -242,12 +240,10 @@ class _Content extends StatelessWidget {
 class _Suffix extends StatelessWidget {
   const _Suffix({
     Key? key,
-    required this.item,
-    required this.controller,
+    required this.projectDetailed,
   }) : super(key: key);
 
-  final ProjectDetailed? item;
-  final ProjectCellController controller;
+  final ProjectDetailed projectDetailed;
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +259,7 @@ class _Suffix extends StatelessWidget {
             SizedBox(
               width: 20,
               child: Text(
-                item!.taskCount.toString(),
+                projectDetailed.taskCount.toString(),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.projectCompletedTasks.copyWith(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),

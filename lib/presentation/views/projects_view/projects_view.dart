@@ -206,7 +206,8 @@ class ProjectsView extends StatelessWidget {
               paginationController: controller.paginationController,
               child: ListView.builder(
                 // controller: scrollController,
-                itemBuilder: (c, i) => ProjectCell(item: controller.paginationController.data[i]),
+                itemBuilder: (c, i) =>
+                    ProjectCell(projectDetails: controller.paginationController.data[i]),
                 itemCount: controller.paginationController.data.length,
               ),
             );

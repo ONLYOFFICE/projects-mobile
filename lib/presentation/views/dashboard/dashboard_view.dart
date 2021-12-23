@@ -357,7 +357,7 @@ class ProjectCardContent extends StatelessWidget {
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (c, i) => i < 2
-                    ? ProjectCell(item: controller.paginationController.data[i])
+                    ? ProjectCell(projectDetails: controller.paginationController.data[i])
                     : const SizedBox(),
                 itemCount: controller.paginationController.data.length > 2
                     ? 2

@@ -35,7 +35,6 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
@@ -55,30 +54,27 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
+  final ProjectTasksController projectTasksController;
 
-  const ProjectTaskScreen({Key? key, required this.projectDetailed}) : super(key: key);
+  const ProjectTaskScreen({Key? key, required this.projectTasksController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final taskStatusesController = Get.find<TaskStatusesController>();
-    taskStatusesController.getStatuses();
-
-    final controller = Get.find<ProjectTasksController>()..setup(projectDetailed!);
+    Get.find<TaskStatusesController>().getStatuses();
 
     return Stack(
       children: [
-        _Content(controller: controller),
+        _Content(controller: projectTasksController),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.only(right: 16, bottom: 24),
             child: Obx(
               () => Visibility(
-                visible: controller.fabIsVisible.value,
+                visible: projectTasksController.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>()
-                      .to(const NewTaskView(), arguments: {'projectDetailed': projectDetailed}),
+                  onPressed: () => Get.find<NavigationController>().to(const NewTaskView(),
+                      arguments: {'projectDetailed': projectTasksController.projectDetailed}),
                   child: AppIcon(
                     icon: SvgIcons.add_fab,
                     color: Get.theme.colors().onPrimarySurface,
@@ -109,7 +105,7 @@ class _Content extends StatelessWidget {
         children: [
           Visibility(
               visible:
-                  controller.itemList.isNotEmpty || controller.filterController.hasFilters.value,
+                  controller.tasksList.isNotEmpty || controller.filterController.hasFilters.value,
               child: Header(controller: controller)),
           (() {
             if (!controller.loaded.value) return const ListLoadingSkeleton();
@@ -119,7 +115,7 @@ class _Content extends StatelessWidget {
                 paginationController: controller.paginationController,
                 child: () {
                   if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
+                      controller.tasksList.isEmpty &&
                       !controller.filterController.hasFilters.value)
                     return Center(
                       child: EmptyScreen(
@@ -128,17 +124,16 @@ class _Content extends StatelessWidget {
                       ),
                     );
                   if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
+                      controller.tasksList.isEmpty &&
                       controller.filterController.hasFilters.value)
                     return Center(
                       child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
                     );
-                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                  if (controller.loaded.value && controller.tasksList.isNotEmpty)
                     return ListView.builder(
-                      itemBuilder: (c, i) =>
-                          TaskCell(task: controller.paginationController.data[i]),
+                      itemBuilder: (c, i) => TaskCell(task: controller.tasksList[i]),
                       itemExtent: 72,
-                      itemCount: controller.paginationController.data.length,
+                      itemCount: controller.tasksList.length,
                     );
                 }() as Widget,
               ),
