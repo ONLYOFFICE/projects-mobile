@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -79,6 +80,8 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   final projectController = Get.find<ProjectDetailsController>();
   final documentsController = Get.find<DocumentsController>();
   final projectTasksController = Get.find<ProjectTasksController>();
+  final projectMilestonesController = Get.find<MilestonesDataSource>();
+
   final projectDocumentsController = Get.find<DocumentsController>();
 
   final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
@@ -87,6 +90,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   void initState() {
     projectController.setup(projectDetailed);
     projectTasksController.setup(projectDetailed);
+    projectMilestonesController.setup(projectDetailed: projectDetailed);
     projectDocumentsController.setupFolder(
         folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
 
@@ -122,6 +126,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                 controller: projectTasksController,
               );
 
+            if (_activeIndex.value == ProjectDetailedTabs.milestones)
+              return ProjectMilestonesSortButton(controller: projectMilestonesController);
+
             return const SizedBox();
           }),
           if (!(projectController.projectData.security!['isInTeam'] as bool) ||
@@ -147,7 +154,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('milestones'),
                       currentTab: _activeIndex.value == 2,
-                      count: projectController.milestoneCount.value),
+                      count: projectMilestonesController.itemList.length),
                   CustomTab(
                       title: tr('discussions'),
                       currentTab: _activeIndex.value == 3,
@@ -169,7 +176,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         children: [
           ProjectOverview(projectController: projectController, tabController: _tabController),
           ProjectTaskScreen(projectTasksController: projectTasksController),
-          ProjectMilestonesScreen(projectDetailed: projectController.projectData),
+          ProjectMilestonesScreen(
+            controller: projectMilestonesController,
+          ),
           ProjectDiscussionsScreen(projectDetailed: projectController.projectData),
           EntityDocumentsView(
             folderId: projectController.projectData.projectFolder,
