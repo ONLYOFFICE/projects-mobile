@@ -107,7 +107,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         ...?actions,
         const SizedBox(
-          width: 10,
+          width: 5,
         )
       ],
       // ignore: prefer_if_null_operators

@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,6 +40,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -141,7 +144,7 @@ class _Content extends StatelessWidget {
   }
 }
 
-class ProjectMilestonesFilterButton extends StatelessWidget with ShowPopupMenuMixin {
+class ProjectMilestonesFilterButton extends StatelessWidget {
   const ProjectMilestonesFilterButton({
     Key? key,
     required this.controller,
@@ -167,6 +170,69 @@ class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixi
 
   final MilestonesDataSource controller;
 
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Obx(
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Obx(
+          () => (controller.sortController.currentSortOrder == 'ascending')
+              ? AppIcon(
+                  icon: SvgIcons.sorting_4_ascend,
+                  color: Get.theme.colors().primary,
+                  width: 20,
+                  height: 20,
+                )
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(math.pi),
+                  child: AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+void milestonesSortButtonOnPressed(MilestonesDataSource controller, BuildContext context) async {
+  Future<void> showPopupMenu(
+      {required BuildContext context,
+      required List<Widget> options,
+      required Offset offset}) async {
+    final items = options.map((e) => PopupMenuItem(child: e)).toList();
+
+    // calculate the menu position, offset dy: 50
+    // final offset = const Offset(0, 50);
+    final button = context.findRenderObject() as RenderBox;
+    final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+    final position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(
+          offset,
+          ancestor: overlay,
+        ),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero) + offset,
+          ancestor: overlay,
+        ),
+      ),
+      Offset.zero & overlay.size,
+    );
+
+    await showMenu(context: context, position: position, items: items);
+  }
+
   List<SortTile> _getSortTile() {
     return [
       SortTile(sortParameter: 'deadline', sortController: controller.sortController),
@@ -175,33 +241,21 @@ class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixi
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => PlatformIconButton(
-        icon: controller.sortController.isSortAscending.value == true
-            ? Icon(PlatformIcons(context).upArrow)
-            : Icon(PlatformIcons(context).downArrow),
-        onPressed: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            final options = Column(
-              children: [
-                const SizedBox(height: 14.5),
-                const Divider(height: 9, thickness: 1),
-                ..._getSortTile(),
-                const SizedBox(height: 20)
-              ],
-            );
-            await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-          } else {
-            await showPopupMenu(
-              context: context,
-              options: _getSortTile(),
-              offset: const Offset(0, 30),
-            );
-          }
-        },
-      ),
+  if (Get.find<PlatformController>().isMobile) {
+    final options = Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        ..._getSortTile(),
+        const SizedBox(height: 20)
+      ],
+    );
+    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
+  } else {
+    await showPopupMenu(
+      context: context,
+      options: _getSortTile(),
+      offset: const Offset(0, 30),
     );
   }
 }

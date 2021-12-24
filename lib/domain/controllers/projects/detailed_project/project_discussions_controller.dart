@@ -84,7 +84,7 @@ class ProjectDiscussionsController extends GetxController {
     super.onClose();
   }
 
-  void setup({required ProjectDetailed projectDetailed}) async {
+  Future<void> setup(ProjectDetailed projectDetailed) async {
     _projectDetailed = projectDetailed;
     projectId = projectDetailed.id;
     projectTitle = projectDetailed.title;

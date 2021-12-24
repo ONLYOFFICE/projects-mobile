@@ -35,19 +35,16 @@ import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
@@ -56,13 +53,6 @@ import 'package:projects/presentation/views/project_detailed/project_milestones_
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
-
-class ProjectDetailedView extends StatefulWidget {
-  ProjectDetailedView({Key? key}) : super(key: key);
-
-  @override
-  _ProjectDetailedViewState createState() => _ProjectDetailedViewState();
-}
 
 class ProjectDetailedTabs {
   static const overview = 0;
@@ -73,29 +63,33 @@ class ProjectDetailedTabs {
   static const team = 5;
 }
 
+class PopupMenuItemValue {
+  static const editProject = 'editProject';
+  static const followProject = 'followProject';
+  static const deleteProject = 'deleteProject';
+  static const sortTasks = 'sortTasks';
+  static const sortMilestones = 'sortMilestones';
+  static const sortDocuments = 'sortDocuments';
+}
+
+class ProjectDetailedView extends StatefulWidget {
+  ProjectDetailedView({Key? key}) : super(key: key);
+
+  @override
+  _ProjectDetailedViewState createState() => _ProjectDetailedViewState();
+}
+
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
+
   final _activeIndex = 0.obs;
 
   final projectController = Get.find<ProjectDetailsController>();
-  final documentsController = Get.find<DocumentsController>();
-  final projectTasksController = Get.find<ProjectTasksController>();
-  final projectMilestonesController = Get.find<MilestonesDataSource>();
-  final projectDiscussionsController =
-      Get.put<ProjectDiscussionsController>(ProjectDiscussionsController());
-  final projectDocumentsController = Get.find<DocumentsController>();
-
-  final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
 
   @override
   void initState() {
-    projectController.setup(projectDetailed);
-    projectTasksController.setup(projectDetailed);
-    projectMilestonesController.setup(projectDetailed: projectDetailed);
-    projectDiscussionsController.setup(projectDetailed: projectDetailed);
-    projectDocumentsController.setupFolder(
-        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
+    projectController.setup(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     _tabController = TabController(
       vsync: this,
@@ -125,26 +119,39 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         actions: [
           Obx(() {
             if (_activeIndex.value == ProjectDetailedTabs.tasks &&
-                (projectTasksController.tasksList.isNotEmpty ||
-                    projectTasksController.filterController.hasFilters.value))
+                (projectController.projectTasksController.tasksList.isNotEmpty ||
+                    projectController.projectTasksController.filterController.hasFilters.value))
               return Row(
                 children: [
-                  ProjectTasksFilterButton(controller: projectTasksController),
+                  PlatformIconButton(
+                    icon: Icon(PlatformIcons(context).search),
+                  ),
+                  ProjectTasksFilterButton(controller: projectController.projectTasksController),
                 ],
               );
 
             if (_activeIndex.value == ProjectDetailedTabs.milestones &&
-                (projectMilestonesController.itemList.isNotEmpty ||
-                    projectMilestonesController.filterController.hasFilters.value))
+                (projectController.projectMilestonesController.itemList.isNotEmpty ||
+                    projectController
+                        .projectMilestonesController.filterController.hasFilters.value))
               return Row(
                 children: [
-                  ProjectMilestonesFilterButton(controller: projectMilestonesController),
+                  PlatformIconButton(
+                    icon: Icon(PlatformIcons(context).search),
+                  ),
+                  ProjectMilestonesFilterButton(
+                      controller: projectController.projectMilestonesController),
                 ],
               );
 
             return const SizedBox();
           }),
-          _ProjectContextMenu(controller: projectController)
+          Obx(
+            () => _ProjectContextMenu(
+              controller: projectController,
+              index: _activeIndex.value,
+            ),
+          )
         ],
         bottom: SizedBox(
           height: 40,
@@ -160,23 +167,23 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   Tab(text: tr('overview')),
                   CustomTab(
                       title: tr('tasks'),
-                      currentTab: _activeIndex.value == 1,
-                      count: projectTasksController.tasksList.length),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.tasks,
+                      count: projectController.projectTasksController.tasksList.length),
                   CustomTab(
                       title: tr('milestones'),
-                      currentTab: _activeIndex.value == 2,
-                      count: projectMilestonesController.itemList.length),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.milestones,
+                      count: projectController.projectMilestonesController.itemList.length),
                   CustomTab(
                       title: tr('discussions'),
-                      currentTab: _activeIndex.value == 3,
-                      count: projectDiscussionsController.itemList.length),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.discussions,
+                      count: projectController.projectDiscussionsController.itemList.length),
                   CustomTab(
                       title: tr('documents'),
-                      currentTab: _activeIndex.value == 4,
-                      count: projectDocumentsController.filesCount.value),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.documents,
+                      count: projectController.projectDocumentsController.filesCount.value),
                   CustomTab(
                       title: tr('team'),
-                      currentTab: _activeIndex.value == 5,
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.team,
                       count: projectController.projectData.participantCount),
                 ]),
           ),
@@ -186,15 +193,15 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         controller: _tabController,
         children: [
           ProjectOverview(projectController: projectController, tabController: _tabController),
-          ProjectTaskScreen(projectTasksController: projectTasksController),
+          ProjectTaskScreen(projectTasksController: projectController.projectTasksController),
           ProjectMilestonesScreen(
-            controller: projectMilestonesController,
+            controller: projectController.projectMilestonesController,
           ),
-          ProjectDiscussionsScreen(controller: projectDiscussionsController),
+          ProjectDiscussionsScreen(controller: projectController.projectDiscussionsController),
           EntityDocumentsView(
             folderId: projectController.projectData.projectFolder,
             folderName: projectController.projectData.title,
-            documentsController: projectDocumentsController,
+            documentsController: projectController.projectDocumentsController,
           ),
           ProjectTeamView(
               projectDetailed: projectController.projectData,
@@ -207,26 +214,44 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
 class _ProjectContextMenu extends StatelessWidget {
   final ProjectDetailsController controller;
+  final int index;
 
-  const _ProjectContextMenu({Key? key, required this.controller}) : super(key: key);
+  const _ProjectContextMenu({Key? key, required this.controller, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
       icon: Icon(PlatformIcons(context).ellipsis, size: 26),
-      offset: const Offset(0, 25),
-      onSelected: (dynamic value) => _onSelected(value, controller, context),
+      //offset: const Offset(0, 25),
+      onSelected: (String value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
         return [
+          if (index == ProjectDetailedTabs.tasks &&
+              (controller.projectTasksController.tasksList.isNotEmpty ||
+                  controller.projectTasksController.filterController.hasFilters.value))
+            PopupMenuItem(
+                value: PopupMenuItemValue.sortTasks,
+                child: ProjectTasksSortButton(
+                  controller: controller.projectTasksController,
+                )),
+          if (index == ProjectDetailedTabs.milestones &&
+              (controller.projectMilestonesController.itemList.isNotEmpty ||
+                  controller.projectMilestonesController.filterController.hasFilters.value))
+            PopupMenuItem(
+                value: PopupMenuItemValue.sortMilestones,
+                child: ProjectMilestonesSortButton(
+                  controller: controller.projectMilestonesController,
+                )),
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           if (controller.projectData.canEdit!)
             PopupMenuItem(
-              value: 'edit',
+              value: PopupMenuItemValue.editProject,
               child: Text(tr('editProject')),
             ),
           if (!(controller.projectData.security?['isInTeam'] as bool))
             PopupMenuItem(
-              value: 'follow',
+              value: PopupMenuItemValue.followProject,
               child: controller.projectData.isFollow as bool
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
@@ -235,7 +260,7 @@ class _ProjectContextMenu extends StatelessWidget {
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
-              value: 'delete',
+              value: PopupMenuItemValue.deleteProject,
               child: Text(
                 tr('delete'),
                 style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
@@ -247,23 +272,34 @@ class _ProjectContextMenu extends StatelessWidget {
   }
 }
 
-Future<void> _onSelected(value, controller, BuildContext context) async {
+Future<void> _onSelected(
+    String value, ProjectDetailsController controller, BuildContext context) async {
   switch (value) {
     case 'copyLink':
-      controller.copyLink();
+      await controller.copyLink();
       break;
 
-    case 'edit':
-      Get.find<NavigationController>().to(
-          EditProjectView(projectDetailed: controller.projectData as ProjectDetailed),
+    case PopupMenuItemValue.sortTasks:
+      taskSortButtonOnPressed(controller.projectTasksController, context);
+      break;
+
+    case PopupMenuItemValue.sortMilestones:
+      milestonesSortButtonOnPressed(controller.projectMilestonesController, context);
+      break;
+
+    case PopupMenuItemValue.sortDocuments:
+      break;
+
+    case PopupMenuItemValue.editProject:
+      Get.find<NavigationController>().to(EditProjectView(projectDetailed: controller.projectData),
           arguments: {'projectDetailed': controller.projectData});
       break;
 
-    case 'follow':
-      controller.followProject();
+    case PopupMenuItemValue.followProject:
+      await controller.followProject();
       break;
 
-    case 'delete':
+    case PopupMenuItemValue.deleteProject:
       await Get.dialog(StyledAlertDialog(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),

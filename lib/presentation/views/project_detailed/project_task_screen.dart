@@ -29,6 +29,7 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +38,8 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -47,7 +48,6 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
@@ -140,7 +140,7 @@ class _Content extends StatelessWidget {
   }
 }
 
-class ProjectTasksFilterButton extends StatelessWidget with ShowPopupMenuMixin {
+class ProjectTasksFilterButton extends StatelessWidget {
   const ProjectTasksFilterButton({
     Key? key,
     required this.controller,
@@ -161,13 +161,76 @@ class ProjectTasksFilterButton extends StatelessWidget with ShowPopupMenuMixin {
   }
 }
 
-class ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
+class ProjectTasksSortButton extends StatelessWidget {
   const ProjectTasksSortButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
   final ProjectTasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Obx(
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Obx(
+          () => (controller.sortController.currentSortOrder == 'ascending')
+              ? AppIcon(
+                  icon: SvgIcons.sorting_4_ascend,
+                  color: Get.theme.colors().primary,
+                  width: 20,
+                  height: 20,
+                )
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(math.pi),
+                  child: AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+void taskSortButtonOnPressed(ProjectTasksController controller, BuildContext context) async {
+  Future<void> showPopupMenu(
+      {required BuildContext context,
+      required List<Widget> options,
+      required Offset offset}) async {
+    final items = options.map((e) => PopupMenuItem(child: e)).toList();
+
+    // calculate the menu position, offset dy: 50
+    // final offset = const Offset(0, 50);
+    final button = context.findRenderObject() as RenderBox;
+    final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+    final position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(
+          offset,
+          ancestor: overlay,
+        ),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero) + offset,
+          ancestor: overlay,
+        ),
+      ),
+      Offset.zero & overlay.size,
+    );
+
+    await showMenu(context: context, position: position, items: items);
+  }
 
   List<SortTile> _getSortTile() {
     return [
@@ -180,33 +243,21 @@ class ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () => PlatformIconButton(
-        icon: controller.sortController.isSortAscending.value == true
-            ? Icon(PlatformIcons(context).upArrow)
-            : Icon(PlatformIcons(context).downArrow),
-        onPressed: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            final options = Column(
-              children: [
-                const SizedBox(height: 14.5),
-                const Divider(height: 9, thickness: 1),
-                ..._getSortTile(),
-                const SizedBox(height: 20)
-              ],
-            );
-            await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-          } else {
-            await showPopupMenu(
-              context: context,
-              options: _getSortTile(),
-              offset: const Offset(0, 30),
-            );
-          }
-        },
-      ),
+  if (Get.find<PlatformController>().isMobile) {
+    final options = Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        ..._getSortTile(),
+        const SizedBox(height: 20)
+      ],
+    );
+    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
+  } else {
+    await showPopupMenu(
+      context: context,
+      options: _getSortTile(),
+      offset: const Offset(0, 30),
     );
   }
 }

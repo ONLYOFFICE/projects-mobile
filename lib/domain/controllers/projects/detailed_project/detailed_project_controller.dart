@@ -36,16 +36,17 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
-import 'package:projects/data/services/files_service.dart';
-import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
@@ -55,7 +56,12 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 
 class ProjectDetailsController extends BaseProjectEditorController {
   final ProjectService _projectService = locator<ProjectService>();
-  final FilesService _docApi = locator<FilesService>();
+
+  final projectTasksController = Get.find<ProjectTasksController>();
+  final projectMilestonesController = Get.find<MilestonesDataSource>();
+  final projectDiscussionsController =
+      Get.put<ProjectDiscussionsController>(ProjectDiscussionsController());
+  final projectDocumentsController = Get.find<DocumentsController>();
 
   RxBool loaded = true.obs;
 
@@ -67,10 +73,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   RxString creationDateText = ''.obs;
 
-  RxInt tasksCount = 0.obs;
-  RxInt docsCount = 0.obs;
-  RxInt milestoneCount = 0.obs;
-
   bool markedToDelete = false;
 
   @override
@@ -78,8 +80,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
   ProjectDetailed _projectDetailed = ProjectDetailed();
 
   late StreamSubscription _refreshProjectsSubscription;
-  late StreamSubscription _refreshDetailsSubscription;
-  late StreamSubscription _refreshMilestonesSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -99,39 +99,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
         if (data.any((elem) => elem == _projectDetailed.id || elem == 'all') as bool) refreshData();
       },
     );
-
-    _refreshDetailsSubscription = locator<EventHub>().on(
-      'needToRefreshDetails',
-      (dynamic data) {
-        if (markedToDelete) {
-          _refreshDetailsSubscription.cancel();
-          return;
-        }
-
-        if (data.any((elem) => elem == _projectDetailed.id || elem == 'all') as bool)
-          refreshProjectDetails();
-      },
-    );
-
-    _refreshMilestonesSubscription = locator<EventHub>().on(
-      'needToRefreshMilestones',
-      (dynamic data) {
-        if (markedToDelete) {
-          _refreshMilestonesSubscription.cancel();
-          return;
-        }
-
-        if (data.any((elem) => elem == _projectDetailed.id || elem == 'all') as bool)
-          refreshProjectMilestones();
-      },
-    );
   }
 
   @override
   void onClose() {
     _refreshProjectsSubscription.cancel();
-    _refreshDetailsSubscription.cancel();
-    _refreshMilestonesSubscription.cancel();
     super.onClose();
   }
 
@@ -139,7 +111,9 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<bool> refreshProjectDetails() async {
+  Future<bool> setup(ProjectDetailed projectDetailed) async {
+    _projectDetailed = projectDetailed;
+
     final response = await _projectService.getProjectById(projectId: _projectDetailed.id!);
     if (response != null) _projectDetailed = response;
 
@@ -149,36 +123,16 @@ class ProjectDetailsController extends BaseProjectEditorController {
       tagsText.value = response.tags!.join(', ');
     }
 
-    tasksCount.value = _projectDetailed.taskCountTotal!;
-
     final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
     creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.created!));
 
-    return Future.value(true);
-  }
-
-  Future<bool> refreshProjectMilestones() async {
-    final response = await locator<MilestoneService>()
-        .milestonesByFilter(projectId: _projectDetailed.id.toString());
-
-    if (response == null) return Future.value(false);
-
-    milestoneCount.value = response.length;
+    await projectTasksController.setup(projectDetailed);
+    await projectMilestonesController.setup(projectDetailed: projectDetailed);
+    await projectDiscussionsController.setup(projectDetailed);
+    await projectDocumentsController.setupFolder(
+        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
 
     return Future.value(true);
-  }
-
-  Future<void> setup(ProjectDetailed projectDetailed) async {
-    _projectDetailed = projectDetailed;
-
-    await refreshProjectDetails();
-    await refreshProjectMilestones();
-
-    await _docApi.getFilesByParams(folderId: _projectDetailed.projectFolder).then(
-      (value) {
-        if (value != null) docsCount.value = value.files!.length;
-      },
-    );
   }
 
   Future<void> fillProjectInfo() async {
@@ -198,8 +152,6 @@ class ProjectDetailsController extends BaseProjectEditorController {
     projectTitleText.value = _projectDetailed.title!;
     descriptionText.value = _projectDetailed.description!;
     managerText.value = _projectDetailed.responsible!.displayName!;
-
-    milestoneCount.value = _projectDetailed.milestoneCount!;
   }
 
   Future<void> refreshData() async {
