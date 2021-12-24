@@ -46,29 +46,29 @@ class ProjectsWithPresets {
 
   Lock lock = Lock();
 
-  ProjectsController? get myProjectsController {
+  ProjectsController get myProjectsController {
     _myProjectsController ?? _setupMyProjects();
-    return _myProjectsController;
+    return _myProjectsController!;
   }
 
-  ProjectsController? get folowedProjectsController {
+  ProjectsController get folowedProjectsController {
     _folowedProjectsController ?? _setupMyFolowedProjects();
-    return _folowedProjectsController;
+    return _folowedProjectsController!;
   }
 
-  ProjectsController? get activeProjectsController {
+  ProjectsController get activeProjectsController {
     _activeProjectsController ?? _setupActiveProjects();
-    return _activeProjectsController;
+    return _activeProjectsController!;
   }
 
-  ProjectsController? get myMembershipProjectController {
+  ProjectsController get myMembershipProjectController {
     _myMembershipProjectController ?? _setupMyMembershipProjects();
-    return _myMembershipProjectController;
+    return _myMembershipProjectController!;
   }
 
-  ProjectsController? get myManagedProjectController {
+  ProjectsController get myManagedProjectController {
     _myManagedProjectController ?? _setupMyManagedProjects();
-    return _myManagedProjectController;
+    return _myManagedProjectController!;
   }
 
   Future<void> _setupMyProjects() async {

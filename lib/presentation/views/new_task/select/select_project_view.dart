@@ -123,7 +123,7 @@ class SelectProjectView extends StatelessWidget {
             searchController.loaded.value == true) {
           return Column(children: const [NothingFound()]);
         }
-        if (projectsController!.loaded.value == true &&
+        if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
           return PaginationListView(
             paginationController: projectsController.paginationController,
@@ -133,7 +133,7 @@ class SelectProjectView extends StatelessWidget {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
               itemBuilder: (c, i) => _ProjectCell(
-                  item: projectsController!.paginationController.data[i], controller: controller),
+                  item: projectsController.paginationController.data[i], controller: controller),
             ),
           );
         }
