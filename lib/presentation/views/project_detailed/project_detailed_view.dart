@@ -125,6 +125,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                 children: [
                   PlatformIconButton(
                     icon: Icon(PlatformIcons(context).search),
+                    onPressed: projectController.projectTasksController.showSearch,
                   ),
                   ProjectTasksFilterButton(controller: projectController.projectTasksController),
                 ],

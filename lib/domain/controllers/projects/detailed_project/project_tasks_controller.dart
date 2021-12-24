@@ -36,11 +36,13 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 class ProjectTasksController extends GetxController {
   final TaskService _api = locator<TaskService>();
@@ -82,6 +84,9 @@ class ProjectTasksController extends GetxController {
     _refreshTasksSubscription.cancel();
     super.dispose();
   }
+
+  void showSearch() =>
+      Get.find<NavigationController>().to(TasksSearchScreen(projectId: projectDetailed.id));
 
   Future<void> loadTasks() async {
     loaded.value = false;

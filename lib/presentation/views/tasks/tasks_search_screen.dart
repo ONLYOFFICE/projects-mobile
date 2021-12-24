@@ -41,11 +41,12 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 class TasksSearchScreen extends StatelessWidget {
-  const TasksSearchScreen({Key? key}) : super(key: key);
+  final int? projectId;
+  const TasksSearchScreen({Key? key, this.projectId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TasksSearchController());
+    final controller = Get.put(TasksSearchController(projectId: projectId));
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
