@@ -161,7 +161,7 @@ packages:
       name: chewie
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.2"
+    version: "1.1.0"
   cli_util:
     dependency: transitive
     description:
@@ -884,13 +884,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
-  nested:
-    dependency: transitive
-    description:
-      name: nested
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   nm:
     dependency: transitive
     description:
@@ -1045,13 +1038,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.2.0"
-  provider:
-    dependency: transitive
-    description:
-      name: provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "5.0.0"
   pub_semver:
     dependency: transitive
     description:

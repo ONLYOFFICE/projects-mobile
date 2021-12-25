@@ -46,13 +46,16 @@ class AccountUtils(private val context: Context) {
         return uri?.toString() ?: ""
     }
 
-    fun updateAccount(id: String, contentValues: ContentValues? = null, bundle: Bundle? = null) {
+    fun updateAccount(id: String, data: String) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues, bundle)
+             val bundle: Bundle = getBundle(data)
+            context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
         } else {
+            val contentValues: ContentValues = getContentValues(data)
             context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues, null, null)
         }
     }
+
 
     fun deleteAccount(id: String? = null, data: String? = null) {
         if (id != null) {

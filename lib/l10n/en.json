@@ -453,11 +453,12 @@
 	"taskStatusOpen": "Open",
 	"taskStatusClosed": "Closed",
 	"searchMilestone": "Search for milestone...",
-
 	"privacyAndTermsFooter": {
 		"privacyPolicyWithLink": "Privacy Policy",
 		"termsOfServiceWithLink": "Terms of Service",
 		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
 	},
-"tfaWrongCode": "Wrong code!"
+	"removeAccountTitle": "Remove account?",
+	"removeAccountText": "You will need to re-enter your portal address, email and password next time you want to log in.",
+	"tfaWrongCode": "Wrong code!"
 }

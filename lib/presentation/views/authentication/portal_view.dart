@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
@@ -51,9 +50,11 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.isRegistered<AccountManagerController>()
-        ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController()).setup();
+    if (Get.isRegistered<AccountManagerController>()) {
+      Get.find<AccountManagerController>();
+    } else {
+      Get.put(AccountManagerController()).setup();
+    }
 
     return Scaffold(
       body: SingleChildScrollView(

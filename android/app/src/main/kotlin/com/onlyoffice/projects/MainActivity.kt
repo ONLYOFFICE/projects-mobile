@@ -33,14 +33,15 @@ class MainActivity : FlutterFragmentActivity() {
             when (call.method) {
                 "getAccounts" -> getAccounts(result)
                 "addAccount" -> addAccount(call, result)
-
+                "deleteAccount" -> deleteAccount(call, result)
+                
                 else -> result.notImplemented()
             }
         }
     }
 
     private fun getAccounts(result: Result) {
-         val accounts = AccountUtils(this.applicationContext).getAccounts()
+         val accounts = this.applicationContext.accountUtils!!.getAccounts()
          val list = mutableListOf<HashMap<String, String>>()
          for (account in accounts) {
              list.add(hashMapOf(
@@ -55,12 +56,27 @@ class MainActivity : FlutterFragmentActivity() {
          var accountId = call.argument<String>("accountId")!!
          var accountData = call.argument<String>("accountData")!!
 
-        //  val account = AccountUtils(this.applicationContext).addAccount(accountId, accountData)
-
-         val account = AccountUtils(this.applicationContext).addAccount("7cc0a8f5-8aca-4f62-9a57-64fb94d2bfda", "{\"id\":\"7cc0a8f5-8aca-4f62-9a57-64fb94d2bfda\",\"login\":\"Blocked.Blocked@onlyoffice.io\",\"portal\":\"alexanderyuzhin.teamlab.info/\",\"serverVersion\":\"\",\"scheme\":\"\",\"name\":\"Blocked Blocked\",\"provider\":\"\",\"avatarUrl\":\"https://dylnrgbh910l3.cloudfront.net/studio/tag/i11.6.0.559/skins/default/images/default_user_photo_size_82-82.png?_=1240520617\",\"isSslCiphers\":\"\",\"isSslState\":\"\",\"isOnline\":\"\",\"isWebDav\":\"\",\"isOneDrive\":\"\",\"isDropbox\":\"\",\"isAdmin\":\"\",\"isVisitor\":\"\",\"token\":\"iqVKPV5WHDCriPTdIIp8oWyAzvl+KVfx3sGmldq8ISHk8dKaGVxDPoYLHPCT/W5+TFEi/ZbHtsiR4muX9DJ5VVDICwpVdj0eSR3QPXHhtPicSqjt1eAr0rOGZ7HulqNnJ22rHw0CsjgXvEMQUzuBuuVIa72pHYgLnYeFXI1cWmo=\",\"password\":\"\",\"expires\":\"2021-12-27T18:43:41.3673166Z\"}")
+         val account =  this.applicationContext.accountUtils!!.addAccount(accountId, accountData)
 
          val wasAdded = !account.isNullOrEmpty()
          result.success(wasAdded)
+    }
+
+    private fun deleteAccount(call: MethodCall, result: Result) {
+         var accountId = call.argument<String>("accountId")!!
+        
+        this.applicationContext.accountUtils!!.deleteAccount(accountId)
+         
+         result.success(true)
+    }
+
+    private fun updateAccount(call: MethodCall, result: Result) {
+         var accountId = call.argument<String>("accountId")!!
+         var accountData = call.argument<String>("accountData")!!
+
+          this.applicationContext.accountUtils!!.updateAccount(accountId, accountData)
+         
+         result.success(true)
     }
 }
 

@@ -39,14 +39,14 @@ class AccountData {
   String name = '';
   String provider = '';
   String avatarUrl = '';
-  String isSslCiphers = '';
-  String isSslState = '';
-  String isOnline = '';
-  String isWebDav = '';
-  String isOneDrive = '';
-  String isDropbox = '';
-  String isAdmin = '';
-  String isVisitor = '';
+  bool isSslCiphers = false;
+  bool isSslState = false;
+  bool isOnline = false;
+  bool isWebDav = false;
+  bool isOneDrive = false;
+  bool isDropbox = false;
+  bool isAdmin = false;
+  bool isVisitor = false;
   String token = '';
   String password = '';
   String expires = '';
@@ -60,14 +60,14 @@ class AccountData {
     this.name = '',
     this.provider = '',
     this.avatarUrl = '',
-    this.isSslCiphers = '',
-    this.isSslState = '',
-    this.isOnline = '',
-    this.isWebDav = '',
-    this.isOneDrive = '',
-    this.isDropbox = '',
-    this.isAdmin = '',
-    this.isVisitor = '',
+    this.isSslCiphers = false,
+    this.isSslState = false,
+    this.isOnline = false,
+    this.isWebDav = false,
+    this.isOneDrive = false,
+    this.isDropbox = false,
+    this.isAdmin = false,
+    this.isVisitor = false,
     this.token = '',
     this.password = '',
     this.expires = '',
@@ -82,18 +82,18 @@ class AccountData {
     name = json['name'] as String;
     provider = json['provider'] as String;
     avatarUrl = json['avatarUrl'] as String;
-    isSslCiphers = json['isSslCiphers'] as String;
-    isSslState = json['isSslState'] as String;
-    isOnline = json['isOnline'] as String;
-    isWebDav = json['isWebDav'] as String;
-    isOneDrive = json['isOneDrive'] as String;
-    isDropbox = json['isDropbox'] as String;
-    isAdmin = json['isAdmin'] as String;
-    isVisitor = json['isVisitor'] as String;
+    isSslCiphers = json['isSslCiphers'] as String == '1';
+    isSslState = json['isSslState'] as String == '1';
+    isOnline = json['isOnline'] as String == '1';
+    isWebDav = json['isWebDav'] as String == '1';
+    isOneDrive = json['isOneDrive'] as String == '1';
+    isDropbox = json['isDropbox'] as String == '1';
+    isAdmin = json['isAdmin'] as String == '1';
+    isVisitor = json['isVisitor'] as String == '1';
     token = json['token'] as String;
     password = json['password'] as String;
 
-    // expires = json['expires'] as String;
+    expires = json['expires'] as String;
   }
 
   Map<String, dynamic> toJson() {

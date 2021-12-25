@@ -46,10 +46,10 @@ class AccountManagerController extends GetxController {
   static const tokenType = 'com.onlyoffice.auth';
   static const key = 'account_data';
 
-  List<AccountData> accounts = <AccountData>[];
+  RxList<AccountData> accounts = <AccountData>[].obs;
 
   Future setup() async {
-    accounts = await fetchAccounts();
+    accounts.value = await fetchAccounts();
 
     if (accounts.isNotEmpty) {
       await showBarModalBottomSheet(
@@ -61,45 +61,59 @@ class AccountManagerController extends GetxController {
 
   Future<void> addAccount({required String tokenString, required String expires}) async {
     try {
-      await AccountProvider.addAccount(accountData: '', accountId: '');
-      // final portalInfo = Get.find<PortalInfoController>();
-      // await portalInfo.setup();
-      // await Get.find<UserController>().getUserInfo();
-      // final user = Get.find<UserController>().user;
+      final portalInfo = Get.find<PortalInfoController>();
+      await portalInfo.setup();
+      await Get.find<UserController>().getUserInfo();
+      final user = Get.find<UserController>().user;
+      final portalName = Get.find<PortalInfoController>().portalName!;
+      final portalUri = Get.find<PortalInfoController>().portalUri!;
+      final avatarUrl = user!.avatar!.contains('http') ? user.avatar : '$portalUri${user.avatar}';
 
-      // final accountData = AccountData(
-      //     token: tokenString,
-      //     portal: Get.find<PortalInfoController>().portalName!,
-      //     login: user!.email!,
-      //     expires: expires,
-      //     name: user.displayName!,
-      //     id: user.id!,
-      //     avatarUrl: user.avatar!);
-      // await AccountProvider.addAccount(
-      //     accountData: json.encode(accountData.toJson()), accountId: user.id!);
+      final accountData = AccountData(
+          token: tokenString,
+          portal: portalName,
+          login: user.email!,
+          expires: expires,
+          name: user.displayName!,
+          id: user.id!,
+          scheme: Uri.parse(portalUri).scheme,
+          avatarUrl: avatarUrl!);
+      await AccountProvider.addAccount(
+          accountData: json.encode(accountData.toJson()), accountId: user.id!);
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
     }
   }
-}
 
-Future<List<AccountData>> fetchAccounts() async {
-  final accountsList = <AccountData>[];
+  Future<List<AccountData>> fetchAccounts() async {
+    final accountsList = <AccountData>[];
+    try {
+      final accounts = await AccountProvider.getAccounts();
 
-  try {
-    final accounts = await AccountProvider.getAccounts();
+      for (final account in accounts) {
+        final dynamic responseJson = json.decode(account);
+        final accountData = AccountData.fromJson(responseJson as Map<String, dynamic>);
 
-    for (final account in accounts) {
-      final dynamic responseJson = json.decode(account);
-      final accountData = AccountData.fromJson(responseJson as Map<String, dynamic>);
-
-      accountsList.add(accountData);
+        accountsList.add(accountData);
+      }
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrint(s.toString());
     }
-  } catch (e, s) {
-    debugPrint(e.toString());
-    debugPrint(s.toString());
+
+    return accountsList;
   }
 
-  return accountsList;
+  Future<void> deleteAccounts({String accountId = ''}) async {
+    try {
+      final deleted = await AccountProvider.deleteAccount(accountId: accountId);
+      if (deleted!) {
+        accounts.value = await fetchAccounts();
+      }
+    } catch (e, s) {
+      debugPrint(e.toString());
+      debugPrint(s.toString());
+    }
+  }
 }

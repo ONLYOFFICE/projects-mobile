@@ -32,7 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/auth/account_user_controller.dart';
+import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
 
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -43,7 +43,7 @@ class AccountTile extends StatelessWidget {
     @required this.userController,
   }) : super(key: key);
 
-  final AccountUserController? userController;
+  final AccountTileController? userController;
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +92,7 @@ class AccountTile extends StatelessWidget {
                                 style: TextStyleHelper.subtitle1(),
                               ),
                               Text(
-                                userController!.portal!
-                                    .replaceAll(' ', '\u00A0'),
+                                userController!.portal!.replaceAll(' ', '\u00A0'),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyleHelper.body2(
                                   color: Get.theme.colors().onBackground,
@@ -110,9 +109,12 @@ class AccountTile extends StatelessWidget {
             ),
             SizedBox(
               width: 72,
-              child: Icon(
-                Icons.close,
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+              child: InkWell(
+                onTap: userController!.deleteAccount,
+                child: Icon(
+                  Icons.close,
+                  color: Get.theme.colors().onSurface.withOpacity(0.6),
+                ),
               ),
             ),
           ],

@@ -33,7 +33,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
-import 'package:projects/domain/controllers/auth/account_user_controller.dart';
+import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_tile.dart';
@@ -62,18 +62,20 @@ class AccountManagerView extends StatelessWidget {
           const SizedBox(height: 18),
           const Divider(height: 1, thickness: 1),
           const SizedBox(height: 20),
-          ListView.builder(
-            physics: const ScrollPhysics(),
-            shrinkWrap: true,
-            itemBuilder: (c, i) => AccountTile(
-              userController: AccountUserController(accountData: controller.accounts[i]),
+          Obx(
+            () => ListView.builder(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (c, i) => AccountTile(
+                userController: AccountTileController(accountData: controller.accounts.value[i]),
+              ),
+              itemExtent: 65,
+              itemCount: controller.accounts.value.length,
             ),
-            itemExtent: 65,
-            itemCount: controller.accounts.length,
           ),
           const SizedBox(height: 34),
           InkWell(
-            onTap: () => controller.addAccount(tokenString: '', expires: ''),
+            onTap: Get.back, //() => controller.addAccount(tokenString: '', expires: ''),
             child: SizedBox(
               height: 48,
               child: Row(
