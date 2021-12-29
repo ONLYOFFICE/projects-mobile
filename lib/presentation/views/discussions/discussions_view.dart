@@ -40,6 +40,7 @@ import 'package:projects/domain/controllers/discussions/discussions_filter_contr
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -50,7 +51,6 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
-import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
   const PortalDiscussionsView({Key? key}) : super(key: key);
@@ -62,22 +62,65 @@ class PortalDiscussionsView extends StatelessWidget {
       controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
     });
 
-    final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
-
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            titleHeight: 101,
-            bottomHeight: 0,
-            showBackButton: false,
-            titleText: tr('discussions'),
-            elevation: value,
+      // appBar: PreferredSize(
+      //   preferredSize: const Size(double.infinity, 101),
+      //   child: ValueListenableBuilder(
+      //     valueListenable: elevation,
+      //     builder: (_, double value, __) => StyledAppBar(
+      //       titleHeight: 101,
+      //       bottomHeight: 0,
+      //       showBackButton: false,
+      //       titleText: tr('discussions'),
+      //       elevation: value,
+      //       actions: [
+      //         PlatformIconButton(
+      //           icon: AppIcon(
+      //             width: 24,
+      //             height: 24,
+      //             icon: SvgIcons.search,
+      //             color: Get.theme.colors().primary,
+      //           ),
+      //           onPressed: controller.showSearch,
+      //           // onPressed: () => controller.showSearch(),
+      //         ),
+      //         PlatformIconButton(
+      //             icon: FiltersButton(controller: controller),
+      //             onPressed: () async => Get.find<NavigationController>().toScreen(
+      //                 const DiscussionsFilterScreen(),
+      //                 preventDuplicates: false,
+      //                 arguments: {'filterController': controller.filterController})),
+      //         const SizedBox(width: 3),
+      //       ],
+      //       bottom: DiscussionsHeader(
+      //         controller: controller,
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      floatingActionButton: Obx(
+        () => Visibility(
+          visible: controller.fabIsVisible.value,
+          child: StyledFloatingActionButton(
+            onPressed: controller.toNewDiscussionScreen,
+            child: AppIcon(
+              icon: SvgIcons.add_discussion,
+              color: Get.theme.colors().onPrimarySurface,
+            ),
+          ),
+        ),
+      ),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) => [
+          MainAppBar(
+            materialTitle: Text(
+              tr('discussions'),
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+            ),
+            cupertinoTitle: Text(
+              tr('discussions'),
+              style: TextStyle(color: Get.theme.colors().onSurface),
+            ),
             actions: [
               PlatformIconButton(
                 icon: AppIcon(
@@ -97,36 +140,19 @@ class PortalDiscussionsView extends StatelessWidget {
                       arguments: {'filterController': controller.filterController})),
               const SizedBox(width: 3),
             ],
-            bottom: DiscussionsHeader(
-              controller: controller,
-            ),
           ),
-        ),
+        ],
+        body: DiscussionsList(controller: controller),
       ),
-      floatingActionButton: Obx(
-        () => Visibility(
-          visible: controller.fabIsVisible.value,
-          child: StyledFloatingActionButton(
-            onPressed: controller.toNewDiscussionScreen,
-            child: AppIcon(
-              icon: SvgIcons.add_discussion,
-              color: Get.theme.colors().onPrimarySurface,
-            ),
-          ),
-        ),
-      ),
-      body: DiscussionsList(controller: controller, scrollController: scrollController),
     );
   }
 }
 
 class DiscussionsList extends StatelessWidget {
   final controller;
-  final ScrollController scrollController;
   const DiscussionsList({
     Key? key,
     required this.controller,
-    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -167,7 +193,6 @@ class DiscussionsList extends StatelessWidget {
               return ListView.separated(
                 itemCount: controller.paginationController.data.length as int,
                 padding: const EdgeInsets.only(bottom: 65),
-                controller: scrollController,
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox(height: 12);
                 },

@@ -259,7 +259,7 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Obx(
               () => Text(
-                controller.screenName.value,
+                controller.documentsScreenName.value,
                 style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
             ),
@@ -276,7 +276,7 @@ class _Title extends StatelessWidget {
                   Get.find<NavigationController>()
                       .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
                     'mode': controller.mode,
-                    'folderName': controller.screenName.value,
+                    'folderName': controller.documentsScreenName.value,
                     'target': target,
                     'currentFolder': controller.currentFolder,
                     'initialFolderId': controller.initialFolderId,

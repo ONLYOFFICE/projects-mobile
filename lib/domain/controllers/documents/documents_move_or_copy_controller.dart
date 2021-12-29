@@ -49,6 +49,7 @@ import 'package:projects/internal/locator.dart';
 class DocumentsMoveOrCopyController extends GetxController implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
 
+  @override
   RxBool hasFilters = false.obs;
   @override
   RxBool loaded = false.obs;
@@ -80,6 +81,7 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
   @override
   PaginationController get paginationController => _paginationController;
 
+  @override
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
@@ -88,7 +90,7 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
   Folder? get currentFolder => _currentFolder;
 
   @override
-  var screenName = tr('chooseSection').obs;
+  RxString documentsScreenName = tr('chooseSection').obs;
 
   late DocumentsSortController _sortController;
 
@@ -122,7 +124,7 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
     if (_currentFolder == null) {
       await initialSetup();
     } else
-      await setupFolder(folder: _currentFolder, folderName: screenName.value);
+      await setupFolder(folder: _currentFolder, folderName: documentsScreenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -139,7 +141,8 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
     _clear();
     _currentFolder = folder;
     _filterController.folderId = _currentFolder!.id;
-    screenName.value = folderName;
+    documentsScreenName.value = folderName;
+    screenName = folderName;
     await _getDocuments();
 
     loaded.value = true;
@@ -174,7 +177,8 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
     paginationController.data.addAll(result.folders!);
     paginationController.data.addAll(result.files!);
 
-    screenName.value = _screenName ?? tr('documents');
+    documentsScreenName.value = _screenName ?? tr('documents');
+    screenName = _screenName ?? tr('documents');
   }
 
   void clearSearch() {
@@ -278,4 +282,20 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
     _targetId = targetId;
     initialFolderId = initial;
   }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
+
+  @override
+  void showSearch() {
+    // TODO: implement showSearch
+  }
+
+  @override
+  String screenName = tr('documents');
 }

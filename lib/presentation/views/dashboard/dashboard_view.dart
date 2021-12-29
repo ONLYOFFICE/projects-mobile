@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -41,8 +40,8 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
@@ -65,20 +64,15 @@ class DashboardView extends StatelessWidget {
         body: _BodyDashboardWidget(dashboardController: dashboardController),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            PlatformWidget(
-              material: (context, target) => SliverAppBar(
-                backgroundColor: Get.theme.colors().background,
-                pinned: true,
-                title: Title(controller: dashboardController),
+            MainAppBar(
+              cupertinoTitle: Text(
+                dashboardController.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
               ),
-              cupertino: (context, target) => CupertinoSliverNavigationBar(
-                backgroundColor: Get.theme.colors().background,
-                largeTitle: Text(
-                  dashboardController.screenName.value,
-                  style: TextStyle(color: Get.theme.colors().onSurface),
-                ),
+              materialTitle: Title(
+                controller: dashboardController,
               ),
-            )
+            ),
           ];
         },
       ),
@@ -315,11 +309,9 @@ class Title extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Obx(
-              () => Text(
-                controller.screenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-              ),
+            child: Text(
+              controller.screenName,
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
             ),
           ),
           Row(

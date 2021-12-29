@@ -52,6 +52,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
@@ -97,77 +98,112 @@ class TasksView extends StatelessWidget {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            PlatformWidget(
-              material: (context, target) => SliverAppBar(
-                backgroundColor: Get.theme.colors().background,
-                pinned: true,
-                title: Text(
-                  controller.screenName,
-                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-                ),
-                actions: [
-                  IconButton(
-                    icon: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.search,
-                      color: Get.theme.colors().primary,
-                    ),
-                    onPressed: controller.showSearch,
-                  ),
-                  IconButton(
-                    icon: FiltersButton(controller: controller),
-                    onPressed: () async => Get.find<NavigationController>().toScreen(
-                        const TasksFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {'filterController': controller.filterController}),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(44),
-                  child: TasksHeader(controller: controller),
-                ),
+            MainAppBar(
+              materialTitle: Text(
+                controller.screenName,
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
-              cupertino: (context, target) => CupertinoSliverNavigationBar(
-                // border: Border.all(style: BorderStyle.none),
-                backgroundColor: Get.theme.colors().background,
-                padding: EdgeInsetsDirectional.zero,
-                largeTitle: Text(
-                  controller.screenName,
-                  style: TextStyle(color: Get.theme.colors().onSurface),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: AppIcon(
-                        width: 24,
-                        height: 24,
-                        icon: SvgIcons.search,
-                        color: Get.theme.colors().primary,
-                      ),
-                      onPressed: controller.showSearch,
-                    ),
-                    IconButton(
-                      icon: FiltersButton(controller: controller),
-                      onPressed: () async => Get.find<NavigationController>().toScreen(
-                          const TasksFilterScreen(),
-                          preventDuplicates: false,
-                          arguments: {'filterController': controller.filterController}),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        CupertinoIcons.ellipsis_circle,
-                        color: Get.theme.colors().primary,
-                      ),
-                    ),
-                  ],
-                ),
+              cupertinoTitle: Text(
+                controller.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
               ),
-            )
+              actions: [
+                IconButton(
+                  icon: AppIcon(
+                    width: 24,
+                    height: 24,
+                    icon: SvgIcons.search,
+                    color: Get.theme.colors().primary,
+                  ),
+                  onPressed: controller.showSearch,
+                ),
+                IconButton(
+                  icon: FiltersButton(controller: controller),
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                      const TasksFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController}),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    CupertinoIcons.ellipsis_circle,
+                    color: Get.theme.colors().primary,
+                  ),
+                ),
+              ],
+            ),
+            // PlatformWidget(
+            //   material: (context, target) => SliverAppBar(
+            //     backgroundColor: Get.theme.colors().background,
+            //     pinned: true,
+            //     title: Text(
+            //       controller.screenName,
+            //       style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+            //     ),
+            //     actions: [
+            //       IconButton(
+            //         icon: AppIcon(
+            //           width: 24,
+            //           height: 24,
+            //           icon: SvgIcons.search,
+            //           color: Get.theme.colors().primary,
+            //         ),
+            //         onPressed: controller.showSearch,
+            //       ),
+            //       IconButton(
+            //         icon: FiltersButton(controller: controller),
+            //         onPressed: () async => Get.find<NavigationController>().toScreen(
+            //             const TasksFilterScreen(),
+            //             preventDuplicates: false,
+            //             arguments: {'filterController': controller.filterController}),
+            //       ),
+            //       const SizedBox(width: 4),
+            //     ],
+            //     bottom: PreferredSize(
+            //       preferredSize: const Size.fromHeight(44),
+            //       child: TasksHeader(controller: controller),
+            //     ),
+            //   ),
+            //   cupertino: (context, target) => CupertinoSliverNavigationBar(
+            //     // border: Border.all(style: BorderStyle.none),
+            //     backgroundColor: Get.theme.colors().background,
+            //     padding: EdgeInsetsDirectional.zero,
+            //     largeTitle: Text(
+            //       controller.screenName,
+            //       style: TextStyle(color: Get.theme.colors().onSurface),
+            //     ),
+            //     trailing: Row(
+            //       mainAxisSize: MainAxisSize.min,
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         IconButton(
+            //           icon: AppIcon(
+            //             width: 24,
+            //             height: 24,
+            //             icon: SvgIcons.search,
+            //             color: Get.theme.colors().primary,
+            //           ),
+            //           onPressed: controller.showSearch,
+            //         ),
+            //         IconButton(
+            //           icon: FiltersButton(controller: controller),
+            //           onPressed: () async => Get.find<NavigationController>().toScreen(
+            //               const TasksFilterScreen(),
+            //               preventDuplicates: false,
+            //               arguments: {'filterController': controller.filterController}),
+            //         ),
+            //         IconButton(
+            //           onPressed: () {},
+            //           icon: Icon(
+            //             CupertinoIcons.ellipsis_circle,
+            //             color: Get.theme.colors().primary,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // )
           ];
         },
         body: Obx(

@@ -37,6 +37,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double titleHeight;
@@ -125,122 +126,127 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     );
   }
 }
-//
-// class MaterialMainAppBar extends StatelessWidget {
-//   const MaterialMainAppBar({Key? key, required this.controller, this.actions, this.bottom})
-//       : super(key: key);
-//
-//   final BaseController controller;
-//   final List<Widget>? actions;
-//   final PreferredSizeWidget? bottom;
-//   @override
-//   Widget build(BuildContext context) {
-//     return SliverAppBar(
-//       backgroundColor: Get.theme.colors().background,
-//       pinned: true,
-//       title: Text(
-//         controller.screenName,
-//         style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-//       ),
-//       actions: actions,
-//       bottom: bottom,
-//     );
-//   }
-// }
-//
-// class CupertinoAppBar extends StatelessWidget {
-//   const CupertinoAppBar(
-//       {Key? key, required this.controller, this.children = const [], this.isCollapsed = false})
-//       : super(key: key);
-//
-//   final BaseController controller;
-//   final List<Widget> children;
-//   final bool isCollapsed;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return isCollapsed
-//         ? SliverPersistentHeader(
-//             pinned: true,
-//             delegate: CupertinoCollapsedNavBar(
-//                 controller: controller, persistentHeight: 44 + MediaQuery.of(context).padding.top),
-//           )
-//         : CupertinoSliverNavigationBar(
-//             // border: Border.all(style: BorderStyle.none),
-//             backgroundColor: Get.theme.colors().background,
-//             padding: EdgeInsetsDirectional.zero,
-//             largeTitle: Text(
-//               controller.screenName,
-//               style: TextStyle(color: Get.theme.colors().onSurface),
-//             ),
-//             trailing: Row(
-//               mainAxisSize: MainAxisSize.min,
-//               mainAxisAlignment: MainAxisAlignment.end,
-//               children: children,
-//             ),
-//           );
-//   }
-// }
-//
-// class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
-//   const CupertinoCollapsedNavBar({required this.controller, required this.persistentHeight});
-//   final BaseDocumentsController controller;
-//   final double persistentHeight;
-//   @override
-//   Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-//     return CupertinoNavigationBar(
-//       backgroundColor: Get.theme.colors().background,
-//       middle: Obx(
-//         () => Text(
-//           controller.screenName.value,
-//           style: TextStyle(color: Get.theme.colors().onSurface),
-//         ),
-//       ),
-//       trailing: Row(
-//         mainAxisSize: MainAxisSize.min,
-//         mainAxisAlignment: MainAxisAlignment.end,
-//         children: [
-//           IconButton(
-//             icon: AppIcon(
-//               width: 24,
-//               height: 24,
-//               icon: SvgIcons.search,
-//               color: Get.theme.colors().primary,
-//             ),
-//             onPressed: () {
-//               Get.find<NavigationController>()
-//                   .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-//                 'folderName': controller.screenName.value,
-//                 'folderId': controller.currentFolderID,
-//                 'documentsController': controller,
-//               });
-//             },
-//           ),
-//           IconButton(
-//             icon: FiltersButton(controller: controller),
-//             onPressed: () async => Get.find<NavigationController>().toScreen(
-//                 const DocumentsFilterScreen(),
-//                 preventDuplicates: false,
-//                 arguments: {'filterController': controller.filterController}),
-//           ),
-//           IconButton(
-//             onPressed: () {},
-//             icon: Icon(CupertinoIcons.ellipsis_circle, color: Get.theme.colors().primary, size: 24),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   @override
-//   double get maxExtent => persistentHeight;
-//
-//   @override
-//   double get minExtent => persistentHeight;
-//
-//   @override
-//   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-//     // TODO: implement shouldRebuild
-//     return false;
-//   }
-// }
+
+class MainAppBar extends StatelessWidget {
+  const MainAppBar({
+    Key? key,
+    this.materialTitle,
+    this.cupertinoTitle,
+    this.bottom,
+    this.actions = const [],
+    this.isCollapsed = false,
+  }) : super(key: key);
+
+  final Widget? materialTitle;
+  final Widget? cupertinoTitle;
+  final PreferredSizeWidget? bottom;
+  final List<Widget> actions;
+  final bool isCollapsed;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      material: (context, target) => MaterialAppBar(
+        title: materialTitle,
+        bottom: bottom,
+        actions: actions,
+      ),
+      cupertino: (context, target) => CupertinoAppBar(
+        title: cupertinoTitle,
+        actions: actions,
+        isCollapsed: isCollapsed,
+      ),
+    );
+  }
+}
+
+class MaterialAppBar extends StatelessWidget {
+  const MaterialAppBar({Key? key, this.title, this.actions = const [], this.bottom})
+      : super(key: key);
+
+  final List<Widget> actions;
+  final PreferredSizeWidget? bottom;
+  final Widget? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Get.theme.colors().background,
+      pinned: true,
+      title: title,
+      actions: actions,
+      bottom: bottom,
+    );
+  }
+}
+
+class CupertinoAppBar extends StatelessWidget {
+  const CupertinoAppBar(
+      {Key? key, required this.title, this.actions = const [], this.isCollapsed = false})
+      : super(key: key);
+
+  final List<Widget> actions;
+  final bool isCollapsed;
+  final Widget? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return isCollapsed
+        ? SliverPersistentHeader(
+            pinned: true,
+            delegate: CupertinoCollapsedNavBar(
+                persistentHeight: 44 + MediaQuery.of(context).padding.top,
+                title: title,
+                actions: actions),
+          )
+        : CupertinoSliverNavigationBar(
+            backgroundColor: Get.theme.colors().background,
+            padding: EdgeInsetsDirectional.zero,
+            largeTitle: title,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: actions,
+            ),
+          );
+  }
+}
+
+class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
+  const CupertinoCollapsedNavBar({
+    required this.persistentHeight,
+    this.actions = const [],
+    this.title,
+  });
+
+  final double persistentHeight;
+  final List<Widget> actions;
+  final Widget? title;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return CupertinoNavigationBar(
+      padding: EdgeInsetsDirectional.zero,
+      transitionBetweenRoutes: false,
+      backgroundColor: Get.theme.colors().background,
+      middle: title,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: actions,
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => persistentHeight;
+
+  @override
+  double get minExtent => persistentHeight;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    // TODO: implement shouldRebuild
+    return false;
+  }
+}

@@ -58,6 +58,7 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
+  @override
   RxBool hasFilters = false.obs;
   @override
   RxBool loaded = false.obs;
@@ -81,6 +82,7 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
   @override
   PaginationController get paginationController => _paginationController;
 
+  @override
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
@@ -90,7 +92,7 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
   int? get currentFolderID => _currentFolderId;
 
   @override
-  RxString screenName = tr('documents').obs;
+  RxString documentsScreenName = tr('documents').obs;
 
   RxInt filesCount = RxInt(-1);
 
@@ -139,7 +141,7 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
     if (_currentFolderId == null) {
       await initialSetup();
     } else
-      await setupFolder(folderId: _currentFolderId, folderName: screenName.value);
+      await setupFolder(folderId: _currentFolderId, folderName: documentsScreenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -156,7 +158,8 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
     _clear();
     _currentFolderId = folderId;
     _filterController.folderId = _currentFolderId;
-    screenName.value = folderName;
+    documentsScreenName.value = folderName;
+    screenName = folderName;
     await _getDocuments();
 
     loaded.value = true;
@@ -195,7 +198,8 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
       filesCount.value = result.files!.length;
     }
 
-    screenName.value = _screenName ?? tr('documents');
+    documentsScreenName.value = _screenName ?? tr('documents');
+    screenName = _screenName ?? tr('documents');
 
     return Future.value(true);
   }
@@ -322,4 +326,20 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
       );
     }
   }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
+
+  @override
+  void showSearch() {
+    // TODO: implement showSearch
+  }
+
+  @override
+  String screenName = tr('documents');
 }

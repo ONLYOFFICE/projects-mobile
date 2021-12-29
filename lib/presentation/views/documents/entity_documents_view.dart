@@ -185,7 +185,7 @@ class _DocsTitle extends StatelessWidget {
                   onTap: () {
                     Get.find<NavigationController>()
                         .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                      'folderName': controller.screenName.value,
+                      'folderName': controller.documentsScreenName.value,
                       'folderId': controller.currentFolderID,
                       'entityType': controller.entityType,
                     });

@@ -52,6 +52,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
@@ -94,92 +95,44 @@ class ProjectsView extends StatelessWidget {
           ),
         ),
       ),
-      // appBar: PreferredSize(
-      //   preferredSize: const Size(double.infinity, 101),
-      //   child: ValueListenableBuilder(
-      //     valueListenable: elevation,
-      //     builder: (_, double value, __) => StyledAppBar(
-      //       title: _Title(controller: controller),
-      //       bottom: Bottom(controller: controller),
-      //       showBackButton: false,
-      //       elevation: value,
-      //     ),
-      //   ),
-      // ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            PlatformWidget(
-              material: (context, target) => SliverAppBar(
-                backgroundColor: Get.theme.colors().background,
-                pinned: true,
-                title: Text(
-                  controller.screenName,
-                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-                ),
-                actions: [
-                  IconButton(
-                    icon: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.search,
-                      color: Get.theme.colors().primary,
-                    ),
-                    onPressed: controller.showSearch,
-                  ),
-                  IconButton(
-                    icon: FiltersButton(controller: controller),
-                    onPressed: () async => Get.find<NavigationController>().toScreen(
-                        const ProjectsFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {'filterController': controller.filterController}),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(44),
-                  child: Bottom(controller: controller),
-                ),
+            MainAppBar(
+              materialTitle: Text(
+                controller.screenName,
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
-              cupertino: (context, target) => CupertinoSliverNavigationBar(
-                // border: Border.all(style: BorderStyle.none),
-                backgroundColor: Get.theme.colors().background,
-                padding: EdgeInsetsDirectional.zero,
-                largeTitle: Text(
-                  controller.screenName,
-                  style: TextStyle(color: Get.theme.colors().onSurface),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: AppIcon(
-                        width: 24,
-                        height: 24,
-                        icon: SvgIcons.search,
-                        color: Get.theme.colors().primary,
-                      ),
-                      onPressed: controller.showSearch,
-                    ),
-                    IconButton(
-                      icon: FiltersButton(controller: controller),
-                      onPressed: () async => Get.find<NavigationController>().toScreen(
-                          const ProjectsFilterScreen(),
-                          preventDuplicates: false,
-                          arguments: {'filterController': controller.filterController}),
-                    ),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        CupertinoIcons.ellipsis_circle,
-                        color: Get.theme.colors().primary,
-                      ),
-                    ),
-                  ],
-                ),
+              cupertinoTitle: Text(
+                controller.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
               ),
-            )
+              actions: [
+                IconButton(
+                  icon: AppIcon(
+                    width: 24,
+                    height: 24,
+                    icon: SvgIcons.search,
+                    color: Get.theme.colors().primary,
+                  ),
+                  onPressed: controller.showSearch,
+                ),
+                IconButton(
+                  icon: FiltersButton(controller: controller),
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                      const ProjectsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController}),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    CupertinoIcons.ellipsis_circle,
+                    color: Get.theme.colors().primary,
+                  ),
+                ),
+              ],
+            ),
           ];
         },
         body: Obx(
@@ -291,29 +244,6 @@ class Bottom extends StatelessWidget {
         ),
       ),
     );
-
-    //   Container(
-    //   padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-    //   child: Row(
-    //     crossAxisAlignment: CrossAxisAlignment.center,
-    //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //     children: <Widget>[
-    //       _ProjectsSortButton(controller: controller),
-    //       Row(
-    //         children: <Widget>[
-    //           Obx(
-    //             () => Text(
-    //               tr('total', args: [controller.paginationController.total.value.toString()]),
-    //               style: TextStyleHelper.body2(
-    //                 color: Get.theme.colors().onSurface.withOpacity(0.6),
-    //               ),
-    //             ),
-    //           ),
-    //         ],
-    //       ),
-    //     ],
-    //   ),
-    // );
   }
 }
 
@@ -422,65 +352,6 @@ class _ProjectsSortButton extends StatelessWidget with ShowPopupMenuMixin {
         },
         icon: AppIcon(
             width: 24, height: 24, icon: SvgIcons.ios_sort, color: Get.theme.colors().primary),
-      ),
-    );
-
-    Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            final options = Column(
-              children: [
-                const SizedBox(height: 14.5),
-                const Divider(height: 9, thickness: 1),
-                ..._getSortTile(),
-                const SizedBox(height: 20),
-              ],
-            );
-
-            await Get.bottomSheet(
-              SortView(sortOptions: options),
-              isScrollControlled: true,
-            );
-          } else {
-            await showPopupMenu(
-              context: context,
-              options: _getSortTile(),
-              offset: const Offset(0, 40),
-            );
-          }
-        },
-        child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (controller.sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      color: Get.theme.colors().primary,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        color: Get.theme.colors().primary,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-            ),
-          ],
-        ),
       ),
     );
   }

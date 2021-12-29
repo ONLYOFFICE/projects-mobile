@@ -51,7 +51,7 @@ import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
@@ -68,22 +68,6 @@ class PortalDocumentsView extends StatelessWidget {
 
     return DocumentsScreen(
       controller: controller,
-      root: true,
-      // scrollController: scrollController,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size(double.infinity, 101),
-      //   child: ValueListenableBuilder(
-      //     valueListenable: elevation,
-      //     builder: (_, double value, __) => StyledAppBar(
-      //       title: DocsTitle(controller: controller),
-      //       bottom: DocsBottom(controller: controller),
-      //       showBackButton: false,
-      //       titleHeight: 50,
-      //       bottomHeight: 50,
-      //       elevation: value,
-      //     ),
-      //   ),
-      // ),
     );
   }
 }
@@ -103,20 +87,7 @@ class FolderContentView extends StatelessWidget {
 
     return DocumentsScreen(
       controller: controller,
-      // scrollController: scrollController,
-      // appBar: PreferredSize(
-      //   preferredSize: const Size(double.infinity, 101),
-      //   child: ValueListenableBuilder(
-      //     valueListenable: elevation,
-      //     builder: (_, dynamic value, __) => StyledAppBar(
-      //       title: DocsTitle(controller: controller),
-      //       bottom: DocsBottom(controller: controller),
-      //       showBackButton: true,
-      //       titleHeight: 50,
-      //       bottomHeight: 50,
-      //     ),
-      //   ),
-      // ),
+      isCollapsed: true,
     );
   }
 }
@@ -137,15 +108,9 @@ class DocumentsSearchView extends StatelessWidget {
       documentsController.setupSearchMode(folderName: folderName, folderId: folderId);
     });
 
-    // TODO: appBar for DocumentsSearchView
     return DocumentsScreen(
       controller: documentsController,
-      // scrollController: ScrollController(),
-      // appBar: StyledAppBar(
-      //   title: CustomSearchBar(controller: documentsController),
-      //   showBackButton: true,
-      //   titleHeight: 50,
-      // ),
+      isCollapsed: true,
     );
   }
 }
@@ -154,11 +119,11 @@ class DocumentsScreen extends StatelessWidget {
   const DocumentsScreen({
     Key? key,
     required this.controller,
-    this.root = false,
+    this.isCollapsed = false,
   }) : super(key: key);
 
   final BaseDocumentsController controller;
-  final bool root;
+  final bool isCollapsed;
 
   @override
   Widget build(BuildContext context) {
@@ -167,106 +132,56 @@ class DocumentsScreen extends StatelessWidget {
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
-            PlatformWidget(
-              material: (context, target) => SliverAppBar(
-                backgroundColor: Get.theme.colors().background,
-                pinned: true,
-                title: Obx(
-                  () => Text(
-                    controller.screenName.value,
-                    style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-                  ),
-                ),
-                actions: [
-                  IconButton(
-                    icon: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.search,
-                      color: Get.theme.colors().primary,
-                    ),
-                    onPressed: () {
-                      Get.find<NavigationController>()
-                          .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                        'folderName': controller.screenName.value,
-                        'folderId': controller.currentFolderID,
-                        'documentsController': controller,
-                      });
-                    },
-                  ),
-                  IconButton(
-                    icon: FiltersButton(controller: controller),
-                    onPressed: () async => Get.find<NavigationController>().toScreen(
-                        const DocumentsFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {'filterController': controller.filterController}),
-                  ),
-                  const SizedBox(width: 4),
-                ],
-                bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(44),
-                  child: DocsBottom(controller: controller),
+            MainAppBar(
+              isCollapsed: isCollapsed,
+              materialTitle: Obx(
+                () => Text(
+                  controller.documentsScreenName.value,
+                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                 ),
               ),
-              cupertino: (context, target) => !root
-                  ? SliverPersistentHeader(
-                      pinned: true,
-                      delegate: CupertinoCollapsedNavBar(
-                        controller: controller,
-                        persistentHeight: 44 + MediaQuery.of(context).padding.top,
-                      ),
-                    )
-                  : CupertinoSliverNavigationBar(
-                      // border: Border.all(style: BorderStyle.none),
-                      backgroundColor: Get.theme.colors().background,
-                      padding: EdgeInsetsDirectional.zero,
-                      largeTitle: Obx(
-                        () => Text(
-                          controller.screenName.value,
-                          style: TextStyle(color: Get.theme.colors().onSurface),
-                        ),
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          IconButton(
-                            iconSize: 24,
-                            icon: AppIcon(
-                              width: 24,
-                              height: 24,
-                              icon: SvgIcons.search,
-                              color: Get.theme.colors().primary,
-                            ),
-                            onPressed: () {
-                              Get.find<NavigationController>()
-                                  .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                                'folderName': controller.screenName.value,
-                                'folderId': controller.currentFolderID,
-                                'documentsController': controller,
-                              });
-                            },
-                          ),
-                          IconButton(
-                            iconSize: 24,
-                            icon: FiltersButton(controller: controller),
-                            onPressed: () async => Get.find<NavigationController>().toScreen(
-                                const DocumentsFilterScreen(),
-                                preventDuplicates: false,
-                                arguments: {'filterController': controller.filterController}),
-                          ),
-                          IconButton(
-                            iconSize: 24,
-                            onPressed: () {},
-                            icon: Icon(
-                              CupertinoIcons.ellipsis_circle,
-                              color: Get.theme.colors().primary,
-                              size: 24,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+              cupertinoTitle: Obx(
+                () => Text(
+                  controller.documentsScreenName.value,
+                  style: TextStyle(color: Get.theme.colors().onSurface),
+                ),
+              ),
+              actions: [
+                IconButton(
+                  iconSize: 24,
+                  icon: AppIcon(
+                    width: 24,
+                    height: 24,
+                    icon: SvgIcons.search,
+                    color: Get.theme.colors().primary,
+                  ),
+                  onPressed: () {
+                    Get.find<NavigationController>()
+                        .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                      'folderName': controller.documentsScreenName.value,
+                      'folderId': controller.currentFolderID,
+                      'documentsController': controller,
+                    });
+                  },
+                ),
+                IconButton(
+                  iconSize: 24,
+                  icon: FiltersButton(controller: controller),
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                      const DocumentsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController}),
+                ),
+                IconButton(
+                  iconSize: 24,
+                  onPressed: () {},
+                  icon: Icon(
+                    CupertinoIcons.ellipsis_circle,
+                    color: Get.theme.colors().primary,
+                    size: 24,
+                  ),
+                ),
+              ],
             ),
           ];
         },
@@ -307,50 +222,6 @@ class DocumentsScreen extends StatelessWidget {
                         );
                 },
               );
-
-            // return PaginationListView(
-            //     paginationController: controller.paginationController,
-            //     child: () {
-            //       if (controller.loaded.value && controller.nothingFound.value) {
-            //         return Center(
-            //             child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
-            //       }
-            //       if (controller.loaded.value &&
-            //           controller.paginationController.data.isEmpty &&
-            //           !controller.filterController.hasFilters.value &&
-            //           !controller.searchMode.value) {
-            //         return Center(
-            //             child: EmptyScreen(
-            //                 icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
-            //       }
-            //       if (controller.loaded.value &&
-            //           controller.paginationController.data.isEmpty &&
-            //           controller.filterController.hasFilters.value &&
-            //           !controller.searchMode.value) {
-            //         return Center(
-            //             child:
-            //                 EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
-            //       }
-            //       if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-            //         return ListView.separated(
-            //           itemCount: controller.paginationController.data.length,
-            //           separatorBuilder: (BuildContext context, int index) =>
-            //               const SizedBox(height: 10),
-            //           itemBuilder: (BuildContext context, int index) {
-            //             final element = controller.paginationController.data[index];
-            //             return element is Folder
-            //                 ? FolderCell(
-            //                     entity: element,
-            //                     controller: controller as DocumentsController,
-            //                   )
-            //                 : FileCell(
-            //                     entity: element as PortalFile,
-            //                     index: index,
-            //                     controller: controller as DocumentsController,
-            //                   );
-            //           },
-            //         );
-            //     }() as Widget);
           },
         ),
       ),
@@ -372,7 +243,7 @@ class DocsTitle extends StatelessWidget {
           Expanded(
             child: Obx(
               () => Text(
-                controller.screenName.value,
+                controller.documentsScreenName.value,
                 style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
             ),
@@ -385,7 +256,7 @@ class DocsTitle extends StatelessWidget {
                 onTap: () {
                   Get.find<NavigationController>()
                       .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                    'folderName': controller.screenName.value,
+                    'folderName': controller.documentsScreenName.value,
                     'folderId': controller.currentFolderID,
                     'documentsController': controller,
                   });
@@ -548,7 +419,7 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
       backgroundColor: Get.theme.colors().background,
       middle: Obx(
         () => Text(
-          controller.screenName.value,
+          controller.documentsScreenName.value,
           style: TextStyle(color: Get.theme.colors().onSurface),
         ),
       ),
@@ -566,7 +437,7 @@ class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
             onPressed: () {
               Get.find<NavigationController>()
                   .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                'folderName': controller.screenName.value,
+                'folderName': controller.documentsScreenName.value,
                 'folderId': controller.currentFolderID,
                 'documentsController': controller,
               });

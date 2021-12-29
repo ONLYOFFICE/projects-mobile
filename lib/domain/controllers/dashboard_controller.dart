@@ -45,6 +45,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardController extends GetxController {
   RefreshController _refreshController = RefreshController();
+
   RefreshController get refreshController {
     if (!_refreshController.isLoading && !_refreshController.isRefresh)
       _refreshController = RefreshController();
@@ -54,15 +55,18 @@ class DashboardController extends GetxController {
   final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
   final TasksWithPresets tasksWithPresets = locator<TasksWithPresets>();
 
-  var screenName = tr('dashboard').obs;
+  final screenName = tr('dashboard');
 
   late TasksController _myTaskController;
+
   TasksController get myTaskController => _myTaskController;
 
   late TasksController _upcomingTaskscontroller;
+
   TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
 
   late ProjectsController _myProjectsController;
+
   ProjectsController get myProjectsController => _myProjectsController;
 
   late ProjectsController _folowedProjectsController;

@@ -58,6 +58,7 @@ class DiscussionsDocumentsController extends GetxController implements BaseDocum
 
   final _userController = Get.find<UserController>();
 
+  @override
   RxBool hasFilters = false.obs;
   @override
   RxBool loaded = false.obs;
@@ -73,6 +74,7 @@ class DiscussionsDocumentsController extends GetxController implements BaseDocum
   @override
   PaginationController get paginationController => _paginationController;
 
+  @override
   RxList get itemList => _paginationController.data;
 
   String? _entityType;
@@ -87,7 +89,10 @@ class DiscussionsDocumentsController extends GetxController implements BaseDocum
   int? get currentFolderID => _currentFolderId;
 
   @override
-  RxString screenName = tr('documents').obs;
+  RxString documentsScreenName = tr('documents').obs;
+
+  @override
+  late String screenName = tr('documents');
 
   late DocumentsSortController _sortController;
 
@@ -199,5 +204,18 @@ class DiscussionsDocumentsController extends GetxController implements BaseDocum
         writeReview: false,
       );
     }
+  }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
+
+  @override
+  void showSearch() {
+    // TODO: implement showSearch
   }
 }
