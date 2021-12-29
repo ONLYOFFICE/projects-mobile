@@ -246,6 +246,7 @@ class DashboardCardView extends StatelessWidget {
                             SizedBox(
                               height: 100,
                               child: Center(child: PlatformCircularProgressIndicator()),
+
                             ),
                         ],
                       ),

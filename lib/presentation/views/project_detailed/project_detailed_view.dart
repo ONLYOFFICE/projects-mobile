@@ -261,7 +261,9 @@ class _ProjectContextMenu extends StatelessWidget {
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
+
               value: PopupMenuItemValue.deleteProject,
+
               child: Text(
                 tr('delete'),
                 style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),

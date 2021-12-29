@@ -168,6 +168,7 @@ PODS:
     - GoogleUtilities/Logger
   - just_audio (0.0.1):
     - Flutter
+  - KeychainSwift (19.0.0)
   - launch_review (0.0.1):
     - Flutter
   - local_auth (0.0.1):
@@ -177,6 +178,7 @@ PODS:
     - nanopb/encode (= 2.30908.0)
   - nanopb/decode (2.30908.0)
   - nanopb/encode (2.30908.0)
+  - ObjectMapper (4.2.0)
   - OrderedSet (5.0.0)
   - package_info (0.0.1):
     - Flutter
@@ -194,6 +196,7 @@ PODS:
     - Flutter
     - FMDB (>= 2.7.5)
   - SwiftyGif (5.4.1)
+
   - url_launcher (0.0.1):
     - Flutter
   - video_player (0.0.1):
@@ -221,12 +224,15 @@ DEPENDENCIES:
   - flutter_libphonenumber (from `.symlinks/plugins/flutter_libphonenumber/ios`)
   - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
+  - KeychainSwift
   - launch_review (from `.symlinks/plugins/launch_review/ios`)
   - local_auth (from `.symlinks/plugins/local_auth/ios`)
+  - ObjectMapper
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - path_provider_ios (from `.symlinks/plugins/path_provider_ios/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - SwiftyJSON
   - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
   - video_player (from `.symlinks/plugins/video_player/ios`)
   - wakelock (from `.symlinks/plugins/wakelock/ios`)
@@ -248,13 +254,16 @@ SPEC REPOS:
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleUtilities
+    - KeychainSwift
     - nanopb
+    - ObjectMapper
     - OrderedSet
     - PhoneNumberKit
     - PromisesObjC
     - Reachability
     - SDWebImage
     - SwiftyGif
+    - SwiftyJSON
 
 EXTERNAL SOURCES:
   audio_session:
@@ -339,9 +348,11 @@ SPEC CHECKSUMS:
   GoogleDataTransport: 629c20a4d363167143f30ea78320d5a7eb8bd940
   GoogleUtilities: 684ee790a24f73ebb2d1d966e9711c203f2a4237
   just_audio: baa7252489dbcf47a4c7cc9ca663e9661c99aafa
+  KeychainSwift: a06190cf933ad46b1e0abc3d77d29c06331715c7
   launch_review: 75d5a956ba8eaa493e9c9d4bf4c05e505e8d5ed0
   local_auth: ef62030a2731330b95df7ef1331bd15f6a64b8a6
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
+  ObjectMapper: 1eb41f610210777375fa806bf161dc39fb832b81
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info: 873975fc26034f0b863a300ad47e7f1ac6c7ec62
   path_provider_ios: 7d7ce634493af4477d156294792024ec3485acd5
@@ -351,13 +362,16 @@ SPEC CHECKSUMS:
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
+
   SwiftyGif: 6895c887f5551618a3c5dd3ecb512419105bacca
   url_launcher: b6e016d912f04be9f5bf6e8e82dc599b7ba59649
   video_player: ecd305f42e9044793efd34846e1ce64c31ea6fcb
+
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_cookie_manager: eaf920722b493bd0f7611b5484771ca53fed03f7
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
 PODFILE CHECKSUM: 216a07bd17c29f43047bcc707524116833a4fb33
+
 
 COCOAPODS: 1.11.2

@@ -30,46 +30,27 @@
  *
  */
 
-import 'dart:io';
+import 'dart:async';
+import 'package:flutter/services.dart';
 
-import 'package:device_info_plus/device_info_plus.dart';
+class AccountProvider {
+  static const MethodChannel _channel = MethodChannel('accountProvider');
 
-class DeviceInfoService {
-  final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
-  AndroidDeviceInfo? _androidInfo;
-
-  Future<void> init() async {
-    if (_androidInfo != null) return;
-    _androidInfo = await _deviceInfo.androidInfo;
+  static Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
+    return await _channel
+        .invokeMethod('addAccount', {'accountData': accountData, 'accountId': accountId});
   }
 
-  Future<String?> get manufacturer async {
-    await init();
-    return _androidInfo?.manufacturer;
+  static Future<List<String>> getAccounts() async {
+    final accounts = <String>[];
+    final result = await _channel.invokeMethod('getAccounts');
+    for (final item in result) {
+      accounts.add(item['account'] as String);
+    }
+    return accounts;
   }
 
-  Future<String?> get model async {
-    await init();
-    return _androidInfo?.model;
-  }
-
-  Future<String?> get osReleaseVersion async {
-    await init();
-    return _androidInfo?.version.release;
-  }
-
-  Future<String?> get osIncrementalVersion async {
-    await init();
-    return _androidInfo?.version.incremental;
-  }
-
-  Future<String?> get osInfo async {
-    await init();
-    return '${Platform.operatingSystem} ${_androidInfo?.version.release}';
-  }
-
-  Future<String?> get deviceInfo async {
-    await init();
-    return '${_androidInfo?.manufacturer} ${_androidInfo?.model} ${_androidInfo?.version.incremental}';
+  static Future<bool?> deleteAccount({String accountId = ''}) async {
+    return await _channel.invokeMethod('deleteAccount', {'accountId': accountId});
   }
 }

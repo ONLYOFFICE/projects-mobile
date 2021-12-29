@@ -154,16 +154,20 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return PlatformIconButton(
       icon: FiltersButton(controller: controller),
       onPressed: () async =>
           Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
+
     );
   }
 }
 
+
 class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const ProjectMilestonesSortButton({
+
     Key? key,
     required this.controller,
   }) : super(key: key);
@@ -256,6 +260,7 @@ void milestonesSortButtonOnPressed(MilestonesDataSource controller, BuildContext
       context: context,
       options: _getSortTile(),
       offset: const Offset(0, 30),
+
     );
   }
 }

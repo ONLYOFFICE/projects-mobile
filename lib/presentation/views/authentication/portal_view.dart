@@ -34,7 +34,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -49,6 +51,12 @@ class PortalInputView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
+    
+    if (Get.isRegistered<AccountManagerController>()) {
+      Get.find<AccountManagerController>();
+    } else {
+      Get.put(AccountManagerController()).setup();
+    }
 
     return Obx(
       () => controller.state.value == ViewState.Busy
@@ -59,6 +67,7 @@ class PortalInputView extends StatelessWidget {
           : Scaffold(
               body: SingleChildScrollView(
                 child: Center(
+
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),

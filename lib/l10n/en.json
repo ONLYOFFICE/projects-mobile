@@ -458,6 +458,8 @@
 		"termsOfServiceWithLink": "Terms of Service",
 		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
 	},
+	"removeAccountTitle": "Remove account?",
+	"removeAccountText": "You will need to re-enter your portal address, email and password next time you want to log in.",
 	"tfaWrongCode": "Wrong code!",
 	"privacyAndTermsAgreement": {
 		"beforeText": "I agree to the ",

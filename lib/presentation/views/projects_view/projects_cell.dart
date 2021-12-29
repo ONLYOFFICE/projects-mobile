@@ -262,6 +262,7 @@ class _Suffix extends StatelessWidget {
                 projectDetailed.taskCount.toString(),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.projectCompletedTasks.copyWith(
+
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
               ),

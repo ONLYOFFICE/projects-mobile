@@ -39,8 +39,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
@@ -58,6 +56,7 @@ import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -119,13 +118,11 @@ class LoginController extends GetxController {
         setState(ViewState.Idle);
         return;
       }
-      if (result.response!.token != null) {
-        await saveToken(result);
-        await sendRegistrationType();
 
-        clearInputFields();
-        await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
-            {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
+      if (result.response!.token != null) {
+        await saveLoginData(token: result.response!.token, expires: result.response!.expires);
+        await Get.find<AccountManagerController>()
+            .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
         await cookieManager.setCookies([
           Cookie('asc_auth_key', result.response!.token!)
@@ -171,6 +168,16 @@ class LoginController extends GetxController {
     }
   }
 
+  Future<void> saveLoginData({String? token, String? expires}) async {
+    await saveToken(token, expires);
+    await sendRegistrationType();
+    setState(ViewState.Idle);
+    clearInputFields();
+
+    await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
+        {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
+  }
+
   Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
     bool? result;
@@ -197,19 +204,19 @@ class LoginController extends GetxController {
     return result ?? true;
   }
 
-  Future saveToken(ApiDTO<AuthToken> result) async {
-    await _secureStorage.putString('token', result.response!.token);
-    await _secureStorage.putString('expires', result.response!.expires);
+  Future saveToken(String? token, String? expires) async {
+    await _secureStorage.putString('token', token);
+    await _secureStorage.putString('expires', expires);
   }
 
   Future<bool> sendCode(String code, {String? userName, String? password}) async {
     setState(ViewState.Busy);
 
-    code = code.removeAllWhitespace;
     _email ??= userName;
     _pass ??= password;
 
-    final result = await _authService.confirmTFACode(email: _email!, pass: _pass!, code: code);
+    final result = await _authService.confirmTFACode(
+        email: _email!, pass: _pass!, code: code.removeAllWhitespace);
 
     if (result.response == null) {
       setState(ViewState.Idle);
@@ -217,12 +224,10 @@ class LoginController extends GetxController {
     }
 
     if (result.response!.token != null) {
-      await saveToken(result);
-      await sendRegistrationType();
-      setState(ViewState.Idle);
-      clearInputFields();
-      await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
-          {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
+      await saveLoginData(token: result.response!.token, expires: result.response!.expires);
+      await Get.find<AccountManagerController>()
+          .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
+
       locator<EventHub>().fire('loginSuccess');
     } else if (result.response!.tfa!) {
       setState(ViewState.Idle);

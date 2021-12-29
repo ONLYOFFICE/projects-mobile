@@ -85,6 +85,7 @@ class EntityDocumentsView extends StatelessWidget {
       //         ),
       //       )
       //     : null,
+
     );
   }
 }
@@ -185,8 +186,10 @@ class _DocsTitle extends StatelessWidget {
                   onTap: () {
                     Get.find<NavigationController>()
                         .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+
                       'folderName': controller.documentsScreenName.value,
                       'folderId': controller.currentFolderID,
+
                       'entityType': controller.entityType,
                     });
                   },
@@ -204,6 +207,7 @@ class _DocsTitle extends StatelessWidget {
                       preventDuplicates: false,
                       arguments: {'filterController': controller.filterController}),
                   child: FiltersButton(controller: controller),
+
                 ),
               ],
             ),
