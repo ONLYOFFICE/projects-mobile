@@ -1407,6 +1407,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  webview_cookie_manager:
+    dependency: "direct main"
+    description:
+      name: webview_cookie_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.6"
   webview_flutter:
     dependency: transitive
     description:

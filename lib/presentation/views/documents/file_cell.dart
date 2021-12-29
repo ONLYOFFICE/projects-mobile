@@ -184,10 +184,10 @@ Future<void> _onFilePopupMenuSelected(
     case 'copyLink':
       final portalDomain = controller.portalInfoController.portalUri;
 
-      final link =
-          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
+      if (portalDomain != null && selectedFile.id != null) {
+        final link =
+            '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
 
-      if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
         MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
       }

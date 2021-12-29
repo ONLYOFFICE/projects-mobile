@@ -146,7 +146,7 @@ class _DiscussionStatus extends StatelessWidget {
           child: StatusButton(
             canEdit: controller!.discussion.value.canEdit,
             text: controller!.status.value == 1 ? tr('archived') : tr('open'),
-            onPressed: () async => controller!.tryChangingStatus(context),
+            onPressed: controller!.tryChangingStatus,
           ),
         ),
       ),

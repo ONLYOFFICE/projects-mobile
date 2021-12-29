@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -60,6 +62,8 @@ class ProjectSearchController extends GetxController {
 
   bool get pullUpEnabled => searchResult.length >= PAGINATION_LENGTH;
 
+  Timer? _searchDebounce;
+
   RefreshController refreshController = RefreshController();
 
   int _totalProjects = 0;
@@ -85,10 +89,15 @@ class ProjectSearchController extends GetxController {
   }
 
   void newSearch(String query) {
-    _query = query;
-    if (onlyMyProjects) _query += '&participant=$_selfId';
-    _startIndex = 0;
-    _performSearch();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_query != query) {
+        _query = query;
+        if (onlyMyProjects) _query += '&participant=$_selfId';
+        _startIndex = 0;
+       await _performSearch();
+      }
+    });
   }
 
   Future<void> _performSearch() async {

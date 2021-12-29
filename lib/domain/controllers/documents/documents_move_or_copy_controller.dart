@@ -30,6 +30,8 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
@@ -37,6 +39,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -44,7 +47,8 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 
-class DocumentsMoveOrCopyController extends GetxController {
+class DocumentsMoveOrCopyController extends GetxController
+    implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
 
   RxBool hasFilters = false.obs;
@@ -54,31 +58,40 @@ class DocumentsMoveOrCopyController extends GetxController {
 
   TextEditingController searchInputController = TextEditingController();
 
-  String? _query;
+  String _query = '';
 
   int? initialFolderId;
 
+  Timer? _searchDebounce;
   int foldersCount = 0;
 
   String? mode;
 
   int? _targetId;
+
   int? get target => _targetId;
 
   late PaginationController _paginationController;
+
+  @override
   PaginationController get paginationController => _paginationController;
+
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   Folder? _currentFolder;
+
   Folder? get currentFolder => _currentFolder;
 
   var screenName = tr('chooseSection').obs;
 
   late DocumentsSortController _sortController;
+
+  @override
   DocumentsSortController get sortController => _sortController;
 
   late DocumentsFilterController _filterController;
+
   DocumentsFilterController get filterController => _filterController;
 
   DocumentsMoveOrCopyController(
@@ -169,10 +182,15 @@ class DocumentsMoveOrCopyController extends GetxController {
   }
 
   void newSearch(String query) {
-    _query = query;
-    paginationController.startIndex = 0;
-    paginationController.data.clear();
-    _performSearch();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_query != query) {
+        _query = query;
+        paginationController.startIndex = 0;
+        paginationController.data.clear();
+        _performSearch();
+      }
+    });
   }
 
   Future<void> setupSearchMode({String? folderName, Folder? folder}) async {

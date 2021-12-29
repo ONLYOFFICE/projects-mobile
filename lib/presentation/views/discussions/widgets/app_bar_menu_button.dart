@@ -60,16 +60,14 @@ class AppBarMenuButton extends StatelessWidget {
           PopupMenuItem(
             value: 'Subscribe',
             child: Text(
-              controller!.isSubscribed
-                  ? tr('unsubscribeFromComments')
-                  : tr('subscribeToComments'),
+              controller!.isSubscribed ? tr('unsubscribeFromComments') : tr('subscribeToComments'),
             ),
           ),
           if (controller!.discussion.value.canEdit!)
             PopupMenuItem(
               value: 'Delete',
-              textStyle: Get.theme.popupMenuTheme.textStyle!
-                  .copyWith(color: Get.theme.colors().colorError),
+              textStyle: Get.theme.popupMenuTheme.textStyle
+                  ?.copyWith(color: Get.theme.colors().colorError),
               child: Text(
                 tr('deleteDiscussion'),
               ),
@@ -80,8 +78,7 @@ class AppBarMenuButton extends StatelessWidget {
   }
 }
 
-void _onSelected(BuildContext context, DiscussionItemController? controller,
-    String value) async {
+void _onSelected(BuildContext context, DiscussionItemController? controller, String value) async {
   switch (value) {
     case 'Edit':
       await controller!.toDiscussionEditingScreen();

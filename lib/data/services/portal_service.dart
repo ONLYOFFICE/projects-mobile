@@ -32,25 +32,33 @@
 
 import 'dart:async';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/api/portal_api.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class PortalService {
   final PortalApi _api = locator<PortalApi>();
 
-  Future<Capabilities?> portalCapabilities(String portalName) async {
-    final capabilities = await _api.getCapabilities(portalName);
+  Future<Capabilities?> portalCapabilities() async {
+    var capabilities = await _api.getCapabilities();
 
-    final success = capabilities.response != null;
+    if (capabilities.error is CustomError) {
+      // TODO need catch socket exception and check CustomError message == Connection refused
+      // https://github.com/fluttercandies/http_client_helper/issues/5
+      locator.get<CoreApi>().redirectPortal();
+      capabilities = await _api.getCapabilities();
+    }
 
-    if (success) {
-      return capabilities.response;
-    } else {
-      await Get.find<ErrorDialog>().show(capabilities.error!.message);
+    if (capabilities.response == null) {
+      await Get.find<ErrorDialog>().show(tr('portalNotFound'));
       return null;
     }
+
+    return capabilities.response;
   }
 }

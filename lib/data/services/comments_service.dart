@@ -37,6 +37,8 @@ import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class CommentsService {
   final CommentsApi _api = locator<CommentsApi>();
@@ -186,5 +188,29 @@ class CommentsService {
       await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
+  }
+
+  Future<String?> uploadImages(image) async {
+    final file = http.MultipartFile.fromBytes(
+      'upload',
+      image.bytes as List<int>,
+      filename: image.name as String?,
+      contentType: MediaType('image', image.extension as String),
+    );
+
+    final result = await _api.uploadImage(file: file);
+
+    final success = result.response != null;
+    if (success) {
+      result.response = (await _secureStorage.getString('portalName'))! +
+          result.response
+              .toString()
+              .split("'")[1]; // TODO parse json response if portal version > 11
+    } else {
+      await Get.find<ErrorDialog>().show(result.error?.message ?? '');
+      return null;
+    }
+
+    return result.response;
   }
 }

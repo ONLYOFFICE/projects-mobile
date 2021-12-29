@@ -37,6 +37,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -69,7 +70,14 @@ abstract class BaseProjectEditorController extends GetxController {
   RxBool isPrivate = true.obs;
   RxBool isFolowed = false.obs;
 
-  RxList<PortalUserItemController> selectedTeamMembers = <PortalUserItemController>[].obs;
+  ProjectDetailed? get projectData;
+
+  RxString statusText = ''.obs;
+
+  Future<bool> updateStatus({int? newStatusId});
+
+  RxList<PortalUserItemController> selectedTeamMembers =
+      <PortalUserItemController>[].obs;
 
   Rx<PortalUser?> selectedProjectManager = PortalUser().obs;
   RxBool needToFillManager = false.obs;

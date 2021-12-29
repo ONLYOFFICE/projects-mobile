@@ -42,13 +42,14 @@ import 'package:projects/internal/locator.dart';
 class CoreApi {
   final SecureStorage _secureStorage = locator<SecureStorage>();
   String? _portalName;
+  String? _token;
 
   final int timeout = 30;
 
   CancellationToken cancellationToken = CancellationToken();
 
   Future<Map<String, String>> getHeaders() async {
-    final token = await getToken();
+    final token = await getToken() ?? ''; // TODO null check
     return <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -58,15 +59,7 @@ class CoreApi {
 
   String version = '2.0';
 
-  String capabilitiesUrl(String portalName) {
-    if (portalName.contains('http')) {
-      _portalName = portalName;
-    } else {
-      _portalName = 'https://$portalName';
-    }
-
-    return '$_portalName/api/$version/capabilities';
-  }
+  Future<String> getCapabilitiesUrl() async => '${await getPortalURI()}/api/$version/capabilities';
 
   Future<String> addTaskCommentUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
@@ -77,17 +70,14 @@ class CoreApi {
   Future<String> addMessageCommentUrl({required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/comment';
 
-  Future<String> allGroups() async =>
-      '${await getPortalURI()}/api/$version/group';
+  Future<String> allGroups() async => '${await getPortalURI()}/api/$version/group';
 
   Future<String> addTaskUrl({required int projectId}) async =>
       '${await getPortalURI()}/api/$version/project/$projectId/task';
 
-  Future<String> allProfiles() async =>
-      '${await getPortalURI()}/api/$version/people';
+  Future<String> allProfiles() async => '${await getPortalURI()}/api/$version/people';
 
-  Future<String> authUrl() async =>
-      '${await getPortalURI()}/api/$version/authentication';
+  Future<String> authUrl() async => '${await getPortalURI()}/api/$version/authentication';
 
   Future<String> copyTaskUrl({required int copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
@@ -122,8 +112,7 @@ class CoreApi {
   Future<String> getEntityFilesUrl({required int entityId}) async =>
       '${await getPortalURI()}/api/$version/project/$entityId/entityfiles';
 
-  Future<String> getFilesBaseUrl() async =>
-      '${await getPortalURI()}/api/$version/files/';
+  Future<String> getFilesBaseUrl() async => '${await getPortalURI()}/api/$version/files/';
 
   Future<String> discussionsByParamsUrl() async =>
       '${await getPortalURI()}/api/$version/project/message/filter?';
@@ -172,17 +161,14 @@ class CoreApi {
   Future<String> taskComments({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
-  Future<String> projectsUrl() async =>
-      '${await getPortalURI()}/api/$version/project';
+  Future<String> projectsUrl() async => '${await getPortalURI()}/api/$version/project';
 
   Future<String> projectByIdUrl(int projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 
-  Future<String> projectTags() async =>
-      '${await getPortalURI()}/api/$version/project/tag';
+  Future<String> projectTags() async => '${await getPortalURI()}/api/$version/project/tag';
 
-  Future<String> selfInfoUrl() async =>
-      '${await getPortalURI()}/api/$version/people/@self';
+  Future<String> selfInfoUrl() async => '${await getPortalURI()}/api/$version/people/@self';
 
   Future<String> sendRegistrationTypeUrl() async =>
       '${await getPortalURI()}/api/$version/portal/mobile/registration';
@@ -193,8 +179,7 @@ class CoreApi {
   Future<String> setPhoneUrl() async =>
       '${await getPortalURI()}/api/$version/authentication/setphone';
 
-  Future<String> statusesUrl() async =>
-      '${await getPortalURI()}/api/$version/project/status';
+  Future<String> statusesUrl() async => '${await getPortalURI()}/api/$version/project/status';
 
   Future<String> subscribeTaskUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
@@ -232,8 +217,7 @@ class CoreApi {
   Future<String> createProjectUrl() async =>
       '${await getPortalURI()}/api/$version/project/withSecurity';
 
-  Future<String> createTagUrl() async =>
-      '${await getPortalURI()}/api/$version/project/tag';
+  Future<String> createTagUrl() async => '${await getPortalURI()}/api/$version/project/tag';
 
   Future<String> projectByIDUrl(int projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
@@ -256,16 +240,17 @@ class CoreApi {
   Future<String> getFileByIdUrl(String fileId) async =>
       '${await getPortalURI()}/api/$version/files/file/$fileId';
 
-  Future<String> getMoveOpsUrl() async =>
-      '${await getPortalURI()}/api/$version/files/fileops/move';
-  Future<String> getCopyOpsUrl() async =>
-      '${await getPortalURI()}/api/$version/files/fileops/copy';
+  Future<String> getMoveOpsUrl() async => '${await getPortalURI()}/api/$version/files/fileops/move';
+  Future<String> getCopyOpsUrl() async => '${await getPortalURI()}/api/$version/files/fileops/copy';
 
   Future<String> getFileOperationsUrl() async =>
       '${await getPortalURI()}/api/$version/files/fileops';
 
   Future<String> getProjectSecurityInfoUrl() async =>
       '${await getPortalURI()}/api/$version/project/securityinfo';
+
+  Future<String> getUploadImagesUrl() async =>
+      '${await getPortalURI()}/fckuploader.ashx?newEditor=true&esid=projects_comments&CKEditor=commentEditorcommentsObj&CKEditorFuncNum=75&langCode=ru';
 
   Future<dynamic> getRequest(String url) async {
     try {
@@ -416,23 +401,37 @@ class CoreApi {
       _portalName = await _secureStorage.getString('portalName');
     }
 
-    if (_portalName == null) {
-      return null;
-    } else {
-      if (!_portalName!.contains('http')) {
-        _portalName = 'https://$_portalName';
-        await savePortalName();
-      }
-    }
+    if (_portalName == null) return null;
+
     return _portalName;
   }
 
-  Future<String> getToken() async {
-    final token = await _secureStorage.getString('token') ?? '';
-    return token;
+  Future<String?> getToken() async {
+    if (_token == null || _token!.isEmpty) {
+      _token = await _secureStorage.getString('token') ?? '';
+    }
+
+    return _token;
   }
 
   Future<void> savePortalName() async {
     await _secureStorage.putString('portalName', _portalName);
+  }
+
+  void setPortalName(String portalName) {
+    if (portalName.contains('http')) {
+      _portalName = portalName;
+    } else {
+      _portalName = 'https://$portalName';
+    }
+  }
+
+  void redirectPortal() {
+    if (_portalName == null || _portalName!.isEmpty) return;
+
+    if (_portalName!.contains('https'))
+      _portalName = _portalName!.replaceFirst('https', 'http');
+    else
+      _portalName = _portalName!.replaceFirst('http', 'https');
   }
 }

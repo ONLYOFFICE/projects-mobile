@@ -94,8 +94,9 @@ class SelectProjectView extends StatelessWidget {
           hintText: tr('searchProjects'),
           controller: searchController.searchInputController,
           showClearIcon: true,
-          onSubmitted: (value) => searchController.newSearch(value),
-          onClearPressed: () => searchController.clearSearch(),
+          onChanged: searchController.newSearch,
+          onSubmitted: searchController.newSearch,
+          onClearPressed: searchController.clearSearch,
         ),
       ),
       body: Obx(() {

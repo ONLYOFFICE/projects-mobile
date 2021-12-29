@@ -70,19 +70,22 @@ class ProfileController extends GetxController {
       .obs;
 
   Future<void> setup() async {
-    // ignore: unawaited_futures
-    userController.getUserInfo();
-    await portalInfoController.setup();
+    var response = await userController.getUserInfo();
+    if (response) {
+      user.value = userController.user;
+      username.value = userController.user!.displayName!;
+      status.value = userController.user!.status!;
+      isVisitor.value = userController.user!.isVisitor!;
+      isOwner.value = userController.user!.isOwner!;
+      isAdmin.value = userController.user!.isAdmin!;
+      email.value = userController.user!.email!;
+    }
 
-    user.value = userController.user;
-    portalName.value = portalInfoController.portalName!;
-    username.value = userController.user!.displayName!;
-    status.value = userController.user!.status!;
-    isVisitor.value = userController.user!.isVisitor!;
-    isOwner.value = userController.user!.isOwner!;
-    isAdmin.value = userController.user!.isAdmin!;
+    response = await portalInfoController.setup();
+    if (response) {
+      portalName.value = portalInfoController.portalName!;
+    }
 
-    email.value = userController.user!.email!;
     await loadAvatar();
   }
 

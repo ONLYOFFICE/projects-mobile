@@ -126,8 +126,7 @@ class PortalUserItem extends StatelessWidget {
                                 style: TextStyleHelper.subtitle1(),
                               ),
                               Obx(
-                                () => userController!.userTitle != null &&
-                                        userController!.userTitle.isNotEmpty
+                                () => userController!.userTitle.isNotEmpty
                                     ? Text(
                                         userController!.userTitle.replaceAll(' ', '\u00A0'),
                                         overflow: TextOverflow.ellipsis,

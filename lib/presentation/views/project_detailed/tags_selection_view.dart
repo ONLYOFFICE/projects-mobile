@@ -85,9 +85,7 @@ class TagsSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('tags'),
         ),
-        actions: [
-          IconButton(icon: const Icon(Icons.check_rounded), onPressed: () => controller.confirm())
-        ],
+        actions: [IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirm)],
         bottom: _TagsSearchBar(controller: controller),
       ),
       body: Obx(

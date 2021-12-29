@@ -90,7 +90,13 @@ class EditProjectView extends StatelessWidget {
                   const SizedBox(height: 26),
                   ProjectTitleTile(controller: editProjectController),
                   const SizedBox(height: 20),
-                  ProjectStatusButton(projectController: editProjectController),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 72),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ProjectStatusButton(
+                            projectController: editProjectController)),
+                  ),
                   const SizedBox(height: 20),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),

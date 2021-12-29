@@ -49,30 +49,21 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 
 part 'status_image.dart';
 
-class TaskCell extends StatefulWidget {
+class TaskCell extends StatelessWidget {
   final PortalTask task;
-  const TaskCell({Key? key, required this.task}) : super(key: key);
-
-  @override
-  _TaskCellState createState() => _TaskCellState();
-}
-
-class _TaskCellState extends State<TaskCell> {
-  late TaskItemController itemController;
-
-  @override
-  void initState() {
-    itemController = Get.put(
-      TaskItemController(widget.task),
-      tag: widget.task.id.toString(),
-    );
-    WidgetsBinding.instance!
-        .addPostFrameCallback((_) async => await itemController.initTaskStatus(widget.task));
-    super.initState();
-  }
+  TaskCell({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final itemController = TaskItemController(task);
+    Get.put(
+      itemController,
+      tag: task.id.toString(),
+    );
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) async => await itemController.initTaskStatus(task),
+    );
+
     return InkWell(
       onTap: () => Get.find<NavigationController>()
           .to(const TaskDetailedView(), arguments: {'controller': itemController}),
@@ -226,8 +217,14 @@ class _ThirdColumn extends StatelessWidget {
           children: [
             const AppIcon(icon: SvgIcons.subtasks, color: Color(0xff666666)),
             const SizedBox(width: 5),
-            Text(controller!.task.value.subtasks!.length.toString(),
-                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            SizedBox(
+              width: 20,
+              child: Text(
+                controller!.task.value.subtasks!.length.toString(),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+              ),
+            ),
           ],
         ),
       ],

@@ -31,7 +31,9 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -43,8 +45,7 @@ import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -53,6 +54,8 @@ import 'package:projects/presentation/views/authentication/2fa_sms/enter_sms_cod
 import 'package:projects/presentation/views/authentication/code_view.dart';
 import 'package:projects/presentation/views/authentication/code_views/get_code_views.dart';
 import 'package:projects/presentation/views/authentication/login_view.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 
 class LoginController extends GetxController {
   final AuthService _authService = locator<AuthService>();
@@ -76,8 +79,15 @@ class LoginController extends GetxController {
   String? _email;
   String? _tfaKey;
 
-  String get portalAdress => portalAdressController.text.replaceFirst('https://', '');
+  String get portalAdress => portalAdressController.text.contains('//')
+      ? portalAdressController.text.split('//')[1]
+      : portalAdressController.text;
   String? get tfaKey => _tfaKey;
+
+  final cookieManager = WebviewCookieManager();
+
+  final checkBoxValue = false.obs;
+  final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
   @override
   void onInit() {
@@ -106,6 +116,13 @@ class LoginController extends GetxController {
 
         await Get.find<AccountManagerController>()
             .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
+
+        await cookieManager.setCookies([
+          Cookie('asc_auth_key', result.response!.token!)
+            ..domain = portalAdress
+            ..expires = DateTime.now().add(const Duration(days: 10))
+            ..httpOnly = false
+        ]);
 
         locator<EventHub>().fire('loginSuccess');
       } else if (result.response!.tfa == true) {
@@ -213,9 +230,14 @@ class LoginController extends GetxController {
   }
 
   Future<void> getPortalCapabilities() async {
+    if (needAgreement && !checkBoxValue.value) {
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('privacyAndTermsFooter.total'));
+      return;
+    }
+
     portalAdressController.text = portalAdressController.text.removeAllWhitespace;
 
-    if (!portalAdressController.text.isURL) {
+    if (!(portalAdressController.text.isURL || portalAdressController.text.isIPv4)) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
@@ -225,10 +247,13 @@ class LoginController extends GetxController {
     } else {
       setState(ViewState.Busy);
 
-      final _capabilities = await _portalService.portalCapabilities(portalAdressController.text);
+      locator.get<CoreApi>().setPortalName(portalAdressController.text);
+
+      final _capabilities = await _portalService.portalCapabilities();
 
       if (_capabilities != null) {
         capabilities = _capabilities;
+        checkBoxValue.value = false;
         setState(ViewState.Idle);
         await Get.to(() => const LoginView());
       }
@@ -277,6 +302,8 @@ class LoginController extends GetxController {
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
+
+    await cookieManager.clearCookies();
 
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();

@@ -57,11 +57,14 @@ class PortalInfoController extends GetxController {
     _headers = null;
   }
 
-  Future<void> setup() async {
-    await lock.synchronized(() async {
+  Future<bool> setup() async {
+    final response = await lock.synchronized(() async {
       _portalUri ??= await locator.get<CoreApi>().getPortalURI();
       _headers ??= await locator.get<CoreApi>().getHeaders();
-      _portalName ??= _portalUri!.replaceFirst('https://', '');
+      if (_portalUri == null) return Future.value(false);
+      _portalName ??= _portalUri!.split('//')[1];
+      return Future.value(true);
     });
+    return Future.value(response);
   }
 }

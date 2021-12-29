@@ -35,8 +35,10 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/authentication_api.dart';
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
@@ -50,12 +52,7 @@ class AuthService {
     final result = authResponse.response != null;
 
     if (!result) {
-      var errorText = '';
-      if (authResponse.error?.message == 'Server error') {
-        errorText = tr('tfaWrongCode');
-      }
-      await Get.find<ErrorDialog>()
-          .show(errorText == '' ? authResponse.error!.message : errorText);
+      await Get.find<ErrorDialog>().show(authResponse.error?.message ?? '');
     }
     return authResponse;
   }
@@ -77,11 +74,14 @@ class AuthService {
     required String email,
     required String pass,
   }) async {
-    final authResponse = await _api.loginByUsername(email: email, pass: pass);
+    var authResponse = await _api.loginByUsername(email: email, pass: pass);
 
-    final tokenReceived = authResponse.response != null;
+    if (authResponse.error is CustomError && authResponse.error?.message == 'Redirect') {
+      locator.get<CoreApi>().redirectPortal();
+      authResponse = await _api.loginByUsername(email: email, pass: pass);
+    }
 
-    if (!tokenReceived) {
+    if (authResponse.response == null) {
       await Get.find<ErrorDialog>().show(authResponse.error!.message);
     }
     return authResponse;
@@ -92,17 +92,15 @@ class AuthService {
     required String pass,
     required String code,
   }) async {
-    final authResponse =
-        await _api.confirmTFACode(email: email, pass: pass, code: code);
+    final authResponse = await _api.confirmTFACode(email: email, pass: pass, code: code);
 
     final tokenReceived = authResponse.response != null;
 
     if (!tokenReceived) {
-      String? errorText;
-      if (authResponse.error?.message != 'Server error') {
-        errorText = authResponse.error?.message;
-      }
-      await Get.find<ErrorDialog>().show(errorText ?? '');
+      var errorText = '';
+      if (authResponse.error?.message == 'Server error') errorText = tr('tfaWrongCode');
+      await Get.find<ErrorDialog>()
+          .show(errorText == '' ? authResponse.error?.message ?? '' : errorText);
     }
     return authResponse;
   }

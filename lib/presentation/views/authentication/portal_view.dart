@@ -45,8 +45,7 @@ import 'package:projects/presentation/views/authentication/widgets/wide_button.d
 
 class PortalInputView extends StatelessWidget {
   PortalInputView({Key? key}) : super(key: key);
-
-  final LoginController controller = Get.find<LoginController>();
+  final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
@@ -65,13 +64,14 @@ class PortalInputView extends StatelessWidget {
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: const BoxConstraints(maxWidth: 480),
+                    constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        SizedBox(height: Get.height * 0.165),
+                        SizedBox(height: Get.height * 0.2),
                         const AppIcon(icon: SvgIcons.app_logo),
-                        SizedBox(height: Get.height * 0.044),
+                        SizedBox(height: Get.height * 0.01),
                         Text(tr('appName'),
                             textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
                         SizedBox(height: Get.height * 0.111),
@@ -98,12 +98,20 @@ class PortalInputView extends StatelessWidget {
                           ]),
                           child: WideButton(
                             text: tr('next'),
-                            onPressed: () async => controller.getPortalCapabilities(),
+                            textColor: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().onBackground.withOpacity(0.5)
+                                : null,
+                            color: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().bgDescription
+                                : null,
+                            onPressed: controller.getPortalCapabilities,
                           ),
                         ),
-                        SizedBox(height: Get.height * 0.222),
-                        const PrivacyAndTermsFooter(),
-                        const SizedBox(height: 36),
+                        if (controller.needAgreement)
+                          PrivacyAndTermsFooter.withCheckbox()
+                        else
+                          const Spacer(),
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
                       ],
                     ),
                   ),

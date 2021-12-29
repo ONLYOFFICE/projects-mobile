@@ -35,6 +35,7 @@ import 'dart:async';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -46,14 +47,15 @@ class NavigationController extends GetxController {
   RxInt tabIndex = 0.obs;
   RxBool onMoreView = false.obs;
   final _userController = Get.find<UserController>();
-  late Rx<PortalUserItemController> selfUserItem;
+  Rx<PortalUserItemController> selfUserItem =
+      Rx(PortalUserItemController(portalUser: PortalUser()));
 
   int treeLength = 0;
 
   @override
   void onInit() {
-    _userController.getUserInfo().then((value) => selfUserItem =
-        Rx(PortalUserItemController(portalUser: _userController.user!)));
+    _userController.getUserInfo().then((value) =>
+        selfUserItem.value = PortalUserItemController(portalUser: _userController.user!));
 
     super.onInit();
   }
@@ -65,15 +67,13 @@ class NavigationController extends GetxController {
   }
 
   void showMoreView() {
-    if (onMoreView.value != true)
-      locator<EventHub>().fire('moreViewVisibilityChanged', true);
+    if (onMoreView.value != true) locator<EventHub>().fire('moreViewVisibilityChanged', true);
 
     onMoreView.value = true;
   }
 
   void hideMoreView() {
-    if (onMoreView.value != false)
-      locator<EventHub>().fire('moreViewVisibilityChanged', false);
+    if (onMoreView.value != false) locator<EventHub>().fire('moreViewVisibilityChanged', false);
 
     onMoreView.value = false;
   }
@@ -135,8 +135,7 @@ class NavigationController extends GetxController {
     }
   }
 
-  void to(Widget widget,
-      {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
+  void to(Widget widget, {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
     if (Get.find<PlatformController>().isMobile) {
       Get.to(
         () => widget,
