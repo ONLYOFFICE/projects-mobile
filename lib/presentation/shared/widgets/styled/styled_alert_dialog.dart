@@ -37,17 +37,17 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StyledAlertDialog extends StatelessWidget {
-  final Widget title;
-  final String titleText;
-  final Widget content;
-  final String contentText;
-  final String cancelText;
-  final String acceptText;
-  final Color acceptColor;
-  final Function() onCancelTap;
-  final Function() onAcceptTap;
+  final Widget? title;
+  final String? titleText;
+  final Widget? content;
+  final String? contentText;
+  final String? cancelText;
+  final String? acceptText;
+  final Color? acceptColor;
+  final Function()? onCancelTap;
+  final Function()? onAcceptTap;
   const StyledAlertDialog({
-    Key key,
+    Key? key,
     this.cancelText,
     this.acceptColor,
     this.acceptText,
@@ -71,8 +71,8 @@ class StyledAlertDialog extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 24),
       insetPadding: EdgeInsets.zero,
       actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      title: title ?? Text(titleText),
-      content: content ?? (contentText != null ? Text(contentText) : null),
+      title: title ?? Text(titleText!),
+      content: content ?? (contentText != null ? Text(contentText!) : null),
       actions: [
         TextButton(
           onPressed: onCancelTap ?? Get.back,
@@ -93,17 +93,17 @@ class StyledAlertDialog extends StatelessWidget {
 }
 
 class SingleButtonDialog extends StatelessWidget {
-  final Widget title;
-  final String titleText;
-  final Widget content;
-  final String contentText;
+  final Widget? title;
+  final String? titleText;
+  final Widget? content;
+  final String? contentText;
 
-  final String acceptText;
-  final Color acceptColor;
+  final String? acceptText;
+  final Color? acceptColor;
 
-  final Function() onAcceptTap;
+  final Function()? onAcceptTap;
   const SingleButtonDialog({
-    Key key,
+    Key? key,
     this.acceptColor,
     this.acceptText,
     this.title,
@@ -124,12 +124,12 @@ class SingleButtonDialog extends StatelessWidget {
           : const EdgeInsets.symmetric(horizontal: 24),
       insetPadding: EdgeInsets.zero,
       actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      title: title ?? Text(titleText),
+      title: title ?? Text(titleText!),
       // ignore: prefer_if_null_operators
       content: content != null
           ? content
           : contentText != null
-              ? Text(contentText)
+              ? Text(contentText!)
               : null,
       actions: [
         TextButton(

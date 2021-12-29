@@ -151,6 +151,11 @@ class SvgIcons {
   static const String presentation =
       'lib/assets/images/icons/folders/presentation.svg';
 
+  static const String archived_status =
+      'lib/assets/images/icons/discussion_statuses/archived.svg';
+  static const String open_status =
+      'lib/assets/images/icons/discussion_statuses/open.svg';
+
   static const String comments_not_created =
       'lib/assets/images/icons/empty_state/comments_not_created.svg';
   static const String comments_not_created_dark =
@@ -213,17 +218,17 @@ class PngIcons {
 }
 
 class AppIcon extends StatelessWidget {
-  final Color color;
-  final double height;
-  final double width;
-  final String icon;
-  final String darkThemeIcon;
+  final Color? color;
+  final double? height;
+  final double? width;
+  final String? icon;
+  final String? darkThemeIcon;
   final bool isPng;
   final bool hasDarkVersion;
 
-  AppIcon({
-    Key key,
-    @required this.icon,
+  const AppIcon({
+    Key? key,
+    required this.icon,
     this.color,
     this.height,
     this.width,
@@ -232,11 +237,11 @@ class AppIcon extends StatelessWidget {
     this.darkThemeIcon,
   }) : super(key: key);
 
-  String get iconToDisplay {
+  String? get iconToDisplay {
     if (!hasDarkVersion) return icon;
 
     if (Get.theme.brightness == Brightness.dark)
-      return darkThemeIcon ?? icon.replaceFirst('.', '_dark.');
+      return darkThemeIcon ?? icon!.replaceFirst('.', '_dark.');
     return icon;
   }
 
@@ -246,13 +251,13 @@ class AppIcon extends StatelessWidget {
     // Therefore, there will be support for png icons as well
     return isPng
         ? Image(
-            image: AssetImage(iconToDisplay),
+            image: AssetImage(iconToDisplay!),
             color: color,
             height: height,
             width: width,
           )
         : SvgPicture.asset(
-            iconToDisplay,
+            iconToDisplay!,
             color: color,
             height: height,
             width: width,

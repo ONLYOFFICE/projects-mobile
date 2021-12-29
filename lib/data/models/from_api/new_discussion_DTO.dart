@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -39,15 +41,15 @@ class NewDiscussionDTO {
     this.notify,
   });
 
-  final int projectId;
-  final bool notify;
-  final String title;
-  final String content;
-  final List<String> participants;
+  final int? projectId;
+  final bool? notify;
+  final String? title;
+  final String? content;
+  final List<String?>? participants;
 
   Map<String, dynamic> toJson() {
     // ignore: omit_local_variable_types
-    String part = participants.join(',');
+    final part = participants!.join(',');
 
     return {
       'title': title,

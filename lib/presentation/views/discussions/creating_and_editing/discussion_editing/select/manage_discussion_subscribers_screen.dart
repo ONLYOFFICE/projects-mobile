@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -50,13 +51,13 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
-  const ManageDiscussionSubscribersScreen({Key key}) : super(key: key);
+  const ManageDiscussionSubscribersScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var usersDataSource = Get.find<UsersDataSource>();
-    DiscussionActionsController controller = Get.arguments['controller'];
-    var onConfirm = Get.arguments['onConfirm'];
+    final usersDataSource = Get.find<UsersDataSource>();
+    final controller = Get.arguments['controller'] as DiscussionActionsController;
+    final onConfirm = Get.arguments['onConfirm'] as Function()?;
 
     final platformController = Get.find<PlatformController>();
 
@@ -68,24 +69,20 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           title: Obx(
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   tr('manageSubscribers'),
-                  style: TextStyleHelper.headerStyle(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                 ),
                 if (controller.subscribers.isNotEmpty)
                   Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onSurface))
+                      style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
               ],
             ),
           ),
@@ -105,10 +102,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               Obx(() => Expanded(
                     child: SearchField(
                       hintText: tr('usersSearch'),
-                      onSubmitted: (value) =>
-                          usersDataSource.searchUsers(value),
-                      showClearIcon:
-                          usersDataSource.isSearchResult.value == true,
+                      onSubmitted: usersDataSource.searchUsers,
+                      showClearIcon: usersDataSource.isSearchResult.value == true,
+                      onChanged: usersDataSource.searchUsers,
                       onClearPressed: controller.clearUserSearch,
                       controller: controller.userSearchController,
                     ),
@@ -116,10 +112,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15.5, right: 16),
                 child: InkResponse(
-                  onTap: () => Get.find<NavigationController>().to(
-                      const UsersFromGroups(),
-                      arguments: {'controller': controller}),
-                  child: AppIcon(icon: SvgIcons.preferences),
+                  onTap: () => Get.find<NavigationController>()
+                      .to(const UsersFromGroups(), arguments: {'controller': controller}),
+                  child: const AppIcon(icon: SvgIcons.preferences),
                 ),
               )
             ],
@@ -153,15 +148,15 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             if (usersDataSource.nothingFound.value == true) {
               // NothingFound contains Expanded widget, that why it is needed
               // to use Column
-              return Column(children: [const NothingFound()]);
+              return Column(children: const [NothingFound()]);
             }
             if (usersDataSource.loaded.value == true &&
                 usersDataSource.usersList.isNotEmpty &&
                 usersDataSource.isSearchResult.value == true) {
               return UsersSearchResult(
                 usersDataSource: usersDataSource,
-                onTapFunction: (user) =>
-                    controller.addSubscriber(user, fromUsersDataSource: true),
+                onTapFunction: (user) => controller.addSubscriber(user as PortalUserItemController,
+                    fromUsersDataSource: true),
               );
             }
             return const ListLoadingSkeleton();
@@ -174,8 +169,8 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
 
 class _UsersCategoryText extends StatelessWidget {
   const _UsersCategoryText({
-    Key key,
-    @required this.text,
+    Key? key,
+    required this.text,
   }) : super(key: key);
 
   final String text;
@@ -187,8 +182,7 @@ class _UsersCategoryText extends StatelessWidget {
         padding: const EdgeInsets.only(left: 15, top: 14),
         child: Text(
           text,
-          style: TextStyleHelper.body2(
-              color: Get.theme.colors().onSurface.withOpacity(0.6)),
+          style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
         ),
       ),
     );
@@ -197,8 +191,8 @@ class _UsersCategoryText extends StatelessWidget {
 
 class _AllUsers extends StatelessWidget {
   const _AllUsers({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final DiscussionActionsController controller;
@@ -211,10 +205,7 @@ class _AllUsers extends StatelessWidget {
           padding: const EdgeInsets.only(top: 24),
           child: PortalUserItem(
             userController: controller.otherUsers[index],
-            onTapFunction: (value) => {
-              controller.addSubscriber(controller.otherUsers[index],
-                  fromUsersDataSource: false)
-            },
+            onTapFunction: (value) => {controller.addSubscriber(controller.otherUsers[index])},
           ),
         ),
         childCount: controller.otherUsers.length,
@@ -225,9 +216,9 @@ class _AllUsers extends StatelessWidget {
 
 class _SubscribedUsers extends StatelessWidget {
   const _SubscribedUsers({
-    Key key,
-    @required this.controller,
-    @required this.usersDataSource,
+    Key? key,
+    required this.controller,
+    required this.usersDataSource,
   }) : super(key: key);
 
   final DiscussionActionsController controller;

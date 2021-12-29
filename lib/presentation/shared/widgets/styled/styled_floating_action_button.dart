@@ -36,12 +36,12 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class StyledFloatingActionButton extends StatelessWidget {
-  final Function() onPressed;
-  final Widget child;
-  final Color backgroundColor;
+  final Function()? onPressed;
+  final Widget? child;
+  final Color? backgroundColor;
 
   const StyledFloatingActionButton({
-    Key key,
+    Key? key,
     this.backgroundColor, //= Get.theme.customColors().lightSecondary,
     this.onPressed,
     this.child,
@@ -51,9 +51,9 @@ class StyledFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: MessagesHandler.isDisplayed,
-      builder: (context, value, _) {
+      builder: (context, bool value, _) {
         // ignore: omit_local_variable_types
-        double padding = value ? 60.0 : 0.0;
+        final double padding = value ? 60.0 : 0.0;
         return AnimatedPadding(
           duration: const Duration(milliseconds: 150),
           padding: EdgeInsets.only(bottom: padding),
@@ -67,10 +67,7 @@ class StyledFloatingActionButton extends StatelessWidget {
                     spreadRadius: 1,
                     offset: const Offset(0, 1)),
                 const BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 5,
-                    spreadRadius: 1,
-                    offset: Offset(0, 4)),
+                    color: Colors.black12, blurRadius: 5, spreadRadius: 1, offset: Offset(0, 4)),
               ],
             ),
             child: FloatingActionButton(

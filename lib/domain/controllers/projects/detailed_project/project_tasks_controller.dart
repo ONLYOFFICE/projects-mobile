@@ -30,7 +30,9 @@
  *
  */
 
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
@@ -39,49 +41,58 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 
 class ProjectTasksController extends GetxController {
-  final _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
   final paginationController =
-      Get.put(PaginationController(), tag: 'ProjectTasksController');
+      Get.put(PaginationController<PortalTask>(), tag: 'ProjectTasksController');
 
-  final _sortController =
-      Get.put(TasksSortController(), tag: 'ProjectTasksController');
+  final _sortController = Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
   final _filterController = Get.find<ProjectTaskFilterController>();
 
-  ProjectDetailed _projectDetailed;
+  late ProjectDetailed _projectDetailed;
 
   ProjectTaskFilterController get filterController => _filterController;
   TasksSortController get sortController => _sortController;
 
   RxBool loaded = false.obs;
 
-  var hasFilters = false.obs;
+  RxBool hasFilters = false.obs;
 
-  int _projectId;
+  int? _projectId;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
     _filterController.applyFiltersDelegate = () async => loadTasks();
     paginationController.loadDelegate = () async => await _getTasks();
-    paginationController.refreshDelegate =
-        () async => await _getTasks(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
   }
 
   RxList get itemList => paginationController.data;
 
-  Future loadTasks() async {
+  Future<void> refreshData() async {
     loaded.value = false;
-    paginationController.startIndex = 0;
-    await _getTasks(needToClear: true);
+
+    //await _getTasks(needToClear: true);
+    locator<EventHub>().fire('needToRefreshProjects', ['all']);
+
     loaded.value = true;
   }
 
-  Future _getTasks({needToClear = false}) async {
-    var result = await _api.getTasksByParams(
+  Future loadTasks() async {
+    loaded.value = false;
+
+    paginationController.startIndex = 0;
+    await _getTasks(needToClear: true);
+
+    loaded.value = true;
+  }
+
+  Future<bool> _getTasks({bool needToClear = false}) async {
+    final result = await _api.getTasksByParams(
         startIndex: paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
         sortOrder: _sortController.currentSortOrder,
@@ -91,11 +102,14 @@ class ProjectTasksController extends GetxController {
         milestoneFilter: _filterController.milestoneFilter,
         deadlineFilter: _filterController.deadlineFilter,
         projectId: _projectId.toString());
+
+    if (result == null) return Future.value(false);
+
     paginationController.total.value = result.total;
-
     if (needToClear) paginationController.data.clear();
+    paginationController.data.addAll(result.response ?? <PortalTask>[]);
 
-    paginationController.data.addAll(result.response);
+    return Future.value(true);
   }
 
   Future<void> setup(ProjectDetailed projectDetailed) async {
@@ -103,12 +117,10 @@ class ProjectTasksController extends GetxController {
     _projectDetailed = projectDetailed;
     _projectId = projectDetailed.id;
     _filterController.projectId = _projectId.toString();
-
-// ignore: unawaited_futures
-    loadTasks();
-
     fabIsVisible.value = _canCreate();
+
+    await loadTasks();
   }
 
-  bool _canCreate() => _projectDetailed.security['canCreateTask'];
+  bool _canCreate() => _projectDetailed.security!['canCreateTask'] ?? false;
 }

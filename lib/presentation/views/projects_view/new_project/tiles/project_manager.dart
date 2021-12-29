@@ -42,8 +42,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class ProjectManagerTile extends StatelessWidget {
   const ProjectManagerTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;
@@ -52,21 +52,20 @@ class ProjectManagerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.isPMSelected.value;
+        final _isNotEmpty = controller.isPMSelected.value as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('project')}:' : null,
-          text: _isNotEmpty ? controller.managerName.value : tr('choosePM'),
+          text: _isNotEmpty ? controller.managerName.value as String : tr('choosePM'),
           icon: SvgIcons.user,
-          textColor: controller.needToFillManager.value
-              ? Get.theme.colors().colorError
-              : null,
+          textColor:
+              controller.needToFillManager.value as bool ? Get.theme.colors().colorError : null,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
-                  onTap: controller.removeManager,
+                  onTap: controller.removeManager as Function(),
                   child: Icon(
                     Icons.close,
                     size: 24,
@@ -74,9 +73,8 @@ class ProjectManagerTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const ProjectManagerSelectionView(),
-              arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const ProjectManagerSelectionView(), arguments: {'controller': controller}),
         );
       },
     );

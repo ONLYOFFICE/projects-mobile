@@ -33,14 +33,14 @@
 part of '../get_code_views.dart';
 
 class _Step4 extends StatelessWidget {
-  const _Step4({Key key, this.topPadding}) : super(key: key);
+  const _Step4({Key? key, this.topPadding}) : super(key: key);
 
-  final double topPadding;
+  final double? topPadding;
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
-    var codeController = MaskedTextController(mask: '000000');
+    final controller = Get.find<LoginController>();
+    final codeController = MaskedTextController(mask: '000000');
 
     return SingleChildScrollView(
       child: Column(
@@ -54,7 +54,7 @@ class _Step4 extends StatelessWidget {
             hasDarkVersion: true,
             darkThemeIcon: PngIcons.code_dark,
             isPng: true,
-            height: 184.5.h,
+            height: 184.5.h as double?,
           ),
           const SizedBox(height: 13),
           Padding(

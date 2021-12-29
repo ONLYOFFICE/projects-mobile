@@ -44,10 +44,10 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class LoginView extends StatelessWidget {
-  LoginView({Key key}) : super(key: key);
+  const LoginView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<LoginController>();
+    final controller = Get.find<LoginController>();
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -56,17 +56,15 @@ class LoginView extends StatelessWidget {
           children: [
             SizedBox(height: Get.height * 0.094),
             Text('${tr('portalAdress')}:',
-                style:
-                    TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
             Text(controller.portalAdress,
-                style: TextStyleHelper.headline6(
-                    color: Get.theme.colors().onSurface)),
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             Center(
               child: Container(
                 color: Get.theme.backgroundColor,
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
-                  padding: const EdgeInsets.all(36.0),
+                  padding: const EdgeInsets.all(36),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -100,27 +98,20 @@ class LoginView extends StatelessWidget {
                           BoxShadow(
                               blurRadius: 3,
                               offset: const Offset(0, 0.85),
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.19)),
+                              color: Get.theme.colors().onBackground.withOpacity(0.19)),
                           BoxShadow(
                               blurRadius: 3,
                               offset: const Offset(0, 0.25),
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.04)),
+                              color: Get.theme.colors().onBackground.withOpacity(0.04)),
                         ]),
                         child: WideButton(
                           text: tr('next'),
-                          onPressed: () async =>
-                              await controller.loginByPassword(),
+                          onPressed: () async => await controller.loginByPassword(),
                         ),
                       ),
                       const SizedBox(height: 4),
                       TextButton(
-                        onPressed: () async => Get.to(
+                        onPressed: () async => Get.to<PasswordRecoveryScreen1>(
                           () => const PasswordRecoveryScreen1(),
                           arguments: {'email': controller.emailController.text},
                         ),

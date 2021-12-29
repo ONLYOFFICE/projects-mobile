@@ -42,13 +42,13 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class TaskFilterController extends BaseTaskFilterController {
-  final _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
   final _sortController = Get.find<TasksSortController>();
-  final _storage = locator<Storage>();
+  final Storage _storage = locator<Storage>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
   RxString acceptedFilters = ''.obs;
 
@@ -61,19 +61,24 @@ class TaskFilterController extends BaseTaskFilterController {
 
   @override
   String get responsibleFilter => _responsibleFilter;
+
   @override
   String get creatorFilter => _creatorFilter;
+
   @override
   String get projectFilter => _projectFilter;
+
   @override
   String get milestoneFilter => _milestoneFilter;
+
   @override
   String get statusFilter => _statusFilter;
+
   @override
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String _projectId;
+  String? _projectId;
 
   bool get _hasFilters =>
       _responsibleFilter.isNotEmpty ||
@@ -99,8 +104,7 @@ class TaskFilterController extends BaseTaskFilterController {
   }
 
   @override
-  String get filtersTitle =>
-      plural('tasksFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('tasksFilterConfirm', suitableResultCount.value);
 
   TaskFilterController() {
     suitableResultCount = (-1).obs;
@@ -109,7 +113,7 @@ class TaskFilterController extends BaseTaskFilterController {
   set projectId(String value) => _projectId = value;
 
   @override
-  void changeResponsible(String filter, [newValue = '']) async {
+  Future<void> changeResponsible(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
     _responsibleFilter = '';
 
@@ -118,8 +122,10 @@ class TaskFilterController extends BaseTaskFilterController {
         responsible['other'] = '';
         responsible['groups'] = '';
         responsible['no'] = false;
-        responsible['me'] = !responsible['me'];
-        if (responsible['me']) _responsibleFilter = '&participant=$_selfId';
+        responsible['me'] = !(responsible['me'] as bool);
+        if (responsible['me'] as bool) {
+          _responsibleFilter = '&participant=$_selfId';
+        }
         break;
       case 'other':
         responsible['me'] = false;
@@ -147,25 +153,24 @@ class TaskFilterController extends BaseTaskFilterController {
         responsible['me'] = false;
         responsible['other'] = '';
         responsible['groups'] = '';
-        responsible['no'] = !responsible['no'];
-        if (responsible['no']) {
-          _responsibleFilter =
-              '&participant=00000000-0000-0000-0000-000000000000';
+        responsible['no'] = !(responsible['no'] as bool);
+        if (responsible['no'] as bool) {
+          _responsibleFilter = '&participant=00000000-0000-0000-0000-000000000000';
         }
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void changeCreator(String filter, [newValue = '']) async {
+  Future<void> changeCreator(String filter, [newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
     _creatorFilter = '';
     if (filter == 'me') {
       creator['other'] = '';
-      creator['me'] = !creator['me'];
-      if (creator['me']) _creatorFilter = '&creator=$_selfId';
+      creator['me'] = !(creator['me'] as bool);
+      if (creator['me'] as bool) _creatorFilter = '&creator=$_selfId';
     }
     if (filter == 'other') {
       creator['me'] = false;
@@ -176,19 +181,19 @@ class TaskFilterController extends BaseTaskFilterController {
         _creatorFilter = '&creator=${newValue["id"]}';
       }
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void changeProject(String filter, [newValue = '']) async {
+  Future<void> changeProject(String filter, [newValue = '']) async {
     _projectFilter = '';
     switch (filter) {
       case 'my':
         project['other'] = '';
         project['withTag'] = '';
         project['withoutTag'] = false;
-        project['my'] = !project['my'];
-        if (project['my']) _projectFilter = '&myprojects=true';
+        project['my'] = !(project['my'] as bool);
+        if (project['my'] as bool) _projectFilter = '&myprojects=true';
         break;
       case 'other':
         project['my'] = false;
@@ -216,12 +221,12 @@ class TaskFilterController extends BaseTaskFilterController {
         project['my'] = false;
         project['other'] = '';
         project['withTag'] = '';
-        project['withoutTag'] = !project['withoutTag'];
-        if (project['withoutTag']) _projectFilter = '&tag=-1';
+        project['withoutTag'] = !(project['withoutTag'] as bool);
+        if (project['withoutTag'] as bool) _projectFilter = '&tag=-1';
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
@@ -231,14 +236,14 @@ class TaskFilterController extends BaseTaskFilterController {
       case 'my':
         milestone['no'] = false;
         milestone['other'] = '';
-        milestone['my'] = !milestone['my'];
-        if (milestone['my']) _milestoneFilter = '&mymilestones=true';
+        milestone['my'] = !(milestone['my'] as bool);
+        if (milestone['my'] as bool) _milestoneFilter = '&mymilestones=true';
         break;
       case 'no':
         milestone['my'] = false;
         milestone['other'] = '';
-        milestone['no'] = !milestone['no'];
-        if (milestone['no']) _milestoneFilter = '&nomilestone=true';
+        milestone['no'] = !(milestone['no'] as bool);
+        if (milestone['no'] as bool) _milestoneFilter = '&nomilestone=true';
         break;
       case 'other':
         milestone['my'] = false;
@@ -261,13 +266,13 @@ class TaskFilterController extends BaseTaskFilterController {
     switch (filter) {
       case 'open':
         status['closed'] = false;
-        status['open'] = !status['open'];
-        if (status['open']) _statusFilter = '&status=1';
+        status['open'] = !(status['open'] as bool);
+        if (status['open'] as bool) _statusFilter = '&status=1';
         break;
       case 'closed':
         status['open'] = false;
-        status['closed'] = !status['closed'];
-        if (status['closed']) _statusFilter = '&status=2';
+        status['closed'] = !(status['closed'] as bool);
+        if (status['closed'] as bool) _statusFilter = '&status=2';
         break;
       default:
     }
@@ -275,10 +280,10 @@ class TaskFilterController extends BaseTaskFilterController {
   }
 
   @override
-  void changeDeadline(
+  Future<void> changeDeadline(
     String filter, {
-    DateTime start,
-    DateTime stop,
+    DateTime? start,
+    DateTime? stop,
   }) async {
     _deadlineFilter = '';
 
@@ -286,54 +291,57 @@ class TaskFilterController extends BaseTaskFilterController {
       deadline['upcoming'] = false;
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
-      deadline['overdue'] = !deadline['overdue'];
-      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
-      if (deadline['overdue'])
+      deadline['overdue'] = !(deadline['overdue'] as bool);
+      final dueDate = formatter.format(DateTime.now()).substring(0, 10);
+      if (deadline['overdue'] as bool) {
         _deadlineFilter = '&deadlineStop=$dueDate&status=open';
+      }
     }
     if (filter == 'today') {
       deadline['overdue'] = false;
       deadline['upcoming'] = false;
       deadline['custom']['selected'] = false;
-      deadline['today'] = !deadline['today'];
-      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
-      if (deadline['today'])
+      deadline['today'] = !(deadline['today'] as bool);
+      final dueDate = formatter.format(DateTime.now()).substring(0, 10);
+      if (deadline['today'] as bool) {
         _deadlineFilter = '&deadlineStart=$dueDate&deadlineStop=$dueDate';
+      }
     }
     if (filter == 'upcoming') {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['custom']['selected'] = false;
-      deadline['upcoming'] = !deadline['upcoming'];
-      var startDate = formatter.format(DateTime.now()).substring(0, 10);
-      var stopDate = formatter
-          .format(DateTime.now().add(const Duration(days: 7)))
-          .substring(0, 10);
-      if (deadline['upcoming'])
+      deadline['upcoming'] = !(deadline['upcoming'] as bool);
+      final startDate = formatter.format(DateTime.now()).substring(0, 10);
+      final stopDate =
+          formatter.format(DateTime.now().add(const Duration(days: 7))).substring(0, 10);
+      if (deadline['upcoming'] as bool) {
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+      }
     }
     if (filter == 'custom') {
       deadline['overdue'] = false;
       deadline['today'] = false;
       deadline['upcoming'] = false;
-      deadline['custom']['selected'] = !deadline['custom']['selected'];
+      deadline['custom']['selected'] = !(deadline['custom']['selected'] as bool);
       deadline['custom']['startDate'] = start;
       deadline['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start).substring(0, 10);
-      var stopDate = formatter.format(stop).substring(0, 10);
-      if (deadline['custom']['selected'])
+      final startDate = formatter.format(start!).substring(0, 10);
+      final stopDate = formatter.format(stop!).substring(0, 10);
+      if (deadline['custom']['selected'] as bool) {
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
+      }
     }
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
 
-    var result = await _api.getTasksByParams(
+    final result = await _api.getTasksByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       responsibleFilter: responsibleFilter,
@@ -345,18 +353,20 @@ class TaskFilterController extends BaseTaskFilterController {
       projectId: _projectId,
     );
 
-    suitableResultCount.value = result.response.length;
+    if (result != null) {
+      suitableResultCount.value = result.response!.length;
+    }
   }
 
   @override
-  void applyFilters() async {
+  Future<void> applyFilters() async {
     hasFilters.value = _hasFilters;
     await saveFilters();
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    applyFiltersDelegate?.call();
   }
 
   @override
-  void resetFilters() async {
+  Future<void> resetFilters() async {
     responsible['me'] = false;
     responsible['other'] = '';
     responsible['groups'] = '';
@@ -395,7 +405,7 @@ class TaskFilterController extends BaseTaskFilterController {
     _statusFilter = '';
     _deadlineFilter = '';
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   Future<void> setupPreset(PresetTaskFilters preset) async {
@@ -410,17 +420,15 @@ class TaskFilterController extends BaseTaskFilterController {
         break;
       case PresetTaskFilters.upcomming:
         _statusFilter = '&status=1';
-        var startDate = formatter.format(DateTime.now());
-        var stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        final startDate = formatter.format(DateTime.now());
+        final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
         _responsibleFilter = '&participant=$_selfId';
         responsible['me'] = true;
         break;
       case PresetTaskFilters.last:
-        var startDate = formatter.format(DateTime.now());
-        var stopDate =
-            formatter.format(DateTime.now().add(const Duration(days: 7)));
+        final startDate = formatter.format(DateTime.now());
+        final stopDate = formatter.format(DateTime.now().add(const Duration(days: 7)));
 
         _deadlineFilter = '&deadlineStart=$startDate&deadlineStop=$stopDate';
         break;
@@ -434,17 +442,14 @@ class TaskFilterController extends BaseTaskFilterController {
 
   @override
   Future<void> saveFilters() async {
-    var dLine = Map.from(deadline);
+    final dLine = Map.from(deadline);
 
-    var dlineCustom = dateTimesToString(dLine['custom']);
+    final dlineCustom = dateTimesToString(dLine['custom'] as Map);
 
     dLine['custom'] = dlineCustom;
 
-    var map = {
-      'responsible': {
-        'buttons': Map.from(responsible),
-        'value': _responsibleFilter
-      },
+    final map = {
+      'responsible': {'buttons': Map.from(responsible), 'value': _responsibleFilter},
       'creator': {'buttons': Map.from(creator), 'value': _creatorFilter},
       'project': {'buttons': Map.from(project), 'value': _projectFilter},
       'milestone': {'buttons': Map.from(milestone), 'value': _milestoneFilter},
@@ -472,55 +477,46 @@ class TaskFilterController extends BaseTaskFilterController {
       'overdue': false,
       'today': false,
       'upcoming': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+      'custom': {'selected': false, 'startDate': DateTime.now(), 'stopDate': DateTime.now()}
     }.obs;
   }
 
   Future<void> _getSavedFilters() async {
-    var savedFilters = await _storage.read('taskFilters', returnCopy: true);
+    final savedFilters = await _storage.read('taskFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
-        responsible.value =
-            Map<String, Object>.from(savedFilters['responsible']['buttons']);
-        _responsibleFilter = savedFilters['responsible']['value'];
+        responsible.value = Map<String, Object>.from(savedFilters['responsible']['buttons'] as Map);
+        _responsibleFilter = savedFilters['responsible']['value'] as String;
 
-        creator.value =
-            Map<String, Object>.from(savedFilters['creator']['buttons']);
-        _creatorFilter = savedFilters['creator']['value'];
+        creator.value = Map<String, Object>.from(savedFilters['creator']['buttons'] as Map);
+        _creatorFilter = savedFilters['creator']['value'] as String;
 
-        project.value =
-            Map<String, Object>.from(savedFilters['project']['buttons']);
-        _projectFilter = savedFilters['project']['value'];
+        project.value = Map<String, Object>.from(savedFilters['project']['buttons'] as Map);
+        _projectFilter = savedFilters['project']['value'] as String;
 
-        milestone.value =
-            Map<String, Object>.from(savedFilters['milestone']['buttons']);
-        _milestoneFilter = savedFilters['milestone']['value'];
+        milestone.value = Map<String, Object>.from(savedFilters['milestone']['buttons'] as Map);
+        _milestoneFilter = savedFilters['milestone']['value'] as String;
 
-        status.value =
-            Map<String, bool>.from(savedFilters['status']['buttons']);
-        _statusFilter = savedFilters['status']['value'];
+        status.value = Map<String, bool>.from(savedFilters['status']['buttons'] as Map);
+        _statusFilter = savedFilters['status']['value'] as String;
 
-        var deadLineFilters =
-            Map<String, Object>.from(savedFilters['deadline']['buttons']);
+        final deadLineFilters =
+            Map<String, Object>.from(savedFilters['deadline']['buttons'] as Map);
 
-        var customDeadlineFilters = deadLineFilters['custom'];
+        var customDeadlineFilters = Map<dynamic, dynamic>.from(deadLineFilters['custom'] as Map);
 
         customDeadlineFilters =
-            stringsToDateTime(customDeadlineFilters, ['startDate', 'stopDate']);
+            stringsToDateTime(customDeadlineFilters, ['startDate', 'stopDate'])!;
 
         deadLineFilters['custom'] = customDeadlineFilters;
 
         deadline.value = deadLineFilters;
-        _deadlineFilter ??= savedFilters['deadline']['value'];
+        _deadlineFilter = savedFilters['deadline']['value'] as String;
 
-        hasFilters.value = savedFilters['hasFilters'];
+        hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
-        printWarning('Discussions filter loading error: $e');
+        printWarning('Tasks filter loading error: $e');
         await loadFilters();
       }
     } else {

@@ -55,12 +55,12 @@ part 'filters/project.dart';
 part 'filters/other.dart';
 
 class DiscussionsFilterScreen extends StatelessWidget {
-  const DiscussionsFilterScreen({Key key}) : super(key: key);
+  const DiscussionsFilterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final BaseFilterController filterController =
-        Get.arguments['filterController'];
+    final filterController =
+        Get.arguments['filterController'] as BaseFilterController;
 
     final platformController = Get.find<PlatformController>();
 
@@ -97,7 +97,9 @@ class DiscussionsFilterScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 12.5),
-                  _Author(filterController: filterController),
+                  _Author(
+                      filterController:
+                          filterController as DiscussionsFilterController),
                   _Status(filterController: filterController),
                   _CreatingDate(filterController: filterController),
                   _Project(filterController: filterController),

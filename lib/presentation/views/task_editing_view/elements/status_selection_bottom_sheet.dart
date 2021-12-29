@@ -37,7 +37,7 @@ import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
+import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
@@ -46,14 +46,13 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 // update the status of the task immediately after clicking,
 // but you need to do it when saving changes
 Future<void> statusSelectionBS(
-    {context, TaskEditingController controller}) async {
-  var _statusesController = Get.find<TaskStatusesController>();
+    {required BuildContext context, TaskEditingController? controller}) async {
+  final _statusesController = Get.find<TaskStatusesController>();
 
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight:
-        _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight: _getInititalSize(statusCount: _statusesController.statuses.length),
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
@@ -78,9 +77,7 @@ Future<void> statusSelectionBS(
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(
-                      width: 1,
-                      color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -89,8 +86,7 @@ Future<void> statusSelectionBS(
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        await controller
-                            .changeStatus(_statusesController.statuses[i]);
+                        await controller!.changeStatus(_statusesController.statuses[i]);
                         Get.back();
                       },
                       child: StatusTile(
@@ -100,7 +96,7 @@ Future<void> statusSelectionBS(
                             status: _statusesController.statuses[i],
                           ),
                           selected: _statusesController.statuses[i].id ==
-                              controller.newStatus.value.id),
+                              controller!.newStatus.value!.id),
                     ),
                   const SizedBox(height: 16),
                 ],
@@ -113,7 +109,7 @@ Future<void> statusSelectionBS(
   );
 }
 
-double _getInititalSize({int statusCount}) {
-  var size = (statusCount * 55 + 65) / Get.height;
+double _getInititalSize({required int statusCount}) {
+  final size = (statusCount * 55 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

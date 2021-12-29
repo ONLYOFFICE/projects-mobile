@@ -44,23 +44,19 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/com
 class DiscussionTextTile extends StatelessWidget {
   final DiscussionActionsController controller;
   const DiscussionTextTile({
-    Key key,
-    this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () => NewItemTile(
-        text: controller.text?.value != null && controller.text.value.isNotEmpty
-            ? parseHtml(controller.text.value)
-            : tr('text'),
-        textColor:
-            controller.setTextError == true && controller.text.value.isEmpty
-                ? Get.theme.colors().colorError
-                : null,
-        isSelected:
-            controller.text?.value != null && controller.text.value.isNotEmpty,
+        text: controller.text.value.isNotEmpty ? parseHtml(controller.text.value) : tr('text'),
+        textColor: controller.setTextError.value == true && controller.text.value.isEmpty
+            ? Get.theme.colors().colorError
+            : null,
+        isSelected: controller.text.value.isNotEmpty,
         icon: SvgIcons.description,
         selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
         onTap: () => Get.find<NavigationController>().toScreen(

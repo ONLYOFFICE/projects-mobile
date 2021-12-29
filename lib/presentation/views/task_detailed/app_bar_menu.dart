@@ -33,19 +33,19 @@
 part of 'task_detailed_view.dart';
 
 class _AppBarMenu extends StatelessWidget {
-  final TaskItemController controller;
-  const _AppBarMenu({Key key, @required this.controller}) : super(key: key);
+  final TaskItemController? controller;
+  const _AppBarMenu({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var task = controller.task.value;
+    final task = controller!.task.value;
     return PopupMenuButton(
       icon: const Icon(Icons.more_vert, size: 26),
       offset: const Offset(0, 25),
-      onSelected: (value) => _onSelected(context, value, controller),
+      onSelected: (dynamic value) => _onSelected(value, controller!),
       itemBuilder: (context) {
         return [
-          if (controller.canEdit && task.responsibles.isEmpty)
+          if (controller!.canEdit && task.responsibles!.isEmpty)
             PopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
@@ -54,25 +54,24 @@ class _AppBarMenu extends StatelessWidget {
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
-          if (controller.canEdit)
+          if (controller!.canEdit)
             PopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
             ),
           PopupMenuItem(
             value: 'followTask',
-            child:
-                Text(task.isSubscribed ? tr('unfollowTask') : tr('followTask')),
+            child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
           ),
-          if (controller.canEdit)
+          if (controller!.canEdit)
             PopupMenuItem(
               value: 'copyTask',
               child: Text(tr('copyTask')),
             ),
-          if (task.canDelete)
+          if (task.canDelete!)
             PopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
-                  .copyWith(color: Get.theme.colors().colorError),
+                  ?.copyWith(color: Get.theme.colors().colorError),
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
             )
@@ -82,24 +81,23 @@ class _AppBarMenu extends StatelessWidget {
   }
 }
 
-void _onSelected(context, value, TaskItemController controller) async {
-  var task = controller.task.value;
+void _onSelected(value, TaskItemController controller) async {
+  final task = controller.task.value;
   switch (value) {
     case 'accept':
-      await controller.accept(context);
+      await controller.accept();
       break;
 
     case 'copyLink':
-      controller.copyLink(taskId: task.id, projectId: task.projectOwner.id);
+      await controller.copyLink(taskId: task.id!, projectId: task.projectOwner!.id!);
       break;
 
     case 'editTask':
-      Get.find<NavigationController>()
-          .to(TaskEditingView(task: controller.task.value));
+      Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value));
       break;
 
     case 'followTask':
-      var result = await controller.subscribeToTask(taskId: task.id);
+      final result = await controller.subscribeToTask(taskId: task.id!);
       if (result) await controller.reloadTask();
       break;
 
@@ -114,16 +112,15 @@ void _onSelected(context, value, TaskItemController controller) async {
         acceptText: tr('delete').toUpperCase(),
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
-          var result = await controller.deleteTask(taskId: task.id);
+          final result = await controller.deleteTask(taskId: task.id!);
           if (result) {
-            locator<EventHub>().fire('needToRefreshProjects');
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
             locator<EventHub>().fire('needToRefreshTasks');
 
             Get.back();
             Get.back();
 
-            MessagesHandler.showSnackBar(
-                context: context, text: tr('taskDeleted'));
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
           } else {
             print('ERROR');
           }

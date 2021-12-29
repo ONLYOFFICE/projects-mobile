@@ -36,24 +36,24 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StatusButton extends StatelessWidget {
-  final bool canEdit;
+  final bool? canEdit;
   final String text;
-  final Function() onPressed;
+  final void Function(BuildContext) onPressed;
 
   const StatusButton({
-    Key key,
-    @required this.canEdit,
-    @required this.text,
-    @required this.onPressed,
+    Key? key,
+    required this.canEdit,
+    required this.text,
+    required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return OutlinedButton(
-      onPressed: canEdit ? onPressed : null,
+      onPressed: canEdit! ? () => onPressed.call(context) : null,
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-          return canEdit
+          return canEdit!
               ? const Color(0xff81C4FF).withOpacity(0.2)
               : Get.theme.colors().bgDescription;
         }),
@@ -70,7 +70,7 @@ class StatusButton extends StatelessWidget {
               child: Text(
                 text,
                 style: TextStyleHelper.subtitle2(
-                  color: canEdit
+                  color: canEdit!
                       ? Get.theme.colors().primary
                       : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
@@ -78,7 +78,7 @@ class StatusButton extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 5),
-          if (canEdit)
+          if (canEdit!)
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Icon(

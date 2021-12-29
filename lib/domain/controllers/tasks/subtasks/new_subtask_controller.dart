@@ -50,13 +50,12 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
-class NewSubtaskController extends GetxController
-    implements SubtaskActionController {
-  Subtask subtask;
+class NewSubtaskController extends GetxController implements SubtaskActionController {
+  Subtask? subtask;
 
-  final _api = locator<SubtasksService>();
+  final SubtasksService _api = locator<SubtasksService>();
 
-  ProjectTeamController teamController;
+  late ProjectTeamController teamController;
 
   final _titleController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
@@ -67,40 +66,37 @@ class NewSubtaskController extends GetxController
   FocusNode get titleFocus => _titleFocus;
   RxList responsibles = [].obs;
   @override
-  RxInt status = 1.obs;
+  RxInt? status = 1.obs;
   @override
-  RxBool setTiltleError = false.obs;
+  RxBool? setTiltleError = false.obs;
 
   List _previusSelectedResponsible = [];
 
   @override
-  void init({Subtask subtask, int projectId}) {
+  void init({Subtask? subtask, int? projectId}) {
     teamController = Get.find<ProjectTeamController>();
 
     _titleFocus.requestFocus();
     setupResponsibleSelection(projectId);
   }
 
-  void setupResponsibleSelection([int projectId]) async {
+  void setupResponsibleSelection([int? projectId]) async {
     if (teamController.usersList.isEmpty) {
-      teamController.setup(
-          projectId: projectId, withoutVisitors: true, withoutBlocked: true);
+      teamController.setup(projectId: projectId, withoutVisitors: true, withoutBlocked: true);
 
-      await teamController
-          .getTeam()
-          .then((value) => _getSelectedResponsibles());
+      await teamController.getTeam().then((value) => _getSelectedResponsibles());
     } else {
       await _getSelectedResponsibles();
     }
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in teamController.usersList) {
+    for (final element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Single;
     }
-    for (var selectedMember in responsibles) {
-      for (var user in teamController.usersList) {
+    for (final selectedMember in responsibles) {
+      for (final user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -118,8 +114,7 @@ class NewSubtaskController extends GetxController
     if (user.isSelected.value == true) {
       responsibles.add(user);
     } else {
-      responsibles.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      responsibles.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
@@ -172,35 +167,30 @@ class NewSubtaskController extends GetxController
   }
 
   @override
-  Future<void> confirm({context, @required int taskId}) async {
+  Future<void> confirm({required dynamic context, required int taskId}) async {
     if (titleController.text.isEmpty)
-      setTiltleError.value = true;
+      setTiltleError!.value = true;
     else {
-      var responsible =
-          responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
+      final responsible = responsibles.isEmpty ? null : responsibles[0]?.portalUser?.id;
 
-      var data = {'responsible': responsible, 'title': _titleController.text};
-      var newSubtask = await _api.createSubtask(taskId: taskId, data: data);
+      final data = {'responsible': responsible, 'title': _titleController.text};
+      final newSubtask = await _api.createSubtask(taskId: taskId, data: data);
       if (newSubtask != null) {
-        var taskController =
-            Get.find<TaskItemController>(tag: taskId.toString());
+        final taskController = Get.find<TaskItemController>(tag: taskId.toString());
 
         Get.back();
         locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
         MessagesHandler.showSnackBar(
-            context: Get.context,
+            context: Get.context!,
             text: tr('subtaskCreated'),
             buttonText: tr('open').toUpperCase(),
             buttonOnTap: () {
-              var controller = Get.put(
-                  SubtaskController(
-                      subtask: newSubtask,
-                      parentTask: taskController.task.value),
+              final controller = Get.put(
+                  SubtaskController(subtask: newSubtask, parentTask: taskController.task.value),
                   tag: newSubtask.hashCode.toString());
-              return Get.find<NavigationController>().to(
-                  const SubtaskDetailedView(),
-                  arguments: {'controller': controller});
+              return Get.find<NavigationController>()
+                  .to(const SubtaskDetailedView(), arguments: {'controller': controller});
             });
       }
     }

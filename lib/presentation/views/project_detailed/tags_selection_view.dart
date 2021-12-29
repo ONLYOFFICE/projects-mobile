@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 
@@ -48,23 +49,22 @@ import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart'
 
 class TagsSelectionView extends StatelessWidget {
   const TagsSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var projController = Get.arguments['controller'];
+    final projController = Get.arguments['controller'];
 
-    var controller = Get.put(ProjectTagsController());
+    final controller = Get.put(ProjectTagsController());
     controller.setup(projController);
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       floatingActionButton: AnimatedPadding(
-        padding: const EdgeInsets.only(bottom: 0),
+        padding: EdgeInsets.zero,
         duration: const Duration(milliseconds: 100),
         child: Obx(
           () => Visibility(
@@ -80,17 +80,12 @@ class TagsSelectionView extends StatelessWidget {
         ),
       ),
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         title: _Header(
           controller: controller,
           title: tr('tags'),
         ),
-        actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () => controller.confirm())
-        ],
+        actions: [IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirm)],
         bottom: _TagsSearchBar(controller: controller),
       ),
       body: Obx(
@@ -102,9 +97,8 @@ class TagsSelectionView extends StatelessWidget {
               controller: controller,
               onTapFunction: () => {},
             );
-          } else if (controller.loaded.value == true &&
-              controller.tags.isEmpty) {
-            return Column(children: [const NothingFound()]);
+          } else if (controller.loaded.value == true && controller.tags.isEmpty) {
+            return Column(children: const [NothingFound()]);
           } else
             return const ListLoadingSkeleton();
         },
@@ -113,7 +107,7 @@ class TagsSelectionView extends StatelessWidget {
   }
 
   Future showTagAddingDialog(controller) async {
-    var inputController = TextEditingController();
+    final inputController = TextEditingController();
 
     await Get.dialog(StyledAlertDialog(
       titleText: tr('enterTag'),
@@ -138,9 +132,9 @@ class TagsSelectionView extends StatelessWidget {
 
 class _Header extends StatelessWidget {
   const _Header({
-    Key key,
-    @required this.title,
-    @required this.controller,
+    Key? key,
+    required this.title,
+    required this.controller,
   }) : super(key: key);
 
   final String title;
@@ -150,29 +144,26 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 50,
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Expanded(
-                    child: Text(
-                      title,
-                      style: TextStyleHelper.headline6(
-                          color: Get.theme.colors().onSurface),
-                    ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Expanded(
+                  child: Text(
+                    title,
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -180,8 +171,8 @@ class _Header extends StatelessWidget {
 
 class _TagsSearchBar extends StatelessWidget {
   const _TagsSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;
@@ -195,7 +186,7 @@ class _TagsSearchBar extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           const SizedBox(width: 20),
-          Container(
+          SizedBox(
             height: 24,
             width: 24,
             child: InkWell(
@@ -210,9 +201,9 @@ class _TagsSearchBar extends StatelessWidget {
 
 class _TagsList extends StatelessWidget {
   const _TagsList({
-    Key key,
-    @required this.controller,
-    @required this.onTapFunction,
+    Key? key,
+    required this.controller,
+    required this.onTapFunction,
   }) : super(key: key);
   final Function onTapFunction;
   final controller;
@@ -225,13 +216,13 @@ class _TagsList extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemBuilder: (c, i) => TagItem(
-              tagItemDTO: controller.tags[i],
+              tagItemDTO: controller.tags[i] as TagItemDTO?,
               onTapFunction: () {
                 controller.changeTagSelection(controller.tags[i]);
               },
             ),
-            itemExtent: 65.0,
-            itemCount: controller.tags.length,
+            itemExtent: 65,
+            itemCount: controller.tags.length as int?,
           ),
         )
       ],

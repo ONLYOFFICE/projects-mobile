@@ -33,6 +33,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:event_hub/event_hub.dart';
@@ -43,7 +44,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
@@ -52,9 +53,10 @@ import 'package:projects/main_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/no_internet_view.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class MainController extends GetxController {
-  final _secureStorage = locator<SecureStorage>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
   // ignore: unnecessary_cast
   Rx<Widget> mainPage = (const SplashView() as Widget).obs;
 
@@ -69,69 +71,61 @@ class MainController extends GetxController {
 
   var subscriptions = <StreamSubscription>[];
 
+  final cookieManager = WebviewCookieManager();
+
   MainController() {
     Connectivity().checkConnectivity().then((result) => {
           noInternet = result == ConnectivityResult.none,
-          if (result == ConnectivityResult.none)
-            Get.to(const NoInternetScreen())
+          if (result == ConnectivityResult.none) Get.to(const NoInternetScreen())
         });
 
     _setupSubscriptions();
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
-
   void _setupSubscriptions() {
     if (subscriptions.isNotEmpty) {
-      for (var item in subscriptions) {
+      for (final item in subscriptions) {
         item.cancel();
       }
     }
 
-    subscriptions.add(Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+    subscriptions.add(Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (noInternet == (result == ConnectivityResult.none)) return;
       if (result == ConnectivityResult.none) {
         Get.to(const NoInternetScreen());
 
-        locator.get<CoreApi>().cancellationToken?.cancel();
+        locator.get<CoreApi>().cancellationToken.cancel();
       } else {
         GetIt.instance.resetLazySingleton<CoreApi>();
         if (isSessionStarted)
           Get.back();
         else
-          Get.offAll(() => MainView());
+          Get.offAll(() => const MainView());
       }
       noInternet = result == ConnectivityResult.none;
 
       setupMainPage();
     }));
 
-    subscriptions
-        .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
+    subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       mainPage.value = navigationView;
-      Get.offAll(() => MainView());
+      Get.offAll(() => const MainView());
       Get.find<UserController>().getUserInfo();
       Get.find<UserController>().getSecurityInfo();
 
       Get.find<PortalInfoController>().setup();
     }));
 
-    subscriptions
-        .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
+    subscriptions.add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       mainPage.value = portalInputView;
 
       GetIt.instance.resetLazySingleton<CoreApi>();
-      await Get.offAll(() => MainView());
+      await Get.offAll(() => const MainView());
     }));
   }
 
   Future<void> setupMainPage() async {
-    var connection = await Connectivity().checkConnectivity();
+    final connection = await Connectivity().checkConnectivity();
     if (connection == ConnectivityResult.none) return;
 
     isSessionStarted = true;
@@ -140,12 +134,12 @@ class MainController extends GetxController {
       return {
         if (isAuthorized)
           {
-            if (!(mainPage.value is NavigationView))
+            if (mainPage.value is! NavigationView)
               {
                 mainPage.value = navigationView,
               }
           }
-        else if (!(mainPage.value is PortalInputView))
+        else if (mainPage.value is! PortalInputView)
           {
             mainPage.value = portalInputView,
           }
@@ -154,28 +148,37 @@ class MainController extends GetxController {
   }
 
   Future<bool> isAuthorized() async {
-    var expirationDate = await _secureStorage.getString('expires');
-    var token = await _secureStorage.getString('token');
-    var portalName = await _secureStorage.getString('portalName');
+    final expirationDate = await _secureStorage.getString('expires');
+    final token = await _secureStorage.getString('token');
+    final portalName = await _secureStorage.getString('portalName');
 
     if (expirationDate == null ||
         expirationDate.isEmpty ||
         token == null ||
         token.isEmpty ||
         portalName == null ||
-        portalName.isEmpty) return false;
+        portalName.isEmpty ||
+        !(portalName.isURL || portalName.split('//')[1].isIPv4)) return false;
 
-    var expiration = DateTime.parse(expirationDate);
+    final expiration = DateTime.parse(expirationDate);
     if (expiration.isBefore(DateTime.now())) return false;
 
-    var isAuthValid = await locator<AuthService>().checkAuthorization();
-    if (!isAuthValid) await logout();
+    final isAuthValid = await locator<AuthService>().checkAuthorization();
+    if (!isAuthValid)
+      await logout();
+    else
+      await cookieManager.setCookies([
+        Cookie('asc_auth_key', token)
+          ..domain = portalName.split('//')[1]
+          ..expires = DateTime.now().add(const Duration(days: 10))
+          ..httpOnly = false
+      ]);
 
     return isAuthValid;
   }
 
   Future<void> logout() async {
-    var storage = locator<Storage>();
+    final storage = locator<Storage>();
 
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
@@ -184,6 +187,8 @@ class MainController extends GetxController {
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
+
+    await cookieManager.clearCookies();
 
     Get.find<PortalInfoController>().logout();
   }

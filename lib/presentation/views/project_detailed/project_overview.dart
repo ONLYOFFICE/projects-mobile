@@ -34,6 +34,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
@@ -46,11 +47,11 @@ import 'package:readmore/readmore.dart';
 
 class ProjectOverview extends StatelessWidget {
   final ProjectDetailsController projectController;
-  final TabController tabController;
+  final TabController? tabController;
 
   const ProjectOverview({
-    Key key,
-    @required this.projectController,
+    Key? key,
+    required this.projectController,
     this.tabController,
   }) : super(key: key);
 
@@ -72,17 +73,21 @@ class ProjectOverview extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              ProjectStatusButton(projectController: projectController),
+              Padding(
+                padding: const EdgeInsets.only(left: 72),
+                child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: ProjectStatusButton(
+                        projectController: projectController)),
+              ),
               const SizedBox(height: 20),
-              if (projectController.descriptionText != null &&
-                  projectController.descriptionText.isNotEmpty)
+              if (projectController.descriptionText.isNotEmpty)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: InfoTile(
                     caption: tr('description'),
-                    icon: AppIcon(
-                        icon: SvgIcons.description,
-                        color: const Color(0xff707070)),
+                    icon: const AppIcon(
+                        icon: SvgIcons.description, color: Color(0xff707070)),
                     subtitleWidget: ReadMoreText(
                       projectController.descriptionText.value,
                       trimLines: 3,
@@ -100,8 +105,8 @@ class ProjectOverview extends StatelessWidget {
                   ),
                 ),
               Obx(() => InfoTile(
-                    icon: AppIcon(
-                        icon: SvgIcons.user, color: const Color(0xff707070)),
+                icon: const AppIcon(
+                        icon: SvgIcons.user, color: Color(0xff707070)),
                     caption: tr('projectManager'),
                     subtitle: projectController.managerText.value,
                     subtitleStyle: TextStyleHelper.subtitle1(
@@ -111,13 +116,13 @@ class ProjectOverview extends StatelessWidget {
               Obx(
                 () => InkWell(
                   onTap: () {
-                    tabController.animateTo(5);
+                    tabController!.animateTo(5);
                   },
                   child: InfoTileWithButton(
-                    icon: AppIcon(
-                        icon: SvgIcons.users, color: const Color(0xff707070)),
+                    icon: const AppIcon(
+                        icon: SvgIcons.users, color: Color(0xff707070)),
                     onTapFunction: () {
-                      tabController.animateTo(5);
+                      tabController!.animateTo(5);
                     },
                     caption: tr('team'),
                     iconData: Icons.navigate_next,
@@ -130,14 +135,14 @@ class ProjectOverview extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.calendar, color: const Color(0xff707070)),
+                  icon: const AppIcon(
+                      icon: SvgIcons.calendar, color: Color(0xff707070)),
                   caption: tr('creationDate'),
                   subtitle: projectController.creationDateText.value)),
               const SizedBox(height: 20),
               Obx(() => InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.tag, color: const Color(0xff707070)),
+                  icon: const AppIcon(
+                      icon: SvgIcons.tag, color: Color(0xff707070)),
                   caption: tr('tags'),
                   subtitle: projectController.tagsText.value)),
             ],
@@ -151,72 +156,61 @@ class ProjectOverview extends StatelessWidget {
 }
 
 class ProjectStatusButton extends StatelessWidget {
-  final projectController;
+  final BaseProjectEditorController projectController;
 
-  const ProjectStatusButton({Key key, @required this.projectController})
+  const ProjectStatusButton({Key? key, required this.projectController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    bool canEdit = projectController.projectData.canEdit;
-    return Padding(
-      padding: const EdgeInsets.only(left: 72),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    final bool canEdit = projectController.projectData!.canEdit!;
+    return OutlinedButton(
+      onPressed: canEdit
+          ? () => {
+                showStatuses(
+                    context: context, itemController: projectController),
+              }
+          : null,
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
+          if (canEdit)
+            return const Color(0xff81C4FF).withOpacity(0.2);
+          else
+            return Get.theme.colors().bgDescription;
+        }),
+        side: MaterialStateProperty.resolveWith((_) {
+          return const BorderSide(color: Colors.transparent, width: 0);
+        }),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          OutlinedButton(
-            onPressed: canEdit
-                ? () => {
-                      showsStatusesBS(
-                          context: context, itemController: projectController),
-                    }
-                : null,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                if (canEdit)
-                  return const Color(0xff81C4FF).withOpacity(0.2);
-                else
-                  return Get.theme.colors().bgDescription;
-              }),
-              side: MaterialStateProperty.resolveWith((_) {
-                return const BorderSide(color: Colors.transparent, width: 0);
-              }),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
-                    child: Obx(
-                      () => Text(
-                        projectController.statusText.value,
-                        style: TextStyleHelper.subtitle2(
-                          color: canEdit
-                              ? Get.theme.colors().primary
-                              : Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.75),
-                        ),
-                      ),
-                    ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8, bottom: 8, left: 5),
+              child: Obx(
+                () => Text(
+                  projectController.statusText.value,
+                  style: TextStyleHelper.subtitle2(
+                    color: canEdit
+                        ? Get.theme.colors().primary
+                        : Get.theme.colors().onBackground.withOpacity(0.75),
                   ),
                 ),
-                const SizedBox(width: 5),
-                if (canEdit)
-                  Padding(
-                    padding: const EdgeInsets.only(top: 2),
-                    child: Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: Get.theme.colors().primary,
-                      size: 19,
-                    ),
-                  )
-              ],
+              ),
             ),
           ),
+          const SizedBox(width: 5),
+          if (canEdit)
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: Icon(
+                Icons.keyboard_arrow_down_rounded,
+                color: Get.theme.colors().primary,
+                size: 19,
+              ),
+            )
         ],
       ),
     );

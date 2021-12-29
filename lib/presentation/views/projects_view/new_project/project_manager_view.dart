@@ -49,14 +49,14 @@ import 'package:projects/presentation/views/projects_view/widgets/search_bar.dar
 
 class ProjectManagerSelectionView extends StatelessWidget {
   const ProjectManagerSelectionView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
+    final controller = Get.arguments['controller'];
 
-    var usersDataSource = Get.find<UsersDataSource>();
+    final usersDataSource = Get.find<UsersDataSource>();
 
     controller.selectionMode = UserSelectionMode.Single;
     usersDataSource.selectionMode = UserSelectionMode.Single;
@@ -65,12 +65,10 @@ class ProjectManagerSelectionView extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         titleText: tr('selectPM'),
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
@@ -82,25 +80,26 @@ class ProjectManagerSelectionView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.usersLoaded.value &&
+          if (controller.usersLoaded.value as bool &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               !usersDataSource.isSearchResult.value) {
             return UsersDefault(
-              selfUserItem: controller.selfUserItem,
+              selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection,
+              onTapFunction:
+                  controller.changePMSelection as void Function(PortalUserItemController),
               withoutGuests: true,
             );
           }
           if (usersDataSource.nothingFound.value == true) {
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           }
           if (usersDataSource.loaded.value == true &&
               usersDataSource.usersWithoutVisitors.isNotEmpty &&
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection,
+              onTapFunction: controller.changePMSelection as Function(PortalUserItemController),
               withoutVisitors: true,
             );
           }
@@ -113,20 +112,19 @@ class ProjectManagerSelectionView extends StatelessWidget {
 
 class UsersSearchResult extends StatelessWidget {
   const UsersSearchResult({
-    Key key,
-    @required this.usersDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.usersDataSource,
+    required this.onTapFunction,
     this.withoutVisitors = false,
   }) : super(key: key);
-  final Function onTapFunction;
+  final Function? onTapFunction;
   final UsersDataSource usersDataSource;
   final bool withoutVisitors;
 
   @override
   Widget build(BuildContext context) {
-    var users = withoutVisitors
-        ? usersDataSource.usersWithoutVisitors
-        : usersDataSource.usersList;
+    final users =
+        withoutVisitors ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -141,7 +139,7 @@ class UsersSearchResult extends StatelessWidget {
                 userController: users[i],
                 onTapFunction: onTapFunction,
               ),
-              itemExtent: 65.0,
+              itemExtent: 65,
               itemCount: users.length,
             ),
           ),
@@ -153,22 +151,20 @@ class UsersSearchResult extends StatelessWidget {
 
 class UsersDefault extends StatelessWidget {
   const UsersDefault({
-    Key key,
-    @required this.selfUserItem,
-    @required this.usersDataSource,
-    @required this.onTapFunction,
+    Key? key,
+    required this.selfUserItem,
+    required this.usersDataSource,
+    required this.onTapFunction,
     this.withoutGuests = false,
   }) : super(key: key);
-  final Function onTapFunction;
-  final PortalUserItemController selfUserItem;
-  final usersDataSource;
+  final Function? onTapFunction;
+  final PortalUserItemController? selfUserItem;
+  final UsersDataSource usersDataSource;
   final bool withoutGuests;
 
   @override
   Widget build(BuildContext context) {
-    var users = withoutGuests
-        ? usersDataSource.usersWithoutVisitors
-        : usersDataSource.usersList;
+    final users = withoutGuests ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
     return SmartRefresher(
       enablePullDown: false,
       enablePullUp: usersDataSource.pullUpEnabled,
@@ -178,20 +174,18 @@ class UsersDefault extends StatelessWidget {
         children: <Widget>[
           Obx(() {
             if (usersDataSource.selfIsVisible.value == true)
-              return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 16),
-                      child: Text(tr('me'), style: TextStyleHelper.body2()),
-                    ),
-                    const SizedBox(height: 26),
-                    PortalUserItem(
-                      onTapFunction: onTapFunction,
-                      userController: selfUserItem,
-                    ),
-                    const SizedBox(height: 26),
-                  ]);
+              return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 16),
+                  child: Text(tr('me'), style: TextStyleHelper.body2()),
+                ),
+                const SizedBox(height: 26),
+                PortalUserItem(
+                  onTapFunction: onTapFunction,
+                  userController: selfUserItem,
+                ),
+                const SizedBox(height: 26),
+              ]);
             else
               return const SizedBox();
           }),
@@ -204,9 +198,9 @@ class UsersDefault extends StatelessWidget {
             ListView.builder(
               physics: const ScrollPhysics(),
               shrinkWrap: true,
-              itemBuilder: (c, i) => PortalUserItem(
-                  userController: users[i], onTapFunction: onTapFunction),
-              itemExtent: 65.0,
+              itemBuilder: (c, i) =>
+                  PortalUserItem(userController: users[i], onTapFunction: onTapFunction),
+              itemExtent: 65,
               itemCount: users.length,
             )
           ]),

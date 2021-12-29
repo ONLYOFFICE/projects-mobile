@@ -39,9 +39,9 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class SortView extends StatelessWidget {
-  const SortView({Key key, @required this.sortOptions}) : super(key: key);
+  const SortView({Key? key, required this.sortOptions}) : super(key: key);
 
-  final sortOptions;
+  final Widget sortOptions;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -56,7 +56,7 @@ class SortView extends StatelessWidget {
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: const EdgeInsets.only(top: 8),
               child: SizedBox(
                 height: 4,
                 width: 40,
@@ -81,14 +81,16 @@ class SortView extends StatelessWidget {
 
 class SortTile extends StatelessWidget {
   final String sortParameter;
-  final BaseSortController sortController;
-  const SortTile({Key key, this.sortParameter, @required this.sortController})
+  final BaseSortController? sortController;
+
+  const SortTile(
+      {Key? key, required this.sortParameter, required this.sortController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _selected = sortController.currentSortfilter == sortParameter;
-    var title = sortController.getFilterLabel(sortParameter);
+    final _selected = sortController!.currentSortfilter == sortParameter;
+    final title = sortController!.getFilterLabel(sortParameter);
 
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
@@ -98,7 +100,7 @@ class SortTile extends StatelessWidget {
 
     return InkWell(
       onTap: () {
-        sortController.changeSort(sortParameter);
+        sortController!.changeSort(sortParameter);
         Get.back();
       },
       child: Container(
@@ -123,7 +125,7 @@ class SortTile extends StatelessWidget {
             ),
             if (_selected)
               AppIcon(
-                icon: sortController.isSortAscending.value == true
+                icon: sortController!.isSortAscending.value == true
                     ? SvgIcons.up_arrow
                     : SvgIcons.down_arrow,
                 color: Get.theme.colors().primary,

@@ -49,39 +49,36 @@ import 'package:readmore/readmore.dart';
 part 'task.dart';
 
 class TaskOverviewScreen extends StatelessWidget {
-  final TaskItemController taskController;
-  final TabController tabController;
+  final TaskItemController? taskController;
+  final TabController? tabController;
 
   const TaskOverviewScreen({
-    Key key,
-    @required this.taskController,
-    @required this.tabController,
+    Key? key,
+    required this.taskController,
+    required this.tabController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (taskController.loaded.value == true ||
-            taskController.firstReload.value == true) {
-          taskController.firstReload.value = false;
-          var task = taskController.task.value;
+        if (taskController!.loaded.value == true || taskController!.firstReload.value == true) {
+          taskController!.firstReload.value = false;
+          final task = taskController!.task.value;
           return SmartRefresher(
-            controller: taskController.refreshController,
-            onRefresh: () => taskController.reloadTask(showLoading: true),
+            controller: taskController!.refreshController,
+            onRefresh: () => taskController!.reloadTask(showLoading: true),
             child: ListView(
               children: [
                 _Task(taskController: taskController),
-                if (task.description != null && task.description.isNotEmpty)
+                if (task.description != null && task.description!.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 21),
                     child: InfoTile(
                       caption: '${tr('description')}:',
-                      icon: AppIcon(
-                          icon: SvgIcons.description,
-                          color: const Color(0xff707070)),
+                      icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
                       subtitleWidget: ReadMoreText(
-                        task.description,
+                        task.description!,
                         trimLines: 3,
                         colorClickableText: Colors.pink,
                         style: TextStyleHelper.body1,
@@ -89,96 +86,77 @@ class TaskOverviewScreen extends StatelessWidget {
                         delimiter: ' ',
                         trimCollapsedText: tr('showMore'),
                         trimExpandedText: tr('showLess'),
-                        moreStyle: TextStyleHelper.body2(
-                            color: Get.theme.colors().links),
-                        lessStyle: TextStyleHelper.body2(
-                            color: Get.theme.colors().links),
+                        moreStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
+                        lessStyle: TextStyleHelper.body2(color: Get.theme.colors().links),
                       ),
                     ),
                   ),
                 InfoTile(
-                  icon: AppIcon(
-                      icon: SvgIcons.project, color: const Color(0xff707070)),
+                  icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
                   caption: '${tr('project')}:',
-                  subtitle: task.projectOwner.title,
+                  subtitle: task.projectOwner!.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
                     color: Get.theme.colors().links,
                   ),
-                  onTap: taskController.toProjectOverview,
+                  onTap: taskController!.toProjectOverview,
                 ),
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
                   InfoTile(
-                      icon: AppIcon(
-                          icon: SvgIcons.milestone,
-                          color: const Color(0xff707070)),
+                      icon: const AppIcon(icon: SvgIcons.milestone, color: Color(0xff707070)),
                       caption: '${tr('milestone')}:',
-                      subtitle: task.milestone.title,
+                      subtitle: task.milestone!.title,
                       subtitleStyle: TextStyleHelper.subtitle1()),
                 if (task.startDate != null) const SizedBox(height: 20),
                 if (task.startDate != null)
                   InfoTile(
-                    icon: AppIcon(
-                        icon: SvgIcons.start_date,
-                        color: const Color(0xff707070)),
+                    icon: const AppIcon(icon: SvgIcons.start_date, color: Color(0xff707070)),
                     caption: '${tr('startDate')}:',
                     subtitle: formatedDateFromString(
                       now: DateTime.now(),
-                      stringDate: task.startDate,
+                      stringDate: task.startDate!,
                     ),
                   ),
                 if (task.deadline != null) const SizedBox(height: 20),
                 if (task.deadline != null)
                   InfoTile(
-                      icon: AppIcon(
-                          icon: SvgIcons.due_date,
-                          color: const Color(0xff707070)),
+                      icon: const AppIcon(icon: SvgIcons.due_date, color: Color(0xff707070)),
                       caption: '${tr('dueDate')}:',
-                      subtitle: formatedDateFromString(
-                          now: DateTime.now(), stringDate: task.deadline)),
+                      subtitle:
+                          formatedDateFromString(now: DateTime.now(), stringDate: task.deadline!)),
                 const SizedBox(height: 20),
                 InfoTile(
-                    icon: AppIcon(
-                        icon: SvgIcons.priority,
-                        color: const Color(0xff707070)),
+                    icon: const AppIcon(icon: SvgIcons.priority, color: Color(0xff707070)),
                     caption: '${tr('priority')}:',
                     subtitle: task.priority == 1 ? tr('high') : tr('normal')),
-                if (task.responsibles != null && task.responsibles.isNotEmpty)
+                if (task.responsibles != null && task.responsibles!.isNotEmpty)
                   const SizedBox(height: 20),
-                if (task.responsibles != null && task.responsibles.isNotEmpty)
+                if (task.responsibles != null && task.responsibles!.isNotEmpty)
                   InfoTile(
                       onTap: () {
                         Get.find<NavigationController>()
-                            .toScreen(TaskTeamView(controller: taskController));
+                            .toScreen(TaskTeamView(controller: taskController!));
                       },
-                      icon: AppIcon(
-                          icon: SvgIcons.person,
-                          color: const Color(0xff707070)),
+                      icon: const AppIcon(icon: SvgIcons.person, color: Color(0xff707070)),
                       caption: '${tr('assignedTo')}:',
-                      subtitle: task.responsibles.length >= 2
-                          ? plural('responsibles', task.responsibles.length)
-                          : task.responsibles[0].displayName,
+                      subtitle: task.responsibles!.length >= 2
+                          ? plural('responsibles', task.responsibles!.length)
+                          : task.responsibles![0]!.displayName,
                       suffix: IconButton(
                           icon: Icon(Icons.navigate_next,
-                              size: 24,
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.6)),
+                              size: 24, color: Get.theme.colors().onBackground.withOpacity(0.6)),
                           onPressed: () {
-                            Get.find<NavigationController>().toScreen(
-                                TaskTeamView(controller: taskController));
+                            Get.find<NavigationController>()
+                                .toScreen(TaskTeamView(controller: taskController!));
                           })),
                 const SizedBox(height: 20),
-                InfoTile(
-                    caption: '${tr('createdBy')}:',
-                    subtitle: task.createdBy.displayName),
+                InfoTile(caption: '${tr('createdBy')}:', subtitle: task.createdBy!.displayName),
                 const SizedBox(height: 20),
                 InfoTile(
                   caption: '${tr('creationDate')}:',
                   subtitle: formatedDateFromString(
                     now: DateTime.now(),
-                    stringDate: task.created,
+                    stringDate: task.created!,
                   ),
                 ),
                 const SizedBox(height: 110)

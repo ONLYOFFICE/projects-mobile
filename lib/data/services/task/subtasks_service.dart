@@ -32,6 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/api/subtasks_api.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/dialogs.dart';
@@ -41,10 +42,11 @@ class SubtasksService {
   final SubtasksApi _api = locator<SubtasksApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  Future acceptSubtask({int taskId, int subtaskId, Map data}) async {
-    var response = await _api.acceptSubtask(
+  Future<Subtask?> acceptSubtask(
+      {required int taskId, required int subtaskId, required Map data}) async {
+    final response = await _api.acceptSubtask(
         data: data, taskId: taskId, subtaskId: subtaskId);
-    var success = response.response != null;
+    final success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -56,15 +58,16 @@ class SubtasksService {
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     }
   }
 
-  Future deleteSubtask({int taskId, int subtaskId}) async {
-    var response =
+// TODO: Future <??>
+  Future deleteSubtask({required int taskId, required int subtaskId}) async {
+    final response =
         await _api.deleteSubTask(taskId: taskId, subtaskId: subtaskId);
-    var success = response.response != null;
+    final success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -76,14 +79,15 @@ class SubtasksService {
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     }
   }
 
-  Future createSubtask({int taskId, Map data}) async {
-    var response = await _api.createSubtask(taskId: taskId, data: data);
-    var success = response.response != null;
+  Future<Subtask?> createSubtask(
+      {required int taskId, required Map data}) async {
+    final response = await _api.createSubtask(taskId: taskId, data: data);
+    final success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -95,27 +99,30 @@ class SubtasksService {
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     }
   }
 
-  Future copySubtask({int taskId, int subtaskId}) async {
-    var response = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
-    var success = response.response != null;
+  Future<Subtask?> copySubtask(
+      {required int taskId, required int subtaskId}) async {
+    final response =
+        await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
+    final success = response.response != null;
 
     if (success) {
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     }
   }
 
-  Future updateSubtaskStatus({int taskId, int subtaskId, Map data}) async {
-    var response = await _api.updateSubtaskStatus(
+  Future<Subtask?> updateSubtaskStatus(
+      {required int taskId, required int subtaskId, required Map data}) async {
+    final response = await _api.updateSubtaskStatus(
         taskId: taskId, subtaskId: subtaskId, data: data);
-    var success = response.response != null;
+    final success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -127,19 +134,20 @@ class SubtasksService {
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     }
   }
 
-  Future updateSubtask({int taskId, int subtaskId, Map data}) async {
-    var response = await _api.updateSubtask(
+  Future<Subtask?> updateSubtask(
+      {required int taskId, required int subtaskId, required Map data}) async {
+    final response = await _api.updateSubtask(
       taskId: taskId,
       subtaskId: subtaskId,
       data: data,
     );
 
-    var success = response.response != null;
+    final success = response.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -151,7 +159,7 @@ class SubtasksService {
       });
       return response.response;
     } else {
-      await Get.find<ErrorDialog>().show(response.error.message);
+      await Get.find<ErrorDialog>().show(response.error!.message);
       return null;
     }
   }

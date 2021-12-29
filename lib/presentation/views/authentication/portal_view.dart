@@ -31,10 +31,10 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -45,35 +45,36 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key key}) : super(key: key);
-
-  final LoginController controller = Get.find<LoginController>();
-  final checkBoxValue = false.obs;
-  final needAgreement = Get.deviceLocale.languageCode == 'zh';
+  PortalInputView({Key? key}) : super(key: key);
+  final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
+    if (Get.isRegistered<AccountManagerController>()) {
+      Get.find<AccountManagerController>();
+    } else {
+      Get.put(AccountManagerController()).setup();
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Obx(
           () => controller.state.value == ViewState.Busy
               ? SizedBox(
-                  height: Get.height,
-                  child: const Center(child: CircularProgressIndicator()))
+                  height: Get.height, child: const Center(child: CircularProgressIndicator()))
               : Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints:
-                        BoxConstraints(maxWidth: 480, maxHeight: Get.height),
+                    constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
                         SizedBox(height: Get.height * 0.2),
-                        AppIcon(icon: SvgIcons.app_logo),
+                        const AppIcon(icon: SvgIcons.app_logo),
                         SizedBox(height: Get.height * 0.01),
                         Text(tr('appName'),
-                            textAlign: TextAlign.center,
-                            style: TextStyleHelper.headline6()),
+                            textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
                         SizedBox(height: Get.height * 0.111),
                         Obx(
                           () => AuthTextField(
@@ -90,50 +91,28 @@ class PortalInputView extends StatelessWidget {
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.85),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.19)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.25),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.04)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
                           ]),
                           child: WideButton(
-                              text: tr('next'),
-                              textColor: needAgreement && !checkBoxValue.value
-                                  ? Get.theme
-                                      .colors()
-                                      .onBackground
-                                      .withOpacity(0.5)
-                                  : null,
-                              color: needAgreement && !checkBoxValue.value
-                                  ? Get.theme.colors().bgDescription
-                                  : null,
-                              onPressed: () async {
-                                if (needAgreement && !checkBoxValue.value) {
-                                  MessagesHandler.showSnackBar(
-                                      context: context,
-                                      text: tr('privacyAndTermsFooter.total'));
-
-                                  return;
-                                }
-                                checkBoxValue.value = false;
-                                await controller.getPortalCapabilities();
-                              }),
+                            text: tr('next'),
+                            textColor: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().onBackground.withOpacity(0.5)
+                                : null,
+                            color: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().bgDescription
+                                : null,
+                            onPressed: controller.getPortalCapabilities,
+                          ),
                         ),
-                        if (needAgreement)
-                          PrivacyAndTermsFooter.withCheckbox(
-                              checkBoxValue: checkBoxValue)
+                        if (controller.needAgreement)
+                          PrivacyAndTermsFooter.withCheckbox()
                         else
                           const Spacer(),
-                        if (needAgreement)
-                          const Spacer()
-                        else
-                          PrivacyAndTermsFooter()
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
                       ],
                     ),
                   ),

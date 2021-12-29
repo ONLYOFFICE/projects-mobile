@@ -30,8 +30,12 @@
  *
  */
 
+import 'dart:async';
+
+import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -40,88 +44,97 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/internal/locator.dart';
 
 class MilestonesDataSource extends GetxController {
-  final _api = locator<MilestoneService>();
+  final MilestoneService _api = locator<MilestoneService>();
 
   final paginationController =
-      Get.put(PaginationController(), tag: 'MilestonesDataSource');
+      Get.put(PaginationController<Milestone>(), tag: 'MilestonesDataSource');
 
   final _sortController = Get.find<MilestonesSortController>();
   final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
 
-  var searchQuery = '';
+  String searchQuery = '';
 
-  ProjectDetailed _projectDetailed;
+  Timer? _searchDebounce;
+
+  ProjectDetailed? _projectDetailed;
 
   MilestonesSortController get sortController => _sortController;
   MilestonesFilterController get filterController => _filterController;
 
   int get itemCount => paginationController.data.length;
-  RxList get itemList => paginationController.data;
+  RxList<Milestone> get itemList => paginationController.data;
 
   RxBool loaded = false.obs;
 
-  var hasFilters = false.obs;
+  RxBool hasFilters = false.obs;
 
-  int _projectId;
+  int? _projectId;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   MilestonesDataSource() {
-    _sortController.updateSortDelegate = () async => await loadMilestones();
+    _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
-    paginationController.loadDelegate = () async => await _getMilestones();
-    paginationController.refreshDelegate =
-        () async => await _getMilestones(needToClear: true);
+    paginationController.loadDelegate = () async => _getMilestones();
+    paginationController.refreshDelegate = () async => loadMilestones();
     paginationController.pullDownEnabled = true;
   }
 
   Future loadMilestones() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
+    locator<EventHub>().fire('needToRefreshMilestones', ['all']);
+
     loaded.value = true;
   }
 
-  Future _getMilestones({needToClear = false}) async {
-    var result = await _api.milestonesByFilter(
+  Future<bool> _getMilestones({bool needToClear = false}) async {
+    final result = await _api.milestonesByFilter(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectId: _projectId != null ? _projectId.toString() : null,
+      projectId: _projectId?.toString(),
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
       statusFilter: _filterController.statusFilter,
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );
+    if (result == null) return Future.value(false);
 
     paginationController.total.value = result.length;
-
     if (needToClear) paginationController.data.clear();
-
     paginationController.data.addAll(result);
+
+    return Future.value(true);
   }
 
-  Future<void> setup({ProjectDetailed projectDetailed, int projectId}) async {
+  Future<void> setup({ProjectDetailed? projectDetailed, int? projectId}) async {
     loaded.value = false;
     _projectDetailed = projectDetailed;
-    _projectId = projectId ?? projectDetailed.id;
+    _projectId = projectId ?? projectDetailed!.id;
     _filterController.projectId = _projectId.toString();
 
     // ignore: unawaited_futures
     loadMilestones();
 
-    fabIsVisible.value = _canCreate();
+    fabIsVisible.value = _canCreate()!;
   }
 
-  bool _canCreate() => _projectDetailed == null
-      ? false
-      : _projectDetailed.security['canCreateMilestone'];
+  bool? _canCreate() =>
+      _projectDetailed == null ? false : _projectDetailed!.security!['canCreateMilestone'] as bool;
 
   void loadMilestonesWithFilterByName(String searchText) {
-    searchQuery = searchText;
-    loadMilestones();
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (searchQuery != searchText) {
+        searchQuery = searchText;
+        await loadMilestones();
+      }
+    });
   }
 
   void clearSearchAndReloadMilestones() {

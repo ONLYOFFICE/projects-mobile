@@ -42,8 +42,8 @@ class TaskTitle extends StatelessWidget {
   final bool showCaption;
   final bool focusOnTitle;
   const TaskTitle({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.showCaption = false,
     this.focusOnTitle = true,
   }) : super(key: key);
@@ -60,21 +60,19 @@ class TaskTitle extends StatelessWidget {
               if (showCaption)
                 Text('${tr('taskTitle')}:',
                     style: TextStyleHelper.caption(
-                        color:
-                            Get.theme.colors().onBackground.withOpacity(0.75))),
+                        color: Get.theme.colors().onBackground.withOpacity(0.75))),
               TextField(
                   focusNode: focusOnTitle ? controller.titleFocus : null,
                   maxLines: null,
                   controller: controller.titleController,
                   onChanged: controller.changeTitle,
-                  style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onBackground),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                   cursorColor: Get.theme.colors().primary.withOpacity(0.87),
                   decoration: InputDecoration(
                       hintText: tr('taskTitle'),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                      contentPadding: EdgeInsets.zero,
                       hintStyle: TextStyleHelper.headline6(
-                          color: controller.setTitleError.value == true
+                          color: controller.setTitleError!.value == true
                               ? Get.theme.colors().colorError
                               : Get.theme.colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none)),

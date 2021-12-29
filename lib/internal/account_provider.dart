@@ -30,42 +30,27 @@
  *
  */
 
-import 'package:bottom_sheet/bottom_sheet.dart';
-import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/services.dart';
 
-void showCustomBottomSheet({
-  @required context,
-  @required double headerHeight,
-  // ignore: use_function_type_syntax_for_parameters
-  @required Widget headerBuilder(context, bottomSheetOffset),
-  // ignore: use_function_type_syntax_for_parameters
-  @required SliverChildDelegate builder(context, bottomSheetOffset),
-  double initHeight,
-  double maxHeight,
-  BoxDecoration decoration,
-}) async {
-  var heightWithoutStatusBar = _getMaxHeight(context);
+class AccountProvider {
+  static const MethodChannel _channel = MethodChannel('accountProvider');
 
-  await showStickyFlexibleBottomSheet(
-      context: context,
-      headerBuilder: headerBuilder,
-      bodyBuilder: builder,
-      headerHeight: headerHeight,
-      decoration: decoration,
-      initHeight: initHeight ?? heightWithoutStatusBar - 0.1,
-      maxHeight: maxHeight ?? initHeight,
-      anchors: [
-        0,
-        initHeight ?? heightWithoutStatusBar - 0.1,
-        maxHeight ?? initHeight
-      ]);
-}
+  static Future<bool?> addAccount({String accountData = '', String accountId = ''}) async {
+    return await _channel
+        .invokeMethod('addAccount', {'accountData': accountData, 'accountId': accountId});
+  }
 
-double _getMaxHeight(context) {
-  var screenHeight = MediaQuery.of(context).size.height;
-  var statusBarHeight = MediaQuery.of(context).padding.top == 0
-      ? 32
-      : MediaQuery.of(context).padding.top;
+  static Future<List<String>> getAccounts() async {
+    final accounts = <String>[];
+    final result = await _channel.invokeMethod('getAccounts');
+    for (final item in result) {
+      accounts.add(item['account'] as String);
+    }
+    return accounts;
+  }
 
-  return (screenHeight - statusBarHeight - 8) / screenHeight;
+  static Future<bool?> deleteAccount({String accountId = ''}) async {
+    return await _channel.invokeMethod('deleteAccount', {'accountId': accountId});
+  }
 }

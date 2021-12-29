@@ -44,12 +44,12 @@ class DownloadApi {
     if (avatarUrl.toLowerCase().contains('http')) {
       url = avatarUrl;
     } else {
-      url = await locator.get<CoreApi>().getPortalURI() + avatarUrl;
+      url = (await locator.get<CoreApi>().getPortalURI())! + avatarUrl;
     }
 
-    var result = ApiDTO<Uint8List>();
+    final result = ApiDTO<Uint8List>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         result.response = response.bodyBytes;
@@ -66,12 +66,12 @@ class DownloadApi {
     if (docUrl.toLowerCase().contains('http')) {
       url = docUrl;
     } else {
-      url = await locator.get<CoreApi>().getPortalURI() + docUrl;
+      url = (await locator.get<CoreApi>().getPortalURI())! + docUrl;
     }
 
-    var result = ApiDTO<Uint8List>();
+    final result = ApiDTO<Uint8List>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
         result.response = response.bodyBytes;

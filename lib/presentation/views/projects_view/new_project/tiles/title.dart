@@ -41,8 +41,8 @@ class ProjectTitleTile extends StatelessWidget {
   final bool showCaption;
   final bool focusOnTitle;
   const ProjectTitleTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.showCaption = false,
     this.focusOnTitle = true,
   }) : super(key: key);
@@ -59,18 +59,16 @@ class ProjectTitleTile extends StatelessWidget {
               if (showCaption)
                 Text('${tr('projectTitle')}:',
                     style: TextStyleHelper.caption(
-                        color:
-                            Get.theme.colors().onBackground.withOpacity(0.75))),
+                        color: Get.theme.colors().onBackground.withOpacity(0.75))),
               TextField(
-                  focusNode: focusOnTitle ? controller.titleFocus : null,
+                  focusNode: focusOnTitle ? controller.titleFocus as FocusNode : null,
                   maxLines: null,
-                  controller: controller.titleController,
-                  style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onBackground),
+                  controller: controller.titleController as TextEditingController?,
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                   cursorColor: Get.theme.colors().primary.withOpacity(0.87),
                   decoration: InputDecoration(
                       hintText: tr('projectTitle'),
-                      contentPadding: const EdgeInsets.symmetric(vertical: 0),
+                      contentPadding: EdgeInsets.zero,
                       hintStyle: TextStyleHelper.headline6(
                           color: controller.needToFillTitle.value == true
                               ? Get.theme.colors().colorError

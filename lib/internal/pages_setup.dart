@@ -84,104 +84,59 @@ import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
-      GetPage(name: '/MainView', page: () => MainView()),
+      GetPage(name: '/MainView', page: () => const MainView()),
       GetPage(name: '/PortalInputView', page: () => PortalInputView()),
-      GetPage(name: '/LoginView', page: () => LoginView()),
+      GetPage(name: '/LoginView', page: () => const LoginView()),
       GetPage(name: '/CodeView', page: () => CodeView()),
       GetPage(name: '/AnalyticsScreen', page: () => const AnalyticsScreen()),
       GetPage(name: '/DiscussionDetailed', page: () => DiscussionDetailed()),
-      GetPage(
-          name: '/DiscussionsFilterScreen',
-          page: () => const DiscussionsFilterScreen()),
-      GetPage(
-          name: '/DiscussionsSearchScreen',
-          page: () => const DiscussionsSearchScreen()),
+      GetPage(name: '/DiscussionsFilterScreen', page: () => const DiscussionsFilterScreen()),
+      GetPage(name: '/DiscussionsSearchScreen', page: () => const DiscussionsSearchScreen()),
       GetPage(name: '/GetCodeViews', page: () => const GetCodeViews()),
-      GetPage(
-          name: '/ColorThemeSelectionScreen',
-          page: () => const ColorThemeSelectionScreen()),
-      GetPage(
-          name: '/CommentEditingView', page: () => const CommentEditingView()),
-      GetPage(
-          name: '/EnterSMSCodeScreen', page: () => const EnterSMSCodeScreen()),
+      GetPage(name: '/ColorThemeSelectionScreen', page: () => const ColorThemeSelectionScreen()),
+      GetPage(name: '/CommentEditingView', page: () => const CommentEditingView()),
+      GetPage(name: '/EnterSMSCodeScreen', page: () => const EnterSMSCodeScreen()),
       GetPage(name: '/HomeView', page: () => const ProjectsView()),
-      GetPage(name: '/TaskDetailedView', page: () => TaskDetailedView()),
-      GetPage(
-          name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),
+      GetPage(name: '/TaskDetailedView', page: () => const TaskDetailedView()),
+      GetPage(name: '/TasksFilterScreen', page: () => const TasksFilterScreen()),
       GetPage(name: '/NewTaskView', page: () => const NewTaskView()),
       GetPage(name: '/NewCommentView', page: () => const NewCommentView()),
-      GetPage(
-          name: '/NewSubtaskView',
-          page: () => const CreatingAndEditingSubtaskView()),
+      GetPage(name: '/NewSubtaskView', page: () => const CreatingAndEditingSubtaskView()),
       GetPage(name: '/TaskDescription', page: () => const TaskDescription()),
       GetPage(
-          name: '/SelectDiscussionSubscribers',
-          page: () => const SelectDiscussionSubscribers()),
+          name: '/SelectDiscussionSubscribers', page: () => const SelectDiscussionSubscribers()),
       GetPage(name: '/SelectDateView', page: () => const SelectDateView()),
-      GetPage(
-          name: '/SelectMilestoneView',
-          page: () => const SelectMilestoneView()),
-      GetPage(
-          name: '/SelectProjectView', page: () => const SelectProjectView()),
-      GetPage(
-          name: '/SubtaskDetailedView',
-          page: () => const SubtaskDetailedView()),
+      GetPage(name: '/SelectMilestoneView', page: () => const SelectMilestoneView()),
+      GetPage(name: '/SelectProjectView', page: () => const SelectProjectView()),
+      GetPage(name: '/SubtaskDetailedView', page: () => const SubtaskDetailedView()),
       GetPage(name: '/ProjectSearchView', page: () => ProjectSearchView()),
-      GetPage(
-          name: '/ProjectsFilterScreen',
-          page: () => const ProjectsFilterScreen()),
-      GetPage(
-          name: '/MilestoneFilterScreen',
-          page: () => const MilestoneFilterScreen()),
-      GetPage(
-          name: '/DocumentsFilterScreen',
-          page: () => const DocumentsFilterScreen()),
+      GetPage(name: '/ProjectsFilterScreen', page: () => const ProjectsFilterScreen()),
+      GetPage(name: '/MilestoneFilterScreen', page: () => const MilestoneFilterScreen()),
+      GetPage(name: '/DocumentsFilterScreen', page: () => const DocumentsFilterScreen()),
       GetPage(name: '/NewProject', page: () => const NewProject()),
+      GetPage(name: '/NewProjectDescription', page: () => const NewProjectDescription()),
       GetPage(
-          name: '/NewProjectDescription',
-          page: () => const NewProjectDescription()),
-      GetPage(
-          name: '/ProjectManagerSelectionView',
-          page: () => const ProjectManagerSelectionView()),
+          name: '/ProjectManagerSelectionView', page: () => const ProjectManagerSelectionView()),
       GetPage(name: '/ReplyCommentView', page: () => const ReplyCommentView()),
       GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
-      GetPage(
-          name: '/TeamMembersSelectionView',
-          page: () => const TeamMembersSelectionView()),
+      GetPage(name: '/TeamMembersSelectionView', page: () => const TeamMembersSelectionView()),
       GetPage(name: '/ProjectDetailedView', page: () => ProjectDetailedView()),
-      GetPage(
-          name: '/GroupMembersSelectionView',
-          page: () => const GroupMembersSelectionView()),
-      GetPage(
-          name: '/NewDiscussionScreen',
-          page: () => const NewDiscussionScreen()),
-      GetPage(
-          name: '/DiscussionEditingScreen',
-          page: () => const DiscussionEditingScreen()),
+      GetPage(name: '/GroupMembersSelectionView', page: () => const GroupMembersSelectionView()),
+      GetPage(name: '/NewDiscussionScreen', page: () => const NewDiscussionScreen()),
+      GetPage(name: '/DiscussionEditingScreen', page: () => const DiscussionEditingScreen()),
       GetPage(
         name: '/ManageDiscussionSubscribersScreen',
         page: () => const ManageDiscussionSubscribersScreen(),
       ),
       GetPage(name: '/NewMilestoneView', page: () => const NewMilestoneView()),
-      GetPage(
-          name: '/NewMilestoneDescription',
-          page: () => const NewMilestoneDescription()),
-      GetPage(
-          name: '/PasscodeSettingsScreen',
-          page: () => const PasscodeSettingsScreen()),
+      GetPage(name: '/NewMilestoneDescription', page: () => const NewMilestoneDescription()),
+      GetPage(name: '/PasscodeSettingsScreen', page: () => const PasscodeSettingsScreen()),
       GetPage(name: '/PasscodeScreen', page: () => PasscodeScreen()),
-      GetPage(
-          name: '/PasswordRecoveryScreen',
-          page: () => const PasswordRecoveryScreen1()),
-      GetPage(
-          name: '/PasswordRecoveryScreen2',
-          page: () => const PasswordRecoveryScreen2()),
-      GetPage(
-          name: '/SelectCountryScreen',
-          page: () => const SelectCountryScreen()),
+      GetPage(name: '/PasswordRecoveryScreen', page: () => const PasswordRecoveryScreen1()),
+      GetPage(name: '/PasswordRecoveryScreen2', page: () => const PasswordRecoveryScreen2()),
+      GetPage(name: '/SelectCountryScreen', page: () => const SelectCountryScreen()),
       GetPage(name: '/SettingsScreen', page: () => const SettingsScreen()),
-      GetPage(
-          name: '/TasksSearchScreen', page: () => const TasksSearchScreen()),
+      GetPage(name: '/TasksSearchScreen', page: () => const TasksSearchScreen()),
       GetPage(name: '/TFASmsScreen', page: () => const TFASmsScreen()),
       GetPage(name: '/UsersFromGroups', page: () => const UsersFromGroups()),
       GetPage(name: '/ProfileScreen', page: () => const ProfileScreen()),

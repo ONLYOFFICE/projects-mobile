@@ -41,12 +41,12 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class NewMilestoneDescription extends StatelessWidget {
-  const NewMilestoneDescription({Key key}) : super(key: key);
+  const NewMilestoneDescription({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    NewMilestoneController newMilestoneController =
-        Get.arguments['newMilestoneController'];
+    final newMilestoneController =
+        Get.arguments['newMilestoneController'] as NewMilestoneController;
 
     final platformController = Get.find<PlatformController>();
 

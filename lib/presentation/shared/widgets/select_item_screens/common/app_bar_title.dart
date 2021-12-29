@@ -34,9 +34,9 @@ part of 'select_item_template.dart';
 
 class _AppBarTitle extends StatelessWidget {
   const _AppBarTitle({
-    Key key,
-    @required this.appBarText,
-    @required this.searchController,
+    Key? key,
+    required this.appBarText,
+    required this.searchController,
   }) : super(key: key);
 
   final BaseSearchController searchController;

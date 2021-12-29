@@ -36,15 +36,15 @@ import 'package:flutter/services.dart';
 
 class CustomSearchBar extends StatelessWidget {
   const CustomSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
     this.searchFunction,
     this.clearFunction,
   }) : super(key: key);
 
   final controller;
-  final Function(String value) searchFunction;
-  final VoidCallback clearFunction;
+  final Function(String value)? searchFunction;
+  final VoidCallback? clearFunction;
 
   @override
   Widget build(BuildContext context) {
@@ -56,13 +56,16 @@ class CustomSearchBar extends StatelessWidget {
             child: TextField(
               autofocus: true,
               textInputAction: TextInputAction.search,
-              controller: controller.searchInputController,
+              controller:
+                  controller.searchInputController as TextEditingController?,
               decoration: InputDecoration.collapsed(hintText: tr('enterQuery')),
-              onSubmitted: searchFunction ?? controller.newSearch,
+              onSubmitted:
+                  searchFunction ?? controller.newSearch as Function(String)?,
+              onChanged: searchFunction ?? controller.newSearch as Function(String)?,
             ),
           ),
           InkResponse(
-            onTap: clearFunction ?? controller.clearSearch,
+            onTap: clearFunction ?? controller.clearSearch as Function()?,
             child: const Icon(Icons.close, color: Colors.blue),
           )
         ],

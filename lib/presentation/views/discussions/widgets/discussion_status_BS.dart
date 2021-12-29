@@ -36,14 +36,15 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
+import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 
 Future<void> showsDiscussionStatusesBS({
-  context,
-  DiscussionItemController controller,
+  required BuildContext context,
+  DiscussionItemController? controller,
 }) async {
-  var initSize = _getInititalSize();
+  final initSize = _getInititalSize();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
@@ -74,9 +75,7 @@ Future<void> showsDiscussionStatusesBS({
           DecoratedBox(
             decoration: BoxDecoration(
               border: Border(
-                top: BorderSide(
-                    width: 1,
-                    color: Get.theme.colors().outline.withOpacity(0.5)),
+                top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
               ),
             ),
             child: Obx(
@@ -84,10 +83,10 @@ Future<void> showsDiscussionStatusesBS({
                 children: [
                   const SizedBox(height: 4),
                   InkWell(
-                    onTap: () async => controller.updateMessageStatus(0),
+                    onTap: () async => controller!.updateMessageStatus(0),
                     child: StatusTile(
                       title: tr('open'),
-                      selected: controller.status.value == 0,
+                      selected: controller!.status.value == 0,
                     ),
                   ),
                   InkWell(
@@ -107,6 +106,76 @@ Future<void> showsDiscussionStatusesBS({
       );
     },
   );
+}
+
+Future<void> showsDiscussionStatusesPM({
+  required BuildContext context,
+  required DiscussionItemController controller,
+}) async {
+  final items = <PopupMenuEntry<dynamic>>[
+    PopupMenuItem(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: Expanded(
+        child: InkWell(
+          onTap: () async => controller.updateMessageStatus(0),
+          child: StatusTileTablet(
+            title: tr('open'),
+            selected: controller.status.value == 0,
+            icon: Center(
+              child: AppIcon(
+                icon: SvgIcons.open_status,
+                color: Get.theme.colors().primary,
+                height: 16,
+                width: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+    PopupMenuItem(
+      height: 36,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      child: Expanded(
+        child: InkWell(
+          onTap: () async => controller.updateMessageStatus(1),
+          child: StatusTileTablet(
+            title: tr('archived'),
+            selected: controller.status.value == 1,
+            icon: Center(
+              child: AppIcon(
+                icon: SvgIcons.archived_status,
+                color: Get.theme.colors().primary,
+                height: 16,
+                width: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ),
+  ];
+
+// calculate the menu position, ofsset dy: 50
+  const offset = Offset(0, 50);
+  final button = context.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+  final position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(
+        offset,
+        ancestor: overlay,
+      ),
+      button.localToGlobal(
+        button.size.bottomRight(Offset.zero) + offset,
+        ancestor: overlay,
+      ),
+    ),
+    Offset.zero & overlay.size,
+  );
+
+  await showMenu(context: context, position: position, items: items);
 }
 
 double _getInititalSize() => 180 / Get.height;

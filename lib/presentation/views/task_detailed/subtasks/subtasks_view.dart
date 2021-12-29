@@ -49,42 +49,45 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 class SubtasksView extends StatelessWidget {
   final TaskItemController controller;
   const SubtasksView({
-    Key key,
-    this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _task = controller.task.value;
+    final _task = controller.task.value;
     return Obx(
       () {
         if (controller.loaded.value == true) {
           return Stack(
             children: [
-              if (_task.subtasks.isEmpty)
-                Center(
-                  child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noSubtasksCreated'),
-                  ),
-                ),
-              if (_task.subtasks.isNotEmpty)
-                SmartRefresher(
-                  controller: controller.subtaskRefreshController,
-                  onRefresh: () => controller.reloadTask(showLoading: true),
-                  child: ListView.builder(
-                    itemCount: _task.subtasks.length,
-                    padding: const EdgeInsets.only(top: 6, bottom: 50),
-                    itemBuilder: (BuildContext context, int index) {
-                      return SubtaskCell(
-                        subtask: _task.subtasks[index],
-                        parentTask: _task,
-                      );
-                    },
-                  ),
-                ),
-              if (controller?.task?.value?.canCreateSubtask == true &&
-                  controller?.task?.value?.status != 2)
+              SmartRefresher(
+                controller: controller.subtaskRefreshController,
+                onRefresh: () => controller.reloadTask(showLoading: true),
+                child: () {
+                  if (_task.subtasks!.isEmpty)
+                    return Center(
+                      child: EmptyScreen(
+                        icon: SvgIcons.task_not_created,
+                        text: tr('noSubtasksCreated'),
+                      ),
+                    );
+
+                  if (_task.subtasks!.isNotEmpty)
+                    return ListView.builder(
+                      itemCount: _task.subtasks!.length,
+                      padding: const EdgeInsets.only(top: 6, bottom: 50),
+                      itemBuilder: (BuildContext context, int index) {
+                        return SubtaskCell(
+                          subtask: _task.subtasks![index],
+                          parentTask: _task,
+                        );
+                      },
+                    );
+                }(),
+              ),
+              if (controller.task.value.canCreateSubtask == true &&
+                  controller.task.value.status != 2)
                 _FAB(task: _task),
             ],
           );
@@ -98,12 +101,12 @@ class SubtasksView extends StatelessWidget {
 
 class _FAB extends StatelessWidget {
   const _FAB({
-    Key key,
-    @required PortalTask task,
+    Key? key,
+    required PortalTask? task,
   })  : _task = task,
         super(key: key);
 
-  final PortalTask _task;
+  final PortalTask? _task;
 
   @override
   Widget build(BuildContext context) {
@@ -111,10 +114,10 @@ class _FAB extends StatelessWidget {
       right: 16,
       bottom: 24,
       child: StyledFloatingActionButton(
-        onPressed: () => Get.find<NavigationController>()
-            .to(const CreatingAndEditingSubtaskView(), arguments: {
-          'taskId': _task.id,
-          'projectId': _task.projectOwner.id,
+        onPressed: () =>
+            Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(), arguments: {
+          'taskId': _task!.id,
+          'projectId': _task!.projectOwner!.id,
           'forEditing': false,
         }),
         child: AppIcon(

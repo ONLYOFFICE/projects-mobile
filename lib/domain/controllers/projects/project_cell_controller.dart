@@ -45,20 +45,19 @@ class ProjectCellController extends GetxController {
   void setup(ProjectDetailed project) {
     _project = project;
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      isPrivate.value = project.isPrivate;
-      status.value = project.status;
-      canEdit.value = project.canEdit;
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      isPrivate.value = project.isPrivate!;
+      status.value = project.status!;
+      canEdit.value = project.canEdit!;
     });
   }
 
-  var _project;
-
+  late ProjectDetailed _project;
   ProjectDetailed get projectData => _project;
 
-  var isPrivate = false.obs;
-  var canEdit = false.obs;
-  var status = (-1).obs;
+  RxBool isPrivate = false.obs;
+  RxBool canEdit = false.obs;
+  RxInt status = (-1).obs;
 
   RxString statusImageString = ''.obs;
 
@@ -70,7 +69,7 @@ class ProjectCellController extends GetxController {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<bool> updateStatus({int newStatusId}) async =>
+  Future<bool> updateStatus({int? newStatusId}) async =>
       Get.find<ProjectStatusesController>()
           .updateStatus(newStatusId: newStatusId, projectData: projectData);
 }

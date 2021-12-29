@@ -45,7 +45,7 @@ import 'package:projects/presentation/views/projects_view/new_project/descriptio
 class ProjectDescriptionTile extends StatefulWidget {
   final controller;
   ProjectDescriptionTile({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 
@@ -55,21 +55,21 @@ class ProjectDescriptionTile extends StatefulWidget {
 
 class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
     with TickerProviderStateMixin {
-  bool _isExpanded;
+  late bool _isExpanded;
 
-  AnimationController _animationController;
+  late AnimationController _animationController;
 
   final Animatable<double> _halfTween = Tween<double>(begin: 0, end: 0.245);
   final Animatable<double> _turnsTween = CurveTween(curve: Curves.easeIn);
 
-  Animation<double> _iconTurns;
+  late Animation<double> _iconTurns;
 
   @override
   void initState() {
     super.initState();
     _isExpanded = false;
-    _animationController = AnimationController(
-        duration: const Duration(milliseconds: 250), vsync: this);
+    _animationController =
+        AnimationController(duration: const Duration(milliseconds: 250), vsync: this);
     _iconTurns = _animationController.drive(_halfTween.chain(_turnsTween));
   }
 
@@ -82,7 +82,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
   @override
   Widget build(BuildContext context) {
     // ignore: omit_local_variable_types
-    double _height = _isExpanded ? null : 61;
+    final double? _height = _isExpanded ? null : 61;
 
     void changeExpansion() {
       setState(() {
@@ -98,16 +98,15 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isNotEmpty = widget.controller.descriptionText.value.isNotEmpty;
-        var _color = _isNotEmpty
+        final bool _isNotEmpty = widget.controller.descriptionText.value.isNotEmpty as bool;
+        final _color = _isNotEmpty
             ? Get.theme.colors().onBackground
             : Get.theme.colors().onBackground.withOpacity(0.4);
-        var text = widget.controller.descriptionText.value;
-        var textSize = _textSize(text, TextStyleHelper.subtitle1());
+        final text = widget.controller.descriptionText.value as String;
+        final textSize = _textSize(text, TextStyleHelper.subtitle1());
 
         return InkWell(
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const NewProjectDescription(),
+          onTap: () => Get.find<NavigationController>().toScreen(const NewProjectDescription(),
               arguments: {'controller': widget.controller}),
           child: Column(
             children: [
@@ -119,13 +118,10 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
                   child: Row(
                     children: [
                       SizedBox(
-                          width: 72,
-                          child: AppIcon(
-                              icon: SvgIcons.description, color: _color)),
+                          width: 72, child: AppIcon(icon: SvgIcons.description, color: _color)),
                       Expanded(
                         child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: _isNotEmpty ? 10 : 18),
+                          padding: EdgeInsets.symmetric(vertical: _isNotEmpty ? 10 : 18),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
@@ -133,15 +129,10 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
                               if (_isNotEmpty)
                                 Text('${tr('description')}:',
                                     style: TextStyleHelper.caption(
-                                        color: Get.theme
-                                            .colors()
-                                            .onBackground
-                                            .withOpacity(0.75))),
+                                        color: Get.theme.colors().onBackground.withOpacity(0.75))),
                               Flexible(
-                                child: Text(
-                                    _isNotEmpty ? text : tr('addDescription'),
-                                    style: TextStyleHelper.subtitle1(
-                                        color: _color)),
+                                child: Text(_isNotEmpty ? text : tr('addDescription'),
+                                    style: TextStyleHelper.subtitle1(color: _color)),
                               ),
                             ],
                           ),
@@ -153,8 +144,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 5, right: 13),
+                              padding: const EdgeInsets.only(left: 5, right: 13),
                               child: IconButton(
                                 icon: RotationTransition(
                                   turns: _iconTurns,
@@ -184,15 +174,13 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
 
 Size _textSize(String text, TextStyle style) {
   final textPainter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      maxLines: 1,
-      textDirection: _ui.TextDirection.ltr)
+      text: TextSpan(text: text, style: style), maxLines: 1, textDirection: _ui.TextDirection.ltr)
     ..layout(minWidth: 0, maxWidth: double.infinity);
   return textPainter.size;
 }
 
 bool _needToExpand(double size, String text) {
-  var freeSize = Get.width - 72 - 59;
+  final freeSize = Get.width - 72 - 59;
   if ('\n'.allMatches(text).length + 1 > 1) return true;
   if (freeSize > size) return false;
   return true;

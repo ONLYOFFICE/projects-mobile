@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/comments/item_controller/abstract_co
 import 'package:projects/domain/controllers/comments/item_controller/discussion_comment_item_controller.dart';
 import 'package:projects/domain/controllers/comments/item_controller/task_comment_item_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
@@ -46,12 +47,12 @@ import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 
 class Comment extends StatelessWidget {
-  final int taskId;
-  final int discussionId;
+  final int? taskId;
+  final int? discussionId;
   final PortalComment comment;
   const Comment({
-    Key key,
-    @required this.comment,
+    Key? key,
+    required this.comment,
     this.taskId,
     this.discussionId,
   })  : assert(discussionId == null || taskId == null),
@@ -59,7 +60,7 @@ class Comment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!comment.inactive) {
+    if (!comment.inactive!) {
       CommentItemController controller;
 
       if (taskId != null) {
@@ -95,24 +96,24 @@ class Comment extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 4),
                     child: HtmlWidget(
-                      controller.comment.value.commentBody,
+                      controller.comment?.value.commentBody ?? '',
+                      factoryBuilder: () => _HTMLWidgetFactory(),
                     ),
                   ),
-                  if (comment.isResponsePermissions) const SizedBox(height: 5),
-                  if (comment.isResponsePermissions)
+                  if (comment.isResponsePermissions!) const SizedBox(height: 5),
+                  if (comment.isResponsePermissions!)
                     GestureDetector(
-                      onTap: () {
-                        return Get.find<NavigationController>()
+                      onTap: () async {
+                        return await Get.find<NavigationController>()
                             .toScreen(const ReplyCommentView(), arguments: {
-                          'comment': controller.comment.value,
+                          'comment': controller.comment!.value,
                           'discussionId': discussionId,
                           'taskId': taskId,
                         });
                       },
                       child: Text(
                         tr('reply'),
-                        style: TextStyleHelper.caption(
-                            color: Get.theme.colors().primary),
+                        style: TextStyleHelper.caption(color: Get.theme.colors().primary),
                       ),
                     ),
                 ],
@@ -127,13 +128,31 @@ class Comment extends StatelessWidget {
   }
 }
 
+class _HTMLWidgetFactory extends WidgetFactory {
+  final _portalInfo = Get.find<PortalInfoController>();
+
+  @override
+  Widget? buildImage(BuildMetadata meta, ImageMetadata data) {
+    final url = meta.element.attributes['src'];
+    if (url != null && url.isNotEmpty && url.contains(_portalInfo.portalName!)) {
+      return Image.network(
+        url,
+        headers: _portalInfo.headers as Map<String, String>?,
+      );
+    }
+
+    return super.buildImage(meta, data);
+  }
+}
+
 class _CommentAuthor extends StatelessWidget {
   final PortalComment comment;
-  final controller;
+  final CommentItemController controller;
+
   const _CommentAuthor({
-    Key key,
-    @required this.comment,
-    this.controller,
+    Key? key,
+    required this.comment,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -157,8 +176,8 @@ class _CommentAuthor extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(comment.userFullName, style: TextStyleHelper.projectTitle),
-              Text(comment.timeStampStr,
+              Text(comment.userFullName!, style: TextStyleHelper.projectTitle),
+              Text(comment.timeStampStr!,
                   style: TextStyleHelper.caption(
                       color: Get.theme.colors().onBackground.withOpacity(0.6))),
             ],
@@ -171,28 +190,26 @@ class _CommentAuthor extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 35),
               child: PopupMenuButton(
-                onSelected: (value) => _onSelected(value, context, controller),
+                onSelected: (String value) => _onSelected(value, controller),
                 icon: Icon(Icons.more_vert_rounded,
-                    size: 25,
-                    color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                    size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
                     PopupMenuItem(
                       value: 'Copy link',
                       child: Text(tr('copyLink')),
                     ),
-                    if (comment.isEditPermissions)
+                    if (comment.isEditPermissions!)
                       PopupMenuItem(
                         value: 'Edit',
                         child: Text(tr('edit')),
                       ),
-                    if (comment.isEditPermissions)
+                    if (comment.isEditPermissions!)
                       PopupMenuItem(
                         value: 'Delete',
                         child: Text(
                           tr('delete'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().colorError),
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
                         ),
                       ),
                   ];
@@ -207,30 +224,33 @@ class _CommentAuthor extends StatelessWidget {
 }
 
 class _DeletedComment extends StatelessWidget {
-  const _DeletedComment({Key key}) : super(key: key);
+  const _DeletedComment({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.symmetric(vertical: 8),
         child: Text(tr('commentDeleted'), style: TextStyleHelper.body2()),
       ),
     );
   }
 }
 
-void _onSelected(value, context, CommentItemController controller) async {
+Future<void> _onSelected(
+  String value,
+  CommentItemController controller,
+) async {
   switch (value) {
     case 'Copy link':
-      await controller.copyLink(context);
+      await controller.copyLink();
       break;
     case 'Edit':
       controller.toCommentEditingView();
       break;
     case 'Delete':
-      await controller.deleteComment(context);
+      await controller.deleteComment();
       break;
     default:
   }

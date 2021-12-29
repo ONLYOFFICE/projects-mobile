@@ -44,10 +44,10 @@ import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 
 class DiscussionTile extends StatelessWidget {
   final Discussion discussion;
-  final Function() onTap;
+  final Function()? onTap;
   const DiscussionTile({
-    Key key,
-    @required this.discussion,
+    Key? key,
+    required this.discussion,
     this.onTap,
   }) : super(key: key);
 
@@ -60,9 +60,9 @@ class DiscussionTile extends StatelessWidget {
         child: Row(
           children: [
             _Image(
-              image: discussion.createdBy.avatar ??
-                  discussion.createdBy.avatarMedium ??
-                  discussion.createdBy.avatarSmall,
+              image: discussion.createdBy!.avatar ??
+                  discussion.createdBy!.avatarMedium ??
+                  discussion.createdBy!.avatarSmall,
             ),
             const SizedBox(width: 16),
             _DiscussionInfo(discussion: discussion),
@@ -76,10 +76,10 @@ class DiscussionTile extends StatelessWidget {
 }
 
 class _Image extends StatelessWidget {
-  final String image;
+  final String? image;
   const _Image({
-    Key key,
-    @required this.image,
+    Key? key,
+    required this.image,
   }) : super(key: key);
 
   @override
@@ -99,10 +99,10 @@ class _Image extends StatelessWidget {
 }
 
 class _DiscussionInfo extends StatelessWidget {
-  final Discussion discussion;
+  final Discussion? discussion;
   const _DiscussionInfo({
-    Key key,
-    @required this.discussion,
+    Key? key,
+    required this.discussion,
   }) : super(key: key);
 
   @override
@@ -112,29 +112,26 @@ class _DiscussionInfo extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            discussion.title,
+            discussion!.title!,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: TextStyleHelper.projectTitle.copyWith(
-              color: discussion.status == 1
-                  ? Get.theme.colors().onBackground.withOpacity(0.6)
-                  : null,
+              color:
+                  discussion!.status == 1 ? Get.theme.colors().onBackground.withOpacity(0.6) : null,
             ),
           ),
           RichText(
             text: TextSpan(
-              style: TextStyleHelper.caption(
-                  color: Get.theme.colors().onSurface.withOpacity(0.6)),
+              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6)),
               children: [
-                if (discussion.status == 1)
+                if (discussion!.status == 1)
                   TextSpan(
                       text: '${tr('archived')} • ',
-                      style: TextStyleHelper.status(
-                          color: Get.theme.colors().onBackground)),
-                TextSpan(text: formatedDate(discussion.created)),
+                      style: TextStyleHelper.status(color: Get.theme.colors().onBackground)),
+                TextSpan(text: formatedDate(discussion!.created!)),
                 const TextSpan(text: ' • '),
                 TextSpan(
-                  text: NameFormatter.formateName(discussion.createdBy),
+                  text: NameFormatter.formateName(discussion!.createdBy!),
                 )
               ],
             ),
@@ -146,10 +143,10 @@ class _DiscussionInfo extends StatelessWidget {
 }
 
 class _CommentsCount extends StatelessWidget {
-  final int commentsCount;
+  final int? commentsCount;
   const _CommentsCount({
-    Key key,
-    @required this.commentsCount,
+    Key? key,
+    required this.commentsCount,
   }) : super(key: key);
 
   @override
@@ -157,13 +154,10 @@ class _CommentsCount extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        AppIcon(
-            icon: SvgIcons.comments,
-            color: Get.theme.colors().onBackground.withOpacity(0.6)),
+        AppIcon(icon: SvgIcons.comments, color: Get.theme.colors().onBackground.withOpacity(0.6)),
         const SizedBox(width: 5.33),
         Text(commentsCount.toString(),
-            style: TextStyleHelper.body2(
-                color: Get.theme.colors().onBackground.withOpacity(0.6))),
+            style: TextStyleHelper.body2(color: Get.theme.colors().onBackground.withOpacity(0.6))),
       ],
     );
   }

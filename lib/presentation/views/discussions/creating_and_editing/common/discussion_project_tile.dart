@@ -44,8 +44,8 @@ class DiscussionProjectTile extends StatelessWidget {
   final DiscussionActionsController controller;
   final bool ignoring;
   const DiscussionProjectTile({
-    Key key,
-    this.controller,
+    Key? key,
+    required this.controller,
     this.ignoring = false,
   }) : super(key: key);
 
@@ -57,16 +57,14 @@ class DiscussionProjectTile extends StatelessWidget {
         child: NewItemTile(
           icon: SvgIcons.project,
           text: controller.selectedProjectTitle.value.isNotEmpty
-              ? controller.selectedProjectTitle.value
+              ? controller.selectedProjectTitle.value as String?
               : tr('chooseProject'),
-          textColor: controller.selectProjectError == true
-              ? Get.theme.colors().colorError
-              : null,
+          textColor:
+              controller.selectProjectError.value == true ? Get.theme.colors().colorError : null,
           isSelected: controller.selectedProjectTitle.value.isNotEmpty,
           selectedIconColor: Get.theme.colors().onSurface.withOpacity(0.8),
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const SelectProjectView(),
-              arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const SelectProjectView(), arguments: {'controller': controller}),
         ),
       ),
     );

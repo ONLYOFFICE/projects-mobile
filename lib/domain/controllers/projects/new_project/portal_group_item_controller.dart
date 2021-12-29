@@ -39,8 +39,8 @@ class PortalGroupItemController extends GetxController {
   PortalGroupItemController({
     this.portalGroup,
   });
-  final PortalGroup portalGroup;
+  final PortalGroup? portalGroup;
   var isSelected = false.obs;
 
-  String get displayName => portalGroup.name;
+  String? get displayName => portalGroup!.name;
 }

@@ -31,32 +31,32 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'package:flutter/widgets.dart';
 
-import 'package:projects/data/models/apiDTO.dart';
-import 'package:projects/data/models/from_api/status.dart';
-import 'package:projects/data/models/from_api/portal_task.dart';
-import 'package:projects/data/models/new_task_DTO.dart';
+import 'package:http/http.dart' as http;
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/from_api/status.dart';
+import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/internal/locator.dart';
 
 class TaskApi {
-  Future<ApiDTO> addTask({NewTaskDTO newTask}) async {
-    var url =
+  Future<ApiDTO<PortalTask>> addTask({required NewTaskDTO newTask}) async {
+    final url =
         await locator.get<CoreApi>().addTaskUrl(projectId: newTask.projectId);
-    var result = ApiDTO();
+    final result = ApiDTO<PortalTask>();
 
     try {
-      var response =
+      final response =
           await locator.get<CoreApi>().postRequest(url, newTask.toJson());
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalTask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = PortalTask.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -64,20 +64,21 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> copyTask(
-      {@required int copyFrom, @required NewTaskDTO task}) async {
-    var url = await locator.get<CoreApi>().copyTaskUrl(copyFrom: copyFrom);
-    var result = ApiDTO();
+  Future<ApiDTO<PortalTask>> copyTask(
+      {required int copyFrom, required NewTaskDTO task}) async {
+    final url = await locator.get<CoreApi>().copyTaskUrl(copyFrom: copyFrom);
+    final result = ApiDTO<PortalTask>();
 
     try {
-      var response =
+      final response =
           await locator.get<CoreApi>().postRequest(url, task.toJson());
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalTask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = PortalTask.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -85,18 +86,19 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> getTaskByID({int id}) async {
-    var url = await locator.get<CoreApi>().taskByIdUrl(id);
-    var result = ApiDTO();
+  Future<ApiDTO<PortalTask>> getTaskByID({required int id}) async {
+    final url = await locator.get<CoreApi>().taskByIdUrl(id);
+    final result = ApiDTO<PortalTask>();
 
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalTask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = PortalTask.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -105,26 +107,28 @@ class TaskApi {
     return result;
   }
 
-  Future<String> getTaskLink({@required taskId, @required projectId}) async {
-    return await locator
+  Future<String> getTaskLink(
+      {required int taskId, required int projectId}) async {
+    return locator
         .get<CoreApi>()
         .getTaskLinkUrl(taskId: taskId, projectId: projectId);
   }
 
   Future<ApiDTO<List<Status>>> getStatuses() async {
-    var url = await locator.get<CoreApi>().statusesUrl();
+    final url = await locator.get<CoreApi>().statusesUrl();
 
-    var result = ApiDTO<List<Status>>();
+    final result = ApiDTO<List<Status>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
             .map((i) => Status.fromJson(i))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -134,21 +138,23 @@ class TaskApi {
   }
 
   Future<ApiDTO> updateTaskStatus(
-      {int taskId, int newStatusId, int newStatusType}) async {
-    var url = await locator.get<CoreApi>().updateTaskStatusUrl(taskId: taskId);
+      {required int taskId,
+      required int newStatusId,
+      required int newStatusType}) async {
+    final url =
+        await locator.get<CoreApi>().updateTaskStatusUrl(taskId: taskId);
 
-    var result = ApiDTO();
+    final result = ApiDTO();
 
-    var body = {'status': newStatusType, 'statusId': newStatusId};
-    Map responseJson;
+    final body = {'status': newStatusType, 'statusId': newStatusId};
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -156,20 +162,19 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> deleteTask({int taskId}) async {
-    var url = await locator.get<CoreApi>().deleteTaskUrl(taskId: taskId);
+  Future<ApiDTO> deleteTask({required int taskId}) async {
+    final url = await locator.get<CoreApi>().deleteTaskUrl(taskId: taskId);
 
-    var result = ApiDTO();
+    final result = ApiDTO();
 
-    Map responseJson;
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
-        responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -177,19 +182,19 @@ class TaskApi {
     return result;
   }
 
-  Future<ApiDTO> subscribeToTask({int taskId}) async {
-    var url = await locator.get<CoreApi>().subscribeTaskUrl(taskId: taskId);
+  Future<ApiDTO> subscribeToTask({required int taskId}) async {
+    final url = await locator.get<CoreApi>().subscribeTaskUrl(taskId: taskId);
 
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url);
+      final response = await locator.get<CoreApi>().putRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -198,26 +203,26 @@ class TaskApi {
   }
 
   Future<PageDTO<List<PortalTask>>> getTasksByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    String responsibleFilter,
-    String creatorFilter,
-    String projectFilter,
-    String milestoneFilter,
-    String statusFilter,
-    String projectId,
-    String deadlineFilter,
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    String? responsibleFilter,
+    String? creatorFilter,
+    String? projectFilter,
+    String? milestoneFilter,
+    String? statusFilter,
+    String? projectId,
+    String? deadlineFilter,
   }) async {
-    var url = await locator.get<CoreApi>().tasksByParamsrUrl();
+    var url = await locator.get<CoreApi>().tasksByParamsUrl();
 
     if (startIndex != null) {
       url += '&Count=25&StartIndex=$startIndex';
     }
 
     if (query != null) {
-      var parsedData = Uri.encodeComponent(query);
+      final parsedData = Uri.encodeComponent(query);
       url += '&FilterValue=$parsedData';
     }
 
@@ -251,20 +256,21 @@ class TaskApi {
       url += '&projectId=$projectId';
     }
 
-    var result = PageDTO<List<PortalTask>>();
+    final result = PageDTO<List<PortalTask>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        final Map responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
-        {
-          result.response = (responseJson['response'] as List)
-              .map((i) => PortalTask.fromJson(i))
-              .toList();
-        }
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['total'] as int;
+
+        result.response =
+              (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map((i) => PortalTask.fromJson(i))
+                  .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -273,20 +279,20 @@ class TaskApi {
     return result;
   }
 
-  Future updateTask({@required NewTaskDTO newTask}) async {
-    var url = await locator.get<CoreApi>().updateTaskUrl(taskId: newTask.id);
-    var result = ApiDTO();
+  Future<ApiDTO<PortalTask>> updateTask({required NewTaskDTO newTask}) async {
+    final url = await locator.get<CoreApi>().updateTaskUrl(taskId: newTask.id!);
+    final result = ApiDTO<PortalTask>();
 
     try {
-      var response =
+      final response =
           await locator.get<CoreApi>().putRequest(url, body: newTask.toJson());
 
       if (response is http.Response) {
-        final Map responseJson = json.decode(response.body);
-        print(PortalTask.fromJson(responseJson['response']));
-        result.response = PortalTask.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = PortalTask.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

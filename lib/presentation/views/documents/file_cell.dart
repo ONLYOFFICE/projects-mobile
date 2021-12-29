@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
@@ -50,13 +51,13 @@ class FileCell extends StatelessWidget {
   final int index;
 
   final PortalFile entity;
-  final controller;
+  final DocumentsController controller;
 
   const FileCell({
-    Key key,
-    @required this.entity,
-    @required this.index,
-    @required this.controller,
+    Key? key,
+    required this.entity,
+    required this.index,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -65,7 +66,7 @@ class FileCell extends StatelessWidget {
       onTap: () async {
         await controller.openFile(entity);
       },
-      child: Container(
+      child: SizedBox(
         height: 72,
         child: Row(
           children: [
@@ -74,9 +75,9 @@ class FileCell extends StatelessWidget {
               child: Center(
                 child: Obx(() {
                   if (controller.paginationController.data[index].fileType == 7)
-                    return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
+                    return const AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
                   if (controller.paginationController.data[index].fileType == 5)
-                    return AppIcon(width: 20, height: 20, icon: SvgIcons.table);
+                    return const AppIcon(width: 20, height: 20, icon: SvgIcons.table);
 
                   if (controller.paginationController.data[index].fileType == 1)
                     return AppIcon(
@@ -86,10 +87,9 @@ class FileCell extends StatelessWidget {
                       color: Get.theme.colors().onSurface,
                     );
                   if (controller.paginationController.data[index].fileType == 4)
-                    return AppIcon(width: 20, height: 20, icon: SvgIcons.image);
+                    return const AppIcon(width: 20, height: 20, icon: SvgIcons.image);
                   if (controller.paginationController.data[index].fileType == 6)
-                    return AppIcon(
-                        width: 20, height: 20, icon: SvgIcons.presentation);
+                    return const AppIcon(width: 20, height: 20, icon: SvgIcons.presentation);
 
                   return AppIcon(
                       width: 20,
@@ -105,16 +105,15 @@ class FileCell extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: Text(entity.title.replaceAll(' ', '\u00A0'),
+                    child: Text(entity.title!.replaceAll(' ', '\u00A0'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.projectTitle),
                   ),
                   Text(
-                      '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.createdBy.displayName}',
+                      '${formatedDate(entity.updated!)} • ${entity.contentLength} • ${entity.createdBy!.displayName}',
                       style: TextStyleHelper.caption(
-                          color:
-                              Get.theme.colors().onSurface.withOpacity(0.6))),
+                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
                 ],
               ),
             ),
@@ -123,11 +122,9 @@ class FileCell extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PopupMenuButton(
-                  onSelected: (value) => {
-                    _onFilePopupMenuSelected(value, entity, context, controller)
-                  },
-                  icon: Icon(Icons.more_vert,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  onSelected: (dynamic value) =>
+                      {_onFilePopupMenuSelected(value, entity, context, controller)},
+                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -162,8 +159,7 @@ class FileCell extends StatelessWidget {
                           value: 'delete',
                           child: Text(
                             tr('delete'),
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
                           ),
                         ),
                     ];
@@ -178,20 +174,20 @@ class FileCell extends StatelessWidget {
   }
 }
 
-void _onFilePopupMenuSelected(
+Future<void> _onFilePopupMenuSelected(
   value,
   PortalFile selectedFile,
   BuildContext context,
-  controller,
+  DocumentsController controller,
 ) async {
   switch (value) {
     case 'copyLink':
-      var portalDomain = controller.portalInfoController.portalUri;
+      final portalDomain = controller.portalInfoController.portalUri;
 
-      var link =
-          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
+      if (portalDomain != null && selectedFile.id != null) {
+        final link =
+            '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
 
-      if (link != null) {
         await Clipboard.setData(ClipboardData(text: link));
         MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
       }
@@ -200,7 +196,7 @@ void _onFilePopupMenuSelected(
       await controller.openFile(selectedFile);
       break;
     case 'download':
-      await controller.downloadFile(selectedFile.viewUrl);
+      await controller.downloadFile(selectedFile.viewUrl!);
       break;
     case 'copy':
       Get.find<NavigationController>()
@@ -225,7 +221,7 @@ void _onFilePopupMenuSelected(
       _renameFile(controller, selectedFile, context);
       break;
     case 'delete':
-      var success = await controller.deleteFile(selectedFile);
+      final success = await controller.deleteFile(selectedFile);
 
       if (success) {
         MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
@@ -236,12 +232,12 @@ void _onFilePopupMenuSelected(
 }
 
 void _renameFile(
-  controller,
+  DocumentsController controller,
   PortalFile element,
   BuildContext context,
 ) {
-  var inputController = TextEditingController();
-  inputController.text = element.title.replaceAll(element.fileExst, '');
+  final inputController = TextEditingController();
+  inputController.text = element.title!.replaceAll(element.fileExst!, '');
 
   Get.dialog(
     StyledAlertDialog(
@@ -259,11 +255,9 @@ void _renameFile(
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         if (inputController.text != element.title) {
-          var success =
-              await controller.renameFile(element, inputController.text);
+          final success = await controller.renameFile(element, inputController.text);
           if (success) {
-            MessagesHandler.showSnackBar(
-                context: context, text: tr('fileRenamed'));
+            MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
             Get.back();
           }
         } else

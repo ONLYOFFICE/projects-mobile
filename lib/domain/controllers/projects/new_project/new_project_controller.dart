@@ -32,8 +32,10 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/models/new_project_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
@@ -47,7 +49,7 @@ import 'package:projects/presentation/views/project_detailed/project_detailed_vi
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class NewProjectController extends BaseProjectEditorController {
-  final _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
 
   NewProjectController() {
     selectionMode = UserSelectionMode.Single;
@@ -68,18 +70,17 @@ class NewProjectController extends BaseProjectEditorController {
     ));
   }
 
-  Future<void> confirm(context) async {
+  Future<void> confirm(BuildContext context) async {
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value = (selectedProjectManager.value == null ||
-        selectedProjectManager.value.id == null);
+    needToFillManager.value =
+        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true)
-      return;
+    if (needToFillTitle.value == true || needToFillManager.value == true) return;
 
-    var participants = <Participant>[];
+    final participants = <Participant>[];
 
-    for (var element in selectedTeamMembers) {
+    for (final element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -91,18 +92,18 @@ class NewProjectController extends BaseProjectEditorController {
       );
     }
 
-    var newProject = NewProjectDTO(
+    final newProject = NewProjectDTO(
         title: titleController.text,
         description: descriptionController.text,
-        responsibleId: selectedProjectManager.value.id,
+        responsibleId: selectedProjectManager.value!.id,
         participants: participants,
         private: isPrivate.value,
         notify: notificationEnabled.value,
         notifyResponsibles: responsiblesNotificationEnabled);
 
-    var result = await _api.createProject(project: newProject);
+    final result = await _api.createProject(project: newProject);
     if (result != null) {
-      locator<EventHub>().fire('needToRefreshProjects');
+      locator<EventHub>().fire('needToRefreshProjects', ['all']);
 
       MessagesHandler.showSnackBar(
         context: context,
@@ -119,5 +120,15 @@ class NewProjectController extends BaseProjectEditorController {
     // ignore: unawaited_futures
     Get.find<NavigationController>()
         .toScreen(const TagsSelectionView(), arguments: {'controller': this});
+  }
+
+  @override
+  // TODO: implement projectData
+  ProjectDetailed? get projectData => throw UnimplementedError();
+
+  @override
+  Future<bool> updateStatus({int? newStatusId}) {
+    // TODO: implement updateStatus
+    throw UnimplementedError();
   }
 }

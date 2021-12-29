@@ -31,26 +31,27 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class PaginationListView<T> extends StatelessWidget {
   const PaginationListView({
-    Key key,
-    @required this.paginationController,
-    @required this.child,
+    Key? key,
+    required this.paginationController,
+    required this.child,
   }) : super(key: key);
 
-  final paginationController;
-  final child;
+  final PaginationController<T> paginationController;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
         footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus mode) {
-            return Container(
-              height: 55.0,
-              child: const Center(child: CircularProgressIndicator()),
+          builder: (BuildContext context, LoadStatus? mode) {
+            return const SizedBox(
+              height: 55,
+              child: Center(child: CircularProgressIndicator()),
             );
           },
         ),

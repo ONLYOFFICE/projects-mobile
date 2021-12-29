@@ -36,15 +36,15 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class WideButton extends StatelessWidget {
-  final Color color;
-  final Color textColor;
+  final Color? color;
+  final Color? textColor;
   final EdgeInsetsGeometry padding;
   final Function() onPressed;
   final String text;
   const WideButton({
-    Key key,
-    @required this.text,
-    @required this.onPressed,
+    Key? key,
+    required this.text,
+    required this.onPressed,
     this.color,
     this.padding = const EdgeInsets.only(top: 10, bottom: 12),
     this.textColor,

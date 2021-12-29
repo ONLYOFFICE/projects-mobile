@@ -38,11 +38,11 @@ import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart'
 
 class NewPasscodeScreen2 extends StatelessWidget with PasscodeScreenMixin {
   NewPasscodeScreen2({
-    Key key,
+    Key? key,
     this.onSaved,
   }) : super(key: key);
 
-  final VoidCallback onSaved;
+  final VoidCallback? onSaved;
 
   final PasscodeSettingsController passcodeController =
       Get.find<PasscodeSettingsController>();

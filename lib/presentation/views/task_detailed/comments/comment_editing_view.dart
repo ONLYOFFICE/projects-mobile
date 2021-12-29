@@ -39,15 +39,15 @@ import 'package:projects/presentation/shared/widgets/html_text_editor.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class CommentEditingView extends StatelessWidget {
-  const CommentEditingView({Key key}) : super(key: key);
+  const CommentEditingView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String commentId = Get.arguments['commentId'];
-    String commentBody = Get.arguments['commentBody'];
-    CommentItemController itemController = Get.arguments['itemController'];
+    final commentId = Get.arguments['commentId'] as String?;
+    final commentBody = Get.arguments['commentBody'] as String?;
+    final itemController = Get.arguments['itemController'] as CommentItemController?;
 
-    var controller = Get.put(CommentEditingController(
+    final controller = Get.put(CommentEditingController(
       commentBody: commentBody,
       commentId: commentId,
       itemController: itemController,
@@ -55,7 +55,7 @@ class CommentEditingView extends StatelessWidget {
 
     return WillPopScope(
       onWillPop: () async {
-        controller.leavePage();
+        await controller.leavePage();
         return false;
       },
       child: Scaffold(

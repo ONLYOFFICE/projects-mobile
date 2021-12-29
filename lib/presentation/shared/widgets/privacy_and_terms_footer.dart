@@ -35,55 +35,56 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/services/remote_config_service.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PrivacyAndTermsFooter extends StatelessWidget {
   PrivacyAndTermsFooter({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   PrivacyAndTermsFooter.withCheckbox({
-    Key key,
-    this.checkBoxValue,
-  }) : super(key: key);
+    Key? key,
+  }) : super(key: key) {
+    checkBoxValue = controller.checkBoxValue;
+  }
 
-  RxBool checkBoxValue;
+  RxBool? checkBoxValue;
+  final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
-    final needAgreement =
-        Get.deviceLocale.languageCode == 'zh' && checkBoxValue != null;
+    final needAgreement = controller.needAgreement && checkBoxValue != null;
 
     RemoteConfigService.fetchAndActivate();
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
-    final textTermsOfService =
-        tr('privacyAndTermsFooter.termsOfServiceWithLink');
+    final textTermsOfService = tr('privacyAndTermsFooter.termsOfServiceWithLink');
+
 
     final beforeText = needAgreement
         ? tr('privacyAndTermsAgreement.beforeText')
         : fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
     final betweenText = needAgreement
         ? tr('privacyAndTermsAgreement.betweenText')
-        : fullText.substring(
-            fullText.indexOf(textPrivacyPolicy) + textPrivacyPolicy.length,
+        : fullText.substring(fullText.indexOf(textPrivacyPolicy) + textPrivacyPolicy.length,
             fullText.indexOf(textTermsOfService));
-    final afterText = fullText.substring(
-        fullText.indexOf(textTermsOfService) + textTermsOfService.length);
+    final afterText =
+        fullText.substring(fullText.indexOf(textTermsOfService) + textTermsOfService.length);
+
 
     final textSpanPrivacyPolicy = TextSpan(
       style: TextStyle(
         decoration: TextDecoration.underline,
         color: Theme.of(context).colors().links,
       ),
-      text: '$textPrivacyPolicy',
+      text: textPrivacyPolicy,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           launch(
-            RemoteConfigService.getString(
-                RemoteConfigService.Keys.linkPrivacyPolicy),
+            RemoteConfigService.getString(RemoteConfigService.Keys.linkPrivacyPolicy),
           );
         },
     );
@@ -92,12 +93,11 @@ class PrivacyAndTermsFooter extends StatelessWidget {
         decoration: TextDecoration.underline,
         color: Theme.of(context).colors().links,
       ),
-      text: '$textTermsOfService',
+      text: textTermsOfService,
       recognizer: TapGestureRecognizer()
         ..onTap = () {
           launch(
-            RemoteConfigService.getString(
-                RemoteConfigService.Keys.linkTermsOfService),
+            RemoteConfigService.getString(RemoteConfigService.Keys.linkTermsOfService),
           );
         },
     );
@@ -109,9 +109,10 @@ class PrivacyAndTermsFooter extends StatelessWidget {
             Obx(
               () => Checkbox(
                 activeColor: Get.theme.colors().primary,
-                value: checkBoxValue.value,
-                onChanged: (bool value) {
-                  checkBoxValue.value = value ?? false;
+                value: checkBoxValue!.value,
+                onChanged: (bool? value) {
+                  checkBoxValue!.value = value ?? false;
+
                 },
               ),
             ),

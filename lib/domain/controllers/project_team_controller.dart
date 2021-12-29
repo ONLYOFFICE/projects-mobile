@@ -43,108 +43,123 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectTeamController extends GetxController {
-  final _api = locator<ProjectService>();
-  var usersList = <PortalUserItemController>[].obs;
-  var loaded = true.obs;
-  var nothingFound = false.obs;
+  final ProjectService _api = locator<ProjectService>();
+  RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
+  RxBool loaded = true.obs;
+  RxBool nothingFound = false.obs;
   var _startIndex = 0;
-  RefreshController refreshController = RefreshController();
-  var totalProfiles;
-  var _projectId;
-  var isSearchResult = false.obs;
-  var searchResult = <PortalUserItemController>[].obs;
+
+  RefreshController _refreshController = RefreshController();
+  RefreshController get refreshController {
+    if (!_refreshController.isLoading && !_refreshController.isRefresh)
+      _refreshController = RefreshController();
+    return _refreshController;
+  }
+
+  int totalProfiles = 0;
+  int _projectId = 0;
+  RxBool isSearchResult = false.obs;
+  RxList<PortalUserItemController> searchResult = <PortalUserItemController>[].obs;
   UserSelectionMode selectionMode = UserSelectionMode.None;
 
   bool _withoutVisitors = false;
   bool _withoutBlocked = false;
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
-  ProjectDetailed _projectDetailed;
+  ProjectDetailed? _projectDetailed;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 
   Future onLoading() async {
     _startIndex += 25;
     if (_startIndex >= totalProfiles) {
-      refreshController.loadComplete();
+      _refreshController.loadComplete();
       _startIndex -= 25;
       return;
     }
     await _loadTeam();
-    refreshController.loadComplete();
+    _refreshController.loadComplete();
   }
 
-  Future _loadTeam({bool needToClear = false}) async {
-    var result = await _api.getProjectTeam(_projectId.toString());
+  Future<bool> _loadTeam({bool needToClear = false}) async {
+    final result = await _api.getProjectTeam(_projectId);
+
+    if (result == null) return Future.value(false);
 
     totalProfiles = result.length;
 
     if (needToClear) usersList.clear();
 
-    for (var element in result) {
-      if (_withoutVisitors && element.isVisitor) continue;
-      if (_withoutBlocked && element.status == UserStatus.Terminated) continue;
+    for (final element in result) {
+      if (_withoutVisitors && element.isVisitor!) continue;
+      if (_withoutBlocked && element.status == UserStatus.Terminated) {
+        continue;
+      }
 
-      var portalUser = PortalUserItemController(portalUser: element);
+      final portalUser = PortalUserItemController(portalUser: element);
       portalUser.selectionMode.value = selectionMode;
       usersList.add(portalUser);
     }
 
     nothingFound.value = usersList.isEmpty;
+
+    return Future.value(true);
   }
 
-  Future getTeam({bool needToClear = true}) async {
+  Future<bool> getTeam({bool needToClear = true}) async {
     loaded.value = false;
+
     await _loadTeam(needToClear: needToClear);
 
     if (_projectDetailed?.status == ProjectStatusCode.closed.index) {
       fabIsVisible.value = false;
 
       loaded.value = true;
-      return;
+      return Future.value(true);
     }
 
-    var _userController = Get.find<UserController>();
-    await _userController.getUserInfo();
-    var selfUser = _userController.user;
+    final _userController = Get.find<UserController>();
+    final response = await _userController.getUserInfo();
+    if (!response) return Future.value(false);
+    final selfUser = _userController.user!;
 
-    if (_projectDetailed != null && _projectDetailed.security['canEditTeam']) {
+    if (_projectDetailed != null && _projectDetailed!.security!['canEditTeam'] as bool) {
       fabIsVisible.value = true;
     } else {
-      if (selfUser.isAdmin ||
-          selfUser.isOwner ||
-          (selfUser.listAdminModules != null &&
-              selfUser.listAdminModules.contains('projects'))) {
+      if (selfUser.isAdmin! ||
+          selfUser.isOwner! ||
+          (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
         fabIsVisible.value = true;
       }
     }
 
-    if (selfUser.isVisitor) fabIsVisible.value = false;
+    if (selfUser.isVisitor!) fabIsVisible.value = false;
 
     loaded.value = true;
+    return Future.value(true);
   }
 
-  void searchUsers(query) {
+  void searchUsers(String query) {
     searchResult.clear();
     if (query == '') {
       nothingFound.value = usersList.isEmpty;
       isSearchResult.value = false;
     }
     isSearchResult.value = true;
-    searchResult.addAll(usersList.where((user) =>
-        user.displayName.toLowerCase().contains(query.toLowerCase())));
+    searchResult.addAll(
+        usersList.where((user) => user.displayName!.toLowerCase().contains(query.toLowerCase())));
 
     nothingFound.value = searchResult.isEmpty;
   }
 
   void setup(
-      {ProjectDetailed projectDetailed,
+      {ProjectDetailed? projectDetailed,
       bool withoutVisitors = false,
       bool withoutBlocked = false,
-      projectId}) {
+      int? projectId}) {
     _withoutVisitors = withoutVisitors;
     _withoutBlocked = withoutBlocked;
-    _projectId = projectId ?? projectDetailed.id;
+    _projectId = projectId ?? projectDetailed!.id!;
     _projectDetailed = projectDetailed;
   }
 }

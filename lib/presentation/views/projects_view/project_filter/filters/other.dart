@@ -34,7 +34,7 @@ part of '../projects_filter.dart';
 
 class _Other extends StatelessWidget {
   final ProjectsFilterController filterController;
-  const _Other({Key key, this.filterController}) : super(key: key);
+  const _Other({Key? key, required this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +45,18 @@ class _Other extends StatelessWidget {
           FilterElement(
             title: tr('followed'),
             titleColor: Get.theme.colors().onSurface,
-            isSelected: filterController.other['followed'],
+            isSelected: filterController.other['followed'] as bool,
             onTap: () => filterController.changeOther('followed'),
           ),
           FilterElement(
-            title: filterController.other['withTag'].isEmpty
+            title: filterController.other['withTag'].isEmpty as bool
                 ? tr('withTag')
-                : filterController.other['withTag'],
-            isSelected: filterController.other['withTag'].isNotEmpty,
-            cancelButtonEnabled: filterController.other['withTag'].isNotEmpty,
+                : filterController.other['withTag'] as String,
+            isSelected: filterController.other['withTag'].isNotEmpty as bool,
+            cancelButtonEnabled: filterController.other['withTag'].isNotEmpty as bool?,
             onTap: () async {
-              var selectedTag = await Get.find<NavigationController>()
-                  .toScreen(const SelectTagScreen());
+              final selectedTag =
+                  await Get.find<NavigationController>().toScreen(const SelectTagScreen());
               await filterController.changeOther('withTag', selectedTag);
             },
             onCancelTap: () => filterController.changeOther('withTag', null),
@@ -64,7 +64,7 @@ class _Other extends StatelessWidget {
           FilterElement(
             title: tr('withoutTag'),
             titleColor: Get.theme.colors().onSurface,
-            isSelected: filterController.other['withoutTag'],
+            isSelected: filterController.other['withoutTag'] as bool,
             onTap: () => filterController.changeOther('withoutTag'),
           ),
         ],

@@ -32,28 +32,30 @@
 
 import 'dart:convert';
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
-import 'package:http/http.dart' as http;
 
 class UserApi {
   Future<ApiDTO<List<PortalUser>>> getAllProfiles() async {
-    var url = await locator.get<CoreApi>().allProfiles();
+    final url = await locator.get<CoreApi>().allProfiles();
 
-    var result = ApiDTO<List<PortalUser>>();
+    final result = ApiDTO<List<PortalUser>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        final Map responseJson = json.decode(response.body);
-        result.response = (responseJson['response'] as List)
+        final responseJson = json.decode(response.body);
+        result.response =
+            (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
             .map((i) => PortalUser.fromJson(i))
-            .toList();
+                .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -63,9 +65,9 @@ class UserApi {
   }
 
   Future<PageDTO<List<PortalUser>>> getProfilesByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
+    int? startIndex,
+    String? query,
+    String? groupId,
   }) async {
     var url = await locator.get<CoreApi>().allProfiles();
     url += '/filter?';
@@ -80,20 +82,22 @@ class UserApi {
 
     if (groupId != null && groupId.isNotEmpty) url += '&groupId=$groupId';
 
-    var result = PageDTO<List<PortalUser>>();
+    final result = PageDTO<List<PortalUser>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        final Map responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['total'] as int;
         {
-          result.response = (responseJson['response'] as List)
+          result.response =
+              (responseJson['response'] as List)
+              .cast<Map<String, dynamic>>()
               .map((i) => PortalUser.fromJson(i))
-              .toList();
+                  .toList();
         }
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

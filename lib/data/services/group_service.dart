@@ -40,35 +40,34 @@ import 'package:projects/data/api/group_api.dart';
 class GroupService {
   final GroupApi _api = locator<GroupApi>();
 
-  Future getAllGroups() async {
-    var groups = await _api.getAllGroups();
+  Future<List<PortalGroup>?> getAllGroups() async {
+    final groups = await _api.getAllGroups();
 
-    var success = groups.response != null;
+    final success = groups.response != null;
 
     if (success) {
       return groups.response;
     } else {
-      await Get.find<ErrorDialog>().show(groups.error.message);
+      await Get.find<ErrorDialog>().show(groups.error!.message);
       return null;
     }
   }
 
-  Future<PageDTO<List<PortalGroup>>> getGroupsByExtendedFilter({
-    int startIndex,
-    String query,
-    String groupId,
+  Future<PageDTO<List<PortalGroup>>?> getGroupsByExtendedFilter({
+    int? startIndex,
+    String? query,
   }) async {
-    var profiles = await _api.getProfilesByExtendedFilter(
+    final profiles = await _api.getProfilesByExtendedFilter(
       startIndex: startIndex,
       query: query,
     );
 
-    var success = profiles.response != null;
+    final success = profiles.error == null;
 
     if (success) {
       return profiles;
     } else {
-      await Get.find<ErrorDialog>().show(profiles.error.message);
+      await Get.find<ErrorDialog>().show(profiles.error!.message);
       return null;
     }
   }

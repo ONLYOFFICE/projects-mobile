@@ -42,15 +42,12 @@ import 'package:projects/presentation/views/authentication/widgets/auth_text_fie
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PasswordRecoveryScreen1 extends StatelessWidget {
-  const PasswordRecoveryScreen1({Key key}) : super(key: key);
+  const PasswordRecoveryScreen1({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var email;
-
-    if (Get.arguments != null) email = Get.arguments['email'];
-
-    var controller = Get.put(PasswordRecoveryController(email));
+    final email = Get.arguments['email'] as String;
+    final controller = Get.put(PasswordRecoveryController(email));
 
     return Scaffold(
       appBar: StyledAppBar(),
@@ -97,7 +94,7 @@ class PasswordRecoveryScreen1 extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: WideButton(
                     text: tr('confirm'),
-                    onPressed: () => controller.onConfirmPressed(),
+                    onPressed: controller.onConfirmPressed,
                   ),
                 ),
               ],

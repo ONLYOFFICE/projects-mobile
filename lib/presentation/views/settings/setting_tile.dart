@@ -41,19 +41,19 @@ class SettingTile extends StatelessWidget {
   // Some icons are black, so we need to use opacity to make all the
   // icons the same
   final bool enableIconOpacity;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
   final String text;
-  final String suffixText;
-  final String loverText;
-  final String icon;
-  final Function() onTap;
-  final Color textColor;
-  final Widget suffix;
+  final String? suffixText;
+  final String? loverText;
+  final String? icon;
+  final Function()? onTap;
+  final Color? textColor;
+  final Widget? suffix;
   final EdgeInsetsGeometry suffixPadding;
   final TextOverflow textOverflow;
 
   const SettingTile({
-    Key key,
+    Key? key,
     this.enableUnderline = false,
     this.enableIconOpacity = false,
     this.icon,
@@ -65,7 +65,7 @@ class SettingTile extends StatelessWidget {
     this.textOverflow = TextOverflow.ellipsis,
     this.textColor,
     this.textStyle,
-    @required this.text,
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -100,7 +100,7 @@ class SettingTile extends StatelessWidget {
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                          vertical: loverText != null && loverText.isNotEmpty
+                          vertical: loverText != null && loverText!.isNotEmpty
                               ? 8
                               : 18),
                       child: Column(
@@ -114,8 +114,8 @@ class SettingTile extends StatelessWidget {
                                       color: textColor != null
                                           ? textColor
                                           : Get.theme.colors().onBackground)),
-                          if (loverText != null && loverText.isNotEmpty)
-                            Text(loverText,
+                          if (loverText != null && loverText!.isNotEmpty)
+                            Text(loverText!,
                                 style: TextStyleHelper.body2(
                                     color: Get.theme
                                         .colors()
@@ -135,7 +135,7 @@ class SettingTile extends StatelessWidget {
                       child: Padding(
                         padding: suffixPadding,
                         child: Text(
-                          suffixText,
+                          suffixText!,
                           style: TextStyleHelper.body2(
                               color: Theme.of(context)
                                   .colors()

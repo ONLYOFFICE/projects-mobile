@@ -39,23 +39,21 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 
 class SelectDateView extends StatelessWidget {
   const SelectDateView({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.arguments['controller'];
-    bool startDate = Get.arguments['startDate'];
-    DateTime initialDate = Get.arguments['initialDate'];
+    final controller = Get.arguments['controller'];
+    final startDate = Get.arguments['startDate'] as bool;
+    final initialDate = Get.arguments['initialDate'] as DateTime?;
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
               : const Icon(Icons.close),
@@ -66,9 +64,7 @@ class SelectDateView extends StatelessWidget {
           firstDate: DateTime(2000),
           lastDate: DateTime(3000),
           onDateChanged: (value) {
-            return startDate
-                ? controller.changeStartDate(value)
-                : controller.changeDueDate(value);
+            startDate ? controller.changeStartDate(value) : controller.changeDueDate(value);
           }),
       // ),
     );

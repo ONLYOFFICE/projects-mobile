@@ -33,7 +33,7 @@
 import 'package:package_info/package_info.dart';
 
 class PackageInfoService {
-  PackageInfo packageInfo;
+  PackageInfo? packageInfo;
 
   Future<void> init() async {
     if (packageInfo != null) return;
@@ -42,21 +42,21 @@ class PackageInfoService {
 
   Future<String> get appName async {
     await init();
-    return packageInfo.appName;
+    return packageInfo!.appName;
   }
 
   Future<String> get buildNumber async {
     await init();
-    return packageInfo.buildNumber;
+    return packageInfo!.buildNumber;
   }
 
   Future<String> get packageName async {
     await init();
-    return packageInfo.packageName;
+    return packageInfo!.packageName;
   }
 
   Future<String> get version async {
     await init();
-    return packageInfo.version;
+    return packageInfo!.version;
   }
 }

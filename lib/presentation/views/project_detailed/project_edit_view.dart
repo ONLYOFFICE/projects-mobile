@@ -49,17 +49,18 @@ import 'package:projects/presentation/views/projects_view/new_project/tiles/team
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
 
 class EditProjectView extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailed? projectDetailed;
 
-  const EditProjectView({Key key, @required this.projectDetailed})
+  const EditProjectView({Key? key, required this.projectDetailed})
       : super(
           key: key,
         );
 
   @override
   Widget build(BuildContext context) {
-    var editProjectController = Get.find<ProjectEditController>();
-    editProjectController.setupEditor(Get.arguments['projectDetailed']);
+    final editProjectController = Get.find<ProjectEditController>();
+    editProjectController
+        .setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     return WillPopScope(
       onWillPop: () async {
@@ -89,7 +90,13 @@ class EditProjectView extends StatelessWidget {
                   const SizedBox(height: 26),
                   ProjectTitleTile(controller: editProjectController),
                   const SizedBox(height: 20),
-                  ProjectStatusButton(projectController: editProjectController),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 72),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ProjectStatusButton(
+                            projectController: editProjectController)),
+                  ),
                   const SizedBox(height: 20),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),
@@ -100,14 +107,14 @@ class EditProjectView extends StatelessWidget {
                       OptionWithSwitch(
                         title: tr('privateProject'),
                         switchValue: editProjectController.isPrivate,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           editProjectController.setPrivate(value);
                         },
                       ),
                       OptionWithSwitch(
                         title: tr('notifyPM'),
                         switchValue: editProjectController.notificationEnabled,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           editProjectController.enableNotification(value);
                         },
                       ),

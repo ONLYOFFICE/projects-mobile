@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_field_initializers_in_const_classes
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -38,25 +40,26 @@ import 'package:projects/internal/locator.dart';
 
 class AnalyticsService {
   AnalyticsService._privateConstructor();
+
   static final AnalyticsService shared = AnalyticsService._privateConstructor();
 
   // Event names
-  static const _AnalyticsEvents Events = _AnalyticsEvents();
-  static const _AnalyticsParams Params = _AnalyticsParams();
+  static const Events = _AnalyticsEvents();
+  static const Params = _AnalyticsParams();
 
   // Private
   final FirebaseAnalytics _analytics = FirebaseAnalytics();
-  final _storage = locator<Storage>();
+  final Storage _storage = locator<Storage>();
 
   FirebaseAnalyticsObserver getAnalyticsObserver() =>
       FirebaseAnalyticsObserver(analytics: _analytics);
 
   // Lifecycle Methods
-  Future<void> logEvent(String event, Map<String, Object> parameters) async {
-    var allowAnalytics = await _storage.read('shareAnalytics');
+  Future<void> logEvent(String event, Map<String, Object?> parameters) async {
+    final allowAnalytics = await _storage.read('shareAnalytics');
 
     // Allow analytics by default
-    if (allowAnalytics == null || allowAnalytics) {
+    if (allowAnalytics == null || (allowAnalytics is bool && allowAnalytics)) {
       await _analytics.logEvent(name: event, parameters: parameters);
     }
   }

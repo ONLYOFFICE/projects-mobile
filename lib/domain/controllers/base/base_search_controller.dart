@@ -37,33 +37,35 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 abstract class BaseSearchController extends GetxController {
   BaseSearchController({this.paginationController});
 
-  final PaginationController paginationController;
+  final PaginationController? paginationController;
   final TextEditingController textController = TextEditingController();
 
-  String _query;
+  String? _query;
 
   RxBool loaded = false.obs;
   RxBool switchToSearchView = false.obs;
 
   bool get nothingFound =>
       switchToSearchView.isTrue &&
-      paginationController.data.isEmpty &&
+      paginationController!.data.isEmpty &&
       textController.text.isNotEmpty &&
       loaded.isTrue;
 
   bool get hasResult =>
       loaded.isTrue &&
       switchToSearchView.isTrue &&
-      paginationController.data.isNotEmpty;
+      paginationController!.data.isNotEmpty;
 
-  Future search({needToClear = true, String query});
-  Future<void> performSearch({needToClear = true, String query}) async {}
+  Future search({bool needToClear = true, String? query});
 
+  Future<void> performSearch({needToClear = true, String? query}) async {}
+
+  // TODO: refact
   void addData(var result, bool needToClear) {
     if (result != null) {
-      paginationController.total.value = result.total;
-      if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response);
+      paginationController!.total.value = result.total as int;
+      if (needToClear) paginationController!.data.clear();
+      paginationController!.data.addAll(result.response as Iterable<dynamic>);
     }
   }
 
@@ -74,7 +76,7 @@ abstract class BaseSearchController extends GetxController {
   }
 
   void clearSearch() {
-    paginationController.data.clear();
+    paginationController!.data.clear();
     textController.clear();
     _query = null;
   }

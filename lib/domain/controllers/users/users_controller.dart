@@ -32,15 +32,16 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_user.dart';
+import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/user_service.dart';
 
 class UsersController extends BaseController {
-  final _api = locator<UserService>();
+  final UserService _api = locator<UserService>();
 
-  PaginationController paginationController;
+  late PaginationController paginationController;
 
   @override
   void onInit() {
@@ -56,7 +57,7 @@ class UsersController extends BaseController {
   }
 
   @override
-  var itemList = [].obs;
+  RxList itemList = [].obs;
 
   RxBool loaded = false.obs;
 
@@ -66,9 +67,12 @@ class UsersController extends BaseController {
     loaded.value = true;
   }
 
-  Future getAllProfiles({String params}) async {
+  Future getAllProfiles({String? params}) async {
     loaded.value = false;
-    itemList.value = await _api.getAllProfiles();
+    final result = await _api.getAllProfiles();
+    if (result != null) {
+      itemList.value = result;
+    }
     loaded.value = true;
   }
 
@@ -80,14 +84,14 @@ class UsersController extends BaseController {
   }
 
   Future _getUsers({bool needToClear = false}) async {
-    var result = await _api.getProfilesByExtendedFilter(
+    final result = await _api.getProfilesByExtendedFilter(
       startIndex: paginationController.startIndex,
     );
 
     if (result != null) {
       paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response);
+      paginationController.data.addAll(result.response ?? <PortalUser>[]);
     }
   }
 }

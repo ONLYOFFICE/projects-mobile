@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
+import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -43,23 +44,22 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
 
 class CreatingAndEditingSubtaskView extends StatelessWidget {
-  const CreatingAndEditingSubtaskView({Key key}) : super(key: key);
+  const CreatingAndEditingSubtaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    bool forEditing = Get.arguments['forEditing'];
+    final forEditing = Get.arguments['forEditing'] as bool;
 
     SubtaskActionController controller;
-    int taskId;
-    int projectId = Get.arguments['projectId'];
+    int? taskId;
+    final projectId = Get.arguments['projectId'] as int?;
 
     if (forEditing) {
-      var itemController = Get.arguments['itemController'];
+      final itemController = Get.arguments['itemController'] as SubtaskController;
       controller = Get.put(SubtaskEditingController(itemController));
-      controller.init(
-          subtask: itemController.subtask.value, projectId: projectId);
+      controller.init(subtask: itemController.subtask.value, projectId: projectId);
     } else {
-      taskId = Get.arguments['taskId'];
+      taskId = Get.arguments['taskId'] as int;
       controller = Get.put(NewSubtaskController());
       controller.init(projectId: projectId);
     }
@@ -77,7 +77,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.done_rounded),
               onPressed: () =>
-                  controller.confirm(context: context, taskId: taskId),
+                  controller.confirm(context: context, taskId: taskId ?? -1), // TODO FIX
             )
           ],
         ),
@@ -94,7 +94,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                         SizedBox(
                           width: 56,
                           child: Icon(
-                            controller.status.value == 1
+                            controller.status!.value == 1
                                 ? Icons.check_box_outline_blank
                                 : Icons.check_box,
                             color: const Color(0xFF666666),
@@ -112,14 +112,9 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                                   decoration: InputDecoration.collapsed(
                                     hintText: tr('describeSubtask'),
                                     hintStyle: TextStyleHelper.subtitle1(
-                                        color:
-                                            controller.setTiltleError.value ==
-                                                    true
-                                                ? Get.theme.colors().colorError
-                                                : Get.theme
-                                                    .colors()
-                                                    .onBackground
-                                                    .withOpacity(0.5)),
+                                        color: controller.setTiltleError!.value == true
+                                            ? Get.theme.colors().colorError
+                                            : Get.theme.colors().onBackground.withOpacity(0.5)),
                                   ),
                                 )),
                           ),
@@ -136,8 +131,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                 onPointerDown: (_) {
                   if (!forEditing) {
                     if (controller.titleController.text.isNotEmpty &&
-                        controller.titleFocus.hasFocus)
-                      controller.titleFocus.unfocus();
+                        controller.titleFocus!.hasFocus) controller.titleFocus!.unfocus();
                   }
                 },
                 child: ResponsibleTile(
@@ -145,8 +139,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                   enableUnderline: false,
                   suffixIcon: IconButton(
                     icon: Icon(Icons.clear_rounded,
-                        size: 20,
-                        color: Get.theme.colors().onSurface.withOpacity(0.6)),
+                        size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6)),
                     onPressed: controller.deleteResponsible,
                   ),
                 ),

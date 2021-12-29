@@ -41,20 +41,18 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class AnalyticsScreen extends StatelessWidget {
-  const AnalyticsScreen({Key key}) : super(key: key);
+  const AnalyticsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<SettingsController>();
+    final controller = Get.find<SettingsController>();
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         titleText: tr('analytics'),
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       ),
       body: Obx(
         () => SwitchListTile(
@@ -62,16 +60,12 @@ class AnalyticsScreen extends StatelessWidget {
           activeColor: Get.theme.colors().primary,
           contentPadding: const EdgeInsets.fromLTRB(16, 14, 5, 30),
           title: Text(tr('shareAnalytics'),
-              style: TextStyleHelper.subtitle1(
-                  color: Get.theme.colors().onBackground)),
+              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onBackground)),
           subtitle: Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Text(tr('shareAnalyticsDescription'),
                   style: TextStyleHelper.body2(
-                      color: Theme.of(context)
-                          .colors()
-                          .onSurface
-                          .withOpacity(0.6)))),
+                      color: Theme.of(context).colors().onSurface.withOpacity(0.6)))),
           onChanged: controller.changeAnalyticsSharingEnability,
         ),
       ),

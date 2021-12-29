@@ -33,26 +33,26 @@
 import 'package:projects/data/models/from_api/portal_user.dart';
 
 class PortalFile {
-  bool shared;
-  DateTime created;
-  DateTime updated;
+  bool? shared;
+  DateTime? created;
+  DateTime? updated;
   dynamic comment;
-  int access;
-  int fileStatus;
-  int fileType;
-  int folderId;
-  int id;
-  int pureContentLength;
-  int rootFolderType;
-  int version;
-  int versionGroup;
-  PortalUser createdBy;
-  PortalUser updatedBy;
-  String contentLength;
-  String fileExst;
-  String title;
-  String thumbnailUrl;
-  String viewUrl;
+  int? access;
+  int? fileStatus;
+  int? fileType;
+  int? folderId;
+  int? id;
+  int? pureContentLength;
+  int? rootFolderType;
+  int? version;
+  int? versionGroup;
+  PortalUser? createdBy;
+  PortalUser? updatedBy;
+  String? contentLength;
+  String? fileExst;
+  String? title;
+  String? thumbnailUrl;
+  String? viewUrl;
 
   PortalFile({
     this.access,
@@ -78,30 +78,30 @@ class PortalFile {
   });
 
   factory PortalFile.fromJson(Map<String, dynamic> json) => PortalFile(
-        access: json['access'],
-        comment: json['comment'],
-        contentLength: json['contentLength'],
-        created: DateTime.parse(json['created']),
+        access: json['access'] as int?,
+        comment: json['comment'] as dynamic,
+        contentLength: json['contentLength'] as String?,
+        created: DateTime.parse(json['created'] as String),
         createdBy: json['createdBy'] != null
-            ? PortalUser.fromJson(json['createdBy'])
+            ? PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>)
             : null,
-        fileExst: json['fileExst'],
-        fileStatus: json['fileStatus'],
-        fileType: json['fileType'],
-        id: json['id'],
-        pureContentLength: json['pureContentLength'],
-        rootFolderType: json['rootFolderType'],
-        shared: json['shared'],
-        title: json['title'],
-        thumbnailUrl: json['thumbnailUrl'],
-        updated: DateTime.parse(json['updated']),
+        fileExst: json['fileExst'] as String?,
+        fileStatus: json['fileStatus'] as int?,
+        fileType: json['fileType'] as int?,
+        id: json['id'] as int?,
+        pureContentLength: json['pureContentLength'] as int?,
+        rootFolderType: json['rootFolderType'] as int?,
+        shared: json['shared'] as bool?,
+        title: json['title'] as String?,
+        thumbnailUrl: json['thumbnailUrl'] as String?,
+        updated: DateTime.parse(json['updated'] as String),
         updatedBy: json['updatedBy'] != null
-            ? PortalUser.fromJson(json['updatedBy'])
+            ? PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>)
             : null,
-        version: json['version'],
-        versionGroup: json['versionGroup'],
-        viewUrl: json['viewUrl'],
-        folderId: json['folderId'],
+        version: json['version'] as int?,
+        versionGroup: json['versionGroup'] as int?,
+        viewUrl: json['viewUrl'] as String?,
+        folderId: json['folderId'] as int?,
       );
 
   Map<String, dynamic> toJson() => {

@@ -1,3 +1,4 @@
+// ignore_for_file: file_names
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -29,39 +30,15 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-import 'package:synchronized/synchronized.dart';
+
 import 'package:get/get.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/internal/locator.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
 
-class PortalInfoController extends GetxController {
-  var lock = Lock();
-  String _portalName;
-  String _portalUri;
-  Map _headers;
-
-  String get portalUri => _portalUri;
-  String get portalName => _portalName;
-  Map get headers => _headers;
-
-  @override
-  void onInit() async {
-    await setup();
-
-    super.onInit();
-  }
-
-  void logout() {
-    _portalName = null;
-    _portalUri = null;
-    _headers = null;
-  }
-
-  Future<void> setup() async {
-    await lock.synchronized(() async {
-      _portalUri ??= await locator.get<CoreApi>().getPortalURI();
-      _headers ??= await locator.get<CoreApi>().getHeaders();
-      _portalName ??= _portalUri.replaceFirst('https://', '');
-    });
-  }
+class TagItemDTO {
+  TagItemDTO({
+    this.isSelected,
+    this.tag,
+  });
+  RxBool? isSelected;
+  ProjectTag? tag;
 }

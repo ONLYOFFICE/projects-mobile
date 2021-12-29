@@ -43,20 +43,20 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class AuthApi {
-  Future<ApiDTO<AuthToken>> loginByUsername(String email, String pass) async {
-    var url = await locator.get<CoreApi>().authUrl();
-    var body = {'userName': email, 'password': pass};
+  Future<ApiDTO<AuthToken>> loginByUsername({required String email, required String pass}) async {
+    final url = await locator.get<CoreApi>().authUrl();
+    final body = {'userName': email, 'password': pass};
 
-    var result = ApiDTO<AuthToken>();
+    final result = ApiDTO<AuthToken>();
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
         result.response =
-            // ignore: avoid_dynamic_calls
-            AuthToken.fromJson(json.decode(response.body)['response']);
+            AuthToken.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
+        await locator.get<CoreApi>().savePortalName();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -65,28 +65,23 @@ class AuthApi {
     return result;
   }
 
-  Future<ApiDTO<AuthToken>> confirmTFACode(
-    String email,
-    String pass,
-    String code,
-  ) async {
-    var url = await locator.get<CoreApi>().tfaUrl(code);
-    var body = {
-      'userName': email,
-      'password': pass,
-      'accessToken': '',
-      'provider': ''
-    };
+  Future<ApiDTO<AuthToken>> confirmTFACode({
+    required String email,
+    required String pass,
+    required String code,
+  }) async {
+    final url = await locator.get<CoreApi>().tfaUrl(code: code);
+    final body = {'userName': email, 'password': pass, 'accessToken': '', 'provider': ''};
 
-    var result = ApiDTO<AuthToken>();
+    final result = ApiDTO<AuthToken>();
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = AuthToken.fromJson(responseJson['response']);
+        final dynamic responseJson = json.decode(response.body);
+        result.response = AuthToken.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -96,17 +91,17 @@ class AuthApi {
   }
 
   Future<ApiDTO<PortalUser>> getUserInfo() async {
-    var url = await locator.get<CoreApi>().selfInfoUrl();
+    final url = await locator.get<CoreApi>().selfInfoUrl();
 
-    var result = ApiDTO<PortalUser>();
+    final result = ApiDTO<PortalUser>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final dynamic response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalUser.fromJson(responseJson['response']);
+        final dynamic responseJson = json.decode(response.body);
+        result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -116,17 +111,17 @@ class AuthApi {
   }
 
   Future<ApiDTO> setPhone(Map body) async {
-    var url = await locator.get<CoreApi>().setPhoneUrl();
+    final url = await locator.get<CoreApi>().setPhoneUrl();
 
-    var result = ApiDTO();
+    final result = ApiDTO<dynamic>();
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = AuthToken.fromJson(responseJson['response']);
+        final dynamic responseJson = json.decode(response.body);
+        result.response = AuthToken.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -136,17 +131,17 @@ class AuthApi {
   }
 
   Future<ApiDTO> sendSms(Map body) async {
-    var url = await locator.get<CoreApi>().sendSmsUrl();
+    final url = await locator.get<CoreApi>().sendSmsUrl();
 
-    var result = ApiDTO();
+    final result = ApiDTO<dynamic>();
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = AuthToken.fromJson(responseJson['response']);
+        final dynamic responseJson = json.decode(response.body);
+        result.response = AuthToken.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -156,20 +151,20 @@ class AuthApi {
   }
 
   Future<ApiDTO> passwordRecovery(String email) async {
-    var url = await locator.get<CoreApi>().passwordRecoveryUrl();
+    final url = await locator.get<CoreApi>().passwordRecoveryUrl();
 
-    var result = ApiDTO();
+    final result = ApiDTO<dynamic>();
 
-    var body = {'email': email};
+    final body = {'email': email};
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        final dynamic responseJson = json.decode(response.body);
+        result.response = responseJson['response'] as Map<String, dynamic>;
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -179,23 +174,22 @@ class AuthApi {
   }
 
   Future<ApiDTO> sendRegistrationType() async {
-    var url = await locator.get<CoreApi>().sendRegistrationTypeUrl();
+    final url = await locator.get<CoreApi>().sendRegistrationTypeUrl();
 
-    var result = ApiDTO();
+    final result = ApiDTO<dynamic>();
 
-    var type =
-        Platform.isAndroid ? Platforms.AndroidProjects : Platforms.IosProjects;
+    final type = Platform.isAndroid ? Platforms.AndroidProjects : Platforms.IosProjects;
 
-    var body = {'type': type};
+    final body = {'type': type};
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        final dynamic responseJson = json.decode(response.body);
+        result.response = responseJson['response'] as Map<String, dynamic>;
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

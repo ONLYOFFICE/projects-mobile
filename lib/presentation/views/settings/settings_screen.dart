@@ -46,11 +46,11 @@ import 'package:projects/presentation/views/settings/passcode/screens/passcode_s
 import 'package:projects/presentation/views/settings/setting_tile.dart';
 
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({Key key}) : super(key: key);
+  const SettingsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(SettingsController());
+    final controller = Get.put(SettingsController());
     final platformController = Get.find<PlatformController>();
 
     return WillPopScope(
@@ -59,11 +59,9 @@ class SettingsScreen extends StatelessWidget {
         return true;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('settings'),
           onLeadingPressed: controller.leave,
           backButtonIcon: Get.put(PlatformController()).isMobile
@@ -108,7 +106,7 @@ class SettingsScreen extends StatelessWidget {
                       text: tr('support'),
                       icon: SvgIcons.support,
                       enableUnderline: true,
-                      onTap: () => controller.onSupportPressed(context),
+                      onTap: controller.onSupportPressed,
                     ),
                     SettingTile(
                       text: tr('rateApp'),

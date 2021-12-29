@@ -37,10 +37,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -56,30 +59,29 @@ import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
 
 class TasksView extends StatelessWidget {
-  const TasksView({Key key}) : super(key: key);
+  const TasksView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.isRegistered<TasksController>(tag: 'TasksView')
+    final controller = Get.isRegistered<TasksController>(tag: 'TasksView')
         ? Get.find<TasksController>(tag: 'TasksView')
         : Get.put(
             TasksController(
               Get.find<TaskFilterController>(),
-              Get.find<PaginationController>(),
+              Get.find<PaginationController<PortalTask>>(),
             ),
             tag: 'TasksView');
 
     controller.setup(PresetTaskFilters.saved);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadTasks();
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -101,7 +103,7 @@ class TasksView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             showBackButton: false,
             titleText: controller.screenName,
             elevation: value,
@@ -117,12 +119,10 @@ class TasksView extends StatelessWidget {
               ),
               IconButton(
                 icon: FiltersButton(controler: controller),
-                onPressed: () async => Get.find<NavigationController>()
-                    .toScreen(const TasksFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {
-                      'filterController': controller.filterController
-                    }),
+                onPressed: () async => Get.find<NavigationController>().toScreen(
+                    const TasksFilterScreen(),
+                    preventDuplicates: false,
+                    arguments: {'filterController': controller.filterController}),
               ),
               const SizedBox(width: 4),
             ],
@@ -134,36 +134,35 @@ class TasksView extends StatelessWidget {
         () {
           if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
             return const ListLoadingSkeleton();
-          if (controller.loaded.value &&
-              controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated')));
-          }
-          if (controller.loaded.value &&
-              controller.taskStatusesLoaded.value &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value) {
-            return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-            );
-          }
+
           return PaginationListView(
-            paginationController: controller.paginationController,
-            child: ListView.builder(
-              // controller: controller.scrollController,
-              controller: scrollController,
-              itemCount: controller.paginationController.data.length,
-              itemBuilder: (BuildContext context, int index) {
-                return TaskCell(
-                    task: controller.paginationController.data[index]);
-              },
-            ),
-          );
+              paginationController: controller.paginationController,
+              child: () {
+                if (controller.loaded.value &&
+                    controller.taskStatusesLoaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    !controller.filterController.hasFilters.value)
+                  return Center(
+                      child:
+                          EmptyScreen(icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
+
+                if (controller.loaded.value &&
+                    controller.taskStatusesLoaded.value &&
+                    controller.paginationController.data.isEmpty &&
+                    controller.filterController.hasFilters.value) {
+                  return Center(
+                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                  );
+                }
+                if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                  return ListView.builder(
+                    controller: scrollController,
+                    itemCount: controller.paginationController.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return TaskCell(task: controller.paginationController.data[index]);
+                    },
+                  );
+              }() as Widget);
         },
       ),
     );
@@ -171,36 +170,12 @@ class TasksView extends StatelessWidget {
 }
 
 class TasksHeader extends StatelessWidget {
-  TasksHeader({Key key, @required this.controller}) : super(key: key);
+  const TasksHeader({Key? key, required this.controller}) : super(key: key);
 
-  final controller;
+  final TasksController controller;
 
   @override
   Widget build(BuildContext context) {
-    var options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(
-            sortParameter: 'deadline',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'priority',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'create_on',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'start_date',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'title', sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'sort_order',
-            sortController: controller.sortController),
-        const SizedBox(height: 20)
-      ],
-    );
     return SizedBox(
       height: 44,
       child: Padding(
@@ -210,44 +185,7 @@ class TasksHeader extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.only(right: 4),
-              child: TextButton(
-                onPressed: () => Get.bottomSheet(
-                  SortView(sortOptions: options),
-                  isScrollControlled: true,
-                ),
-                child: Row(
-                  children: [
-                    Obx(
-                      () => Text(
-                        controller.sortController.currentSortTitle.value,
-                        style: TextStyleHelper.projectsSorting
-                            .copyWith(color: Get.theme.colors().primary),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Obx(
-                      () => (controller.sortController.currentSortOrder ==
-                              'ascending')
-                          ? AppIcon(
-                              icon: SvgIcons.sorting_4_ascend,
-                              color: Get.theme.colors().primary,
-                              width: 20,
-                              height: 20,
-                            )
-                          : Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationX(math.pi),
-                              child: AppIcon(
-                                icon: SvgIcons.sorting_4_ascend,
-                                color: Get.theme.colors().primary,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _TasksSortButton(controller: controller),
             ),
             Obx(
               () => Text(
@@ -261,6 +199,95 @@ class TasksHeader extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _TasksSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final TasksController controller;
+
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(
+          sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'priority', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'create_on',
+          sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'start_date',
+          sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'title', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'sort_order',
+          sortController: controller.sortController),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        if (Get.find<PlatformController>().isMobile) {
+          final options = Column(
+            children: [
+              const SizedBox(height: 14.5),
+              const Divider(height: 9, thickness: 1),
+              ..._getSortTile(),
+              const SizedBox(height: 20)
+            ],
+          );
+
+          await Get.bottomSheet(
+            SortView(sortOptions: options),
+            isScrollControlled: true,
+          );
+        } else {
+          await showPopupMenu(
+            context: context,
+            options: _getSortTile(),
+            offset: const Offset(0, 40),
+          );
+        }
+      },
+      child: Row(
+        children: [
+          Obx(
+            () => Text(
+              controller.sortController.currentSortTitle.value,
+              style: TextStyleHelper.projectsSorting
+                  .copyWith(color: Get.theme.colors().primary),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Obx(
+            () => (controller.sortController.currentSortOrder == 'ascending')
+                ? AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  )
+                : Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationX(math.pi),
+                    child: AppIcon(
+                      icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
+                      width: 20,
+                      height: 20,
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }

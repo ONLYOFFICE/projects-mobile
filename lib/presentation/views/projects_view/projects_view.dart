@@ -36,12 +36,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
@@ -51,11 +56,8 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-
 class ProjectsView extends StatelessWidget {
-  const ProjectsView({Key key}) : super(key: key);
+  const ProjectsView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -66,17 +68,17 @@ class ProjectsView extends StatelessWidget {
         : Get.put(
             ProjectsController(
               Get.find<ProjectsFilterController>(),
-              Get.find<PaginationController>(),
+              Get.find<PaginationController<ProjectDetailed>>(),
             ),
             tag: 'ProjectsView');
 
     controller.setup(PresetProjectFilters.saved);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadProjects();
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
     scrollController.addListener(
         () => elevation.value = scrollController.offset > 2 ? 1 : 0);
@@ -101,7 +103,7 @@ class ProjectsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             title: _Title(controller: controller),
             bottom: Bottom(controller: controller),
             showBackButton: false,
@@ -111,11 +113,12 @@ class ProjectsView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
+          if (controller.loaded.value == false) {
             return const ListLoadingSkeleton();
+          }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value) {
+              !controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.project_not_created,
@@ -124,7 +127,7 @@ class ProjectsView extends StatelessWidget {
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value) {
+              controller.filterController!.hasFilters.value) {
             return Center(
               child: EmptyScreen(
                   icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
@@ -146,15 +149,13 @@ class ProjectsView extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
-  const _Title({Key key, @required this.controller}) : super(key: key);
-  final controller;
+  const _Title({Key? key, required this.controller}) : super(key: key);
+  final ProjectsController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Text(
@@ -164,13 +165,10 @@ class _Title extends StatelessWidget {
             ),
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
               InkResponse(
-                onTap: () {
-                  controller.showSearch();
-                },
+                onTap: controller.showSearch,
                 child: AppIcon(
                   width: 24,
                   height: 24,
@@ -199,34 +197,87 @@ class _Title extends StatelessWidget {
 }
 
 class Bottom extends StatelessWidget {
-  Bottom({Key key, this.controller}) : super(key: key);
-  final controller;
+  const Bottom({Key? key, required this.controller}) : super(key: key);
+  final ProjectsController controller;
   @override
   Widget build(BuildContext context) {
-    var options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'title',
-          sortController: controller.sortController,
-        ),
-        const SizedBox(height: 20),
-      ],
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          _ProjectsSortButton(controller: controller),
+          Container(
+            child: Row(
+              children: <Widget>[
+                Obx(
+                  () => Text(
+                    tr('total', args: [
+                      controller.paginationController.total.value.toString()
+                    ]),
+                    style: TextStyleHelper.body2(
+                      color: Get.theme.colors().onSurface.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+  }
+}
 
-    var sortButton = Container(
+class _ProjectsSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _ProjectsSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProjectsController controller;
+
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(
+        sortParameter: 'create_on',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'title',
+        sortController: controller.sortController,
+      ),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkWell(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: options),
-            isScrollControlled: true,
-          );
+        onTap: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            final options = Column(
+              children: [
+                const SizedBox(height: 14.5),
+                const Divider(height: 9, thickness: 1),
+                ..._getSortTile(),
+                const SizedBox(height: 20),
+              ],
+            );
+
+            await Get.bottomSheet(
+              SortView(sortOptions: options),
+              isScrollControlled: true,
+            );
+          } else {
+            await showPopupMenu(
+              context: context,
+              options: _getSortTile(),
+              offset: const Offset(0, 40),
+            );
+          }
         },
         child: Row(
           children: <Widget>[
@@ -259,33 +310,6 @@ class Bottom extends StatelessWidget {
             ),
           ],
         ),
-      ),
-    );
-
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          sortButton,
-          Container(
-            child: Row(
-              children: <Widget>[
-                Obx(
-                  () => Text(
-                    tr('total', args: [
-                      controller.paginationController?.total?.value.toString()
-                    ]),
-                    style: TextStyleHelper.body2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
       ),
     );
   }

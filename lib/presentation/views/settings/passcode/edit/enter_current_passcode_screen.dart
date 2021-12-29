@@ -39,13 +39,13 @@ import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart'
 class EnterCurrentPasscodeScreen extends StatelessWidget
     with PasscodeScreenMixin {
   EnterCurrentPasscodeScreen({
-    Key key,
-    @required this.onPass,
+    Key? key,
+    required this.onPass,
     this.onBack,
   }) : super(key: key);
 
   final VoidCallback onPass;
-  final VoidCallback onBack;
+  final VoidCallback? onBack;
 
   final passcodeCheckingController = Get.find<PasscodeCheckingController>()
     ..setup(canUseFingerprint: false);
@@ -64,7 +64,7 @@ class EnterCurrentPasscodeScreen extends StatelessWidget
 
   @override
   void onBackPressed() =>
-      onBack != null ? onBack() : passcodeCheckingController.leave();
+      onBack != null ? onBack!() : passcodeCheckingController.leave();
 
   @override
   void onDeletePressed() => passcodeCheckingController.deleteNumber();

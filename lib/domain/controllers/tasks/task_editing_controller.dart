@@ -51,114 +51,108 @@ import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
-class TaskEditingController extends GetxController
-    implements TaskActionsController {
+class TaskEditingController extends GetxController implements TaskActionsController {
   PortalTask task;
-  final _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
-  ProjectTeamController teamController;
+  late ProjectTeamController teamController;
 
-  TaskEditingController({@required this.task});
+  TaskEditingController({required this.task});
 
   @override
-  RxBool setTitleError = false.obs;
+  RxBool? setTitleError = false.obs;
   Rx<TextEditingController> descriptionController = TextEditingController().obs;
 
   final TextEditingController _titleController = TextEditingController();
 
-  TaskItemController _taskItemController;
+  late TaskItemController _taskItemController;
 
-  int get selectedProjectId => task.projectOwner.id;
+  int? get selectedProjectId => task.projectOwner!.id;
 
   @override
-  RxString title;
+  RxString? title;
   @override
-  RxString descriptionText;
-  var newMilestoneId;
+  RxString? descriptionText;
+  int? newMilestoneId;
   @override
-  RxString selectedMilestoneTitle;
+  RxString? selectedMilestoneTitle;
   @override
   var selectedProjectTitle; //Unused
   @override
-  var needToSelectProject = false;
+  dynamic needToSelectProject = false;
   // to track changes.
-  DateTime _newStartDate;
+  DateTime? _newStartDate;
   @override
-  RxString startDateText;
-  DateTime _newDueDate;
+  RxString? startDateText;
+  DateTime? _newDueDate;
   @override
-  RxString dueDateText;
+  RxString? dueDateText;
   @override
-  RxBool highPriority;
+  RxBool? highPriority;
 
   @override
-  RxList responsibles;
+  RxList? responsibles;
   // to track changes
-  List _previusSelectedResponsibles;
+  List? _previusSelectedResponsibles;
 
-  Status initialStatus;
-  Rx<Status> newStatus;
+  Status? initialStatus;
+  late Rx<Status?> newStatus;
 
   @override
   TextEditingController get titleController => _titleController;
   @override
-  FocusNode get titleFocus => null;
+  FocusNode? get titleFocus => null;
 
   @override
-  DateTime get dueDate => _newDueDate;
+  DateTime? get dueDate => _newDueDate;
   @override
-  DateTime get startDate => _newStartDate;
+  DateTime? get startDate => _newStartDate;
 
   @override
   void onInit() async {
-    title = task.title.obs;
-    _titleController.text = task.title;
+    title = task.title!.obs;
+    _titleController.text = task.title!;
     _taskItemController = Get.find<TaskItemController>(tag: task.id.toString());
 
     teamController = Get.find<ProjectTeamController>();
 
     initialStatus = _taskItemController.status.value;
     newStatus = initialStatus.obs;
-    descriptionText = task.description.obs;
-    descriptionController.value.text = task.description;
+    descriptionText = task.description!.obs;
+    descriptionController.value.text = task.description!;
     selectedMilestoneTitle = task.milestone?.title?.obs ?? tr('none').obs;
     newMilestoneId = task.milestoneId;
     _initDates();
     highPriority = task.priority == 1 ? true.obs : false.obs;
     responsibles = [].obs;
-    for (var user in task.responsibles) {
-      responsibles.add(PortalUserItemController(portalUser: user));
+    for (final user in task.responsibles!) {
+      responsibles!.add(PortalUserItemController(portalUser: user!));
     }
     // ignore: invalid_use_of_protected_member
-    _previusSelectedResponsibles = List.from(responsibles.value);
+    _previusSelectedResponsibles = List.from(responsibles!.value);
     super.onInit();
   }
 
-  // it was used before, but now it is a just placeholder
-  @override
-  void init() {}
-
   void _initDates() {
-    var now = DateTime.now();
-    _newStartDate =
-        task.startDate != null ? DateTime.parse(task.startDate) : null;
-    _newDueDate = task.deadline != null ? DateTime.parse(task.deadline) : null;
+    final now = DateTime.now();
+    _newStartDate = task.startDate != null ? DateTime.parse(task.startDate!) : null;
+    _newDueDate = task.deadline != null ? DateTime.parse(task.deadline!) : null;
 
     startDateText = task.startDate != null
-        ? formatedDateFromString(now: now, stringDate: task.startDate).obs
+        ? formatedDateFromString(now: now, stringDate: task.startDate!).obs
         : ''.obs;
     dueDateText = task.deadline != null
-        ? formatedDateFromString(now: now, stringDate: task.deadline).obs
+        ? formatedDateFromString(now: now, stringDate: task.deadline!).obs
         : ''.obs;
   }
 
   @override
-  void changeTitle(String newText) => title.value = newText;
+  void changeTitle(String newText) => title!.value = newText;
   Future<void> changeStatus(Status newStatus) async {
-    if (newStatus.id == this.newStatus.value.id) return;
+    if (newStatus.id == this.newStatus.value!.id) return;
 
     if (newStatus.statusType == 2 &&
-        initialStatus.statusType != newStatus.statusType &&
+        initialStatus!.statusType != newStatus.statusType &&
         task.hasOpenSubtasks) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('closingTask'),
@@ -177,13 +171,13 @@ class TaskEditingController extends GetxController
   @override
   void confirmDescription(String newText) {
     descriptionController.value.text = newText;
-    descriptionText.value = newText;
+    descriptionText!.value = newText;
     Get.back();
   }
 
   @override
   void leaveDescriptionView(String typedText) {
-    if (typedText == descriptionText.value) {
+    if (typedText == descriptionText!.value) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -191,7 +185,7 @@ class TaskEditingController extends GetxController
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          descriptionController.value.text = task.description;
+          descriptionController.value.text = task.description!;
           Get.back();
           Get.back();
         },
@@ -201,9 +195,9 @@ class TaskEditingController extends GetxController
   }
 
   @override
-  void changeMilestoneSelection({var id, String title}) {
+  void changeMilestoneSelection({int? id, String? title}) {
     if (id != null && title != null) {
-      selectedMilestoneTitle.value = title;
+      selectedMilestoneTitle!.value = title;
       newMilestoneId = id;
     } else {
       removeMilestoneSelection();
@@ -213,43 +207,43 @@ class TaskEditingController extends GetxController
 
   void removeMilestoneSelection() {
     newMilestoneId = null;
-    selectedMilestoneTitle.value = tr('none');
+    selectedMilestoneTitle!.value = tr('none');
   }
 
   @override
-  void changeStartDate(DateTime newDate) {
+  void changeStartDate(DateTime? newDate) {
     if (newDate != null) {
       // ignore: omit_local_variable_types
-      bool verificationResult = checkDate(newDate, _newDueDate);
+      final bool verificationResult = checkDate(newDate, _newDueDate);
       if (verificationResult) {
-        startDateText.value = formatedDate(newDate);
+        startDateText!.value = formatedDate(newDate);
         _newStartDate = newDate;
         Get.back();
       }
     } else {
-      startDateText.value = '';
+      startDateText!.value = '';
       _newStartDate = null;
     }
   }
 
   @override
-  void changeDueDate(DateTime newDate) {
+  void changeDueDate(DateTime? newDate) {
     if (newDate != null) {
       // ignore: omit_local_variable_types
-      bool verificationResult = checkDate(_newStartDate, newDate);
+      final bool verificationResult = checkDate(_newStartDate, newDate);
       if (verificationResult) {
-        dueDateText.value = formatedDate(newDate);
+        dueDateText!.value = formatedDate(newDate);
         _newDueDate = newDate;
         Get.back();
       }
     } else {
-      dueDateText.value = '';
+      dueDateText!.value = '';
       _newDueDate = null;
     }
   }
 
   @override
-  bool checkDate(DateTime startDate, DateTime dueDate) {
+  bool checkDate(DateTime? startDate, DateTime? dueDate) {
     if (startDate == null || dueDate == null) return true;
     if (startDate.isAfter(dueDate)) {
       Get.find<ErrorDialog>().show(tr('dateSelectionError'));
@@ -259,17 +253,17 @@ class TaskEditingController extends GetxController
   }
 
   @override
-  void changePriority(bool value) => highPriority.value = value;
+  void changePriority(bool value) => highPriority!.value = value;
 
   void confirmResponsiblesSelection() {
     // ignore: invalid_use_of_protected_member
-    _previusSelectedResponsibles = List.of(responsibles.value);
+    _previusSelectedResponsibles = List.of(responsibles!.value);
     Get.back();
   }
 
   void leaveResponsiblesSelectionView() {
     // ignore: invalid_use_of_protected_member
-    if (listEquals(_previusSelectedResponsibles, responsibles.value)) {
+    if (listEquals(_previusSelectedResponsibles, responsibles!.value)) {
       Get.back();
     } else {
       Get.dialog(StyledAlertDialog(
@@ -277,7 +271,7 @@ class TaskEditingController extends GetxController
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
         onAcceptTap: () {
-          responsibles.value = List.of(_previusSelectedResponsibles);
+          responsibles!.value = List.of(_previusSelectedResponsibles!);
           Get.back();
           Get.back();
         },
@@ -289,25 +283,21 @@ class TaskEditingController extends GetxController
   void setupResponsibleSelection() async {
     if (teamController.usersList.isEmpty) {
       teamController.setup(
-          projectId: task.projectOwner.id,
-          withoutVisitors: true,
-          withoutBlocked: true);
+          projectId: task.projectOwner!.id, withoutVisitors: true, withoutBlocked: true);
 
-      await teamController
-          .getTeam()
-          .then((value) => _getSelectedResponsibles());
+      await teamController.getTeam().then((value) => _getSelectedResponsibles());
     } else {
       await _getSelectedResponsibles();
     }
   }
 
   Future<void> _getSelectedResponsibles() async {
-    for (var element in teamController.usersList) {
+    for (final element in teamController.usersList) {
       element.isSelected.value = false;
       element.selectionMode.value = UserSelectionMode.Multiple;
     }
-    for (var selectedMember in responsibles) {
-      for (var user in teamController.usersList) {
+    for (final selectedMember in responsibles!) {
+      for (final user in teamController.usersList) {
         if (selectedMember.portalUser.id == user.portalUser.id) {
           user.isSelected.value = true;
         }
@@ -317,25 +307,24 @@ class TaskEditingController extends GetxController
 
   void addResponsible(PortalUserItemController user) {
     if (user.isSelected.value == true) {
-      responsibles.add(user);
+      responsibles!.add(user);
     } else {
-      responsibles.removeWhere(
-          (element) => user.portalUser.id == element.portalUser.id);
+      responsibles!.removeWhere((element) => user.portalUser.id == element.portalUser.id);
     }
   }
 
   void discardChanges() {
     bool taskEdited;
     // checking all fields for changes
-    taskEdited = title.value != task.title ||
-        descriptionText.value != task.description ||
+    taskEdited = title!.value != task.title ||
+        descriptionText!.value != task.description ||
         newMilestoneId != task.milestoneId ||
-        initialStatus.id != newStatus.value.id ||
-        task.responsibles.length != responsibles.length;
+        initialStatus!.id != newStatus.value!.id ||
+        task.responsibles!.length != responsibles!.length;
 
     var i = 0;
-    while (!taskEdited && responsibles.length > i) {
-      if (responsibles[i].portalUser.id != task.responsibles[i].id) {
+    while (!taskEdited && responsibles!.length > i) {
+      if (responsibles![i].portalUser.id != task.responsibles![i]!.id) {
         taskEdited = true;
       }
       i++;
@@ -360,33 +349,32 @@ class TaskEditingController extends GetxController
   }
 
   Future<void> confirm() async {
-    if (title.isEmpty || task.title == null) {
-      setTitleError.value = true;
+    if (title!.isEmpty || task.title == null) {
+      setTitleError!.value = true;
     } else {
       // update the task status if it has been changed
-      if (initialStatus.id != newStatus.value.id) {
+      if (initialStatus!.id != newStatus.value!.id) {
         await _taskItemController.tryChangingStatus(
-            id: task.id,
-            newStatusId: newStatus.value.id,
-            newStatusType: newStatus.value.statusType);
+            id: task.id!,
+            newStatusId: newStatus.value!.id!,
+            newStatusType: newStatus.value!.statusType!);
       }
-      // ignore: omit_local_variable_types
-      List<String> responsibleIds = [];
+      final responsibleIds = <String?>[];
 
-      for (var item in responsibles) responsibleIds.add(item.id);
-      var newTask = NewTaskDTO(
-        description: descriptionText.value,
+      for (final item in responsibles!) responsibleIds.add(item.id as String?);
+      final newTask = NewTaskDTO(
+        description: descriptionText!.value,
         deadline: _newDueDate,
         id: task.id,
         startDate: _newStartDate,
-        priority: highPriority.value == true ? 'high' : 'normal',
-        title: title.value,
+        priority: highPriority!.value == true ? 'high' : 'normal',
+        title: title!.value,
         milestoneid: newMilestoneId,
-        projectId: task.projectOwner.id,
+        projectId: task.projectOwner!.id!,
         responsibles: responsibleIds,
       );
 
-      var updatedTask = await _api.updateTask(newTask: newTask);
+      final updatedTask = await _api.updateTask(newTask: newTask);
 
       if (updatedTask != null) {
         // ignore: unawaited_futures
@@ -396,29 +384,29 @@ class TaskEditingController extends GetxController
     }
   }
 
-  Future<void> acceptTask(context) async {
-    var newTask = NewTaskDTO(
-      description: descriptionText.value,
+  Future<void> acceptTask() async {
+    final newTask = NewTaskDTO(
+      description: descriptionText!.value,
       deadline: _newDueDate,
       id: task.id,
       startDate: _newStartDate,
-      priority: highPriority.value == true ? 'high' : 'normal',
-      title: title.value,
+      priority: highPriority!.value == true ? 'high' : 'normal',
+      title: title!.value,
       milestoneid: newMilestoneId,
-      projectId: task.projectOwner.id,
-      responsibles: [Get.find<UserController>().user.id],
+      projectId: task.projectOwner!.id!,
+      responsibles: [Get.find<UserController>().user!.id],
     );
     _taskItemController.setLoaded = false;
-    var updatedTask = await _api.updateTask(newTask: newTask);
+    final updatedTask = await _api.updateTask(newTask: newTask);
     _taskItemController.setLoaded = true;
 
     if (updatedTask != null) {
       _taskItemController.task.value = updatedTask;
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('taskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
       );
     }
   }

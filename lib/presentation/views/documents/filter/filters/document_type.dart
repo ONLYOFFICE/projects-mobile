@@ -32,10 +32,10 @@
 
 part of '../documents_filter_screen.dart';
 
-class _Type extends StatelessWidget {
+class _DocumentType extends StatelessWidget {
   final filterController;
 
-  const _Type({Key key, this.filterController}) : super(key: key);
+  const _DocumentType({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,48 +46,43 @@ class _Type extends StatelessWidget {
           FilterElement(
               title: tr('folders'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['folders'],
+              isSelected: filterController.contentTypes['folders'] as bool,
               onTap: () => filterController.changeContentTypeFilter('folders')),
           FilterElement(
               title: tr('documents'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['documents'],
-              onTap: () =>
-                  filterController.changeContentTypeFilter('documents')),
+              isSelected: filterController.contentTypes['documents'] as bool,
+              onTap: () => filterController.changeContentTypeFilter('documents')),
           FilterElement(
               title: tr('presentations'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['presentations'],
-              onTap: () =>
-                  filterController.changeContentTypeFilter('presentations')),
+              isSelected: filterController.contentTypes['presentations'] as bool,
+              onTap: () => filterController.changeContentTypeFilter('presentations')),
           FilterElement(
               title: tr('spreadsheets'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['spreadsheets'],
-              onTap: () =>
-                  filterController.changeContentTypeFilter('spreadsheets')),
+              isSelected: filterController.contentTypes['spreadsheets'] as bool,
+              onTap: () => filterController.changeContentTypeFilter('spreadsheets')),
           FilterElement(
               title: tr('images'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['images'],
+              isSelected: filterController.contentTypes['images'] as bool,
               onTap: () => filterController.changeContentTypeFilter('images')),
           FilterElement(
               title: tr('media'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['media'],
+              isSelected: filterController.contentTypes['media'] as bool,
               onTap: () => filterController.changeContentTypeFilter('media')),
           FilterElement(
               title: tr('archives'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['archives'],
-              onTap: () =>
-                  filterController.changeContentTypeFilter('archives')),
+              isSelected: filterController.contentTypes['archives'] as bool,
+              onTap: () => filterController.changeContentTypeFilter('archives')),
           FilterElement(
               title: tr('allFiles'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.contentTypes['allFiles'],
-              onTap: () =>
-                  filterController.changeContentTypeFilter('allFiles')),
+              isSelected: filterController.contentTypes['allFiles'] as bool,
+              onTap: () => filterController.changeContentTypeFilter('allFiles')),
         ],
       ),
     );

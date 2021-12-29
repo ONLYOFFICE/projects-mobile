@@ -37,9 +37,9 @@ import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 
 class NotifyResponsiblesTile extends StatelessWidget {
-  final NewTaskController controller;
+  final NewTaskController? controller;
   const NotifyResponsiblesTile({
-    Key key,
+    Key? key,
     this.controller,
   }) : super(key: key);
 
@@ -47,8 +47,8 @@ class NotifyResponsiblesTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() => TileWithSwitch(
         title: tr('notifyResponsible'),
-        isSelected: controller.notifyResponsibles.value,
-        onChanged: controller.changeNotifyResponsiblesValue,
+        isSelected: controller!.notifyResponsibles.value,
+        onChanged: controller!.changeNotifyResponsiblesValue,
         enableBorder: true));
   }
 }

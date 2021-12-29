@@ -32,9 +32,12 @@
 
 import 'package:html/parser.dart';
 
-String parseHtml(String htmlString) {
-  final document = parse(htmlString);
-  final parsedString = parse(document.body.text).documentElement.text;
+String parseHtml(String? htmlString) {
+  if (htmlString == null) return '';
 
-  return parsedString ?? '';
+  final document = parse(htmlString);
+  final parsedString =
+      parse(document.body?.text ?? '').documentElement?.text ?? '';
+
+  return parsedString;
 }

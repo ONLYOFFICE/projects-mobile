@@ -40,15 +40,16 @@ import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/internal/locator.dart';
 
 class CoreApi {
-  final _secureStorage = locator<SecureStorage>();
-  String _portalName;
+  final SecureStorage _secureStorage = locator<SecureStorage>();
+  String? _portalName;
+  String? _token;
 
   final int timeout = 30;
 
-  var cancellationToken = CancellationToken();
+  CancellationToken cancellationToken = CancellationToken();
 
   Future<Map<String, String>> getHeaders() async {
-    var token = await getToken();
+    final token = await getToken() ?? ''; // TODO null check
     return <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Accept': 'application/json',
@@ -56,131 +57,118 @@ class CoreApi {
     };
   }
 
-  var version = '2.0';
+  String version = '2.0';
 
-  String capabilitiesUrl(String portalName) {
-    if (portalName.contains('http')) {
-      _portalName = portalName;
-    } else {
-      _portalName = 'https://$portalName';
-    }
+  Future<String> getCapabilitiesUrl() async => '${await getPortalURI()}/api/$version/capabilities';
 
-    return '$_portalName/api/$version/capabilities';
-  }
-
-  Future<String> addTaskCommentUrl({int taskId}) async =>
+  Future<String> addTaskCommentUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
-  Future<String> addMessageUrl({int projectId}) async =>
+  Future<String> addMessageUrl({required int projectId}) async =>
       '${await getPortalURI()}/api/$version/project/$projectId/message';
 
-  Future<String> addMessageCommentUrl({int messageId}) async =>
+  Future<String> addMessageCommentUrl({required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/comment';
 
-  Future<String> allGroups() async =>
-      '${await getPortalURI()}/api/$version/group';
+  Future<String> allGroups() async => '${await getPortalURI()}/api/$version/group';
 
-  Future<String> addTaskUrl({projectId}) async =>
+  Future<String> addTaskUrl({required int projectId}) async =>
       '${await getPortalURI()}/api/$version/project/$projectId/task';
 
-  Future<String> allProfiles() async =>
-      '${await getPortalURI()}/api/$version/people';
+  Future<String> allProfiles() async => '${await getPortalURI()}/api/$version/people';
 
-  Future<String> authUrl() async =>
-      '${await getPortalURI()}/api/$version/authentication';
+  Future<String> authUrl() async => '${await getPortalURI()}/api/$version/authentication';
 
-  Future<String> copyTaskUrl({@required int copyFrom}) async =>
+  Future<String> copyTaskUrl({required int copyFrom}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$copyFrom/copy';
 
   Future<String> copySubtaskUrl({
-    @required int taskId,
-    @required int subtaskId,
+    required int taskId,
+    required int subtaskId,
   }) async =>
       '${await getPortalURI()}/api/2.0/project/task/$taskId/$subtaskId/copy';
 
-  Future<String> createSubtaskUrl({@required int taskId}) async =>
+  Future<String> createSubtaskUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/2.0/project/task/$taskId';
 
-  Future<String> deleteCommentUrl({String commentId}) async =>
+  Future<String> deleteCommentUrl({required String commentId}) async =>
       '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
-  Future<String> deleteTaskUrl({int taskId}) async =>
+  Future<String> deleteTaskUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
-  Future<String> deleteMessageUrl({int id}) async =>
+  Future<String> deleteMessageUrl({required int id}) async =>
       '${await getPortalURI()}/api/$version/project/message/$id';
 
   Future<String> deleteSubtaskUrl({
-    @required int taskId,
-    @required int subtaskId,
+    required int taskId,
+    required int subtaskId,
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
-  Future<String> getTaskFilesUrl({int taskId}) async =>
+  Future<String> getTaskFilesUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/files';
 
-  Future<String> getEntityFilesUrl({String entityId}) async =>
+  Future<String> getEntityFilesUrl({required int entityId}) async =>
       '${await getPortalURI()}/api/$version/project/$entityId/entityfiles';
 
-  Future<String> getFilesBaseUrl() async =>
-      '${await getPortalURI()}/api/$version/files/';
+  Future<String> getFilesBaseUrl() async => '${await getPortalURI()}/api/$version/files/';
 
   Future<String> discussionsByParamsUrl() async =>
       '${await getPortalURI()}/api/$version/project/message/filter?';
 
-  Future<String> discussionDetailedUrl({int messageId}) async =>
+  Future<String> discussionDetailedUrl({required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId';
 
   Future<String> milestonesByFilterUrl() async =>
       '${await getPortalURI()}/api/$version/project/milestone/filter?';
 
-  Future<String> getTaskLinkUrl(
-          {@required taskId, @required projectId}) async =>
+  Future<String> getTaskLinkUrl({
+    required int taskId,
+    required int projectId,
+  }) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#';
 
   Future<String> getDiscussionCommentLink({
-    @required discussionId,
-    @required projectId,
-    @required commentId,
+    required int discussionId,
+    required int projectId,
+    required String commentId,
   }) async =>
       '${await getPortalURI()}/Products/Projects/Messages.aspx?prjID=$projectId&id=$discussionId#comment_$commentId';
 
   Future<String> getTaskCommentLink({
-    @required taskId,
-    @required projectId,
-    @required commentId,
+    required int taskId,
+    required int projectId,
+    required String commentId,
   }) async =>
       '${await getPortalURI()}/Products/Projects/Tasks.aspx?prjID=$projectId&id=$taskId#comment_$commentId';
 
   Future<String> passwordRecoveryUrl() async =>
       '${await getPortalURI()}/api/$version/people/password';
 
-  Future<String> tfaUrl(String code) async =>
+  Future<String> tfaUrl({required String code}) async =>
       '${await getPortalURI()}/api/$version/authentication/$code';
 
   Future<String> projectsByParamsBaseUrl() async =>
       '${await getPortalURI()}/api/$version/project/filter?';
 
-  Future<String> tasksByParamsrUrl() async =>
+  Future<String> tasksByParamsUrl() async =>
       '${await getPortalURI()}/api/$version/project/task/filter?';
 
   Future<String> taskByIdUrl(int id) async =>
       '${await getPortalURI()}/api/$version/project/task/$id';
 
-  Future<String> taskComments({int taskId}) async =>
+  Future<String> taskComments({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/comment';
 
-  Future<String> projectsUrl() async =>
-      '${await getPortalURI()}/api/$version/project';
+  Future<String> projectsUrl() async => '${await getPortalURI()}/api/$version/project';
 
   Future<String> projectByIdUrl(int projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 
-  Future<String> projectTags() async =>
-      '${await getPortalURI()}/api/$version/project/tag';
+  Future<String> projectTags() async => '${await getPortalURI()}/api/$version/project/tag';
 
-  Future<String> selfInfoUrl() async =>
-      '${await getPortalURI()}/api/$version/people/@self';
+  Future<String> selfInfoUrl() async => '${await getPortalURI()}/api/$version/people/@self';
 
   Future<String> sendRegistrationTypeUrl() async =>
       '${await getPortalURI()}/api/$version/portal/mobile/registration';
@@ -191,90 +179,89 @@ class CoreApi {
   Future<String> setPhoneUrl() async =>
       '${await getPortalURI()}/api/$version/authentication/setphone';
 
-  Future<String> statusesUrl() async =>
-      '${await getPortalURI()}/api/$version/project/status';
+  Future<String> statusesUrl() async => '${await getPortalURI()}/api/$version/project/status';
 
-  Future<String> subscribeTaskUrl({int taskId}) async =>
+  Future<String> subscribeTaskUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/subscribe';
 
-  Future<String> subscribeToMessage({int messageId}) async =>
+  Future<String> subscribeToMessage({required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/subscribe';
 
-  Future<String> updateCommentUrl({
-    @required String commentId,
-  }) async =>
+  Future<String> updateCommentUrl({required String commentId}) async =>
       '${await getPortalURI()}/api/$version/project/comment/$commentId';
 
-  Future<String> updateMessageUrl({@required int messageId}) async =>
+  Future<String> updateMessageUrl({required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId';
 
-  Future<String> updateMessageStatusUrl({@required int messageId}) async =>
+  Future<String> updateMessageStatusUrl({required int messageId}) async =>
       '${await getPortalURI()}/api/$version/project/message/$messageId/status';
 
   Future<String> updateSubtask({
-    @required int taskId,
-    @required int subtaskId,
+    required int taskId,
+    required int subtaskId,
   }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId';
 
-  Future<String> updateSubtaskStatus(
-          {@required int taskId, @required int subtaskId}) async =>
+  Future<String> updateSubtaskStatus({
+    required int taskId,
+    required int subtaskId,
+  }) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/$subtaskId/status';
 
-  Future<String> updateTaskUrl({@required int taskId}) async =>
+  Future<String> updateTaskUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId';
 
-  Future<String> updateTaskStatusUrl({int taskId}) async =>
+  Future<String> updateTaskStatusUrl({required int taskId}) async =>
       '${await getPortalURI()}/api/$version/project/task/$taskId/status';
 
   Future<String> createProjectUrl() async =>
       '${await getPortalURI()}/api/$version/project/withSecurity';
 
-  Future<String> createTagUrl() async =>
-      '${await getPortalURI()}/api/$version/project/tag';
+  Future<String> createTagUrl() async => '${await getPortalURI()}/api/$version/project/tag';
 
   Future<String> projectByIDUrl(int projectId) async =>
       '${await getPortalURI()}/api/$version/project/$projectId';
 
-  Future<String> updateProjectStatusUrl(int projectId) async =>
+  Future<String> updateProjectStatusUrl({required int projectId}) async =>
       '${await projectByIDUrl(projectId)}/status';
 
-  Future<String> followProjectUrl(int projectId) async =>
+  Future<String> followProjectUrl({required int projectId}) async =>
       '${await projectByIDUrl(projectId)}/follow';
 
-  Future<String> projectTeamUrl(String projectID) async =>
+  Future<String> projectTeamUrl({required int projectID}) async =>
       '${await getPortalURI()}/api/$version/project/$projectID/team';
 
-  Future<String> createMilestoneUrl(String projectID) async =>
+  Future<String> createMilestoneUrl({required int projectID}) async =>
       '${await getPortalURI()}/api/$version/project/$projectID/milestone';
 
-  Future<String> getFolderByIdUrl({String folderId}) async =>
+  Future<String> getFolderByIdUrl(String folderId) async =>
       '${await getPortalURI()}/api/$version/files/folder/$folderId';
 
-  Future<String> getFileByIdUrl({String fileId}) async =>
+  Future<String> getFileByIdUrl(String fileId) async =>
       '${await getPortalURI()}/api/$version/files/file/$fileId';
 
-  Future<String> getMoveOpsUrl() async =>
-      '${await getPortalURI()}/api/$version/files/fileops/move';
-  Future<String> getCopyOpsUrl() async =>
-      '${await getPortalURI()}/api/$version/files/fileops/copy';
+  Future<String> getMoveOpsUrl() async => '${await getPortalURI()}/api/$version/files/fileops/move';
+  Future<String> getCopyOpsUrl() async => '${await getPortalURI()}/api/$version/files/fileops/copy';
 
   Future<String> getFileOperationsUrl() async =>
       '${await getPortalURI()}/api/$version/files/fileops';
 
-  Future<String> getProjectSecurityinfoUrl() async =>
+  Future<String> getProjectSecurityInfoUrl() async =>
       '${await getPortalURI()}/api/$version/project/securityinfo';
+
+  Future<String> getUploadImagesUrl() async =>
+      '${await getPortalURI()}/fckuploader.ashx?newEditor=true&esid=projects_comments&CKEditor=commentEditorcommentsObj&CKEditorFuncNum=75&langCode=ru';
 
   Future<dynamic> getRequest(String url) async {
     try {
       debugPrint(url);
-      var headers = await getHeaders();
-      var request = HttpClientHelper.get(Uri.parse(url),
-          cancelToken: cancellationToken,
-          timeRetry: const Duration(milliseconds: 100),
-          retries: 3,
-          timeLimit: Duration(seconds: timeout),
-          headers: headers);
+      final headers = await getHeaders();
+      final request = HttpClientHelper.get(
+        Uri.parse(url),
+        cancelToken: cancellationToken,
+        timeLimit: Duration(seconds: timeout),
+        headers: headers,
+      );
       final response = await request;
 
       if (response == null) return CustomError(message: '');
@@ -282,15 +269,17 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -298,15 +287,13 @@ class CoreApi {
     }
   }
 
-  Future<dynamic> postRequest(String url, Map body) async {
+  Future<dynamic> postRequest(String url, Map? body) async {
     try {
       debugPrint(url);
-      var headers = await getHeaders();
-      var request = HttpClientHelper.post(
+      final headers = await getHeaders();
+      final request = HttpClientHelper.post(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
         body: jsonEncode(body),
@@ -319,15 +306,17 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -335,15 +324,14 @@ class CoreApi {
     }
   }
 
-  Future<dynamic> putRequest(String url, {Map body = const {}}) async {
+  Future<dynamic> putRequest(String url,
+      {Map<dynamic, dynamic> body = const <dynamic, dynamic>{}}) async {
     try {
       debugPrint(url);
-      var headers = await getHeaders();
-      var request = HttpClientHelper.put(
+      final headers = await getHeaders();
+      final request = HttpClientHelper.put(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
         body: body.isEmpty ? null : jsonEncode(body),
@@ -355,15 +343,17 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -374,12 +364,10 @@ class CoreApi {
   Future<dynamic> deleteRequest(String url) async {
     try {
       debugPrint(url);
-      var headers = await getHeaders();
-      var request = HttpClientHelper.delete(
+      final headers = await getHeaders();
+      final request = HttpClientHelper.delete(
         Uri.parse(url),
         cancelToken: cancellationToken,
-        timeRetry: const Duration(milliseconds: 100),
-        retries: 3,
         timeLimit: Duration(seconds: timeout),
         headers: headers,
       );
@@ -390,15 +378,17 @@ class CoreApi {
       if (response.statusCode == 200 || response.statusCode == 201) {
         return response;
       } else {
-        var error;
+        String? error;
         if (response.headers['content-type'] != null &&
-            response.headers['content-type'].contains('json'))
-          error = json.decode(response.body)['error']['message'];
+            response.headers['content-type']!.contains('json')) {
+          error = json.decode(response.body)['error']['message'] as String?;
+        }
 
-        return CustomError(message: error ?? response.reasonPhrase);
+        return CustomError(message: error ?? response.reasonPhrase!);
       }
     } on TimeoutException catch (_) {
       return CustomError(message: '');
+      // ignore: avoid_catching_errors
     } on OperationCanceledError catch (_) {
       return CustomError(message: '');
     } catch (e) {
@@ -406,28 +396,42 @@ class CoreApi {
     }
   }
 
-  Future<String> getPortalURI() async {
-    if (_portalName == null || _portalName.isEmpty) {
+  Future<String?> getPortalURI() async {
+    if (_portalName == null || _portalName!.isEmpty) {
       _portalName = await _secureStorage.getString('portalName');
     }
 
     if (_portalName == null) return null;
 
-    if (!_portalName.contains('http')) {
-      _portalName = 'https://$_portalName';
-      await savePortalName();
-    }
-
     return _portalName;
   }
 
-  Future<String> getToken() async {
-    var token = await _secureStorage.getString('token');
+  Future<String?> getToken() async {
+    if (_token == null || _token!.isEmpty) {
+      _token = await _secureStorage.getString('token') ?? '';
+    }
 
-    return token;
+    return _token;
   }
 
   Future<void> savePortalName() async {
     await _secureStorage.putString('portalName', _portalName);
+  }
+
+  void setPortalName(String portalName) {
+    if (portalName.contains('http')) {
+      _portalName = portalName;
+    } else {
+      _portalName = 'https://$portalName';
+    }
+  }
+
+  void redirectPortal() {
+    if (_portalName == null || _portalName!.isEmpty) return;
+
+    if (_portalName!.contains('https'))
+      _portalName = _portalName!.replaceFirst('https', 'http');
+    else
+      _portalName = _portalName!.replaceFirst('http', 'https');
   }
 }

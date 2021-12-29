@@ -43,10 +43,10 @@ import 'package:projects/internal/locator.dart';
 class DownloadService {
   final DownloadApi _api = locator<DownloadApi>();
 
-  Future<Uint8List> downloadImage(String url) async {
-    var projects = await _api.downloadImage(url);
+  Future<Uint8List?> downloadImage(String url) async {
+    final projects = await _api.downloadImage(url);
 
-    var success = projects.response != null;
+    final success = projects.response != null;
 
     if (success) {
       return projects.response;
@@ -55,33 +55,37 @@ class DownloadService {
     }
   }
 
-  Future downloadDocument(String url) async {
+  Future<void> downloadDocument(String url) async {
     var dir;
-    if (Platform.isAndroid)
+    if (Platform.isAndroid) {
       dir = await getExternalStorageDirectory();
-    else
+    } else {
       dir = await getApplicationDocumentsDirectory();
+    }
 
-    var path = dir.path;
+    final path = dir.path as String;
+    // TODO: check
     print(path);
 
-    var headers = await locator.get<CoreApi>().getHeaders();
+    final headers = await locator.get<CoreApi>().getHeaders();
     FlutterDownloader.registerCallback(downloadCallback);
 
-    final taskId = await FlutterDownloader.enqueue(
+    final taskId = await (FlutterDownloader.enqueue(
       url: url,
       headers: headers,
       savedDir: path,
       showNotification: true,
       openFileFromNotification: true,
-    );
+    ) as FutureOr<String>);
 
     var waitTask = true;
     while (waitTask) {
-      var query = "SELECT * FROM task WHERE task_id='$taskId'";
-      var _tasks = await FlutterDownloader.loadTasksWithRawQuery(query: query);
-      var taskStatus = _tasks[0].status.toString();
-      var taskProgress = _tasks[0].progress;
+      final query = "SELECT * FROM task WHERE task_id='$taskId'";
+      final _tasks =
+          await (FlutterDownloader.loadTasksWithRawQuery(query: query)
+              as FutureOr<List<DownloadTask>>);
+      final taskStatus = _tasks[0].status.toString();
+      final taskProgress = _tasks[0].progress;
       if (taskStatus == 'DownloadTaskStatus(3)' && taskProgress == 100) {
         waitTask = false;
       }

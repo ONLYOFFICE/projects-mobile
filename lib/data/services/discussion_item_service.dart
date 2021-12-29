@@ -32,6 +32,7 @@
 
 import 'package:get/get.dart';
 import 'package:projects/data/api/discussions_api.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/new_discussion_DTO.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -39,43 +40,25 @@ import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionItemService {
-  final _api = locator<DiscussionsApi>();
+  final DiscussionsApi _api = locator<DiscussionsApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  Future getMessageDetailed({int id}) async {
-    var result = await _api.getMessageDetailed(id: id);
-    var success = result.response != null;
+  Future<Discussion?> getMessageDetailed({required int id}) async {
+    final result = await _api.getMessageDetailed(id: id);
+    final success = result.response != null;
 
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }
 
-  Future updateMessage({int id, NewDiscussionDTO discussion}) async {
-    var result = await _api.updateMessage(id: id, discussion: discussion);
-    var success = result.response != null;
-
-    if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
-      });
-      return result.response;
-    } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
-      return null;
-    }
-  }
-
-  Future updateMessageStatus({int id, String newStatus}) async {
-    var result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
-    var success = result.response != null;
+  Future<Discussion?> updateMessage(
+      {required int id, required NewDiscussionDTO discussion}) async {
+    final result = await _api.updateMessage(id: id, discussion: discussion);
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -87,14 +70,15 @@ class DiscussionItemService {
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }
 
-  Future subscribeToMessage({int id}) async {
-    var result = await _api.subscribeToMessage(id: id);
-    var success = result.response != null;
+  Future<Discussion?> updateMessageStatus(
+      {required int id, required String newStatus}) async {
+    final result = await _api.updateMessageStatus(id: id, newStatus: newStatus);
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -106,14 +90,33 @@ class DiscussionItemService {
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }
 
-  Future deleteMessage({int id}) async {
-    var result = await _api.deleteMessage(id: id);
-    var success = result.response != null;
+  Future<Discussion?> subscribeToMessage({required int id}) async {
+    final result = await _api.subscribeToMessage(id: id);
+    final success = result.response != null;
+
+    if (success) {
+      await AnalyticsService.shared
+          .logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal:
+            await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity:
+            AnalyticsService.Params.Value.discussion
+      });
+      return result.response;
+    } else {
+      await Get.find<ErrorDialog>().show(result.error!.message);
+      return null;
+    }
+  }
+
+  Future<Discussion?> deleteMessage({required int id}) async {
+    final result = await _api.deleteMessage(id: id);
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -125,7 +128,7 @@ class DiscussionItemService {
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }

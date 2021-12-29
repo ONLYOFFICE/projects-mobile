@@ -40,8 +40,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class TagsTile extends StatelessWidget {
   const TagsTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;
@@ -50,18 +50,18 @@ class TagsTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.tags.isNotEmpty;
+        final _isNotEmpty = controller.tags.isNotEmpty as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('tags')}:' : null,
-          text: _isNotEmpty ? controller.tagsText.value : tr('addTag'),
+          text: _isNotEmpty ? controller.tagsText.value as String : tr('addTag'),
           icon: SvgIcons.tag,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
-                  onTap: controller.showTags,
+                  onTap: controller.showTags as Function(),
                   child: Icon(
                     Icons.navigate_next,
                     size: 24,
@@ -69,7 +69,7 @@ class TagsTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: controller.showTags,
+          onTap: controller.showTags as Function(),
         );
       },
     );

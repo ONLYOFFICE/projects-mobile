@@ -33,8 +33,8 @@
 part of '../discussions_filter_screen.dart';
 
 class _Status extends StatelessWidget {
-  final DiscussionsFilterController filterController;
-  const _Status({Key key, this.filterController}) : super(key: key);
+  final DiscussionsFilterController? filterController;
+  const _Status({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,13 +45,13 @@ class _Status extends StatelessWidget {
           FilterElement(
               title: tr('open'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['open'],
-              onTap: () => filterController.changeStatus('open')),
+              isSelected: filterController!.status['open'] as bool,
+              onTap: () => filterController!.changeStatus('open')),
           FilterElement(
               title: tr('archived'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.status['archived'],
-              onTap: () => filterController.changeStatus('archived')),
+              isSelected: filterController!.status['archived'] as bool,
+              onTap: () => filterController!.changeStatus('archived')),
         ],
       ),
     );

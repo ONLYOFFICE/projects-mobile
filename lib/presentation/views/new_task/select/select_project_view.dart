@@ -53,42 +53,38 @@ import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart'
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectView extends StatelessWidget {
-  const SelectProjectView({Key key}) : super(key: key);
+  const SelectProjectView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'];
 
-    var projectsWithPresets = locator<ProjectsWithPresets>();
+    final projectsWithPresets = locator<ProjectsWithPresets>();
 
     var projectsController = projectsWithPresets.myProjectsController;
 
-    var userController = Get.find<UserController>();
+    final userController = Get.find<UserController>();
 
     if (userController.user != null &&
-        (userController.user.isAdmin ||
-            userController.user.isOwner ||
-            (userController.user.listAdminModules != null &&
-                userController.user.listAdminModules.contains('projects')))) {
+        (userController.user!.isAdmin! ||
+            userController.user!.isOwner! ||
+            (userController.user!.listAdminModules != null &&
+                userController.user!.listAdminModules!.contains('projects')))) {
       projectsController = projectsWithPresets.activeProjectsController;
-    } else if (controller is NewTaskController ||
-        controller is DiscussionActionsController) {
+    } else if (controller is NewTaskController || controller is DiscussionActionsController) {
       projectsController = projectsWithPresets.myMembershipProjectController;
     } else if (controller is NewMilestoneController) {
       projectsController = projectsWithPresets.myManagedProjectController;
     }
 
-    var searchController =
-        Get.put(ProjectSearchController(onlyMyProjects: true));
+    final searchController = Get.put(ProjectSearchController(onlyMyProjects: true));
 
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectProject'),
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
@@ -98,8 +94,9 @@ class SelectProjectView extends StatelessWidget {
           hintText: tr('searchProjects'),
           controller: searchController.searchInputController,
           showClearIcon: true,
-          onSubmitted: (value) => searchController.newSearch(value),
-          onClearPressed: () => searchController.clearSearch(),
+          onChanged: searchController.newSearch,
+          onSubmitted: searchController.newSearch,
+          onClearPressed: searchController.clearSearch,
         ),
       ),
       body: Obx(() {
@@ -115,18 +112,17 @@ class SelectProjectView extends StatelessWidget {
               separatorBuilder: (BuildContext context, int index) {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
-              itemBuilder: (c, i) => _ProjectCell(
-                  item: searchController.searchResult[i],
-                  controller: controller),
+              itemBuilder: (c, i) =>
+                  _ProjectCell(item: searchController.searchResult[i], controller: controller),
             ),
           );
         }
         if (searchController.switchToSearchView.value == true &&
             searchController.searchResult.isEmpty &&
             searchController.loaded.value == true) {
-          return Column(children: [const NothingFound()]);
+          return Column(children: const [NothingFound()]);
         }
-        if (projectsController.loaded.value == true &&
+        if (projectsController!.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
           return PaginationListView(
             paginationController: projectsController.paginationController,
@@ -136,8 +132,7 @@ class SelectProjectView extends StatelessWidget {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
               itemBuilder: (c, i) => _ProjectCell(
-                  item: projectsController.paginationController.data[i],
-                  controller: controller),
+                  item: projectsController!.paginationController.data[i], controller: controller),
             ),
           );
         }
@@ -148,8 +143,7 @@ class SelectProjectView extends StatelessWidget {
 }
 
 class _ProjectCell extends StatelessWidget {
-  const _ProjectCell({Key key, @required this.item, @required this.controller})
-      : super(key: key);
+  const _ProjectCell({Key? key, required this.item, required this.controller}) : super(key: key);
   final ProjectDetailed item;
   final controller;
   @override
@@ -171,15 +165,12 @@ class _ProjectCell extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.title,
+                      item.title!,
                       style: TextStyleHelper.projectTitle,
                     ),
-                    Text(item.responsible.displayName,
+                    Text(item.responsible!.displayName!,
                         style: TextStyleHelper.caption(
-                                color: Get.theme
-                                    .colors()
-                                    .onSurface
-                                    .withOpacity(0.6))
+                                color: Get.theme.colors().onSurface.withOpacity(0.6))
                             .copyWith(height: 1.667)),
                   ],
                 ),

@@ -39,8 +39,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class UsersSearchBar extends StatelessWidget {
   const UsersSearchBar({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final UsersDataSource controller;
@@ -67,17 +67,13 @@ class UsersSearchBar extends StatelessWidget {
             child: TextField(
               textInputAction: TextInputAction.search,
               controller: controller.searchInputController,
-              decoration:
-                  InputDecoration.collapsed(hintText: tr('usersSearch')),
-              onSubmitted: (value) {
-                controller.searchUsers(value);
-              },
+              decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),
+              onSubmitted: controller.searchUsers,
+              onChanged: controller.searchUsers,
             ),
           ),
           InkWell(
-            onTap: () {
-              controller.clearSearch();
-            },
+            onTap: controller.clearSearch,
             child: const Icon(Icons.close, color: Colors.blue),
           )
         ],

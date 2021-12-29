@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
@@ -46,12 +47,12 @@ import 'package:projects/presentation/views/project_detailed/milestones/descript
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 
 class NewMilestoneView extends StatelessWidget {
-  const NewMilestoneView({Key key}) : super(key: key);
+  const NewMilestoneView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var newMilestoneController = Get.find<NewMilestoneController>();
-    var projectDetailed = Get.arguments['projectDetailed'];
+    final newMilestoneController = Get.find<NewMilestoneController>();
+    final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
     newMilestoneController.setup(projectDetailed);
 
     return WillPopScope(
@@ -62,15 +63,16 @@ class NewMilestoneView extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Get.theme.colors().backgroundColor,
         appBar: StyledAppBar(
-            titleText: tr('newMilestone'),
-            actions: [
-              IconButton(
-                  icon: const Icon(Icons.check_rounded),
-                  onPressed: () => newMilestoneController.confirm(context))
-            ],
-            leading: IconButton(
-                icon: const Icon(Icons.arrow_back_rounded),
-                onPressed: () => newMilestoneController.discard())),
+          titleText: tr('newMilestone'),
+          actions: [
+            IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => newMilestoneController.confirm(context))
+          ],
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back_rounded),
+              onPressed: newMilestoneController.discard),
+        ),
         body: SingleChildScrollView(
           child: Obx(
             () => Column(
@@ -88,7 +90,7 @@ class NewMilestoneView extends StatelessWidget {
                     OptionWithSwitch(
                       title: tr('keyMilestone'),
                       switchValue: newMilestoneController.keyMilestone,
-                      switchOnChanged: (value) {
+                      switchOnChanged: (bool value) {
                         if (!FocusScope.of(context).hasPrimaryFocus) {
                           FocusScope.of(context).unfocus();
                         }
@@ -98,7 +100,7 @@ class NewMilestoneView extends StatelessWidget {
                     OptionWithSwitch(
                       title: tr('remindBeforeDue'),
                       switchValue: newMilestoneController.remindBeforeDueDate,
-                      switchOnChanged: (value) {
+                      switchOnChanged: (bool value) {
                         if (!FocusScope.of(context).hasPrimaryFocus) {
                           FocusScope.of(context).unfocus();
                         }
@@ -109,7 +111,7 @@ class NewMilestoneView extends StatelessWidget {
                     OptionWithSwitch(
                       title: tr('notifyResponsible'),
                       switchValue: newMilestoneController.notificationEnabled,
-                      switchOnChanged: (value) {
+                      switchOnChanged: (bool value) {
                         newMilestoneController.enableNotification(value);
                       },
                     ),
@@ -125,10 +127,10 @@ class NewMilestoneView extends StatelessWidget {
 }
 
 class MilestoneInput extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const MilestoneInput({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -139,12 +141,11 @@ class MilestoneInput extends StatelessWidget {
         () => TextField(
           maxLines: 2,
           controller: controller.titleController,
-          style:
-              TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+          style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
           cursorColor: Get.theme.colors().primary.withOpacity(0.87),
           decoration: InputDecoration(
               hintText: tr('milestoneTitle'),
-              contentPadding: const EdgeInsets.symmetric(vertical: 0),
+              contentPadding: EdgeInsets.zero,
               hintStyle: TextStyleHelper.headline6(
                   color: controller.needToSetTitle.value
                       ? Get.theme.colors().colorError
@@ -157,22 +158,20 @@ class MilestoneInput extends StatelessWidget {
 }
 
 class DescriptionTile extends StatelessWidget {
-  final newMilestoneController;
+  final NewMilestoneController newMilestoneController;
   const DescriptionTile({
-    Key key,
-    @required this.newMilestoneController,
+    Key? key,
+    required this.newMilestoneController,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSletected =
-            newMilestoneController.descriptionText.value.isNotEmpty;
+        final _isSletected = newMilestoneController.descriptionText.value.isNotEmpty;
         return NewItemTile(
-            text: _isSletected
-                ? newMilestoneController.descriptionText.value
-                : tr('addDescription'),
+            text:
+                _isSletected ? newMilestoneController.descriptionText.value : tr('addDescription'),
             maxLines: 1,
             icon: SvgIcons.description,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
@@ -180,8 +179,7 @@ class DescriptionTile extends StatelessWidget {
             caption: _isSletected ? tr('description') : null,
             isSelected: _isSletected,
             suffix: _isSletected
-                ? Icon(Icons.navigate_next,
-                    size: 24, color: Get.theme.colors().onBackground)
+                ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
                 : null,
             onTap: () => Get.find<NavigationController>()
                     .toScreen(const NewMilestoneDescription(), arguments: {
@@ -193,39 +191,34 @@ class DescriptionTile extends StatelessWidget {
 }
 
 class ProjectTile extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const ProjectTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
+        final _isSelected = controller.slectedProjectTitle.value.isNotEmpty;
         return NewItemTile(
-            text: _isSelected
-                ? controller.slectedProjectTitle.value
-                : tr('selectProject'),
+            text: _isSelected ? controller.slectedProjectTitle.value : tr('selectProject'),
             icon: SvgIcons.project,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
             selectedIconColor: Get.theme.colors().onBackground,
-            textColor: controller.needToSelectProject.value
-                ? Get.theme.colors().colorError
-                : null,
+            textColor: controller.needToSelectProject.value ? Get.theme.colors().colorError : null,
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
                 ? IconButton(
-                    icon: Icon(Icons.navigate_next,
-                        size: 24, color: Get.theme.colors().onBackground),
+                    icon:
+                        Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
-                  Get.find<NavigationController>()
-                      .toScreen(const SelectProjectView(), arguments: {
+                  Get.find<NavigationController>().toScreen(const SelectProjectView(), arguments: {
                     'controller': controller,
                   }),
                 });
@@ -235,10 +228,10 @@ class ProjectTile extends StatelessWidget {
 }
 
 class ResponsibleTile extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const ResponsibleTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -248,26 +241,20 @@ class ResponsibleTile extends StatelessWidget {
       //var _isSelected = controller.responsible != null;
       return NewItemTile(
         isSelected: controller.responsible?.value != null,
-        caption:
-            controller.responsible?.value != null ? tr('assignedTo') : null,
+        caption: controller.responsible?.value != null ? tr('assignedTo') : null,
         text: controller.responsible?.value != null
-            ? '${controller.responsible.value.portalUser.displayName}'
+            ? '${controller.responsible?.value?.portalUser.displayName}'
             : tr('addResponsible'),
-        textColor: controller.needToSelectResponsible.value
-            ? Get.theme.colors().colorError
-            : null,
+        textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
         suffix: controller.responsible?.value != null
-            ? Icon(Icons.navigate_next,
-                size: 24, color: Get.theme.colors().onBackground)
+            ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
             : null,
         icon: SvgIcons.person,
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
         selectedIconColor: Get.theme.colors().onBackground,
         onTap: () => {
-          if (!FocusScope.of(context).hasPrimaryFocus)
-            {FocusScope.of(context).unfocus()},
-          Get.find<NavigationController>().toScreen(
-              const ProjectTeamResponsibleSelectionView(),
+          if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
+          Get.find<NavigationController>().toScreen(const ProjectTeamResponsibleSelectionView(),
               arguments: {'controller': controller})
         },
       );
@@ -276,17 +263,17 @@ class ResponsibleTile extends StatelessWidget {
 }
 
 class DueDateTile extends StatelessWidget {
-  final controller;
+  final NewMilestoneController controller;
   const DueDateTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isSelected = controller.dueDateText.value.isNotEmpty;
+        final _isSelected = controller.dueDateText.value.isNotEmpty;
         return NewItemTile(
             icon: SvgIcons.due_date,
             iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
@@ -294,19 +281,16 @@ class DueDateTile extends StatelessWidget {
             text: _isSelected ? controller.dueDateText.value : tr('setDueDate'),
             caption: _isSelected ? tr('dueDate') : null,
             isSelected: _isSelected,
-            textColor: controller.needToSetDueDate.value
-                ? Get.theme.colors().colorError
-                : null,
+            textColor: controller.needToSetDueDate.value ? Get.theme.colors().colorError : null,
             suffix: _isSelected
                 ? IconButton(
-                    icon: Icon(Icons.close_rounded,
-                        size: 24, color: Get.theme.colors().onBackground),
+                    icon:
+                        Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
             onTap: () => {
-                  if (!FocusScope.of(context).hasPrimaryFocus)
-                    {FocusScope.of(context).unfocus()},
+                  if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
                   controller.onDueDateTilePressed()
                 });
       },

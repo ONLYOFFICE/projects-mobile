@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/tasks/new_task_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -51,12 +52,13 @@ import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
 part 'tiles/tile_with_switch.dart';
 
 class NewTaskView extends StatelessWidget {
-  const NewTaskView({Key key}) : super(key: key);
+  const NewTaskView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<NewTaskController>();
-    var projectDetailed = Get.arguments['projectDetailed'];
+    final controller = Get.find<NewTaskController>();
+    final projectDetailed =
+        Get.arguments['projectDetailed'] as ProjectDetailed?;
     controller.init(projectDetailed);
 
     return WillPopScope(
@@ -84,18 +86,18 @@ class NewTaskView extends StatelessWidget {
                 // unfocus title
                 Listener(
                   onPointerDown: (_) {
-                    if (controller.title.isNotEmpty &&
+                    if (controller.title!.isNotEmpty &&
                         controller.titleFocus.hasFocus)
                       controller.titleFocus.unfocus();
                   },
                   child: Column(
                     children: [
                       NewTaskProjectTile(controller: controller),
-                      if (controller.selectedProjectTitle.value.isNotEmpty)
+                      if (controller.selectedProjectTitle!.value.isNotEmpty)
                         MilestoneTile(controller: controller),
-                      if (controller.selectedProjectTitle.value.isNotEmpty)
+                      if (controller.selectedProjectTitle!.value.isNotEmpty)
                         ResponsibleTile(controller: controller),
-                      if (controller.responsibles.isNotEmpty)
+                      if (controller.responsibles!.isNotEmpty)
                         NotifyResponsiblesTile(controller: controller),
                       DescriptionTile(controller: controller),
                       GestureDetector(

@@ -31,29 +31,29 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
 
 class GroupApi {
   Future<ApiDTO<List<PortalGroup>>> getAllGroups() async {
-    var url = await locator.get<CoreApi>().allGroups();
+    final url = await locator.get<CoreApi>().allGroups();
 
-    var result = ApiDTO<List<PortalGroup>>();
+    final result = ApiDTO<List<PortalGroup>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => PortalGroup.fromJson(i))
+            .map((i) => PortalGroup.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -63,8 +63,8 @@ class GroupApi {
   }
 
   Future<PageDTO<List<PortalGroup>>> getProfilesByExtendedFilter({
-    int startIndex,
-    String query,
+    int? startIndex,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().allGroups();
 
@@ -76,20 +76,21 @@ class GroupApi {
       url += '&FilterValue=$query';
     }
 
-    var result = PageDTO<List<PortalGroup>>();
+    final result = PageDTO<List<PortalGroup>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['count'] as int;
         {
           result.response = (responseJson['response'] as List)
+              .cast<Map<String, dynamic>>()
               .map((i) => PortalGroup.fromJson(i))
               .toList();
         }
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

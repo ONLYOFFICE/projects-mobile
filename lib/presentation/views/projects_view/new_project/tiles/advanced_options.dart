@@ -39,78 +39,75 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class AdvancedOptions extends StatelessWidget {
-  final options;
+  final List<Widget> options;
 
   const AdvancedOptions({
-    Key key,
-    @required this.options,
+    Key? key,
+    required this.options,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Theme(
-                  data: Get.theme.copyWith(dividerColor: Colors.transparent),
-                  child: ExpansionTile(
-                    expandedAlignment: Alignment.topLeft,
-                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                    tilePadding: const EdgeInsets.only(right: 25),
-                    title: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          width: 72,
-                          child: AppIcon(
-                              icon: SvgIcons.preferences,
-                              height: 24,
-                              width: 24,
-                              color: Get.theme.colors().onBackground),
-                        ),
-                        Text(
-                          tr('advancedOptions'),
-                          style: TextStyleHelper.subtitle1(
-                              color: Get.theme.colors().onSurface),
-                        ),
-                      ],
-                    ),
-                    children: options,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Theme(
+                data: Get.theme.copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  expandedAlignment: Alignment.topLeft,
+                  expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                  tilePadding: const EdgeInsets.only(right: 25),
+                  title: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 72,
+                        child: AppIcon(
+                            icon: SvgIcons.preferences,
+                            height: 24,
+                            width: 24,
+                            color: Get.theme.colors().onBackground),
+                      ),
+                      Text(
+                        tr('advancedOptions'),
+                        style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
+                      ),
+                    ],
                   ),
+                  children: options,
                 ),
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  indent: 72,
-                  endIndent: 0,
-                  color: Get.theme.colors().outline,
-                ),
-              ],
-            ),
+              ),
+              Divider(
+                height: 1,
+                thickness: 1,
+                indent: 72,
+                endIndent: 0,
+                color: Get.theme.colors().outline,
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
 
 class OptionWithSwitch extends StatelessWidget {
   const OptionWithSwitch({
-    Key key,
-    @required this.title,
-    @required this.switchOnChanged,
-    @required this.switchValue,
+    Key? key,
+    required this.title,
+    required this.switchOnChanged,
+    required this.switchValue,
   }) : super(key: key);
 
   final RxBool switchValue;
-  final Function switchOnChanged;
+  final Function? switchOnChanged;
   final String title;
 
   @override
@@ -146,9 +143,8 @@ class OptionWithSwitch extends StatelessWidget {
               Obx(
                 () => Switch(
                   value: switchValue.value,
-                  onChanged: switchOnChanged,
-                  activeTrackColor:
-                      Get.theme.colors().primary.withOpacity(0.54),
+                  onChanged: switchOnChanged as void Function(bool)?,
+                  activeTrackColor: Get.theme.colors().primary.withOpacity(0.54),
                   activeColor: Get.theme.colors().primary,
                 ),
               ),

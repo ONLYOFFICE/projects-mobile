@@ -31,26 +31,26 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/milestone.dart';
 import 'package:projects/data/models/new_milestone_DTO.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
 
 class MilestoneApi {
   Future<ApiDTO<List<Milestone>>> milestonesByFilter({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-    String deadlineFilter,
-    String query,
+    int? startIndex,
+    String? sortBy,
+    String? sortOrder,
+    String? projectId,
+    String? milestoneResponsibleFilter,
+    String? taskResponsibleFilter,
+    String? statusFilter,
+    String? deadlineFilter,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().milestonesByFilterUrl();
 
@@ -77,23 +77,25 @@ class MilestoneApi {
       url += deadlineFilter;
     }
 
-    if (projectId != null && projectId.isNotEmpty)
+    if (projectId != null && projectId.isNotEmpty) {
       url += '&projectid=$projectId';
+    }
 
-    if (query != null && query.isNotEmpty)
+    if (query != null && query.isNotEmpty) {
       url += '&filterBy=Name&filterOp=contains&filterValue=$query';
+    }
 
-    var result = ApiDTO<List<Milestone>>();
+    final result = ApiDTO<List<Milestone>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => Milestone.fromJson(i))
+            .map((i) => Milestone.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -103,15 +105,15 @@ class MilestoneApi {
   }
 
   Future<PageDTO<List<Milestone>>> milestonesByFilterPaginated({
-    int startIndex,
-    String sortBy,
-    String sortOrder,
-    String projectId,
-    String milestoneResponsibleFilter,
-    String taskResponsibleFilter,
-    String statusFilter,
-    String deadlineFilter,
-    String query,
+    int? startIndex,
+    String? sortBy,
+    String? sortOrder,
+    String? projectId,
+    String? milestoneResponsibleFilter,
+    String? taskResponsibleFilter,
+    String? statusFilter,
+    String? deadlineFilter,
+    String? query,
   }) async {
     var url = await locator.get<CoreApi>().milestonesByFilterUrl();
 
@@ -140,23 +142,24 @@ class MilestoneApi {
       url += deadlineFilter;
     }
 
-    if (projectId != null && projectId.isNotEmpty)
+    if (projectId != null && projectId.isNotEmpty) {
       url += '&projectid=$projectId';
+    }
 
     if (query != null) url += '&FilterValue=$query';
 
-    var result = PageDTO<List<Milestone>>();
+    final result = PageDTO<List<Milestone>>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.total = responseJson['total'];
+        final responseJson = json.decode(response.body);
+        result.total = responseJson['total'] as int;
         result.response = (responseJson['response'] as List)
-            .map((i) => Milestone.fromJson(i))
+            .map((i) => Milestone.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -166,21 +169,21 @@ class MilestoneApi {
   }
 
   Future<ApiDTO<Map<String, dynamic>>> createMilestone(
-      {int projectId, NewMilestoneDTO milestone}) async {
-    var url =
-        await locator.get<CoreApi>().createMilestoneUrl(projectId.toString());
+      {required int projectId, required NewMilestoneDTO milestone}) async {
+    final url =
+        await locator.get<CoreApi>().createMilestoneUrl(projectID: projectId);
 
-    var result = ApiDTO<Map<String, dynamic>>();
-    var body = milestone.toJson();
+    final result = ApiDTO<Map<String, dynamic>>();
+    final body = milestone.toJson();
 
     try {
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = responseJson['response'];
+        final responseJson = json.decode(response.body);
+        result.response = responseJson['response'] as Map<String, dynamic>;
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

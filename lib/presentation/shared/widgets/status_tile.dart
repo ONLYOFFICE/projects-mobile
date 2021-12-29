@@ -36,11 +36,11 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class StatusTile extends StatelessWidget {
-  final String title;
-  final Widget icon;
+  final String? title;
+  final Widget? icon;
   final bool selected;
 
-  const StatusTile({Key key, this.icon, this.title, this.selected = false})
+  const StatusTile({Key? key, this.icon, this.title, this.selected = false})
       : super(key: key);
 
   @override
@@ -64,7 +64,7 @@ class StatusTile extends StatelessWidget {
               children: [
                 SizedBox(width: 48, child: icon),
                 Flexible(
-                    child: Text(title,
+                    child: Text(title!,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
                         style: TextStyleHelper.body2())),
@@ -79,6 +79,51 @@ class StatusTile extends StatelessWidget {
                 color: Get.theme.colors().primary,
               ),
             )
+        ],
+      ),
+    );
+  }
+}
+
+class StatusTileTablet extends StatelessWidget {
+  final String title;
+  final Widget icon;
+  final bool selected;
+
+  const StatusTileTablet(
+      {Key? key,
+      required this.icon,
+      required this.title,
+      this.selected = false})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    BoxDecoration _selectedDecoration() {
+      return BoxDecoration(
+          color: Get.theme.colors().bgDescription,
+          borderRadius: BorderRadius.circular(6));
+    }
+
+    return Container(
+      height: 36,
+      decoration: selected ? _selectedDecoration() : null,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Flexible(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(width: 48, child: icon),
+                Flexible(
+                    child: Text(title,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyleHelper.body2())),
+              ],
+            ),
+          ),
         ],
       ),
     );
