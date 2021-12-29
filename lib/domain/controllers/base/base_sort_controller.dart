@@ -54,8 +54,7 @@ abstract class BaseSortController extends GetxController {
     }
   }
 
-  String get currentSortOrder =>
-      isSortAscending.value == true ? 'ascending' : 'descending';
+  String get currentSortOrder => isSortAscending.value == true ? 'ascending' : 'descending';
 
   String getFilterLabel(String value) => tr(value);
 }

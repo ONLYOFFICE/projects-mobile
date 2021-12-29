@@ -167,13 +167,13 @@ class DiscussionsController extends BaseController {
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
         (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets.activeProjectsController!.itemList.isEmpty)
-        await projectsWithPresets.activeProjectsController!.loadProjects();
-      fabVisibility = projectsWithPresets.activeProjectsController!.itemList.isNotEmpty;
+      if (projectsWithPresets.activeProjectsController.itemList.isEmpty)
+        await projectsWithPresets.activeProjectsController.loadProjects();
+      fabVisibility = projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (projectsWithPresets.myProjectsController!.itemList.isEmpty)
-        await projectsWithPresets.myProjectsController!.loadProjects();
-      fabVisibility = projectsWithPresets.myProjectsController!.itemList.isNotEmpty;
+      if (projectsWithPresets.myProjectsController.itemList.isEmpty)
+        await projectsWithPresets.myProjectsController.loadProjects();
+      fabVisibility = projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

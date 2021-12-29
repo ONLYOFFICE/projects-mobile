@@ -31,20 +31,18 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
 import 'package:projects/presentation/views/discussions/discussions_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/more/more_view.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
-
 import 'package:projects/presentation/views/projects_view/projects_view.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
@@ -182,7 +180,7 @@ class TabletLayout extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        IconButton(
+                        PlatformIconButton(
                           iconSize: 64,
                           icon: SizedBox(
                               width: 72,
@@ -202,7 +200,7 @@ class TabletLayout extends StatelessWidget {
                           onPressed: () => controller.toScreen(const SelfProfileScreen(),
                               arguments: {'showBackButton': true, 'showSettingsButton': false}),
                         ),
-                        IconButton(
+                        PlatformIconButton(
                           iconSize: 64,
                           icon: AppIcon(
                             icon: SvgIcons.settings,
@@ -252,6 +250,9 @@ class MobileLayout extends StatelessWidget {
   Widget build(BuildContext context) {
     final navigationController = Get.find<NavigationController>();
 
+    final heightBottomNavigationBar =
+        navigationController.onMoreView.value ? 300 : 56 + MediaQuery.of(context).padding.bottom;
+
     return Obx(
       () => Scaffold(
         body: Stack(
@@ -271,7 +272,7 @@ class MobileLayout extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: SizedBox(
-          height: navigationController.onMoreView.value ? 300 : 56,
+          height: heightBottomNavigationBar.toDouble(),
           child: Column(
             children: [
               if (navigationController.onMoreView.value) const Expanded(child: MoreView()),

@@ -10,13 +10,23 @@ import flutter_downloader
     ) -> Bool {
         GeneratedPluginRegistrant.register(with: self)
         
-        FlutterDownloaderPlugin.setPluginRegistrantCallback({ registry in
-            FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "vn.hunghd.flutter_downloader")!)
-            GeneratedPluginRegistrant.register(with: registry)
-        })
+
+       FlutterDownloaderPlugin.setPluginRegistrantCallback(registerPlugins)
+
+      //todo: fix on account manager was added
+//         FlutterDownloaderPlugin.setPluginRegistrantCallback({ registry in
+//             FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "vn.hunghd.flutter_downloader")!)
+//             GeneratedPluginRegistrant.register(with: registry)
+//         })
         
-        AccountsManager.start()
+//         AccountsManager.start()
         
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
+}
+
+private func registerPlugins(registry: FlutterPluginRegistry) {
+   if (!registry.hasPlugin("FlutterDownloaderPlugin")) {
+      FlutterDownloaderPlugin.register(with: registry.registrar(forPlugin: "FlutterDownloaderPlugin")!)
+   }
 }

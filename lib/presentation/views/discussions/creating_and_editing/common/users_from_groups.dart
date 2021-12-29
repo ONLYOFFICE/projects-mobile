@@ -36,6 +36,8 @@ import 'package:projects/domain/controllers/discussions/actions/abstract_discuss
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 
 class UsersFromGroups extends StatelessWidget {
@@ -52,9 +54,9 @@ class UsersFromGroups extends StatelessWidget {
       appBar: StyledAppBar(
         titleText: 'Users from groups',
         actions: [
-          IconButton(
+          PlatformIconButton(
             onPressed: controller.confirmGroupSelection,
-            icon: const Icon(Icons.done),
+            icon: Icon(PlatformIcons(context).checkMark),
           )
         ],
       ),

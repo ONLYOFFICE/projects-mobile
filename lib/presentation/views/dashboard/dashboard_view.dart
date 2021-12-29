@@ -36,17 +36,16 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/dashboard_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardView extends StatelessWidget {
@@ -61,43 +60,66 @@ class DashboardView extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Get.theme.colors().background,
-      appBar: StyledAppBar(
-        backgroundColor: Get.theme.colors().background,
-        title: Title(controller: dashboardController),
-        // titleHeight: 50,
-        elevation: 0,
-        showBackButton: false,
+      body: NestedScrollView(
+        body: _BodyDashboardWidget(dashboardController: dashboardController),
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            MainAppBar(
+              cupertinoTitle: Text(
+                dashboardController.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
+              ),
+              materialTitle: Title(
+                controller: dashboardController,
+              ),
+            ),
+          ];
+        },
       ),
-      body: SmartRefresher(
-        controller: dashboardController.refreshController,
-        onLoading: dashboardController.onLoading,
-        onRefresh: dashboardController.onRefresh,
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-          controller: dashboardController.scrollController,
-          children: <Widget>[
-            DashboardCardView(
-              overline: tr('tasks'),
-              controller: dashboardController.myTaskController,
-            ),
-            DashboardCardView(
-              overline: tr('tasks'),
-              controller: dashboardController.upcomingTaskscontroller,
-            ),
-            DashboardCardView(
-              overline: tr('projects'),
-              controller: dashboardController.myProjectsController,
-            ),
-            DashboardCardView(
-              overline: tr('projects'),
-              controller: dashboardController.folowedProjectsController,
-            ),
-            DashboardCardView(
-              overline: tr('projects'),
-              controller: dashboardController.activeProjectsController,
-            ),
-          ],
-        ),
+    );
+  }
+}
+
+class _BodyDashboardWidget extends StatelessWidget {
+  const _BodyDashboardWidget({
+    Key? key,
+    required this.dashboardController,
+  }) : super(key: key);
+
+  final DashboardController dashboardController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SmartRefresher(
+      // scrollController: dashboardController.scrollController,
+      controller: dashboardController.refreshController,
+      onLoading: dashboardController.onLoading,
+      onRefresh: dashboardController.onRefresh,
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+        // controller: dashboardController.scrollController,
+        children: <Widget>[
+          DashboardCardView(
+            overline: tr('tasks'),
+            controller: dashboardController.myTaskController,
+          ),
+          DashboardCardView(
+            overline: tr('tasks'),
+            controller: dashboardController.upcomingTaskscontroller,
+          ),
+          DashboardCardView(
+            overline: tr('projects'),
+            controller: dashboardController.myProjectsController,
+          ),
+          DashboardCardView(
+            overline: tr('projects'),
+            controller: dashboardController.folowedProjectsController,
+          ),
+          DashboardCardView(
+            overline: tr('projects'),
+            controller: dashboardController.activeProjectsController,
+          ),
+        ],
       ),
     );
   }
@@ -221,9 +243,10 @@ class DashboardCardView extends StatelessWidget {
                               ),
                             ),
                           if (!(controller.loaded.value as bool))
-                            const SizedBox(
+                            SizedBox(
                               height: 100,
-                              child: Center(child: CircularProgressIndicator()),
+                              child: Center(child: PlatformCircularProgressIndicator()),
+
                             ),
                         ],
                       ),
@@ -287,11 +310,9 @@ class Title extends StatelessWidget {
       child: Row(
         children: <Widget>[
           Expanded(
-            child: Obx(
-              () => Text(
-                controller.screenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-              ),
+            child: Text(
+              controller.screenName,
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
             ),
           ),
           Row(
@@ -329,7 +350,7 @@ class ProjectCardContent extends StatelessWidget {
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (c, i) => i < 2
-                    ? ProjectCell(item: controller.paginationController.data[i])
+                    ? ProjectCell(projectDetails: controller.paginationController.data[i])
                     : const SizedBox(),
                 itemCount: controller.paginationController.data.length > 2
                     ? 2

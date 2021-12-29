@@ -76,8 +76,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   Future<bool> updateStatus({int? newStatusId});
 
-  RxList<PortalUserItemController> selectedTeamMembers =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> selectedTeamMembers = <PortalUserItemController>[].obs;
 
   Rx<PortalUser?> selectedProjectManager = PortalUser().obs;
   RxBool needToFillManager = false.obs;

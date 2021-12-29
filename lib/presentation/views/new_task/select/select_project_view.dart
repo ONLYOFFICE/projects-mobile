@@ -50,6 +50,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectView extends StatelessWidget {
@@ -87,8 +88,8 @@ class SelectProjectView extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectProject'),
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         bottomHeight: 44,
         bottom: SearchField(
           hintText: tr('searchProjects'),
@@ -122,7 +123,7 @@ class SelectProjectView extends StatelessWidget {
             searchController.loaded.value == true) {
           return Column(children: const [NothingFound()]);
         }
-        if (projectsController!.loaded.value == true &&
+        if (projectsController.loaded.value == true &&
             searchController.switchToSearchView.value == false) {
           return PaginationListView(
             paginationController: projectsController.paginationController,
@@ -132,7 +133,7 @@ class SelectProjectView extends StatelessWidget {
                 return const StyledDivider(leftPadding: 16, rightPadding: 16);
               },
               itemBuilder: (c, i) => _ProjectCell(
-                  item: projectsController!.paginationController.data[i], controller: controller),
+                  item: projectsController.paginationController.data[i], controller: controller),
             ),
           );
         }

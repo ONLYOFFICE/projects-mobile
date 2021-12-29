@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class DiscussionTitleTextField extends StatelessWidget {
   final DiscussionActionsController controller;
@@ -49,7 +50,7 @@ class DiscussionTitleTextField extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 72, right: 16, top: 16, bottom: 34),
       child: Obx(
-        () => TextField(
+        () => PlatformTextField(
             focusNode: controller.titleFocus,
             maxLines: null,
             controller: controller.titleController,

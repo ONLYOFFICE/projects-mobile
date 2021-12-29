@@ -40,6 +40,7 @@ class PaginationController<T> extends GetxController {
   RxList<T> data = <T>[].obs;
 
   RefreshController _refreshController = RefreshController();
+
   RefreshController get refreshController {
     if (!_refreshController.isLoading && !_refreshController.isRefresh)
       _refreshController = RefreshController();
@@ -53,6 +54,7 @@ class PaginationController<T> extends GetxController {
   late Function loadDelegate;
 
   bool pullDownEnabled = false;
+
   bool get pullUpEnabled => data.length != total.value;
 
   Future<void> onRefresh() async {

@@ -39,6 +39,9 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class NewMilestoneDescription extends StatelessWidget {
   const NewMilestoneDescription({Key? key}) : super(key: key);
@@ -51,33 +54,30 @@ class NewMilestoneDescription extends StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('description'),
-        leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => newMilestoneController.leaveDescriptionView(
-                newMilestoneController.descriptionController.value.text)),
+        leading: PlatformIconButton(
+            icon: Icon(PlatformIcons(context).back),
+            onPressed: () => newMilestoneController
+                .leaveDescriptionView(newMilestoneController.descriptionController.value.text)),
         actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: () => newMilestoneController.confirmDescription(
-                  newMilestoneController.descriptionController.value.text))
+          PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
+              onPressed: () => newMilestoneController
+                  .confirmDescription(newMilestoneController.descriptionController.value.text))
         ],
       ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(24, 24, 12, 16),
-        child: TextField(
+        child: PlatformTextField(
           controller: newMilestoneController.descriptionController.value,
           autofocus: true,
           maxLines: null,
           style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface),
           decoration: InputDecoration.collapsed(
-              hintText: tr('milestoneDescription'),
-              hintStyle: TextStyleHelper.subtitle1()),
+              hintText: tr('milestoneDescription'), hintStyle: TextStyleHelper.subtitle1()),
         ),
       ),
     );

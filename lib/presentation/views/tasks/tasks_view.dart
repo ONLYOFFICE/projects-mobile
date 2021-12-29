@@ -33,14 +33,14 @@
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -54,6 +54,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
@@ -78,14 +79,9 @@ class TasksView extends StatelessWidget {
       controller.loadTasks();
     });
 
-    final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
@@ -99,71 +95,152 @@ class TasksView extends StatelessWidget {
           ),
         ),
       ),
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            showBackButton: false,
-            titleText: controller.screenName,
-            elevation: value,
-            actions: [
-              IconButton(
-                icon: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            MainAppBar(
+              materialTitle: Text(
+                controller.screenName,
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+              ),
+              cupertinoTitle: Text(
+                controller.screenName,
+                style: TextStyle(color: Get.theme.colors().onSurface),
+              ),
+              actions: [
+                IconButton(
+                  icon: AppIcon(
+                    width: 24,
+                    height: 24,
+                    icon: SvgIcons.search,
+                    color: Get.theme.colors().primary,
+                  ),
+                  onPressed: controller.showSearch,
                 ),
-                onPressed: controller.showSearch,
-              ),
-              IconButton(
-                icon: FiltersButton(controler: controller),
-                onPressed: () async => Get.find<NavigationController>().toScreen(
-                    const TasksFilterScreen(),
-                    preventDuplicates: false,
-                    arguments: {'filterController': controller.filterController}),
-              ),
-              const SizedBox(width: 4),
-            ],
-            bottom: TasksHeader(controller: controller),
-          ),
-        ),
-      ),
-      body: Obx(
-        () {
-          if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
-            return const ListLoadingSkeleton();
-
-          return PaginationListView(
-              paginationController: controller.paginationController,
-              child: () {
-                if (controller.loaded.value &&
-                    controller.taskStatusesLoaded.value &&
-                    controller.paginationController.data.isEmpty &&
-                    !controller.filterController.hasFilters.value)
-                  return Center(
-                      child:
-                          EmptyScreen(icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
-
-                if (controller.loaded.value &&
-                    controller.taskStatusesLoaded.value &&
-                    controller.paginationController.data.isEmpty &&
-                    controller.filterController.hasFilters.value) {
-                  return Center(
-                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-                  );
-                }
-                if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                  return ListView.builder(
-                    controller: scrollController,
-                    itemCount: controller.paginationController.data.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return TaskCell(task: controller.paginationController.data[index]);
-                    },
-                  );
-              }() as Widget);
+                IconButton(
+                  icon: FiltersButton(controller: controller),
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                      const TasksFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController}),
+                ),
+                IconButton(
+                  onPressed: () {},
+                  icon: Icon(
+                    CupertinoIcons.ellipsis_circle,
+                    color: Get.theme.colors().primary,
+                  ),
+                ),
+              ],
+            ),
+            // PlatformWidget(
+            //   material: (context, target) => SliverAppBar(
+            //     backgroundColor: Get.theme.colors().background,
+            //     pinned: true,
+            //     title: Text(
+            //       controller.screenName,
+            //       style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+            //     ),
+            //     actions: [
+            //       IconButton(
+            //         icon: AppIcon(
+            //           width: 24,
+            //           height: 24,
+            //           icon: SvgIcons.search,
+            //           color: Get.theme.colors().primary,
+            //         ),
+            //         onPressed: controller.showSearch,
+            //       ),
+            //       IconButton(
+            //         icon: FiltersButton(controller: controller),
+            //         onPressed: () async => Get.find<NavigationController>().toScreen(
+            //             const TasksFilterScreen(),
+            //             preventDuplicates: false,
+            //             arguments: {'filterController': controller.filterController}),
+            //       ),
+            //       const SizedBox(width: 4),
+            //     ],
+            //     bottom: PreferredSize(
+            //       preferredSize: const Size.fromHeight(44),
+            //       child: TasksHeader(controller: controller),
+            //     ),
+            //   ),
+            //   cupertino: (context, target) => CupertinoSliverNavigationBar(
+            //     // border: Border.all(style: BorderStyle.none),
+            //     backgroundColor: Get.theme.colors().background,
+            //     padding: EdgeInsetsDirectional.zero,
+            //     largeTitle: Text(
+            //       controller.screenName,
+            //       style: TextStyle(color: Get.theme.colors().onSurface),
+            //     ),
+            //     trailing: Row(
+            //       mainAxisSize: MainAxisSize.min,
+            //       mainAxisAlignment: MainAxisAlignment.end,
+            //       children: [
+            //         IconButton(
+            //           icon: AppIcon(
+            //             width: 24,
+            //             height: 24,
+            //             icon: SvgIcons.search,
+            //             color: Get.theme.colors().primary,
+            //           ),
+            //           onPressed: controller.showSearch,
+            //         ),
+            //         IconButton(
+            //           icon: FiltersButton(controller: controller),
+            //           onPressed: () async => Get.find<NavigationController>().toScreen(
+            //               const TasksFilterScreen(),
+            //               preventDuplicates: false,
+            //               arguments: {'filterController': controller.filterController}),
+            //         ),
+            //         IconButton(
+            //           onPressed: () {},
+            //           icon: Icon(
+            //             CupertinoIcons.ellipsis_circle,
+            //             color: Get.theme.colors().primary,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // )
+          ];
         },
+        body: Obx(
+          () {
+            if (!controller.loaded.value || !controller.taskStatusesLoaded.value)
+              return const ListLoadingSkeleton();
+
+            return PaginationListView(
+                paginationController: controller.paginationController,
+                child: () {
+                  if (controller.loaded.value &&
+                      controller.taskStatusesLoaded.value &&
+                      controller.paginationController.data.isEmpty &&
+                      !controller.filterController.hasFilters.value)
+                    return Center(
+                        child: EmptyScreen(
+                            icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
+
+                  if (controller.loaded.value &&
+                      controller.taskStatusesLoaded.value &&
+                      controller.paginationController.data.isEmpty &&
+                      controller.filterController.hasFilters.value) {
+                    return Center(
+                      child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                    );
+                  }
+                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                    return ListView.builder(
+                      // controller: scrollController,
+                      itemCount: controller.paginationController.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return TaskCell(task: controller.paginationController.data[index]);
+                      },
+                    );
+                }() as Widget);
+          },
+        ),
       ),
     );
   }
@@ -189,9 +266,7 @@ class TasksHeader extends StatelessWidget {
             ),
             Obx(
               () => Text(
-                tr('total', args: [
-                  controller.paginationController.total.value.toString()
-                ]),
+                tr('total', args: [controller.paginationController.total.value.toString()]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
@@ -214,80 +289,99 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(
-          sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'priority', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'start_date',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'title', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'sort_order',
-          sortController: controller.sortController),
+      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(sortParameter: 'priority', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'start_date', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: () async {
-        if (Get.find<PlatformController>().isMobile) {
-          final options = Column(
-            children: [
-              const SizedBox(height: 14.5),
-              const Divider(height: 9, thickness: 1),
-              ..._getSortTile(),
-              const SizedBox(height: 20)
-            ],
-          );
+    return PlatformWidget(
+      material: (context, target) => TextButton(
+        onPressed: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            final options = Column(
+              children: [
+                const SizedBox(height: 14.5),
+                const Divider(height: 9, thickness: 1),
+                ..._getSortTile(),
+                const SizedBox(height: 20)
+              ],
+            );
 
-          await Get.bottomSheet(
-            SortView(sortOptions: options),
-            isScrollControlled: true,
-          );
-        } else {
-          await showPopupMenu(
-            context: context,
-            options: _getSortTile(),
-            offset: const Offset(0, 40),
-          );
-        }
-      },
-      child: Row(
-        children: [
-          Obx(
-            () => Text(
-              controller.sortController.currentSortTitle.value,
-              style: TextStyleHelper.projectsSorting
-                  .copyWith(color: Get.theme.colors().primary),
+            await Get.bottomSheet(
+              SortView(sortOptions: options),
+              isScrollControlled: true,
+            );
+          } else {
+            await showPopupMenu(
+              context: context,
+              options: _getSortTile(),
+              offset: const Offset(0, 40),
+            );
+          }
+        },
+        child: Row(
+          children: [
+            Obx(
+              () => Text(
+                controller.sortController.currentSortTitle.value,
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+              ),
             ),
-          ),
-          const SizedBox(width: 8),
-          Obx(
-            () => (controller.sortController.currentSortOrder == 'ascending')
-                ? AppIcon(
-                    icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().primary,
-                    width: 20,
-                    height: 20,
-                  )
-                : Transform(
-                    alignment: Alignment.center,
-                    transform: Matrix4.rotationX(math.pi),
-                    child: AppIcon(
+            const SizedBox(width: 8),
+            Obx(
+              () => (controller.sortController.currentSortOrder == 'ascending')
+                  ? AppIcon(
                       icon: SvgIcons.sorting_4_ascend,
                       color: Get.theme.colors().primary,
                       width: 20,
                       height: 20,
+                    )
+                  : Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationX(math.pi),
+                      child: AppIcon(
+                        icon: SvgIcons.sorting_4_ascend,
+                        color: Get.theme.colors().primary,
+                        width: 20,
+                        height: 20,
+                      ),
                     ),
-                  ),
-          ),
-        ],
+            ),
+          ],
+        ),
+      ),
+      cupertino: (_, __) => IconButton(
+        onPressed: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            final options = Column(
+              children: [
+                const SizedBox(height: 14.5),
+                const Divider(height: 9, thickness: 1),
+                ..._getSortTile(),
+                const SizedBox(height: 20)
+              ],
+            );
+
+            await Get.bottomSheet(
+              SortView(sortOptions: options),
+              isScrollControlled: true,
+            );
+          } else {
+            await showPopupMenu(
+              context: context,
+              options: _getSortTile(),
+              offset: const Offset(0, 40),
+            );
+          }
+        },
+        icon: AppIcon(
+            width: 24, height: 24, icon: SvgIcons.ios_sort, color: Get.theme.colors().primary),
       ),
     );
   }

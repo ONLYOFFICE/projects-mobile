@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 class DiscussionTile extends StatelessWidget {
   final Discussion discussion;
   final Function()? onTap;
+
   const DiscussionTile({
     Key? key,
     required this.discussion,

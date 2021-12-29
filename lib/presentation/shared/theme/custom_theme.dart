@@ -30,6 +30,7 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/app_colors.dart';
@@ -99,16 +100,14 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     // lightColors.onSurface),
     // text
   ),
-  navigationRailTheme:
-      NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
+  navigationRailTheme: NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
     elevation: 10,
   ),
   dialogTheme: DialogTheme(
       titleTextStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
-      contentTextStyle:
-          TextStyleHelper.body2(color: lightColors.onSurface.withOpacity(0.6))),
+      contentTextStyle: TextStyleHelper.body2(color: lightColors.onSurface.withOpacity(0.6))),
 );
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -120,14 +119,19 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
     backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
   ),
-  navigationRailTheme:
-      NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
+  navigationRailTheme: NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
     elevation: 10,
   ),
   dialogTheme: DialogTheme(
       titleTextStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
-      contentTextStyle:
-          TextStyleHelper.body2(color: darkColors.onSurface.withOpacity(0.6))),
+      contentTextStyle: TextStyleHelper.body2(color: darkColors.onSurface.withOpacity(0.6))),
+);
+
+final CupertinoThemeData cupertinoTheme = CupertinoThemeData(
+  brightness: Brightness.light,
+  primaryColor: CupertinoColors.white,
+  barBackgroundColor: lightColors.backgroundColor,
+  scaffoldBackgroundColor: lightColors.backgroundColor,
 );

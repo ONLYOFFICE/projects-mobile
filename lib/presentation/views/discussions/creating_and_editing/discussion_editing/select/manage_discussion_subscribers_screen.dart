@@ -45,6 +45,8 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
@@ -88,12 +90,13 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
           actions: [
-            IconButton(
-                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-                icon: const Icon(Icons.done))
+            PlatformIconButton(
+              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+              icon: Icon(PlatformIcons(context).checkMark),
+            )
           ],
           // bottom: CustomSearchBar(controller: controller),
           bottom: Row(

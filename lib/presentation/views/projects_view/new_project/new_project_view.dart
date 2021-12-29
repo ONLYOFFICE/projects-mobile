@@ -34,6 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';
@@ -57,22 +59,22 @@ class NewProject extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor: Get.theme.backgroundColor,
+        //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('project'),
           onLeadingPressed: controller.discardChanges,
           elevation: 2,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.check_outlined),
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
               onPressed: () => controller.confirm(context),
             )
           ],
         ),
         body: Listener(
           onPointerDown: (_) {
-            if (controller.titleController.text.isNotEmpty &&
-                controller.titleFocus.hasFocus) controller.titleFocus.unfocus();
+            if (controller.titleController.text.isNotEmpty && controller.titleFocus.hasFocus)
+              controller.titleFocus.unfocus();
           },
           child: ListView(
             children: [
@@ -98,8 +100,7 @@ class NewProject extends StatelessWidget {
                     },
                   ),
                   Obx(() {
-                    if (controller.selfUserItem?.id ==
-                        controller.selectedProjectManager.value?.id)
+                    if (controller.selfUserItem?.id == controller.selectedProjectManager.value?.id)
                       return OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: false.obs,

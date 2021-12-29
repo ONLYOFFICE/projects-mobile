@@ -43,6 +43,7 @@ import 'package:projects/data/models/from_api/capabilities.dart';
 import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/portal_service.dart';
+import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -82,12 +83,19 @@ class LoginController extends GetxController {
   String get portalAdress => portalAdressController.text.contains('//')
       ? portalAdressController.text.split('//')[1]
       : portalAdressController.text;
+
   String? get tfaKey => _tfaKey;
 
   final cookieManager = WebviewCookieManager();
 
   final checkBoxValue = false.obs;
   final needAgreement = Get.deviceLocale!.languageCode == 'zh';
+
+  final _state = ViewState.Idle.obs;
+  Rx<ViewState> get state => _state;
+  void setState(ViewState viewState) {
+    state.value = viewState;
+  }
 
   @override
   void onInit() {
@@ -113,7 +121,6 @@ class LoginController extends GetxController {
 
       if (result.response!.token != null) {
         await saveLoginData(token: result.response!.token, expires: result.response!.expires);
-
         await Get.find<AccountManagerController>()
             .addAccount(tokenString: result.response!.token!, expires: result.response!.expires!);
 
@@ -125,6 +132,8 @@ class LoginController extends GetxController {
         ]);
 
         locator<EventHub>().fire('loginSuccess');
+
+        setState(ViewState.Idle);
       } else if (result.response!.tfa == true) {
         _email = email;
         _pass = password;
@@ -279,12 +288,6 @@ class LoginController extends GetxController {
     return null;
   }
 
-  Rx<ViewState> get state => ViewState.Idle.obs;
-
-  void setState(ViewState viewState) {
-    state.value = viewState;
-  }
-
   Future<bool> sendRegistrationType() async {
     final result = await _authService.sendRegistrationType();
     return result != null;
@@ -307,6 +310,8 @@ class LoginController extends GetxController {
 
     Get.find<PortalInfoController>().logout();
     Get.find<UserController>().clear();
+
+    await RemoteConfigService.fetchAndActivate();
 
     locator<EventHub>().fire('logoutSuccess');
   }

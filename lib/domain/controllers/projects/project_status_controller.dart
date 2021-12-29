@@ -47,10 +47,8 @@ class ProjectStatusesController extends GetxController {
 
   String getStatusImageString(int value) => ProjectStatus.toImageString(value);
 
-  Future<bool> updateStatus(
-      {int? newStatusId, required ProjectDetailed projectData}) async {
-    if (projectData.taskCount! > 0 &&
-        newStatusId == ProjectStatusCode.closed.index) {
+  Future<bool> updateStatus({int? newStatusId, required ProjectDetailed projectData}) async {
+    if (projectData.taskCount! > 0 && newStatusId == ProjectStatusCode.closed.index) {
       MessagesHandler.showSnackBar(
         context: Get.context!,
         text: tr('cannotCloseProject'),
@@ -59,8 +57,7 @@ class ProjectStatusesController extends GetxController {
     }
 
     final t = await locator<ProjectService>().updateProjectStatus(
-        projectId: projectData.id!,
-        newStatus: ProjectStatus.toLiteral(newStatusId));
+        projectId: projectData.id!, newStatus: ProjectStatus.toLiteral(newStatusId));
 
     if (t != null) {
       return true;

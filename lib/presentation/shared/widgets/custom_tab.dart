@@ -73,9 +73,7 @@ class CustomTab extends StatelessWidget {
                   count.toString(),
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      fontSize: 14,
-                      color: Get.theme.colors().surface,
-                      letterSpacing: 0.1),
+                      fontSize: 14, color: Get.theme.colors().surface, letterSpacing: 0.1),
                 ),
               ),
             ),

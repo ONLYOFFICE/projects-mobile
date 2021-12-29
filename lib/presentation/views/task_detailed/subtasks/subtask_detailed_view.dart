@@ -40,6 +40,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 
@@ -58,7 +60,7 @@ class SubtaskDetailedView extends StatelessWidget {
             actions: [
               if (_subtask.canEdit! || controller.canCreateSubtask)
                 PopupMenuButton(
-                  icon: const Icon(Icons.more_vert, size: 26),
+                  icon: Icon(PlatformIcons(context).ellipsis, size: 26),
                   offset: const Offset(0, 25),
                   onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
@@ -140,8 +142,8 @@ class SubtaskDetailedView extends StatelessWidget {
                       ),
                     ),
                     if (_subtask.responsible != null && _subtask.canEdit!)
-                      IconButton(
-                        icon: Icon(Icons.clear_rounded,
+                      PlatformIconButton(
+                        icon: Icon(PlatformIcons(context).clear,
                             color: Get.theme.colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
                             taskId: _subtask.taskId!, subtaskId: _subtask.id!),

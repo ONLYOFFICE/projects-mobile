@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 class CodeForm extends StatefulWidget {
   const CodeForm({Key? key}) : super(key: key);
@@ -95,7 +96,7 @@ class _CodeFormState extends State<CodeForm> {
           codeField,
           const SizedBox(height: 10),
           Obx(() => controller.state.value == ViewState.Busy
-              ? const CircularProgressIndicator()
+              ? PlatformCircularProgressIndicator()
               : loginButon),
           const SizedBox(height: 15),
         ],

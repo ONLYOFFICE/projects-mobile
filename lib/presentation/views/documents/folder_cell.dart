@@ -35,7 +35,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -46,6 +45,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 
@@ -84,7 +85,8 @@ class FolderCell extends StatelessWidget {
                     context,
                     controller,
                   ),
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(PlatformIcons(context).ellipsis,
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -250,7 +252,7 @@ Future<void> _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
       });
       break;
     case 'move':
@@ -258,7 +260,7 @@ Future<void> _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
       });
 
       break;
@@ -283,7 +285,7 @@ void _renameFolder(DocumentsController? controller, Folder element, BuildContext
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFolder'),
-      content: TextField(
+      content: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,

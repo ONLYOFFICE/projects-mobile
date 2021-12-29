@@ -71,5 +71,6 @@ class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
   Widget get itemList => const _UserList();
 
   @override
-  Widget get searchResult => _SearchResult(searchController: searchController as UserSearchController);
+  Widget get searchResult =>
+      _SearchResult(searchController: searchController as UserSearchController);
 }

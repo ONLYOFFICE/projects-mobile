@@ -50,6 +50,7 @@ class ProjectTeamController extends GetxController {
   var _startIndex = 0;
 
   RefreshController _refreshController = RefreshController();
+
   RefreshController get refreshController {
     if (!_refreshController.isLoading && !_refreshController.isRefresh)
       _refreshController = RefreshController();

@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class WideButton extends StatelessWidget {
   final Color? color;
@@ -53,7 +54,7 @@ class WideButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // ignore: deprecated_member_use
-    return FlatButton(
+    /* return FlatButton(
       onPressed: onPressed,
       disabledColor: Get.theme.colors().surface,
       minWidth: double.infinity,
@@ -64,6 +65,17 @@ class WideButton extends StatelessWidget {
         text,
         style: TextStyleHelper.button(
             color: textColor ?? Get.theme.colors().onNavBar),
+      ),
+    ); */
+
+    return PlatformTextButton(
+      onPressed: onPressed,
+      disabledColor: Get.theme.colors().surface,
+      color: color ?? Get.theme.colors().primary,
+      padding: padding,
+      child: Text(
+        text,
+        style: TextStyleHelper.button(color: textColor ?? Get.theme.colors().onNavBar),
       ),
     );
   }

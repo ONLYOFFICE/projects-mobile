@@ -81,9 +81,8 @@ class DownloadService {
     var waitTask = true;
     while (waitTask) {
       final query = "SELECT * FROM task WHERE task_id='$taskId'";
-      final _tasks =
-          await (FlutterDownloader.loadTasksWithRawQuery(query: query)
-              as FutureOr<List<DownloadTask>>);
+      final _tasks = await (FlutterDownloader.loadTasksWithRawQuery(query: query)
+          as FutureOr<List<DownloadTask>>);
       final taskStatus = _tasks[0].status.toString();
       final taskProgress = _tasks[0].progress;
       if (taskStatus == 'DownloadTaskStatus(3)' && taskProgress == 100) {
@@ -94,6 +93,5 @@ class DownloadService {
     await FlutterDownloader.open(taskId: taskId);
   }
 
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {}
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {}
 }

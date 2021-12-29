@@ -31,14 +31,15 @@
  */
 
 import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
@@ -47,23 +48,21 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
 
 class ProjectMilestonesScreen extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
+  final MilestonesDataSource controller;
   const ProjectMilestonesScreen({
     Key? key,
-    required this.projectDetailed,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<MilestonesDataSource>();
-    controller.setup(projectDetailed: projectDetailed);
     return Stack(
       children: [
         _Content(controller: controller),
@@ -76,7 +75,7 @@ class ProjectMilestonesScreen extends StatelessWidget {
                 visible: controller.fabIsVisible.value,
                 child: StyledFloatingActionButton(
                   onPressed: () => Get.find<NavigationController>().to(const NewMilestoneView(),
-                      arguments: {'projectDetailed': projectDetailed}),
+                      arguments: {'projectDetailed': controller.projectDetailed}),
                   child: AppIcon(
                     icon: SvgIcons.fab_milestone,
                     color: Get.theme.colors().onPrimarySurface,
@@ -105,10 +104,6 @@ class _Content extends StatelessWidget {
       () => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Visibility(
-              visible:
-                  controller.itemList.isNotEmpty || controller.filterController.hasFilters.value,
-              child: Header()),
           (() {
             if (!controller.loaded.value) return const ListLoadingSkeleton();
 
@@ -149,49 +144,98 @@ class _Content extends StatelessWidget {
   }
 }
 
-class Header extends StatelessWidget {
-  Header({
+class ProjectMilestonesFilterButton extends StatelessWidget {
+  const ProjectMilestonesFilterButton({
     Key? key,
+    required this.controller,
   }) : super(key: key);
-  final controller = Get.find<MilestonesDataSource>();
+
+  final MilestonesDataSource controller;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async =>
+          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
+
+    );
+  }
+}
+
+
+class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const ProjectMilestonesSortButton({
+
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final MilestonesDataSource controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _ProjectMilestonesSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async =>
-                          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+        Obx(
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
           ),
+        ),
+        const SizedBox(width: 8),
+        Obx(
+          () => (controller.sortController.currentSortOrder == 'ascending')
+              ? AppIcon(
+                  icon: SvgIcons.sorting_4_ascend,
+                  color: Get.theme.colors().primary,
+                  width: 20,
+                  height: 20,
+                )
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(math.pi),
+                  child: AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
         ),
       ],
     );
   }
 }
 
-class _ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixin {
-  const _ProjectMilestonesSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+void milestonesSortButtonOnPressed(MilestonesDataSource controller, BuildContext context) async {
+  Future<void> showPopupMenu(
+      {required BuildContext context,
+      required List<Widget> options,
+      required Offset offset}) async {
+    final items = options.map((e) => PopupMenuItem(child: e)).toList();
 
-  final MilestonesDataSource controller;
+    // calculate the menu position, offset dy: 50
+    // final offset = const Offset(0, 50);
+    final button = context.findRenderObject() as RenderBox;
+    final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+    final position = RelativeRect.fromRect(
+      Rect.fromPoints(
+        button.localToGlobal(
+          offset,
+          ancestor: overlay,
+        ),
+        button.localToGlobal(
+          button.size.bottomRight(Offset.zero) + offset,
+          ancestor: overlay,
+        ),
+      ),
+      Offset.zero & overlay.size,
+    );
+
+    await showMenu(context: context, position: position, items: items);
+  }
 
   List<SortTile> _getSortTile() {
     return [
@@ -201,61 +245,22 @@ class _ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMix
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            final options = Column(
-              children: [
-                const SizedBox(height: 14.5),
-                const Divider(height: 9, thickness: 1),
-                ..._getSortTile(),
-                const SizedBox(height: 20)
-              ],
-            );
-            await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-          } else {
-            await showPopupMenu(
-              context: context,
-              options: _getSortTile(),
-              offset: const Offset(0, 30),
-            );
-          }
-        },
-        child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (controller.sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      color: Get.theme.colors().primary,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        color: Get.theme.colors().primary,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
+  if (Get.find<PlatformController>().isMobile) {
+    final options = Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        ..._getSortTile(),
+        const SizedBox(height: 20)
+      ],
+    );
+    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
+  } else {
+    await showPopupMenu(
+      context: context,
+      options: _getSortTile(),
+      offset: const Offset(0, 30),
+
     );
   }
 }

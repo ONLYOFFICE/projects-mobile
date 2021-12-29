@@ -39,6 +39,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class PasscodeSettingsScreen extends StatelessWidget {
   const PasscodeSettingsScreen({Key? key}) : super(key: key);
@@ -59,7 +61,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
           titleText: tr('passcodeLock'),
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           onLeadingPressed: controller.leavePasscodeSettingsScreen,
-          backButtonIcon: const Icon(Icons.arrow_back_rounded),
+          backButtonIcon: Icon(PlatformIcons(context).back),
         ),
         body: Obx(
           () {
@@ -129,7 +131,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                 ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return Center(child: PlatformCircularProgressIndicator());
             }
           },
         ),

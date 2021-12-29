@@ -89,10 +89,8 @@ class CommentsService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.reply
       });
       return result.response;
@@ -102,8 +100,7 @@ class CommentsService {
     }
   }
 
-  Future<PortalComment?> addTaskComment(
-      {required int taskId, required String content}) async {
+  Future<PortalComment?> addTaskComment({required int taskId, required String content}) async {
     final result = await _api.addTaskComment(taskId: taskId, content: content);
     final success = result.response != null;
 
@@ -117,8 +114,7 @@ class CommentsService {
 
   Future<PortalComment?> addMessageComment(
       {required int messageId, required String content}) async {
-    final result =
-        await _api.addMessageComment(messageId: messageId, content: content);
+    final result = await _api.addMessageComment(messageId: messageId, content: content);
     final success = result.response != null;
 
     if (success) {
@@ -134,10 +130,8 @@ class CommentsService {
     final success = task.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.reply
       });
       return task.response;
@@ -160,9 +154,7 @@ class CommentsService {
   }
 
   Future<String> getTaskCommentLink(
-      {required int taskId,
-      required int projectId,
-      required String commentId}) async {
+      {required int taskId, required int projectId, required String commentId}) async {
     return _api.getTaskCommentLink(
       taskId: taskId,
       projectId: projectId,
@@ -170,17 +162,13 @@ class CommentsService {
     );
   }
 
-  Future<dynamic> updateComment(
-      {required String commentId, required String content}) async {
-    final result =
-        await _api.updateComment(commentId: commentId, content: content);
+  Future<dynamic> updateComment({required String commentId, required String content}) async {
+    final result = await _api.updateComment(commentId: commentId, content: content);
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
         AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.reply
       });
       return result.response;

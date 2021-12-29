@@ -34,6 +34,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class SearchField extends StatelessWidget {
   final bool autofocus;
@@ -73,7 +75,7 @@ class SearchField extends StatelessWidget {
       height: height,
       width: width,
       margin: margin,
-      child: TextField(
+      child: PlatformTextField(
         controller: controller,
         onSubmitted: onSubmitted,
         onChanged: onChanged,
@@ -92,7 +94,8 @@ class SearchField extends StatelessWidget {
             suffixIcon: showClearIcon
                 ? GestureDetector(
                     onTap: onClearPressed,
-                    child: const SizedBox(height: 32, width: 32, child: Icon(Icons.clear_rounded)))
+                    child:
+                        SizedBox(height: 32, width: 32, child: Icon(PlatformIcons(context).clear)))
                 : GestureDetector(
                     onTap: onSuffixTap, child: SizedBox(height: 32, child: suffixIcon))),
       ),

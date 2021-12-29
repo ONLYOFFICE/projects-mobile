@@ -41,28 +41,33 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key? key}) : super(key: key);
-  final controller = Get.find<LoginController>();
+  const PortalInputView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<LoginController>();
+    
     if (Get.isRegistered<AccountManagerController>()) {
       Get.find<AccountManagerController>();
     } else {
       Get.put(AccountManagerController()).setup();
     }
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Obx(
-          () => controller.state.value == ViewState.Busy
-              ? SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator()))
-              : Center(
+    return Obx(
+      () => controller.state.value == ViewState.Busy
+          ? Scaffold(
+              body: SizedBox(
+                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator())),
+            )
+          : Scaffold(
+              body: SingleChildScrollView(
+                child: Center(
+
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
@@ -83,6 +88,7 @@ class PortalInputView extends StatelessWidget {
                             hintText: tr('portalAdress'),
                             validator: controller.emailValidator,
                             hasError: controller.portalFieldError.value == true,
+                            keyboardType: TextInputType.url,
                           ),
                         ),
                         SizedBox(height: Get.height * 0.033),
@@ -117,8 +123,8 @@ class PortalInputView extends StatelessWidget {
                     ),
                   ),
                 ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }

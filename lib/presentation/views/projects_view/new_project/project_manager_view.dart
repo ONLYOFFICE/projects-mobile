@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -70,8 +71,8 @@ class ProjectManagerSelectionView extends StatelessWidget {
         titleText: tr('selectPM'),
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         bottom: Container(
           height: 40,
           margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),

@@ -40,7 +40,7 @@ class _AppBarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final task = controller!.task.value;
     return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
+      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
       offset: const Offset(0, 25),
       onSelected: (dynamic value) => _onSelected(value, controller!),
       itemBuilder: (context) {
@@ -114,7 +114,6 @@ void _onSelected(value, TaskItemController controller) async {
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);
           if (result) {
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
             locator<EventHub>().fire('needToRefreshTasks');
 
             Get.back();

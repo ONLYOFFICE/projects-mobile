@@ -33,61 +33,83 @@
 import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:launch_review/launch_review.dart';
-import 'package:projects/data/services/analytics_service.dart';
-import 'package:projects/internal/constants.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:path/path.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/files_service.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
-
+import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class DiscussionsDocumentsController extends GetxController {
+class DiscussionsDocumentsController extends GetxController implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
   final _userController = Get.find<UserController>();
 
+  @override
   RxBool hasFilters = false.obs;
+  @override
   RxBool loaded = false.obs;
+  @override
   RxBool nothingFound = false.obs;
+  @override
   RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
 
   late PaginationController _paginationController;
+
+  @override
   PaginationController get paginationController => _paginationController;
+
+  @override
   RxList get itemList => _paginationController.data;
 
   String? _entityType;
 
   String? get entityType => _entityType;
-  set entityType(String? value) => {_entityType = value, _filterController!.entityType = value};
+
+  set entityType(String? value) => {_entityType = value, _filterController.entityType = value};
 
   int? _currentFolderId;
-  int? get currentFolder => _currentFolderId;
 
-  var screenName = tr('documents').obs;
+  @override
+  int? get currentFolderID => _currentFolderId;
 
-  DocumentsSortController? _sortController;
-  DocumentsSortController? get sortController => _sortController;
+  @override
+  RxString documentsScreenName = tr('documents').obs;
 
-  DocumentsFilterController? _filterController;
-  DocumentsFilterController? get filterController => _filterController;
+  @override
+  late String screenName = tr('documents');
+
+  late DocumentsSortController _sortController;
+
+  @override
+  DocumentsSortController get sortController => _sortController;
+
+  late DocumentsFilterController _filterController;
+
+  @override
+  DocumentsFilterController get filterController => _filterController;
 
   bool get canCopy => false;
+
   bool get canMove => false;
+
   bool get canRename => false;
+
   bool get canDelete => !_userController.user!.isVisitor!;
 
   DiscussionsDocumentsController(
@@ -98,7 +120,7 @@ class DiscussionsDocumentsController extends GetxController {
     _sortController = sortController;
     _paginationController = paginationController;
     _filterController = filterController;
-    _filterController!.applyFiltersDelegate = () async => {}; // await refreshContent();
+    _filterController.applyFiltersDelegate = () async => {}; // await refreshContent();
     sortController.updateSortDelegate = () async => {}; //await refreshContent();
     paginationController.loadDelegate = () async => {}; //await _getDocuments();
     paginationController.refreshDelegate = () async => {}; //await refreshContent();
@@ -182,5 +204,18 @@ class DiscussionsDocumentsController extends GetxController {
         writeReview: false,
       );
     }
+  }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
+
+  @override
+  void showSearch() {
+    // TODO: implement showSearch
   }
 }

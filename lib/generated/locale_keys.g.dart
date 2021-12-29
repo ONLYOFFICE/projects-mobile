@@ -32,7 +32,7 @@
 
 // DO NOT EDIT. This is code generated via package:easy_localization/generate.dart
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const appName = 'appName';
   static const appDescription = 'appDescription';
   static const emailAddress = 'emailAddress';
@@ -385,5 +385,4 @@ abstract class  LocaleKeys {
   static const noCommentsCreated = 'noCommentsCreated';
   static const noDiscussionsCreated = 'noDiscussionsCreated';
   static const noDiscussionsMatching = 'noDiscussionsMatching';
-
 }

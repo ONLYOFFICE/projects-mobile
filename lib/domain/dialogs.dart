@@ -111,8 +111,7 @@ Map _blockingErrors = {
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
   'the paid period is over': 'The paid period is over',
-  'access to the projects module is forbidden':
-      'Access to the Projects module is Forbidden',
+  'access to the projects module is forbidden': 'Access to the Projects module is Forbidden',
   'contact the portal administrator for access to the projects module.':
       'Contact the portal administrator for access to the Projects module.',
 };

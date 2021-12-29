@@ -54,6 +54,7 @@ class TasksController extends BaseController {
   final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
 
   late PaginationController<PortalTask> _paginationController;
+
   PaginationController<PortalTask> get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
@@ -187,15 +188,15 @@ class TasksController extends BaseController {
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
         (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets!.activeProjectsController!.itemList.isEmpty) {
-        await projectsWithPresets!.activeProjectsController!.loadProjects();
+      if (projectsWithPresets!.activeProjectsController.itemList.isEmpty) {
+        await projectsWithPresets!.activeProjectsController.loadProjects();
       }
-      fabVisibility = projectsWithPresets!.activeProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets!.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (projectsWithPresets!.myProjectsController!.itemList.isEmpty) {
-        await projectsWithPresets!.myProjectsController!.loadProjects();
+      if (projectsWithPresets!.myProjectsController.itemList.isEmpty) {
+        await projectsWithPresets!.myProjectsController.loadProjects();
       }
-      fabVisibility = projectsWithPresets!.myProjectsController!.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets!.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

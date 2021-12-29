@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
 
 class StyledAlertDialog extends StatelessWidget {
   final Widget? title;
@@ -58,13 +59,12 @@ class StyledAlertDialog extends StatelessWidget {
     this.onAcceptTap,
     // Default: pop window
     this.onCancelTap,
-  })  : assert(titleText != null || title != null,
-            content != null || contentText != null),
+  })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return PlatformAlertDialog(
       titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
       contentPadding: contentText != null || content != null
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
@@ -76,15 +76,13 @@ class StyledAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: onCancelTap ?? Get.back,
-          child:
-              Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
+          child: Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
         ),
         TextButton(
           onPressed: onAcceptTap,
           child: Text(
             acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(
-                color: acceptColor ?? Get.theme.colors().colorError),
+            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
       ],
@@ -111,13 +109,12 @@ class SingleButtonDialog extends StatelessWidget {
     this.titleText,
     this.contentText,
     this.onAcceptTap,
-  })  : assert(titleText != null || title != null,
-            content != null || contentText != null),
+  })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
+    return PlatformAlertDialog(
       titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
       contentPadding: contentText != null || content != null
           ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
@@ -136,8 +133,7 @@ class SingleButtonDialog extends StatelessWidget {
           onPressed: onAcceptTap,
           child: Text(
             acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(
-                color: acceptColor ?? Get.theme.colors().colorError),
+            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
       ],

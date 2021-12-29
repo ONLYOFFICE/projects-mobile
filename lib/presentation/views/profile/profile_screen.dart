@@ -47,6 +47,8 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class SelfProfileScreen extends StatelessWidget {
@@ -77,12 +79,12 @@ class SelfProfileScreen extends StatelessWidget {
           showBackButton: showBackButton,
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
           titleText: tr('profile'),
           actions: [
             if (showSettingsButton)
-              IconButton(
+              PlatformIconButton(
                 icon: const AppIcon(icon: SvgIcons.settings),
                 onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
               )

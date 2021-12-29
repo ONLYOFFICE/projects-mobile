@@ -37,7 +37,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:get/get.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/remote_config_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
@@ -63,6 +63,7 @@ void main() async {
 
   await Firebase.initializeApp();
   await RemoteConfigService.initialize();
+  await RemoteConfigService.fetchAndActivate();
 
   runApp(
     EasyLocalization(
@@ -120,7 +121,7 @@ Future<bool> isAuthorized() async {
   return true;
 }
 
-class App extends GetMaterialApp {
+class App extends StatelessWidget {
   final String? initialPage;
 
   const App({Key? key, this.initialPage}) : super(key: key);
@@ -142,6 +143,8 @@ class App extends GetMaterialApp {
         theme: lightTheme,
         darkTheme: darkTheme,
         themeMode: ThemeService().savedThemeMode(),
+        // cupertinoTheme: lightCupertinoTheme,
+        //cupertinoTheme: cupertinoTheme,
       ),
     );
   }

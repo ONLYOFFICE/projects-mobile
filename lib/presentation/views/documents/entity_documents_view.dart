@@ -36,8 +36,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -47,7 +47,6 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
@@ -70,22 +69,23 @@ class EntityDocumentsView extends StatelessWidget {
 
     return DocumentsScreen(
       controller: documentsController,
-      scrollController: scrollController,
-      appBar: documentsController.itemList.isNotEmpty ||
-              documentsController.filterController.hasFilters.value
-          ? PreferredSize(
-              preferredSize: const Size(double.infinity, 50),
-              child: ValueListenableBuilder(
-                valueListenable: elevation,
-                builder: (_, double value, __) => StyledAppBar(
-                  title: _DocsTitle(controller: documentsController),
-                  showBackButton: false,
-                  titleHeight: 50,
-                  elevation: value,
-                ),
-              ),
-            )
-          : null,
+      // scrollController: scrollController,
+      // appBar: documentsController.itemList.isNotEmpty ||
+      //         documentsController.filterController.hasFilters.value
+      //     ? PreferredSize(
+      //         preferredSize: const Size(double.infinity, 50),
+      //         child: ValueListenableBuilder(
+      //           valueListenable: elevation,
+      //           builder: (_, double value, __) => StyledAppBar(
+      //             title: _DocsTitle(controller: documentsController),
+      //             showBackButton: false,
+      //             titleHeight: 50,
+      //             elevation: value,
+      //           ),
+      //         ),
+      //       )
+      //     : null,
+
     );
   }
 }
@@ -107,18 +107,18 @@ class TaskDocumentsView extends StatelessWidget {
 
     return DocumentsScreen(
       controller: documentsController,
-      scrollController: scrollController,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 0),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            showBackButton: false,
-            titleHeight: 0,
-            elevation: value,
-          ),
-        ),
-      ),
+      // scrollController: scrollController,
+      // appBar: PreferredSize(
+      //   preferredSize: const Size(double.infinity, 0),
+      //   child: ValueListenableBuilder(
+      //     valueListenable: elevation,
+      //     builder: (_, double value, __) => StyledAppBar(
+      //       showBackButton: false,
+      //       titleHeight: 0,
+      //       elevation: value,
+      //     ),
+      //   ),
+      // ),
     );
   }
 }
@@ -147,12 +147,12 @@ class DiscussionsDocumentsView extends StatelessWidget {
               valueListenable: elevation,
               builder: (_, double value, __) => DocumentsScreen(
                 controller: documentsController,
-                scrollController: scrollController,
-                appBar: StyledAppBar(
-                  showBackButton: false,
-                  titleHeight: 0,
-                  elevation: value,
-                ),
+                // scrollController: scrollController,
+                // appBar: StyledAppBar(
+                //   showBackButton: false,
+                //   titleHeight: 0,
+                //   elevation: value,
+                // ),
               ),
             ),
           );
@@ -167,6 +167,7 @@ class DiscussionsDocumentsView extends StatelessWidget {
 class _DocsTitle extends StatelessWidget {
   const _DocsTitle({Key? key, required this.controller}) : super(key: key);
   final DocumentsController controller;
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -185,8 +186,10 @@ class _DocsTitle extends StatelessWidget {
                   onTap: () {
                     Get.find<NavigationController>()
                         .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                      'folderName': controller.screenName.value,
-                      'folderId': controller.currentFolder,
+
+                      'folderName': controller.documentsScreenName.value,
+                      'folderId': controller.currentFolderID,
+
                       'entityType': controller.entityType,
                     });
                   },
@@ -203,7 +206,8 @@ class _DocsTitle extends StatelessWidget {
                       const DocumentsFilterScreen(),
                       preventDuplicates: false,
                       arguments: {'filterController': controller.filterController}),
-                  child: FiltersButton(controler: controller),
+                  child: FiltersButton(controller: controller),
+
                 ),
               ],
             ),

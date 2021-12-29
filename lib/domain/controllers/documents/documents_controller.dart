@@ -33,35 +33,38 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:launch_review/launch_review.dart';
-import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:launch_review/launch_review.dart';
 import 'package:path/path.dart';
-import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/data/services/analytics_service.dart';
-import 'package:projects/internal/constants.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/data/services/analytics_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/files_service.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
+import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class DocumentsController extends GetxController
-    implements BaseDocumentsController {
+class DocumentsController extends GetxController implements BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
+  @override
   RxBool hasFilters = false.obs;
+  @override
   RxBool loaded = false.obs;
+  @override
   RxBool nothingFound = false.obs;
+  @override
   RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
@@ -78,14 +81,18 @@ class DocumentsController extends GetxController
 
   @override
   PaginationController get paginationController => _paginationController;
+
+  @override
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   int? _currentFolderId;
 
-  int? get currentFolder => _currentFolderId;
+  @override
+  int? get currentFolderID => _currentFolderId;
 
-  var screenName = tr('documents').obs;
+  @override
+  RxString documentsScreenName = tr('documents').obs;
 
   RxInt filesCount = RxInt(-1);
 
@@ -96,6 +103,7 @@ class DocumentsController extends GetxController
 
   late DocumentsFilterController _filterController;
 
+  @override
   DocumentsFilterController get filterController => _filterController;
 
   late StreamSubscription _refreshDocumentsSubscription;
@@ -133,7 +141,7 @@ class DocumentsController extends GetxController
     if (_currentFolderId == null) {
       await initialSetup();
     } else
-      await setupFolder(folderId: _currentFolderId, folderName: screenName.value);
+      await setupFolder(folderId: _currentFolderId, folderName: documentsScreenName.value);
   }
 
   Future<void> initialSetup() async {
@@ -150,7 +158,8 @@ class DocumentsController extends GetxController
     _clear();
     _currentFolderId = folderId;
     _filterController.folderId = _currentFolderId;
-    screenName.value = folderName;
+    documentsScreenName.value = folderName;
+    screenName = folderName;
     await _getDocuments();
 
     loaded.value = true;
@@ -189,7 +198,8 @@ class DocumentsController extends GetxController
       filesCount.value = result.files!.length;
     }
 
-    screenName.value = _screenName ?? tr('documents');
+    documentsScreenName.value = _screenName ?? tr('documents');
+    screenName = _screenName ?? tr('documents');
 
     return Future.value(true);
   }
@@ -316,4 +326,20 @@ class DocumentsController extends GetxController
       );
     }
   }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
+
+  @override
+  void showSearch() {
+    // TODO: implement showSearch
+  }
+
+  @override
+  String screenName = tr('documents');
 }

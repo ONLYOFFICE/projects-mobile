@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/filters/filter_element_widg
 import 'package:projects/presentation/shared/widgets/select_item_screens/select_group_screen.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 part 'filters/document_type.dart';
 part 'filters/search_settings.dart';
@@ -72,8 +73,8 @@ class DocumentsFilterScreen extends StatelessWidget {
         showBackButton: true,
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         actions: [
           TextButton(
               onPressed: () async => filterController.resetFilters(),

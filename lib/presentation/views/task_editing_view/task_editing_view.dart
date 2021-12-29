@@ -37,6 +37,8 @@ import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';
@@ -69,7 +71,10 @@ class TaskEditingView extends StatelessWidget {
           titleText: tr('editTask'),
           onLeadingPressed: controller.discardChanges,
           actions: [
-            IconButton(icon: const Icon(Icons.done_rounded), onPressed: controller.confirm)
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).checkMark),
+              onPressed: controller.confirm,
+            )
           ],
         ),
         body: SingleChildScrollView(
@@ -107,7 +112,7 @@ class TaskEditingView extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 8, bottom: 8),
                               child: Obx(() => Text(controller.newStatus.value!.title!,
                                   style: TextStyleHelper.subtitle2())))),
-                      const Icon(Icons.arrow_drop_down_sharp)
+                      Icon(PlatformIcons(context).downChevron)
                     ],
                   ),
                 ),

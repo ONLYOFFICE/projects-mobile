@@ -43,19 +43,18 @@ class NewMilestoneDTO {
   String? responsible;
   bool? notifyResponsible;
 
-  NewMilestoneDTO({this.title,
-    this.deadline,
-    this.isKey,
-    this.isNotify,
-    this.description,
-    this.responsible,
-    this.notifyResponsible});
+  NewMilestoneDTO(
+      {this.title,
+      this.deadline,
+      this.isKey,
+      this.isNotify,
+      this.description,
+      this.responsible,
+      this.notifyResponsible});
 
   NewMilestoneDTO.fromJson(Map<String, dynamic> json) {
     title = json['title'] as String?;
-    deadline = json['deadline'] != null
-        ? DateTime.parse(json['deadline'] as String)
-        : null;
+    deadline = json['deadline'] != null ? DateTime.parse(json['deadline'] as String) : null;
     isKey = json['isKey'] as bool?;
     isNotify = json['isNotify'] as bool?;
     description = json['description'] as String?;

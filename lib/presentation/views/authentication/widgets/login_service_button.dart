@@ -48,10 +48,7 @@ class LoginItem extends StatelessWidget {
             color: Colors.white,
             borderRadius: BorderRadius.circular(5),
             boxShadow: const [
-              BoxShadow(
-                  blurRadius: 3,
-                  offset: Offset(0, 2),
-                  color: Color.fromARGB(80, 0, 0, 0))
+              BoxShadow(blurRadius: 3, offset: Offset(0, 2), color: Color.fromARGB(80, 0, 0, 0))
             ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

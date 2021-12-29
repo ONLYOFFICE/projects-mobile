@@ -90,18 +90,14 @@ class NewItemTile extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                        vertical:
-                            caption != null && caption!.isNotEmpty ? 10 : 18),
+                        vertical: caption != null && caption!.isNotEmpty ? 10 : 18),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (caption != null && caption!.isNotEmpty)
                           Text(caption!,
                               style: TextStyleHelper.caption(
-                                  color: Get.theme
-                                      .colors()
-                                      .onBackground
-                                      .withOpacity(0.75))),
+                                  color: Get.theme.colors().onBackground.withOpacity(0.75))),
                         Text(text!,
                             maxLines: maxLines,
                             overflow: textOverflow,
@@ -112,10 +108,7 @@ class NewItemTile extends StatelessWidget {
                                         ? textColor
                                         : isSelected!
                                             ? Get.theme.colors().onBackground
-                                            : Get.theme
-                                                .colors()
-                                                .onSurface
-                                                .withOpacity(0.4))),
+                                            : Get.theme.colors().onSurface.withOpacity(0.4))),
                       ],
                     ),
                   ),
@@ -158,8 +151,7 @@ class _Icon extends StatelessWidget {
               color: selectedIconColor != null
                   ? isSelected!
                       ? selectedIconColor
-                      : iconColor ??
-                          Get.theme.colors().onSurface.withOpacity(0.4)
+                      : iconColor ?? Get.theme.colors().onSurface.withOpacity(0.4)
                   : iconColor ?? Get.theme.colors().onSurface.withOpacity(0.4),
             )
           : null,

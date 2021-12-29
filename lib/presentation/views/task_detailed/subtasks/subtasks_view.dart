@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class SubtasksView extends StatelessWidget {
   final TaskItemController controller;
+
   const SubtasksView({
     Key? key,
     required this.controller,

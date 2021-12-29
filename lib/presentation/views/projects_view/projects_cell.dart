@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -43,32 +42,31 @@ import 'package:projects/domain/controllers/projects/project_cell_controller.dar
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
-  final ProjectDetailed item;
-  const ProjectCell({Key? key, required this.item}) : super(key: key);
+  final ProjectDetailed projectDetails;
+  const ProjectCell({Key? key, required this.projectDetails}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final itemController = Get.find<ProjectCellController>();
-    itemController.setup(item);
+    final itemController = Get.find<ProjectCellController>()..setup(projectDetails);
 
     return SizedBox(
       height: 72,
       child: InkWell(
         onTap: () => Get.find<NavigationController>()
-            .to(ProjectDetailedView(), arguments: {'projectDetailed': itemController.projectData}),
+            .to(ProjectDetailedView(), arguments: {'projectDetailed': projectDetails}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (item.canEdit!)
+            if (projectDetails.canEdit!)
               InkWell(
                 onTap: () async =>
                     showsStatusesBS(context: context, itemController: itemController),
@@ -85,13 +83,12 @@ class ProjectCell extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _Content(
-                          item: item,
+                          item: projectDetails,
                           itemController: itemController,
                         ),
                         const Spacer(),
                         _Suffix(
-                          item: item,
-                          controller: itemController,
+                          projectDetailed: projectDetails,
                         ),
                       ],
                     ),
@@ -243,12 +240,10 @@ class _Content extends StatelessWidget {
 class _Suffix extends StatelessWidget {
   const _Suffix({
     Key? key,
-    required this.item,
-    required this.controller,
+    required this.projectDetailed,
   }) : super(key: key);
 
-  final ProjectDetailed? item;
-  final ProjectCellController controller;
+  final ProjectDetailed projectDetailed;
 
   @override
   Widget build(BuildContext context) {
@@ -264,9 +259,10 @@ class _Suffix extends StatelessWidget {
             SizedBox(
               width: 20,
               child: Text(
-                item!.taskCount.toString(),
+                projectDetailed.taskCount.toString(),
                 overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.projectCompleatedTasks.copyWith(
+                style: TextStyleHelper.projectCompletedTasks.copyWith(
+
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
               ),
@@ -390,7 +386,7 @@ void showsStatusesPM(
   ];
 
 // calculate the menu position, ofsset dy: 50
-  final offset = const Offset(0, 50);
+  const offset = Offset(0, 50);
   final button = context.findRenderObject() as RenderBox;
   final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
   final position = RelativeRect.fromRect(
@@ -409,7 +405,6 @@ void showsStatusesPM(
 
   await showMenu(context: context, position: position, items: items);
 }
-
 
 double _getInititalSize({required int statusCount}) {
   final size = (statusCount * 50 + 65) / Get.height;

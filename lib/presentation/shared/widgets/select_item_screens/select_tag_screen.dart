@@ -58,15 +58,12 @@ class _TagList extends StatelessWidget with SelectItemListMixin {
   const _TagList({Key? key}) : super(key: key);
 
   @override
-  PaginationController get paginationController =>
-      Get.find<TagsController>().paginationController;
+  PaginationController get paginationController => Get.find<TagsController>().paginationController;
 
   @override
   Widget Function(BuildContext context, int index) get itemBuilder => (_, i) {
         final tag = paginationController.data[i] as ProjectTag;
         return SelectItemTile(
-            title: tag.title,
-            onSelect: () =>
-                Get.back(result: {'id': tag.id, 'title': tag.title}));
+            title: tag.title, onSelect: () => Get.back(result: {'id': tag.id, 'title': tag.title}));
       };
 }

@@ -39,12 +39,13 @@ import 'package:projects/domain/controllers/documents/documents_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
-
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class FileCell extends StatelessWidget {
@@ -124,7 +125,8 @@ class FileCell extends StatelessWidget {
                 child: PopupMenuButton(
                   onSelected: (dynamic value) =>
                       {_onFilePopupMenuSelected(value, entity, context, controller)},
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(PlatformIcons(context).ellipsis,
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -203,7 +205,7 @@ Future<void> _onFilePopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
         'target': selectedFile.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
         'refreshCalback': controller.refreshContent
       });
       break;
@@ -212,7 +214,7 @@ Future<void> _onFilePopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
         'target': selectedFile.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
         'refreshCalback': controller.refreshContent
       });
 
@@ -242,7 +244,7 @@ void _renameFile(
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFile'),
-      content: TextField(
+      content: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,

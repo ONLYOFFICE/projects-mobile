@@ -40,14 +40,14 @@ class TasksWithPresets {
   TasksController? _myTasksController;
   TasksController? _upcomingTaskscontroller;
 
-  TasksController? get myTasksController {
+  TasksController get myTasksController {
     _myTasksController ?? setupMyTasks();
-    return _myTasksController;
+    return _myTasksController!;
   }
 
-  TasksController? get upcomingTasksController {
+  TasksController get upcomingTasksController {
     _upcomingTaskscontroller ?? setupUpcomingTasks();
-    return _upcomingTaskscontroller;
+    return _upcomingTaskscontroller!;
   }
 
   void setupMyTasks() {

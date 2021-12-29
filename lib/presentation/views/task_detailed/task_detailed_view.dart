@@ -44,6 +44,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
@@ -102,8 +104,8 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
         appBar: StyledAppBar(
           actions: [
             if (taskItemController.canEdit)
-              IconButton(
-                icon: const Icon(Icons.edit_outlined),
+              PlatformIconButton(
+                icon: Icon(PlatformIcons(context).edit),
                 onPressed: () => Get.find<NavigationController>()
                     .to(TaskEditingView(task: taskItemController.task.value)),
               ),

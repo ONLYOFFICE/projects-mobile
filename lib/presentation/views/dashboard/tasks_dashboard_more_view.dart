@@ -43,6 +43,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 import 'package:projects/presentation/views/tasks/tasks_view.dart';
@@ -57,11 +58,10 @@ class TasksDashboardMoreView extends StatelessWidget {
     final scrollController = ScrollController();
     final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
@@ -83,7 +83,7 @@ class TasksDashboardMoreView extends StatelessWidget {
             titleText: controller.screenName,
             elevation: value,
             actions: [
-              IconButton(
+              PlatformIconButton(
                 icon: AppIcon(
                   width: 24,
                   height: 24,
@@ -100,22 +100,18 @@ class TasksDashboardMoreView extends StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
+          if (controller.loaded.value == false) return const ListLoadingSkeleton();
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               !controller.filterController.hasFilters.value) {
             return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.task_not_created,
-                    text: tr('noTasksCreated')));
+                child: EmptyScreen(icon: SvgIcons.task_not_created, text: tr('noTasksCreated')));
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController.hasFilters.value) {
             return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+              child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
             );
           }
           return PaginationListView(
@@ -125,8 +121,7 @@ class TasksDashboardMoreView extends StatelessWidget {
               controller: scrollController,
               itemCount: controller.paginationController.data.length,
               itemBuilder: (BuildContext context, int index) {
-                return TaskCell(
-                    task: controller.paginationController.data[index]);
+                return TaskCell(task: controller.paginationController.data[index]);
               },
             ),
           );

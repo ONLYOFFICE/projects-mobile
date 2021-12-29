@@ -57,6 +57,7 @@ class ProjectsController extends BaseController {
 
   late PaginationController<ProjectDetailed> _paginationController;
   PaginationController<ProjectDetailed> get paginationController => _paginationController;
+
   @override
   RxList get itemList => _paginationController.data;
 
@@ -66,6 +67,7 @@ class ProjectsController extends BaseController {
   ProjectsSortController get sortController => _sortController;
 
   ProjectsFilterController? _filterController;
+
   ProjectsFilterController? get filterController => _filterController;
 
   final _userController = Get.find<UserController>();

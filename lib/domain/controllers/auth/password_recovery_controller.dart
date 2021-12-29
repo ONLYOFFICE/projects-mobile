@@ -56,8 +56,7 @@ class PasswordRecoveryController extends GetxController {
 
   Future onConfirmPressed() async {
     if (_checkEmail()) {
-      final result =
-          await _authService.passwordRecovery(email: _emailController.text);
+      final result = await _authService.passwordRecovery(email: _emailController.text);
       if (result != null) await Get.to(() => const PasswordRecoveryScreen2());
     }
   }
