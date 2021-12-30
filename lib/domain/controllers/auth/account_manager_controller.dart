@@ -65,18 +65,20 @@ class AccountManagerController extends GetxController {
       await portalInfo.setup();
       await Get.find<UserController>().getUserInfo();
       final user = Get.find<UserController>().user;
-      final portalName = Get.find<PortalInfoController>().portalName!;
-      final portalUri = Get.find<PortalInfoController>().portalUri!;
+
+      final portalUri = Uri.parse(Get.find<PortalInfoController>().portalUri!);
       final avatarUrl = user!.avatar!.contains('http') ? user.avatar : '$portalUri${user.avatar}';
 
       final accountData = AccountData(
           token: tokenString,
-          portal: portalName,
+          portal: portalUri.host,
           login: user.email!,
           expires: expires,
           name: user.displayName!,
           id: user.id!,
-          scheme: Uri.parse(portalUri).scheme,
+          isAdmin: user.isAdmin!,
+          isVisitor: user.isVisitor!,
+          scheme: '${portalUri.scheme}://',
           avatarUrl: avatarUrl!);
       await AccountProvider.addAccount(
           accountData: json.encode(accountData.toJson()), accountId: user.id!);
