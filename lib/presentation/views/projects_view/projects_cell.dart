@@ -372,7 +372,7 @@ void showsStatusesPM(
                 newStatusId: _statusesController.statuses[i],
               );
               if (success) {
-                locator<EventHub>().fire('needToRefreshProjects');
+                locator<EventHub>().fire('needToRefreshProjects', ['all']);
               }
               Get.back();
             },
@@ -409,7 +409,6 @@ void showsStatusesPM(
 
   await showMenu(context: context, position: position, items: items);
 }
-
 
 double _getInititalSize({required int statusCount}) {
   final size = (statusCount * 50 + 65) / Get.height;
