@@ -67,7 +67,7 @@ class MoreView extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.find<NavigationController>().changeTabIndex(4),
             child: Container(
-                height: 76,
+                constraints: const BoxConstraints(minHeight: 76),
                 padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
                 decoration: BoxDecoration(
                   border: Border(

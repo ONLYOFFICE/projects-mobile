@@ -169,18 +169,16 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _ProjectTasksSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async => Get.find<NavigationController>().toScreen(
-                          const TasksFilterScreen(),
-                          preventDuplicates: false,
-                          arguments: {'filterController': controller.filterController}),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
-                ),
+              Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () async => Get.find<NavigationController>().toScreen(
+                        const TasksFilterScreen(),
+                        preventDuplicates: false,
+                        arguments: {'filterController': controller.filterController}),
+                    child: FiltersButton(controler: controller),
+                  ),
+                ],
               ),
             ],
           ),
