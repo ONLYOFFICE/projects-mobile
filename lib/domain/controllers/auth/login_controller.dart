@@ -171,7 +171,16 @@ class LoginController extends GetxController {
 
   Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
-    bool? result;
+    _emailController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _emailController.text.length),
+    );
+
+    _passwordController.text = _passwordController.text.removeAllWhitespace;
+    _passwordController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _passwordController.text.length),
+    );
+
+    var result = true;
 
     emailFieldError.value = false;
     passwordFieldError.value = false;
@@ -181,10 +190,6 @@ class LoginController extends GetxController {
       emailFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => emailFieldError.value = false);
-      // save cursor position
-      emailController.selection = TextSelection.fromPosition(
-        TextPosition(offset: emailController.text.length),
-      );
     }
     if (_passwordController.text.isEmpty) {
       result = false;
@@ -192,7 +197,7 @@ class LoginController extends GetxController {
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => passwordFieldError.value = false);
     }
-    return result ?? true;
+    return result;
   }
 
   Future saveToken(String? token, String? expires) async {
@@ -236,14 +241,14 @@ class LoginController extends GetxController {
     }
 
     _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
+    _portalAdressController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _portalAdressController.text.length),
+    );
 
     if (!(_portalAdressController.text.isURL || _portalAdressController.text.isIPv4)) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
-      _portalAdressController.selection = TextSelection.fromPosition(
-        TextPosition(offset: _portalAdressController.text.length),
-      );
     } else {
       setState(ViewState.Busy);
 
@@ -260,23 +265,6 @@ class LoginController extends GetxController {
 
       setState(ViewState.Idle);
     }
-  }
-
-  String? emailValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Введите корректный email';
-
-    /// regex pattern to validate email inputs.
-    const Pattern _emailPattern =
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]";
-
-    if (RegExp(_emailPattern as String).hasMatch(value)) return null;
-
-    return 'Введите корректный email';
-  }
-
-  String? passValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Введите пароль';
-    return null;
   }
 
   Rx<ViewState> get state => ViewState.Idle.obs;
