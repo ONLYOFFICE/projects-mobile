@@ -66,29 +66,34 @@ class MainController extends GetxController {
   // ignore: unnecessary_cast
   final portalInputView = PortalInputView() as Widget;
 
-  var noInternet = false;
-  var isSessionStarted = false;
+  bool noInternet = false;
+  bool isSessionStarted = false;
   bool correctPasscodeChecked = false;
 
-  var subscriptions = <StreamSubscription>[];
+  final subscriptions = <StreamSubscription>[];
 
   final cookieManager = WebviewCookieManager();
 
-  MainController() {
+  @override
+  void onInit() {
     Connectivity().checkConnectivity().then((result) => {
           noInternet = result == ConnectivityResult.none,
           if (result == ConnectivityResult.none) Get.to(const NoInternetScreen())
         });
 
     _setupSubscriptions();
+
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    cancelAllSubscriptions();
+    super.onClose();
   }
 
   void _setupSubscriptions() {
-    if (subscriptions.isNotEmpty) {
-      for (final item in subscriptions) {
-        item.cancel();
-      }
-    }
+    if (subscriptions.isNotEmpty) cancelAllSubscriptions();
 
     subscriptions.add(Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (noInternet == (result == ConnectivityResult.none)) return;
@@ -123,8 +128,14 @@ class MainController extends GetxController {
       mainPage.value = portalInputView;
 
       GetIt.instance.resetLazySingleton<CoreApi>();
-      await Get.offAll(() => const MainView());
+      Get.offAll(() => const MainView());
     }));
+  }
+
+  void cancelAllSubscriptions() {
+    for (final item in subscriptions) {
+      item.cancel();
+    }
   }
 
   Future<void> setupMainPage() async {
