@@ -48,14 +48,16 @@ class PasswordRecoveryController extends GetxController {
     super.onInit();
   }
 
-  final TextEditingController _emailController = TextEditingController();
-
+  final _emailController = TextEditingController();
   TextEditingController get emailController => _emailController;
 
   RxBool emailFieldError = false.obs;
 
   Future onConfirmPressed() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
+    _emailController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _emailController.text.length),
+    );
 
     if (_checkEmail()) {
       final result = await _authService.passwordRecovery(email: _emailController.text);
@@ -66,6 +68,8 @@ class PasswordRecoveryController extends GetxController {
   bool _checkEmail() {
     if (!_emailController.text.isEmail) {
       emailFieldError.value = true;
+      // ignore: unawaited_futures
+      900.milliseconds.delay().then((_) => emailFieldError.value = false);
       return false;
     } else {
       emailFieldError.value = false;
