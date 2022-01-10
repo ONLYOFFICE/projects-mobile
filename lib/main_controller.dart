@@ -44,6 +44,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
@@ -114,6 +115,8 @@ class MainController extends GetxController {
       Get.find<UserController>().getSecurityInfo();
 
       Get.find<PortalInfoController>().setup();
+
+      Get.find<LoginController>().clearInputFields();
     }));
 
     subscriptions.add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {

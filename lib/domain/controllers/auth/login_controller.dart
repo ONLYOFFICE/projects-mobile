@@ -62,12 +62,13 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  late TextEditingController portalAdressController;
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  late TextEditingController _portalAdressController;
+  TextEditingController get portalAdressController => _portalAdressController;
 
+  late TextEditingController _emailController;
   TextEditingController get emailController => _emailController;
 
+  late TextEditingController _passwordController;
   TextEditingController get passwordController => _passwordController;
 
   RxBool portalFieldError = false.obs;
@@ -78,11 +79,11 @@ class LoginController extends GetxController {
   String? _pass;
   String? _email;
   String? _tfaKey;
-
-  String get portalAdress => portalAdressController.text.contains('//')
-      ? portalAdressController.text.split('//')[1]
-      : portalAdressController.text;
   String? get tfaKey => _tfaKey;
+
+  String get portalAdress => _portalAdressController.text.contains('//')
+      ? _portalAdressController.text.split('//')[1]
+      : _portalAdressController.text;
 
   final cookieManager = WebviewCookieManager();
 
@@ -93,7 +94,7 @@ class LoginController extends GetxController {
   void onInit() {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    portalAdressController = TextEditingController();
+    _portalAdressController = TextEditingController();
     super.onInit();
   }
 
@@ -163,7 +164,6 @@ class LoginController extends GetxController {
     await saveToken(token, expires);
     await sendRegistrationType();
     setState(ViewState.Idle);
-    clearInputFields();
 
     await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
         {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
@@ -235,19 +235,19 @@ class LoginController extends GetxController {
       return;
     }
 
-    portalAdressController.text = portalAdressController.text.removeAllWhitespace;
+    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
 
-    if (!(portalAdressController.text.isURL || portalAdressController.text.isIPv4)) {
+    if (!(_portalAdressController.text.isURL || _portalAdressController.text.isIPv4)) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
-      portalAdressController.selection = TextSelection.fromPosition(
-        TextPosition(offset: portalAdressController.text.length),
+      _portalAdressController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _portalAdressController.text.length),
       );
     } else {
       setState(ViewState.Busy);
 
-      locator.get<CoreApi>().setPortalName(portalAdressController.text);
+      locator.get<CoreApi>().setPortalName(_portalAdressController.text);
 
       final _capabilities = await _portalService.portalCapabilities();
 
@@ -314,15 +314,20 @@ class LoginController extends GetxController {
   // TODO: check dispose textControllers
   @override
   void onClose() {
-    // clearInputFields();
-    clearErrors();
+    clearInputFields();
     super.onClose();
   }
 
   void clearInputFields() {
-    portalAdressController.clear();
+    _portalAdressController.clear();
     _emailController.clear();
     _passwordController.clear();
+
+    capabilities = null;
+    _pass = null;
+    _email = null;
+    _tfaKey = null;
+
     clearErrors();
   }
 
