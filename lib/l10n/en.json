@@ -465,5 +465,6 @@
 		"beforeText": "I agree to the ",
 		"betweenText": " and the "
 	},
-	"portalNotFound": "Portal not found. Check portal URL."
+	"portalNotFound": "Portal not found. Check portal URL.",
+	"newTagNoTitleErrorMessage": "Each tag must have a title."
 }
