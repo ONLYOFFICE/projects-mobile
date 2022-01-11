@@ -36,7 +36,6 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -81,7 +80,6 @@ class PortalInputView extends StatelessWidget {
                             controller: controller.portalAdressController,
                             autofillHint: AutofillHints.url,
                             hintText: tr('portalAdress'),
-                            validator: controller.emailValidator,
                             hasError: controller.portalFieldError.value == true,
                           ),
                         ),

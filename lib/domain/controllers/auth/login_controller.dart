@@ -62,12 +62,13 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  late TextEditingController portalAdressController;
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
+  late TextEditingController _portalAdressController;
+  TextEditingController get portalAdressController => _portalAdressController;
 
+  late TextEditingController _emailController;
   TextEditingController get emailController => _emailController;
 
+  late TextEditingController _passwordController;
   TextEditingController get passwordController => _passwordController;
 
   RxBool portalFieldError = false.obs;
@@ -78,11 +79,11 @@ class LoginController extends GetxController {
   String? _pass;
   String? _email;
   String? _tfaKey;
-
-  String get portalAdress => portalAdressController.text.contains('//')
-      ? portalAdressController.text.split('//')[1]
-      : portalAdressController.text;
   String? get tfaKey => _tfaKey;
+
+  String get portalAdress => _portalAdressController.text.contains('//')
+      ? _portalAdressController.text.split('//')[1]
+      : _portalAdressController.text;
 
   final cookieManager = WebviewCookieManager();
 
@@ -93,7 +94,7 @@ class LoginController extends GetxController {
   void onInit() {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
-    portalAdressController = TextEditingController();
+    _portalAdressController = TextEditingController();
     super.onInit();
   }
 
@@ -163,7 +164,6 @@ class LoginController extends GetxController {
     await saveToken(token, expires);
     await sendRegistrationType();
     setState(ViewState.Idle);
-    clearInputFields();
 
     await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
         {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
@@ -171,7 +171,16 @@ class LoginController extends GetxController {
 
   Future<bool> _checkEmailAndPass() async {
     _emailController.text = _emailController.text.removeAllWhitespace;
-    bool? result;
+    _emailController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _emailController.text.length),
+    );
+
+    _passwordController.text = _passwordController.text.removeAllWhitespace;
+    _passwordController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _passwordController.text.length),
+    );
+
+    var result = true;
 
     emailFieldError.value = false;
     passwordFieldError.value = false;
@@ -181,10 +190,6 @@ class LoginController extends GetxController {
       emailFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => emailFieldError.value = false);
-      // save cursor position
-      emailController.selection = TextSelection.fromPosition(
-        TextPosition(offset: emailController.text.length),
-      );
     }
     if (_passwordController.text.isEmpty) {
       result = false;
@@ -192,7 +197,7 @@ class LoginController extends GetxController {
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => passwordFieldError.value = false);
     }
-    return result ?? true;
+    return result;
   }
 
   Future saveToken(String? token, String? expires) async {
@@ -235,19 +240,19 @@ class LoginController extends GetxController {
       return;
     }
 
-    portalAdressController.text = portalAdressController.text.removeAllWhitespace;
+    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
+    _portalAdressController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _portalAdressController.text.length),
+    );
 
-    if (!(portalAdressController.text.isURL || portalAdressController.text.isIPv4)) {
+    if (!(_portalAdressController.text.isURL || _portalAdressController.text.isIPv4)) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
-      portalAdressController.selection = TextSelection.fromPosition(
-        TextPosition(offset: portalAdressController.text.length),
-      );
     } else {
       setState(ViewState.Busy);
 
-      locator.get<CoreApi>().setPortalName(portalAdressController.text);
+      locator.get<CoreApi>().setPortalName(_portalAdressController.text);
 
       final _capabilities = await _portalService.portalCapabilities();
 
@@ -260,23 +265,6 @@ class LoginController extends GetxController {
 
       setState(ViewState.Idle);
     }
-  }
-
-  String? emailValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Введите корректный email';
-
-    /// regex pattern to validate email inputs.
-    const Pattern _emailPattern =
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]";
-
-    if (RegExp(_emailPattern as String).hasMatch(value)) return null;
-
-    return 'Введите корректный email';
-  }
-
-  String? passValidator(String? value) {
-    if (value == null || value.isEmpty) return 'Введите пароль';
-    return null;
   }
 
   Rx<ViewState> get state => ViewState.Idle.obs;
@@ -314,15 +302,20 @@ class LoginController extends GetxController {
   // TODO: check dispose textControllers
   @override
   void onClose() {
-    // clearInputFields();
-    clearErrors();
+    clearInputFields();
     super.onClose();
   }
 
   void clearInputFields() {
-    portalAdressController.clear();
+    _portalAdressController.clear();
     _emailController.clear();
     _passwordController.clear();
+
+    capabilities = null;
+    _pass = null;
+    _email = null;
+    _tfaKey = null;
+
     clearErrors();
   }
 
