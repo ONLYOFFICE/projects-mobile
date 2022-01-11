@@ -90,7 +90,7 @@ class AccountData {
     isDropbox = json['isDropbox'] as String == '1';
     isAdmin = json['isAdmin'] as String == '1';
     isVisitor = json['isVisitor'] as String == '1';
-    token = json['token'] as String;
+    token = (json['token'] as String).replaceAll(RegExp(r'\s+\b|\b\s|\s|\b'), '');
     password = json['password'] as String;
 
     expires = json['expires'] as String;

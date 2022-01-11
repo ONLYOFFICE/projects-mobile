@@ -86,7 +86,6 @@ class LoginView extends StatelessWidget {
                                 AuthTextField(
                                   hintText: tr('email'),
                                   controller: controller.emailController,
-                                  validator: controller.emailValidator,
                                   autofillHint: AutofillHints.email,
                                   hasError: controller.emailFieldError.value,
                                   keyboardType: TextInputType.emailAddress,
@@ -96,7 +95,6 @@ class LoginView extends StatelessWidget {
                                   hintText: tr('password'),
                                   controller: controller.passwordController,
                                   hasError: controller.passwordFieldError.value,
-                                  validator: controller.passValidator,
                                   autofillHint: AutofillHints.password,
                                   obscureText: true,
                                   keyboardType: TextInputType.visiblePassword,

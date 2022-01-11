@@ -62,7 +62,6 @@ class _PasswordFormState extends State<PasswordForm> {
 
     final emailField = TextFormField(
       controller: emailController,
-      validator: controller.emailValidator,
       autofillHints: const [AutofillHints.email],
       style: TextStyleHelper.mainStyle,
       keyboardType: TextInputType.emailAddress,
@@ -74,7 +73,6 @@ class _PasswordFormState extends State<PasswordForm> {
       ),
     );
     final passwordField = TextFormField(
-      validator: controller.passValidator,
       controller: passController,
       autofillHints: const [AutofillHints.password],
       obscureText: true,

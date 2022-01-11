@@ -60,7 +60,7 @@ class FilterElement extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        height: 32,
+        constraints: const BoxConstraints(minHeight: 32),
         padding: const EdgeInsets.only(top: 5, bottom: 6, left: 12, right: 12),
         decoration: BoxDecoration(
           border: Border.all(color: Get.theme.colors().outline, width: 0.5),

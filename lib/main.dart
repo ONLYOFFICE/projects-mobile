@@ -49,6 +49,7 @@ import 'package:projects/presentation/shared/theme/theme_service.dart';
 
 void main() async {
   HttpOverrides.global = DevHttpOverrides();
+  WidgetsFlutterBinding.ensureInitialized();
   setupLocator();
   setupGetX();
   await GetStorage.init();
@@ -89,7 +90,6 @@ List<Locale> supportedLocales() => [
     ];
 
 Future<String> _getInitPage() async {
-  WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
 
   final storage = locator<SecureStorage>();

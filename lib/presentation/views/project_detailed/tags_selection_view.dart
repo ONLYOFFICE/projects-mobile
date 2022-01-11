@@ -36,18 +36,15 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
-
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {
@@ -116,25 +113,81 @@ class TagsSelectionView extends StatelessWidget {
 
   Future showTagAddingDialog(controller) async {
     final inputController = TextEditingController();
+    final validate = ValueNotifier(true);
+    void onSubmited(String text) {
+      controller.createTag(text);
+      Get.back();
+    }
 
-    await Get.dialog(StyledAlertDialog(
-      titleText: tr('enterTag'),
-      content: PlatformTextField(
-        autofocus: true,
-        textInputAction: TextInputAction.done,
-        controller: inputController,
-        decoration: const InputDecoration.collapsed(hintText: ''),
-        onSubmitted: (value) {
-          controller.createTag(value);
+    await Get.dialog(
+      ValueListenableBuilder<bool>(
+        valueListenable: validate,
+        builder: (context, value, child) {
+          return StyledAlertDialog(
+            titleText: tr('enterTag'),
+            content: _TagTextFieldWidget(
+              inputController: inputController,
+              onSubmited: onSubmited,
+              validate: validate,
+            ),
+            acceptText: tr('confirm').toUpperCase(),
+            onAcceptTap: () {
+              if (inputController.text.isNotEmpty) {
+                onSubmited(inputController.text);
+              } else {
+                validate.value = false;
+              }
+            },
+            onCancelTap: Get.back,
+          );
         },
       ),
-      acceptText: tr('confirm').toUpperCase(),
-      onAcceptTap: () {
-        controller.createTag(inputController.text);
-        Get.back();
+    );
+  }
+}
+
+class _TagTextFieldWidget extends StatelessWidget {
+  final TextEditingController inputController;
+  final Function(String) onSubmited;
+  final ValueNotifier<bool> validate;
+
+  const _TagTextFieldWidget({
+    Key? key,
+    required this.inputController,
+    required this.onSubmited,
+    required this.validate,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final errorColor = Theme.of(context).errorColor;
+    return TextField(
+      autofocus: true,
+      textInputAction: TextInputAction.done,
+      controller: inputController,
+      onChanged: (_) {
+        validate.value = true;
       },
-      onCancelTap: Get.back,
-    ));
+      decoration: InputDecoration(
+        hintText: '',
+        border: InputBorder.none,
+        isCollapsed: true,
+        errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
+        focusedErrorBorder: !validate.value
+            ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+            : null,
+        errorBorder: !validate.value
+            ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+            : null,
+      ),
+      onSubmitted: (value) {
+        if (inputController.text.isNotEmpty) {
+          onSubmited(value);
+        } else {
+          validate.value = false;
+        }
+      },
+    );
   }
 }
 

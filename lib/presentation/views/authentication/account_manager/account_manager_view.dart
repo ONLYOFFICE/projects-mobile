@@ -67,15 +67,15 @@ class AccountManagerView extends StatelessWidget {
               physics: const ScrollPhysics(),
               shrinkWrap: true,
               itemBuilder: (c, i) => AccountTile(
-                userController: AccountTileController(accountData: controller.accounts.value[i]),
+                userController: AccountTileController(accountData: controller.accounts[i]),
               ),
               itemExtent: 65,
-              itemCount: controller.accounts.value.length,
+              itemCount: controller.accounts.length,
             ),
           ),
           const SizedBox(height: 34),
           InkWell(
-            onTap: Get.back, //() => controller.addAccount(tokenString: '', expires: ''),
+            onTap: Get.back,
             child: SizedBox(
               height: 48,
               child: Row(

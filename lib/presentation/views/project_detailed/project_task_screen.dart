@@ -258,7 +258,6 @@ void taskSortButtonOnPressed(ProjectTasksController controller, BuildContext con
       context: context,
       options: _getSortTile(),
       offset: const Offset(0, 30),
-
     );
   }
 }

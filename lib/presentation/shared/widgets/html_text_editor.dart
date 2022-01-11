@@ -44,7 +44,7 @@ class HtmlTextEditor extends StatelessWidget {
     this.height,
     this.hintText,
     this.hasError = false,
-    this.initialText,
+    this.initialText = '',
     this.textController,
   }) : super(key: key);
 

@@ -161,8 +161,8 @@ class AuthApi {
       final dynamic response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        final dynamic responseJson = json.decode(response.body);
-        result.response = responseJson['response'] as Map<String, dynamic>;
+        final responseJson = json.decode(response.body);
+        result.response = responseJson['response'];
       } else {
         result.error = response as CustomError;
       }

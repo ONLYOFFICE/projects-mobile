@@ -151,47 +151,46 @@ class DashboardCardView extends StatelessWidget {
                   controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
                 },
                 child: Container(
-                  height: 60,
+                  constraints: const BoxConstraints(minHeight: 60),
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            overline.toUpperCase(),
-                            style: TextStyleHelper.overline(
-                              color: Get.theme.colors().onSurface.withOpacity(0.6),
-                            ),
-                          ),
-                          Text(
-                            controller.screenName as String,
-                            style: TextStyleHelper.headline7(),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            height: 28,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Get.theme.colors().bgDescription,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Obx(
-                                () => Text(
-                                  controller.paginationController.total.value.toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyleHelper.subtitle2(),
-                                ),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              overline.toUpperCase(),
+                              style: TextStyleHelper.overline(
+                                color: Get.theme.colors().onSurface.withOpacity(0.6),
                               ),
                             ),
+                            Text(
+                              controller.screenName as String,
+                              style: TextStyleHelper.headline7(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 28,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Get.theme.colors().bgDescription,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Obx(
+                            () => Text(
+                              controller.paginationController.total.value.toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyleHelper.subtitle2(),
+                            ),
                           ),
-                        ],
+                        ),
                       )
                     ],
                   ),

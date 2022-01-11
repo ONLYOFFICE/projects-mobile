@@ -255,9 +255,9 @@ void setupGetX() {
   Get.create<ProjectDetailsController>(() => ProjectDetailsController());
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
-  Get.lazyPut(() => MainController(), fenix: true);
-  Get.lazyPut(() => PasscodeCheckingController(), fenix: true);
   Get.put(LoginController(), permanent: true);
+  Get.put(MainController(), permanent: true);
+  Get.lazyPut(() => PasscodeCheckingController(), fenix: true);
   Get.lazyPut(() => NavigationController(), fenix: true);
 
   Get.lazyPut(() => ProfileController(), fenix: true);
