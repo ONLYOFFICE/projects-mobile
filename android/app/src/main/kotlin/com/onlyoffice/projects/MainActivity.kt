@@ -12,11 +12,9 @@ import io.flutter.embedding.android.DrawableSplashScreen
 import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
-
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.Result
-import com.onlyoffice.projects.utils.AccountUtils
 import io.flutter.plugins.GeneratedPluginRegistrant
 
 
@@ -27,56 +25,57 @@ class MainActivity : FlutterFragmentActivity() {
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         GeneratedPluginRegistrant.registerWith(flutterEngine)
-        
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "accountProvider").setMethodCallHandler {
-        call, result ->
+
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "accountProvider").setMethodCallHandler { call, result ->
             when (call.method) {
                 "getAccounts" -> getAccounts(result)
                 "addAccount" -> addAccount(call, result)
                 "deleteAccount" -> deleteAccount(call, result)
-                
+
                 else -> result.notImplemented()
             }
         }
     }
 
     private fun getAccounts(result: Result) {
-         val accounts = this.applicationContext.accountUtils!!.getAccounts()
-         val list = mutableListOf<HashMap<String, String>>()
-         for (account in accounts) {
-             list.add(hashMapOf(
-                     "account" to account,
-             ))
-         }
-         result.success(list)
-        
+        val accounts = this.applicationContext.accountUtils!!.getAccounts()
+        val list = mutableListOf<HashMap<String, String>>()
+        for (account in accounts) {
+            list.add(
+                hashMapOf(
+                    "account" to account,
+                )
+            )
+        }
+        result.success(list)
+
     }
 
     private fun addAccount(call: MethodCall, result: Result) {
-         var accountId = call.argument<String>("accountId")!!
-         var accountData = call.argument<String>("accountData")!!
+        val accountId = call.argument<String>("accountId")
+        val accountData = call.argument<String>("accountData")
 
-         val account =  this.applicationContext.accountUtils!!.addAccount(accountId, accountData)
+        val account = this.applicationContext.accountUtils!!.addAccount(accountId, accountData)
 
-         val wasAdded = !account.isNullOrEmpty()
-         result.success(wasAdded)
+        val wasAdded = account != null
+        result.success(wasAdded)
     }
 
     private fun deleteAccount(call: MethodCall, result: Result) {
-         var accountId = call.argument<String>("accountId")!!
-        
+        val accountId = call.argument<String>("accountId")
+
         this.applicationContext.accountUtils!!.deleteAccount(accountId)
-         
-         result.success(true)
+
+        result.success(true)
     }
 
     private fun updateAccount(call: MethodCall, result: Result) {
-         var accountId = call.argument<String>("accountId")!!
-         var accountData = call.argument<String>("accountData")!!
+        val accountId = call.argument<String>("accountId")
+        val accountData = call.argument<String>("accountData")
 
-          this.applicationContext.accountUtils!!.updateAccount(accountId, accountData)
-         
-         result.success(true)
+        this.applicationContext.accountUtils!!.updateAccount(accountId, accountData)
+
+        result.success(true)
     }
 }
 
