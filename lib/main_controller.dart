@@ -44,6 +44,7 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -51,6 +52,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/splash_view.dart';
 import 'package:projects/main_view.dart';
+import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/no_internet_view.dart';
@@ -64,7 +66,7 @@ class MainController extends GetxController {
   // ignore: unnecessary_cast
   final navigationView = NavigationView() as Widget;
   // ignore: unnecessary_cast
-  final portalInputView = PortalInputView() as Widget;
+  Widget portalInputView = AccountManagerView() as Widget;
 
   bool noInternet = false;
   bool isSessionStarted = false;
@@ -143,8 +145,11 @@ class MainController extends GetxController {
     if (connection == ConnectivityResult.none) return;
 
     isSessionStarted = true;
+    final accountManager = Get.isRegistered<AccountManagerController>()
+        ? Get.find<AccountManagerController>()
+        : Get.put(AccountManagerController());
 
-    isAuthorized().then((isAuthorized) {
+    isAuthorized().then((isAuthorized) async {
       return {
         if (isAuthorized)
           {
@@ -153,8 +158,17 @@ class MainController extends GetxController {
                 mainPage.value = navigationView,
               }
           }
-        else if (mainPage.value is! PortalInputView)
+        else if (mainPage.value is! AccountManagerView)
           {
+            await accountManager.setup(),
+            if (accountManager.accounts.isEmpty)
+              {
+                portalInputView = PortalInputView(),
+              }
+            else
+              {
+                portalInputView = AccountManagerView(),
+              },
             mainPage.value = portalInputView,
           }
       };

@@ -32,14 +32,16 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/account_provider.dart';
-import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
+import 'package:projects/presentation/views/authentication/portal_view.dart';
 
 class AccountManagerController extends GetxController {
   static const accountType = 'com.onlyoffice.account';
@@ -50,13 +52,6 @@ class AccountManagerController extends GetxController {
 
   Future setup() async {
     accounts.value = await fetchAccounts();
-
-    if (accounts.isNotEmpty) {
-      await showBarModalBottomSheet(
-        context: Get.context!,
-        builder: (context) => const AccountManagerView(),
-      );
-    }
   }
 
   Future<void> addAccount({required String tokenString, required String expires}) async {
@@ -112,6 +107,10 @@ class AccountManagerController extends GetxController {
       final deleted = await AccountProvider.deleteAccount(accountId: accountId);
       if (deleted!) {
         accounts.value = await fetchAccounts();
+
+        if (accounts.isEmpty) await Get.find<NavigationController>().to(PortalInputView());
+
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }
     } catch (e, s) {
       debugPrint(e.toString());

@@ -51,73 +51,69 @@ class AccountTile extends StatelessWidget {
       onTap: () {
         userController?.onTap();
       },
-      child: SizedBox(
-        height: 48,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 72,
-              child: SizedBox(
-                width: 40,
-                height: 40,
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Get.theme.colors().bgDescription,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Obx(() {
-                      return userController!.avatar.value;
-                    }),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                userController!.name!.replaceAll(' ', '\u00A0'),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(),
-                              ),
-                              Text(
-                                userController!.portal!.replaceAll(' ', '\u00A0'),
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.body2(
-                                  color: Get.theme.colors().onBackground,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+      onLongPress: userController!.deleteAccount,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        child: SizedBox(
+          height: 48,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(
+                width: 72,
+                child: SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Get.theme.colors().bgDescription,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: Obx(() {
+                        return userController!.avatar.value;
+                      }),
                     ),
                   ),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 72,
-              child: InkWell(
-                onTap: userController!.deleteAccount,
-                child: Icon(
-                  Icons.close,
-                  color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  userController!.name!.replaceAll(' ', '\u00A0'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyleHelper.subtitle1(
+                                    color: Get.theme.colors().onSurface,
+                                  ),
+                                ),
+                                Text(
+                                  userController!.portal!.replaceAll(' ', '\u00A0'),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyleHelper.caption(
+                                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

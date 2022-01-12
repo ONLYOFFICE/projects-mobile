@@ -6,6 +6,13 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import com.onlyoffice.projects.accountsDao
+import com.onlyoffice.projects.db.CloudAccount
+import com.onlyoffice.projects.isDocumentInstalled
+import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.json.JSONObject
 
 class AccountUtils(private val context: Context) {
@@ -17,56 +24,82 @@ class AccountUtils(private val context: Context) {
     }
 
     fun getTimestamp(): Long {
-        val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$TIME"), null, null, null, null)
-        val time = cursor?.extras?.let { bundle ->
-            return@let bundle.getLong(TIME)
-        } ?: run {
-            return@run 0L
+        if (context.isDocumentInstalled) {
+            val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$TIME"), null, null, null, null)
+            val time = cursor?.extras?.let { bundle ->
+                return@let bundle.getLong(TIME)
+            } ?: run {
+                return@run 0L
+            }
+            cursor?.close()
+            return time
+        } else {
+            return System.currentTimeMillis()
         }
-        cursor?.close()
-        return time
     }
 
     fun getAccounts(login: String? = null): Array<String> {
-        val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS"), null, null, arrayOf(login), null)
-        val accounts: Array<String> = parseAccounts(cursor)
-        cursor?.close()
-        return accounts
-    }
-
-    fun addAccount(id: String, data: String): String {
-        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val bundle: Bundle = getBundle(data)
-            context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
+        if (context.isDocumentInstalled) {
+            val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS"), null, null, arrayOf(login), null)
+            val accounts: Array<String> = parseAccounts(cursor)
+            cursor?.close()
+            if (accounts.isNotEmpty()) {
+                addAccountsToDb(accounts)
+            }
+            return accounts
         } else {
-            val contentValues: ContentValues = getContentValues(data)
-            context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues)
+            return runBlocking {
+                return@runBlocking context.accountsDao?.getAccounts()?.map { Json.encodeToString(it) }?.toTypedArray() ?: emptyArray()
+            }
         }
-
-        return uri?.toString() ?: ""
     }
 
-    fun updateAccount(id: String, data: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-             val bundle: Bundle = getBundle(data)
-            context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
-        } else {
-            val contentValues: ContentValues = getContentValues(data)
-            context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues, null, null)
+    fun addAccount(id: String?, data: String?): Long? {
+        if (context.isDocumentInstalled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val bundle: Bundle = getBundle(checkNotNull(data) { "Account data null" })
+                context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
+            } else {
+                val contentValues: ContentValues = getContentValues(checkNotNull(data) { "Account data null" })
+                context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues)
+            }
+        }
+        return runBlocking {
+            return@runBlocking context.accountsDao?.addAccount(Json.decodeFromString(checkNotNull(data) { "Account data null" }))
+        }
+    }
+
+    fun updateAccount(id: String?, data: String?) {
+        if (context.isDocumentInstalled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                val bundle: Bundle = getBundle(checkNotNull(data) { "Data null" })
+                context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
+            } else {
+                val contentValues: ContentValues = getContentValues(checkNotNull(data) { "Account data null" })
+                context.contentResolver.update(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues, null, null)
+            }
+        }
+        runBlocking {
+            context.accountsDao?.updateAccount(Json.decodeFromString(checkNotNull(data) { "Account data null" }))
         }
     }
 
 
     fun deleteAccount(id: String? = null, data: String? = null) {
-        if (id != null) {
-            context.contentResolver.delete(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), null, null)
-        } else if (data != null) {
-            val json = JSONObject(data)
-            context.contentResolver.delete(
-                Uri.parse("content://$AUTHORITY/$ACCOUNTS/${json.getString("id")}"),
-                null,
-                null
-            )
+        if (context.isDocumentInstalled) {
+            if (id != null) {
+                context.contentResolver.delete(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), null, null)
+            } else if (data != null) {
+                val json = JSONObject(data)
+                context.contentResolver.delete(
+                    Uri.parse("content://$AUTHORITY/$ACCOUNTS/${json.getString("id")}"),
+                    null,
+                    null
+                )
+            }
+        }
+        runBlocking {
+            context.accountsDao?.deleteAccount(Json.decodeFromString(data ?: ""))
         }
     }
 
@@ -106,11 +139,7 @@ class AccountUtils(private val context: Context) {
         json.keys().forEach { name ->
             when (val value = json.get(name)) {
                 is String -> {
-                    if (name == "token" || name == "password") {
-                        bundle.putString(name, CryptUtils.encryptAES128(value, json.getString("id")))
-                    } else {
-                        bundle.putString(name, value)
-                    }
+                    bundle.putString(name, value)
                 }
                 is Boolean -> {
                     bundle.putBoolean(name, value)
@@ -132,11 +161,7 @@ class AccountUtils(private val context: Context) {
         json.keys().forEach { name ->
             when (val value = json.get(name)) {
                 is String -> {
-                    if (name == "token" || name == "password") {
-                        contentValues.put(name, CryptUtils.encryptAES128(value, json.getString("id")))
-                    } else {
-                        contentValues.put(name, value)
-                    }
+                    contentValues.put(name, value)
                 }
                 is Boolean -> {
                     contentValues.put(name, value)
@@ -150,6 +175,12 @@ class AccountUtils(private val context: Context) {
             }
         }
         return contentValues
+    }
+
+    private fun addAccountsToDb(accounts: Array<String>) {
+        runBlocking {
+            context.accountsDao?.addAccounts(accounts.map { CloudAccount.toObject(it) })
+        }
     }
 
 }
