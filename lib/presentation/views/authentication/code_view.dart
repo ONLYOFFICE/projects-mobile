@@ -107,21 +107,6 @@ class _CodeViewState extends State<CodeView> {
                         onPressed: () async => await controller.sendCode(codeController.text),
                       ),
                     ),
-                    // Center(
-                    //   child: Container(
-                    //     color: Get.theme.backgroundColor,
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(36.0),
-                    //       child: Column(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: <Widget>[
-                    //           const SizedBox(height: 10.0),
-                    // CodeForm()
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
