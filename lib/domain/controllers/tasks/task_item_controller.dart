@@ -44,6 +44,7 @@ import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
@@ -162,7 +163,12 @@ class TaskItemController extends GetxController {
 
   Future<void> copyLink({required int taskId, required int projectId}) async {
     final link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
-    await Clipboard.setData(ClipboardData(text: link));
+
+    if (link.isURL) {
+      await Clipboard.setData(ClipboardData(text: link));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   Future accept() async {
@@ -249,7 +255,7 @@ class TaskItemController extends GetxController {
   Future<void> openStatuses(BuildContext context) async {
     if (task.value.canEdit! && isStatusLoaded.isTrue) {
       if (Get.find<PlatformController>().isMobile) {
-         showsStatusesBS(context: context, taskItemController: this);
+        showsStatusesBS(context: context, taskItemController: this);
       } else {
         showsStatusesPM(context: context, taskItemController: this);
       }

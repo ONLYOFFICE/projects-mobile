@@ -186,10 +186,13 @@ Future<void> _onFilePopupMenuSelected(
 
       if (portalDomain != null && selectedFile.id != null) {
         final link =
-            '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
+            '$portalDomain/Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
 
-        await Clipboard.setData(ClipboardData(text: link));
-        MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        if (link.isURL) {
+          await Clipboard.setData(ClipboardData(text: link));
+          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        } else
+          MessagesHandler.showSnackBar(context: context, text: tr('error'));
       }
       break;
     case 'open':
