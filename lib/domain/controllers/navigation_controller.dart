@@ -135,16 +135,16 @@ class NavigationController extends GetxController {
     }
   }
 
-  void to(Widget widget, {bool? preventDuplicates, Map<String, dynamic>? arguments}) {
+  Future to(Widget widget, {bool? preventDuplicates, Map<String, dynamic>? arguments}) async {
     if (Get.find<PlatformController>().isMobile) {
-      Get.to(
+      await Get.to(
         () => widget,
         preventDuplicates: preventDuplicates ?? false,
         arguments: arguments,
       );
     } else {
       treeLength++;
-      Get.to(
+      await Get.to(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,

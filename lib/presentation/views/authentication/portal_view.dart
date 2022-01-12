@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
-import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -49,12 +48,6 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Get.isRegistered<AccountManagerController>()) {
-      Get.find<AccountManagerController>();
-    } else {
-      Get.put(AccountManagerController()).setup();
-    }
-
     return Scaffold(
       body: SingleChildScrollView(
         child: Obx(
