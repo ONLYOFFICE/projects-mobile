@@ -116,22 +116,25 @@ class TagsSelectionView extends StatelessWidget {
       ValueListenableBuilder<bool>(
         valueListenable: validate,
         builder: (context, value, child) {
-          return StyledAlertDialog(
-            titleText: tr('enterTag'),
-            content: _TagTextFieldWidget(
-              inputController: inputController,
-              onSubmited: onSubmited,
-              validate: validate,
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            child: StyledAlertDialog(
+              titleText: tr('enterTag'),
+              content: _TagTextFieldWidget(
+                inputController: inputController,
+                onSubmited: onSubmited,
+                validate: validate,
+              ),
+              acceptText: tr('confirm').toUpperCase(),
+              onAcceptTap: () {
+                if (inputController.text.isNotEmpty) {
+                  onSubmited(inputController.text);
+                } else {
+                  validate.value = false;
+                }
+              },
+              onCancelTap: Get.back,
             ),
-            acceptText: tr('confirm').toUpperCase(),
-            onAcceptTap: () {
-              if (inputController.text.isNotEmpty) {
-                onSubmited(inputController.text);
-              } else {
-                validate.value = false;
-              }
-            },
-            onCancelTap: Get.back,
           );
         },
       ),
@@ -154,32 +157,37 @@ class _TagTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final errorColor = Theme.of(context).errorColor;
-    return TextField(
-      autofocus: true,
-      textInputAction: TextInputAction.done,
-      controller: inputController,
-      onChanged: (_) {
-        validate.value = true;
-      },
-      decoration: InputDecoration(
-        hintText: '',
-        border: InputBorder.none,
-        isCollapsed: true,
-        errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
-        focusedErrorBorder: !validate.value
-            ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
-            : null,
-        errorBorder: !validate.value
-            ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
-            : null,
+    return Container(
+      margin: const EdgeInsets.only(top: 10),
+      child: TextField(
+        autofocus: true,
+        textInputAction: TextInputAction.done,
+        controller: inputController,
+        onChanged: (_) {
+          validate.value = true;
+        },
+        decoration: InputDecoration(
+          hintText: '',
+          border: InputBorder.none,
+          isCollapsed: true,
+          errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+          focusedErrorBorder: !validate.value
+              ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+              : null,
+          errorBorder: !validate.value
+              ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+              : null,
+        ),
+        onSubmitted: (value) {
+          if (inputController.text.isNotEmpty) {
+            onSubmited(value);
+          } else {
+            validate.value = false;
+          }
+        },
       ),
-      onSubmitted: (value) {
-        if (inputController.text.isNotEmpty) {
-          onSubmited(value);
-        } else {
-          validate.value = false;
-        }
-      },
     );
   }
 }
