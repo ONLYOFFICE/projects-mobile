@@ -90,6 +90,12 @@ class LoginController extends GetxController {
   final checkBoxValue = false.obs;
   final needAgreement = Get.deviceLocale!.languageCode == 'zh';
 
+  final _state = ViewState.Idle.obs;
+  Rx<ViewState> get state => _state;
+  void setState(ViewState viewState) {
+    if (state.value != viewState) state.value = viewState;
+  }
+
   @override
   void onInit() {
     _emailController = TextEditingController();
@@ -163,7 +169,6 @@ class LoginController extends GetxController {
   Future<void> saveLoginData({String? token, String? expires}) async {
     await saveToken(token, expires);
     await sendRegistrationType();
-    setState(ViewState.Idle);
 
     await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
         {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
@@ -259,18 +264,12 @@ class LoginController extends GetxController {
       if (_capabilities != null) {
         capabilities = _capabilities;
         checkBoxValue.value = false;
-        setState(ViewState.Idle);
         await Get.to(() => const LoginView());
+        return;
       }
 
       setState(ViewState.Idle);
     }
-  }
-
-  Rx<ViewState> get state => ViewState.Idle.obs;
-
-  void setState(ViewState viewState) {
-    state.value = viewState;
   }
 
   Future<bool> sendRegistrationType() async {

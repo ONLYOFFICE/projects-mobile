@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
@@ -49,19 +50,25 @@ class PortalInputView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      controller.setState(ViewState.Idle);
+    });
+
     if (Get.isRegistered<AccountManagerController>()) {
       Get.find<AccountManagerController>();
     } else {
       Get.put(AccountManagerController()).setup();
     }
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Obx(
-          () => controller.state.value == ViewState.Busy
-              ? SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator()))
-              : Center(
+    return Obx(
+      () => controller.state.value == ViewState.Busy
+          ? Scaffold(
+              body: SizedBox(
+                  height: Get.height, child: const Center(child: CircularProgressIndicator())),
+            )
+          : Scaffold(
+              body: SingleChildScrollView(
+                child: Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
@@ -115,8 +122,8 @@ class PortalInputView extends StatelessWidget {
                     ),
                   ),
                 ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }
