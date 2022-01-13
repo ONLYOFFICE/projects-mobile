@@ -14,6 +14,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.json.JSONObject
+import java.lang.RuntimeException
 
 class AccountUtils(private val context: Context) {
 
@@ -99,7 +100,19 @@ class AccountUtils(private val context: Context) {
             }
         }
         runBlocking {
-            context.accountsDao?.deleteAccount(Json.decodeFromString(data ?: ""))
+            when {
+                id != null -> {
+                    context.accountsDao?.getAccount(id)?.let { account ->
+                        context.accountsDao?.deleteAccount(account)
+                    }
+                }
+                data != null -> {
+                    context.accountsDao?.deleteAccount(Json.decodeFromString(data))
+                }
+                else -> {
+                    throw RuntimeException("id or data must not be null")
+                }
+            }
         }
     }
 
