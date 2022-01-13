@@ -105,16 +105,21 @@ class AccountTileController extends GetxController {
   Future<void> onTap() async => loginToSavedAccount();
 
   Future<void> deleteAccount() async {
-    await Get.dialog(StyledAlertDialog(
-      titleText: tr('removeAccountTitle'),
-      contentText: tr('removeAccountText'),
-      acceptText: tr('remove').toUpperCase(),
-      cancelText: tr('cancel').toUpperCase(),
-      onAcceptTap: () async => {
-        await Get.find<AccountManagerController>().deleteAccounts(accountId: accountData!.id),
-        Get.back(),
-      },
-      onCancelTap: Get.back,
-    ));
+    await Get.dialog(
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: StyledAlertDialog(
+          titleText: tr('removeAccountTitle'),
+          contentText: tr('removeAccountText'),
+          acceptText: tr('remove').toUpperCase(),
+          cancelText: tr('cancel').toUpperCase(),
+          onAcceptTap: () async => {
+            await Get.find<AccountManagerController>().deleteAccounts(accountId: accountData!.id),
+            Get.back(),
+          },
+          onCancelTap: Get.back,
+        ),
+      ),
+    );
   }
 }

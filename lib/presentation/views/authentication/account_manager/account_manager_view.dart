@@ -42,23 +42,26 @@ import 'package:projects/presentation/views/authentication/account_manager/accou
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 
 class AccountManagerView extends StatelessWidget {
   AccountManagerView({Key? key}) : super(key: key);
-  final controller = Get.find<LoginController>();
+
+  final loginController = Get.find<LoginController>();
+
+  final accountController = Get.isRegistered<AccountManagerController>()
+      ? Get.find<AccountManagerController>()
+      : Get.put(AccountManagerController());
 
   @override
   Widget build(BuildContext context) {
+    accountController.setup();
+
     return Scaffold(
       body: Obx(
-        () => controller.state.value == ViewState.Busy
+        () => loginController.state.value == ViewState.Busy
             ? SizedBox(height: Get.height, child: const Center(child: CircularProgressIndicator()))
             : Center(
                 child: Container(
@@ -72,44 +75,29 @@ class AccountManagerView extends StatelessWidget {
                       Text(tr('appName'),
                           textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
                       SizedBox(height: Get.height * 0.06),
-                      const Expanded(
-                        child: _AccountManagerView(),
+                      Expanded(
+                        child: Obx(
+                          () => ListView.separated(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (c, i) {
+                              if (i == accountController.accounts.length) {
+                                return const _NewAccountButton();
+                              } else
+                                return AccountTile(
+                                  userController: AccountTileController(
+                                      accountData: accountController.accounts[i]),
+                                );
+                            },
+                            separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
+                            itemCount: accountController.accounts.length + 1,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
               ),
-      ),
-    );
-  }
-}
-
-class _AccountManagerView extends StatelessWidget {
-  const _AccountManagerView({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final controller = Get.isRegistered<AccountManagerController>()
-        ? Get.find<AccountManagerController>()
-        : Get.put(AccountManagerController());
-    controller.setup();
-
-    return Obx(
-      () => ListView.separated(
-        physics: const ScrollPhysics(),
-        shrinkWrap: true,
-        itemBuilder: (c, i) {
-          if (i == controller.accounts.length) {
-            return const _NewAccountButton();
-          } else
-            return AccountTile(
-              userController: AccountTileController(accountData: controller.accounts[i]),
-            );
-        },
-        separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
-        itemCount: controller.accounts.length + 1,
       ),
     );
   }
