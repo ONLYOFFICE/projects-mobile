@@ -63,11 +63,11 @@ class DiscussionCommentItemController extends GetxController implements CommentI
       projectId: projectId!,
     );
 
-    // TODO: refactoring needed
-    if (link != null) {
+    if (link.isURL) {
       await Clipboard.setData(ClipboardData(text: link));
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   @override
