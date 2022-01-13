@@ -60,12 +60,6 @@ class NavigationController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    // clearCurrentIndex();
-    super.onClose();
-  }
-
   void showMoreView() {
     if (onMoreView.value != true) locator<EventHub>().fire('moreViewVisibilityChanged', true);
 

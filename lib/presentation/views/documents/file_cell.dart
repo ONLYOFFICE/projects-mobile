@@ -202,7 +202,7 @@ Future<void> _onFilePopupMenuSelected(
       await controller.downloadFile(selectedFile.viewUrl!);
       break;
     case 'copy':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
         'target': selectedFile.id,
@@ -211,7 +211,7 @@ Future<void> _onFilePopupMenuSelected(
       });
       break;
     case 'move':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
         'target': selectedFile.id,

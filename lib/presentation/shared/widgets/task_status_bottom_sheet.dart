@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/task_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
@@ -48,8 +47,7 @@ void showsStatusesBS(
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight:
-        _getInitialSize(statusCount: _statusesController.statuses.length),
+    initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
@@ -111,8 +109,7 @@ void showsStatusesBS(
 }
 
 Future<void> showsStatusesPM(
-    {required BuildContext context,
-    required TaskItemController taskItemController}) async {
+    {required BuildContext context, required TaskItemController taskItemController}) async {
   final _statusesController = Get.find<TaskStatusesController>();
   final items = <PopupMenuEntry<dynamic>>[
     for (var i = 0; i < _statusesController.statuses.length; i++)
@@ -134,8 +131,8 @@ Future<void> showsStatusesPM(
                   canEditTask: taskItemController.task.value.canEdit,
                   status: _statusesController.statuses[i],
                 ),
-                selected: _statusesController.statuses[i].title ==
-                    taskItemController.status.value.title),
+                selected:
+                    _statusesController.statuses[i].title == taskItemController.status.value.title),
           ),
         ),
       ),

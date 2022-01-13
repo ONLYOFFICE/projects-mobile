@@ -93,7 +93,7 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'editTask':
-      Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value));
+      await Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value));
       break;
 
     case 'followTask':

@@ -250,11 +250,7 @@ class CommentsApi {
       final responseStream = await request.send();
       final response = await http.Response.fromStream(responseStream);
 
-      if (response is http.Response) {
-        result.response = response.body;
-      } else {
-        result.error = response as CustomError;
-      }
+      result.response = response.body;
     } catch (e) {
       result.error = CustomError(message: e.toString());
     }

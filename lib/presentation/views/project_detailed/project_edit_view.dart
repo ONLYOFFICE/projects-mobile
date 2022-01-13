@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 
@@ -59,8 +58,7 @@ class EditProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final editProjectController = Get.find<ProjectEditController>();
-    editProjectController
-        .setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
+    editProjectController.setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     return WillPopScope(
       onWillPop: () async {
@@ -94,8 +92,7 @@ class EditProjectView extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 72),
                     child: Align(
                         alignment: Alignment.centerLeft,
-                        child: ProjectStatusButton(
-                            projectController: editProjectController)),
+                        child: ProjectStatusButton(projectController: editProjectController)),
                   ),
                   const SizedBox(height: 20),
                   ProjectDescriptionTile(controller: editProjectController),

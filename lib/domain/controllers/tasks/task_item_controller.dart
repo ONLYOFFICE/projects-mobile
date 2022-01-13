@@ -212,7 +212,7 @@ class TaskItemController extends GetxController {
       final newTaskController =
           Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
 
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(const TaskDetailedView(), arguments: {'controller': newTaskController});
     }
   }
@@ -257,7 +257,7 @@ class TaskItemController extends GetxController {
       if (Get.find<PlatformController>().isMobile) {
         showsStatusesBS(context: context, taskItemController: this);
       } else {
-        showsStatusesPM(context: context, taskItemController: this);
+        await showsStatusesPM(context: context, taskItemController: this);
       }
     }
   }
@@ -322,7 +322,7 @@ class TaskItemController extends GetxController {
       projectId: task.value.projectOwner!.id!,
     );
     if (project != null) {
-      Get.find<NavigationController>().to(
+      await Get.find<NavigationController>().to(
         ProjectDetailedView(),
         arguments: {'projectDetailed': project},
       );

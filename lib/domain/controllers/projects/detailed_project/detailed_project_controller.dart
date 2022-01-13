@@ -36,7 +36,6 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
@@ -227,7 +226,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     for (final user in teamMembers) {
       selectedTeamMembers.add(user);
     }
-    Get.find<NavigationController>()
+    await Get.find<NavigationController>()
         .to(const TeamMembersSelectionView(), arguments: {'controller': this});
   }
 

@@ -177,7 +177,7 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> toDiscussionEditingScreen() async {
-    Get.find<NavigationController>().to(
+    await Get.find<NavigationController>().to(
       const DiscussionEditingScreen(),
       arguments: {'discussion': discussion.value},
     );
@@ -263,7 +263,7 @@ class DiscussionItemController extends GetxController {
       projectId: discussion.value.projectOwner!.id!,
     );
     if (project != null) {
-      Get.find<NavigationController>().to(
+      await Get.find<NavigationController>().to(
         ProjectDetailedView(),
         arguments: {'projectDetailed': project},
       );

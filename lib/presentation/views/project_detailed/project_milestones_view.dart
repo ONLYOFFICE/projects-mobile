@@ -166,16 +166,14 @@ class Header extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               _ProjectMilestonesSortButton(controller: controller),
-              Container(
-                child: Row(
-                  children: <Widget>[
-                    InkWell(
-                      onTap: () async =>
-                          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
-                      child: FiltersButton(controler: controller),
-                    ),
-                  ],
-                ),
+              Row(
+                children: <Widget>[
+                  InkWell(
+                    onTap: () async =>
+                        Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
+                    child: FiltersButton(controler: controller),
+                  ),
+                ],
               ),
             ],
           ),

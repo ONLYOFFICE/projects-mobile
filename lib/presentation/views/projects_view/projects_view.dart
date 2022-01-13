@@ -80,8 +80,7 @@ class ProjectsView extends StatelessWidget {
     final scrollController = ScrollController();
     final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
@@ -120,25 +119,21 @@ class ProjectsView extends StatelessWidget {
               controller.paginationController.data.isEmpty &&
               !controller.filterController!.hasFilters.value) {
             return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.project_not_created,
-                  text: tr('noProjectsCreated')),
+              child: EmptyScreen(icon: SvgIcons.project_not_created, text: tr('noProjectsCreated')),
             );
           }
           if (controller.loaded.value == true &&
               controller.paginationController.data.isEmpty &&
               controller.filterController!.hasFilters.value) {
             return Center(
-              child: EmptyScreen(
-                  icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
+              child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noProjectsMatching')),
             );
           }
           return PaginationListView(
             paginationController: controller.paginationController,
             child: ListView.builder(
               controller: scrollController,
-              itemBuilder: (c, i) =>
-                  ProjectCell(item: controller.paginationController.data[i]),
+              itemBuilder: (c, i) => ProjectCell(item: controller.paginationController.data[i]),
               itemCount: controller.paginationController.data.length,
             ),
           );
@@ -160,8 +155,7 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Text(
               controller.screenName,
-              style: TextStyleHelper.headerStyle(
-                  color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
             ),
           ),
           Row(
@@ -179,12 +173,9 @@ class _Title extends StatelessWidget {
               const SizedBox(width: 24),
               InkResponse(
                 onTap: () async => {
-                  Get.find<NavigationController>().toScreen(
-                      const ProjectsFilterScreen(),
+                  Get.find<NavigationController>().toScreen(const ProjectsFilterScreen(),
                       preventDuplicates: false,
-                      arguments: {
-                        'filterController': controller.filterController
-                      })
+                      arguments: {'filterController': controller.filterController})
                 },
                 child: FiltersButton(controler: controller),
               ),
@@ -208,21 +199,17 @@ class Bottom extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           _ProjectsSortButton(controller: controller),
-          Container(
-            child: Row(
-              children: <Widget>[
-                Obx(
-                  () => Text(
-                    tr('total', args: [
-                      controller.paginationController.total.value.toString()
-                    ]),
-                    style: TextStyleHelper.body2(
-                      color: Get.theme.colors().onSurface.withOpacity(0.6),
-                    ),
+          Row(
+            children: <Widget>[
+              Obx(
+                () => Text(
+                  tr('total', args: [controller.paginationController.total.value.toString()]),
+                  style: TextStyleHelper.body2(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ],
       ),
@@ -284,8 +271,7 @@ class _ProjectsSortButton extends StatelessWidget with ShowPopupMenuMixin {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),

@@ -244,12 +244,12 @@ Future<void> _onFolderPopupMenuSelected(
       }
       break;
     case 'open':
-      Get.find<NavigationController>().to(FolderContentView(),
+      await Get.find<NavigationController>().to(FolderContentView(),
           preventDuplicates: false,
           arguments: {'folderName': selectedFolder.title, 'folderId': selectedFolder.id});
       break;
     case 'copy':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
@@ -257,7 +257,7 @@ Future<void> _onFolderPopupMenuSelected(
       });
       break;
     case 'move':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,

@@ -390,7 +390,7 @@ void showsStatusesPM(
   ];
 
 // calculate the menu position, ofsset dy: 50
-  final offset = const Offset(0, 50);
+  const offset = Offset(0, 50);
   final button = context.findRenderObject() as RenderBox;
   final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
   final position = RelativeRect.fromRect(

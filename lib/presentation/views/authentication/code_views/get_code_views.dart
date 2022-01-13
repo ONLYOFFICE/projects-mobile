@@ -31,7 +31,6 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text2/flutter_masked_text2.dart';
@@ -78,8 +77,8 @@ class _GetCodeViewsState extends State<GetCodeViews> {
   Widget build(BuildContext context) {
     // additional padding at the top on tablets
     // ignore: omit_local_variable_types
-    final double padding = getTopPadding(
-        _platformController.isMobile, MediaQuery.of(context).size.height);
+    final double padding =
+        getTopPadding(_platformController.isMobile, MediaQuery.of(context).size.height);
 
     final pages = [
       _Step1(topPadding: padding),
@@ -90,8 +89,7 @@ class _GetCodeViewsState extends State<GetCodeViews> {
 
     return Scaffold(
       appBar: StyledAppBar(
-          leading: IconButton(
-              icon: const Icon(Icons.close_rounded), onPressed: Get.back)),
+          leading: IconButton(icon: const Icon(Icons.close_rounded), onPressed: Get.back)),
       body: SizedBox(
         height: Get.height - MediaQuery.of(context).padding.top - 56,
         child: Stack(

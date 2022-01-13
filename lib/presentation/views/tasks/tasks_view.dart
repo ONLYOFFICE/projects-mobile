@@ -33,7 +33,6 @@
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -189,9 +188,7 @@ class TasksHeader extends StatelessWidget {
             ),
             Obx(
               () => Text(
-                tr('total', args: [
-                  controller.paginationController.total.value.toString()
-                ]),
+                tr('total', args: [controller.paginationController.total.value.toString()]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
                 ),
@@ -214,21 +211,12 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(
-          sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'priority', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'start_date',
-          sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'title', sortController: controller.sortController),
-      SortTile(
-          sortParameter: 'sort_order',
-          sortController: controller.sortController),
+      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(sortParameter: 'priority', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'start_date', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
     ];
   }
 
@@ -263,8 +251,7 @@ class _TasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
           Obx(
             () => Text(
               controller.sortController.currentSortTitle.value,
-              style: TextStyleHelper.projectsSorting
-                  .copyWith(color: Get.theme.colors().primary),
+              style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
             ),
           ),
           const SizedBox(width: 8),

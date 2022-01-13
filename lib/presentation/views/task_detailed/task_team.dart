@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
@@ -69,10 +68,8 @@ class TaskTeamView extends StatelessWidget {
                     userController: PortalUserItemController(
                         portalUser: controller.task.value.responsibles![i]!),
                     onTapFunction: (value) => {
-                          Get.find<NavigationController>()
-                              .toScreen(const ProfileScreen(), arguments: {
-                            'portalUser': controller.task.value.responsibles![i]
-                          })
+                          Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                              arguments: {'portalUser': controller.task.value.responsibles![i]})
                         }),
                 itemExtent: 65,
                 itemCount: controller.task.value.responsibles!.length,
