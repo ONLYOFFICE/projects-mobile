@@ -50,7 +50,8 @@ class AccountProvider {
     return accounts;
   }
 
-  static Future<bool?> deleteAccount({String accountId = ''}) async {
-    return await _channel.invokeMethod('deleteAccount', {'accountId': accountId});
+  static Future<bool?> deleteAccount({String accountId = '', String accountData = ''}) async {
+    return await _channel
+        .invokeMethod('deleteAccount', {'accountId': accountId, 'accountData': accountData});
   }
 }

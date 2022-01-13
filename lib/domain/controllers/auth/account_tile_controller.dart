@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -111,10 +112,11 @@ class AccountTileController extends GetxController {
         child: StyledAlertDialog(
           titleText: tr('removeAccountTitle'),
           contentText: tr('removeAccountText'),
-          acceptText: tr('remove').toUpperCase(),
+          acceptText: tr('removeAccount').toUpperCase(),
           cancelText: tr('cancel').toUpperCase(),
           onAcceptTap: () async => {
-            await Get.find<AccountManagerController>().deleteAccounts(accountId: accountData!.id),
+            await Get.find<AccountManagerController>().deleteAccounts(
+                accountId: accountData!.id, accountData: jsonEncode(accountData!.toJson())),
             Get.back(),
           },
           onCancelTap: Get.back,

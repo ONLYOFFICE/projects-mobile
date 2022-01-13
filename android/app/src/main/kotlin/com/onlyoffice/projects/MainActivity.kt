@@ -63,8 +63,10 @@ class MainActivity : FlutterFragmentActivity() {
 
     private fun deleteAccount(call: MethodCall, result: Result) {
         val accountId = call.argument<String>("accountId")
+        val accountData = call.argument<String>("accountData")
 
-        this.applicationContext.accountUtils!!.deleteAccount(accountId)
+
+        this.applicationContext.accountUtils!!.deleteAccount(accountId, accountData)
 
         result.success(true)
     }

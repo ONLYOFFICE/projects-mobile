@@ -102,13 +102,14 @@ class AccountManagerController extends GetxController {
     return accountsList;
   }
 
-  Future<void> deleteAccounts({String accountId = ''}) async {
+  Future<void> deleteAccounts({String accountId = '', String accountData = ''}) async {
     try {
-      final deleted = await AccountProvider.deleteAccount(accountId: accountId);
+      final deleted =
+          await AccountProvider.deleteAccount(accountId: accountId, accountData: accountData);
       if (deleted!) {
         accounts.value = await fetchAccounts();
 
-        if (accounts.isEmpty) await Get.find<NavigationController>().to(PortalInputView());
+        if (accounts.isEmpty) await Get.offAll(PortalInputView());
 
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }
