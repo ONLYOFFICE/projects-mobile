@@ -240,7 +240,14 @@ class _ProjectContextMenu extends StatelessWidget {
                 child: ProjectMilestonesSortButton(
                   controller: controller.projectMilestonesController,
                 )),
-          // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
+          if (index == ProjectDetailedTabs.documents &&
+              (controller.projectDocumentsController.itemList.isNotEmpty ||
+                  controller.projectDocumentsController.filterController.hasFilters.value))
+            PlatformPopupMenuItem(
+                value: PopupMenuItemValue.sortDocuments,
+                child: ProjectDocumentsSortButton(
+                  controller: controller.projectDocumentsController,
+                )),
           if (controller.projectData.canEdit!)
             PlatformPopupMenuItem(
               value: PopupMenuItemValue.editProject,
@@ -282,6 +289,7 @@ Future<void> _onSelected(
       break;
 
     case PopupMenuItemValue.sortDocuments:
+      documentsSortButtonOnPressed(controller.projectDocumentsController, context);
       break;
 
     case PopupMenuItemValue.editProject:

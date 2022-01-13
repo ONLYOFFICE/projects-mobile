@@ -49,7 +49,6 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
@@ -154,20 +153,16 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return PlatformIconButton(
       icon: FiltersButton(controller: controller),
       onPressed: () async =>
           Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
-
     );
   }
 }
 
-
 class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixin {
   const ProjectMilestonesSortButton({
-
     Key? key,
     required this.controller,
   }) : super(key: key);
@@ -260,7 +255,6 @@ void milestonesSortButtonOnPressed(MilestonesDataSource controller, BuildContext
       context: context,
       options: _getSortTile(),
       offset: const Offset(0, 30),
-
     );
   }
 }
