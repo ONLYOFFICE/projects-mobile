@@ -32,23 +32,26 @@
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class ProjectDocumentsScreen extends StatelessWidget {
@@ -121,6 +124,27 @@ class _Content extends StatelessWidget {
                 );
             }() as Widget);
       },
+    );
+  }
+}
+
+class ProjectDocumentsFilterButton extends StatelessWidget {
+  const ProjectDocumentsFilterButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final DocumentsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+        const DocumentsFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+      ),
     );
   }
 }

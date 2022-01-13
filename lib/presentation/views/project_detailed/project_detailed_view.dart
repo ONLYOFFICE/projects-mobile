@@ -119,36 +119,12 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     return Scaffold(
       appBar: StyledAppBar(
         actions: [
-          Obx(() {
-            if (_activeIndex.value == ProjectDetailedTabs.tasks &&
-                (projectController.projectTasksController.tasksList.isNotEmpty ||
-                    projectController.projectTasksController.filterController.hasFilters.value))
-              return Row(
-                children: [
-                  PlatformIconButton(
-                    icon: Icon(PlatformIcons(context).search),
-                    onPressed: projectController.projectTasksController.showSearch,
-                  ),
-                  ProjectTasksFilterButton(controller: projectController.projectTasksController),
-                ],
-              );
-
-            if (_activeIndex.value == ProjectDetailedTabs.milestones &&
-                (projectController.projectMilestonesController.itemList.isNotEmpty ||
-                    projectController
-                        .projectMilestonesController.filterController.hasFilters.value))
-              return Row(
-                children: [
-                  PlatformIconButton(
-                    icon: Icon(PlatformIcons(context).search),
-                  ),
-                  ProjectMilestonesFilterButton(
-                      controller: projectController.projectMilestonesController),
-                ],
-              );
-
-            return const SizedBox();
-          }),
+          Obx(
+            () => _ProjectAppBarActions(
+              projectController: projectController,
+              index: _activeIndex.value,
+            ),
+          ),
           Obx(
             () => _ProjectContextMenu(
               controller: projectController,
@@ -206,6 +182,59 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         ],
       ),
     );
+  }
+}
+
+class _ProjectAppBarActions extends StatelessWidget {
+  final ProjectDetailsController projectController;
+  final int index;
+
+  const _ProjectAppBarActions({Key? key, required this.projectController, required this.index})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return () {
+      if (index == ProjectDetailedTabs.tasks &&
+          (projectController.projectTasksController.tasksList.isNotEmpty ||
+              projectController.projectTasksController.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+              onPressed: projectController.projectTasksController.showSearch,
+            ),
+            ProjectTasksFilterButton(controller: projectController.projectTasksController),
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.milestones &&
+          (projectController.projectMilestonesController.itemList.isNotEmpty ||
+              projectController.projectMilestonesController.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+            ),
+            ProjectMilestonesFilterButton(
+                controller: projectController.projectMilestonesController),
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.documents &&
+          (projectController.projectDocumentsController.itemList.isNotEmpty ||
+              projectController.projectDocumentsController.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+            ),
+            ProjectDocumentsFilterButton(controller: projectController.projectDocumentsController),
+          ],
+        );
+
+      return const SizedBox();
+    }();
   }
 }
 
