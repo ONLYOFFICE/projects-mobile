@@ -123,19 +123,24 @@ class AccountUtils(private val context: Context) {
                 val jsonObject = JSONObject()
                 val names = cursor.columnNames
                 repeat(cursor.columnCount) { index ->
-                    if (cursor.getColumnName(index) == "token" || cursor.getColumnName(index) == "password") {
-                        jsonObject.put(
-                            names[index], CryptUtils.decryptAES128(
-                                cursor.getString(index), cursor.getString(
-                                    cursor.getColumnIndex(
-                                        names[0]
+                    when (cursor.getColumnName(index)) {
+                        "token", "password" -> {
+                            jsonObject.put(
+                                names[index], CryptUtils.decryptAES128(
+                                    cursor.getString(index), cursor.getString(
+                                        cursor.getColumnIndex(
+                                            names[0]
+                                        )
                                     )
                                 )
                             )
-                        )
-                    } else {
-                        jsonObject.put(names[index], cursor.getString(index))
-
+                        }
+                        "isSslCiphers", "isSslState", "isOnline", "isWebDav", "isOneDrive", "isDropbox", "isAdmin", "isVisitor" -> {
+                            jsonObject.put(names[index], cursor.getString(index) == "1")
+                        }
+                        else -> {
+                            jsonObject.put(names[index], cursor.getString(index))
+                        }
                     }
                 }
                 arrayList[cursor.position] = jsonObject.toString()
