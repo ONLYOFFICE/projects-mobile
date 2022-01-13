@@ -296,6 +296,7 @@ class LoginController extends GetxController {
     Get.find<UserController>().clear();
 
     locator<EventHub>().fire('logoutSuccess');
+    setState(ViewState.Idle);
   }
 
   // TODO: check dispose textControllers
