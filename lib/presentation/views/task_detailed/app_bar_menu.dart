@@ -39,39 +39,39 @@ class _AppBarMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final task = controller!.task.value;
-    return PopupMenuButton(
+    return PlatformPopupMenuButton(
       icon: Icon(PlatformIcons(context).ellipsis, size: 26),
-      offset: const Offset(0, 25),
       onSelected: (dynamic value) => _onSelected(value, controller!),
       itemBuilder: (context) {
         return [
           if (controller!.canEdit && task.responsibles!.isEmpty)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
             ),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
           if (controller!.canEdit)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
             ),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'followTask',
             child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
           ),
           if (controller!.canEdit)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               value: 'copyTask',
               child: Text(tr('copyTask')),
             ),
           if (task.canDelete!)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
+              isDestructiveAction: true,
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
             )

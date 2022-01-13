@@ -46,6 +46,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
@@ -78,7 +80,7 @@ class FolderCell extends StatelessWidget {
               width: 60,
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: PopupMenuButton(
+                child: PlatformPopupMenuButton(
                   onSelected: (dynamic value) => _onFolderPopupMenuSelected(
                     value,
                     entity,
@@ -89,38 +91,38 @@ class FolderCell extends StatelessWidget {
                       color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'open',
                         child: Text(tr('open')),
                       ),
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
                       if (Security.documents.canEdit(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
                       if (!Security.documents.isRoot(entity) &&
                           Security.documents.canDelete(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
                       if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
                         ),
                       if (!Security.documents.isRoot(entity) &&
                           Security.documents.canDelete(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          ),
+                          isDestructiveAction: true,
+                          textStyle:
+                              TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                          child: Text(tr('delete')),
                         ),
                     ];
                   },

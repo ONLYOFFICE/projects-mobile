@@ -169,7 +169,6 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
 
     return CupertinoButton(
       key: data?.widgetKey ?? widgetKey,
-      child: data?.icon ?? cupertinoIcon ?? icon!,
       onPressed: data?.onPressed ?? onPressed ?? null,
       padding: data?.padding ?? padding,
       color: data?.color ?? color,
@@ -178,6 +177,7 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
       pressedOpacity: data?.pressedOpacity ?? 0.4,
       disabledColor: data?.disabledColor ?? disabledColor ?? CupertinoColors.quaternarySystemFill,
       alignment: data?.alignment ?? Alignment.center,
+      child: data?.icon ?? cupertinoIcon ?? icon!,
     );
   }
 }

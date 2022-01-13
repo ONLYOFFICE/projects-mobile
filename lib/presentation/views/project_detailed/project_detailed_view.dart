@@ -46,6 +46,8 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
@@ -222,7 +224,7 @@ class _ProjectContextMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
+    return PlatformPopupMenuButton(
       icon: Icon(PlatformIcons(context).ellipsis, size: 26),
       //offset: const Offset(0, 25),
       onSelected: (String value) => _onSelected(value, controller, context),
@@ -231,7 +233,7 @@ class _ProjectContextMenu extends StatelessWidget {
           if (index == ProjectDetailedTabs.tasks &&
               (controller.projectTasksController.tasksList.isNotEmpty ||
                   controller.projectTasksController.filterController.hasFilters.value))
-            PopupMenuItem(
+            PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortTasks,
                 child: ProjectTasksSortButton(
                   controller: controller.projectTasksController,
@@ -239,35 +241,30 @@ class _ProjectContextMenu extends StatelessWidget {
           if (index == ProjectDetailedTabs.milestones &&
               (controller.projectMilestonesController.itemList.isNotEmpty ||
                   controller.projectMilestonesController.filterController.hasFilters.value))
-            PopupMenuItem(
+            PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortMilestones,
                 child: ProjectMilestonesSortButton(
                   controller: controller.projectMilestonesController,
                 )),
           // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
           if (controller.projectData.canEdit!)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               value: PopupMenuItemValue.editProject,
               child: Text(tr('editProject')),
             ),
           if (!(controller.projectData.security?['isInTeam'] as bool))
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               value: PopupMenuItemValue.followProject,
               child: controller.projectData.isFollow as bool
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
             ),
           if (controller.projectData.canDelete as bool)
-            PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
-
+            PlatformPopupMenuItem(
+              textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
               value: PopupMenuItemValue.deleteProject,
-
-              child: Text(
-                tr('delete'),
-                style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-              ),
+              isDestructiveAction: true,
+              child: Text(tr('delete')),
             )
         ];
       },
