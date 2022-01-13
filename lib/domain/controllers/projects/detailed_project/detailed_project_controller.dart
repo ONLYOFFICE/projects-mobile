@@ -62,15 +62,12 @@ class ProjectDetailsController extends BaseProjectEditorController {
   final projectDiscussionsController =
       Get.put<ProjectDiscussionsController>(ProjectDiscussionsController());
   final projectDocumentsController = Get.find<DocumentsController>();
+  final projectTeamDataSource = Get.find<ProjectTeamController>();
 
   RxBool loaded = true.obs;
 
   RxString projectTitleText = ''.obs;
-
   RxString managerText = ''.obs;
-  final teamMembers = <PortalUserItemController>[].obs;
-  RxInt teamMembersCount = 0.obs;
-
   RxString creationDateText = ''.obs;
 
   bool markedToDelete = false;
@@ -117,7 +114,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     final response = await _projectService.getProjectById(projectId: _projectDetailed.id!);
     if (response != null) _projectDetailed = response;
 
-    await fillProjectInfo();
+    fillProjectInfo();
     if (response!.tags != null) {
       tags.addAll(response.tags!);
       tagsText.value = response.tags!.join(', ');
@@ -126,27 +123,18 @@ class ProjectDetailsController extends BaseProjectEditorController {
     final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
     creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.created!));
 
-    await projectTasksController.setup(projectDetailed);
-    await projectMilestonesController.setup(projectDetailed: projectDetailed);
-    await projectDiscussionsController.setup(projectDetailed);
-    await projectDocumentsController.setupFolder(
-        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
+    unawaited(projectTasksController.setup(projectDetailed));
+    unawaited(projectMilestonesController.setup(projectDetailed: projectDetailed));
+    unawaited(projectDiscussionsController.setup(projectDetailed));
+    unawaited(projectDocumentsController.setupFolder(
+        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder));
+    projectTeamDataSource.setup(projectDetailed: projectDetailed);
+    unawaited(projectTeamDataSource.getTeam());
 
     return Future.value(true);
   }
 
-  Future<void> fillProjectInfo() async {
-    teamMembersCount.value = _projectDetailed.participantCount!;
-
-    final tream = Get.find<ProjectTeamController>()..setup(projectDetailed: _projectDetailed);
-    // ignore: unawaited_futures
-    tream.getTeam().then((value) => {
-          teamMembers.clear(),
-          teamMembers.addAll(tream.usersList),
-          teamMembers
-              .removeWhere((element) => element.portalUser.id == _projectDetailed.responsible!.id),
-        });
-
+  void fillProjectInfo() {
     statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed.status)]);
 
     projectTitleText.value = _projectDetailed.title!;
@@ -167,7 +155,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     selectedTeamMembers.clear();
 
-    for (final user in teamMembers) {
+    for (final user in projectTeamDataSource.usersList) {
       selectedTeamMembers.add(user);
     }
     Get.find<NavigationController>()

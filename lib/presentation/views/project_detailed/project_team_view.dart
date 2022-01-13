@@ -33,7 +33,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -46,22 +45,17 @@ import 'package:projects/presentation/shared/widgets/styled/styled_floating_acti
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTeamView extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
-
-  final fabAction;
+  final ProjectTeamController projectTeamDataSource;
+  final Function() fabAction;
 
   const ProjectTeamView({
     Key? key,
-    required this.projectDetailed,
+    required this.projectTeamDataSource,
     required this.fabAction,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final projectTeamDataSource = Get.find<ProjectTeamController>()
-      ..setup(projectDetailed: projectDetailed)
-      ..getTeam();
-
     return Stack(
       children: [
         _Content(projectTeamDataSource: projectTeamDataSource),
@@ -73,7 +67,7 @@ class ProjectTeamView extends StatelessWidget {
               () => Visibility(
                 visible: projectTeamDataSource.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: fabAction as Function(),
+                  onPressed: fabAction,
                   child: AppIcon(
                     icon: SvgIcons.fab_user,
                     color: Get.theme.colors().onPrimarySurface,
@@ -101,31 +95,24 @@ class _Content extends StatelessWidget {
     return Obx(() {
       if (projectTeamDataSource.loaded.value == true) {
         return SmartRefresher(
-            enablePullDown: false,
+            enablePullDown: true,
             enablePullUp: projectTeamDataSource.pullUpEnabled,
             controller: projectTeamDataSource.refreshController,
             onLoading: projectTeamDataSource.onLoading,
-            child: ListView(
-              children: <Widget>[
-                Column(
-                  children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController: projectTeamDataSource.usersList[i],
-                          onTapFunction: (value) => {
-                                Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                                    arguments: {
-                                      'portalUser': projectTeamDataSource.usersList[i].portalUser
-                                    })
-                              }),
-                      itemExtent: 65,
-                      itemCount: projectTeamDataSource.usersList.length,
-                    )
-                  ],
-                ),
-              ],
+            onRefresh: projectTeamDataSource.getTeam,
+            child: ListView.builder(
+              physics: const ScrollPhysics(),
+              shrinkWrap: true,
+              itemBuilder: (c, i) => PortalUserItem(
+                  userController: projectTeamDataSource.usersList[i],
+                  onTapFunction: (value) => {
+                        Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                            arguments: {
+                              'portalUser': projectTeamDataSource.usersList[i].portalUser
+                            })
+                      }),
+              itemExtent: 65,
+              itemCount: projectTeamDataSource.usersList.length,
             ));
       }
       return const ListLoadingSkeleton();

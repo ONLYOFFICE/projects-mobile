@@ -207,7 +207,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
             documentsController: projectController.projectDocumentsController,
           ),
           ProjectTeamView(
-              projectDetailed: projectController.projectData,
+              projectTeamDataSource: projectController.projectTeamDataSource,
               fabAction: projectController.manageTeamMembers),
         ],
       ),
