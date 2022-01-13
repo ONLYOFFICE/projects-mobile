@@ -48,9 +48,9 @@ import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart'
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_milestones_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
@@ -197,15 +197,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         children: [
           ProjectOverview(projectController: projectController, tabController: _tabController),
           ProjectTaskScreen(projectTasksController: projectController.projectTasksController),
-          ProjectMilestonesScreen(
-            controller: projectController.projectMilestonesController,
-          ),
+          ProjectMilestonesScreen(controller: projectController.projectMilestonesController),
           ProjectDiscussionsScreen(controller: projectController.projectDiscussionsController),
-          EntityDocumentsView(
-            folderId: projectController.projectData.projectFolder,
-            folderName: projectController.projectData.title,
-            documentsController: projectController.projectDocumentsController,
-          ),
+          ProjectDocumentsScreen(controller: projectController.projectDocumentsController),
           ProjectTeamView(
               projectTeamDataSource: projectController.projectTeamDataSource,
               fabAction: projectController.manageTeamMembers),
@@ -316,7 +310,10 @@ Future<void> _onSelected(
             );
             locator<EventHub>().fire('needToRefreshProjects', ['all']);
           } else {
-            print('ERROR');
+            MessagesHandler.showSnackBar(
+              context: context,
+              text: tr('error'),
+            );
           }
         },
       ));
