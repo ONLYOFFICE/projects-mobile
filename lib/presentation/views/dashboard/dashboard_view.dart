@@ -61,7 +61,6 @@ class DashboardView extends StatelessWidget {
     return Scaffold(
       backgroundColor: Get.theme.colors().background,
       body: NestedScrollView(
-        body: _BodyDashboardWidget(dashboardController: dashboardController),
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             MainAppBar(
@@ -75,6 +74,7 @@ class DashboardView extends StatelessWidget {
             ),
           ];
         },
+        body: _BodyDashboardWidget(dashboardController: dashboardController),
       ),
     );
   }
@@ -245,7 +245,6 @@ class DashboardCardView extends StatelessWidget {
                             SizedBox(
                               height: 100,
                               child: Center(child: PlatformCircularProgressIndicator()),
-
                             ),
                         ],
                       ),

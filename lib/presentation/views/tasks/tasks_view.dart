@@ -54,6 +54,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
@@ -108,102 +109,11 @@ class TasksView extends StatelessWidget {
                 style: TextStyle(color: Get.theme.colors().onSurface),
               ),
               actions: [
-                IconButton(
-                  icon: AppIcon(
-                    width: 24,
-                    height: 24,
-                    icon: SvgIcons.search,
-                    color: Get.theme.colors().primary,
-                  ),
-                  onPressed: controller.showSearch,
-                ),
-                IconButton(
-                  icon: FiltersButton(controller: controller),
-                  onPressed: () async => Get.find<NavigationController>().toScreen(
-                      const TasksFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {'filterController': controller.filterController}),
-                ),
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(
-                    CupertinoIcons.ellipsis_circle,
-                    color: Get.theme.colors().primary,
-                  ),
-                ),
+                _SearchButtonWidget(controller: controller),
+                _FilterButtonWidget(controller: controller),
+                _MoreButtonWidget(controller: controller),
               ],
             ),
-            // PlatformWidget(
-            //   material: (context, target) => SliverAppBar(
-            //     backgroundColor: Get.theme.colors().background,
-            //     pinned: true,
-            //     title: Text(
-            //       controller.screenName,
-            //       style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-            //     ),
-            //     actions: [
-            //       IconButton(
-            //         icon: AppIcon(
-            //           width: 24,
-            //           height: 24,
-            //           icon: SvgIcons.search,
-            //           color: Get.theme.colors().primary,
-            //         ),
-            //         onPressed: controller.showSearch,
-            //       ),
-            //       IconButton(
-            //         icon: FiltersButton(controller: controller),
-            //         onPressed: () async => Get.find<NavigationController>().toScreen(
-            //             const TasksFilterScreen(),
-            //             preventDuplicates: false,
-            //             arguments: {'filterController': controller.filterController}),
-            //       ),
-            //       const SizedBox(width: 4),
-            //     ],
-            //     bottom: PreferredSize(
-            //       preferredSize: const Size.fromHeight(44),
-            //       child: TasksHeader(controller: controller),
-            //     ),
-            //   ),
-            //   cupertino: (context, target) => CupertinoSliverNavigationBar(
-            //     // border: Border.all(style: BorderStyle.none),
-            //     backgroundColor: Get.theme.colors().background,
-            //     padding: EdgeInsetsDirectional.zero,
-            //     largeTitle: Text(
-            //       controller.screenName,
-            //       style: TextStyle(color: Get.theme.colors().onSurface),
-            //     ),
-            //     trailing: Row(
-            //       mainAxisSize: MainAxisSize.min,
-            //       mainAxisAlignment: MainAxisAlignment.end,
-            //       children: [
-            //         IconButton(
-            //           icon: AppIcon(
-            //             width: 24,
-            //             height: 24,
-            //             icon: SvgIcons.search,
-            //             color: Get.theme.colors().primary,
-            //           ),
-            //           onPressed: controller.showSearch,
-            //         ),
-            //         IconButton(
-            //           icon: FiltersButton(controller: controller),
-            //           onPressed: () async => Get.find<NavigationController>().toScreen(
-            //               const TasksFilterScreen(),
-            //               preventDuplicates: false,
-            //               arguments: {'filterController': controller.filterController}),
-            //         ),
-            //         IconButton(
-            //           onPressed: () {},
-            //           icon: Icon(
-            //             CupertinoIcons.ellipsis_circle,
-            //             color: Get.theme.colors().primary,
-            //           ),
-            //         ),
-            //       ],
-            //     ),
-            //   ),
-            // )
           ];
         },
         body: Obx(
@@ -241,6 +151,94 @@ class TasksView extends StatelessWidget {
                 }() as Widget);
           },
         ),
+      ),
+    );
+  }
+}
+
+class _MoreButtonWidget extends StatelessWidget {
+  const _MoreButtonWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final TasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      onPressed: () {},
+      cupertino: (_, __) {
+        return CupertinoIconButtonData(
+          icon: Icon(
+            CupertinoIcons.ellipsis_circle,
+            color: Get.theme.colors().primary,
+          ),
+          color: Get.theme.colors().background,
+          onPressed: () {},
+          padding: EdgeInsets.zero,
+        );
+      },
+      materialIcon: Icon(
+        Icons.more_vert,
+        color: Get.theme.colors().primary,
+      ),
+    );
+  }
+}
+
+class _FilterButtonWidget extends StatelessWidget {
+  const _FilterButtonWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final TasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      onPressed: () async => Get.find<NavigationController>().toScreen(const TasksFilterScreen(),
+          preventDuplicates: false, arguments: {'filterController': controller.filterController}),
+      cupertino: (_, __) {
+        return CupertinoIconButtonData(
+          icon: FiltersButton(controller: controller),
+          color: Get.theme.colors().background,
+          onPressed: controller.showSearch,
+          padding: EdgeInsets.zero,
+        );
+      },
+      materialIcon: FiltersButton(controller: controller),
+    );
+  }
+}
+
+class _SearchButtonWidget extends StatelessWidget {
+  const _SearchButtonWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final TasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      onPressed: controller.showSearch,
+      cupertino: (_, __) {
+        return CupertinoIconButtonData(
+          icon: AppIcon(
+            icon: SvgIcons.search,
+            color: Get.theme.colors().primary,
+          ),
+          color: Get.theme.colors().background,
+          onPressed: controller.showSearch,
+          padding: EdgeInsets.zero,
+        );
+      },
+      materialIcon: AppIcon(
+        icon: SvgIcons.search,
+        color: Get.theme.colors().primary,
       ),
     );
   }

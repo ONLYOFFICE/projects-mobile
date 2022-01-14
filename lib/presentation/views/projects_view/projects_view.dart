@@ -54,6 +54,7 @@ import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/project_filter/projects_filter.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
@@ -108,26 +109,54 @@ class ProjectsView extends StatelessWidget {
                 style: TextStyle(color: Get.theme.colors().onSurface),
               ),
               actions: [
-                IconButton(
-                  icon: AppIcon(
-                    width: 24,
-                    height: 24,
+                PlatformIconButton(
+                  onPressed: controller.showSearch,
+                  cupertino: (_, __) {
+                    return CupertinoIconButtonData(
+                      icon: AppIcon(
+                        icon: SvgIcons.search,
+                        color: Get.theme.colors().primary,
+                      ),
+                      color: Get.theme.colors().background,
+                      onPressed: controller.showSearch,
+                      padding: EdgeInsets.zero,
+                    );
+                  },
+                  materialIcon: AppIcon(
                     icon: SvgIcons.search,
                     color: Get.theme.colors().primary,
                   ),
-                  onPressed: controller.showSearch,
                 ),
-                IconButton(
-                  icon: FiltersButton(controller: controller),
+                PlatformIconButton(
                   onPressed: () async => Get.find<NavigationController>().toScreen(
                       const ProjectsFilterScreen(),
                       preventDuplicates: false,
                       arguments: {'filterController': controller.filterController}),
+                  cupertino: (_, __) {
+                    return CupertinoIconButtonData(
+                      icon: FiltersButton(controller: controller),
+                      color: Get.theme.colors().background,
+                      onPressed: controller.showSearch,
+                      padding: EdgeInsets.zero,
+                    );
+                  },
+                  materialIcon: FiltersButton(controller: controller),
                 ),
-                IconButton(
+                PlatformIconButton(
                   onPressed: () {},
-                  icon: Icon(
-                    CupertinoIcons.ellipsis_circle,
+                  cupertino: (_, __) {
+                    return CupertinoIconButtonData(
+                      icon: Icon(
+                        CupertinoIcons.ellipsis_circle,
+                        color: Get.theme.colors().primary,
+                      ),
+                      color: Get.theme.colors().background,
+                      onPressed: () {},
+                      padding: EdgeInsets.zero,
+                    );
+                  },
+                  materialIcon: Icon(
+                    Icons.more_vert,
                     color: Get.theme.colors().primary,
                   ),
                 ),

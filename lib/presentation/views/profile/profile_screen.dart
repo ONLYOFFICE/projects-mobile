@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
@@ -40,7 +41,6 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -64,10 +64,18 @@ class SelfProfileScreen extends StatelessWidget {
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
-    final showBackButton =
-        Get.arguments == null ? false : Get.arguments['showBackButton'] as bool? ?? false;
-    final showSettingsButton =
-        Get.arguments == null ? true : Get.arguments['showSettingsButton'] as bool? ?? true;
+    final bool showBackButton;
+    if (Get.arguments == null) {
+      showBackButton = false;
+    } else {
+      showBackButton = Get.arguments['showBackButton'] as bool? ?? false;
+    }
+    final bool showSettingsButton;
+    if (Get.arguments == null) {
+      showSettingsButton = true;
+    } else {
+      showSettingsButton = Get.arguments['showSettingsButton'] as bool? ?? true;
+    }
 
     final platformController = Get.find<PlatformController>();
 
@@ -81,11 +89,26 @@ class SelfProfileScreen extends StatelessWidget {
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? Icon(PlatformIcons(context).back)
               : Icon(PlatformIcons(context).clear),
-          titleText: tr('profile'),
+          // titleText: tr('profile'),
+          title: Text(
+            tr('profile'),
+            style: TextStyle(color: Get.theme.colors().onSurface),
+          ),
+          centerTitle: GetPlatform.isAndroid ? false : true,
           actions: [
             if (showSettingsButton)
               PlatformIconButton(
-                icon: const AppIcon(icon: SvgIcons.settings),
+                cupertino: (_, __) {
+                  return CupertinoIconButtonData(
+                    icon: AppIcon(
+                      icon: SvgIcons.settings,
+                      color: Get.theme.colors().primary,
+                    ),
+                    onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+                materialIcon: const AppIcon(icon: SvgIcons.settings),
                 onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
               )
           ],

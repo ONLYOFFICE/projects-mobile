@@ -40,7 +40,14 @@ class _AppBarMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final task = controller!.task.value;
     return PopupMenuButton(
-      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
+      icon: PlatformWidget(
+        cupertino: (_, __) => Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+        ),
+        material: (_, __) => const Icon(Icons.more_vert),
+      ),
+      // Icon(PlatformIcons(context).ellipsis, size: 26),
       offset: const Offset(0, 25),
       onSelected: (dynamic value) => _onSelected(value, controller!),
       itemBuilder: (context) {

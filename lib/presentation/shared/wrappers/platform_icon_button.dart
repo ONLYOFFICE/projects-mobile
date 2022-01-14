@@ -6,11 +6,9 @@
 
 import 'package:flutter/cupertino.dart' show CupertinoButton, CupertinoColors;
 import 'package:flutter/material.dart' show IconButton, VisualDensity;
-import 'package:flutter/rendering.dart' show MouseCursor, SystemMouseCursors;
 import 'package:flutter/widgets.dart';
-
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 const double _kMinInteractiveDimensionCupertino = 44.0;
 
@@ -139,7 +137,7 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
     return IconButton(
       key: data?.widgetKey ?? widgetKey,
       icon: data?.icon ?? materialIcon ?? icon!,
-      onPressed: data?.onPressed ?? onPressed ?? null,
+      onPressed: data?.onPressed ?? onPressed,
       padding: data?.padding ?? padding ?? const EdgeInsets.all(8.0),
       color: data?.color ?? color,
       alignment: data?.alignment ?? Alignment.center,
@@ -169,15 +167,15 @@ class PlatformIconButton extends PlatformWidgetBase<CupertinoButton, Widget> {
 
     return CupertinoButton(
       key: data?.widgetKey ?? widgetKey,
-      child: data?.icon ?? cupertinoIcon ?? icon!,
-      onPressed: data?.onPressed ?? onPressed ?? null,
+      onPressed: data?.onPressed ?? onPressed,
       padding: data?.padding ?? padding,
       color: data?.color ?? color,
-      borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
+      borderRadius: data?.borderRadius ?? const BorderRadius.all(Radius.circular(8.0)),
       minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
       pressedOpacity: data?.pressedOpacity ?? 0.4,
       disabledColor: data?.disabledColor ?? disabledColor ?? CupertinoColors.quaternarySystemFill,
       alignment: data?.alignment ?? Alignment.center,
+      child: data?.icon ?? cupertinoIcon ?? icon!,
     );
   }
 }

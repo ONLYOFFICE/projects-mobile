@@ -63,41 +63,6 @@ class PortalDiscussionsView extends StatelessWidget {
     });
 
     return Scaffold(
-      // appBar: PreferredSize(
-      //   preferredSize: const Size(double.infinity, 101),
-      //   child: ValueListenableBuilder(
-      //     valueListenable: elevation,
-      //     builder: (_, double value, __) => StyledAppBar(
-      //       titleHeight: 101,
-      //       bottomHeight: 0,
-      //       showBackButton: false,
-      //       titleText: tr('discussions'),
-      //       elevation: value,
-      //       actions: [
-      //         PlatformIconButton(
-      //           icon: AppIcon(
-      //             width: 24,
-      //             height: 24,
-      //             icon: SvgIcons.search,
-      //             color: Get.theme.colors().primary,
-      //           ),
-      //           onPressed: controller.showSearch,
-      //           // onPressed: () => controller.showSearch(),
-      //         ),
-      //         PlatformIconButton(
-      //             icon: FiltersButton(controller: controller),
-      //             onPressed: () async => Get.find<NavigationController>().toScreen(
-      //                 const DiscussionsFilterScreen(),
-      //                 preventDuplicates: false,
-      //                 arguments: {'filterController': controller.filterController})),
-      //         const SizedBox(width: 3),
-      //       ],
-      //       bottom: DiscussionsHeader(
-      //         controller: controller,
-      //       ),
-      //     ),
-      //   ),
-      // ),
       floatingActionButton: Obx(
         () => Visibility(
           visible: controller.fabIsVisible.value,
@@ -122,28 +87,78 @@ class PortalDiscussionsView extends StatelessWidget {
               style: TextStyle(color: Get.theme.colors().onSurface),
             ),
             actions: [
-              PlatformIconButton(
-                icon: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
-                ),
-                onPressed: controller.showSearch,
-                // onPressed: () => controller.showSearch(),
-              ),
-              PlatformIconButton(
-                  icon: FiltersButton(controller: controller),
-                  onPressed: () async => Get.find<NavigationController>().toScreen(
-                      const DiscussionsFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {'filterController': controller.filterController})),
+              _SearchButtonWidget(controller: controller),
+              _FilterButtonWidget(controller: controller),
               const SizedBox(width: 3),
             ],
           ),
         ],
         body: DiscussionsList(controller: controller),
       ),
+    );
+  }
+}
+
+class _SearchButtonWidget extends StatelessWidget {
+  const _SearchButtonWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final DiscussionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      onPressed: controller.showSearch,
+      materialIcon: AppIcon(
+        width: 24,
+        height: 24,
+        icon: SvgIcons.search,
+        color: Get.theme.colors().primary,
+      ),
+      cupertino: (_, __) {
+        return CupertinoIconButtonData(
+          icon: AppIcon(
+            icon: SvgIcons.search,
+            color: Get.theme.colors().primary,
+          ),
+          color: Get.theme.colors().background,
+          onPressed: controller.showSearch,
+          padding: EdgeInsets.zero,
+        );
+      },
+    );
+  }
+}
+
+class _FilterButtonWidget extends StatelessWidget {
+  const _FilterButtonWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final DiscussionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+          const DiscussionsFilterScreen(),
+          preventDuplicates: false,
+          arguments: {'filterController': controller.filterController}),
+      materialIcon: FiltersButton(controller: controller),
+      cupertino: (_, __) {
+        return CupertinoIconButtonData(
+          icon: FiltersButton(controller: controller),
+          color: Get.theme.colors().background,
+          onPressed: () async => Get.find<NavigationController>().toScreen(
+              const DiscussionsFilterScreen(),
+              preventDuplicates: false,
+              arguments: {'filterController': controller.filterController}),
+          padding: EdgeInsets.zero,
+        );
+      },
     );
   }
 }

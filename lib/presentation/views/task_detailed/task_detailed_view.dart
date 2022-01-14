@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
@@ -46,6 +47,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/documents/entity_documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
@@ -106,6 +108,14 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
             if (taskItemController.canEdit)
               PlatformIconButton(
                 icon: Icon(PlatformIcons(context).edit),
+                cupertino: (_, __) {
+                  return CupertinoIconButtonData(
+                    icon: Icon(PlatformIcons(context).edit),
+                    onPressed: () => Get.find<NavigationController>()
+                        .to(TaskEditingView(task: taskItemController.task.value)),
+                    padding: EdgeInsets.zero,
+                  );
+                },
                 onPressed: () => Get.find<NavigationController>()
                     .to(TaskEditingView(task: taskItemController.task.value)),
               ),
