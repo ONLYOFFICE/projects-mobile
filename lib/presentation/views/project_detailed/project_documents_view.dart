@@ -58,13 +58,18 @@ class ProjectDocumentsScreen extends StatelessWidget {
   const ProjectDocumentsScreen({
     Key? key,
     required this.controller,
+    this.appBar,
   }) : super(key: key);
 
   final BaseDocumentsController controller;
+  final PreferredSizeWidget? appBar;
 
   @override
   Widget build(BuildContext context) {
-    return _Content(controller: controller);
+    return Scaffold(
+      appBar: appBar,
+      body: _Content(controller: controller),
+    );
   }
 }
 
@@ -122,7 +127,9 @@ class _Content extends StatelessWidget {
                           );
                   },
                 );
-            }() as Widget);
+
+              return const SizedBox();
+            }());
       },
     );
   }

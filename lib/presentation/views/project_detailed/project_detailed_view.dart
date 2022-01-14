@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart'
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
@@ -227,8 +228,15 @@ class _ProjectAppBarActions extends StatelessWidget {
         return Row(
           children: [
             PlatformIconButton(
-              icon: Icon(PlatformIcons(context).search),
-            ),
+                icon: Icon(PlatformIcons(context).search),
+                onPressed: () {
+                  Get.find<NavigationController>()
+                      .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                    'folderName': projectController.projectDocumentsController.screenName,
+                    'folderId': projectController.projectDocumentsController.currentFolderID,
+                    'documentsController': projectController.projectDocumentsController,
+                  });
+                }),
             ProjectDocumentsFilterButton(controller: projectController.projectDocumentsController),
           ],
         );
