@@ -29,15 +29,17 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -47,44 +49,26 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/filter/milestone_filter_screen.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/milestone_cell.dart';
-import 'package:projects/presentation/views/project_detailed/milestones/new_milestone.dart';
+import 'package:projects/presentation/views/documents/file_cell.dart';
+import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
+import 'package:projects/presentation/views/documents/folder_cell.dart';
 
-class ProjectMilestonesScreen extends StatelessWidget {
-  final MilestonesDataSource controller;
-  const ProjectMilestonesScreen({
+class ProjectDocumentsScreen extends StatelessWidget {
+  const ProjectDocumentsScreen({
     Key? key,
     required this.controller,
+    this.appBar,
   }) : super(key: key);
+
+  final BaseDocumentsController controller;
+  final PreferredSizeWidget? appBar;
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        _Content(controller: controller),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16, bottom: 24),
-            child: Obx(
-              () => Visibility(
-                visible: controller.fabIsVisible.value,
-                child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>().to(const NewMilestoneView(),
-                      arguments: {'projectDetailed': controller.projectDetailed}),
-                  child: AppIcon(
-                    icon: SvgIcons.fab_milestone,
-                    color: Get.theme.colors().onPrimarySurface,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return Scaffold(
+      appBar: appBar,
+      body: _Content(controller: controller),
     );
   }
 }
@@ -95,79 +79,90 @@ class _Content extends StatelessWidget {
     required this.controller,
   }) : super(key: key);
 
-  final MilestonesDataSource controller;
+  final BaseDocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          (() {
-            if (!controller.loaded.value) return const ListLoadingSkeleton();
+      () {
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
 
-            return Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: () {
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
-                      !controller.filterController.hasFilters.value)
-                    return Center(
-                      child: EmptyScreen(
-                        icon: SvgIcons.milestone_not_created,
-                        text: tr('noMilestonesCreated'),
-                      ),
-                    );
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
-                      controller.filterController.hasFilters.value)
-                    return Center(
-                      child:
-                          EmptyScreen(icon: SvgIcons.not_found, text: tr('noMilestonesMatching')),
-                    );
-                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                    return ListView.builder(
-                      itemBuilder: (c, i) =>
-                          MilestoneCell(milestone: controller.paginationController.data[i]),
-                      itemExtent: 72,
-                      itemCount: controller.paginationController.data.length,
-                    );
-                }() as Widget,
-              ),
-            );
-          }()),
-        ],
-      ),
+        return PaginationListView(
+            paginationController: controller.paginationController,
+            child: () {
+              if (controller.loaded.value && controller.nothingFound.value) {
+                return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
+              }
+              if (controller.loaded.value &&
+                  controller.paginationController.data.isEmpty &&
+                  !controller.filterController.hasFilters.value &&
+                  !controller.searchMode.value) {
+                return Center(
+                    child: EmptyScreen(
+                        icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
+              }
+              if (controller.loaded.value &&
+                  controller.paginationController.data.isEmpty &&
+                  controller.filterController.hasFilters.value &&
+                  !controller.searchMode.value) {
+                return Center(
+                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
+              }
+              if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                return ListView.separated(
+                  controller: ScrollController(),
+                  itemCount: controller.paginationController.data.length,
+                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
+                  itemBuilder: (BuildContext context, int index) {
+                    final element = controller.paginationController.data[index];
+                    return element is Folder
+                        ? FolderCell(
+                            entity: element,
+                            controller: controller as DocumentsController,
+                          )
+                        : FileCell(
+                            entity: element as PortalFile,
+                            index: index,
+                            controller: controller as DocumentsController,
+                          );
+                  },
+                );
+
+              return const SizedBox();
+            }());
+      },
     );
   }
 }
 
-class ProjectMilestonesFilterButton extends StatelessWidget {
-  const ProjectMilestonesFilterButton({
+class ProjectDocumentsFilterButton extends StatelessWidget {
+  const ProjectDocumentsFilterButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
-  final MilestonesDataSource controller;
+  final DocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
     return PlatformIconButton(
       icon: FiltersButton(controller: controller),
-      onPressed: () async =>
-          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+        const DocumentsFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+      ),
     );
   }
 }
 
-class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixin {
-  const ProjectMilestonesSortButton({
+class ProjectDocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const ProjectDocumentsSortButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
-  final MilestonesDataSource controller;
+  final DocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -204,7 +199,7 @@ class ProjectMilestonesSortButton extends StatelessWidget with ShowPopupMenuMixi
   }
 }
 
-void milestonesSortButtonOnPressed(MilestonesDataSource controller, BuildContext context) async {
+void documentsSortButtonOnPressed(DocumentsController controller, BuildContext context) async {
   Future<void> showPopupMenu(
       {required BuildContext context,
       required List<Widget> options,
@@ -234,9 +229,12 @@ void milestonesSortButtonOnPressed(MilestonesDataSource controller, BuildContext
 
   List<SortTile> _getSortTile() {
     return [
-      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
+      SortTile(sortParameter: 'dateandtime', sortController: controller.sortController),
       SortTile(sortParameter: 'create_on', sortController: controller.sortController),
-      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'AZ', sortController: controller.sortController),
+      SortTile(sortParameter: 'type', sortController: controller.sortController),
+      SortTile(sortParameter: 'size', sortController: controller.sortController),
+      SortTile(sortParameter: 'author', sortController: controller.sortController),
     ];
   }
 

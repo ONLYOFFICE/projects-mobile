@@ -41,6 +41,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_switch.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';

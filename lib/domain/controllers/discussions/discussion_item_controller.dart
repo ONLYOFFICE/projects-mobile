@@ -194,7 +194,7 @@ class DiscussionItemController extends GetxController {
     }
   }
 
-  Future<void> deleteMessage(BuildContext context) async {
+  Future<void> deleteMessage() async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
@@ -206,7 +206,7 @@ class DiscussionItemController extends GetxController {
           if (result != null) {
             Get.back();
             Get.back();
-            MessagesHandler.showSnackBar(context: context, text: tr('discussionDeleted'));
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('discussionDeleted'));
 
             locator<EventHub>().fire('needToRefreshDetails', [discussion.value.project!.id]);
             locator<EventHub>().fire('needToRefreshDiscussions', ['all']);

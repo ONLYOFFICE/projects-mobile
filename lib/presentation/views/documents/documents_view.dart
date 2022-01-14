@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
@@ -58,6 +59,7 @@ import 'package:projects/presentation/views/documents/documents_sort_options.dar
 import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key? key}) : super(key: key);
@@ -110,9 +112,14 @@ class DocumentsSearchView extends StatelessWidget {
       documentsController.setupSearchMode(folderName: folderName, folderId: folderId);
     });
 
-    return DocumentsScreen(
+    return ProjectDocumentsScreen(
       controller: documentsController,
-      isCollapsed: true,
+      appBar: StyledAppBar(
+        title: CustomSearchBar(controller: documentsController),
+        showBackButton: true,
+        titleHeight: 50,
+      ),
+      //isCollapsed: true,
     );
   }
 }

@@ -38,6 +38,9 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_detailed_view.dart';
 
@@ -94,34 +97,33 @@ class SubtaskCell extends StatelessWidget {
                   ),
                   if (subtaskController.subtask.value!.canEdit! ||
                       subtaskController.canCreateSubtask)
-                    SizedBox(
-                      width: 52,
-                      child: PopupMenuButton(
-                        onSelected: (dynamic value) =>
-                            _onSelected(context, value, subtaskController),
-                        itemBuilder: (context) {
-                          return [
-                            if (subtaskController.canEdit &&
-                                subtaskController.subtask.value!.responsible == null)
-                              PopupMenuItem(
-                                  value: 'acceptSubtask',
-                                  child: Text(tr('acceptSubtask'),
-                                      style: TextStyleHelper.subtitle1())),
-                            if (subtaskController.canCreateSubtask &&
-                                subtaskController.subtask.value!.status == SubtaskStatus.OPEN)
-                              PopupMenuItem(
-                                  value: 'copySubtask',
-                                  child:
-                                      Text(tr('copySubtask'), style: TextStyleHelper.subtitle1())),
-                            if (subtask.canEdit!)
-                              PopupMenuItem(
-                                  value: 'delete',
-                                  child: Text(tr('delete'),
-                                      style: TextStyleHelper.subtitle1(
-                                          color: Get.theme.colors().colorError))),
-                          ];
-                        },
-                      ),
+                    PlatformPopupMenuButton(
+                      onSelected: (dynamic value) => _onSelected(context, value, subtaskController),
+                      icon: Icon(PlatformIcons(context).ellipsis,
+                          color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                      itemBuilder: (context) {
+                        return [
+                          if (subtaskController.canEdit &&
+                              subtaskController.subtask.value!.responsible == null)
+                            PlatformPopupMenuItem(
+                                value: 'acceptSubtask',
+                                child:
+                                    Text(tr('acceptSubtask'), style: TextStyleHelper.subtitle1())),
+                          if (subtaskController.canCreateSubtask &&
+                              subtaskController.subtask.value!.status == SubtaskStatus.OPEN)
+                            PlatformPopupMenuItem(
+                                value: 'copySubtask',
+                                child: Text(tr('copySubtask'), style: TextStyleHelper.subtitle1())),
+                          if (subtask.canEdit!)
+                            PlatformPopupMenuItem(
+                              value: 'delete',
+                              isDestructiveAction: true,
+                              textStyle:
+                                  TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                              child: Text(tr('delete')),
+                            )
+                        ];
+                      },
                     ),
                 ],
               ),
