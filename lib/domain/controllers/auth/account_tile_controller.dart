@@ -73,7 +73,7 @@ class AccountTileController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      final avatarBytes = await _downloadService.downloadImage(accountData!.avatarUrl);
+      final avatarBytes = await _downloadService.downloadImage(accountData!.avatarUrl!);
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;
@@ -87,7 +87,7 @@ class AccountTileController extends GetxController {
 
   void setupUser() {
     if (accountData?.portal != null) {
-      userTitle.value = accountData!.portal;
+      userTitle.value = accountData!.portal!;
     }
     loadAvatar();
   }
@@ -116,7 +116,7 @@ class AccountTileController extends GetxController {
           cancelText: tr('cancel').toUpperCase(),
           onAcceptTap: () async => {
             await Get.find<AccountManagerController>().deleteAccounts(
-                accountId: accountData!.id, accountData: jsonEncode(accountData!.toJson())),
+                accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())),
             Get.back(),
           },
           onCancelTap: Get.back,

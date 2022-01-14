@@ -66,14 +66,14 @@ class AccountManagerController extends GetxController {
       final accountData = AccountData(
           token: tokenString,
           portal: portalUri.host,
-          login: user.email!,
+          login: user.email,
           expires: expires,
-          name: user.displayName!,
-          id: user.id!,
-          isAdmin: user.isAdmin!,
-          isVisitor: user.isVisitor!,
+          name: user.displayName,
+          id: user.id,
+          isAdmin: user.isAdmin,
+          isVisitor: user.isVisitor,
           scheme: '${portalUri.scheme}://',
-          avatarUrl: avatarUrl!);
+          avatarUrl: avatarUrl);
       await AccountProvider.addAccount(
           accountData: json.encode(accountData.toJson()), accountId: user.id!);
     } catch (e, s) {
