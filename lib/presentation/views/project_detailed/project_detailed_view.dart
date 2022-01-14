@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -48,10 +49,11 @@ import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart'
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
-import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_milestones_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
@@ -256,7 +258,17 @@ class _ProjectContextMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformPopupMenuButton(
-      icon: Icon(PlatformIcons(context).ellipsis, size: 26),
+      icon: PlatformWidget(
+        cupertino: (_, __) => Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+          size: 26,
+        ),
+        material: (_, __) => const Icon(
+          Icons.more_vert,
+          size: 26,
+        ),
+      ),
       //offset: const Offset(0, 25),
       onSelected: (String value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
@@ -331,6 +343,8 @@ Future<void> _onSelected(
 
     case PopupMenuItemValue.editProject:
       Get.find<NavigationController>().to(EditProjectView(projectDetailed: controller.projectData),
+          transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
+          fullscreenDialog: true,
           arguments: {'projectDetailed': controller.projectData});
       break;
 

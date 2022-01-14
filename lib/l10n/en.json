@@ -466,5 +466,7 @@
 		"betweenText": " and the "
 	},
 	"portalNotFound": "Portal not found. Check portal URL.",
-	"newTagNoTitleErrorMessage": "Each tag must have a title."
+	"newTagNoTitleErrorMessage": "Each tag must have a title.",
+	"done": "Done",
+	"closeLowerCase": "Close"
 }

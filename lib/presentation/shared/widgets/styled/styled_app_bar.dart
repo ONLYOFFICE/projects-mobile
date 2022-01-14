@@ -52,6 +52,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Function()? onLeadingPressed;
   final Color? backgroundColor;
+  final double? leadingWidth;
 
   final Icon? backButtonIcon;
 
@@ -69,6 +70,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.title,
     this.titleHeight = 56,
     this.titleText,
+    this.leadingWidth,
     this.backgroundColor,
   })  : assert(titleText == null || title == null),
         assert(leading == null || onLeadingPressed == null),
@@ -92,12 +94,12 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
-
       // backwardsCompatibility: false,
       // systemOverlayStyle: const SystemUiOverlayStyle(
       //   statusBarColor: Colors.transparent,
       //   statusBarIconBrightness: Brightness.dark,
       // ),
+      leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformIconButton(
               icon: Icon(PlatformIcons(context).back),
@@ -117,7 +119,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
           : titleText != null
               ? Text(
                   titleText!,
-                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
                 )
               : null,
       bottom: bottom == null
