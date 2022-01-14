@@ -453,10 +453,20 @@
 	"taskStatusOpen": "进行中",
 	"taskStatusClosed": "已结束",
 	"searchMilestone": "搜索里程碑...",
-
 	"privacyAndTermsFooter": {
 		"privacyPolicyWithLink": "隐私政策",
 		"termsOfServiceWithLink": "服务条款",
 		"total": "通过继续您接受@:privacyAndTermsFooter.privacyPolicyWithLink 和 @:privacyAndTermsFooter.termsOfServiceWithLink"
-	}
+	},
+	"removeAccountTitle": "是否要删除账户？",
+	"removeAccountText": "下次想登录时，您需要重新输入门户地址、电子邮件和密码。",
+	"tfaWrongCode": "代码错误!",
+	"privacyAndTermsAgreement": {
+		"beforeText": "我同意",
+		"betweenText": " 及 "
+	},
+	"portalNotFound": "门户网站不存在。检查门户网站的URL。",
+	"newTagNoTitleErrorMessage": "每个标签必须添加标题。",
+	"accountDeleted": "账户已被删除",
+	"removeAccount": "移除"
 }

@@ -453,10 +453,20 @@
 	"taskStatusOpen": "Ouverte",
 	"taskStatusClosed": "Fermée",
 	"searchMilestone": "Recherche de jalon...",
-
 	"privacyAndTermsFooter": {
 		"privacyPolicyWithLink": "Politique de confidentialité",
 		"termsOfServiceWithLink": "Conditions d'utilisation",
 		"total": "En continuant, vous acceptez @:privacyAndTermsFooter.privacyPolicyWithLink et @:privacyAndTermsFooter.termsOfServiceWithLink"
-	}
+	},
+	"removeAccountTitle": "Supprimer le compte ?",
+	"removeAccountText": "Vous devrez saisir à nouveau votre adresse de portail, votre email et votre mot de passe la prochaine fois que vous voudrez vous connecter.",
+	"tfaWrongCode": "Code incorrect !",
+	"privacyAndTermsAgreement": {
+		"beforeText": "J'accepte les ",
+		"betweenText": " et les "
+	},
+	"portalNotFound": "Portail non trouvé. Vérifiez l'URL du portail.",
+	"newTagNoTitleErrorMessage": "Chaque étiquette doit avoir un titre.",
+	"accountDeleted": "Le compte a été supprimé",
+	"removeAccount": "supprimer"
 }

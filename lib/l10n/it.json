@@ -453,10 +453,20 @@
 	"taskStatusOpen": "Aperta",
 	"taskStatusClosed": "Chiusa",
 	"searchMilestone": "Ricerca di pietra miliare...",
-
 	"privacyAndTermsFooter": {
 		"privacyPolicyWithLink": "Informativa sulla privacy",
 		"termsOfServiceWithLink": "Termini di servizio",
 		"total": "Continuando, dichiari di accettare @:privacyAndTermsFooter.privacyPolicyWithLink e @:privacyAndTermsFooter.termsOfServiceWithLink"
-	}
+	},
+	"removeAccountTitle": "Rimuovere account?",
+	"removeAccountText": "Dovrai reinserire l'indirizzo del portale, l'email e la password la prossima volta che desideri accedere.",
+	"tfaWrongCode": "Codice errato!",
+	"privacyAndTermsAgreement": {
+		"beforeText": "Sono d'accordo con ",
+		"betweenText": " e "
+	},
+	"portalNotFound": "Portale non trovato. Controlla l'URL del portale.",
+	"newTagNoTitleErrorMessage": "Ogni etichetta deve avere un titolo.",
+	"accountDeleted": "L'account è stato eliminato",
+	"removeAccount": "rimuovere"
 }
