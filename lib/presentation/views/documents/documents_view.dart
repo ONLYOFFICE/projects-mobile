@@ -224,7 +224,9 @@ class DocumentsScreen extends StatelessWidget {
                             );
                     },
                   );
-              }() as Widget);
+
+                return const SizedBox();
+              }());
         },
       ),
     );
