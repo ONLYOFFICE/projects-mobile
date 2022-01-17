@@ -279,7 +279,7 @@ Future<void> _onFolderPopupMenuSelected(
   }
 }
 
-void _renameFolder(DocumentsController? controller, Folder element, BuildContext context) {
+void _renameFolder(DocumentsController controller, Folder element, BuildContext context) {
   final inputController = TextEditingController();
   inputController.text = element.title!;
 
@@ -294,18 +294,17 @@ void _renameFolder(DocumentsController? controller, Folder element, BuildContext
           hintText: tr('enterFolderName'),
         ),
         onSubmitted: (value) {
-          controller!.newSearch(value);
+          controller.newSearch(value);
         },
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         if (inputController.text != element.title) {
-          final success = await controller!.renameFolder(element, inputController.text);
+          final success = await controller.renameFolder(element, inputController.text);
           if (success) {
             MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
             Get.back();
-            await controller.refreshContent();
           }
         } else
           Get.back();
