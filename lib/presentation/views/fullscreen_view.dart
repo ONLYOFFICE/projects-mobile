@@ -31,7 +31,6 @@
  */
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class ModalScreenView extends StatelessWidget {
   final Widget contentView;

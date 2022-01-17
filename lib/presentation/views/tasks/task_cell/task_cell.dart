@@ -67,6 +67,7 @@ class TaskCell extends StatelessWidget {
     );
 
     return InkWell(
+      enableFeedback: false,
       onTap: () => Get.find<NavigationController>()
           .to(const TaskDetailedView(), arguments: {'controller': itemController}),
       child: SizedBox(
