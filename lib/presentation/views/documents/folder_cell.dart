@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
@@ -60,7 +61,7 @@ class FolderCell extends StatelessWidget {
   }) : super(key: key);
 
   final Folder entity;
-  final DocumentsController controller;
+  final BaseDocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -231,7 +232,7 @@ Future<void> _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
   BuildContext context,
-  DocumentsController controller,
+  dynamic controller,
 ) async {
   switch (value) {
     case 'copyLink':
@@ -272,7 +273,7 @@ Future<void> _onFolderPopupMenuSelected(
     case 'delete':
       final success = await controller.deleteFolder(selectedFolder);
 
-      if (success) {
+      if (success as bool) {
         MessagesHandler.showSnackBar(context: context, text: tr('folderDeleted'));
       }
       break;
@@ -280,7 +281,7 @@ Future<void> _onFolderPopupMenuSelected(
   }
 }
 
-void _renameFolder(DocumentsController? controller, Folder element, BuildContext context) {
+void _renameFolder(dynamic controller, Folder element, BuildContext context) {
   final inputController = TextEditingController();
   inputController.text = element.title!;
 
@@ -303,7 +304,7 @@ void _renameFolder(DocumentsController? controller, Folder element, BuildContext
       onAcceptTap: () async {
         if (inputController.text != element.title) {
           final success = await controller!.renameFolder(element, inputController.text);
-          if (success) {
+          if (success as bool) {
             MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
             Get.back();
             await controller.refreshContent();

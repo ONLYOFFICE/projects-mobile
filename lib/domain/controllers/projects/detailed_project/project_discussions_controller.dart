@@ -46,8 +46,9 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 
 class ProjectDiscussionsController extends GetxController {
   final DiscussionsService _api = locator<DiscussionsService>();
-  var projectId;
-  var projectTitle;
+
+  int? projectId;
+  String? projectTitle;
 
   RxList<Discussion> get itemList => paginationController.data;
   PaginationController<Discussion> get paginationController => _paginationController;
@@ -126,4 +127,8 @@ class ProjectDiscussionsController extends GetxController {
       arguments: {'projectId': projectId, 'projectTitle': projectTitle},
       transition: Transition.cupertinoDialog,
       fullscreenDialog: true);
+
+  void showSearch() =>
+      Get.find<NavigationController>().to(DiscussionsSearchScreen(projectId: projectId));
+
 }

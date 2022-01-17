@@ -47,18 +47,19 @@ class DiscussionSearchController extends BaseController {
   RxBool loaded = true.obs;
   RxBool nothingFound = false.obs;
 
-  String? _query;
-
   final _paginationController = PaginationController<Discussion>();
-
   PaginationController<Discussion> get paginationController => _paginationController;
+  @override
+  RxList get itemList => _paginationController.data;
+
+  String? _query;
   String? _searchQuery;
   Timer? _searchDebounce;
+  String? projectId;
 
   TextEditingController searchInputController = TextEditingController();
 
-  @override
-  RxList get itemList => _paginationController.data;
+  DiscussionSearchController({this.projectId});
 
   @override
   void onInit() {
@@ -94,6 +95,7 @@ class DiscussionSearchController extends BaseController {
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
     final result = await _api.getDiscussionsByParams(
+      projectId: projectId,
       startIndex: paginationController.startIndex,
       query: _query,
     );

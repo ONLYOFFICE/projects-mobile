@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
+import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
@@ -43,7 +44,7 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_overview.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_subscribers_view.dart';
 import 'package:projects/presentation/views/discussions/widgets/app_bar_menu_button.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
 class DiscussionDetailed extends StatefulWidget {
   DiscussionDetailed({Key? key}) : super(key: key);
@@ -54,35 +55,39 @@ class DiscussionDetailed extends StatefulWidget {
 
 class _DiscussionDetailedState extends State<DiscussionDetailed>
     with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
   int _activeIndex = 0;
-  late DiscussionItemController controller;
+
+  final controller = Get.put(DiscussionItemController(Get.arguments['discussion'] as Discussion));
+  final documentsController = Get.find<DiscussionsDocumentsController>();
 
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
-    final discussionItemController =
-        DiscussionItemController(Get.arguments['discussion'] as Discussion);
-    controller = Get.put(discussionItemController);
-    controller.getDiscussionDetailed();
+
+    controller
+        .getDiscussionDetailed()
+        .then((value) => documentsController.setupFiles(controller.discussion.value.files!));
+
+    _tabController.addListener(() {
+      if (_tabController.indexIsChanging) {
+        setState(() {
+          _activeIndex = _tabController.index;
+        });
+      }
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
-    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController!.addListener(() {
-      if (_tabController!.indexIsChanging) {
-        setState(() {
-          _activeIndex = _tabController!.index;
-        });
-      }
-    });
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
@@ -116,7 +121,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
         body: TabBarView(controller: _tabController, children: [
           DiscussionCommentsView(controller: controller),
           DiscussionSubscribersView(controller: controller),
-          DiscussionsDocumentsView(files: controller.discussion.value.files),
+          ProjectDocumentsScreen(controller: documentsController),
           DiscussionOverview(controller: controller),
         ]),
       ),
