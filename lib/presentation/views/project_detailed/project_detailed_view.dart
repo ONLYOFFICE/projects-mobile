@@ -86,7 +86,7 @@ class ProjectDetailedView extends StatefulWidget {
 
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
 
   final _activeIndex = 0.obs;
 
@@ -101,10 +101,10 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
       length: 6,
     );
 
-    _tabController!.addListener(() {
-      if (_activeIndex.value == _tabController!.index) return;
+    _tabController.addListener(() {
+      if (_activeIndex.value == _tabController.index) return;
 
-      _activeIndex.value = _tabController!.index;
+      _activeIndex.value = _tabController.index;
     });
 
     super.initState();
@@ -113,7 +113,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
   @override
   void dispose() {
     locator<EventHub>().fire('needToRefreshProjects', ['all']);
-    _tabController!.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 

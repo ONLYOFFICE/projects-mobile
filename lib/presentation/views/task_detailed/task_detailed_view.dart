@@ -45,18 +45,23 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 import 'package:projects/presentation/views/task_detailed/comments/task_comments_view.dart';
 import 'package:projects/presentation/views/task_detailed/overview/tasks_overview_screen.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtasks_view.dart';
 import 'package:projects/presentation/views/task_editing_view/task_editing_view.dart';
 
 part 'app_bar_menu.dart';
+
+class TaskDetailedTabs {
+  static const overview = 0;
+  static const subtasks = 1;
+  static const documents = 2;
+  static const comments = 3;
+}
 
 class TaskDetailedView extends StatefulWidget {
   const TaskDetailedView({Key? key}) : super(key: key);
@@ -66,12 +71,13 @@ class TaskDetailedView extends StatefulWidget {
 }
 
 class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerProviderStateMixin {
-  TabController? _tabController;
-  // ignore: prefer_final_fields
-  var _activeIndex = 0.obs;
-  late TaskItemController taskItemController;
-  final documentsController = Get.find<DocumentsController>();
+  late TabController _tabController;
   final tabsAmount = 4;
+  final _activeIndex = 0.obs;
+
+  late TaskItemController taskItemController;
+
+  final documentsController = Get.find<DocumentsController>();
 
   @override
   void initState() {
@@ -88,44 +94,31 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
     documentsController.setupFolder(
         folderId: taskItemController.task.value.id,
         folderName: taskItemController.task.value.title!);
+
+    _tabController.addListener(() {
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
+    });
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
-    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController!.addListener(() {
-      if (_activeIndex.value == _tabController!.index) return;
-
-      _activeIndex.value = _tabController!.index;
-    });
-    return Obx(
-      () => Scaffold(
-        appBar: StyledAppBar(
-          actions: [
-            if (taskItemController.canEdit)
-              PlatformIconButton(
-                icon: Icon(PlatformIcons(context).edit),
-                cupertino: (_, __) {
-                  return CupertinoIconButtonData(
-                    icon: Icon(PlatformIcons(context).edit),
-                    onPressed: () => Get.find<NavigationController>()
-                        .to(TaskEditingView(task: taskItemController.task.value)),
-                    padding: EdgeInsets.zero,
-                  );
-                },
-                onPressed: () => Get.find<NavigationController>()
-                    .to(TaskEditingView(task: taskItemController.task.value)),
-              ),
-            _AppBarMenu(controller: taskItemController)
-          ],
-          bottom: SizedBox(
-            height: 40,
-            child: TabBar(
+    return Scaffold(
+      appBar: StyledAppBar(
+        actions: [
+          _AppBarMenu(controller: taskItemController),
+        ],
+        bottom: SizedBox(
+          height: 40,
+          child: Obx(
+            () => TabBar(
                 isScrollable: true,
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
@@ -149,16 +142,15 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
                 ]),
           ),
         ),
-        body: TabBarView(controller: _tabController, children: [
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
           TaskOverviewScreen(taskController: taskItemController, tabController: _tabController),
           SubtasksView(controller: taskItemController),
-          TaskDocumentsView(
-            folderId: taskItemController.task.value.id,
-            folderName: taskItemController.task.value.title,
-            documentsController: documentsController,
-          ),
+          ProjectDocumentsScreen(controller: documentsController),
           TaskCommentsView(controller: taskItemController),
-        ]),
+        ],
       ),
     );
   }

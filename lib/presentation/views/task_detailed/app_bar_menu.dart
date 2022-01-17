@@ -33,12 +33,12 @@
 part of 'task_detailed_view.dart';
 
 class _AppBarMenu extends StatelessWidget {
-  final TaskItemController? controller;
+  final TaskItemController controller;
   const _AppBarMenu({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final task = controller!.task.value;
+    final task = controller.task.value;
     return PlatformPopupMenuButton(
       icon: PlatformWidget(
         cupertino: (_, __) => Icon(
@@ -46,12 +46,15 @@ class _AppBarMenu extends StatelessWidget {
           color: Get.theme.colors().primary,
           size: 26,
         ),
-        material: (_, __) => const Icon(Icons.more_vert, size: 26,),
+        material: (_, __) => const Icon(
+          Icons.more_vert,
+          size: 26,
+        ),
       ),
-      onSelected: (dynamic value) => _onSelected(value, controller!),
+      onSelected: (dynamic value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
-          if (controller!.canEdit && task.responsibles!.isEmpty)
+          if (controller.canEdit && task.responsibles!.isEmpty)
             PlatformPopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
@@ -60,7 +63,7 @@ class _AppBarMenu extends StatelessWidget {
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
-          if (controller!.canEdit)
+          if (controller.canEdit)
             PlatformPopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
@@ -69,7 +72,7 @@ class _AppBarMenu extends StatelessWidget {
             value: 'followTask',
             child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
           ),
-          if (controller!.canEdit)
+          if (controller.canEdit)
             PlatformPopupMenuItem(
               value: 'copyTask',
               child: Text(tr('copyTask')),
