@@ -57,7 +57,7 @@ class AccountManagerView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    accountController.setup();
+    if (accountController.accounts.isEmpty) accountController.setup();
 
     return Scaffold(
       body: Obx(
