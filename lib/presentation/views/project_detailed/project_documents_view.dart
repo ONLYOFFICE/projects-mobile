@@ -118,12 +118,12 @@ class _Content extends StatelessWidget {
                     return element is Folder
                         ? FolderCell(
                             entity: element,
-                            controller: controller as DocumentsController,
+                            controller: controller,
                           )
                         : FileCell(
                             entity: element as PortalFile,
                             index: index,
-                            controller: controller as DocumentsController,
+                            controller: controller,
                           );
                   },
                 );

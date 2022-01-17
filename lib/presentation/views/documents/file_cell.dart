@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -54,7 +55,7 @@ class FileCell extends StatelessWidget {
   final int index;
 
   final PortalFile entity;
-  final DocumentsController controller;
+  final BaseDocumentsController controller;
 
   const FileCell({
     Key? key,
@@ -182,7 +183,7 @@ Future<void> _onFilePopupMenuSelected(
   value,
   PortalFile selectedFile,
   BuildContext context,
-  DocumentsController controller,
+  dynamic controller,
 ) async {
   switch (value) {
     case 'copyLink':
@@ -227,7 +228,7 @@ Future<void> _onFilePopupMenuSelected(
     case 'delete':
       final success = await controller.deleteFile(selectedFile);
 
-      if (success) {
+      if (success as bool) {
         MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
       }
       break;
@@ -236,7 +237,7 @@ Future<void> _onFilePopupMenuSelected(
 }
 
 void _renameFile(
-  DocumentsController controller,
+  dynamic controller,
   PortalFile element,
   BuildContext context,
 ) {
@@ -260,7 +261,7 @@ void _renameFile(
       onAcceptTap: () async {
         if (inputController.text != element.title) {
           final success = await controller.renameFile(element, inputController.text);
-          if (success) {
+          if (success as bool) {
             MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
             Get.back();
           }
