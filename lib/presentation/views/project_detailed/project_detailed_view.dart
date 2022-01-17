@@ -224,6 +224,17 @@ class _ProjectAppBarActions extends StatelessWidget {
           ],
         );
 
+      if (index == ProjectDetailedTabs.discussions &&
+          projectController.projectDiscussionsController.itemList.isNotEmpty)
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+              onPressed: projectController.projectDiscussionsController.showSearch,
+            ),
+          ],
+        );
+
       if (index == ProjectDetailedTabs.documents &&
           (projectController.projectDocumentsController.itemList.isNotEmpty ||
               projectController.projectDocumentsController.filterController.hasFilters.value))
