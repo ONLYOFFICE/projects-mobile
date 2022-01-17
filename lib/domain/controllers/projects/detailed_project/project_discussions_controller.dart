@@ -43,6 +43,7 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
+import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 
 class ProjectDiscussionsController extends GetxController {
   final DiscussionsService _api = locator<DiscussionsService>();
@@ -130,5 +131,4 @@ class ProjectDiscussionsController extends GetxController {
 
   void showSearch() =>
       Get.find<NavigationController>().to(DiscussionsSearchScreen(projectId: projectId));
-
 }
