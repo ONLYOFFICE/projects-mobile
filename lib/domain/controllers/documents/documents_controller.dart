@@ -53,6 +53,7 @@ import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:synchronized/synchronized.dart';
 
 class DocumentsController extends GetxController
     implements BaseDocumentsController {
@@ -100,6 +101,8 @@ class DocumentsController extends GetxController
 
   late StreamSubscription _refreshDocumentsSubscription;
 
+  final _lock = Lock();
+
   DocumentsController(
     DocumentsFilterController filterController,
     PaginationController paginationController,
@@ -130,10 +133,12 @@ class DocumentsController extends GetxController
   }
 
   Future<void> refreshContent() async {
-    if (_currentFolderId == null) {
-      await initialSetup();
-    } else
-      await setupFolder(folderId: _currentFolderId, folderName: screenName.value);
+    await _lock.synchronized(() async {
+      if (_currentFolderId == null) {
+        await initialSetup();
+      } else
+        await setupFolder(folderId: _currentFolderId, folderName: screenName.value);
+    });
   }
 
   Future<void> initialSetup() async {
