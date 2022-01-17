@@ -154,7 +154,8 @@ class DiscussionsController extends BaseController {
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
       .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen());
+  void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
+      transition: Transition.cupertinoDialog, fullscreenDialog: true);
 
   @override
   void showSearch() => Get.find<NavigationController>().to(const DiscussionsSearchScreen());

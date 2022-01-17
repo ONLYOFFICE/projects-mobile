@@ -36,7 +36,6 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -124,5 +123,7 @@ class ProjectDiscussionsController extends GetxController {
       .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
   void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
-      arguments: {'projectId': projectId, 'projectTitle': projectTitle});
+      arguments: {'projectId': projectId, 'projectTitle': projectTitle},
+      transition: Transition.cupertinoDialog,
+      fullscreenDialog: true);
 }

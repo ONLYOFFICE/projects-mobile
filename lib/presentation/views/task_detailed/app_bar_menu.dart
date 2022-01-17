@@ -103,7 +103,8 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'editTask':
-      Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value));
+      Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value),
+          transition: Transition.cupertinoDialog, fullscreenDialog: true);
       break;
 
     case 'followTask':

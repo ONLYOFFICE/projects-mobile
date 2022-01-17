@@ -31,19 +31,19 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/tags.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/team_members.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
-
-import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 
 class NewProject extends StatelessWidget {
   const NewProject({
@@ -62,14 +62,40 @@ class NewProject extends StatelessWidget {
         //backgroundColor: Get.theme.backgroundColor,
         appBar: StyledAppBar(
           titleText: tr('project'),
-          onLeadingPressed: controller.discardChanges,
-          elevation: 2,
+          leadingWidth: 65,
+          centerTitle: GetPlatform.isAndroid ? false : true,
           actions: [
-            PlatformIconButton(
-              icon: Icon(PlatformIcons(context).checkMark),
-              onPressed: () => controller.confirm(context),
-            )
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => controller.confirm(platformContext),
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: () => controller.confirm(platformContext),
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('Done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            ),
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.discardChanges,
+              child: Text(
+                tr('closeLowerCase'),
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.discardChanges,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: Listener(
           onPointerDown: (_) {
@@ -78,6 +104,7 @@ class NewProject extends StatelessWidget {
           },
           child: ListView(
             children: [
+              const SizedBox(height: 16),
               ProjectTitleTile(controller: controller),
               ProjectManagerTile(controller: controller),
               TeamMembersTile(controller: controller),
