@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
+import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -61,6 +62,9 @@ class ProjectDiscussionsController extends GetxController {
   final _sortController = Get.find<DiscussionsSortController>();
   DiscussionsSortController get sortController => _sortController;
 
+  final _filterController = Get.find<DiscussionsFilterController>();
+  DiscussionsFilterController get filterController => _filterController;
+
   final loaded = false.obs;
   final fabIsVisible = false.obs;
 
@@ -68,6 +72,7 @@ class ProjectDiscussionsController extends GetxController {
 
   ProjectDiscussionsController() {
     _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
+    _filterController.applyFiltersDelegate = () async => loadProjectDiscussions();
 
     _paginationController.loadDelegate = () async => await _getDiscussions();
     _paginationController.refreshDelegate = () async => await loadProjectDiscussions();
@@ -88,6 +93,7 @@ class ProjectDiscussionsController extends GetxController {
   Future<void> setup(ProjectDetailed projectDetailed) async {
     _projectDetailed = projectDetailed;
     projectId = projectDetailed.id;
+    _filterController.projectId = projectId!.toString();
     projectTitle = projectDetailed.title;
     fabIsVisible.value = _canCreate();
 
@@ -96,11 +102,17 @@ class ProjectDiscussionsController extends GetxController {
 
   bool _canCreate() => _projectDetailed.security!['canCreateMessage'] ?? false;
 
-  Future loadProjectDiscussions() async {
+  Future loadProjectDiscussions({PresetDiscussionFilters? preset}) async {
     loaded.value = false;
 
     _paginationController.startIndex = 0;
-    await _getDiscussions(needToClear: true);
+    if (preset != null) {
+      await _filterController
+          .setupPreset(preset)
+          .then((value) => _getDiscussions(needToClear: true));
+    } else {
+      await _getDiscussions(needToClear: true);
+    }
 
     loaded.value = true;
   }
@@ -110,6 +122,11 @@ class ProjectDiscussionsController extends GetxController {
       startIndex: _paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
+      authorFilter: _filterController.authorFilter,
+      statusFilter: _filterController.statusFilter,
+      creationDateFilter: _filterController.creationDateFilter,
+      projectFilter: projectId?.toString() ?? _filterController.projectFilter,
+      otherFilter: _filterController.otherFilter,
       projectId: projectId.toString(),
     );
     if (result == null) return Future.value(false);

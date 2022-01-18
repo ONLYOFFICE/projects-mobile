@@ -233,6 +233,8 @@ class _ProjectAppBarActions extends StatelessWidget {
               icon: Icon(PlatformIcons(context).search),
               onPressed: projectController.projectDiscussionsController.showSearch,
             ),
+            ProjectDiscussionsFilterButton(
+                controller: projectController.projectDiscussionsController)
           ],
         );
 
@@ -302,7 +304,8 @@ class _ProjectContextMenu extends StatelessWidget {
                   controller: controller.projectMilestonesController,
                 )),
           if (index == ProjectDetailedTabs.discussions &&
-              controller.projectDiscussionsController.itemList.isNotEmpty)
+              (controller.projectDiscussionsController.itemList.isNotEmpty ||
+                  controller.projectDiscussionsController.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortDiscussions,
                 child: ProjectDiscussionsSortButton(

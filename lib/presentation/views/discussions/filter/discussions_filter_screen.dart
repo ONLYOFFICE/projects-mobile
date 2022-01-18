@@ -97,7 +97,8 @@ class DiscussionsFilterScreen extends StatelessWidget {
                   _Author(filterController: filterController as DiscussionsFilterController),
                   _Status(filterController: filterController),
                   _CreatingDate(filterController: filterController),
-                  _Project(filterController: filterController),
+                  if (filterController.projectId == null)
+                    _Project(filterController: filterController),
                   _Other(filterController: filterController),
                   const SizedBox(height: 60),
                 ],

@@ -188,12 +188,7 @@ void setupGetX() {
   // Get.lazyPut(() => PaginationController<PortalTask>(),
   //     fenix: true, tag: '_myTasksPaginationController');
 
-  Get.create(
-    () => DiscussionsController(
-      Get.find<DiscussionsFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
+  Get.create(() => DiscussionsController());
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
 

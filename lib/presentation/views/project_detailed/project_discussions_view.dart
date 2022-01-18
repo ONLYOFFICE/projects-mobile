@@ -33,15 +33,19 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/discussions/discussions_view.dart';
+import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 
 class ProjectDiscussionsScreen extends StatelessWidget {
   final ProjectDiscussionsController controller;
@@ -75,6 +79,27 @@ class ProjectDiscussionsScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ProjectDiscussionsFilterButton extends StatelessWidget {
+  const ProjectDiscussionsFilterButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProjectDiscussionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+        const DiscussionsFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+      ),
     );
   }
 }

@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -205,33 +206,6 @@ class ProjectTasksSortButton extends StatelessWidget {
 }
 
 void taskSortButtonOnPressed(ProjectTasksController controller, BuildContext context) async {
-  Future<void> showPopupMenu(
-      {required BuildContext context,
-      required List<Widget> options,
-      required Offset offset}) async {
-    final items = options.map((e) => PopupMenuItem(child: e)).toList();
-
-    // calculate the menu position, offset dy: 50
-    // final offset = const Offset(0, 50);
-    final button = context.findRenderObject() as RenderBox;
-    final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
-    final position = RelativeRect.fromRect(
-      Rect.fromPoints(
-        button.localToGlobal(
-          offset,
-          ancestor: overlay,
-        ),
-        button.localToGlobal(
-          button.size.bottomRight(Offset.zero) + offset,
-          ancestor: overlay,
-        ),
-      ),
-      Offset.zero & overlay.size,
-    );
-
-    await showMenu(context: context, position: position, items: items);
-  }
-
   List<SortTile> _getSortTile() {
     return [
       SortTile(sortParameter: 'deadline', sortController: controller.sortController),

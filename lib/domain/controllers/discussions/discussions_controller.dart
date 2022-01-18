@@ -52,33 +52,32 @@ import 'package:projects/presentation/views/discussions/discussions_search_view.
 class DiscussionsController extends BaseController {
   final DiscussionsService _api = locator<DiscussionsService>();
   final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
-  PaginationController? _paginationController;
 
-  PaginationController? get paginationController => _paginationController;
+  @override
+  RxList get itemList => paginationController.data;
+  final _paginationController = Get.find<PaginationController>();
+  PaginationController get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
 
   final _sortController = Get.find<DiscussionsSortController>();
   DiscussionsSortController get sortController => _sortController;
 
-  DiscussionsFilterController? _filterController;
-  DiscussionsFilterController? get filterController => _filterController;
+  final _filterController = Get.find<DiscussionsFilterController>();
+  DiscussionsFilterController get filterController => _filterController;
 
-  RxBool loaded = false.obs;
-  RxBool fabIsVisible = false.obs;
+  final loaded = false.obs;
+  final fabIsVisible = false.obs;
 
   late StreamSubscription _visibilityChangedSubscription;
   late StreamSubscription _refreshDiscussionsSubscription;
 
-  DiscussionsController(
-    DiscussionsFilterController filterController,
-    PaginationController paginationController,
-  ) {
+  DiscussionsController() {
     screenName = tr('discussions');
-    _paginationController = paginationController;
-    _filterController = filterController;
-    _filterController!.applyFiltersDelegate = () async => loadDiscussions();
+
+    _filterController.applyFiltersDelegate = () async => loadDiscussions();
     _sortController.updateSortDelegate = () async => loadDiscussions();
+
     paginationController.loadDelegate = () async => _getDiscussions();
     paginationController.refreshDelegate = () async => refreshData();
     paginationController.pullDownEnabled = true;
@@ -106,19 +105,18 @@ class DiscussionsController extends BaseController {
     super.onClose();
   }
 
-  @override
-  RxList get itemList => paginationController!.data;
-
   Future loadDiscussions({PresetDiscussionFilters? preset}) async {
     loaded.value = false;
-    paginationController!.startIndex = 0;
+
+    paginationController.startIndex = 0;
     if (preset != null) {
-      await _filterController!
+      await _filterController
           .setupPreset(preset)
           .then((value) => _getDiscussions(needToClear: true));
     } else {
       await _getDiscussions(needToClear: true);
     }
+
     loaded.value = true;
   }
 
@@ -130,22 +128,22 @@ class DiscussionsController extends BaseController {
 
   Future _getDiscussions({bool needToClear = false, String? projectId}) async {
     final result = await _api.getDiscussionsByParams(
-      startIndex: paginationController!.startIndex,
+      startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      authorFilter: _filterController!.authorFilter,
-      statusFilter: _filterController!.statusFilter,
-      creationDateFilter: _filterController!.creationDateFilter,
-      projectFilter: _filterController!.projectFilter,
-      otherFilter: _filterController!.otherFilter,
+      authorFilter: _filterController.authorFilter,
+      statusFilter: _filterController.statusFilter,
+      creationDateFilter: _filterController.creationDateFilter,
+      projectFilter: _filterController.projectFilter,
+      otherFilter: _filterController.otherFilter,
       projectId: projectId,
     );
 
     if (result == null) return Future.value(false);
 
-    paginationController!.total.value = result.total;
-    if (needToClear) paginationController!.data.clear();
-    paginationController!.data.addAll(result.response ?? <Discussion>[]);
+    paginationController.total.value = result.total;
+    if (needToClear) paginationController.data.clear();
+    paginationController.data.addAll(result.response ?? <Discussion>[]);
 
     return Future.value(true);
   }
