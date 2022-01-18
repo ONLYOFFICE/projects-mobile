@@ -36,6 +36,8 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -98,7 +100,8 @@ class TasksFilterScreen extends StatelessWidget {
                   const SizedBox(height: 12.5),
                   _Responsible(filterController: filterController),
                   _Creator(filterController: filterController),
-                  _Project(filterController: filterController),
+                  if ((filterController as ProjectTaskFilterController).projectId == null)
+                    _Project(filterController: filterController),
                   _Milestone(filterController: filterController),
                   _Status(filterController: filterController),
                   _DueDate(filterController: filterController),
