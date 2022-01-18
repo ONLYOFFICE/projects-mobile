@@ -64,6 +64,16 @@ class StyledAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultCancelText =
+        GetPlatform.isIOS ? tr('cancel').toLowerCase().capitalizeFirst! : tr('cancel');
+    final defaultAcceptText =
+        GetPlatform.isIOS ? tr('accept').toLowerCase().capitalizeFirst! : tr('cancel');
+
+    final platformCancelText =
+        GetPlatform.isIOS ? cancelText?.toLowerCase().capitalizeFirst : cancelText;
+    final platformAcceptText =
+        GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
+
     return PlatformAlertDialog(
       titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
       contentPadding: contentText != null || content != null
@@ -76,12 +86,12 @@ class StyledAlertDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: onCancelTap ?? Get.back,
-          child: Text(cancelText ?? tr('cancel'), style: TextStyleHelper.button()),
+          child: Text(platformCancelText ?? defaultCancelText, style: TextStyleHelper.button()),
         ),
         TextButton(
           onPressed: onAcceptTap,
           child: Text(
-            acceptText ?? tr('accept'),
+            platformAcceptText ?? defaultAcceptText,
             style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
           ),
         ),
