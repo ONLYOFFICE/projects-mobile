@@ -226,7 +226,8 @@ class _ProjectAppBarActions extends StatelessWidget {
         );
 
       if (index == ProjectDetailedTabs.discussions &&
-          projectController.projectDiscussionsController.itemList.isNotEmpty)
+          (projectController.projectDiscussionsController.itemList.isNotEmpty ||
+              projectController.projectDiscussionsController.filterController.hasFilters.value))
         return Row(
           children: [
             PlatformIconButton(

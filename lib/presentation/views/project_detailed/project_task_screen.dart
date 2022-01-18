@@ -100,43 +100,38 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          (() {
-            if (!controller.loaded.value) return const ListLoadingSkeleton();
+      () {
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
 
-            return Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: () {
-                  if (controller.loaded.value &&
-                      controller.tasksList.isEmpty &&
-                      !controller.filterController.hasFilters.value)
-                    return Center(
-                      child: EmptyScreen(
-                        icon: SvgIcons.task_not_created,
-                        text: tr('noTasksCreated'),
-                      ),
-                    );
-                  if (controller.loaded.value &&
-                      controller.tasksList.isEmpty &&
-                      controller.filterController.hasFilters.value)
-                    return Center(
-                      child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-                    );
-                  if (controller.loaded.value && controller.tasksList.isNotEmpty)
-                    return ListView.builder(
-                      itemBuilder: (c, i) => TaskCell(task: controller.tasksList[i]),
-                      itemExtent: 72,
-                      itemCount: controller.tasksList.length,
-                    );
-                }() as Widget,
-              ),
-            );
-          }()),
-        ],
-      ),
+        return Expanded(
+          child: PaginationListView(
+            paginationController: controller.paginationController,
+            child: () {
+              if (controller.loaded.value &&
+                  controller.tasksList.isEmpty &&
+                  !controller.filterController.hasFilters.value)
+                return Center(
+                  child: EmptyScreen(
+                    icon: SvgIcons.task_not_created,
+                    text: tr('noTasksCreated'),
+                  ),
+                );
+              if (controller.loaded.value &&
+                  controller.tasksList.isEmpty &&
+                  controller.filterController.hasFilters.value)
+                return Center(
+                  child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+                );
+              if (controller.loaded.value && controller.tasksList.isNotEmpty)
+                return ListView.builder(
+                  itemBuilder: (c, i) => TaskCell(task: controller.tasksList[i]),
+                  itemExtent: 72,
+                  itemCount: controller.tasksList.length,
+                );
+            }() as Widget,
+          ),
+        );
+      },
     );
   }
 }
