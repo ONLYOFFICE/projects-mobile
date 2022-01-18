@@ -6,6 +6,11 @@ Dotenv.load '.env.secret'
 default_platform :ios
 skip_docs # Do not create fastlane/README.md
 
+def escape_markdown2(string)
+  pattern = /(\[|\_|\*|\[|\`)/
+  string.gsub(pattern){|match|"\\"  + match}
+end
+
 platform :ios do
   version_name = '1.0'
   version_code = 1
@@ -70,6 +75,8 @@ platform :ios do
       match_lightweight_tag: false,
       merge_commit_filtering: "exclude_merges"
     )
+
+    change_log = escape_markdown2(change_log)
 
     # Build artifacts and upload to store
     get_packages
