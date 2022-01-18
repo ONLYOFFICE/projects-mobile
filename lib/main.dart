@@ -37,6 +37,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projects/data/services/remote_config_service.dart';
@@ -140,8 +141,12 @@ class App extends StatelessWidget {
         supportedLocales: context.supportedLocales,
         locale: context.deviceLocale,
         title: 'ONLYOFFICE',
-        theme: lightTheme,
-        darkTheme: darkTheme,
+        theme: lightTheme.copyWith(
+          splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
+        ),
+        darkTheme: darkTheme.copyWith(
+          splashFactory: GetPlatform.isIOS ? NoSplash.splashFactory : null,
+        ),
         themeMode: ThemeService().savedThemeMode(),
         // cupertinoTheme: lightCupertinoTheme,
         //cupertinoTheme: cupertinoTheme,
