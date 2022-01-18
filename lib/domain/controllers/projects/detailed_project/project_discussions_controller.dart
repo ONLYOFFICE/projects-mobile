@@ -59,10 +59,10 @@ class ProjectDiscussionsController extends GetxController {
   late ProjectDetailed _projectDetailed;
 
   final _sortController = Get.find<DiscussionsSortController>();
+  DiscussionsSortController get sortController => _sortController;
 
-  RxBool loaded = false.obs;
-
-  var fabIsVisible = false.obs;
+  final loaded = false.obs;
+  final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshDiscussionsSubscription;
 

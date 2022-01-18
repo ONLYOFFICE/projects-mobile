@@ -57,12 +57,11 @@ class DiscussionsController extends BaseController {
   PaginationController? get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
-  final _sortController = Get.find<DiscussionsSortController>();
 
+  final _sortController = Get.find<DiscussionsSortController>();
   DiscussionsSortController get sortController => _sortController;
 
   DiscussionsFilterController? _filterController;
-
   DiscussionsFilterController? get filterController => _filterController;
 
   RxBool loaded = false.obs;

@@ -74,6 +74,7 @@ class PopupMenuItemValue {
   static const deleteProject = 'deleteProject';
   static const sortTasks = 'sortTasks';
   static const sortMilestones = 'sortMilestones';
+  static const sortDiscussions = 'sortDiscussions';
   static const sortDocuments = 'sortDocuments';
 }
 
@@ -300,6 +301,13 @@ class _ProjectContextMenu extends StatelessWidget {
                 child: ProjectMilestonesSortButton(
                   controller: controller.projectMilestonesController,
                 )),
+          if (index == ProjectDetailedTabs.discussions &&
+              controller.projectDiscussionsController.itemList.isNotEmpty)
+            PlatformPopupMenuItem(
+                value: PopupMenuItemValue.sortDiscussions,
+                child: ProjectDiscussionsSortButton(
+                  controller: controller.projectDiscussionsController,
+                )),
           if (index == ProjectDetailedTabs.documents &&
               (controller.projectDocumentsController.itemList.isNotEmpty ||
                   controller.projectDocumentsController.filterController.hasFilters.value))
@@ -346,6 +354,10 @@ Future<void> _onSelected(
 
     case PopupMenuItemValue.sortMilestones:
       milestonesSortButtonOnPressed(controller.projectMilestonesController, context);
+      break;
+
+    case PopupMenuItemValue.sortDiscussions:
+      discussionsSortButtonOnPressed(controller.projectDiscussionsController, context);
       break;
 
     case PopupMenuItemValue.sortDocuments:
