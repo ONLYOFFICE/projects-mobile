@@ -86,6 +86,7 @@ platform :ios do
       scheme: "Runner",
       configuration: "Release",
       export_method: "app-store",
+      destination: "generic/platform=iOS",
       xcargs: "-allowProvisioningUpdates"
     )
 
