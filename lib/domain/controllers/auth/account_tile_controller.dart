@@ -93,8 +93,6 @@ class AccountTileController extends GetxController {
   }
 
   Future<void> loginToSavedAccount() async {
-    Get.back();
-
     await locator<SecureStorage>()
         .putString('portalName', '${accountData!.scheme}${accountData!.portal}');
     await Get.find<LoginController>()

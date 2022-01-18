@@ -29,7 +29,6 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
@@ -63,39 +62,43 @@ class AccountManagerView extends StatelessWidget {
       body: Obx(
         () => loginController.state.value == ViewState.Busy
             ? SizedBox(height: Get.height, child: const Center(child: CircularProgressIndicator()))
-            : Center(
-                child: Container(
-                  constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: <Widget>[
-                      SizedBox(height: Get.height * 0.1),
-                      const AppIcon(icon: SvgIcons.app_logo),
-                      SizedBox(height: Get.height * 0.01),
-                      Text(tr('appName'),
-                          textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
-                      SizedBox(height: Get.height * 0.06),
-                      Expanded(
-                        child: Obx(
-                          () => ListView.separated(
-                            physics: const ScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (c, i) {
-                              if (i == accountController.accounts.length) {
-                                return const _NewAccountButton();
-                              } else
-                                return AccountTile(
-                                  userController: AccountTileController(
-                                      accountData: accountController.accounts[i]),
-                                );
-                            },
-                            separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
-                            itemCount: accountController.accounts.length + 1,
+            : NestedScrollView(
+                headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      pinned: true,
+                      bottom: PreferredSize(
+                        preferredSize: const Size.fromHeight(160),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              const AppIcon(icon: SvgIcons.app_logo),
+                              SizedBox(height: Get.height * 0.01),
+                              Text(tr('appName'),
+                                  textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
+                            ],
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ];
+                },
+                body: ListView.separated(
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (c, i) {
+                    if (i == accountController.accounts.length) {
+                      return const _NewAccountButton();
+                    } else
+                      return AccountTile(
+                        userController:
+                            AccountTileController(accountData: accountController.accounts[i]),
+                      );
+                  },
+                  separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
+                  itemCount: accountController.accounts.length + 1,
                 ),
               ),
       ),
@@ -113,7 +116,7 @@ class _NewAccountButton extends StatelessWidget {
     return InkWell(
       onTap: () => Get.find<NavigationController>().to(PortalInputView()),
       child: SizedBox(
-        height: 48,
+        height: 64,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
