@@ -10,8 +10,6 @@ import com.onlyoffice.projects.accountsDao
 import com.onlyoffice.projects.db.AccountsDao
 import com.onlyoffice.projects.db.CloudAccount
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 class AccountContentProviders : ContentProvider() {
 
@@ -72,7 +70,7 @@ class AccountContentProviders : ContentProvider() {
 
     override fun insert(uri: Uri, values: ContentValues?): Uri? {
         val account: CloudAccount = if (values?.containsKey(CLOUD_ACCOUNT_KEY) == true) {
-            Json.decodeFromString(values.getAsString("account") ?: "")
+            CloudAccount.toObject(values.getAsString("account") ?: "")
         } else {
             getAccount(values)
         }
@@ -86,7 +84,7 @@ class AccountContentProviders : ContentProvider() {
         var id = ""
         extras?.let {
             if (extras.containsKey(CLOUD_ACCOUNT_KEY)) {
-                val account: CloudAccount = Json.decodeFromString(extras.getString("account") ?: "")
+                val account: CloudAccount = CloudAccount.toObject(extras.getString("account") ?: "")
                 id = account.id
                 runBlocking {
                     dao?.addAccount(account = account)

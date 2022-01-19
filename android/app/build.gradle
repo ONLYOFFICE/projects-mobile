@@ -31,7 +31,6 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'kotlinx-serialization'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
@@ -102,6 +101,4 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.4.0'
     implementation 'androidx.room:room-ktx:2.4.0'
     kapt 'androidx.room:room-compiler:2.4.0'
-
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.1"
 }
