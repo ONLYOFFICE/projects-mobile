@@ -71,23 +71,20 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
 
   String? _query;
 
-  String? _entityType;
+  Timer? _searchDebounce;
 
+  String? _entityType;
   String? get entityType => _entityType;
   set entityType(String? value) => {_entityType = value, _filterController.entityType = value};
 
-  late PaginationController _paginationController;
-  Timer? _searchDebounce;
-
+  final _paginationController = PaginationController();
   @override
   PaginationController get paginationController => _paginationController;
-
   @override
   RxList get itemList => _paginationController.data;
 
   String? _screenName;
   int? _currentFolderId;
-
   @override
   int? get currentFolderID => _currentFolderId;
 
@@ -96,31 +93,22 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
 
   RxInt filesCount = RxInt(-1);
 
-  late DocumentsSortController _sortController;
-
+  final _sortController = DocumentsSortController();
   @override
   DocumentsSortController get sortController => _sortController;
 
-  late DocumentsFilterController _filterController;
-
+  final _filterController = DocumentsFilterController();
   @override
   DocumentsFilterController get filterController => _filterController;
 
   late StreamSubscription _refreshDocumentsSubscription;
 
-  DocumentsController(
-    DocumentsFilterController filterController,
-    PaginationController paginationController,
-    DocumentsSortController sortController,
-  ) {
-    _sortController = sortController;
-    _paginationController = paginationController;
-    _filterController = filterController;
+  DocumentsController() {
     _filterController.applyFiltersDelegate = () async => await refreshContent();
     sortController.updateSortDelegate = () async => await refreshContent();
+
     _paginationController.loadDelegate = () async => await _getDocuments();
     _paginationController.refreshDelegate = () async => await refreshContent();
-
     _paginationController.pullDownEnabled = true;
 
     portalInfoController.setup();

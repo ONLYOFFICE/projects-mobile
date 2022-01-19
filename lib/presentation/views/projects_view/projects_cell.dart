@@ -38,6 +38,7 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -51,18 +52,22 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
-  final ProjectDetailed projectDetails;
   const ProjectCell({Key? key, required this.projectDetails}) : super(key: key);
+
+  final ProjectDetailed projectDetails;
 
   @override
   Widget build(BuildContext context) {
     final itemController = Get.find<ProjectCellController>()..setup(projectDetails);
+    final projectController = Get.find<ProjectDetailsController>()..fillProjectInfo(projectDetails);
 
     return SizedBox(
       height: 72,
       child: InkWell(
-        onTap: () => Get.find<NavigationController>()
-            .to(ProjectDetailedView(), arguments: {'projectDetailed': projectDetails}),
+        onTap: () {
+          Get.find<NavigationController>()
+              .to(ProjectDetailedView(), arguments: {'projectController': projectController});
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -88,7 +93,7 @@ class ProjectCell extends StatelessWidget {
                         ),
                         const Spacer(),
                         _Suffix(
-                          projectDetailed: projectDetails,
+                          projectController: projectController,
                         ),
                       ],
                     ),
@@ -240,10 +245,10 @@ class _Content extends StatelessWidget {
 class _Suffix extends StatelessWidget {
   const _Suffix({
     Key? key,
-    required this.projectDetailed,
+    required this.projectController,
   }) : super(key: key);
 
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailsController projectController;
 
   @override
   Widget build(BuildContext context) {
@@ -258,12 +263,15 @@ class _Suffix extends StatelessWidget {
             const SizedBox(width: 3),
             SizedBox(
               width: 20,
-              child: Text(
-                projectDetailed.taskCount.toString(),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.projectCompletedTasks.copyWith(
-
-                  color: Get.theme.colors().onSurface.withOpacity(0.6),
+              child: Obx(
+                () => Text(
+                  projectController.projectTasksController.tasksList.isNotEmpty
+                      ? projectController.projectTasksController.tasksList.length.toString()
+                      : projectController.projectData.taskCount.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper.projectCompletedTasks.copyWith(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                  ),
                 ),
               ),
             ),

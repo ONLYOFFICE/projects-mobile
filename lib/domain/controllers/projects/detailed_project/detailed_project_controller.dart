@@ -59,12 +59,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   final projectTasksController = Get.find<ProjectTasksController>();
   final projectMilestonesController = Get.find<MilestonesDataSource>();
-  final projectDiscussionsController =
-      Get.put<ProjectDiscussionsController>(ProjectDiscussionsController());
+  final projectDiscussionsController = Get.find<ProjectDiscussionsController>();
   final projectDocumentsController = Get.find<DocumentsController>();
   final projectTeamDataSource = Get.find<ProjectTeamController>();
 
-  RxBool loaded = true.obs;
+  RxBool loaded = false.obs;
 
   RxString projectTitleText = ''.obs;
   RxString managerText = ''.obs;
@@ -108,44 +107,49 @@ class ProjectDetailsController extends BaseProjectEditorController {
     return utf8.decode(base64.decode(image));
   }
 
-  Future<bool> setup(ProjectDetailed projectDetailed) async {
-    _projectDetailed = projectDetailed;
+  Future<bool> setup({ProjectDetailed? projectDetailed}) async {
+    if (projectDetailed != null) _projectDetailed = projectDetailed;
 
     final response = await _projectService.getProjectById(projectId: _projectDetailed.id!);
     if (response != null) _projectDetailed = response;
 
-    fillProjectInfo();
-    if (response!.tags != null) {
-      tags.addAll(response.tags!);
-      tagsText.value = response.tags!.join(', ');
-    }
+    fillProjectInfo(_projectDetailed);
 
-    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
-    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.created!));
-
-    unawaited(projectTasksController.setup(projectDetailed));
-    unawaited(projectMilestonesController.setup(projectDetailed: projectDetailed));
-    unawaited(projectDiscussionsController.setup(projectDetailed));
+    unawaited(projectTasksController.setup(_projectDetailed));
+    unawaited(projectMilestonesController.setup(projectDetailed: _projectDetailed));
+    unawaited(projectDiscussionsController.setup(_projectDetailed));
     unawaited(projectDocumentsController.setupFolder(
-        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder));
-    projectTeamDataSource.setup(projectDetailed: projectDetailed);
+        folderName: _projectDetailed.title!, folderId: _projectDetailed.projectFolder));
+    projectTeamDataSource.setup(projectDetailed: _projectDetailed);
     unawaited(projectTeamDataSource.getTeam());
 
     return Future.value(true);
   }
 
-  void fillProjectInfo() {
+  void fillProjectInfo(ProjectDetailed projectDetailed) {
+    _projectDetailed = projectDetailed;
+
     statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed.status)]);
 
     projectTitleText.value = _projectDetailed.title!;
     descriptionText.value = _projectDetailed.description!;
     managerText.value = _projectDetailed.responsible!.displayName!;
+
+    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
+    creationDateText.value = formatter.format(DateTime.parse(_projectDetailed.created!));
+
+    if (_projectDetailed.tags != null) {
+      tags.addAll(_projectDetailed.tags!);
+      tagsText.value = _projectDetailed.tags!.join(', ');
+    }
+
+    loaded.value = true;
   }
 
   Future<void> refreshData() async {
     loaded.value = false;
 
-    await setup(_projectDetailed);
+    await setup();
 
     loaded.value = true;
   }

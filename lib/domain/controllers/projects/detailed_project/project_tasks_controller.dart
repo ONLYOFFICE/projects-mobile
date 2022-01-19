@@ -49,8 +49,7 @@ class ProjectTasksController extends GetxController {
 
   RxList<PortalTask> get tasksList => _paginationController.data;
   PaginationController<PortalTask> get paginationController => _paginationController;
-  final _paginationController =
-      Get.put(PaginationController<PortalTask>(), tag: 'ProjectTasksController');
+  final _paginationController = PaginationController<PortalTask>();
 
   TasksSortController get sortController => _sortController;
   final _sortController = Get.put(TasksSortController(), tag: 'ProjectTasksController');
@@ -75,7 +74,7 @@ class ProjectTasksController extends GetxController {
     _paginationController.pullDownEnabled = true;
 
     _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
-      loadTasks();
+      if (_projectDetailed.id != null) loadTasks();
     });
   }
 
@@ -109,7 +108,9 @@ class ProjectTasksController extends GetxController {
         deadlineFilter: _filterController.deadlineFilter,
         projectId: _projectDetailed.id.toString());
 
-    if (result == null) return Future.value(false);
+    if (result == null) {
+      return Future.value(false);
+    }
 
     _paginationController.total.value = result.total;
     if (needToClear) _paginationController.data.clear();

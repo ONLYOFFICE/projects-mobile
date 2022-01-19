@@ -91,11 +91,18 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   final _activeIndex = 0.obs;
 
-  final projectController = Get.find<ProjectDetailsController>();
+  late final ProjectDetailsController projectController;
 
   @override
   void initState() {
-    projectController.setup(Get.arguments['projectDetailed'] as ProjectDetailed);
+    if (Get.arguments['projectController'] != null)
+      projectController = Get.arguments['projectController'] as ProjectDetailsController;
+    else {
+      projectController = Get.find<ProjectDetailsController>();
+      projectController.fillProjectInfo(Get.arguments['projectDetailed'] as ProjectDetailed);
+    } // TODO refactor
+
+    projectController.setup();
 
     _tabController = TabController(
       vsync: this,
@@ -113,7 +120,6 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
 
   @override
   void dispose() {
-    locator<EventHub>().fire('needToRefreshProjects', ['all']);
     _tabController.dispose();
     super.dispose();
   }
