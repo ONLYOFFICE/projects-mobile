@@ -95,7 +95,7 @@ class DocumentsFilterController extends BaseFilterController {
 
     suitableResultCount.value = -1;
 
-    applyFiltersDelegate?.call();
+    //applyFiltersDelegate?.call();
 
 // _getSavedFilters();
   }
