@@ -31,6 +31,8 @@
 	<string>This app requires access to the camera, so that you can take photo and upload it in the app.</string>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app requires Face ID permission to authenticate using Face recognition.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app requires access to capture audio for image picker plugin.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>This app requires access to the photo library, so that you can upload your photos in the app.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
