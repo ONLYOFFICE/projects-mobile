@@ -10,11 +10,7 @@ import com.onlyoffice.projects.accountsDao
 import com.onlyoffice.projects.db.CloudAccount
 import com.onlyoffice.projects.isDocumentInstalled
 import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.json.JSONObject
-import java.lang.RuntimeException
 
 class AccountUtils(private val context: Context) {
 
@@ -50,7 +46,7 @@ class AccountUtils(private val context: Context) {
             return accounts
         } else {
             return runBlocking {
-                return@runBlocking context.accountsDao?.getAccounts()?.map { Json.encodeToString(it) }?.toTypedArray() ?: emptyArray()
+                return@runBlocking context.accountsDao?.getAccounts()?.map { CloudAccount.toString(it) }?.toTypedArray() ?: emptyArray()
             }
         }
     }
@@ -66,7 +62,7 @@ class AccountUtils(private val context: Context) {
             }
         }
         return runBlocking {
-            return@runBlocking context.accountsDao?.addAccount(Json.decodeFromString(checkNotNull(data) { "Account data null" }))
+            return@runBlocking context.accountsDao?.addAccount(CloudAccount.toObject(checkNotNull(data) { "Account data null" }))
         }
     }
 
@@ -81,7 +77,7 @@ class AccountUtils(private val context: Context) {
             }
         }
         runBlocking {
-            context.accountsDao?.updateAccount(Json.decodeFromString(checkNotNull(data) { "Account data null" }))
+            context.accountsDao?.updateAccount(CloudAccount.toObject(checkNotNull(data) { "Account data null" }))
         }
     }
 
@@ -107,7 +103,7 @@ class AccountUtils(private val context: Context) {
                     }
                 }
                 data != null -> {
-                    context.accountsDao?.deleteAccount(Json.decodeFromString(data))
+                    context.accountsDao?.deleteAccount(CloudAccount.toObject(data))
                 }
                 else -> {
                     throw RuntimeException("id or data must not be null")

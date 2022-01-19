@@ -3,11 +3,9 @@ package com.onlyoffice.projects.db
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.onlyoffice.projects.utils.CryptUtils
-import kotlinx.serialization.Serializable
 import org.json.JSONObject
 
 @Entity
-@Serializable
 data class CloudAccount(
     @PrimaryKey
     val id: String,
