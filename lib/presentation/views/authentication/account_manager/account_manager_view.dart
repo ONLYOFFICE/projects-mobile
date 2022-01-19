@@ -114,7 +114,7 @@ class _NewAccountButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.find<NavigationController>().to(PortalInputView()),
+      onTap: () => Get.to(() => PortalInputView()),
       child: SizedBox(
         height: 64,
         child: Row(
