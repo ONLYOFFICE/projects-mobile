@@ -365,27 +365,23 @@ void showsStatusesPM(
       PopupMenuItem(
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        child: Expanded(
-          child: InkWell(
-            onTap: () async {
-              final success = await itemController.updateStatus(
-                newStatusId: _statusesController.statuses[i],
-              );
-              if (success) {
-                locator<EventHub>().fire('needToRefreshProjects', ['all']);
-              }
-              Get.back();
-            },
-            child: StatusTileTablet(
-                title: _statusesController.getStatusName(i),
-                icon: AppIcon(
-                    icon: _statusesController.getStatusImageString(i),
-                    color: itemController.projectData!.canEdit!
-                        ? Get.theme.colors().primary
-                        : Get.theme.colors().onBackground),
-                selected: _statusesController.statuses[i] == itemController.projectData!.status),
-          ),
-        ),
+        onTap: () async {
+          final success = await itemController.updateStatus(
+            newStatusId: _statusesController.statuses[i],
+          );
+          if (success) {
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
+          }
+          Get.back();
+        },
+        child: StatusTileTablet(
+            title: _statusesController.getStatusName(i),
+            icon: AppIcon(
+                icon: _statusesController.getStatusImageString(i),
+                color: itemController.projectData!.canEdit!
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground),
+            selected: _statusesController.statuses[i] == itemController.projectData!.status),
       ),
   ];
 
