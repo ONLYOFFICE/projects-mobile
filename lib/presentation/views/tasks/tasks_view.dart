@@ -206,7 +206,6 @@ class _FilterButtonWidget extends StatelessWidget {
         return CupertinoIconButtonData(
           icon: FiltersButton(controller: controller),
           color: Get.theme.colors().background,
-          onPressed: controller.showSearch,
           padding: EdgeInsets.zero,
         );
       },
