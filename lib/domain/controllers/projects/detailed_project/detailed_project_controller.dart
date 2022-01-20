@@ -57,11 +57,11 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 class ProjectDetailsController extends BaseProjectEditorController {
   final ProjectService _projectService = locator<ProjectService>();
 
-  final projectTasksController = Get.find<ProjectTasksController>();
-  final projectMilestonesController = Get.find<MilestonesDataSource>();
-  final projectDiscussionsController = Get.find<ProjectDiscussionsController>();
-  final projectDocumentsController = Get.find<DocumentsController>();
-  final projectTeamDataSource = Get.find<ProjectTeamController>();
+  ProjectTasksController? projectTasksController;
+  MilestonesDataSource? projectMilestonesController;
+  ProjectDiscussionsController? projectDiscussionsController;
+  DocumentsController? projectDocumentsController;
+  ProjectTeamController? projectTeamDataSource;
 
   RxBool loaded = false.obs;
 
@@ -71,11 +71,14 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   bool markedToDelete = false;
 
+  final taskCount = 0.obs;
+
   @override
   ProjectDetailed get projectData => _projectDetailed;
   ProjectDetailed _projectDetailed = ProjectDetailed();
 
-  late StreamSubscription _refreshProjectsSubscription;
+  StreamSubscription? _refreshProjectsSubscription;
+  StreamSubscription? _taskCountSubscription;
 
   final _userController = Get.find<UserController>();
 
@@ -84,11 +87,11 @@ class ProjectDetailsController extends BaseProjectEditorController {
           selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
-    _refreshProjectsSubscription = locator<EventHub>().on(
+    _refreshProjectsSubscription ??= locator<EventHub>().on(
       'needToRefreshProjects',
       (dynamic data) {
         if (markedToDelete) {
-          _refreshProjectsSubscription.cancel();
+          _refreshProjectsSubscription?.cancel();
           return;
         }
 
@@ -99,29 +102,41 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   @override
   void onClose() {
-    _refreshProjectsSubscription.cancel();
+    _refreshProjectsSubscription?.cancel();
+    _taskCountSubscription?.cancel();
     super.onClose();
-  }
-
-  String decodeImageString(String image) {
-    return utf8.decode(base64.decode(image));
   }
 
   Future<bool> setup({ProjectDetailed? projectDetailed}) async {
     if (projectDetailed != null) _projectDetailed = projectDetailed;
+
+    projectTasksController = Get.find<ProjectTasksController>();
+    projectMilestonesController = Get.find<MilestonesDataSource>();
+    projectDiscussionsController = Get.find<ProjectDiscussionsController>();
+    projectDocumentsController = Get.find<DocumentsController>();
+    projectTeamDataSource = Get.find<ProjectTeamController>();
 
     final response = await _projectService.getProjectById(projectId: _projectDetailed.id!);
     if (response != null) _projectDetailed = response;
 
     fillProjectInfo(_projectDetailed);
 
-    unawaited(projectTasksController.setup(_projectDetailed));
-    unawaited(projectMilestonesController.setup(projectDetailed: _projectDetailed));
-    unawaited(projectDiscussionsController.setup(_projectDetailed));
-    unawaited(projectDocumentsController.setupFolder(
-        folderName: _projectDetailed.title!, folderId: _projectDetailed.projectFolder));
-    projectTeamDataSource.setup(projectDetailed: _projectDetailed);
-    unawaited(projectTeamDataSource.getTeam());
+    unawaited(projectTasksController!.setup(_projectDetailed));
+    unawaited(_taskCountSubscription?.cancel());
+    _taskCountSubscription = projectTasksController!.tasksList.listen((taskList) {
+      taskCount.value = taskList.length;
+    });
+
+    unawaited(projectMilestonesController!.setup(projectDetailed: _projectDetailed));
+    unawaited(projectDiscussionsController!.setup(_projectDetailed));
+    unawaited(
+      projectDocumentsController!.setupFolder(
+        folderName: _projectDetailed.title!,
+        folderId: _projectDetailed.projectFolder,
+      ),
+    );
+    projectTeamDataSource!.setup(projectDetailed: _projectDetailed);
+    unawaited(projectTeamDataSource!.getTeam());
 
     return Future.value(true);
   }
@@ -143,6 +158,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
       tagsText.value = _projectDetailed.tags!.join(', ');
     }
 
+    taskCount.value = _projectDetailed.taskCountTotal ?? 0;
+
     loaded.value = true;
   }
 
@@ -159,7 +176,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
     selectedTeamMembers.clear();
 
-    for (final user in projectTeamDataSource.usersList) {
+    for (final user in projectTeamDataSource!.usersList) {
       selectedTeamMembers.add(user);
     }
     Get.find<NavigationController>()

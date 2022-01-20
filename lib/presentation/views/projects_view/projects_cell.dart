@@ -265,9 +265,7 @@ class _Suffix extends StatelessWidget {
               width: 20,
               child: Obx(
                 () => Text(
-                  projectController.projectTasksController.tasksList.isNotEmpty
-                      ? projectController.projectTasksController.tasksList.length.toString()
-                      : projectController.projectData.taskCount.toString(),
+                  projectController.taskCount.value.toString(),
                   overflow: TextOverflow.ellipsis,
                   style: TextStyleHelper.projectCompletedTasks.copyWith(
                     color: Get.theme.colors().onSurface.withOpacity(0.6),

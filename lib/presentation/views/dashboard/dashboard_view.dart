@@ -350,9 +350,9 @@ class ProjectCardContent extends StatelessWidget {
                 itemBuilder: (c, i) => i < 2
                     ? ProjectCell(projectDetails: controller.paginationController.data[i])
                     : const SizedBox(),
-                itemCount: controller.paginationController.data.length > 2
-                    ? 2
-                    : controller.paginationController.data.length,
+                itemCount: controller.paginationController.data.length < 2
+                    ? controller.paginationController.data.length
+                    : 2,
               ),
             ]),
         ],
@@ -386,9 +386,9 @@ class TaskCardContent extends StatelessWidget {
                 itemBuilder: (c, i) => i < 2
                     ? TaskCell(task: controller.paginationController.data[i])
                     : const SizedBox(),
-                itemCount: controller.paginationController.data.length > 2
-                    ? 2
-                    : controller.paginationController.data.length,
+                itemCount: controller.paginationController.data.length < 2
+                    ? controller.paginationController.data.length
+                    : 2,
               ),
             ]),
         ],

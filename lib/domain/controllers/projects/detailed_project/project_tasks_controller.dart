@@ -64,7 +64,7 @@ class ProjectTasksController extends GetxController {
   RxBool hasFilters = false.obs;
   RxBool fabIsVisible = false.obs;
 
-  late StreamSubscription _refreshTasksSubscription;
+  StreamSubscription? _refreshTasksSubscription;
 
   ProjectTasksController() {
     _sortController.updateSortDelegate = () async => await loadTasks();
@@ -73,14 +73,14 @@ class ProjectTasksController extends GetxController {
     _paginationController.refreshDelegate = () async => await loadTasks();
     _paginationController.pullDownEnabled = true;
 
-    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
-      if (_projectDetailed.id != null) loadTasks();
+    _refreshTasksSubscription ??= locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
+      loadTasks();
     });
   }
 
   @override
   void onClose() {
-    _refreshTasksSubscription.cancel();
+    _refreshTasksSubscription?.cancel();
     super.dispose();
   }
 

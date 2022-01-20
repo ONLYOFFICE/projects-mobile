@@ -157,23 +157,23 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('tasks'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.tasks,
-                      count: projectController.projectTasksController.tasksList.length),
+                      count: projectController.projectTasksController?.tasksList.length ?? 0),
                   CustomTab(
                       title: tr('milestones'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.milestones,
-                      count: projectController.projectMilestonesController.itemList.length),
+                      count: projectController.projectMilestonesController?.itemList.length ?? 0),
                   CustomTab(
                       title: tr('discussions'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.discussions,
-                      count: projectController.projectDiscussionsController.itemList.length),
+                      count: projectController.projectDiscussionsController?.itemList.length ?? 0),
                   CustomTab(
                       title: tr('documents'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.documents,
-                      count: projectController.projectDocumentsController.filesCount.value),
+                      count: projectController.projectDocumentsController?.filesCount.value ?? 0),
                   CustomTab(
                       title: tr('team'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.team,
-                      count: projectController.projectData.participantCount),
+                      count: projectController.projectTeamDataSource?.usersList.length ?? 0),
                 ]),
           ),
         ),
@@ -182,12 +182,12 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
         controller: _tabController,
         children: [
           ProjectOverview(projectController: projectController, tabController: _tabController),
-          ProjectTaskScreen(projectTasksController: projectController.projectTasksController),
-          ProjectMilestonesScreen(controller: projectController.projectMilestonesController),
-          ProjectDiscussionsScreen(controller: projectController.projectDiscussionsController),
-          ProjectDocumentsScreen(controller: projectController.projectDocumentsController),
+          ProjectTaskScreen(projectTasksController: projectController.projectTasksController!),
+          ProjectMilestonesScreen(controller: projectController.projectMilestonesController!),
+          ProjectDiscussionsScreen(controller: projectController.projectDiscussionsController!),
+          ProjectDocumentsScreen(controller: projectController.projectDocumentsController!),
           ProjectTeamView(
-              projectTeamDataSource: projectController.projectTeamDataSource,
+              projectTeamDataSource: projectController.projectTeamDataSource!,
               fabAction: projectController.manageTeamMembers),
         ],
       ),
@@ -206,48 +206,52 @@ class _ProjectAppBarActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return () {
       if (index == ProjectDetailedTabs.tasks &&
-          (projectController.projectTasksController.tasksList.isNotEmpty ||
-              projectController.projectTasksController.filterController.hasFilters.value))
+          projectController.projectTasksController != null &&
+          (projectController.projectTasksController!.tasksList.isNotEmpty ||
+              projectController.projectTasksController!.filterController.hasFilters.value))
         return Row(
           children: [
             PlatformIconButton(
               icon: Icon(PlatformIcons(context).search),
-              onPressed: projectController.projectTasksController.showSearch,
+              onPressed: projectController.projectTasksController!.showSearch,
             ),
-            ProjectTasksFilterButton(controller: projectController.projectTasksController),
+            ProjectTasksFilterButton(controller: projectController.projectTasksController!),
           ],
         );
 
       if (index == ProjectDetailedTabs.milestones &&
-          (projectController.projectMilestonesController.itemList.isNotEmpty ||
-              projectController.projectMilestonesController.filterController.hasFilters.value))
+          projectController.projectMilestonesController != null &&
+          (projectController.projectMilestonesController!.itemList.isNotEmpty ||
+              projectController.projectMilestonesController!.filterController.hasFilters.value))
         return Row(
           children: [
             PlatformIconButton(
               icon: Icon(PlatformIcons(context).search),
             ),
             ProjectMilestonesFilterButton(
-                controller: projectController.projectMilestonesController),
+                controller: projectController.projectMilestonesController!),
           ],
         );
 
       if (index == ProjectDetailedTabs.discussions &&
-          (projectController.projectDiscussionsController.itemList.isNotEmpty ||
-              projectController.projectDiscussionsController.filterController.hasFilters.value))
+          projectController.projectDiscussionsController != null &&
+          (projectController.projectDiscussionsController!.itemList.isNotEmpty ||
+              projectController.projectDiscussionsController!.filterController.hasFilters.value))
         return Row(
           children: [
             PlatformIconButton(
               icon: Icon(PlatformIcons(context).search),
-              onPressed: projectController.projectDiscussionsController.showSearch,
+              onPressed: projectController.projectDiscussionsController!.showSearch,
             ),
             ProjectDiscussionsFilterButton(
-                controller: projectController.projectDiscussionsController)
+                controller: projectController.projectDiscussionsController!)
           ],
         );
 
       if (index == ProjectDetailedTabs.documents &&
-          (projectController.projectDocumentsController.itemList.isNotEmpty ||
-              projectController.projectDocumentsController.filterController.hasFilters.value))
+          projectController.projectDocumentsController != null &&
+          (projectController.projectDocumentsController!.itemList.isNotEmpty ||
+              projectController.projectDocumentsController!.filterController.hasFilters.value))
         return Row(
           children: [
             PlatformIconButton(
@@ -255,12 +259,12 @@ class _ProjectAppBarActions extends StatelessWidget {
                 onPressed: () {
                   Get.find<NavigationController>()
                       .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                    'folderName': projectController.projectDocumentsController.screenName,
-                    'folderId': projectController.projectDocumentsController.currentFolderID,
+                    'folderName': projectController.projectDocumentsController!.screenName,
+                    'folderId': projectController.projectDocumentsController!.currentFolderID,
                     'documentsController': projectController.projectDocumentsController,
                   });
                 }),
-            ProjectDocumentsFilterButton(controller: projectController.projectDocumentsController),
+            ProjectDocumentsFilterButton(controller: projectController.projectDocumentsController!),
           ],
         );
 
@@ -295,36 +299,40 @@ class _ProjectContextMenu extends StatelessWidget {
       itemBuilder: (context) {
         return [
           if (index == ProjectDetailedTabs.tasks &&
-              (controller.projectTasksController.tasksList.isNotEmpty ||
-                  controller.projectTasksController.filterController.hasFilters.value))
+              controller.projectTasksController != null &&
+              (controller.projectTasksController!.tasksList.isNotEmpty ||
+                  controller.projectTasksController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortTasks,
                 child: ProjectTasksSortButton(
-                  controller: controller.projectTasksController,
+                  controller: controller.projectTasksController!,
                 )),
           if (index == ProjectDetailedTabs.milestones &&
-              (controller.projectMilestonesController.itemList.isNotEmpty ||
-                  controller.projectMilestonesController.filterController.hasFilters.value))
+              controller.projectMilestonesController != null &&
+              (controller.projectMilestonesController!.itemList.isNotEmpty ||
+                  controller.projectMilestonesController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortMilestones,
                 child: ProjectMilestonesSortButton(
-                  controller: controller.projectMilestonesController,
+                  controller: controller.projectMilestonesController!,
                 )),
           if (index == ProjectDetailedTabs.discussions &&
-              (controller.projectDiscussionsController.itemList.isNotEmpty ||
-                  controller.projectDiscussionsController.filterController.hasFilters.value))
+              controller.projectDiscussionsController != null &&
+              (controller.projectDiscussionsController!.itemList.isNotEmpty ||
+                  controller.projectDiscussionsController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortDiscussions,
                 child: ProjectDiscussionsSortButton(
-                  controller: controller.projectDiscussionsController,
+                  controller: controller.projectDiscussionsController!,
                 )),
           if (index == ProjectDetailedTabs.documents &&
-              (controller.projectDocumentsController.itemList.isNotEmpty ||
-                  controller.projectDocumentsController.filterController.hasFilters.value))
+              controller.projectDocumentsController != null &&
+              (controller.projectDocumentsController!.itemList.isNotEmpty ||
+                  controller.projectDocumentsController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortDocuments,
                 child: ProjectDocumentsSortButton(
-                  controller: controller.projectDocumentsController,
+                  controller: controller.projectDocumentsController!,
                 )),
           if (controller.projectData.canEdit!)
             PlatformPopupMenuItem(
@@ -359,19 +367,19 @@ Future<void> _onSelected(
       break;
 
     case PopupMenuItemValue.sortTasks:
-      taskSortButtonOnPressed(controller.projectTasksController, context);
+      taskSortButtonOnPressed(controller.projectTasksController!, context);
       break;
 
     case PopupMenuItemValue.sortMilestones:
-      milestonesSortButtonOnPressed(controller.projectMilestonesController, context);
+      milestonesSortButtonOnPressed(controller.projectMilestonesController!, context);
       break;
 
     case PopupMenuItemValue.sortDiscussions:
-      discussionsSortButtonOnPressed(controller.projectDiscussionsController, context);
+      discussionsSortButtonOnPressed(controller.projectDiscussionsController!, context);
       break;
 
     case PopupMenuItemValue.sortDocuments:
-      documentsSortButtonOnPressed(controller.projectDocumentsController, context);
+      documentsSortButtonOnPressed(controller.projectDocumentsController!, context);
       break;
 
     case PopupMenuItemValue.editProject:
