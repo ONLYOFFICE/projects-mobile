@@ -73,7 +73,16 @@ class AccountTileController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      final avatarBytes = await _downloadService.downloadImage(accountData!.avatarUrl!);
+      Uint8List? avatarBytes;
+
+      if (accountData!.avatarUrl!.contains('http')) {
+        avatarBytes = await _downloadService.downloadImage(accountData!.avatarUrl!);
+      } else {
+        final url = '${accountData!.scheme!}$portal${accountData!.avatarUrl!}';
+
+        avatarBytes = await _downloadService.downloadImageWithToken(url, accountData!.token!);
+      }
+
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;

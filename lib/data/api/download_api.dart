@@ -32,6 +32,7 @@
 
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+import 'package:http_client_helper/http_client_helper.dart';
 
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
@@ -50,6 +51,30 @@ class DownloadApi {
     final result = ApiDTO<Uint8List>();
     try {
       final response = await locator.get<CoreApi>().getRequest(url);
+
+      if (response is http.Response) {
+        result.response = response.bodyBytes;
+      } else {}
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<Uint8List>> downloadImageWithToken(String avatarUrl, String token) async {
+    final result = ApiDTO<Uint8List>();
+    try {
+      final headers = await locator.get<CoreApi>().getHeaders();
+      headers['Authorization'] = token;
+
+      final request = HttpClientHelper.get(
+        Uri.parse(avatarUrl),
+        cancelToken: locator.get<CoreApi>().cancellationToken,
+        timeLimit: Duration(seconds: locator.get<CoreApi>().timeout),
+        headers: headers,
+      );
+      final response = await request;
 
       if (response is http.Response) {
         result.response = response.bodyBytes;
