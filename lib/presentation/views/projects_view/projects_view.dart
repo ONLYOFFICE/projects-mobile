@@ -35,7 +35,6 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -73,12 +72,11 @@ class ProjectsView extends StatelessWidget {
               Get.find<ProjectsFilterController>(),
               Get.find<PaginationController<ProjectDetailed>>(),
             ),
-            tag: 'ProjectsView');
+            tag: 'ProjectsView',
+          );
 
     controller.setup(PresetProjectFilters.saved);
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.loadProjects();
-    });
+    controller.loadProjects();
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,
