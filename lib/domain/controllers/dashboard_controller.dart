@@ -77,7 +77,7 @@ class DashboardController extends GetxController {
 
   var scrollController = ScrollController();
 
-  Future setup() async {
+  void setup() {
     _myTaskController = tasksWithPresets.myTasksController;
     _upcomingTaskscontroller = tasksWithPresets.upcomingTasksController;
 
@@ -92,7 +92,7 @@ class DashboardController extends GetxController {
     _activeProjectsController.screenName = tr('activeProjects');
   }
 
-  void onRefresh() async {
+  void onRefresh() {
     refreshData();
     refreshProjectsData();
 
@@ -107,7 +107,7 @@ class DashboardController extends GetxController {
     _refreshController.refreshCompleted();
   }
 
-  void onLoading() async {
+  void onLoading() {
     loadContent();
     _refreshController.loadComplete();
   }

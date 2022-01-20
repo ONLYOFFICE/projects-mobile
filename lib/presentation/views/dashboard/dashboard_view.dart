@@ -52,11 +52,9 @@ class DashboardView extends StatelessWidget {
   const DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final dashboardController = Get.put(DashboardController())..setup();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) async {
-      dashboardController.loadContent();
-    });
+    final dashboardController = Get.put(DashboardController())
+      ..setup()
+      ..loadContent();
 
     return Scaffold(
       backgroundColor: Get.theme.colors().background,
@@ -143,61 +141,61 @@ class DashboardCardView extends StatelessWidget {
       child: Card(
         elevation: 1,
         color: Get.theme.colors().surface,
-        child: Obx(
-          () => Column(
-            children: <Widget>[
-              InkWell(
-                onTap: () => {
-                  controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
-                },
-                child: Container(
-                  constraints: const BoxConstraints(minHeight: 60),
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Flexible(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              overline.toUpperCase(),
-                              style: TextStyleHelper.overline(
-                                color: Get.theme.colors().onSurface.withOpacity(0.6),
-                              ),
-                            ),
-                            Text(
-                              controller.screenName as String,
-                              style: TextStyleHelper.headline7(),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        height: 28,
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Get.theme.colors().bgDescription,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Obx(
-                            () => Text(
-                              controller.paginationController.total.value.toString(),
-                              textAlign: TextAlign.center,
-                              style: TextStyleHelper.subtitle2(),
+        child: Column(
+          children: <Widget>[
+            InkWell(
+              onTap: () => {
+                controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
+              },
+              child: Container(
+                constraints: const BoxConstraints(minHeight: 60),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Flexible(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            overline.toUpperCase(),
+                            style: TextStyleHelper.overline(
+                              color: Get.theme.colors().onSurface.withOpacity(0.6),
                             ),
                           ),
+                          Text(
+                            controller.screenName as String,
+                            style: TextStyleHelper.headline7(),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      height: 28,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      decoration: BoxDecoration(
+                        color: Get.theme.colors().bgDescription,
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Center(
+                        child: Obx(
+                          () => Text(
+                            controller.paginationController.total.value.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyleHelper.subtitle2(),
+                          ),
                         ),
-                      )
-                    ],
-                  ),
+                      ),
+                    )
+                  ],
                 ),
               ),
+            ),
+            Obx(() {
               if (controller.expandedCardView.value as bool)
-                Column(
+                return Column(
                   children: <Widget>[
                     const Divider(
                       height: 1,
@@ -289,9 +287,10 @@ class DashboardCardView extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-            ],
-          ),
+                );
+              return const SizedBox();
+            }),
+          ],
         ),
       ),
     );
@@ -336,27 +335,23 @@ class ProjectCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          if (controller.loaded.value)
-            Column(children: [
-              ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (c, i) => i < 2
-                    ? ProjectCell(projectDetails: controller.paginationController.data[i])
-                    : const SizedBox(),
-                itemCount: controller.paginationController.data.length < 2
-                    ? controller.paginationController.data.length
-                    : 2,
-              ),
-            ]),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (controller.loaded.value)
+          ListView.builder(
+            padding: EdgeInsets.zero,
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (c, i) => i < 2
+                ? ProjectCell(projectDetails: controller.paginationController.data[i])
+                : const SizedBox(),
+            itemCount: controller.paginationController.data.length < 2
+                ? controller.paginationController.data.length
+                : 2,
+          ),
+      ],
     );
   }
 }
@@ -372,27 +367,22 @@ class TaskCardContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          if (controller.loaded.value)
-            Column(children: [
-              ListView.builder(
-                padding: EdgeInsets.zero,
-                physics: const ScrollPhysics(),
-                shrinkWrap: true,
-                itemBuilder: (c, i) => i < 2
-                    ? TaskCell(task: controller.paginationController.data[i])
-                    : const SizedBox(),
-                itemCount: controller.paginationController.data.length < 2
-                    ? controller.paginationController.data.length
-                    : 2,
-              ),
-            ]),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        if (controller.loaded.value)
+          ListView.builder(
+            padding: EdgeInsets.zero,
+            physics: const ScrollPhysics(),
+            shrinkWrap: true,
+            itemBuilder: (c, i) =>
+                i < 2 ? TaskCell(task: controller.paginationController.data[i]) : const SizedBox(),
+            itemCount: controller.paginationController.data.length < 2
+                ? controller.paginationController.data.length
+                : 2,
+          ),
+      ],
     );
   }
 }

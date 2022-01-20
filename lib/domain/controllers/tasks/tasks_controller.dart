@@ -90,7 +90,6 @@ class TasksController extends BaseController {
     screenName = tr('tasks');
     loaded.value = false;
     _paginationController = paginationController;
-    expandedCardView.value = true;
     _filterController = filterController;
     _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => loadTasks();
@@ -168,10 +167,9 @@ class TasksController extends BaseController {
 
     paginationController.total.value = result.total;
     if (needToClear) paginationController.data.clear();
-    if (result.total != 0) {
-      paginationController.data.addAll(result.response ?? <PortalTask>[]);
-      expandedCardView.value = paginationController.data.isNotEmpty;
-    }
+    if (result.total != 0) paginationController.data.addAll(result.response ?? <PortalTask>[]);
+
+    expandedCardView.value = paginationController.data.isNotEmpty;
 
     return Future.value(true);
   }
