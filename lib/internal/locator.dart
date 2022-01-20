@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
