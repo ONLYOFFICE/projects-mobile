@@ -41,6 +41,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class PasscodeSettingsScreen extends StatelessWidget {
   const PasscodeSettingsScreen({Key? key}) : super(key: key);
@@ -86,7 +87,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                     if (controller.isPasscodeEnable.value == true)
                       Padding(
                         padding: const EdgeInsets.only(left: 7),
-                        child: TextButton(
+                        child: PlatformTextButton(
                           onPressed: controller.tryChangingPasscode,
                           child: Text(
                             tr('changePasscode'),

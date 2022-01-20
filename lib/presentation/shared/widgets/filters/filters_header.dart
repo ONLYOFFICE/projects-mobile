@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class FiltersHeader extends StatelessWidget {
   const FiltersHeader({
@@ -81,7 +82,7 @@ class FiltersHeader extends StatelessWidget {
             Positioned(
                 top: 5,
                 right: Get.find<PlatformController>().isMobile ? 8 : 12,
-                child: TextButton(
+                child: PlatformTextButton(
                     onPressed: () async {
                       filterController.resetFilters();
                       Get.back();

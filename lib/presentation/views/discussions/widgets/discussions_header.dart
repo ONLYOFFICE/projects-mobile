@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class DiscussionsHeader extends StatelessWidget {
   final DiscussionsController controller;
@@ -94,7 +95,7 @@ class _DiscussionSortButton extends StatelessWidget with ShowPopupMenuMixin {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return PlatformTextButton(
       onPressed: () async {
         if (Get.find<PlatformController>().isMobile) {
           final options = Column(

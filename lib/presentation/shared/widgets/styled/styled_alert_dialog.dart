@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class StyledAlertDialog extends StatelessWidget {
   final Widget? title;
@@ -84,11 +85,11 @@ class StyledAlertDialog extends StatelessWidget {
       title: title ?? Text(titleText!),
       content: content ?? (contentText != null ? Text(contentText!) : null),
       actions: [
-        TextButton(
+        PlatformTextButton(
           onPressed: onCancelTap ?? Get.back,
           child: Text(platformCancelText ?? defaultCancelText, style: TextStyleHelper.button()),
         ),
-        TextButton(
+        PlatformTextButton(
           onPressed: onAcceptTap,
           child: Text(
             platformAcceptText ?? defaultAcceptText,
@@ -139,7 +140,7 @@ class SingleButtonDialog extends StatelessWidget {
               ? Text(contentText!)
               : null,
       actions: [
-        TextButton(
+        PlatformTextButton(
           onPressed: onAcceptTap,
           child: Text(
             acceptText ?? tr('accept'),

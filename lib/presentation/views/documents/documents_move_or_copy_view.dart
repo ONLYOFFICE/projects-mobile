@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
@@ -380,29 +381,29 @@ class MoveDocumentsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                TextButton(
+                PlatformTextButton(
                   onPressed: () => Get.close(controller.foldersCount),
                   child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                 ),
                 if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.moveFolder,
                     child:
                         Text(tr('moveFolderHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFolder' && controller.currentFolder != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.copyFolder,
                     child:
                         Text(tr('copyFolderHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'moveFile' && controller.currentFolder != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.moveFile,
                     child: Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFile' && controller.currentFolder != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.copyFile,
                     child: Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),

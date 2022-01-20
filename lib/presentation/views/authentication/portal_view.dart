@@ -50,7 +50,7 @@ class PortalInputView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
-    
+
     if (Get.isRegistered<AccountManagerController>()) {
       Get.find<AccountManagerController>();
     } else {
@@ -66,7 +66,6 @@ class PortalInputView extends StatelessWidget {
           : Scaffold(
               body: SingleChildScrollView(
                 child: Center(
-
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),

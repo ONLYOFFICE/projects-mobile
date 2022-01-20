@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -134,7 +135,7 @@ class EnterSMSCodeScreen extends StatelessWidget {
                       controller.onConfirmPressed(codeController.text);
                     },
                   ),
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.resendSms,
                     child: Text(tr('requestNewCode')),
                   )

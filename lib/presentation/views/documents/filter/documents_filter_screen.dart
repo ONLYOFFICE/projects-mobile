@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/select_
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 part 'filters/document_type.dart';
 part 'filters/search_settings.dart';
@@ -76,7 +77,7 @@ class DocumentsFilterScreen extends StatelessWidget {
             ? Icon(PlatformIcons(context).back)
             : Icon(PlatformIcons(context).clear),
         actions: [
-          TextButton(
+          PlatformTextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),

@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/users/s
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 part 'filters/author.dart';
 part 'filters/status.dart';
@@ -78,7 +79,7 @@ class DiscussionsFilterScreen extends StatelessWidget {
             ? Icon(PlatformIcons(context).back)
             : Icon(PlatformIcons(context).clear),
         actions: [
-          TextButton(
+          PlatformTextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),
