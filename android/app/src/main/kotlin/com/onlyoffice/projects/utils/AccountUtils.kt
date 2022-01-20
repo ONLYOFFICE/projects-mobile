@@ -38,7 +38,11 @@ class AccountUtils(private val context: Context) {
     fun getAccounts(login: String? = null): Array<String> {
         if (context.isDocumentInstalled) {
             val cursor = context.contentResolver.query(Uri.parse("content://$AUTHORITY/$ACCOUNTS"), null, null, arrayOf(login), null)
-            val accounts: Array<String> = parseAccounts(cursor)
+            val accounts: Array<String> =
+                parseAccounts(cursor).map { CloudAccount.toObject(it) }
+                    .filter { !it.isWebDav }
+                    .filter { it.portal?.contains("personal") != true }
+                    .map { CloudAccount.toString(it) }.toTypedArray()
             cursor?.close()
             if (accounts.isNotEmpty()) {
                 addAccountsToDb(accounts)
@@ -46,23 +50,29 @@ class AccountUtils(private val context: Context) {
             return accounts
         } else {
             return runBlocking {
-                return@runBlocking context.accountsDao?.getAccounts()?.map { CloudAccount.toString(it) }?.toTypedArray() ?: emptyArray()
+                return@runBlocking context.accountsDao?.getAccounts()?.filter { !it.isWebDav }
+                    ?.filter { it.portal?.contains("personal") != true }
+                    ?.map { CloudAccount.toString(it) }?.toTypedArray() ?: emptyArray()
             }
         }
     }
 
     fun addAccount(id: String?, data: String?): Long? {
+        val account = CloudAccount.toObject(checkNotNull(data) { "Account data null" })
+        if (account.portal?.contains("personal") == true) {
+            return -1
+        }
         if (context.isDocumentInstalled) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                val bundle: Bundle = getBundle(checkNotNull(data) { "Account data null" })
+                val bundle: Bundle = getBundle(data)
                 context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), ContentValues(), bundle)
             } else {
-                val contentValues: ContentValues = getContentValues(checkNotNull(data) { "Account data null" })
+                val contentValues: ContentValues = getContentValues(data)
                 context.contentResolver.insert(Uri.parse("content://$AUTHORITY/$ACCOUNTS/$id"), contentValues)
             }
         }
         return runBlocking {
-            return@runBlocking context.accountsDao?.addAccount(CloudAccount.toObject(checkNotNull(data) { "Account data null" }))
+            return@runBlocking context.accountsDao?.addAccount(CloudAccount.toObject(data))
         }
     }
 
@@ -193,7 +203,9 @@ class AccountUtils(private val context: Context) {
 
     private fun addAccountsToDb(accounts: Array<String>) {
         runBlocking {
-            context.accountsDao?.addAccounts(accounts.map { CloudAccount.toObject(it) })
+            context.accountsDao?.addAccounts(accounts.map { CloudAccount.toObject(it) }
+                .filter { !it.isWebDav }
+                .filter { it.portal?.contains("personal") != true })
         }
     }
 

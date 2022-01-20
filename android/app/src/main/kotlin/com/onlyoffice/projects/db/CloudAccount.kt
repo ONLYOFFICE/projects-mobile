@@ -75,14 +75,14 @@ data class CloudAccount(
                 scheme = json.optString(CloudAccount::scheme.name),
                 name = json.optString(CloudAccount::name.name),
                 avatarUrl = json.optString(CloudAccount::avatarUrl.name),
-                isSslCiphers = json.optString(CloudAccount::isSslCiphers.name) == "1",
-                isSslState = json.optString(CloudAccount::isSslState.name) == "1",
-                isOnline = json.optString(CloudAccount::isOnline.name) == "1",
-                isWebDav = json.optString(CloudAccount::isWebDav.name) == "1",
-                isOneDrive = json.optString(CloudAccount::isOneDrive.name) == "1",
-                isDropbox = json.optString(CloudAccount::isDropbox.name) == "1",
-                isAdmin = json.optString(CloudAccount::isAdmin.name) == "1",
-                isVisitor = json.optString(CloudAccount::isVisitor.name) == "1",
+                isSslCiphers = json.optBoolean(CloudAccount::isSslCiphers.name, false) ,
+                isSslState = json.optBoolean(CloudAccount::isSslState.name, false) ,
+                isOnline = json.optBoolean(CloudAccount::isOnline.name, false),
+                isWebDav = json.optBoolean(CloudAccount::isWebDav.name, false),
+                isOneDrive = json.optBoolean(CloudAccount::isOneDrive.name, false),
+                isDropbox = json.optBoolean(CloudAccount::isDropbox.name, false),
+                isAdmin = json.optBoolean(CloudAccount::isAdmin.name, false),
+                isVisitor = json.optBoolean(CloudAccount::isVisitor.name, false),
             ).apply {
                 token = json.optString(CloudAccount::token.name)
                 password = json.optString(CloudAccount::password.name)
