@@ -78,6 +78,8 @@ class NewProjectController extends BaseProjectEditorController {
 
     if (needToFillTitle.value == true || needToFillManager.value == true) return;
 
+    Get.back();
+
     final participants = <Participant>[];
 
     for (final element in selectedTeamMembers) {
@@ -112,8 +114,11 @@ class NewProjectController extends BaseProjectEditorController {
             .to(ProjectDetailedView(), arguments: {'projectDetailed': result}),
         buttonText: tr('open').toUpperCase(),
       );
-      Get.back();
-    }
+    } else
+      MessagesHandler.showSnackBar(
+        context: context,
+        text: tr('error'),
+      );
   }
 
   Future<void> showTags() async {

@@ -301,6 +301,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
     if (title!.isEmpty) setTitleError!.value = true;
     if (_selectedProjectId == null || title!.isEmpty) return;
 
+    Get.back();
+
     String? priority;
     final responsibleIds = <String?>[];
 
@@ -323,7 +325,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
       locator<EventHub>().fire('needToRefreshProjects', ['all']);
       locator<EventHub>().fire('needToRefreshTasks');
 
-      Get.back();
       MessagesHandler.showSnackBar(
         context: context,
         text: tr('taskCreated'),
@@ -335,7 +336,11 @@ class NewTaskController extends GetxController implements TaskActionsController 
               .to(const TaskDetailedView(), arguments: {'controller': itemController});
         },
       );
-    }
+    } else
+      MessagesHandler.showSnackBar(
+        context: context,
+        text: tr('error'),
+      );
   }
 
   void discardTask() {
