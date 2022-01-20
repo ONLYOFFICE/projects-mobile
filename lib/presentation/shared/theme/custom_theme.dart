@@ -64,6 +64,7 @@ final AppColors lightColors = AppColors(
   surface: const Color(0xffffffff),
   systemBlue: const Color(0xff007aff),
   tabbarBackground: const Color(0xff2E4057),
+  backgroundSecond: const Color(0xffF4F4F4),
 );
 
 final AppColors darkColors = AppColors(
@@ -86,6 +87,7 @@ final AppColors darkColors = AppColors(
   surface: const Color(0xff252525),
   systemBlue: const Color(0xff007aff),
   tabbarBackground: const Color(0xff2E4057),
+  backgroundSecond: const Color(0xff080808),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(
@@ -99,16 +101,14 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     // lightColors.onSurface),
     // text
   ),
-  navigationRailTheme:
-      NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
+  navigationRailTheme: NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
     elevation: 10,
   ),
   dialogTheme: DialogTheme(
       titleTextStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
-      contentTextStyle:
-          TextStyleHelper.body2(color: lightColors.onSurface.withOpacity(0.6))),
+      contentTextStyle: TextStyleHelper.body2(color: lightColors.onSurface.withOpacity(0.6))),
 );
 
 final ThemeData darkTheme = ThemeData.dark().copyWith(
@@ -120,14 +120,12 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
     backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
   ),
-  navigationRailTheme:
-      NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
+  navigationRailTheme: NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
     elevation: 10,
   ),
   dialogTheme: DialogTheme(
       titleTextStyle: TextStyleHelper.subtitle1(color: darkColors.onSurface),
-      contentTextStyle:
-          TextStyleHelper.body2(color: darkColors.onSurface.withOpacity(0.6))),
+      contentTextStyle: TextStyleHelper.body2(color: darkColors.onSurface.withOpacity(0.6))),
 );

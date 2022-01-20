@@ -55,6 +55,7 @@ class AppColors {
   final Color surface;
   final Color tabbarBackground;
   final Color colorError;
+  final Color backgroundSecond;
 
   const AppColors({
     required this.background,
@@ -76,5 +77,6 @@ class AppColors {
     required this.surface,
     required this.tabbarBackground,
     required this.colorError,
+    required this.backgroundSecond,
   });
 }
