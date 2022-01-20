@@ -76,7 +76,8 @@ class AccountTileController extends GetxController {
       Uint8List? avatarBytes;
 
       if (accountData!.avatarUrl!.contains('http')) {
-        avatarBytes = await _downloadService.downloadImage(accountData!.avatarUrl!);
+        avatarBytes = await _downloadService.downloadImageWithToken(
+            accountData!.avatarUrl!, accountData!.token!);
       } else {
         final url = '${accountData!.scheme!}$portal${accountData!.avatarUrl!}';
 
