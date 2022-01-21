@@ -209,6 +209,8 @@ class NewMilestoneController extends GetxController {
         needToSelectResponsible.value ||
         needToSetDueDate.value) return;
 
+    Get.back();
+
     final milestone = NewMilestoneDTO(
       title: titleController.text,
       description: descriptionController.value.text,
@@ -224,8 +226,8 @@ class NewMilestoneController extends GetxController {
     if (success) {
       MessagesHandler.showSnackBar(context: context, text: tr('milestoneCreated'));
       locator<EventHub>().fire('needToRefreshProjects', ['all']);
-      Get.back();
-    }
+    } else
+      MessagesHandler.showSnackBar(context: context, text: tr('error'));
   }
 
   void discard() {
