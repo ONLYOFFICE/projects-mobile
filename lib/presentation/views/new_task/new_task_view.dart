@@ -81,6 +81,7 @@ class NewTaskView extends StatelessWidget {
               children: [
                 const SizedBox(height: 10),
                 TaskTitle(controller: controller),
+                const SizedBox(height: 10),
                 const StyledDivider(leftPadding: 72.5),
                 // unfocus title
                 Listener(

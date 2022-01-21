@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class ProjectTitleTile extends StatelessWidget {
   final controller;
@@ -49,37 +50,65 @@ class ProjectTitleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        return Padding(
-          padding: const EdgeInsets.only(left: 72, right: 16, bottom: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if (showCaption)
-                Text(
-                  '${tr('project')}:',
-                  style: TextStyleHelper.caption(
-                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
+    final correctText =
+        (controller.titleController as TextEditingController?)?.text.isNotEmpty ?? false
+            ? true.obs
+            : false.obs;
+
+    return Padding(
+      padding: EdgeInsets.only(right: 16, bottom: 10, top: showCaption ? 26 : 10),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: SizedBox(
+              width: 72,
+              child: Obx(
+                () => AppIcon(
+                  icon: SvgIcons.project,
+                  color: correctText.value
+                      ? Get.theme.colors().onBackground.withOpacity(0.75)
+                      : Get.theme.colors().onBackground.withOpacity(0.4),
                 ),
-              TextField(
-                  focusNode: focusOnTitle ? controller.titleFocus as FocusNode : null,
-                  maxLines: null,
-                  controller: controller.titleController as TextEditingController?,
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-                  cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-                  decoration: InputDecoration(
-                      hintText: tr('projectTitle'),
-                      contentPadding: EdgeInsets.zero,
-                      hintStyle: TextStyleHelper.headline6(
-                          color: controller.needToFillTitle.value == true
-                              ? Get.theme.colors().colorError
-                              : Get.theme.colors().onSurface.withOpacity(0.5)),
-                      border: InputBorder.none)),
-            ],
+              ),
+            ),
           ),
-        );
-      },
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (showCaption)
+                  Text('${tr('projectTitle')}:',
+                      style: TextStyleHelper.caption(
+                          color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                Obx(
+                  () => TextField(
+                      onChanged: (value) {
+                        if (value.isNotEmpty)
+                          correctText.value = true;
+                        else
+                          correctText.value = false;
+                      },
+                      focusNode: focusOnTitle ? controller.titleFocus as FocusNode : null,
+                      maxLines: null,
+                      controller: controller.titleController as TextEditingController?,
+                      style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+                      cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                      decoration: InputDecoration(
+                          hintText: tr('projectTitle'),
+                          contentPadding: EdgeInsets.zero,
+                          hintStyle: TextStyleHelper.headline6(
+                              color: controller.needToFillTitle.value == true
+                                  ? Get.theme.colors().colorError
+                                  : Get.theme.colors().onSurface.withOpacity(0.5)),
+                          border: InputBorder.none)),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

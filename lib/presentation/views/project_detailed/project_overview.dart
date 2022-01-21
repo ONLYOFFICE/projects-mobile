@@ -60,10 +60,11 @@ class ProjectOverview extends StatelessWidget {
         if (projectController.loaded.value == true) {
           return ListView(
             children: [
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               Obx(
                 () => InfoTile(
                   caption: tr('project').toUpperCase(),
+                  icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
                   subtitle: projectController.projectTitleText.value,
                   subtitleStyle: TextStyleHelper.headline7(
                     color: Get.theme.colors().onBackground,

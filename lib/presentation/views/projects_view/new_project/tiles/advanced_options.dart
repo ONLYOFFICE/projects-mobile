@@ -72,7 +72,7 @@ class AdvancedOptions extends StatelessWidget {
                             icon: SvgIcons.preferences,
                             height: 24,
                             width: 24,
-                            color: Get.theme.colors().onBackground),
+                            color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       ),
                       Text(
                         tr('advancedOptions'),
