@@ -477,5 +477,10 @@
 	"discussionIsOpen": "Open",
 	"discussionInArchive": "Archived",
 	"openDiscussion": "Open",
-	"archiveDiscussion": "To archive"
+	"archiveDiscussion": "To archive",
+	"overwriteDialogTitle": "Overwrite confirmation",
+	"overwriteDialogContent": "The file with the name {} already exists in the destination folder.",
+	"replaceConfirmation": "Replace the existing file with the version update",
+	"copyConfirmation": "Copy and keep both files",
+	"skipConfirmation": "Skip this conflict"
 }

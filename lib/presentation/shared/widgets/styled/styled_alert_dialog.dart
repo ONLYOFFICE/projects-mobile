@@ -48,6 +48,7 @@ class StyledAlertDialog extends StatelessWidget {
   final Color? acceptColor;
   final Function()? onCancelTap;
   final Function()? onAcceptTap;
+  final List<Widget>? actions;
 
   const StyledAlertDialog({
     Key? key,
@@ -59,8 +60,8 @@ class StyledAlertDialog extends StatelessWidget {
     this.titleText,
     this.contentText,
     this.onAcceptTap,
-    // Default: pop window
     this.onCancelTap,
+    this.actions,
   })  : assert(titleText != null || title != null, content != null || contentText != null),
         super(key: key);
 
@@ -87,22 +88,23 @@ class StyledAlertDialog extends StatelessWidget {
               child: _content,
             )
           : null,
-      actions: [
-        PlatformTextButton(
-          onPressed: onCancelTap ?? Get.back,
-          child: Text(
-            platformCancelText ?? defaultCancelText,
-            style: TextStyleHelper.button(),
-            softWrap: false,
-          ),
-        ),
-        PlatformTextButton(
-          onPressed: onAcceptTap,
-          child: Text(platformAcceptText ?? defaultAcceptText,
-              style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
-              softWrap: false),
-        ),
-      ],
+      actions: actions ??
+          [
+            PlatformTextButton(
+              onPressed: onCancelTap ?? Get.back,
+              child: Text(
+                platformCancelText ?? defaultCancelText,
+                style: TextStyleHelper.button(),
+                softWrap: false,
+              ),
+            ),
+            PlatformTextButton(
+              onPressed: onAcceptTap,
+              child: Text(platformAcceptText ?? defaultAcceptText,
+                  style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
+                  softWrap: false),
+            ),
+          ],
     );
   }
 }

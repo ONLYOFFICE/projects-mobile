@@ -36,6 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/api/files_api.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/data/services/files_service.dart';
@@ -46,6 +47,8 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class DocumentsMoveOrCopyController extends BaseDocumentsController {
@@ -131,6 +134,11 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     loaded.value = true;
   }
 
+  void setupOptions(int? targetId, int? initial) {
+    _targetId = targetId;
+    initialFolderId = initial;
+  }
+
   Future<void> setupFolder({required String folderName, Folder? folder}) async {
     loaded.value = false;
 
@@ -174,7 +182,6 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     paginationController.data.addAll(result.files!);
 
     countFolders();
-    countFiles();
 
     documentsScreenName.value = _screenName ?? tr('chooseSection');
     screenName = _screenName ?? tr('chooseSection');
@@ -225,6 +232,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     final result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
+      type: ConflictResolveType.Skip,
     );
 
     if (result != null) {
@@ -241,6 +249,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     final result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
+      type: ConflictResolveType.Skip,
     );
 
     if (result != null) {
@@ -254,49 +263,56 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
   }
 
   Future moveFile() async {
+    final conflictsResult = await _api.checkForConflicts(
+      destFolderId: _currentFolder!.id.toString(),
+      fileIds: [_targetId.toString()],
+    );
+
+    var type = ConflictResolveType.Skip;
+    if (conflictsResult != null && conflictsResult.isNotEmpty)
+      type = (await showConflictResolvingDialog([conflictsResult[0].title.toString()])) ??
+          ConflictResolveType.Skip;
+
     final result = await _api.moveDocument(
       movingFile: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
+      type: type,
     );
 
-    if (result != null) {
-      Get.close(nestingCounter);
-
+    Get.close(nestingCounter);
+    if (result != null)
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
-    } else
+    else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFile() async {
+    final conflictsResult = await _api.checkForConflicts(
+      destFolderId: _currentFolder!.id.toString(),
+      fileIds: [_targetId.toString()],
+    );
+
+    var type = ConflictResolveType.Skip;
+    if (conflictsResult != null && conflictsResult.isNotEmpty)
+      type = (await showConflictResolvingDialog([conflictsResult[0].title.toString()])) ??
+          ConflictResolveType.Skip;
+
     final result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
+      type: type,
     );
 
-    if (result != null) {
-      Get.close(nestingCounter);
-
+    Get.close(nestingCounter);
+    if (result != null)
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
-    } else
+    else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
     locator<EventHub>().fire('needToRefreshDocuments');
   }
-
-  void setupOptions(int? targetId, int? initial) {
-    _targetId = targetId;
-    initialFolderId = initial;
-  }
-
-  @override
-  // TODO: implement expandedCardView
-  RxBool get expandedCardView => throw UnimplementedError();
-
-  @override
-  // TODO: implement showAll
-  RxBool get showAll => throw UnimplementedError();
 
   @override
   void showSearch() {
@@ -310,4 +326,47 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       'nestingCounter': nestingCounter,
     });
   }
+
+  Future<ConflictResolveType?> showConflictResolvingDialog(List<String> titles) async {
+    return await Get.dialog(StyledAlertDialog(
+      titleText: tr('overwriteDialogTitle'),
+      contentText: tr('overwriteDialogContent', args: titles),
+      actions: [
+        PlatformTextButton(
+          onPressed: () {
+            Get.back(result: ConflictResolveType.Overwrite);
+          },
+          child: Text(
+            tr('replaceConfirmation'),
+          ),
+        ),
+        PlatformTextButton(
+          onPressed: () {
+            Get.back(result: ConflictResolveType.Duplicate);
+          },
+          child: Text(
+            tr('copyConfirmation'),
+            softWrap: false,
+          ),
+        ),
+        PlatformTextButton(
+          onPressed: () {
+            Get.back(result: ConflictResolveType.Skip);
+          },
+          child: Text(
+            tr('skipConfirmation'),
+            softWrap: false,
+          ),
+        ),
+      ],
+    ));
+  }
+
+  @override
+  // TODO: implement expandedCardView
+  RxBool get expandedCardView => throw UnimplementedError();
+
+  @override
+  // TODO: implement showAll
+  RxBool get showAll => throw UnimplementedError();
 }

@@ -41,6 +41,8 @@ import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/internal/locator.dart';
 
+enum ConflictResolveType { Skip, Overwrite, Duplicate }
+
 class FilesApi {
   Future<ApiDTO<List<PortalFile>>> getTaskFiles({required int taskId}) async {
     final url = await locator.get<CoreApi>().getTaskFilesUrl(taskId: taskId);
@@ -222,8 +224,9 @@ class FilesApi {
   }
 
   Future<ApiDTO<MoveFolderResponse>> moveDocument({
-    String? movingFolder,
     required String targetFolder,
+    required ConflictResolveType type,
+    String? movingFolder,
     String? movingFile,
   }) async {
     final url = await locator.get<CoreApi>().getMoveOpsUrl();
@@ -237,7 +240,7 @@ class FilesApi {
       'destFolderId': targetFolder,
       'folderIds': folderIds,
       'fileIds': fileIds,
-      'conflictResolveType': 'skip',
+      'conflictResolveType': type.name,
       'deleteAfter': true
     };
 
@@ -261,8 +264,9 @@ class FilesApi {
   }
 
   Future<ApiDTO<MoveFolderResponse>> copyDocument({
-    String? copyingFolder,
     required String targetFolder,
+    required ConflictResolveType type,
+    String? copyingFolder,
     String? copyingFile,
   }) async {
     final url = await locator.get<CoreApi>().getCopyOpsUrl();
@@ -276,8 +280,8 @@ class FilesApi {
       'destFolderId': targetFolder,
       'folderIds': folderIds,
       'fileIds': fileIds,
-      'conflictResolveType': 'skip',
-      'deleteAfter': true
+      'conflictResolveType': type.name,
+      'deleteAfter': false
     };
 
     final result = ApiDTO<MoveFolderResponse>();
@@ -289,6 +293,38 @@ class FilesApi {
         final responseJson = json.decode(response.body);
         result.response =
             MoveFolderResponse.fromJson(responseJson['response'][0] as Map<String, dynamic>);
+      } else {
+        result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<List<PortalFile>>> checkForConflicts({
+    required String destFolderId,
+    List<String>? folderIds,
+    List<String>? fileIds,
+  }) async {
+    var url = await locator.get<CoreApi>().getMoveOpsUrl();
+
+    final result = ApiDTO<List<PortalFile>>();
+
+    url += '?destFolderId=$destFolderId';
+    if (folderIds != null) url += '&folderIds=${folderIds.join(',')}';
+    if (fileIds != null) url += '&fileIds=${fileIds.join(',')}';
+
+    try {
+      final response = await locator.get<CoreApi>().getRequest(url);
+
+      if (response is http.Response) {
+        final responseJson = json.decode(response.body);
+        result.response = (responseJson['response'] as List)
+            .cast<Map<String, dynamic>>()
+            .map(PortalFile.fromJson)
+            .toList();
       } else {
         result.error = response as CustomError;
       }
