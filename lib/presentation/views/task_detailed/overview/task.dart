@@ -40,7 +40,7 @@ class _Task extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(72, 20, 16, 16),
+      padding: const EdgeInsets.fromLTRB(72, 10, 16, 16),
       child: Obx(
         () {
           return Column(
@@ -53,7 +53,7 @@ class _Task extends StatelessWidget {
                   color: Get.theme.colors().onSurface,
                 ),
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: 20),
               StatusButton(
                 canEdit: taskController!.task.value.canEdit,
                 text: taskController?.status.value.title ?? '',

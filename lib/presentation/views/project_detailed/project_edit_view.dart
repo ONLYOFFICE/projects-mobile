@@ -33,10 +33,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
+import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
@@ -85,8 +83,11 @@ class EditProjectView extends StatelessWidget {
             if (editProjectController.loaded.value == true) {
               return ListView(
                 children: [
-                  const SizedBox(height: 26),
-                  ProjectTitleTile(controller: editProjectController),
+                  const SizedBox(height: 10),
+                  ProjectTitleTile(
+                    controller: editProjectController,
+                    showCaption: true,
+                  ),
                   const SizedBox(height: 20),
                   Padding(
                     padding: const EdgeInsets.only(left: 72),

@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -77,8 +78,10 @@ class NewMilestoneView extends StatelessWidget {
           child: Obx(
             () => Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 MilestoneInput(controller: newMilestoneController),
+                const SizedBox(height: 10),
+                const StyledDivider(leftPadding: 72.5),
                 ProjectTile(controller: newMilestoneController),
                 if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
                   ResponsibleTile(controller: newMilestoneController),
@@ -139,6 +142,7 @@ class MilestoneInput extends StatelessWidget {
       padding: const EdgeInsets.only(left: 72, right: 25),
       child: Obx(
         () => TextField(
+          minLines: 1,
           maxLines: 2,
           controller: controller.titleController,
           style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
