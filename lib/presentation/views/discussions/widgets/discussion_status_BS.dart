@@ -116,20 +116,16 @@ Future<void> showsDiscussionStatusesPM({
     PopupMenuItem(
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-      child: Expanded(
-        child: InkWell(
-          onTap: () async => controller.updateMessageStatus(0),
-          child: StatusTileTablet(
-            title: tr('open'),
-            selected: controller.status.value == 0,
-            icon: Center(
-              child: AppIcon(
-                icon: SvgIcons.open_status,
-                color: Get.theme.colors().primary,
-                height: 16,
-                width: 16,
-              ),
-            ),
+      onTap: () async => controller.updateMessageStatus(0),
+      child: StatusTileTablet(
+        title: tr('open'),
+        selected: controller.status.value == 0,
+        icon: Center(
+          child: AppIcon(
+            icon: SvgIcons.open_status,
+            color: Get.theme.colors().primary,
+            height: 16,
+            width: 16,
           ),
         ),
       ),
@@ -137,20 +133,16 @@ Future<void> showsDiscussionStatusesPM({
     PopupMenuItem(
       height: 36,
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-      child: Expanded(
-        child: InkWell(
-          onTap: () async => controller.updateMessageStatus(1),
-          child: StatusTileTablet(
-            title: tr('archived'),
-            selected: controller.status.value == 1,
-            icon: Center(
-              child: AppIcon(
-                icon: SvgIcons.archived_status,
-                color: Get.theme.colors().primary,
-                height: 16,
-                width: 16,
-              ),
-            ),
+      onTap: () async => controller.updateMessageStatus(1),
+      child: StatusTileTablet(
+        title: tr('archived'),
+        selected: controller.status.value == 1,
+        icon: Center(
+          child: AppIcon(
+            icon: SvgIcons.archived_status,
+            color: Get.theme.colors().primary,
+            height: 16,
+            width: 16,
           ),
         ),
       ),
