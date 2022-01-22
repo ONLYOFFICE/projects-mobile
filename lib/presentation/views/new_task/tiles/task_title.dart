@@ -58,7 +58,7 @@ class TaskTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (showCaption)
-                Text('${tr('taskTitle')}:',
+                Text('${tr('task')}:',
                     style: TextStyleHelper.caption(
                         color: Get.theme.colors().onBackground.withOpacity(0.75))),
               TextField(
@@ -76,7 +76,6 @@ class TaskTitle extends StatelessWidget {
                               ? Get.theme.colors().colorError
                               : Get.theme.colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none)),
-              const SizedBox(height: 10)
             ],
           ),
         );

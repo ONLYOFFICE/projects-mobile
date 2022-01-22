@@ -57,8 +57,7 @@ class NewTaskView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<NewTaskController>();
-    final projectDetailed =
-        Get.arguments['projectDetailed'] as ProjectDetailed?;
+    final projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed?;
     controller.init(projectDetailed);
 
     return WillPopScope(
@@ -72,8 +71,7 @@ class NewTaskView extends StatelessWidget {
           titleText: tr('newTask'),
           actions: [
             IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => controller.confirm(context))
+                icon: const Icon(Icons.check_rounded), onPressed: () => controller.confirm(context))
           ],
           onLeadingPressed: controller.discardTask,
         ),
@@ -81,13 +79,13 @@ class NewTaskView extends StatelessWidget {
           child: Obx(
             () => Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 TaskTitle(controller: controller),
+                const StyledDivider(leftPadding: 72.5),
                 // unfocus title
                 Listener(
                   onPointerDown: (_) {
-                    if (controller.title!.isNotEmpty &&
-                        controller.titleFocus.hasFocus)
+                    if (controller.title!.isNotEmpty && controller.titleFocus.hasFocus)
                       controller.titleFocus.unfocus();
                   },
                   child: Column(
@@ -100,8 +98,7 @@ class NewTaskView extends StatelessWidget {
                       if (controller.responsibles!.isNotEmpty)
                         NotifyResponsiblesTile(controller: controller),
                       DescriptionTile(controller: controller),
-                      GestureDetector(
-                          child: StartDateTile(controller: controller)),
+                      GestureDetector(child: StartDateTile(controller: controller)),
                       DueDateTile(controller: controller),
                       const SizedBox(height: 5),
                       PriorityTile(controller: controller)

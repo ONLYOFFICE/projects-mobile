@@ -33,15 +33,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/project_manager.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/tags.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/team_members.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
-
-import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 
 class NewProject extends StatelessWidget {
   const NewProject({
@@ -71,12 +71,14 @@ class NewProject extends StatelessWidget {
         ),
         body: Listener(
           onPointerDown: (_) {
-            if (controller.titleController.text.isNotEmpty &&
-                controller.titleFocus.hasFocus) controller.titleFocus.unfocus();
+            if (controller.titleController.text.isNotEmpty && controller.titleFocus.hasFocus)
+              controller.titleFocus.unfocus();
           },
           child: ListView(
             children: [
+              const SizedBox(height: 10),
               ProjectTitleTile(controller: controller),
+              const StyledDivider(leftPadding: 72.5),
               ProjectManagerTile(controller: controller),
               TeamMembersTile(controller: controller),
               ProjectDescriptionTile(controller: controller),
@@ -98,8 +100,7 @@ class NewProject extends StatelessWidget {
                     },
                   ),
                   Obx(() {
-                    if (controller.selfUserItem?.id ==
-                        controller.selectedProjectManager.value?.id)
+                    if (controller.selfUserItem?.id == controller.selectedProjectManager.value?.id)
                       return OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: false.obs,

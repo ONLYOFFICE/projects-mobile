@@ -47,7 +47,7 @@ class DiscussionTitleTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 72, right: 16, top: 16, bottom: 34),
+      padding: const EdgeInsets.only(left: 72, right: 16, top: 10, bottom: 10),
       child: Obx(
         () => TextField(
             focusNode: controller.titleFocus,

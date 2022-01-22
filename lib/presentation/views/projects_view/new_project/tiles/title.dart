@@ -52,14 +52,16 @@ class ProjectTitleTile extends StatelessWidget {
     return Obx(
       () {
         return Padding(
-          padding: const EdgeInsets.only(left: 72, right: 16),
+          padding: const EdgeInsets.only(left: 72, right: 16, bottom: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (showCaption)
-                Text('${tr('projectTitle')}:',
-                    style: TextStyleHelper.caption(
-                        color: Get.theme.colors().onBackground.withOpacity(0.75))),
+                Text(
+                  '${tr('project')}:',
+                  style: TextStyleHelper.caption(
+                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
+                ),
               TextField(
                   focusNode: focusOnTitle ? controller.titleFocus as FocusNode : null,
                   maxLines: null,
@@ -74,7 +76,6 @@ class ProjectTitleTile extends StatelessWidget {
                               ? Get.theme.colors().colorError
                               : Get.theme.colors().onSurface.withOpacity(0.5)),
                       border: InputBorder.none)),
-              const SizedBox(height: 10)
             ],
           ),
         );
