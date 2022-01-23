@@ -35,6 +35,7 @@ import 'dart:collection';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
@@ -80,6 +81,7 @@ class ErrorDialog extends GetxController {
             if (_blockingErrors[error.toLowerCase()] != null)
               {
                 Get.find<LoginController>().logout(),
+                Get.put(AccountManagerController()).clearToken(),
                 dialogIsShown = false,
                 queue.clear(),
               }
@@ -111,8 +113,7 @@ Map _blockingErrors = {
   'forbidden': 'Forbidden',
   'payment required': 'Payment required',
   'the paid period is over': 'The paid period is over',
-  'access to the projects module is forbidden':
-      'Access to the Projects module is Forbidden',
+  'access to the projects module is forbidden': 'Access to the Projects module is Forbidden',
   'contact the portal administrator for access to the projects module.':
       'Contact the portal administrator for access to the Projects module.',
 };
