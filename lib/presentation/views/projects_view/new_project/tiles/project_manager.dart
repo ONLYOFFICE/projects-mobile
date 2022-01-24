@@ -61,7 +61,7 @@ class ProjectManagerTile extends StatelessWidget {
           textColor:
               controller.needToFillManager.value as bool ? Get.theme.colors().colorError : null,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(

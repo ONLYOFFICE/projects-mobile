@@ -63,6 +63,8 @@ class AdvancedOptions extends StatelessWidget {
                   expandedAlignment: Alignment.topLeft,
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   tilePadding: const EdgeInsets.only(right: 25),
+                  iconColor: Get.theme.colors().onBackground.withOpacity(0.75),
+                  collapsedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
                   title: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -72,7 +74,7 @@ class AdvancedOptions extends StatelessWidget {
                             icon: SvgIcons.preferences,
                             height: 24,
                             width: 24,
-                            color: Get.theme.colors().onBackground),
+                            color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       ),
                       Text(
                         tr('advancedOptions'),

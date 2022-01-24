@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -43,9 +42,9 @@ import 'package:projects/domain/controllers/projects/project_cell_controller.dar
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
 import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
@@ -69,11 +68,13 @@ class ProjectCell extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (item.canEdit!)
-              InkWell(
-                onTap: () async =>
-                    showsStatusesBS(context: context, itemController: itemController),
-                child: ProjectIcon(itemController: itemController),
-              )
+              Builder(builder: (builderContext) {
+                return InkWell(
+                  onTap: () async =>
+                      showStatuses(context: builderContext, itemController: itemController),
+                  child: ProjectIcon(itemController: itemController),
+                );
+              })
             else
               ProjectIcon(itemController: itemController),
             Expanded(
@@ -284,7 +285,7 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight: _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
@@ -350,10 +351,12 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
 
 void showStatuses(
     {required BuildContext context, required BaseProjectEditorController itemController}) async {
-  if (Get.find<PlatformController>().isMobile) {
-    showsStatusesBS(context: context, itemController: itemController);
-  } else {
-    showsStatusesPM(context: context, itemController: itemController);
+  if (itemController.projectData!.canEdit!) {
+    if (Get.find<PlatformController>().isMobile) {
+      showsStatusesBS(context: context, itemController: itemController);
+    } else {
+      showsStatusesPM(context: context, itemController: itemController);
+    }
   }
 }
 
@@ -406,7 +409,7 @@ void showsStatusesPM(
   await showMenu(context: context, position: position, items: items);
 }
 
-double _getInititalSize({required int statusCount}) {
+double _getInitialSize({required int statusCount}) {
   final size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }
