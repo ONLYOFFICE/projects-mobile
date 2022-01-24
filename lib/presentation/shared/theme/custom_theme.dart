@@ -100,6 +100,15 @@ final ThemeData lightTheme = ThemeData.light().copyWith(
     // lightColors.onSurface),
     // text
   ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData().copyWith(
+    unselectedItemColor: Get.theme.colors().onNavBar.withOpacity(0.4),
+    selectedItemColor: Get.theme.colors().onNavBar,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: Get.theme.colors().primarySurface,
+    elevation: 0,
+  ),
   navigationRailTheme: NavigationRailThemeData(backgroundColor: lightColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(
     textStyle: TextStyleHelper.subtitle1(color: lightColors.onSurface),
@@ -118,6 +127,15 @@ final ThemeData darkTheme = ThemeData.dark().copyWith(
     iconTheme: IconThemeData(color: darkColors.primary),
     backgroundColor: darkColors.backgroundColor,
     titleTextStyle: TextStyleHelper.headline6(color: Colors.black),
+  ),
+  bottomNavigationBarTheme: const BottomNavigationBarThemeData().copyWith(
+    unselectedItemColor: Get.theme.colors().onNavBar.withOpacity(0.4),
+    selectedItemColor: Get.theme.colors().onNavBar,
+    showSelectedLabels: true,
+    showUnselectedLabels: true,
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: Get.theme.colors().primarySurface,
+    elevation: 0,
   ),
   navigationRailTheme: NavigationRailThemeData(backgroundColor: darkColors.primarySurface),
   popupMenuTheme: PopupMenuThemeData(

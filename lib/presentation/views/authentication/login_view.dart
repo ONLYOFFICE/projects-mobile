@@ -51,7 +51,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
-    final styledAppBar = StyledAppBar();
+    final styledAppBar = StyledAppBar(elevation: 0);
 
     return Obx(
       () => controller.state.value == ViewState.Busy

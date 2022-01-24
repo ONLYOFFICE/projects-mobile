@@ -277,18 +277,12 @@ class MobileLayout extends StatelessWidget {
             children: [
               if (navigationController.onMoreView.value) const Expanded(child: MoreView()),
               BottomNavigationBar(
-                unselectedItemColor: Get.theme.colors().onNavBar.withOpacity(0.4),
-                selectedItemColor: Get.theme.colors().onNavBar,
                 onTap: navigationController.changeTabIndex,
                 currentIndex:
                     navigationController.onMoreView.value || navigationController.tabIndex.value > 3
                         ? 3
                         : navigationController.tabIndex.value,
-                showSelectedLabels: true,
-                showUnselectedLabels: true,
-                type: BottomNavigationBarType.fixed,
-                backgroundColor: Get.theme.colors().primarySurface,
-                elevation: 0,
+                selectedFontSize: GetPlatform.isIOS ? 12 : 14,
                 items: [
                   BottomNavigationBarItem(
                     icon: AppIcon(

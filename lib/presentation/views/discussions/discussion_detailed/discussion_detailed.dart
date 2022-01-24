@@ -118,12 +118,14 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                 ]),
           ),
         ),
-        body: TabBarView(controller: _tabController, children: [
-          DiscussionCommentsView(controller: controller),
-          DiscussionSubscribersView(controller: controller),
-          ProjectDocumentsScreen(controller: documentsController),
-          DiscussionOverview(controller: controller),
-        ]),
+        body: SafeArea(
+          child: TabBarView(controller: _tabController, children: [
+            DiscussionCommentsView(controller: controller),
+            DiscussionSubscribersView(controller: controller),
+            ProjectDocumentsScreen(controller: documentsController),
+            DiscussionOverview(controller: controller),
+          ]),
+        ),
       ),
     );
   }

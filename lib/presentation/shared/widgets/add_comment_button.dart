@@ -49,9 +49,9 @@ class AddCommentButton extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            blurRadius: 3,
-            color: Get.theme.colors().onSurface.withOpacity(0.1),
-            offset: const Offset(0, 0.85),
+            blurRadius: 1,
+            color: Get.theme.colors().onSurface.withOpacity(0.05),
+            offset: const Offset(0, -1),
           ),
         ],
         color: Get.theme.colors().backgroundColor,
