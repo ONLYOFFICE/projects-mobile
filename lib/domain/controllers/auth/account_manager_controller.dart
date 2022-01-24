@@ -36,13 +36,17 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/account_provider.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 
 class AccountManagerController extends GetxController {
+  final SecureStorage _secureStorage = locator<SecureStorage>();
+
   static const accountType = 'com.onlyoffice.account';
   static const tokenType = 'com.onlyoffice.auth';
   static const key = 'account_data';
@@ -74,8 +78,10 @@ class AccountManagerController extends GetxController {
           isVisitor: user.isVisitor,
           scheme: '${portalUri.scheme}://',
           avatarUrl: avatarUrl);
-      await AccountProvider.addAccount(
-          accountData: json.encode(accountData.toJson()), accountId: user.id!);
+      final accountString = json.encode(accountData.toJson());
+      await AccountProvider.addAccount(accountData: accountString, accountId: user.id!);
+
+      await _secureStorage.putString('currentAccount', accountString);
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
@@ -116,5 +122,16 @@ class AccountManagerController extends GetxController {
       debugPrint(e.toString());
       debugPrint(s.toString());
     }
+  }
+
+  Future<void> clearToken() async {
+    final currentAccount = await _secureStorage.getString('currentAccount');
+    final account = AccountData.fromJson(json.decode(currentAccount!) as Map<String, dynamic>);
+
+    account.token = '';
+    final accountString = jsonEncode(account.toJson());
+
+    await AccountProvider.addAccount(accountData: accountString, accountId: account.id!);
+    await _secureStorage.putString('currentAccount', accountString);
   }
 }

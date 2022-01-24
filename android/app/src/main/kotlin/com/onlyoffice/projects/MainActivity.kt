@@ -31,6 +31,8 @@ class MainActivity : FlutterFragmentActivity() {
                 "getAccounts" -> getAccounts(result)
                 "addAccount" -> addAccount(call, result)
                 "deleteAccount" -> deleteAccount(call, result)
+                "updateAccount" -> addAccount(call, result)
+                
 
                 else -> result.notImplemented()
             }

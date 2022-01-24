@@ -206,6 +206,7 @@ class LoginController extends GetxController {
   }
 
   Future saveToken(String? token, String? expires) async {
+    //TODO: replace with AccountData
     await _secureStorage.putString('token', token);
     await _secureStorage.putString('expires', expires);
   }

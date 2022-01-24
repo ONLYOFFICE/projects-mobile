@@ -54,4 +54,9 @@ class AccountProvider {
     return await _channel
         .invokeMethod('deleteAccount', {'accountId': accountId, 'accountData': accountData});
   }
+
+  static Future<bool?> updateAccount({String accountData = '', String accountId = ''}) async {
+    return await _channel
+        .invokeMethod('updateAccount', {'accountData': accountData, 'accountId': accountId});
+  }
 }

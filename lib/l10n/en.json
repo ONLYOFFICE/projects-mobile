@@ -468,5 +468,6 @@
 	"portalNotFound": "Portal not found. Check portal URL.",
 	"newTagNoTitleErrorMessage": "Each tag must have a title.",
 	"accountDeleted": "Account has been deleted",
-	"removeAccount": "remove"
+	"removeAccount": "remove",
+	"addNewAccount": "Add new account"
 }

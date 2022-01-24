@@ -468,5 +468,6 @@
 	"portalNotFound": "门户网站不存在。检查门户网站的URL。",
 	"newTagNoTitleErrorMessage": "每个标签必须添加标题。",
 	"accountDeleted": "账户已被删除",
-	"removeAccount": "移除"
+	"removeAccount": "移除",
+	"addNewAccount": "添加新帐户"
 }
