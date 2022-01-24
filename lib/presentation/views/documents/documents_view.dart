@@ -40,6 +40,7 @@ import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
@@ -218,9 +219,8 @@ class DocumentsScreen extends StatelessWidget {
                               controller: controller as DocumentsController,
                             )
                           : FileCell(
-                              entity: element as PortalFile,
-                              index: index,
-                              controller: controller as DocumentsController,
+                              cellController: FileCellController(portalFile: element as PortalFile),
+                              documentsController: controller as DocumentsController,
                             );
                     },
                   );
@@ -307,9 +307,7 @@ class DocsBottom extends StatelessWidget {
                 children: <Widget>[
                   Obx(
                     () => Text(
-                      tr('total', args: [
-                        controller.paginationController.total.value.toString()
-                      ]),
+                      tr('total', args: [controller.paginationController.total.value.toString()]),
                       style: TextStyleHelper.body2(
                         color: Get.theme.colors().onSurface.withOpacity(0.6),
                       ),
@@ -341,8 +339,7 @@ class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
         onTap: () async {
           if (Get.find<PlatformController>().isMobile) {
             await Get.bottomSheet(
-              SortView(
-                  sortOptions: DocumentsSortOption(controller: controller)),
+              SortView(sortOptions: DocumentsSortOption(controller: controller)),
               isScrollControlled: true,
             );
           } else {
@@ -384,8 +381,7 @@ class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
