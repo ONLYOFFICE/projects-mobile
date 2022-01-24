@@ -78,9 +78,8 @@ class NewMilestoneView extends StatelessWidget {
           child: Obx(
             () => Column(
               children: [
-                const SizedBox(height: 10),
+                //const SizedBox(height: 16),
                 MilestoneInput(controller: newMilestoneController),
-                const SizedBox(height: 10),
                 const StyledDivider(leftPadding: 72.5),
                 ProjectTile(controller: newMilestoneController),
                 if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
@@ -138,24 +137,48 @@ class MilestoneInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final correctText = controller.titleController.text.isNotEmpty ? true.obs : false.obs;
+
     return Padding(
-      padding: const EdgeInsets.only(left: 72, right: 25),
-      child: Obx(
-        () => TextField(
-          minLines: 1,
-          maxLines: 2,
-          controller: controller.titleController,
-          style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-          cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-          decoration: InputDecoration(
-              hintText: tr('milestoneTitle'),
-              contentPadding: EdgeInsets.zero,
-              hintStyle: TextStyleHelper.headline6(
-                  color: controller.needToSetTitle.value
-                      ? Get.theme.colors().colorError
-                      : Get.theme.colors().onSurface.withOpacity(0.5)),
-              border: InputBorder.none),
-        ),
+      padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 72,
+            child: Obx(
+              () => AppIcon(
+                icon: SvgIcons.milestone,
+                color: correctText.value
+                    ? Get.theme.colors().onBackground.withOpacity(0.75)
+                    : Get.theme.colors().onBackground.withOpacity(0.4),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () => TextField(
+                onChanged: (value) {
+                  if (value.isNotEmpty)
+                    correctText.value = true;
+                  else
+                    correctText.value = false;
+                },
+                maxLines: null,
+                controller: controller.titleController,
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+                cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                decoration: InputDecoration(
+                    hintText: tr('milestoneTitle'),
+                    contentPadding: EdgeInsets.zero,
+                    hintStyle: TextStyleHelper.headline6(
+                        color: controller.needToSetTitle.value
+                            ? Get.theme.colors().colorError
+                            : Get.theme.colors().onSurface.withOpacity(0.5)),
+                    border: InputBorder.none),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

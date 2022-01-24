@@ -57,7 +57,7 @@ class TagsTile extends StatelessWidget {
           text: _isNotEmpty ? controller.tagsText.value as String : tr('addTag'),
           icon: SvgIcons.tag,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(

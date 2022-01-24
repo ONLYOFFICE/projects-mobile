@@ -100,7 +100,7 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
         // ignore: omit_local_variable_types
         final bool _isNotEmpty = widget.controller.descriptionText.value.isNotEmpty as bool;
         final _color = _isNotEmpty
-            ? Get.theme.colors().onBackground
+            ? Get.theme.colors().onBackground.withOpacity(0.75)
             : Get.theme.colors().onBackground.withOpacity(0.4);
         final text = widget.controller.descriptionText.value as String;
         final textSize = _textSize(text, TextStyleHelper.subtitle1());
@@ -132,7 +132,10 @@ class _ProjectDescriptionTileState extends State<ProjectDescriptionTile>
                                         color: Get.theme.colors().onBackground.withOpacity(0.75))),
                               Flexible(
                                 child: Text(_isNotEmpty ? text : tr('addDescription'),
-                                    style: TextStyleHelper.subtitle1(color: _color)),
+                                    style: _isNotEmpty
+                                        ? TextStyleHelper.subtitle1(
+                                            color: Get.theme.colors().onBackground)
+                                        : TextStyleHelper.subtitle1(color: _color)),
                               ),
                             ],
                           ),

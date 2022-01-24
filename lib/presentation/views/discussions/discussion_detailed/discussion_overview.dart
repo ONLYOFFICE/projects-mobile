@@ -66,22 +66,44 @@ class DiscussionOverview extends StatelessWidget {
             child: ListView(
               children: [
                 const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.only(left: 72),
-                  child: Text(tr('discussion').toUpperCase(),
-                      style: TextStyleHelper.overline(
-                          color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10),
+                      child: SizedBox(
+                        width: 72,
+                        child: AppIcon(
+                          icon: SvgIcons.discussions,
+                          color: Get.theme.colors().onBackground.withOpacity(0.6),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(tr('discussion').toUpperCase(),
+                                style: TextStyleHelper.overline(
+                                    color: Get.theme.colors().onBackground.withOpacity(0.6))),
+                            Text(discussion.title!,
+                                style:
+                                    TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                    padding: const EdgeInsets.only(left: 72, right: 16),
-                    child: Text(discussion.title!,
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface))),
                 const SizedBox(height: 22),
                 _DiscussionStatus(controller: controller),
                 const SizedBox(height: 16),
                 InfoTile(
                   caption: '${tr('description')}:',
-                  icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
+                  icon: AppIcon(
+                      icon: SvgIcons.description,
+                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   subtitleWidget: ReadMoreText(
                     parseHtml(discussion.text),
                     trimLines: 3,
@@ -97,7 +119,9 @@ class DiscussionOverview extends StatelessWidget {
                 ),
                 const SizedBox(height: 21),
                 InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
+                  icon: AppIcon(
+                      icon: SvgIcons.project,
+                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('project')}:',
                   subtitle: discussion.project!.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
@@ -108,12 +132,18 @@ class DiscussionOverview extends StatelessWidget {
                 if (discussion.created != null) const SizedBox(height: 20),
                 if (discussion.created != null)
                   InfoTile(
+                    icon: AppIcon(
+                        icon: SvgIcons.calendar,
+                        color: Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('creationDate')}:',
                     subtitle: formatedDate(discussion.created!),
                   ),
                 if (discussion.createdBy != null) const SizedBox(height: 20),
                 if (discussion.createdBy != null)
                   InfoTile(
+                    icon: AppIcon(
+                        icon: SvgIcons.user,
+                        color: Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('createdBy')}:',
                     subtitle: discussion.createdBy!.displayName,
                   ),
