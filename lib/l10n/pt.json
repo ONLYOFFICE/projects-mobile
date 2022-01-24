@@ -468,5 +468,6 @@
 	"portalNotFound": "Portal não encontrado. Verificar a URL do portal.",
 	"newTagNoTitleErrorMessage": "Cada rótulo deve ter um título.",
 	"accountDeleted": "Conta foi excluída",
-	"removeAccount": "remover"
+	"removeAccount": "remover",
+	"addNewAccount": "Adicionar nova conta"
 }

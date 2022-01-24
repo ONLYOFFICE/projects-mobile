@@ -468,5 +468,6 @@
 	"portalNotFound": "Portail non trouvé. Vérifiez l'URL du portail.",
 	"newTagNoTitleErrorMessage": "Chaque étiquette doit avoir un titre.",
 	"accountDeleted": "Le compte a été supprimé",
-	"removeAccount": "supprimer"
+	"removeAccount": "supprimer",
+	"addNewAccount": "Ajouter un nouveau compte"
 }

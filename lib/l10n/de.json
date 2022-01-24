@@ -468,5 +468,6 @@
 	"portalNotFound": "Portal nicht gefunden. Überprüfen Sie die Portal-URL.",
 	"newTagNoTitleErrorMessage": "Jedes Tag soll einen Titel haben.",
 	"accountDeleted": "Konto wurde gelöscht",
-	"removeAccount": "löschen"
+	"removeAccount": "löschen",
+	"addNewAccount": "Neues Konto hinzufügen"
 }

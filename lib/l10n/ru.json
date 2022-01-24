@@ -468,5 +468,6 @@
 	"portalNotFound": "Портал не найден. Проверьте URL-адрес портала.",
 	"newTagNoTitleErrorMessage": "Каждый тег должен иметь наименование.",
 	"accountDeleted": "Аккаунт удален",
-	"removeAccount": "удалить"
+	"removeAccount": "удалить",
+	"addNewAccount": "Добавить новый аккаунт"
 }

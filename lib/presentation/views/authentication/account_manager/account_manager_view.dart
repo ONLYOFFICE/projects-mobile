@@ -179,7 +179,7 @@ class _NewAccountButton extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Add new account',
+                          tr('addNewAccount'),
                           overflow: TextOverflow.ellipsis,
                           style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
                         ),
