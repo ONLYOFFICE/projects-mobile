@@ -119,6 +119,9 @@ class AccountTileController extends GetxController {
       await Get.find<LoginController>()
           .saveLoginData(token: accountData!.token, expires: accountData!.expires);
 
+      await locator<SecureStorage>()
+          .putString('currentAccount', json.encode(accountData!.toJson()));
+
       locator<EventHub>().fire('loginSuccess');
     }
   }
