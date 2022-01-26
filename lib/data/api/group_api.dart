@@ -82,7 +82,7 @@ class GroupApi {
 
       if (response is http.Response) {
         final responseJson = json.decode(response.body);
-        result.total = responseJson['count'] as int;
+        result.total = responseJson['count'] is int ? responseJson['count'] as int : 0;
         {
           result.response = (responseJson['response'] as List)
               .cast<Map<String, dynamic>>()

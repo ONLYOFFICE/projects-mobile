@@ -38,7 +38,9 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
@@ -68,11 +70,9 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         title: _AppBarTitle(
           appBarText: appBarText,
           searchController: searchController,
@@ -87,8 +87,8 @@ mixin SelectItemWithSearchMixin on StatelessWidget {
       ),
       body: Obx(
         () {
-          if (controller.loaded.value as bool &&
-              searchController.textController.text.isEmpty) return itemList;
+          if (controller.loaded.value as bool && searchController.textController.text.isEmpty)
+            return itemList;
 
           if (searchController.hasResult) return searchResult;
           if (searchController.nothingFound) return nothingFound;
@@ -116,12 +116,10 @@ mixin SelectItemMixin on StatelessWidget {
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         titleText: appBarText,
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       ),
       body: Obx(
         () {
@@ -140,22 +138,26 @@ mixin SelectItemListMixin on StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () => PaginationListView(
-        paginationController: paginationController,
-        child: ListView.separated(
-          itemCount: paginationController.data.length,
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          separatorBuilder: (BuildContext context, int index) {
-            return const StyledDivider(
-              leftPadding: 16,
-              rightPadding: 16,
-            );
-          },
-          itemBuilder: itemBuilder,
-        ),
-      ),
-    );
+    return Obx(() {
+      if (paginationController.data.isEmpty) {
+        return Center(child: EmptyScreen(icon: SvgIcons.group, text: tr('noGroups')));
+      } else {
+        return PaginationListView(
+          paginationController: paginationController,
+          child: ListView.separated(
+            itemCount: paginationController.data.length,
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            separatorBuilder: (BuildContext context, int index) {
+              return const StyledDivider(
+                leftPadding: 16,
+                rightPadding: 16,
+              );
+            },
+            itemBuilder: itemBuilder,
+          ),
+        );
+      }
+    });
   }
 }
 
