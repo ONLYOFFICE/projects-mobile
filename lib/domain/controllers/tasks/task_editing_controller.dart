@@ -90,6 +90,9 @@ class TaskEditingController extends GetxController implements TaskActionsControl
   RxBool? highPriority;
 
   @override
+  RxBool titleIsEmpty = true.obs;
+
+  @override
   RxList? responsibles;
   // to track changes
   List? _previusSelectedResponsibles;
@@ -129,7 +132,15 @@ class TaskEditingController extends GetxController implements TaskActionsControl
     }
     // ignore: invalid_use_of_protected_member
     _previusSelectedResponsibles = List.from(responsibles!.value);
+
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
   }
 
   void _initDates() {

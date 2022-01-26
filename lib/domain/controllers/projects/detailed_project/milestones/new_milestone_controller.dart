@@ -57,6 +57,9 @@ class NewMilestoneController extends GetxController {
   RxBool keyMilestone = false.obs;
 
   RxBool notificationEnabled = false.obs;
+
+  var titleIsEmpty = true.obs;
+  final FocusNode titleFocus = FocusNode();
   int? get selectedProjectId => _selectedProjectId;
   DateTime? get dueDate => _dueDate;
 
@@ -80,6 +83,12 @@ class NewMilestoneController extends GetxController {
   Rx<PortalUserItemController?>? responsible;
   RxList<PortalUserItemController?> teamMembers = <PortalUserItemController>[].obs;
 
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
+  }
+
   Future<void> setup(ProjectDetailed? projectDetailed) async {
     if (projectDetailed != null) {
       slectedProjectTitle.value = projectDetailed.title!;
@@ -94,6 +103,8 @@ class NewMilestoneController extends GetxController {
       for (final user in teamController.usersList) {
         teamMembers.add(user);
       }
+
+      titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
     }
   }
 

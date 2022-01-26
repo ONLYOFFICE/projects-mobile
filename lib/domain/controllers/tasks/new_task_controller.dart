@@ -76,6 +76,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
   RxString? selectedProjectTitle = ''.obs;
   @override
   RxString? selectedMilestoneTitle = ''.obs;
+  @override
+  RxBool titleIsEmpty = true.obs;
 
   @override
   RxString? descriptionText = ''.obs;
@@ -118,6 +120,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
     }
+
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
   }
 
   @override

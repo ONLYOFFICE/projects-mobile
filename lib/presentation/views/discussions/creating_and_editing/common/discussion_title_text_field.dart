@@ -47,8 +47,6 @@ class DiscussionTitleTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final correctText = controller.titleController.text.isNotEmpty ? true.obs : false.obs;
-
     return Padding(
       padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
       child: Row(
@@ -60,9 +58,9 @@ class DiscussionTitleTextField extends StatelessWidget {
               child: Obx(
                 () => AppIcon(
                   icon: SvgIcons.discussions,
-                  color: correctText.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.75)
-                      : Get.theme.colors().onBackground.withOpacity(0.4),
+                  color: controller.titleIsEmpty.value
+                      ? Get.theme.colors().onBackground.withOpacity(0.4)
+                      : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -71,11 +69,6 @@ class DiscussionTitleTextField extends StatelessWidget {
             child: Obx(
               () => TextField(
                 onChanged: (value) {
-                  if (value.isNotEmpty)
-                    correctText.value = true;
-                  else
-                    correctText.value = false;
-
                   controller.changeTitle(value);
                 },
                 focusNode: controller.titleFocus,

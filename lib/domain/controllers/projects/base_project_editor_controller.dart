@@ -76,8 +76,7 @@ abstract class BaseProjectEditorController extends GetxController {
 
   Future<bool> updateStatus({int? newStatusId});
 
-  RxList<PortalUserItemController> selectedTeamMembers =
-      <PortalUserItemController>[].obs;
+  RxList<PortalUserItemController> selectedTeamMembers = <PortalUserItemController>[].obs;
 
   Rx<PortalUser?> selectedProjectManager = PortalUser().obs;
   RxBool needToFillManager = false.obs;
@@ -90,13 +89,23 @@ abstract class BaseProjectEditorController extends GetxController {
 
   final FocusNode titleFocus = FocusNode();
 
+  var titleIsEmpty = true.obs;
+
   @override
   void onInit() {
     _userController.getUserInfo().then((value) => {
           selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
+
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
   }
 
   String? get teamMembersTitle => selectedTeamMembers.length == 1

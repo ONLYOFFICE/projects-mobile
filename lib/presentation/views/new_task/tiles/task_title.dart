@@ -51,8 +51,6 @@ class TaskTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final correctText = controller.titleController?.text.isNotEmpty ?? false ? true.obs : false.obs;
-
     return Padding(
       padding: const EdgeInsets.only(right: 16),
       child: Row(
@@ -64,9 +62,9 @@ class TaskTitle extends StatelessWidget {
               child: Obx(
                 () => AppIcon(
                   icon: SvgIcons.tab_bar_tasks,
-                  color: correctText.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.75)
-                      : Get.theme.colors().onBackground.withOpacity(0.4),
+                  color: controller.titleIsEmpty.value
+                      ? Get.theme.colors().onBackground.withOpacity(0.4)
+                      : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -82,11 +80,6 @@ class TaskTitle extends StatelessWidget {
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
                 Obx(() => TextField(
                     onChanged: (value) {
-                      if (value.isNotEmpty)
-                        correctText.value = true;
-                      else
-                        correctText.value = false;
-
                       controller.changeTitle(value);
                     },
                     focusNode: focusOnTitle ? controller.titleFocus : null,

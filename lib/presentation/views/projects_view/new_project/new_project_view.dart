@@ -104,7 +104,7 @@ class NewProject extends StatelessWidget {
                       return OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: false.obs,
-                        switchOnChanged: null,
+                        switchOnChanged: (v) => {},
                       );
                     else
                       return OptionWithSwitch(

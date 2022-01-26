@@ -33,12 +33,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class ProjectTitleTile extends StatelessWidget {
-  final controller;
+  final BaseProjectEditorController controller;
   final bool showCaption;
   final bool focusOnTitle;
   const ProjectTitleTile({
@@ -50,11 +51,6 @@ class ProjectTitleTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final correctText =
-        (controller.titleController as TextEditingController?)?.text.isNotEmpty ?? false
-            ? true.obs
-            : false.obs;
-
     return Padding(
       padding: EdgeInsets.only(right: 16, bottom: 10, top: showCaption ? 26 : 10),
       child: Row(
@@ -66,9 +62,9 @@ class ProjectTitleTile extends StatelessWidget {
               child: Obx(
                 () => AppIcon(
                   icon: SvgIcons.project,
-                  color: correctText.value
-                      ? Get.theme.colors().onBackground.withOpacity(0.75)
-                      : Get.theme.colors().onBackground.withOpacity(0.4),
+                  color: controller.titleIsEmpty.value
+                      ? Get.theme.colors().onBackground.withOpacity(0.4)
+                      : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
               ),
             ),
@@ -84,15 +80,9 @@ class ProjectTitleTile extends StatelessWidget {
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
                 Obx(
                   () => TextField(
-                      onChanged: (value) {
-                        if (value.isNotEmpty)
-                          correctText.value = true;
-                        else
-                          correctText.value = false;
-                      },
-                      focusNode: focusOnTitle ? controller.titleFocus as FocusNode : null,
+                      focusNode: focusOnTitle ? controller.titleFocus : null,
                       maxLines: null,
-                      controller: controller.titleController as TextEditingController?,
+                      controller: controller.titleController,
                       style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
                       cursorColor: Get.theme.colors().primary.withOpacity(0.87),
                       decoration: InputDecoration(

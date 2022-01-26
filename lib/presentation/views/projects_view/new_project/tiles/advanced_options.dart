@@ -109,7 +109,7 @@ class OptionWithSwitch extends StatelessWidget {
   }) : super(key: key);
 
   final RxBool switchValue;
-  final Function? switchOnChanged;
+  final Function switchOnChanged;
   final String title;
 
   @override
@@ -145,7 +145,7 @@ class OptionWithSwitch extends StatelessWidget {
               Obx(
                 () => Switch(
                   value: switchValue.value,
-                  onChanged: switchOnChanged as void Function(bool)?,
+                  onChanged: (v) => {switchOnChanged(v)},
                   activeTrackColor: Get.theme.colors().primary.withOpacity(0.54),
                   activeColor: Get.theme.colors().primary,
                 ),
