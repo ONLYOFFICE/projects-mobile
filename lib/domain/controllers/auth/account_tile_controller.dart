@@ -39,6 +39,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
@@ -97,11 +98,19 @@ class AccountTileController extends GetxController {
     }
   }
 
-  void setupUser() {
+  Future<void> setupUser() async {
     if (accountData?.portal != null) {
       userTitle.value = accountData!.portal!;
+
+      if (accountData!.token!.isNotEmpty) {
+        final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
+
+        if (!isAuthValid)
+          await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+      }
     }
-    loadAvatar();
+
+    await loadAvatar();
   }
 
   Future<void> loginToSavedAccount() async {
