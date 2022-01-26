@@ -126,12 +126,14 @@ class AccountManagerController extends GetxController {
 
   Future<void> clearToken() async {
     final currentAccount = await _secureStorage.getString('currentAccount');
-    final account = AccountData.fromJson(json.decode(currentAccount!) as Map<String, dynamic>);
+    if ((currentAccount ?? '') != '') {
+      final account = AccountData.fromJson(json.decode(currentAccount!) as Map<String, dynamic>);
 
-    account.token = '';
-    final accountString = jsonEncode(account.toJson());
+      account.token = '';
+      final accountString = jsonEncode(account.toJson());
 
-    await AccountProvider.addAccount(accountData: accountString, accountId: account.id!);
-    await _secureStorage.putString('currentAccount', accountString);
+      await AccountProvider.updateAccount(accountData: accountString, accountId: account.id!);
+      await _secureStorage.putString('currentAccount', accountString);
+    }
   }
 }

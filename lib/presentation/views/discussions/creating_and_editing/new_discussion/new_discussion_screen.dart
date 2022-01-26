@@ -40,7 +40,6 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/com
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
-import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
 
 class NewDiscussionScreen extends StatelessWidget {
   const NewDiscussionScreen({Key? key}) : super(key: key);
