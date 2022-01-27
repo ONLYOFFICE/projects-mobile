@@ -469,5 +469,7 @@
 	"newTagNoTitleErrorMessage": "Cada rótulo deve ter um título.",
 	"accountDeleted": "Conta foi excluída",
 	"removeAccount": "remover",
-	"addNewAccount": "Adicionar nova conta"
+	"addNewAccount": "Adicionar nova conta",
+	"noGroups": "Nenhum grupo aqui ainda",
+	"searchTags": "Pesquisar por tags..."
 }

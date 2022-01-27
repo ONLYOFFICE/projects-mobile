@@ -469,5 +469,7 @@
 	"newTagNoTitleErrorMessage": "Jedes Tag soll einen Titel haben.",
 	"accountDeleted": "Konto wurde gelöscht",
 	"removeAccount": "löschen",
-	"addNewAccount": "Neues Konto hinzufügen"
+	"addNewAccount": "Neues Konto hinzufügen",
+	"noGroups": "Keine Gruppen gefunden",
+	"searchTags": "Suchen nach Tags..."
 }

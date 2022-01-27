@@ -469,5 +469,7 @@
 	"newTagNoTitleErrorMessage": "每个标签必须添加标题。",
 	"accountDeleted": "账户已被删除",
 	"removeAccount": "移除",
-	"addNewAccount": "添加新帐户"
+	"addNewAccount": "添加新帐户",
+	"noGroups": "在此还没有群组",
+	"searchTags": "搜索标签..."
 }

@@ -469,5 +469,7 @@
 	"newTagNoTitleErrorMessage": "Ogni etichetta deve avere un titolo.",
 	"accountDeleted": "L'account è stato eliminato",
 	"removeAccount": "rimuovere",
-	"addNewAccount": "Aggiungere nuovo account"
+	"addNewAccount": "Aggiungere nuovo account",
+	"noGroups": "Non ci sono ancora gruppi qui",
+	"searchTags": "Cercare le etichette..."
 }

@@ -469,5 +469,7 @@
 	"newTagNoTitleErrorMessage": "Cada etiqueta debe tener un nombre.",
 	"accountDeleted": "La cuenta se ha eliminado",
 	"removeAccount": "eliminar",
-	"addNewAccount": "Añadir nueva cuenta"
+	"addNewAccount": "Añadir nueva cuenta",
+	"noGroups": "Todavía no hay grupos aquí",
+	"searchTags": "Buscar etiquetas..."
 }

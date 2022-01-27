@@ -469,5 +469,7 @@
 	"newTagNoTitleErrorMessage": "Каждый тег должен иметь наименование.",
 	"accountDeleted": "Аккаунт удален",
 	"removeAccount": "удалить",
-	"addNewAccount": "Добавить новый аккаунт"
+	"addNewAccount": "Добавить новый аккаунт",
+	"noGroups": "Здесь пока нет групп",
+	"searchTags": "Поиск тегов..."
 }
