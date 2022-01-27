@@ -62,7 +62,7 @@ class PortalInfoController extends GetxController {
       _portalUri ??= await locator.get<CoreApi>().getPortalURI();
       _headers ??= await locator.get<CoreApi>().getHeaders();
       if (_portalUri == null) return Future.value(false);
-      _portalName ??= _portalUri!.split('//')[1];
+      _portalName ??= Uri.parse(_portalUri!).authority;
       return Future.value(true);
     });
     return Future.value(response);

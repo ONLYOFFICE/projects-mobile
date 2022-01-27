@@ -186,7 +186,7 @@ class MainController extends GetxController {
         token.isEmpty ||
         portalName == null ||
         portalName.isEmpty ||
-        !(portalName.isURL || portalName.split('//')[1].isIPv4)) return false;
+        !Uri.parse(portalName).hasAuthority) return false;
 
     final expiration = DateTime.parse(expirationDate);
     if (expiration.isBefore(DateTime.now())) return false;
@@ -197,7 +197,7 @@ class MainController extends GetxController {
     else
       await cookieManager.setCookies([
         Cookie('asc_auth_key', token)
-          ..domain = portalName.split('//')[1]
+          ..domain = Uri.parse(portalName).authority
           ..expires = DateTime.now().add(const Duration(days: 10))
           ..httpOnly = false
       ]);

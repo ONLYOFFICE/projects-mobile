@@ -11,6 +11,7 @@ linter:
     directives_ordering: false
     require_trailing_commas: false
     flutter_style_todos: false
+    sort_pub_dependencies: false
 
     # enable following rules when problems cleaned
     curly_braces_in_flow_control_structures: false

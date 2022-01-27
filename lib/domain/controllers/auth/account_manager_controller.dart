@@ -69,7 +69,7 @@ class AccountManagerController extends GetxController {
 
       final accountData = AccountData(
           token: tokenString,
-          portal: portalUri.host,
+          portal: portalUri.authority,
           login: user.email,
           expires: expires,
           name: user.displayName,

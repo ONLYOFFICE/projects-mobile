@@ -82,9 +82,8 @@ class LoginController extends GetxController {
   String? _tfaKey;
   String? get tfaKey => _tfaKey;
 
-  String get portalAdress => _portalAdressController.text.contains('//')
-      ? _portalAdressController.text.split('//')[1]
-      : _portalAdressController.text;
+  Uri portalURI = Uri();
+  String get portalAdress => portalURI.authority;
 
   final cookieManager = WebviewCookieManager();
 
@@ -253,14 +252,23 @@ class LoginController extends GetxController {
       TextPosition(offset: _portalAdressController.text.length),
     );
 
-    if (!(_portalAdressController.text.isURL || _portalAdressController.text.isIPv4)) {
+    var portalString = _portalAdressController.text;
+
+    if (portalString[portalString.length - 1] == '.')
+      portalString = portalString.substring(0, portalString.length - 1);
+
+    if (!portalString.contains('http')) portalString = 'https://$portalString';
+
+    portalURI = Uri.parse(portalString);
+
+    if (!portalURI.hasAuthority) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
     } else {
       setState(ViewState.Busy);
 
-      locator.get<CoreApi>().setPortalName(_portalAdressController.text);
+      locator.get<CoreApi>().setPortalName(portalString);
 
       final _capabilities = await _portalService.portalCapabilities();
 
