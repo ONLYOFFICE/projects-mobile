@@ -75,13 +75,13 @@ class ErrorDialog extends GetxController {
           titleText: tr('error'),
           contentText: _customErrors[error] ?? error,
           acceptText: tr('ok'),
-          onAcceptTap: () => {
+          onAcceptTap: () async => {
             Get.back(),
             dialogIsShown = false,
             if (_blockingErrors[error.toLowerCase()] != null)
               {
+                await Get.put(AccountManagerController()).clearToken(),
                 Get.find<LoginController>().logout(),
-                Get.put(AccountManagerController()).clearToken(),
                 dialogIsShown = false,
                 queue.clear(),
               }

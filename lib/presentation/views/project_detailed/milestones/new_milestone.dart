@@ -57,88 +57,86 @@ class NewMilestoneView extends StatelessWidget {
     newMilestoneController.setup(projectDetailed);
 
     return WillPopScope(
-      onWillPop: () async {
-        newMilestoneController.discard();
-        return false;
-      },
-      child: Scaffold(
-        backgroundColor: Get.theme.colors().backgroundColor,
-        appBar: StyledAppBar(
-          titleText: tr('newMilestone'),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: () => newMilestoneController.confirm(context))
-          ],
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back_rounded),
-              onPressed: newMilestoneController.discard),
-        ),
-        body: SingleChildScrollView(
-          child: Obx(
-            () => Column(
-              children: [
-                //const SizedBox(height: 16),
-                MilestoneInput(controller: newMilestoneController),
-                const StyledDivider(leftPadding: 72.5),
-                ProjectTile(controller: newMilestoneController),
-                if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
-                  ResponsibleTile(controller: newMilestoneController),
-                DescriptionTile(newMilestoneController: newMilestoneController),
-                DueDateTile(controller: newMilestoneController),
-                const SizedBox(height: 5),
-                AdvancedOptions(
-                  options: <Widget>[
-                    OptionWithSwitch(
-                      title: tr('keyMilestone'),
-                      switchValue: newMilestoneController.keyMilestone,
-                      switchOnChanged: (bool value) {
-                        if (!FocusScope.of(context).hasPrimaryFocus) {
-                          FocusScope.of(context).unfocus();
-                        }
-                        newMilestoneController.setKeyMilestone(value);
-                      },
-                    ),
-                    OptionWithSwitch(
-                      title: tr('remindBeforeDue'),
-                      switchValue: newMilestoneController.remindBeforeDueDate,
-                      switchOnChanged: (bool value) {
-                        if (!FocusScope.of(context).hasPrimaryFocus) {
-                          FocusScope.of(context).unfocus();
-                        }
-
-                        newMilestoneController.enableRemindBeforeDueDate(value);
-                      },
-                    ),
-                    OptionWithSwitch(
-                      title: tr('notifyResponsible'),
-                      switchValue: newMilestoneController.notificationEnabled,
-                      switchOnChanged: (bool value) {
-                        newMilestoneController.enableNotification(value);
-                      },
-                    ),
-                  ],
-                ),
-              ],
+        onWillPop: () async {
+          newMilestoneController.discard();
+          return false;
+        },
+        child: Scaffold(
+          backgroundColor: Get.theme.colors().backgroundColor,
+          appBar: StyledAppBar(
+            titleText: tr('newMilestone'),
+            actions: [
+              IconButton(
+                  icon: const Icon(Icons.check_rounded),
+                  onPressed: () => newMilestoneController.confirm(context))
+            ],
+            leading: IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                onPressed: newMilestoneController.discard),
+          ),
+          body: Listener(
+            onPointerDown: (_) {
+              if (newMilestoneController.titleController.text.isNotEmpty &&
+                  newMilestoneController.titleFocus.hasFocus)
+                newMilestoneController.titleFocus.unfocus();
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  MilestoneInput(controller: newMilestoneController),
+                  const StyledDivider(leftPadding: 72.5),
+                  ProjectTile(controller: newMilestoneController),
+                  Obx(() => newMilestoneController.slectedProjectTitle.value.isNotEmpty
+                      ? ResponsibleTile(controller: newMilestoneController)
+                      : const SizedBox()),
+                  DescriptionTile(newMilestoneController: newMilestoneController),
+                  DueDateTile(controller: newMilestoneController),
+                  const SizedBox(height: 5),
+                  AdvancedOptions(
+                    options: <Widget>[
+                      OptionWithSwitch(
+                        title: tr('keyMilestone'),
+                        switchValue: newMilestoneController.keyMilestone,
+                        switchOnChanged: (bool value) {
+                          newMilestoneController.setKeyMilestone(value);
+                        },
+                      ),
+                      OptionWithSwitch(
+                        title: tr('remindBeforeDue'),
+                        switchValue: newMilestoneController.remindBeforeDueDate,
+                        switchOnChanged: (bool value) {
+                          newMilestoneController.enableRemindBeforeDueDate(value);
+                        },
+                      ),
+                      OptionWithSwitch(
+                        title: tr('notifyResponsible'),
+                        switchValue: newMilestoneController.notificationEnabled,
+                        switchOnChanged: (bool value) {
+                          newMilestoneController.enableNotification(value);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
 class MilestoneInput extends StatelessWidget {
   final NewMilestoneController controller;
+
+  final bool focusOnTitle;
   const MilestoneInput({
     Key? key,
     required this.controller,
+    this.focusOnTitle = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final correctText = controller.titleController.text.isNotEmpty ? true.obs : false.obs;
-
     return Padding(
       padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
       child: Row(
@@ -148,21 +146,16 @@ class MilestoneInput extends StatelessWidget {
             child: Obx(
               () => AppIcon(
                 icon: SvgIcons.milestone,
-                color: correctText.value
-                    ? Get.theme.colors().onBackground.withOpacity(0.75)
-                    : Get.theme.colors().onBackground.withOpacity(0.4),
+                color: controller.titleIsEmpty.isTrue
+                    ? Get.theme.colors().onBackground.withOpacity(0.4)
+                    : Get.theme.colors().onBackground.withOpacity(0.75),
               ),
             ),
           ),
           Expanded(
             child: Obx(
               () => TextField(
-                onChanged: (value) {
-                  if (value.isNotEmpty)
-                    correctText.value = true;
-                  else
-                    correctText.value = false;
-                },
+                focusNode: focusOnTitle ? controller.titleFocus : null,
                 maxLines: null,
                 controller: controller.titleController,
                 style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
@@ -280,7 +273,6 @@ class ResponsibleTile extends StatelessWidget {
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
         selectedIconColor: Get.theme.colors().onBackground,
         onTap: () => {
-          if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
           Get.find<NavigationController>().toScreen(const ProjectTeamResponsibleSelectionView(),
               arguments: {'controller': controller})
         },
@@ -316,10 +308,7 @@ class DueDateTile extends StatelessWidget {
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
-            onTap: () => {
-                  if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
-                  controller.onDueDateTilePressed()
-                });
+            onTap: controller.onDueDateTilePressed);
       },
     );
   }

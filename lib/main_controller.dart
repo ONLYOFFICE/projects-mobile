@@ -193,7 +193,7 @@ class MainController extends GetxController {
 
     final isAuthValid = await locator<AuthService>().checkAuthorization();
     if (!isAuthValid)
-      await logout();
+      await clearLoginData();
     else
       await cookieManager.setCookies([
         Cookie('asc_auth_key', token)
@@ -205,7 +205,7 @@ class MainController extends GetxController {
     return isAuthValid;
   }
 
-  Future<void> logout() async {
+  Future<void> clearLoginData() async {
     final storage = locator<Storage>();
 
     await _secureStorage.delete('expires');
@@ -217,6 +217,8 @@ class MainController extends GetxController {
     await storage.remove('discussionFilters');
 
     await cookieManager.clearCookies();
+
+    await Get.put(AccountManagerController()).clearToken();
 
     Get.find<PortalInfoController>().logout();
   }

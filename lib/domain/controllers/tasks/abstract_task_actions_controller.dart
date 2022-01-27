@@ -45,6 +45,7 @@ abstract class TaskActionsController extends GetxController {
   DateTime? get startDate;
 
   RxBool? highPriority;
+  late RxBool titleIsEmpty;
 
   TextEditingController? _titleController;
   TextEditingController? get titleController => _titleController;

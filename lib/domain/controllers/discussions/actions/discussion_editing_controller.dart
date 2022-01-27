@@ -118,6 +118,9 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
   @override
   RxBool setTextError = false.obs;
 
+  @override
+  RxBool titleIsEmpty = true.obs;
+
   DiscussionEditingController({
     this.id = -1,
     required this.title,
@@ -127,6 +130,8 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     required this.initialSubscribers,
   }) {
     _usersDataSource.selectionMode = UserSelectionMode.Multiple;
+
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
   }
 
   @override
@@ -346,5 +351,11 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
     } else {
       Get.back();
     }
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
   }
 }

@@ -449,26 +449,27 @@
 	"addComment": "Add comment...",
 	"statusOpen": "Open",
 	"statusClosed": "Closed",
-  "statusPaused": "Paused",
-  "taskStatusOpen": "Open",
-  "taskStatusClosed": "Closed",
-  "searchMilestone": "Search for milestone...",
-  "privacyAndTermsFooter": {
-    "privacyPolicyWithLink": "Privacy Policy",
-    "termsOfServiceWithLink": "Terms of Service",
-    "total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
-  },
-  "removeAccountTitle": "Remove account?",
-  "removeAccountText": "You will need to re-enter your portal address, email and password next time you want to log in.",
-  "tfaWrongCode": "Wrong code!",
-  "privacyAndTermsAgreement": {
-    "beforeText": "I agree to the ",
-    "betweenText": " and the "
-  },
-  "portalNotFound": "Portal not found. Check portal URL.",
-  "newTagNoTitleErrorMessage": "Each tag must have a title.",
-  "accountDeleted": "Account has been deleted",
-  "removeAccount": "remove",
-  "addNewAccount": "Add new account",
+	"statusPaused": "Paused",
+	"taskStatusOpen": "Open",
+	"taskStatusClosed": "Closed",
+	"searchMilestone": "Search for milestone...",
+	"privacyAndTermsFooter": {
+		"privacyPolicyWithLink": "Privacy Policy",
+		"termsOfServiceWithLink": "Terms of Service",
+		"total": "By continuing you accept @:privacyAndTermsFooter.privacyPolicyWithLink and @:privacyAndTermsFooter.termsOfServiceWithLink"
+	},
+	"removeAccountTitle": "Remove account?",
+	"removeAccountText": "You will need to re-enter your portal address, email and password next time you want to log in.",
+	"tfaWrongCode": "Wrong code!",
+	"privacyAndTermsAgreement": {
+		"beforeText": "I agree to the ",
+		"betweenText": " and the "
+	},
+	"portalNotFound": "Portal not found. Check portal URL.",
+	"newTagNoTitleErrorMessage": "Each tag must have a title.",
+	"accountDeleted": "Account has been deleted",
+	"removeAccount": "remove",
+	"addNewAccount": "Add new account",
+	"noGroups": "No groups here yet",
   "searchTags": "Search for tags..."
 }

@@ -85,3 +85,7 @@ extension ColorExtension on String {
     }
   }
 }
+
+extension Extension on String? {
+  bool isNullOrEmpty() => (this ?? '') == '';
+}

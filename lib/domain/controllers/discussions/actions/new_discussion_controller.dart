@@ -102,11 +102,14 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   var _previousSelectedSubscribers = []; // to track changes
 
   @override
-  RxBool selectProjectError = false.obs; //RxBool
+  RxBool selectProjectError = false.obs;
   @override
   RxBool setTitleError = false.obs;
   @override
   RxBool setTextError = false.obs;
+
+  @override
+  RxBool titleIsEmpty = true.obs;
 
   NewDiscussionController({int? projectId, String? projectTitle}) {
     if (projectId != null && projectTitle != null) {
@@ -117,6 +120,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
       addTeam();
     }
+
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
   }
 
   @override
@@ -124,6 +129,12 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     _titleFocus.requestFocus();
 
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
   }
 
   @override

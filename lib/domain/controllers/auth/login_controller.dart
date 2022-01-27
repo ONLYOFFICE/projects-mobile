@@ -37,6 +37,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
@@ -167,6 +168,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> saveLoginData({String? token, String? expires}) async {
+    GetIt.instance.resetLazySingleton<CoreApi>();
     await saveToken(token, expires);
     await sendRegistrationType();
 

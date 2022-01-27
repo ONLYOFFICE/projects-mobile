@@ -48,7 +48,7 @@ class SelectGroupScreen extends StatelessWidget with SelectItemMixin {
   GroupsController get controller => Get.find<GroupsController>();
 
   @override
-  VoidCallback get getItemsFunction => () async => await controller.getGroups();
+  VoidCallback get getItemsFunction => () async => controller.getGroups();
 
   @override
   Widget get itemList => const _GroupList();
