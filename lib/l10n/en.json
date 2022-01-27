@@ -470,5 +470,6 @@
 	"accountDeleted": "Account has been deleted",
 	"removeAccount": "remove",
 	"addNewAccount": "Add new account",
-	"noGroups": "No groups here yet"
+	"noGroups": "No groups here yet",
+  "searchTags": "Search for tags..."
 }
