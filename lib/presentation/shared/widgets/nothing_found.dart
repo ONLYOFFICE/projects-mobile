@@ -34,7 +34,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/internal/utils/debug_print.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -58,16 +57,16 @@ class NothingFound extends StatelessWidget {
 }
 
 class EmptyScreen extends StatelessWidget {
-  final String? icon;
-  final String? text;
+  final String icon;
+  final String text;
 
   const EmptyScreen({
     Key? key,
-    this.text,
-    this.icon,
+    required this.text,
+    required this.icon,
   }) : super(key: key);
 
-  String get darkThemeIcon => icon!.replaceFirst('.', '_dark.');
+  String get darkThemeIcon => icon.replaceFirst('.', '_dark.');
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +92,7 @@ class EmptyScreen extends StatelessWidget {
             ),
           ),
           Text(
-            text!,
+            text,
             textAlign: TextAlign.center,
             style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.4)),
           ),
