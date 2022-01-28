@@ -68,8 +68,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
   })  : assert(titleText == null || title == null),
         assert(leading == null || onLeadingPressed == null),
-        preferredSize = Size.fromHeight(
-            bottom != null ? titleHeight + bottomHeight : titleHeight),
+        preferredSize = Size.fromHeight(bottom != null ? titleHeight + bottomHeight : titleHeight),
         super(key: key);
 
   @override
@@ -88,7 +87,6 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
-
       // backwardsCompatibility: false,
       // systemOverlayStyle: const SystemUiOverlayStyle(
       //   statusBarColor: Colors.transparent,
@@ -100,24 +98,20 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
-      toolbarTextStyle:
-          TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
       actions: actions,
       // ignore: prefer_if_null_operators
       title: title != null
-          ? PreferredSize(
-              preferredSize: Size.fromHeight(titleHeight), child: title!)
+          ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null
               ? Text(
                   titleText!,
-                  style: TextStyleHelper.headerStyle(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                 )
               : null,
       bottom: bottom == null
           ? null
-          : PreferredSize(
-              preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
+          : PreferredSize(preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
     );
   }
 }

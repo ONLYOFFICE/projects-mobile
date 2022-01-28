@@ -58,14 +58,18 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('selectResponsible'),
         bottom: SearchField(
+          showClearIcon: true,
           hintText: tr('usersSearch'),
           onSubmitted: (value) => controller.teamController.searchUsers(value),
           onChanged: (value) => controller.teamController.searchUsers(value),
         ),
         actions: [
-          IconButton(
-              icon: const Icon(Icons.check_rounded),
-              onPressed: controller.confirmResponsiblesSelection as Function())
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: controller.confirmResponsiblesSelection as Function()),
+          )
         ],
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),

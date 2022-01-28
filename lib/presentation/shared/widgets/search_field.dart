@@ -49,23 +49,25 @@ class SearchField extends StatelessWidget {
   final Function(String value)? onSubmitted;
   final Function()? onSuffixTap;
   final Function()? onClearPressed;
+  final TextInputAction? textInputAction;
 
-  const SearchField({
-    Key? key,
-    this.autofocus = false,
-    this.color,
-    this.controller,
-    this.height = 32,
-    this.hintText,
-    this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 10),
-    this.onChanged,
-    this.onClearPressed,
-    this.onSubmitted,
-    this.onSuffixTap,
-    this.showClearIcon = false,
-    this.suffixIcon,
-    this.width,
-  }) : super(key: key);
+  const SearchField(
+      {Key? key,
+      this.autofocus = false,
+      this.color,
+      this.controller,
+      this.height = 32,
+      this.hintText,
+      this.margin = const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
+      this.onChanged,
+      this.onClearPressed,
+      this.onSubmitted,
+      this.onSuffixTap,
+      this.showClearIcon = false,
+      this.suffixIcon,
+      this.width,
+      this.textInputAction = TextInputAction.search})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +80,7 @@ class SearchField extends StatelessWidget {
         onSubmitted: onSubmitted,
         onChanged: onChanged,
         autofocus: autofocus,
+        textInputAction: textInputAction,
         decoration: InputDecoration(
             hintText: hintText,
             filled: true,
@@ -89,10 +92,30 @@ class SearchField extends StatelessWidget {
             labelStyle: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
             hintStyle: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+            prefixIcon: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(width: 16, height: 20),
+                Icon(
+                  Icons.search,
+                  size: 20,
+                  color: Get.theme.colors().onSurface.withOpacity(0.4),
+                ),
+                const SizedBox(width: 8, height: 20),
+              ],
+            ),
+            prefixIconConstraints: BoxConstraints.tight(const Size(44, 20)),
             suffixIcon: showClearIcon
                 ? GestureDetector(
                     onTap: onClearPressed,
-                    child: const SizedBox(height: 32, width: 32, child: Icon(Icons.clear_rounded)))
+                    child: SizedBox(
+                      height: 32,
+                      width: 32,
+                      child: Icon(
+                        Icons.clear_rounded,
+                        color: Get.theme.colors().onSurface.withOpacity(0.4),
+                      ),
+                    ))
                 : GestureDetector(
                     onTap: onSuffixTap, child: SizedBox(height: 32, child: suffixIcon))),
       ),

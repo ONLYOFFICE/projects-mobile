@@ -35,17 +35,16 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
-
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectManagerSelectionView extends StatelessWidget {
   const ProjectManagerSelectionView({
@@ -72,10 +71,14 @@ class ProjectManagerSelectionView extends StatelessWidget {
         backButtonIcon: Get.put(PlatformController()).isMobile
             ? const Icon(Icons.arrow_back_rounded)
             : const Icon(Icons.close),
-        bottom: Container(
-          height: 40,
-          margin: const EdgeInsets.only(left: 16, right: 16, bottom: 10),
-          child: UsersSearchBar(controller: usersDataSource),
+        bottom: SearchField(
+          controller: usersDataSource.searchInputController,
+          hintText: tr('usersSearch'),
+          textInputAction: TextInputAction.search,
+          showClearIcon: usersDataSource.isSearchResult.value == true,
+          onClearPressed: usersDataSource.clearSearch,
+          onChanged: usersDataSource.searchUsers,
+          onSubmitted: usersDataSource.searchUsers,
         ),
       ),
       body: Obx(
@@ -175,6 +178,7 @@ class UsersDefault extends StatelessWidget {
           Obx(() {
             if (usersDataSource.selfIsVisible.value == true)
               return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                const SizedBox(height: 26),
                 Container(
                   padding: const EdgeInsets.only(left: 16),
                   child: Text(tr('me'), style: TextStyleHelper.body2()),
