@@ -64,6 +64,9 @@ class LoginController extends GetxController {
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
   late TextEditingController _portalAdressController;
+
+  late AccountManagerController accountManager;
+
   TextEditingController get portalAdressController => _portalAdressController;
 
   late TextEditingController _emailController;
@@ -101,7 +104,17 @@ class LoginController extends GetxController {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _portalAdressController = TextEditingController();
+
+    accountManager = Get.isRegistered<AccountManagerController>()
+        ? Get.find<AccountManagerController>()
+        : Get.put(AccountManagerController());
+
     super.onInit();
+  }
+
+  void setup() {
+    portalAdressController.text = '';
+    emailController.text = '';
   }
 
   Future<void> loginByPassword() async {

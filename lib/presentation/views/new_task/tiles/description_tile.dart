@@ -97,7 +97,7 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        final bool _isNotEmpty = widget.controller!.descriptionText!.value.isNotEmpty;
+        final _isNotEmpty = widget.controller!.descriptionText!.value.isNotEmpty;
         final _color = _isNotEmpty
             ? Get.theme.colors().onBackground
             : Get.theme.colors().onBackground.withOpacity(0.4);

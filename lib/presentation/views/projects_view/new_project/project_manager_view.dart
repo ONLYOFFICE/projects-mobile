@@ -89,8 +89,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
             return UsersDefault(
               selfUserItem: controller.selfUserItem as PortalUserItemController,
               usersDataSource: usersDataSource,
-              onTapFunction:
-                  controller.changePMSelection as void Function(PortalUserItemController),
+              onTapFunction: (v) => controller.changePMSelection(v),
               withoutGuests: true,
             );
           }
@@ -102,7 +101,7 @@ class ProjectManagerSelectionView extends StatelessWidget {
               usersDataSource.isSearchResult.value == true) {
             return UsersSearchResult(
               usersDataSource: usersDataSource,
-              onTapFunction: controller.changePMSelection as Function(PortalUserItemController),
+              onTapFunction: (v) => controller.changePMSelection(v),
               withoutVisitors: true,
             );
           }

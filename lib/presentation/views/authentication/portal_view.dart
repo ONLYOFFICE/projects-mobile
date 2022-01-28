@@ -40,6 +40,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
@@ -51,7 +52,10 @@ class PortalInputView extends StatelessWidget {
   Widget build(BuildContext context) {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.setState(ViewState.Idle);
+      controller.setup();
     });
+
+    final height = controller.accountManager.accounts.isEmpty ? Get.height : Get.height - 80;
     return Obx(
       () => controller.state.value == ViewState.Busy
           ? Scaffold(
@@ -59,21 +63,33 @@ class PortalInputView extends StatelessWidget {
                   height: Get.height, child: const Center(child: CircularProgressIndicator())),
             )
           : Scaffold(
+              appBar: controller.accountManager.accounts.isEmpty
+                  ? null
+                  : StyledAppBar(
+                      backButtonIcon: const Icon(Icons.close),
+                      title: Text(
+                        tr('addNewAccount'),
+                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                      ),
+                    ),
               body: SingleChildScrollView(
                 child: Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
+                    constraints: BoxConstraints(maxWidth: 480, maxHeight: height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        SizedBox(height: Get.height * 0.2),
+                        if (controller.accountManager.accounts.isEmpty)
+                          SizedBox(height: height * 0.2)
+                        else
+                          SizedBox(height: height * 0.1),
                         const AppIcon(icon: SvgIcons.app_logo),
-                        SizedBox(height: Get.height * 0.01),
+                        SizedBox(height: height * 0.01),
                         Text(tr('appName'),
                             textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
-                        SizedBox(height: Get.height * 0.111),
+                        SizedBox(height: height * 0.111),
                         Obx(
                           () => AuthTextField(
                             controller: controller.portalAdressController,
@@ -82,7 +98,7 @@ class PortalInputView extends StatelessWidget {
                             hasError: controller.portalFieldError.value == true,
                           ),
                         ),
-                        SizedBox(height: Get.height * 0.033),
+                        SizedBox(height: height * 0.033),
                         DecoratedBox(
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
