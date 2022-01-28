@@ -60,7 +60,12 @@ class LoginView extends StatelessWidget {
               body: SizedBox(
                   height: Get.height, child: const Center(child: CircularProgressIndicator())))
           : Scaffold(
-              appBar: StyledAppBar(),
+              appBar: StyledAppBar(
+                title: Text(
+                  tr('addNewAccount'),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                ),
+              ),
               body: SingleChildScrollView(
                 child: Column(
                   children: [
