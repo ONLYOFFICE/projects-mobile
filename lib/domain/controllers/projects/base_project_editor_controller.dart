@@ -180,7 +180,7 @@ abstract class BaseProjectEditorController extends GetxController {
     selectedTeamMembers
         .removeWhere((element) => selectedProjectManager.value!.id == element.portalUser.id);
     managerName.value = '';
-    selectedProjectManager.value = null;
+    selectedProjectManager.value = PortalUser();
     isPMSelected.value = false;
 
     for (final element in usersDataSourse.usersList) {
