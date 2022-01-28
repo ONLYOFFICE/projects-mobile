@@ -114,6 +114,11 @@ class AccountTileController extends GetxController {
   }
 
   Future<void> loginToSavedAccount() async {
+    final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
+    if (!isAuthValid) {
+      await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+    }
+
     if (accountData?.token == '') {
       final loginController = Get.find<LoginController>();
 
