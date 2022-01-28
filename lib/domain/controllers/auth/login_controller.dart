@@ -101,7 +101,13 @@ class LoginController extends GetxController {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _portalAdressController = TextEditingController();
+
     super.onInit();
+  }
+
+  void setup() {
+    portalAdressController.text = '';
+    emailController.text = '';
   }
 
   Future<void> loginByPassword() async {

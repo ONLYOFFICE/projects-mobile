@@ -47,10 +47,6 @@ import 'package:projects/presentation/views/authentication/portal_view.dart';
 class AccountManagerController extends GetxController {
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  static const accountType = 'com.onlyoffice.account';
-  static const tokenType = 'com.onlyoffice.auth';
-  static const key = 'account_data';
-
   RxList<AccountData> accounts = <AccountData>[].obs;
 
   Future setup() async {
@@ -114,7 +110,7 @@ class AccountManagerController extends GetxController {
       if (deleted!) {
         accounts.value = await fetchAccounts();
 
-        if (accounts.isEmpty) await Get.offAll(() =>PortalInputView());
+        if (accounts.isEmpty) await Get.to(() => PortalInputView());
 
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }

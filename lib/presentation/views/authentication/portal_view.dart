@@ -51,6 +51,7 @@ class PortalInputView extends StatelessWidget {
   Widget build(BuildContext context) {
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.setState(ViewState.Idle);
+      controller.setup();
     });
     return Obx(
       () => controller.state.value == ViewState.Busy
