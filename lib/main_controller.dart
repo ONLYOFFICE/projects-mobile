@@ -194,13 +194,17 @@ class MainController extends GetxController {
     final isAuthValid = await locator<AuthService>().checkAuthorization();
     if (!isAuthValid)
       await clearLoginData();
-    else
+    else {
       await cookieManager.setCookies([
         Cookie('asc_auth_key', token)
           ..domain = Uri.parse(portalName).authority
           ..expires = DateTime.now().add(const Duration(days: 10))
           ..httpOnly = false
       ]);
+
+      await Get.find<AccountManagerController>()
+          .addAccount(tokenString: token, expires: expirationDate);
+    }
 
     return isAuthValid;
   }

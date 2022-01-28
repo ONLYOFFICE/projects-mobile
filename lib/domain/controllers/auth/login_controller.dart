@@ -247,19 +247,7 @@ class LoginController extends GetxController {
       return;
     }
 
-    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
-    _portalAdressController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _portalAdressController.text.length),
-    );
-
-    var portalString = _portalAdressController.text;
-
-    if (portalString[portalString.length - 1] == '.')
-      portalString = portalString.substring(0, portalString.length - 1);
-
-    if (!portalString.contains('http')) portalString = 'https://$portalString';
-
-    portalURI = Uri.parse(portalString);
+    final portalString = setupPortalUri();
 
     if (!portalURI.hasAuthority) {
       portalFieldError.value = true;
@@ -281,6 +269,23 @@ class LoginController extends GetxController {
 
       setState(ViewState.Idle);
     }
+  }
+
+  String setupPortalUri() {
+    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
+    _portalAdressController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _portalAdressController.text.length),
+    );
+
+    var portalString = _portalAdressController.text;
+
+    if (portalString[portalString.length - 1] == '.')
+      portalString = portalString.substring(0, portalString.length - 1);
+
+    if (!portalString.contains('http')) portalString = 'https://$portalString';
+
+    portalURI = Uri.parse(portalString);
+    return portalString;
   }
 
   Future<bool> sendRegistrationType() async {

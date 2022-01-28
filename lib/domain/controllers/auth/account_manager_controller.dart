@@ -114,7 +114,7 @@ class AccountManagerController extends GetxController {
       if (deleted!) {
         accounts.value = await fetchAccounts();
 
-        if (accounts.isEmpty) await Get.offAll(PortalInputView());
+        if (accounts.isEmpty) await Get.offAll(() =>PortalInputView());
 
         MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }
