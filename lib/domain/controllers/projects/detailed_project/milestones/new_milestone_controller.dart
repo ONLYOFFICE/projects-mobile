@@ -190,7 +190,11 @@ class NewMilestoneController extends GetxController {
   }
 
   void addResponsible(PortalUserItemController user) {
-    responsible = user.obs;
+    if (responsible == null)
+      responsible = user.obs;
+    else
+      responsible?.value = user;
+
     needToSelectResponsible.value = false;
     Get.back();
   }
