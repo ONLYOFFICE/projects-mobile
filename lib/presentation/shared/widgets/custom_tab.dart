@@ -35,14 +35,14 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class CustomTab extends StatelessWidget {
-  final String? title;
+  final String title;
   final int? count;
-  final bool? currentTab;
+  final bool currentTab;
   const CustomTab({
     Key? key,
-    this.title,
+    required this.title,
     this.count,
-    this.currentTab,
+    required this.currentTab,
   }) : super(key: key);
 
   @override
@@ -51,23 +51,18 @@ class CustomTab extends StatelessWidget {
       height: 40,
       child: Row(
         children: [
-          Text(title!),
-          if (count != null && count! >= 0) const SizedBox(width: 8),
+          Text(title),
           if (count != null && count! >= 0)
             Container(
+              margin: const EdgeInsets.only(left: 8),
               padding: const EdgeInsets.symmetric(horizontal: 6),
               alignment: Alignment.center,
-              height: 21,
+              height: 20,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
-                color: Get.theme.colors().onSurface.withOpacity(0.3),
-                // TODO change active tabs color
-                // color: currentTab
-                //     ? Get.theme.customColors().primary
-                //     : Get.theme
-                //         .customColors()
-                //         .onSurface
-                //         .withOpacity(0.3),
+                color: currentTab
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onSurface.withOpacity(0.25),
               ),
               child: Text(
                 count.toString(),
