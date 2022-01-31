@@ -30,6 +30,9 @@
  *
  */
 
+import 'dart:async';
+
+import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -43,14 +46,14 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/new
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 
 class ProjectDiscussionsController extends GetxController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
   var projectId;
   var projectTitle;
 
   final _paginationController =
       Get.put(PaginationController(), tag: 'ProjectDiscussionsController');
 
-  ProjectDetailed _projectDetailed;
+  late ProjectDetailed _projectDetailed;
 
   PaginationController get paginationController => _paginationController;
 
@@ -60,54 +63,78 @@ class ProjectDiscussionsController extends GetxController {
 
   var fabIsVisible = false.obs;
 
+  late StreamSubscription _refreshDiscussionsSubscription;
+
   ProjectDiscussionsController(ProjectDetailed projectDetailed) {
     setup(projectDetailed);
-    _sortController.updateSortDelegate =
-        () async => await loadProjectDiscussions();
+    _sortController.updateSortDelegate = () async => await loadProjectDiscussions();
 
     paginationController.loadDelegate = () async => await _getDiscussions();
-    paginationController.refreshDelegate =
-        () async => await _getDiscussions(needToClear: true);
+    paginationController.refreshDelegate = () async => await refreshData();
     paginationController.pullDownEnabled = true;
+
+    _refreshDiscussionsSubscription =
+        locator<EventHub>().on('needToRefreshDiscussions', (dynamic data) async {
+      if (data.any((elem) => elem == 'all') as bool) await loadProjectDiscussions();
+    });
   }
 
-  void setup(ProjectDetailed projectDetailed) {
+  @override
+  void onClose() {
+    _refreshDiscussionsSubscription.cancel();
+    super.onClose();
+  }
+
+  void setup(ProjectDetailed projectDetailed) async {
     _projectDetailed = projectDetailed;
     projectId = projectDetailed.id;
     projectTitle = projectDetailed.title;
-
     fabIsVisible.value = _canCreate();
+
+    await loadProjectDiscussions();
   }
 
-  bool _canCreate() => _projectDetailed.security['canCreateMessage'];
+  Future<void> refreshData() async {
+    loaded.value = false;
+
+    //await _getDiscussions(needToClear: true);
+    locator<EventHub>().fire('needToRefreshDetails', [_projectDetailed.id]);
+
+    loaded.value = true;
+  }
+
+  bool _canCreate() => _projectDetailed.security!['canCreateMessage'] ?? false;
 
   RxList get itemList => paginationController.data;
 
   Future loadProjectDiscussions() async {
     loaded.value = false;
+
     paginationController.startIndex = 0;
     await _getDiscussions(needToClear: true);
+
     loaded.value = true;
   }
 
-  Future _getDiscussions({needToClear = false}) async {
-    var result = await _api.getDiscussionsByParams(
+  Future<bool> _getDiscussions({bool needToClear = false}) async {
+    final result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       projectId: projectId.toString(),
     );
+    if (result == null) return Future.value(false);
+
     paginationController.total.value = result.total;
-
     if (needToClear) paginationController.data.clear();
+    paginationController.data.addAll(result.response ?? <Discussion>[]);
 
-    paginationController.data.addAll(result.response);
+    return Future.value(true);
   }
 
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
       .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
-  void toNewDiscussionScreen() =>
-      Get.find<NavigationController>().to(const NewDiscussionScreen(),
-          arguments: {'projectId': projectId, 'projectTitle': projectTitle});
+  void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
+      arguments: {'projectId': projectId, 'projectTitle': projectTitle});
 }

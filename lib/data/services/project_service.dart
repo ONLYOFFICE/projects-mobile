@@ -35,6 +35,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/folow_project.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/models/from_api/project.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
@@ -50,30 +51,30 @@ class ProjectService {
   final ProjectApi _api = locator<ProjectApi>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  Future<List<Project>> getProjects() async {
-    var projects = await _api.getProjects();
+  Future<List<Project>?> getProjects() async {
+    final projects = await _api.getProjects();
 
-    var success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects.response;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error.message);
+      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
 
-  Future<PageDTO<List<ProjectDetailed>>> getProjectsByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    String projectManagerFilter,
-    String participantFilter,
-    String otherFilter,
-    String statusFilter,
+  Future<PageDTO<List<ProjectDetailed>>?> getProjectsByParams({
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    String? projectManagerFilter,
+    String? participantFilter,
+    String? otherFilter,
+    String? statusFilter,
   }) async {
-    var projects = await _api.getProjectsByParams(
+    final projects = await _api.getProjectsByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
@@ -84,77 +85,78 @@ class ProjectService {
       statusFilter: statusFilter,
     );
 
-    var success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error.message);
+      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
 
-  Future<ProjectDetailed> getProjectById({int projectId}) async {
-    var projects = await _api.getProjectById(projectId: projectId);
+  Future<ProjectDetailed?> getProjectById({required int projectId}) async {
+    final projects = await _api.getProjectById(projectId: projectId);
 
-    var success = projects.response != null;
+    final success = projects.error == null;
 
     if (success) {
       return projects.response;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error.message);
+      await Get.find<ErrorDialog>().show(projects.error!.message);
       return null;
     }
   }
 
-  Future<List<ProjectTag>> getProjectTags() async {
-    var tags = await _api.getProjectTags();
+  Future<List<ProjectTag>?> getProjectTags() async {
+    final tags = await _api.getProjectTags();
 
-    var success = tags.response != null;
+    final success = tags.response != null;
 
     if (success) {
       return tags.response;
     } else {
-      await Get.find<ErrorDialog>().show(tags.error.message);
+      await Get.find<ErrorDialog>().show(tags.error!.message);
       return null;
     }
   }
 
-  Future<PageDTO<List<ProjectTag>>> getTagsPaginated({
-    int startIndex,
-    String query,
+  Future<PageDTO<List<ProjectTag>>?> getTagsPaginated({
+    int? startIndex,
+    String? query,
   }) async {
-    var tags =
+    final tags =
         await _api.getTagsPaginated(query: query, startIndex: startIndex);
 
-    var success = tags.response != null;
+    final success = tags.response != null;
 
     if (success) {
       return tags;
     } else {
-      await Get.find<ErrorDialog>().show(tags.error.message);
+      await Get.find<ErrorDialog>().show(tags.error!.message);
       return null;
     }
   }
 
-  Future<List<PortalUser>> getProjectTeam(String projectID) async {
-    var team = await _api.getProjectTeam(projectID);
+  Future<List<PortalUser>?> getProjectTeam(int projectID) async {
+    final team = await _api.getProjectTeam(projectID: projectID);
 
-    var success = team.response != null;
+    final success = team.response != null;
 
     if (success) {
       return team.response;
     } else {
-      await Get.find<ErrorDialog>().show(team.error.message);
+      await Get.find<ErrorDialog>().show(team.error!.message);
       return null;
     }
   }
 
-  Future<List<PortalUser>> addToProjectTeam(
-      String projectID, List<String> users) async {
-    var team = await _api.addToProjectTeam(projectID, users);
+  Future<List<PortalUser>?> addToProjectTeam(
+      int projectID, List<String> users) async {
+    final team =
+        await _api.addToProjectTeam(projectID: projectID, users: users);
 
-    var success = team.response != null;
+    final success = team.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -166,13 +168,14 @@ class ProjectService {
       });
       return team.response;
     } else {
-      await Get.find<ErrorDialog>().show(team.error.message);
+      await Get.find<ErrorDialog>().show(team.error!.message);
       return null;
     }
   }
 
-  Future createProject({NewProjectDTO project}) async {
-    var result = await _api.createProject(project: project);
+  Future<ProjectDetailed?> createProject(
+      {required NewProjectDTO project}) async {
+    final result = await _api.createProject(project: project);
 
     if (result.response != null) {
       await AnalyticsService.shared
@@ -185,14 +188,16 @@ class ProjectService {
 
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
     }
   }
 
-  Future<bool> editProject({EditProjectDTO project, int projectId}) async {
-    var result = await _api.editProject(project: project, projectId: projectId);
+  Future<bool> editProject(
+      {required EditProjectDTO project, required int projectId}) async {
+    final result =
+        await _api.editProject(project: project, projectId: projectId);
 
-    var success = result.response != null;
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -204,15 +209,15 @@ class ProjectService {
       });
       return success;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return false;
     }
   }
 
-  Future<bool> deleteProject({int projectId}) async {
-    var result = await _api.deleteProject(projectId: projectId);
+  Future<bool> deleteProject({required int projectId}) async {
+    final result = await _api.deleteProject(projectId: projectId);
 
-    var success = result.response != null;
+    final success = result.response != null;
 
     if (success) {
       await AnalyticsService.shared
@@ -224,17 +229,17 @@ class ProjectService {
       });
       return success;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return false;
     }
   }
 
-  Future<ProjectDetailed> updateProjectStatus(
-      {int projectId, String newStatus}) async {
-    var result = await _api.updateProjectStatus(
+  Future<ProjectDetailed?> updateProjectStatus(
+      {required int projectId, required String newStatus}) async {
+    final result = await _api.updateProjectStatus(
         projectId: projectId, newStatus: newStatus);
 
-    var success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -246,15 +251,15 @@ class ProjectService {
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }
 
-  Future followProject({int projectId}) async {
-    var result = await _api.followProject(projectId: projectId);
+  Future<FollowProject?> followProject({required int projectId}) async {
+    final result = await _api.followProject(projectId: projectId);
 
-    var success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -266,15 +271,15 @@ class ProjectService {
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }
 
-  Future createTag({String name}) async {
-    var result = await _api.createTag(name: name);
+  Future<ProjectTag?> createTag({required String name}) async {
+    final result = await _api.createTag(name: name);
 
-    var success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       await AnalyticsService.shared
@@ -286,20 +291,20 @@ class ProjectService {
       });
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }
 
-  Future<SecrityInfo> getProjectSecurityinfo() async {
-    var result = await _api.getProjectSecurityinfo();
+  Future<SecurityInfo?> getProjectSecurityinfo() async {
+    final result = await _api.getProjectSecurityinfo();
 
-    var success = result.response != null;
+    final success = result.error == null;
 
     if (success) {
       return result.response;
     } else {
-      await Get.find<ErrorDialog>().show(result.error.message);
+      await Get.find<ErrorDialog>().show(result.error!.message);
       return null;
     }
   }

@@ -50,7 +50,7 @@ part 'search_result.dart';
 part 'user_list.dart';
 
 class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
-  const SelectUserScreen({Key key}) : super(key: key);
+  const SelectUserScreen({Key? key}) : super(key: key);
 
   @override
   String get appBarText => tr('selectUser');
@@ -71,5 +71,5 @@ class SelectUserScreen extends StatelessWidget with SelectItemWithSearchMixin {
   Widget get itemList => const _UserList();
 
   @override
-  Widget get searchResult => _SearchResult(searchController: searchController);
+  Widget get searchResult => _SearchResult(searchController: searchController as UserSearchController);
 }

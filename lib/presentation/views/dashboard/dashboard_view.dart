@@ -50,12 +50,12 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardView extends StatelessWidget {
-  const DashboardView({Key key}) : super(key: key);
+  const DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var dashboardController = Get.put(DashboardController())..setup();
+    final dashboardController = Get.put(DashboardController())..setup();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
+    SchedulerBinding.instance!.addPostFrameCallback((_) async {
       dashboardController.loadContent();
     });
 
@@ -69,7 +69,6 @@ class DashboardView extends StatelessWidget {
         showBackButton: false,
       ),
       body: SmartRefresher(
-        enablePullDown: true,
         controller: dashboardController.refreshController,
         onLoading: dashboardController.onLoading,
         onRefresh: dashboardController.onRefresh,
@@ -106,12 +105,12 @@ class DashboardView extends StatelessWidget {
 
 class DashboardCardView extends StatelessWidget {
   final String overline;
-  final controller;
+  final dynamic controller;
 
   DashboardCardView({
-    Key key,
-    this.overline,
-    this.controller,
+    Key? key,
+    required this.overline,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -124,68 +123,59 @@ class DashboardCardView extends StatelessWidget {
         color: Get.theme.colors().surface,
         child: Obx(
           () => Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               InkWell(
                 onTap: () => {
-                  controller.expandedCardView.value =
-                      !controller.expandedCardView.value
+                  controller.expandedCardView.value = !(controller.expandedCardView.value as bool)
                 },
                 child: Container(
-                  height: 60,
+                  constraints: const BoxConstraints(minHeight: 60),
                   padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                   child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            overline.toUpperCase(),
-                            style: TextStyleHelper.overline(
-                              color:
-                                  Get.theme.colors().onSurface.withOpacity(0.6),
-                            ),
-                          ),
-                          Text(
-                            controller.screenName,
-                            style: TextStyleHelper.headline7(),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            height: 28,
-                            padding: const EdgeInsets.symmetric(horizontal: 10),
-                            decoration: BoxDecoration(
-                              color: Get.theme.colors().bgDescription,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Obx(
-                                () => Text(
-                                  controller.paginationController.total.value
-                                      .toString(),
-                                  textAlign: TextAlign.center,
-                                  style: TextStyleHelper.subtitle2(),
-                                ),
+                      Flexible(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              overline.toUpperCase(),
+                              style: TextStyleHelper.overline(
+                                color: Get.theme.colors().onSurface.withOpacity(0.6),
                               ),
                             ),
+                            Text(
+                              controller.screenName as String,
+                              style: TextStyleHelper.headline7(),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        height: 28,
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Get.theme.colors().bgDescription,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Obx(
+                            () => Text(
+                              controller.paginationController.total.value.toString(),
+                              textAlign: TextAlign.center,
+                              style: TextStyleHelper.subtitle2(),
+                            ),
                           ),
-                        ],
+                        ),
                       )
                     ],
                   ),
                 ),
               ),
-              if (controller.expandedCardView.value)
+              if (controller.expandedCardView.value as bool)
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
                   children: <Widget>[
                     const Divider(
                       height: 1,
@@ -193,113 +183,87 @@ class DashboardCardView extends StatelessWidget {
                       indent: 0,
                       endIndent: 0,
                     ),
-                    Container(
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            if (controller is ProjectsController &&
-                                controller.loaded.value)
-                              Expanded(
-                                child: ProjectCardContent(
-                                  controller: controller,
-                                ),
-                              ),
-                            if (controller is TasksController &&
-                                controller.loaded.value)
-                              Expanded(
-                                child: TaskCardContent(
-                                  controller: controller,
-                                ),
-                              ),
-                            if (!controller.loaded.value)
-                              Container(
-                                height: 100,
-                                child: const Center(
-                                    child: CircularProgressIndicator()),
-                              ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            if (controller.loaded.value &&
-                                controller.paginationController.total.value ==
-                                    0)
-                              Container(
-                                height: 100,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      tr('dashboardNoActive',
-                                          args: [overline.toLowerCase()]),
-                                      style: TextStyleHelper.subtitle1(
-                                        color: Get.theme
-                                            .colors()
-                                            .onSurface
-                                            .withOpacity(0.6),
-                                      ),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          if (controller.loaded.value as bool &&
+                              controller.paginationController.total.value == 0)
+                            SizedBox(
+                              height: 100,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    tr('dashboardNoActive', args: [overline.toLowerCase()]),
+                                    style: TextStyleHelper.subtitle1(
+                                      color: Get.theme.colors().onSurface.withOpacity(0.6),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                          ],
-                        ),
+                            ),
+                          if (controller is ProjectsController &&
+                              controller.loaded.value as bool &&
+                              controller.paginationController.total.value as int > 0)
+                            Expanded(
+                              child: ProjectCardContent(
+                                controller: controller as ProjectsController,
+                              ),
+                            ),
+                          if (controller is TasksController &&
+                              controller.loaded.value as bool &&
+                              controller.paginationController.total.value as int > 0)
+                            Expanded(
+                              child: TaskCardContent(
+                                controller: controller as TasksController,
+                              ),
+                            ),
+                          if (!(controller.loaded.value as bool))
+                            const SizedBox(
+                              height: 100,
+                              child: Center(child: CircularProgressIndicator()),
+                            ),
+                        ],
                       ),
                     ),
-                    Container(
-                      child: Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            if (controller.loaded.value &&
-                                controller.paginationController.total.value > 2)
-                              Container(
-                                height: 50,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    InkWell(
-                                      onTap: () => {
-                                        Get.find<NavigationController>().to(
-                                            controller is ProjectsController
-                                                ? const ProjectsDashboardMoreView()
-                                                : const TasksDashboardMoreView(),
-                                            arguments: {
-                                              'controller': controller
-                                            }),
-                                      },
-                                      child: !controller.showAll.value
-                                          ? Text(
-                                              tr('viewAll').toUpperCase(),
-                                              style: TextStyleHelper.button(
-                                                color:
-                                                    Get.theme.colors().primary,
-                                              ),
-                                            )
-                                          : Text(
-                                              tr('viewLess').toUpperCase(),
-                                              style: TextStyleHelper.button(
-                                                color:
-                                                    Get.theme.colors().primary,
-                                              ),
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          if (controller.loaded.value as bool &&
+                              (controller.paginationController.total.value as int) > 2)
+                            SizedBox(
+                              height: 50,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  InkWell(
+                                    onTap: () => {
+                                      Get.find<NavigationController>().to(
+                                          controller is ProjectsController
+                                              ? const ProjectsDashboardMoreView()
+                                              : const TasksDashboardMoreView(),
+                                          arguments: {'controller': controller}),
+                                    },
+                                    child: !(controller.showAll.value as bool)
+                                        ? Text(
+                                            tr('viewAll').toUpperCase(),
+                                            style: TextStyleHelper.button(
+                                              color: Get.theme.colors().primary,
                                             ),
-                                    ),
-                                  ],
-                                ),
+                                          )
+                                        : Text(
+                                            tr('viewLess').toUpperCase(),
+                                            style: TextStyleHelper.button(
+                                              color: Get.theme.colors().primary,
+                                            ),
+                                          ),
+                                  ),
+                                ],
                               ),
-                          ],
-                        ),
+                            ),
+                        ],
                       ),
                     ),
                   ],
@@ -313,30 +277,26 @@ class DashboardCardView extends StatelessWidget {
 }
 
 class Title extends StatelessWidget {
-  const Title({Key key, @required this.controller}) : super(key: key);
-  final controller;
+  const Title({Key? key, required this.controller}) : super(key: key);
+  final DashboardController controller;
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           Expanded(
             child: Obx(
               () => Text(
                 controller.screenName.value,
-                style: TextStyleHelper.headerStyle(
-                    color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
             ),
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              const SizedBox(width: 24),
+            children: const <Widget>[
+              SizedBox(width: 24),
             ],
           ),
         ],
@@ -349,9 +309,9 @@ class Title extends StatelessWidget {
 class ProjectCardContent extends StatelessWidget {
   final ProjectsController controller;
 
-  ProjectCardContent({
-    Key key,
-    this.controller,
+  const ProjectCardContent({
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -364,12 +324,15 @@ class ProjectCardContent extends StatelessWidget {
           if (controller.loaded.value)
             Column(children: [
               ListView.builder(
+                padding: EdgeInsets.zero,
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,
                 itemBuilder: (c, i) => i < 2
                     ? ProjectCell(item: controller.paginationController.data[i])
                     : const SizedBox(),
-                itemCount: controller.paginationController.data.length,
+                itemCount: controller.paginationController.data.length > 2
+                    ? 2
+                    : controller.paginationController.data.length,
               ),
             ]),
         ],
@@ -382,49 +345,34 @@ class ProjectCardContent extends StatelessWidget {
 class TaskCardContent extends StatelessWidget {
   final TasksController controller;
 
-  TaskCardContent({
-    Key key,
-    this.controller,
+  const TaskCardContent({
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => controller.showAll.value == true
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (controller.loaded.value)
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => TaskCell(
-                          task: controller.paginationController.data[i]),
-                      itemCount: controller.paginationController.data.length,
-                    ),
-                  ]),
-              ],
-            )
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                if (controller.loaded.value)
-                  Column(children: [
-                    ListView.builder(
-                      physics: const ScrollPhysics(),
-                      shrinkWrap: true,
-                      itemBuilder: (c, i) => i < 2
-                          ? TaskCell(
-                              task: controller.paginationController.data[i])
-                          : const SizedBox(),
-                      itemCount: controller.paginationController.data.length,
-                    ),
-                  ]),
-              ],
-            ),
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          if (controller.loaded.value)
+            Column(children: [
+              ListView.builder(
+                padding: EdgeInsets.zero,
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (c, i) => i < 2
+                    ? TaskCell(task: controller.paginationController.data[i])
+                    : const SizedBox(),
+                itemCount: controller.paginationController.data.length > 2
+                    ? 2
+                    : controller.paginationController.data.length,
+              ),
+            ]),
+        ],
+      ),
     );
   }
 }

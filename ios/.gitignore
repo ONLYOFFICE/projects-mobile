@@ -14,7 +14,6 @@ Icon?
 profile
 xcuserdata
 **/.generated/
-Podfile.lock
 Flutter/App.framework
 Flutter/Flutter.framework
 Flutter/Flutter.podspec
@@ -25,6 +24,11 @@ Flutter/flutter_assets/
 Flutter/flutter_export_environment.sh
 ServiceDefinitions.json
 Runner/GeneratedPluginRegistrant.*
+*.dSYM
+*.dSYM.zip
+*.ipa
+GoogleService-Info-prod.plist
+Internal.plist
 
 # Exceptions to above rules.
 !default.mode1v3
@@ -33,4 +37,5 @@ Runner/GeneratedPluginRegistrant.*
 !default.perspectivev3
 
 # fastlane
+fastlane/.env.secret
 fastlane/report.xml

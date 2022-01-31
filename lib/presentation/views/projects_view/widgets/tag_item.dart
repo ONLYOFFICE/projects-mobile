@@ -32,26 +32,26 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/tag_itemDTO.dart';
+import 'package:projects/data/models/tag_item_DTO.dart';
 
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class TagItem extends StatelessWidget {
-  final TagItemDTO tagItemDTO;
+  final TagItemDTO? tagItemDTO;
   final Function onTapFunction;
 
   const TagItem({
-    Key key,
-    @required this.onTapFunction,
-    @required this.tagItemDTO,
+    Key? key,
+    required this.onTapFunction,
+    required this.tagItemDTO,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onTapFunction,
-      child: Container(
+      onTap: onTapFunction as void Function()?,
+      child: SizedBox(
         height: 48,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -59,17 +59,15 @@ class TagItem extends StatelessWidget {
             const SizedBox(width: 16),
             Expanded(
               child: Text(
-                tagItemDTO.tag.title.replaceAll(' ', '\u00A0'),
+                tagItemDTO!.tag!.title!.replaceAll(' ', '\u00A0'),
                 overflow: TextOverflow.ellipsis,
                 style: TextStyleHelper.subtitle1(),
               ),
             ),
             Obx(() {
-              if (tagItemDTO.isSelected.value == true) {
+              if (tagItemDTO!.isSelected!.value == true) {
                 return SizedBox(
-                    width: 72,
-                    child: Icon(Icons.check_box,
-                        color: Get.theme.colors().primary));
+                    width: 72, child: Icon(Icons.check_box, color: Get.theme.colors().primary));
               } else {
                 return const SizedBox(
                   width: 72,

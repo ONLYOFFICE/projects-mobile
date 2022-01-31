@@ -41,11 +41,11 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PasswordRecoveryScreen2 extends StatelessWidget {
-  const PasswordRecoveryScreen2({Key key}) : super(key: key);
+  const PasswordRecoveryScreen2({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<PasswordRecoveryController>();
+    final controller = Get.find<PasswordRecoveryController>();
 
     return Scaffold(
       appBar: StyledAppBar(),

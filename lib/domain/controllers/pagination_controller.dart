@@ -31,24 +31,30 @@
  */
 
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class PaginationController extends GetxController {
-  RxList data = [].obs;
-  RefreshController refreshController = RefreshController();
-  var startIndex = 0;
-  var total = 0.obs;
+class PaginationController<T> extends GetxController {
+  static const PAGINATION_LENGTH = 25;
+  RxList<T> data = <T>[].obs;
 
-  Function refreshDelegate;
-  Function loadDelegate;
+  RefreshController _refreshController = RefreshController();
+  RefreshController get refreshController {
+    if (!_refreshController.isLoading && !_refreshController.isRefresh)
+      _refreshController = RefreshController();
+    return _refreshController;
+  }
 
-  var pullDownEnabled = false;
-  bool get pullUpEnabled =>
-      total.value == null ? false : data.length != total.value;
+  int startIndex = 0;
+  RxInt total = 0.obs;
 
-  void onRefresh() async {
+  late Function refreshDelegate;
+  late Function loadDelegate;
+
+  bool pullDownEnabled = false;
+  bool get pullUpEnabled => data.length != total.value;
+
+  Future<void> onRefresh() async {
     startIndex = 0;
     await refreshDelegate();
     refreshController.refreshCompleted();
@@ -62,15 +68,15 @@ class PaginationController extends GetxController {
       ..getSecurityInfo();
   }
 
-  void onLoading() async {
-    startIndex += 25;
+  Future<void> onLoading() async {
+    startIndex += PAGINATION_LENGTH;
     if (startIndex >= total.value) {
-      refreshController.loadComplete();
-      startIndex -= 25;
+      _refreshController.loadComplete();
+      startIndex -= PAGINATION_LENGTH;
       return;
     }
     await loadDelegate();
-    refreshController.loadComplete();
+    _refreshController.loadComplete();
   }
 
   void setup() {

@@ -41,8 +41,8 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class FiltersHeader extends StatelessWidget {
   const FiltersHeader({
-    Key key,
-    @required this.filterController,
+    Key? key,
+    required this.filterController,
   }) : super(key: key);
 
   final BaseFilterController filterController;
@@ -61,7 +61,7 @@ class FiltersHeader extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Padding(
-                padding: const EdgeInsets.only(top: 8.0),
+                padding: const EdgeInsets.only(top: 8),
                 child: SizedBox(
                   height: 4,
                   width: 40,
@@ -77,8 +77,7 @@ class FiltersHeader extends StatelessWidget {
                 top: 18.5,
                 left: 16,
                 child: Text(tr('filter'),
-                    style: TextStyleHelper.h6(
-                        color: Get.theme.colors().onSurface))),
+                    style: TextStyleHelper.h6(color: Get.theme.colors().onSurface))),
             Positioned(
                 top: 5,
                 right: Get.find<PlatformController>().isMobile ? 8 : 12,
@@ -88,8 +87,7 @@ class FiltersHeader extends StatelessWidget {
                       Get.back();
                     },
                     child: Text(tr('reset'),
-                        style: TextStyleHelper.button(
-                            color: Get.theme.colors().systemBlue)))),
+                        style: TextStyleHelper.button(color: Get.theme.colors().systemBlue)))),
             const Positioned(
               bottom: 0,
               left: 0,

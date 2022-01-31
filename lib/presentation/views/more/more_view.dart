@@ -42,17 +42,15 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class MoreView extends StatelessWidget {
-  const MoreView({Key key}) : super(key: key);
+  const MoreView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var portalUser;
-
-    portalUser = Get.isRegistered<ProfileController>()
+    final portalUser = Get.isRegistered<ProfileController>()
         ? Get.find<ProfileController>()
         : Get.put(ProfileController(), permanent: true);
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       portalUser.setup();
     });
 
@@ -69,12 +67,11 @@ class MoreView extends StatelessWidget {
           GestureDetector(
             onTap: () => Get.find<NavigationController>().changeTabIndex(4),
             child: Container(
-                height: 76,
+                constraints: const BoxConstraints(minHeight: 76),
                 padding: const EdgeInsets.fromLTRB(12, 16, 10, 15),
                 decoration: BoxDecoration(
                   border: Border(
-                    bottom: BorderSide(
-                        color: Get.theme.colors().outline, width: 0.5),
+                    bottom: BorderSide(color: Get.theme.colors().outline, width: 0.5),
                   ),
                 ),
                 child: Row(
@@ -87,7 +84,7 @@ class MoreView extends StatelessWidget {
                         alignment: Alignment.center,
                         children: <Widget>[
                           CircleAvatar(
-                            radius: 40.0,
+                            radius: 40,
                             backgroundColor: Get.theme.colors().bgDescription,
                             child: ClipOval(
                               child: Obx(() {
@@ -96,32 +93,22 @@ class MoreView extends StatelessWidget {
                             ),
                           ),
                           if (portalUser.status.value == UserStatus.Terminated)
-                            Positioned(
+                            const Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: AppIcon(
-                                    icon: SvgIcons.userBlocked,
-                                    width: 16,
-                                    height: 16)),
-                          if ((portalUser.isAdmin.value ||
-                                  portalUser.isOwner.value) &&
+                                child: AppIcon(icon: SvgIcons.userBlocked, width: 16, height: 16)),
+                          if ((portalUser.isAdmin.value || portalUser.isOwner.value) &&
                               portalUser.status.value != UserStatus.Terminated)
-                            Positioned(
+                            const Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: AppIcon(
-                                    icon: SvgIcons.userAdmin,
-                                    width: 16,
-                                    height: 16)),
+                                child: AppIcon(icon: SvgIcons.userAdmin, width: 16, height: 16)),
                           if (portalUser.isVisitor.value &&
                               portalUser.status.value != UserStatus.Terminated)
-                            Positioned(
+                            const Positioned(
                                 bottom: 0,
                                 right: 0,
-                                child: AppIcon(
-                                    icon: SvgIcons.userVisitor,
-                                    width: 16,
-                                    height: 16)),
+                                child: AppIcon(icon: SvgIcons.userVisitor, width: 16, height: 16)),
                         ],
                       ),
                     ),
@@ -135,8 +122,7 @@ class MoreView extends StatelessWidget {
                               portalUser.username.value,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyleHelper.subtitle1(
-                                  color: Get.theme.colors().onNavBar),
+                              style: TextStyleHelper.subtitle1(color: Get.theme.colors().onNavBar),
                             );
                           }),
                           Obx(() {
@@ -145,10 +131,7 @@ class MoreView extends StatelessWidget {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyleHelper.body2(
-                                  color: Get.theme
-                                      .colors()
-                                      .onNavBar
-                                      .withOpacity(0.6)),
+                                  color: Get.theme.colors().onNavBar.withOpacity(0.6)),
                             );
                           }),
                         ],
@@ -177,10 +160,10 @@ class _MoreTile extends StatelessWidget {
   final Function() onTap;
 
   const _MoreTile({
-    Key key,
-    @required this.iconPath,
-    @required this.onTap,
-    @required this.text,
+    Key? key,
+    required this.iconPath,
+    required this.onTap,
+    required this.text,
   }) : super(key: key);
 
   @override
@@ -195,9 +178,7 @@ class _MoreTile extends StatelessWidget {
               width: 56,
               child: AppIcon(icon: iconPath),
             ),
-            Text(text,
-                style: TextStyleHelper.subtitle1(
-                    color: Get.theme.colors().onNavBar)),
+            Text(text, style: TextStyleHelper.subtitle1(color: Get.theme.colors().onNavBar)),
           ],
         ),
       ),

@@ -32,30 +32,31 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 
 abstract class DiscussionActionsController {
-  RxString text;
-  RxString title;
-  var selectedProjectTitle;
-  RxList<PortalUserItemController> subscribers;
-  RxList<PortalUserItemController> otherUsers;
+  RxString text = RxString('');
+  RxString title = RxString('');
+  RxString selectedProjectTitle = RxString('');
+  final subscribers = <PortalUserItemController>[].obs;
+  final otherUsers = <PortalUserItemController>[].obs;
 
   FocusNode get titleFocus => FocusNode();
-  TextEditingController _titleController;
-  TextEditingController _userSearchController;
+  late TextEditingController _titleController;
+  late TextEditingController _userSearchController;
   TextEditingController get titleController => _titleController;
   TextEditingController get userSearchController => _userSearchController;
-  var textController;
+  late HtmlEditorController textController;
 
-  var setTitleError;
-  var setTextError;
-  var selectProjectError;
+  late RxBool setTitleError;
+  late RxBool setTextError;
+  late RxBool selectProjectError;
+  late RxBool titleIsEmpty;
 
   void setupSubscribersSelection();
-  void addSubscriber(PortalUserItemController user,
-      {fromUsersDataSource = false});
+  void addSubscriber(PortalUserItemController user, {bool fromUsersDataSource = false});
   void removeSubscriber(PortalUserItemController user);
 
   void changeTitle(String newText);

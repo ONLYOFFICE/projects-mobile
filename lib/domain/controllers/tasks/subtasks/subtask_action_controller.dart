@@ -38,13 +38,13 @@ import 'package:projects/domain/controllers/projects/new_project/portal_user_ite
 abstract class SubtaskActionController extends GetxController {
   final TextEditingController _titleController = TextEditingController();
   TextEditingController get titleController => _titleController;
-  FocusNode get titleFocus;
-  RxBool setTiltleError;
-  RxInt status;
+  FocusNode? get titleFocus;
+  RxBool? setTiltleError;
+  RxInt? status;
 
-  void init({Subtask subtask, int projectId});
+  void init({Subtask? subtask, int? projectId});
   void addResponsible(PortalUserItemController user);
-  Future<void> confirm({@required context, int taskId});
+  Future<void> confirm({required BuildContext context, required int taskId});
   void confirmResponsiblesSelection();
   void leaveResponsiblesSelectionView();
   void deleteResponsible();

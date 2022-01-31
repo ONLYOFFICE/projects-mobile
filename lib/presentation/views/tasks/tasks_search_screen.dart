@@ -41,28 +41,26 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 class TasksSearchScreen extends StatelessWidget {
-  const TasksSearchScreen({Key key}) : super(key: key);
+  const TasksSearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(TasksSearchController());
+    final controller = Get.put(TasksSearchController());
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),
       body: Obx(
         () {
-          if (controller.loaded.value == false)
-            return const ListLoadingSkeleton();
+          if (controller.loaded.value == false) return const ListLoadingSkeleton();
           if (controller.nothingFound.isTrue)
-            return Column(children: [const NothingFound()]);
+            return Column(children: const [NothingFound()]);
           else {
             return PaginationListView(
               paginationController: controller.paginationController,
               child: ListView.builder(
                 itemCount: controller.paginationController.data.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return TaskCell(
-                      task: controller.paginationController.data[index]);
+                  return TaskCell(task: controller.paginationController.data[index]);
                 },
               ),
             );

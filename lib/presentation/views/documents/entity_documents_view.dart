@@ -39,6 +39,8 @@ import 'package:projects/domain/controllers/discussions/discussion_item_controll
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/discussions_documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -51,57 +53,57 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 
 class EntityDocumentsView extends StatelessWidget {
-  final String folderName;
-  final int folderId;
+  final String? folderName;
+  final int? folderId;
   final DocumentsController documentsController;
 
-  EntityDocumentsView(
-      {Key key, this.folderName, this.folderId, this.documentsController})
+  const EntityDocumentsView(
+      {Key? key, this.folderName, this.folderId, required this.documentsController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return DocumentsScreen(
       controller: documentsController,
       scrollController: scrollController,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 50),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
-            title: _DocsTitle(controller: documentsController),
-            showBackButton: false,
-            titleHeight: 50,
-            elevation: value,
-          ),
-        ),
-      ),
+      appBar: documentsController.itemList.isNotEmpty ||
+              documentsController.filterController.hasFilters.value
+          ? PreferredSize(
+              preferredSize: const Size(double.infinity, 50),
+              child: ValueListenableBuilder(
+                valueListenable: elevation,
+                builder: (_, double value, __) => StyledAppBar(
+                  title: _DocsTitle(controller: documentsController),
+                  showBackButton: false,
+                  titleHeight: 50,
+                  elevation: value,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
 
 class TaskDocumentsView extends StatelessWidget {
-  final String folderName;
-  final int folderId;
+  final String? folderName;
+  final int? folderId;
   final DocumentsController documentsController;
 
-  TaskDocumentsView(
-      {Key key, this.folderName, this.folderId, this.documentsController})
+  TaskDocumentsView({Key? key, this.folderName, this.folderId, required this.documentsController})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return DocumentsScreen(
       controller: documentsController,
@@ -110,7 +112,7 @@ class TaskDocumentsView extends StatelessWidget {
         preferredSize: const Size(double.infinity, 0),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             showBackButton: false,
             titleHeight: 0,
             elevation: value,
@@ -122,29 +124,28 @@ class TaskDocumentsView extends StatelessWidget {
 }
 
 class DiscussionsDocumentsView extends StatelessWidget {
-  final List<PortalFile> files;
-  DiscussionsDocumentsView({Key key, this.files}) : super(key: key);
+  final List<PortalFile>? files;
+  DiscussionsDocumentsView({Key? key, this.files}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final documentsController = Get.find<DiscussionsDocumentsController>();
     final discussionController = Get.find<DiscussionItemController>();
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Obx(
       () {
         if (discussionController.loaded.value == true) {
-          documentsController.setupFiles(files);
+          documentsController.setupFiles(files!);
           return PreferredSize(
             preferredSize: const Size(double.infinity, 101),
             child: ValueListenableBuilder(
               valueListenable: elevation,
-              builder: (_, value, __) => DocumentsScreen(
+              builder: (_, double value, __) => DocumentsScreen(
                 controller: documentsController,
                 scrollController: scrollController,
                 appBar: StyledAppBar(
@@ -164,26 +165,115 @@ class DiscussionsDocumentsView extends StatelessWidget {
 }
 
 class _DocsTitle extends StatelessWidget {
-  const _DocsTitle({Key key, @required this.controller}) : super(key: key);
-  final controller;
+  const _DocsTitle({Key? key, required this.controller}) : super(key: key);
+  final DocumentsController controller;
   @override
   Widget build(BuildContext context) {
-    var sortButton = Container(
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          _ProjectDocumentsSortButton(controller: controller),
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                InkResponse(
+                  onTap: () {
+                    Get.find<NavigationController>()
+                        .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                      'folderName': controller.screenName.value,
+                      'folderId': controller.currentFolder,
+                      'entityType': controller.entityType,
+                    });
+                  },
+                  child: AppIcon(
+                    width: 24,
+                    height: 24,
+                    icon: SvgIcons.search,
+                    color: Get.theme.colors().primary,
+                  ),
+                ),
+                const SizedBox(width: 24),
+                InkResponse(
+                  onTap: () async => Get.find<NavigationController>().toScreen(
+                      const DocumentsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController}),
+                  child: FiltersButton(controler: controller),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ProjectDocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _ProjectDocumentsSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final DocumentsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
       padding: const EdgeInsets.only(right: 4),
       child: InkResponse(
-        onTap: () {
-          Get.bottomSheet(
-            SortView(sortOptions: DocumentsSortOption(controller: controller)),
-            isScrollControlled: true,
-          );
+        onTap: () async {
+          if (Get.find<PlatformController>().isMobile) {
+            await Get.bottomSheet(
+              SortView(sortOptions: DocumentsSortOption(controller: controller)),
+              isScrollControlled: true,
+            );
+          } else {
+            final options = [
+              SortTile(
+                sortParameter: 'dateandtime',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'create_on',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'AZ',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'type',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'size',
+                sortController: controller.sortController,
+              ),
+              SortTile(
+                sortParameter: 'author',
+                sortController: controller.sortController,
+              ),
+            ];
+
+            await showPopupMenu(
+              context: context,
+              options: options,
+              offset: const Offset(0, 30),
+            );
+          }
         },
         child: Row(
           children: <Widget>[
             Obx(
               () => Text(
                 controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting
-                    .copyWith(color: Get.theme.colors().primary),
+                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
               ),
             ),
             const SizedBox(width: 8),
@@ -207,58 +297,6 @@ class _DocsTitle extends StatelessWidget {
                     ),
             ),
           ],
-        ),
-      ),
-    );
-
-    return Obx(
-      () => Visibility(
-        visible: controller.itemList.isNotEmpty ||
-            controller.filterController.hasFilters.value == true,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                child: sortButton,
-              ),
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  InkResponse(
-                    onTap: () {
-                      Get.find<NavigationController>().to(DocumentsSearchView(),
-                          preventDuplicates: false,
-                          arguments: {
-                            'folderName': controller.screenName.value,
-                            'folderId': controller.currentFolder,
-                            'entityType': controller.entityType,
-                          });
-                    },
-                    child: AppIcon(
-                      width: 24,
-                      height: 24,
-                      icon: SvgIcons.search,
-                      color: Get.theme.colors().primary,
-                    ),
-                  ),
-                  const SizedBox(width: 24),
-                  InkResponse(
-                    onTap: () async => Get.find<NavigationController>()
-                        .toScreen(const DocumentsFilterScreen(),
-                            preventDuplicates: false,
-                            arguments: {
-                          'filterController': controller.filterController
-                        }),
-                    child: FiltersButton(controler: controller),
-                  ),
-                ],
-              ),
-            ],
-          ),
         ),
       ),
     );

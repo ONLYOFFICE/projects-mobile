@@ -33,12 +33,11 @@
 import 'package:get/get.dart';
 
 abstract class BaseController extends GetxController {
-  String screenName;
+  late String screenName;
   RxList<dynamic> get itemList;
-  var hasFilters = false.obs;
+  final hasFilters = false.obs;
 
-  var showAll = false.obs;
-  var expandedCardView = true.obs;
-
+  final showAll = false.obs;
+  final expandedCardView = true.obs;
   void showSearch() {}
 }

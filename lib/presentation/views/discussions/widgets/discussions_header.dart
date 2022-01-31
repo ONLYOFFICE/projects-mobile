@@ -36,6 +36,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -43,25 +45,11 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DiscussionsHeader extends StatelessWidget {
   final DiscussionsController controller;
-  DiscussionsHeader({Key key, this.controller}) : super(key: key);
+
+  DiscussionsHeader({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        SortTile(
-            sortParameter: 'create_on',
-            sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'title', sortController: controller.sortController),
-        SortTile(
-            sortParameter: 'comments',
-            sortController: controller.sortController),
-        const SizedBox(height: 20)
-      ],
-    );
     return SizedBox(
       height: 44,
       child: Padding(
@@ -71,49 +59,12 @@ class DiscussionsHeader extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.only(right: 4),
-              child: TextButton(
-                onPressed: () => Get.bottomSheet(
-                  SortView(sortOptions: options),
-                  isScrollControlled: true,
-                ),
-                child: Row(
-                  children: [
-                    Obx(
-                      () => Text(
-                        controller.sortController.currentSortTitle.value,
-                        style: TextStyleHelper.projectsSorting
-                            .copyWith(color: Get.theme.colors().primary),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Obx(
-                      () => (controller.sortController.currentSortOrder ==
-                              'ascending')
-                          ? AppIcon(
-                              icon: SvgIcons.sorting_4_ascend,
-                              color: Get.theme.colors().primary,
-                              width: 20,
-                              height: 20,
-                            )
-                          : Transform(
-                              alignment: Alignment.center,
-                              transform: Matrix4.rotationX(math.pi),
-                              child: AppIcon(
-                                icon: SvgIcons.sorting_4_ascend,
-                                color: Get.theme.colors().primary,
-                                width: 20,
-                                height: 20,
-                              ),
-                            ),
-                    ),
-                  ],
-                ),
-              ),
+              child: _DiscussionSortButton(controller: controller),
             ),
             Obx(
               () => Text(
                 tr('total', args: [
-                  controller.paginationController.total.value.toString()
+                  controller.paginationController!.total.value.toString()
                 ]),
                 style: TextStyleHelper.body2(
                   color: Get.theme.colors().onSurface.withOpacity(0.6),
@@ -122,6 +73,87 @@ class DiscussionsHeader extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _DiscussionSortButton extends StatelessWidget with ShowPopupMenuMixin {
+  const _DiscussionSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final DiscussionsController controller;
+
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(
+          sortParameter: 'create_on',
+          sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'title', sortController: controller.sortController),
+      SortTile(
+          sortParameter: 'comments', sortController: controller.sortController),
+    ];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        if (Get.find<PlatformController>().isMobile) {
+          final options = Column(
+            children: [
+              const SizedBox(height: 14.5),
+              const Divider(height: 9, thickness: 1),
+              ..._getSortTile(),
+              const SizedBox(height: 20)
+            ],
+          );
+
+          await Get.bottomSheet(
+            SortView(sortOptions: options),
+            isScrollControlled: true,
+          );
+        } else {
+          await showPopupMenu(
+            context: context,
+            options: _getSortTile(),
+            offset: const Offset(0, 40),
+          );
+        }
+      },
+      child: Row(
+        children: [
+          Obx(
+            () => Text(
+              controller.sortController.currentSortTitle.value,
+              style: TextStyleHelper.projectsSorting
+                  .copyWith(color: Get.theme.colors().primary),
+            ),
+          ),
+          const SizedBox(width: 8),
+          Obx(
+            () => (controller.sortController.currentSortOrder == 'ascending')
+                ? AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  )
+                : Transform(
+                    alignment: Alignment.center,
+                    transform: Matrix4.rotationX(math.pi),
+                    child: AppIcon(
+                      icon: SvgIcons.sorting_4_ascend,
+                      color: Get.theme.colors().primary,
+                      width: 20,
+                      height: 20,
+                    ),
+                  ),
+          ),
+        ],
       ),
     );
   }

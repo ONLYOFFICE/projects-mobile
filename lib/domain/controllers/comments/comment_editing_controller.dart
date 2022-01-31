@@ -40,10 +40,10 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class CommentEditingController extends GetxController {
-  final _api = locator<CommentsService>();
-  final String commentBody;
-  final String commentId;
-  final CommentItemController itemController;
+  final CommentsService _api = locator<CommentsService>();
+  final String? commentBody;
+  final String? commentId;
+  final CommentItemController? itemController;
 
   CommentEditingController({
     this.commentBody,
@@ -58,7 +58,7 @@ class CommentEditingController extends GetxController {
   HtmlEditorController get textController => _textController;
 
   Future<void> confirm() async {
-    var text = await _textController.getText();
+    final text = await _textController.getText();
 
     if (text.isEmpty) {
       setTitleError.value = true;
@@ -69,20 +69,20 @@ class CommentEditingController extends GetxController {
       return;
     }
 
-    var result = await _api.updateComment(
-      commentId: commentId,
+    final result = await _api.updateComment(
+      commentId: commentId!,
       content: text,
     );
     if (result != null) {
-      itemController.comment.value.commentBody = result;
+      itemController!.comment!.value.commentBody = result as String;
       Get.back();
     } else {
-      debugPrint(result);
+      debugPrint(result as String);
     }
   }
 
-  void leavePage() async {
-    var text = await _textController.getText();
+  Future<void> leavePage() async {
+    final text = await _textController.getText();
     if (text != commentBody) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('discardChanges'),

@@ -30,29 +30,32 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
-import 'package:projects/data/models/tag_itemDTO.dart';
+import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectTagsController extends GetxController {
-  final _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
   final _userController = Get.find<UserController>()..getUserInfo();
 
-  var usersList = [].obs;
-  var loaded = true.obs;
+  final searchInputController = TextEditingController();
 
-  var isSearchResult = false.obs;
+  RxList usersList = [].obs;
+  RxBool loaded = true.obs;
+
+  RxBool isSearchResult = false.obs;
 
   RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
+  RxList<TagItemDTO> filteredTags = <TagItemDTO>[].obs;
 
-  RxList<String> projectDetailedTags = <String>[].obs;
+  RxList<String?> projectDetailedTags = <String>[].obs;
 
   var _projController;
 
-  var fabIsVisible = false.obs;
+  RxBool fabIsVisible = false.obs;
 
   void onLoading() async {}
 
@@ -61,35 +64,36 @@ class ProjectTagsController extends GetxController {
     loaded.value = false;
     tags.clear();
     projectDetailedTags.clear();
-    var allTags = await _api.getProjectTags();
+    final allTags = await _api.getProjectTags();
 
     if (projController?.tags != null) {
-      for (var value in projController?.tags) {
-        projectDetailedTags.add(value);
+      for (final value in projController?.tags) {
+        projectDetailedTags.add(value as String?);
       }
     }
 
     if (allTags != null) {
-      for (var tag in allTags) {
-        var isSelected = projectDetailedTags?.contains(tag.title)?.obs;
+      for (final tag in allTags) {
+        final isSelected = projectDetailedTags.contains(tag.title).obs;
 
         tags.add(TagItemDTO(isSelected: isSelected, tag: tag));
+        filteredTags.add(TagItemDTO(isSelected: isSelected, tag: tag));
       }
     }
 
-    fabIsVisible.value = _userController.user.isAdmin ||
-        _userController.user.isOwner ||
-        (_userController.user.listAdminModules != null &&
-            _userController.user.listAdminModules.contains('projects'));
+    fabIsVisible.value = _userController.user!.isAdmin! ||
+        _userController.user!.isOwner! ||
+        (_userController.user!.listAdminModules != null &&
+            _userController.user!.listAdminModules!.contains('projects'));
 
     loaded.value = true;
   }
 
   Future<void> confirm() async {
     _projController.tags.clear();
-    for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
+    for (final tag in tags) {
+      if (tag.isSelected!.value) {
+        _projController.tags.add(tag.tag!.title);
       }
     }
     _projController.tagsText.value = _projController.tags.join(', ');
@@ -97,20 +101,36 @@ class ProjectTagsController extends GetxController {
   }
 
   Future changeTagSelection(TagItemDTO tag) async {
-    tag.isSelected.value = !tag.isSelected.value;
+    tag.isSelected!.value = !tag.isSelected!.value;
 
-    _projController.tags.clear();
-    for (var tag in tags) {
-      if (tag.isSelected.value) {
-        _projController.tags.add(tag.tag.title);
-      }
-    }
-
-    _projController.tagsText.value = _projController.tags.join(', ');
+    final index = tags.indexWhere((element) => element.tag!.id == tag.tag!.id);
+    tags[index].isSelected?.value = tag.isSelected!.value;
   }
 
   Future<void> createTag(String value) async {
-    var res = await _api.createTag(name: value);
+    final res = await _api.createTag(name: value);
     if (res != null) await setup(_projController);
+  }
+
+  void newSearch(String searchValue) {
+    if (searchValue.isNotEmpty) {
+      filteredTags.clear();
+      final filter = tags
+          .where((tagItem) => tagItem.tag!.title!.toLowerCase().contains(searchValue.toLowerCase()))
+          .toList();
+      for (final tag in filter) {
+        filteredTags.add(tag);
+      }
+    } else {
+      clearSearch();
+    }
+  }
+
+  void clearSearch() {
+    searchInputController.clear();
+    filteredTags.clear();
+    for (final tag in tags) {
+      filteredTags.add(tag);
+    }
   }
 }

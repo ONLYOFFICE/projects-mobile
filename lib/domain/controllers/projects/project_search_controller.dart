@@ -30,8 +30,11 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_detailed.dart';
 
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -41,30 +44,32 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class ProjectSearchController extends GetxController {
   static const PAGINATION_LENGTH = 25;
 
-  final _api = locator<ProjectService>();
-  final onlyMyProjects;
+  final ProjectService _api = locator<ProjectService>();
+  final bool onlyMyProjects;
 
   ProjectSearchController({this.onlyMyProjects = false});
 
-  var searchResult = [].obs;
-  var loaded = true.obs;
-  var searchInputController = TextEditingController();
+  var searchResult = <ProjectDetailed>[].obs;
+  RxBool loaded = true.obs;
+  TextEditingController searchInputController = TextEditingController();
 
-  var nothingFound = false.obs;
+  RxBool nothingFound = false.obs;
   // for select project view
-  var switchToSearchView = false.obs;
-  var _startIndex;
-  var _query;
+  RxBool switchToSearchView = false.obs;
+  int _startIndex = 0;
+  late String _query;
   var _selfId;
 
   bool get pullUpEnabled => searchResult.length >= PAGINATION_LENGTH;
 
+  Timer? _searchDebounce;
+
   RefreshController refreshController = RefreshController();
 
-  var _totalProjects;
+  int _totalProjects = 0;
 
   @override
-  void onInit() async {
+  Future<void> onInit() async {
     if (onlyMyProjects) {
       _selfId = await Get.find<UserController>().getUserId();
       _query = '&participant=$_selfId';
@@ -72,39 +77,46 @@ class ProjectSearchController extends GetxController {
     super.onInit();
   }
 
-  void onLoading() async {
+  Future<void> onLoading() async {
     _startIndex += PAGINATION_LENGTH;
     if (_startIndex >= _totalProjects) {
       refreshController.loadComplete();
       _startIndex -= PAGINATION_LENGTH;
       return;
     }
-    _performSearch();
+    await _performSearch();
     refreshController.loadComplete();
   }
 
-  void newSearch(query) {
-    _query = query;
-    if (onlyMyProjects) _query += '&participant=$_selfId';
-    _startIndex = 0;
-    _performSearch();
+  void newSearch(String query) {
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      if (_query != query) {
+        _query = query;
+        if (onlyMyProjects) _query += '&participant=$_selfId';
+        _startIndex = 0;
+       await _performSearch();
+      }
+    });
   }
 
-  void _performSearch() async {
+  Future<void> _performSearch() async {
     loaded.value = false;
     nothingFound.value = false;
     switchToSearchView.value = true;
     searchResult.clear();
 
-    var result = await _api.getProjectsByParams(
-        startIndex: _startIndex, query: _query.toLowerCase());
+    final result =
+        await _api.getProjectsByParams(startIndex: _startIndex, query: _query.toLowerCase());
 
-    _totalProjects = result.total;
+    if (result != null) {
+      _totalProjects = result.total;
 
-    if (result.response.isEmpty) {
-      nothingFound.value = true;
-    } else {
-      searchResult.addAll(result.response);
+      if (result.response!.isEmpty) {
+        nothingFound.value = true;
+      } else {
+        searchResult.addAll(result.response ?? <ProjectDetailed>[]);
+      }
     }
     loaded.value = true;
   }

@@ -34,7 +34,8 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
+import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
@@ -42,61 +43,30 @@ import 'package:projects/domain/security.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class FileCell extends StatelessWidget {
-  final int index;
+  final FileCellController cellController;
+  final DocumentsController documentsController;
 
-  final PortalFile entity;
-  final controller;
-
-  const FileCell({
-    Key key,
-    @required this.entity,
-    @required this.index,
-    @required this.controller,
-  }) : super(key: key);
+  const FileCell({Key? key, required this.documentsController, required this.cellController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () async {
-        await controller.openFile(entity);
+        await cellController.openFile(cellController.file);
       },
-      child: Container(
+      child: SizedBox(
         height: 72,
         child: Row(
           children: [
             SizedBox(
               width: 72,
               child: Center(
-                child: Obx(() {
-                  if (controller.paginationController.data[index].fileType == 7)
-                    return AppIcon(width: 20, height: 20, icon: SvgIcons.doc);
-                  if (controller.paginationController.data[index].fileType == 5)
-                    return AppIcon(width: 20, height: 20, icon: SvgIcons.table);
-
-                  if (controller.paginationController.data[index].fileType == 1)
-                    return AppIcon(
-                      width: 20,
-                      height: 20,
-                      icon: SvgIcons.archive,
-                      color: Get.theme.colors().onSurface,
-                    );
-                  if (controller.paginationController.data[index].fileType == 4)
-                    return AppIcon(width: 20, height: 20, icon: SvgIcons.image);
-                  if (controller.paginationController.data[index].fileType == 6)
-                    return AppIcon(
-                        width: 20, height: 20, icon: SvgIcons.presentation);
-
-                  return AppIcon(
-                      width: 20,
-                      height: 20,
-                      icon: SvgIcons.documents,
-                      color: Get.theme.colors().onSurface.withOpacity(0.6));
-                }),
+                child: Obx(() => cellController.fileIcon.value),
               ),
             ),
             Expanded(
@@ -105,16 +75,15 @@ class FileCell extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Flexible(
-                    child: Text(entity.title.replaceAll(' ', '\u00A0'),
+                    child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyleHelper.projectTitle),
                   ),
                   Text(
-                      '${formatedDate(entity.updated)} • ${entity.contentLength} • ${entity.createdBy.displayName}',
+                      '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
                       style: TextStyleHelper.caption(
-                          color:
-                              Get.theme.colors().onSurface.withOpacity(0.6))),
+                          color: Get.theme.colors().onSurface.withOpacity(0.6))),
                 ],
               ),
             ),
@@ -123,11 +92,10 @@ class FileCell extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PopupMenuButton(
-                  onSelected: (value) => {
-                    _onFilePopupMenuSelected(value, entity, context, controller)
+                  onSelected: (dynamic value) => {
+                    _onFilePopupMenuSelected(value, context, documentsController, cellController)
                   },
-                  icon: Icon(Icons.more_vert,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -142,28 +110,27 @@ class FileCell extends StatelessWidget {
                         value: 'download',
                         child: Text(tr('download')),
                       ),
-                      if (Security.files.canEdit(entity))
+                      if (Security.files.canEdit(cellController.file))
                         PopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
-                      if (Security.files.canDelete(entity))
+                      if (Security.files.canDelete(cellController.file))
                         PopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
-                      if (Security.files.canEdit(entity))
+                      if (Security.files.canEdit(cellController.file))
                         PopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
                         ),
-                      if (Security.files.canDelete(entity))
+                      if (Security.files.canDelete(cellController.file))
                         PopupMenuItem(
                           value: 'delete',
                           child: Text(
                             tr('delete'),
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
                           ),
                         ),
                     ];
@@ -178,54 +145,53 @@ class FileCell extends StatelessWidget {
   }
 }
 
-void _onFilePopupMenuSelected(
-  value,
-  PortalFile selectedFile,
-  BuildContext context,
-  controller,
-) async {
+Future<void> _onFilePopupMenuSelected(value, BuildContext context,
+    DocumentsController documentsController, FileCellController cellController) async {
   switch (value) {
     case 'copyLink':
-      var portalDomain = controller.portalInfoController.portalUri;
+      final portalDomain = documentsController.portalInfoController.portalUri;
 
-      var link =
-          '${portalDomain}Products/Files/DocEditor.aspx?fileid=${selectedFile.id.toString()}';
+      if (portalDomain != null && cellController.file.id != null) {
+        final link =
+            '$portalDomain/Products/Files/DocEditor.aspx?fileid=${cellController.file.id.toString()}';
 
-      if (link != null) {
-        await Clipboard.setData(ClipboardData(text: link));
-        MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        if (link.isURL) {
+          await Clipboard.setData(ClipboardData(text: link));
+          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        } else
+          MessagesHandler.showSnackBar(context: context, text: tr('error'));
       }
       break;
     case 'open':
-      await controller.openFile(selectedFile);
+      await cellController.openFile(cellController.file);
       break;
     case 'download':
-      await controller.downloadFile(selectedFile.viewUrl);
+      await cellController.downloadFile(cellController.file.viewUrl!);
       break;
     case 'copy':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
-        'target': selectedFile.id,
-        'initialFolderId': controller.currentFolder,
-        'refreshCalback': controller.refreshContent
+        'target': cellController.file.id,
+        'initialFolderId': documentsController.currentFolder,
+        'refreshCalback': documentsController.refreshContent
       });
       break;
     case 'move':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
-        'target': selectedFile.id,
-        'initialFolderId': controller.currentFolder,
-        'refreshCalback': controller.refreshContent
+        'target': cellController.file.id,
+        'initialFolderId': documentsController.currentFolder,
+        'refreshCalback': documentsController.refreshContent
       });
 
       break;
     case 'rename':
-      _renameFile(controller, selectedFile, context);
+      _renameFile(documentsController, cellController, context);
       break;
     case 'delete':
-      var success = await controller.deleteFile(selectedFile);
+      final success = await cellController.deleteFile(cellController.file);
 
       if (success) {
         MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
@@ -236,12 +202,12 @@ void _onFilePopupMenuSelected(
 }
 
 void _renameFile(
-  controller,
-  PortalFile element,
+  DocumentsController docController,
+  FileCellController cellController,
   BuildContext context,
 ) {
-  var inputController = TextEditingController();
-  inputController.text = element.title.replaceAll(element.fileExst, '');
+  final inputController = TextEditingController();
+  inputController.text = cellController.file.title!.replaceAll(cellController.file.fileExst!, '');
 
   Get.dialog(
     StyledAlertDialog(
@@ -252,18 +218,17 @@ void _renameFile(
         controller: inputController,
         decoration: InputDecoration.collapsed(hintText: tr('enterFileName')),
         onSubmitted: (value) {
-          controller.newSearch(value);
+          docController.newSearch(value);
         },
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
       onAcceptTap: () async {
-        if (inputController.text != element.title) {
-          var success =
-              await controller.renameFile(element, inputController.text);
+        if (inputController.text != cellController.file.title) {
+          final success =
+              await cellController.renameFile(cellController.file, inputController.text);
           if (success) {
-            MessagesHandler.showSnackBar(
-                context: context, text: tr('fileRenamed'));
+            MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
             Get.back();
           }
         } else

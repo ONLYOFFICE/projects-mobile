@@ -34,17 +34,17 @@ import 'package:flutter/material.dart';
 
 class CellAtributedTitle extends StatelessWidget {
   const CellAtributedTitle({
-    Key key,
-    @required this.text,
-    @required this.style,
-    @required this.atributeIcon,
-    @required this.atributeIconVisible,
+    Key? key,
+    required this.text,
+    required this.style,
+    required this.atributeIcon,
+    required this.atributeIconVisible,
   }) : super(key: key);
 
-  final String text;
+  final String? text;
   final TextStyle style;
   final Widget atributeIcon;
-  final bool atributeIconVisible;
+  final bool? atributeIconVisible;
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +52,11 @@ class CellAtributedTitle extends StatelessWidget {
       TextSpan(
         style: style,
         children: [
-          if (atributeIconVisible)
+          if (atributeIconVisible!)
             WidgetSpan(
                 child: atributeIcon, alignment: PlaceholderAlignment.middle),
-          if (atributeIconVisible) TextSpan(text: ' $text'),
-          if (!atributeIconVisible) TextSpan(text: text),
+          if (atributeIconVisible!) TextSpan(text: ' $text'),
+          if (!atributeIconVisible!) TextSpan(text: text),
         ],
       ),
       overflow: TextOverflow.ellipsis,

@@ -33,6 +33,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html_editor_enhanced/html_editor.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -41,8 +42,8 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 
 class NewDiscussionTextScreen extends StatelessWidget {
   const NewDiscussionTextScreen({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final DiscussionActionsController controller;
@@ -57,25 +58,22 @@ class NewDiscussionTextScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           titleText: tr('text'),
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
               : const Icon(Icons.close),
           onLeadingPressed: controller.leaveTextView,
           actions: [
-            IconButton(
-                icon: const Icon(Icons.check_rounded),
-                onPressed: controller.confirmText)
+            IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirmText)
           ],
         ),
         body: HtmlTextEditor(
           initialText: controller.text.value,
-          textController: controller.textController,
+          // ignore: unnecessary_cast
+          textController: controller.textController as HtmlEditorController,
           hintText: tr('discussionText'),
         ),
       ),

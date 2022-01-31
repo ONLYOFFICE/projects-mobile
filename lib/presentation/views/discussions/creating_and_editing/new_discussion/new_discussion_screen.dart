@@ -35,25 +35,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/new_discussion_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
 
 class NewDiscussionScreen extends StatelessWidget {
-  const NewDiscussionScreen({Key key}) : super(key: key);
+  const NewDiscussionScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var projectId;
-    var projectTitle;
+    final projectId = Get.arguments?['projectId'] as int?;
+    final projectTitle = Get.arguments?['projectTitle'] as String?;
 
-    try {
-      projectId = Get.arguments['projectId'];
-      projectTitle = Get.arguments['projectTitle'];
-    } catch (_) {}
-
-    var controller = Get.put(NewDiscussionController(
+    final controller = Get.put(NewDiscussionController(
       projectId: projectId,
       projectTitle: projectTitle,
     ));
@@ -68,8 +64,7 @@ class NewDiscussionScreen extends StatelessWidget {
           titleText: tr('newDiscussion'),
           actions: [
             IconButton(
-                onPressed: () => controller.confirm(context),
-                icon: const Icon(Icons.done_rounded))
+                onPressed: () => controller.confirm(context), icon: const Icon(Icons.done_rounded))
           ],
           onLeadingPressed: controller.discardDiscussion,
         ),
@@ -77,10 +72,10 @@ class NewDiscussionScreen extends StatelessWidget {
           child: Column(
             children: [
               DiscussionTitleTextField(controller: controller),
+              const StyledDivider(leftPadding: 72.5),
               Listener(
                 onPointerDown: (_) {
-                  if (controller.title.isNotEmpty &&
-                      controller.titleFocus.hasFocus)
+                  if (controller.title.isNotEmpty && controller.titleFocus.hasFocus)
                     controller.titleFocus.unfocus();
                 },
                 child: Column(

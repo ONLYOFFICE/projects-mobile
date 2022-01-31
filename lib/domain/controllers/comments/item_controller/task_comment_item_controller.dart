@@ -45,55 +45,52 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comment_editing_view.dart';
 
-class TaskCommentItemController extends GetxController
-    implements CommentItemController {
-  final _api = locator<CommentsService>();
+class TaskCommentItemController extends GetxController implements CommentItemController {
+  final CommentsService _api = locator<CommentsService>();
 
   @override
-  final Rx<PortalComment> comment;
-  final int taskId;
+  Rx<PortalComment>? comment;
+  final int? taskId;
+
   TaskCommentItemController({this.comment, this.taskId});
 
   @override
-  Future<void> copyLink(context) async {
-    var projectId = Get.find<TaskItemController>(tag: taskId.toString())
-        .task
-        .value
-        .projectOwner
-        .id;
+  Future<void> copyLink() async {
+    final projectId =
+        Get.find<TaskItemController>(tag: taskId.toString()).task.value.projectOwner!.id;
 
-    var link = await _api.getTaskCommentLink(
-      commentId: comment.value.commentId,
-      taskId: taskId,
-      projectId: projectId,
+    final link = await _api.getTaskCommentLink(
+      commentId: comment!.value.commentId!,
+      taskId: taskId!,
+      projectId: projectId!,
     );
 
-    if (link != null) {
+    if (link.isURL) {
       await Clipboard.setData(ClipboardData(text: link));
-      MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
-    }
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   @override
-  Future<void> deleteComment(context) async {
+  Future<void> deleteComment() async {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('deleteCommentTitle'),
       contentText: tr('deleteCommentWarning'),
       acceptText: tr('delete').toUpperCase(),
       onCancelTap: Get.back,
       onAcceptTap: () async {
-        var response =
-            await _api.deleteComment(commentId: comment.value.commentId);
+        final response = await _api.deleteComment(commentId: comment!.value.commentId!);
         if (response != null) {
           Get.back();
 
           locator<EventHub>().fire('needToRefreshParentTask', [taskId, true]);
 
           MessagesHandler.showSnackBar(
-            context: context,
+            context: Get.context!,
             text: tr('commentDeleted'),
             buttonText: tr('confirm'),
-            buttonOnTap: ScaffoldMessenger.of(context).hideCurrentSnackBar,
+            buttonOnTap: ScaffoldMessenger.of(Get.context!).hideCurrentSnackBar,
           );
         }
       },
@@ -103,8 +100,8 @@ class TaskCommentItemController extends GetxController
   @override
   void toCommentEditingView() {
     Get.find<NavigationController>().to(const CommentEditingView(), arguments: {
-      'commentId': comment.value.commentId,
-      'commentBody': comment.value.commentBody,
+      'commentId': comment!.value.commentId,
+      'commentBody': comment!.value.commentBody,
       'itemController': this,
     });
   }

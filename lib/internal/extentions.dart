@@ -35,7 +35,7 @@ import 'package:intl/intl.dart';
 import 'package:flutter/widgets.dart';
 
 extension CustomList<T> on List<T> {
-  static T firstOrNull<T>(List<T> list) {
+  static T? firstOrNull<T>(List<T> list) {
     if (list.isEmpty) {
       return null;
     } else {
@@ -44,28 +44,28 @@ extension CustomList<T> on List<T> {
   }
 }
 
-String formatedDateFromString({DateTime now, String stringDate}) {
-  var date = DateTime.tryParse(stringDate.split('T')[0]);
+String formatedDateFromString({required DateTime now, required String stringDate}) {
+  final date = DateTime.tryParse(stringDate.split('T')[0])!;
 
   if (now.year == date.year) {
-    final formatter = DateFormat.MMMMd(Get.locale.languageCode);
+    final formatter = DateFormat.MMMMd(Get.locale!.languageCode);
     return formatter.format(date);
   } else {
-    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
+    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
 
     return formatter.format(date);
   }
 }
 
-String formatedDate(DateTime date, {DateTime now}) {
+String formatedDate(DateTime date, {DateTime? now}) {
   now ??= DateTime.now();
 
   if (now.year == date.year) {
-    final formatter = DateFormat.MMMMd(Get.locale.languageCode);
+    final formatter = DateFormat.MMMMd(Get.locale!.languageCode);
     // final formatter = DateFormat('d MMM');
     return formatter.format(date);
   } else {
-    final formatter = DateFormat.yMMMMd(Get.locale.languageCode);
+    final formatter = DateFormat.yMMMMd(Get.locale!.languageCode);
     // final formatter = DateFormat('d MMM yyy');
     return formatter.format(date);
   }
@@ -84,4 +84,8 @@ extension ColorExtension on String {
       return const Color(0xff000000);
     }
   }
+}
+
+extension Extension on String? {
+  bool isNullOrEmpty() => (this ?? '') == '';
 }

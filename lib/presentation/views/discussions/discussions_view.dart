@@ -34,9 +34,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
@@ -50,27 +52,26 @@ import 'package:projects/presentation/views/discussions/filter/discussions_filte
 import 'package:projects/presentation/views/discussions/widgets/discussions_header.dart';
 
 class PortalDiscussionsView extends StatelessWidget {
-  const PortalDiscussionsView({Key key}) : super(key: key);
+  const PortalDiscussionsView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<DiscussionsController>();
+    final controller = Get.find<DiscussionsController>();
 
-    SchedulerBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
     });
 
-    var scrollController = ScrollController();
-    var elevation = ValueNotifier<double>(0);
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
 
-    scrollController.addListener(
-        () => elevation.value = scrollController.offset > 2 ? 1 : 0);
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size(double.infinity, 101),
         child: ValueListenableBuilder(
           valueListenable: elevation,
-          builder: (_, value, __) => StyledAppBar(
+          builder: (_, double value, __) => StyledAppBar(
             titleHeight: 101,
             bottomHeight: 0,
             showBackButton: false,
@@ -89,12 +90,10 @@ class PortalDiscussionsView extends StatelessWidget {
               ),
               IconButton(
                   icon: FiltersButton(controler: controller),
-                  onPressed: () async => Get.find<NavigationController>()
-                          .toScreen(const DiscussionsFilterScreen(),
-                              preventDuplicates: false,
-                              arguments: {
-                            'filterController': controller.filterController
-                          })),
+                  onPressed: () async => Get.find<NavigationController>().toScreen(
+                      const DiscussionsFilterScreen(),
+                      preventDuplicates: false,
+                      arguments: {'filterController': controller.filterController})),
               const SizedBox(width: 3),
             ],
             bottom: DiscussionsHeader(
@@ -115,8 +114,7 @@ class PortalDiscussionsView extends StatelessWidget {
           ),
         ),
       ),
-      body: DiscussionsList(
-          controller: controller, scrollController: scrollController),
+      body: DiscussionsList(controller: controller, scrollController: scrollController),
     );
   }
 }
@@ -125,9 +123,9 @@ class DiscussionsList extends StatelessWidget {
   final controller;
   final ScrollController scrollController;
   const DiscussionsList({
-    Key key,
-    @required this.controller,
-    @required this.scrollController,
+    Key? key,
+    required this.controller,
+    required this.scrollController,
   }) : super(key: key);
 
   @override
@@ -136,48 +134,50 @@ class DiscussionsList extends StatelessWidget {
     // where there are no filters yet
     var hasFilters = false;
     try {
-      hasFilters = controller?.filterController?.hasFilters?.value;
+      hasFilters = controller?.filterController?.hasFilters?.value as bool;
     } catch (_) {}
 
     return Obx(() {
-      if (controller.loaded == false) {
+      if (!(controller.loaded.value as bool)) {
         return const ListLoadingSkeleton();
-      } else {
-        if (controller.paginationController.data.isEmpty && hasFilters)
-          return Center(
-            child: EmptyScreen(
-              icon: SvgIcons.not_found,
-              text: tr('noDiscussionsMatching'),
-            ),
-          );
-
-        if (controller.paginationController.data.isEmpty)
-          return Center(
-            child: EmptyScreen(
-              icon: SvgIcons.comments_not_created,
-              text: tr('noDiscussionsCreated'),
-            ),
-          );
-
-        return PaginationListView(
-          paginationController: controller.paginationController,
-          child: ListView.separated(
-            itemCount: controller.paginationController.data.length,
-            padding: const EdgeInsets.only(bottom: 65),
-            controller: scrollController,
-            separatorBuilder: (BuildContext context, int index) {
-              return const SizedBox(height: 12);
-            },
-            itemBuilder: (BuildContext context, int index) {
-              return DiscussionTile(
-                discussion: controller.paginationController.data[index],
-                onTap: () => controller
-                    .toDetailed(controller.paginationController.data[index]),
-              );
-            },
-          ),
-        );
       }
+      return PaginationListView(
+          paginationController: controller.paginationController as PaginationController,
+          child: () {
+            if (controller.loaded.value as bool &&
+                controller.paginationController.data.isEmpty as bool &&
+                hasFilters)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.not_found,
+                  text: tr('noDiscussionsMatching'),
+                ),
+              );
+            if (controller.loaded.value as bool &&
+                controller.paginationController.data.isEmpty as bool)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.comments_not_created,
+                  text: tr('noDiscussionsCreated'),
+                ),
+              );
+            if (controller.loaded.value as bool &&
+                controller.paginationController.data.isNotEmpty as bool)
+              return ListView.separated(
+                itemCount: controller.paginationController.data.length as int,
+                padding: const EdgeInsets.only(bottom: 65),
+                controller: scrollController,
+                separatorBuilder: (BuildContext context, int index) {
+                  return const SizedBox(height: 12);
+                },
+                itemBuilder: (BuildContext context, int index) {
+                  return DiscussionTile(
+                    discussion: controller.paginationController.data[index] as Discussion,
+                    onTap: () => controller.toDetailed(controller.paginationController.data[index]),
+                  );
+                },
+              );
+          }() as Widget);
     });
   }
 }

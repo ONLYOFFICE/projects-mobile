@@ -33,6 +33,7 @@
  */
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:event_hub/event_hub.dart';
@@ -43,110 +44,131 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/data/services/storage/storage.dart';
-import 'package:projects/domain/controllers/portalInfoController.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/splash_view.dart';
 import 'package:projects/main_view.dart';
+import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/navigation_view.dart';
 import 'package:projects/presentation/views/no_internet_view.dart';
+import 'package:webview_cookie_manager/webview_cookie_manager.dart';
 
 class MainController extends GetxController {
-  final _secureStorage = locator<SecureStorage>();
+  final SecureStorage _secureStorage = locator<SecureStorage>();
   // ignore: unnecessary_cast
   Rx<Widget> mainPage = (const SplashView() as Widget).obs;
 
   // ignore: unnecessary_cast
   final navigationView = NavigationView() as Widget;
   // ignore: unnecessary_cast
-  final portalInputView = PortalInputView() as Widget;
+  Widget portalInputView = AccountManagerView() as Widget;
 
-  var noInternet = false;
-  var isSessionStarted = false;
+  bool noInternet = false;
+  bool isSessionStarted = false;
   bool correctPasscodeChecked = false;
 
-  var subscriptions = <StreamSubscription>[];
+  final subscriptions = <StreamSubscription>[];
 
-  MainController() {
-    Connectivity().checkConnectivity().then((result) => {
-          noInternet = result == ConnectivityResult.none,
-          if (result == ConnectivityResult.none)
-            Get.to(const NoInternetScreen())
-        });
-
-    _setupSubscriptions();
-  }
+  final cookieManager = WebviewCookieManager();
 
   @override
   void onInit() {
+    Connectivity().checkConnectivity().then((result) => {
+          noInternet = result == ConnectivityResult.none,
+          if (result == ConnectivityResult.none) Get.to(const NoInternetScreen())
+        });
+
+    _setupSubscriptions();
+
     super.onInit();
   }
 
-  void _setupSubscriptions() {
-    if (subscriptions.isNotEmpty) {
-      for (var item in subscriptions) {
-        item.cancel();
-      }
-    }
+  @override
+  void onClose() {
+    cancelAllSubscriptions();
+    super.onClose();
+  }
 
-    subscriptions.add(Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+  void _setupSubscriptions() {
+    if (subscriptions.isNotEmpty) cancelAllSubscriptions();
+
+    subscriptions.add(Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
       if (noInternet == (result == ConnectivityResult.none)) return;
       if (result == ConnectivityResult.none) {
         Get.to(const NoInternetScreen());
 
-        locator.get<CoreApi>().cancellationToken?.cancel();
+        locator.get<CoreApi>().cancellationToken.cancel();
       } else {
         GetIt.instance.resetLazySingleton<CoreApi>();
         if (isSessionStarted)
           Get.back();
         else
-          Get.offAll(() => MainView());
+          Get.offAll(() => const MainView());
       }
       noInternet = result == ConnectivityResult.none;
 
       setupMainPage();
     }));
 
-    subscriptions
-        .add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
+    subscriptions.add(locator<EventHub>().on('loginSuccess', (dynamic data) async {
       mainPage.value = navigationView;
-      Get.offAll(() => MainView());
+      Get.offAll(() => const MainView());
       Get.find<UserController>().getUserInfo();
       Get.find<UserController>().getSecurityInfo();
 
       Get.find<PortalInfoController>().setup();
+
+      Get.find<LoginController>().clearInputFields();
     }));
 
-    subscriptions
-        .add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
+    subscriptions.add(locator<EventHub>().on('logoutSuccess', (dynamic data) async {
       mainPage.value = portalInputView;
 
       GetIt.instance.resetLazySingleton<CoreApi>();
-      await Get.offAll(() => MainView());
+      Get.offAll(() => const MainView());
     }));
   }
 
+  void cancelAllSubscriptions() {
+    for (final item in subscriptions) {
+      item.cancel();
+    }
+  }
+
   Future<void> setupMainPage() async {
-    var connection = await Connectivity().checkConnectivity();
+    final connection = await Connectivity().checkConnectivity();
     if (connection == ConnectivityResult.none) return;
 
     isSessionStarted = true;
+    final accountManager = Get.isRegistered<AccountManagerController>()
+        ? Get.find<AccountManagerController>()
+        : Get.put(AccountManagerController());
 
-    isAuthorized().then((isAuthorized) {
+    isAuthorized().then((isAuthorized) async {
       return {
         if (isAuthorized)
           {
-            if (!(mainPage.value is NavigationView))
+            if (mainPage.value is! NavigationView)
               {
                 mainPage.value = navigationView,
               }
           }
-        else if (!(mainPage.value is PortalInputView))
+        else if (mainPage.value is! AccountManagerView)
           {
+            await accountManager.setup(),
+            if (accountManager.accounts.isEmpty)
+              {
+                portalInputView = PortalInputView(),
+              }
+            else
+              {
+                portalInputView = AccountManagerView(),
+              },
             mainPage.value = portalInputView,
           }
       };
@@ -154,28 +176,41 @@ class MainController extends GetxController {
   }
 
   Future<bool> isAuthorized() async {
-    var expirationDate = await _secureStorage.getString('expires');
-    var token = await _secureStorage.getString('token');
-    var portalName = await _secureStorage.getString('portalName');
+    final expirationDate = await _secureStorage.getString('expires');
+    final token = await _secureStorage.getString('token');
+    final portalName = await _secureStorage.getString('portalName');
 
     if (expirationDate == null ||
         expirationDate.isEmpty ||
         token == null ||
         token.isEmpty ||
         portalName == null ||
-        portalName.isEmpty) return false;
+        portalName.isEmpty ||
+        !Uri.parse(portalName).hasAuthority) return false;
 
-    var expiration = DateTime.parse(expirationDate);
+    final expiration = DateTime.parse(expirationDate);
     if (expiration.isBefore(DateTime.now())) return false;
 
-    var isAuthValid = await locator<AuthService>().checkAuthorization();
-    if (!isAuthValid) await logout();
+    final isAuthValid = await locator<AuthService>().checkAuthorization();
+    if (!isAuthValid)
+      await clearLoginData();
+    else {
+      await cookieManager.setCookies([
+        Cookie('asc_auth_key', token)
+          ..domain = Uri.parse(portalName).authority
+          ..expires = DateTime.now().add(const Duration(days: 10))
+          ..httpOnly = false
+      ]);
+
+      await Get.find<AccountManagerController>()
+          .addAccount(tokenString: token, expires: expirationDate);
+    }
 
     return isAuthValid;
   }
 
-  Future<void> logout() async {
-    var storage = locator<Storage>();
+  Future<void> clearLoginData() async {
+    final storage = locator<Storage>();
 
     await _secureStorage.delete('expires');
     await _secureStorage.delete('portalName');
@@ -184,6 +219,10 @@ class MainController extends GetxController {
     await storage.remove('taskFilters');
     await storage.remove('projectFilters');
     await storage.remove('discussionFilters');
+
+    await cookieManager.clearCookies();
+
+    await Get.put(AccountManagerController()).clearToken();
 
     Get.find<PortalInfoController>().logout();
   }

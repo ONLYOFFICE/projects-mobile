@@ -52,12 +52,12 @@ part 'filters/team_member.dart';
 part 'filters/project_manager.dart';
 
 class ProjectsFilterScreen extends StatelessWidget {
-  const ProjectsFilterScreen({Key key}) : super(key: key);
+  const ProjectsFilterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ProjectsFilterController filterController =
-        Get.arguments['filterController'];
+    final filterController =
+        Get.arguments['filterController'] as ProjectsFilterController;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(

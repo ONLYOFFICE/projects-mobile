@@ -453,10 +453,23 @@
 	"taskStatusOpen": "Открыта",
 	"taskStatusClosed": "Закрыта",
 	"searchMilestone": "Поиск вехи...",
-
 	"privacyAndTermsFooter": {
 		"privacyPolicyWithLink": "Политика конфиденциальности",
 		"termsOfServiceWithLink": "Пользовательское соглашение",
 		"total": "Продолжая, вы принимаете @:privacyAndTermsFooter.privacyPolicyWithLink и @:privacyAndTermsFooter.termsOfServiceWithLink"
-	}
+	},
+	"removeAccountTitle": "Удалить аккаунт?",
+	"removeAccountText": "При следующем входе потребуется повторно указать адрес портала, адрес электронной почты и пароль.",
+	"tfaWrongCode": "Неверный код!",
+	"privacyAndTermsAgreement": {
+		"beforeText": "Я соглашаюсь с ",
+		"betweenText": " и "
+	},
+	"portalNotFound": "Портал не найден. Проверьте URL-адрес портала.",
+	"newTagNoTitleErrorMessage": "Каждый тег должен иметь наименование.",
+	"accountDeleted": "Аккаунт удален",
+	"removeAccount": "удалить",
+	"addNewAccount": "Добавить новый аккаунт",
+	"noGroups": "Здесь пока нет групп",
+	"searchTags": "Поиск тегов..."
 }

@@ -31,14 +31,15 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/milestone.dart';
+import 'package:projects/data/services/milestone_service.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/milestone_service.dart';
 
 class MilestonesController extends GetxController {
   final MilestoneService _api = locator<MilestoneService>();
 
-  PaginationController paginationController;
+  late PaginationController paginationController;
 
   @override
   void onInit() {
@@ -53,11 +54,15 @@ class MilestonesController extends GetxController {
 
   RxBool loaded = false.obs;
 
-  var milestones = [].obs;
+  RxList milestones = [].obs;
 
   Future getAllMilestones() async {
     loaded.value = false;
-    milestones.value = await _api.milestonesByFilter();
+
+    final result = await _api.milestonesByFilter();
+    if (result != null) {
+      milestones.value = result;
+    }
     loaded.value = true;
   }
 
@@ -69,14 +74,14 @@ class MilestonesController extends GetxController {
   }
 
   Future _getMilestones({bool needToClear = false}) async {
-    var result = await _api.milestonesByFilterPaginated(
+    final result = await _api.milestonesByFilterPaginated(
       startIndex: paginationController.startIndex,
     );
 
     if (result != null) {
       paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response);
+      paginationController.data.addAll(result.response ?? <Milestone>[]);
     }
   }
 
@@ -86,17 +91,3 @@ class MilestonesController extends GetxController {
     loaded.value = true;
   }
 }
-
-// class MilestonesController extends GetxController {
-//   final _api = locator<MilestoneService>();
-
-//   var milestones = <Milestone>[].obs;
-
-//   RxBool loaded = false.obs;
-
-//   Future getMilestonesByFilter() async {
-//     loaded.value = false;
-//     milestones.value = await _api.milestonesByFilter();
-//     loaded.value = true;
-//   }
-// }

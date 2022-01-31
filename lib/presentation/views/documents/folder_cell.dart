@@ -51,13 +51,13 @@ import 'package:projects/presentation/views/documents/documents_view.dart';
 
 class FolderCell extends StatelessWidget {
   const FolderCell({
-    Key key,
-    @required this.entity,
-    @required this.controller,
+    Key? key,
+    required this.entity,
+    required this.controller,
   }) : super(key: key);
 
   final Folder entity;
-  final controller;
+  final DocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +67,7 @@ class FolderCell extends StatelessWidget {
             preventDuplicates: false,
             arguments: {'folderName': entity.title, 'folderId': entity.id});
       },
-      child: Container(
+      child: SizedBox(
         height: 72,
         child: Row(
           children: [
@@ -78,14 +78,13 @@ class FolderCell extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: PopupMenuButton(
-                  onSelected: (value) => _onFolderPopupMenuSelected(
+                  onSelected: (dynamic value) => _onFolderPopupMenuSelected(
                     value,
                     entity,
                     context,
                     controller,
                   ),
-                  icon: Icon(Icons.more_vert,
-                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
                       PopupMenuItem(
@@ -107,8 +106,7 @@ class FolderCell extends StatelessWidget {
                           value: 'move',
                           child: Text(tr('move')),
                         ),
-                      if (!Security.documents.isRoot(entity) &&
-                          Security.documents.canEdit(entity))
+                      if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
                         PopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
@@ -119,8 +117,7 @@ class FolderCell extends StatelessWidget {
                           value: 'delete',
                           child: Text(
                             tr('delete'),
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
                           ),
                         ),
                     ];
@@ -137,9 +134,9 @@ class FolderCell extends StatelessWidget {
 
 class MoveFolderCell extends StatelessWidget {
   const MoveFolderCell({
-    Key key,
-    @required this.element,
-    @required this.controller,
+    Key? key,
+    required this.element,
+    required this.controller,
   }) : super(key: key);
 
   final Folder element;
@@ -149,7 +146,7 @@ class MoveFolderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkResponse(
       onTap: () {
-        var target = controller.target;
+        final target = controller.target;
         Get.find<NavigationController>()
             .to(MoveFolderContentView(), preventDuplicates: false, arguments: {
           'mode': controller.mode,
@@ -159,7 +156,7 @@ class MoveFolderCell extends StatelessWidget {
           'foldersCount': controller.foldersCount,
         });
       },
-      child: Container(
+      child: SizedBox(
         height: 72,
         child: Row(
           children: [
@@ -174,7 +171,7 @@ class MoveFolderCell extends StatelessWidget {
 
 class FolderCellAvatar extends StatelessWidget {
   const FolderCellAvatar({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -195,8 +192,8 @@ class FolderCellAvatar extends StatelessWidget {
 
 class FolderCellTitle extends StatelessWidget {
   const FolderCellTitle({
-    Key key,
-    @required this.element,
+    Key? key,
+    required this.element,
   }) : super(key: key);
 
   final Folder element;
@@ -209,27 +206,24 @@ class FolderCellTitle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Flexible(
-            child: Text(element.title.replaceAll(' ', '\u00A0'),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.projectTitle),
+            child: Text(element.title!.replaceAll(' ', '\u00A0'),
+                maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyleHelper.projectTitle),
           ),
           Text(
               tr('documentsCaption', args: [
-                formatedDate(element.updated),
+                formatedDate(element.updated!),
                 element.filesCount.toString(),
                 element.foldersCount.toString()
               ]),
               // '${formatedDate(element.updated)} • documents:${element.filesCount} • subfolders:${element.foldersCount}',
-              style: TextStyleHelper.caption(
-                  color: Get.theme.colors().onSurface.withOpacity(0.6))),
+              style: TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
         ],
       ),
     );
   }
 }
 
-void _onFolderPopupMenuSelected(
+Future<void> _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
   BuildContext context,
@@ -237,26 +231,25 @@ void _onFolderPopupMenuSelected(
 ) async {
   switch (value) {
     case 'copyLink':
-      var portalDomain = controller.portalInfoController.portalUri;
+      final portalDomain = controller.portalInfoController.portalUri;
 
-      var link =
-          '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
+      if (portalDomain != null && selectedFolder.id != null) {
+        final link = '$portalDomain/Products/Files/#${selectedFolder.id.toString()}';
 
-      if (link != null) {
-        await Clipboard.setData(ClipboardData(text: link));
-        MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        if (link.isURL) {
+          await Clipboard.setData(ClipboardData(text: link));
+          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        } else
+          MessagesHandler.showSnackBar(context: context, text: tr('error'));
       }
       break;
     case 'open':
-      Get.find<NavigationController>().to(FolderContentView(),
+      await Get.find<NavigationController>().to(FolderContentView(),
           preventDuplicates: false,
-          arguments: {
-            'folderName': selectedFolder.title,
-            'folderId': selectedFolder.id
-          });
+          arguments: {'folderName': selectedFolder.title, 'folderId': selectedFolder.id});
       break;
     case 'copy':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
@@ -264,7 +257,7 @@ void _onFolderPopupMenuSelected(
       });
       break;
     case 'move':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
@@ -276,21 +269,19 @@ void _onFolderPopupMenuSelected(
       _renameFolder(controller, selectedFolder, context);
       break;
     case 'delete':
-      var success = await controller.deleteFolder(selectedFolder);
+      final success = await controller.deleteFolder(selectedFolder);
 
       if (success) {
-        MessagesHandler.showSnackBar(
-            context: context, text: tr('folderDeleted'));
+        MessagesHandler.showSnackBar(context: context, text: tr('folderDeleted'));
       }
       break;
     default:
   }
 }
 
-void _renameFolder(
-    DocumentsController controller, Folder element, BuildContext context) {
-  var inputController = TextEditingController();
-  inputController.text = element.title;
+void _renameFolder(DocumentsController controller, Folder element, BuildContext context) {
+  final inputController = TextEditingController();
+  inputController.text = element.title!;
 
   Get.dialog(
     StyledAlertDialog(
@@ -310,13 +301,10 @@ void _renameFolder(
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         if (inputController.text != element.title) {
-          var success =
-              await controller.renameFolder(element, inputController.text);
+          final success = await controller.renameFolder(element, inputController.text);
           if (success) {
-            MessagesHandler.showSnackBar(
-                context: context, text: tr('folderRenamed'));
+            MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
             Get.back();
-            await controller.refreshContent();
           }
         } else
           Get.back();

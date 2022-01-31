@@ -42,30 +42,30 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class PortalUserItem extends StatelessWidget {
   const PortalUserItem({
-    Key key,
-    @required this.onTapFunction,
-    @required this.userController,
+    Key? key,
+    required this.onTapFunction,
+    required this.userController,
   }) : super(key: key);
 
-  final Function onTapFunction;
-  final PortalUserItemController userController;
+  final Function? onTapFunction;
+  final PortalUserItemController? userController;
 
   @override
   Widget build(BuildContext context) {
-    var user = userController.portalUser;
+    final user = userController!.portalUser;
     return InkWell(
       onTap: () {
-        userController.onTap();
-        if (onTapFunction != null) onTapFunction(userController);
+        userController!.onTap();
+        onTapFunction?.call(userController);
       },
-      child: Container(
+      child: SizedBox(
         height: 48,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: 72,
-              child: Container(
+              child: SizedBox(
                 width: 40,
                 height: 40,
                 child: Stack(
@@ -74,43 +74,35 @@ class PortalUserItem extends StatelessWidget {
                     Opacity(
                       opacity: user.status == UserStatus.Terminated ? 0.4 : 1.0,
                       child: CircleAvatar(
-                        radius: 20.0,
+                        radius: 20,
                         backgroundColor: Get.theme.colors().bgDescription,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(20),
                           child: Obx(() {
-                            return userController.avatar.value;
+                            return userController!.avatar.value;
                           }),
                         ),
                       ),
                     ),
-                    if (user.status == null ||
-                        user.status == UserStatus.Terminated)
-                      Positioned(
+                    if (user.status == null || user.status == UserStatus.Terminated)
+                      const Positioned(
                           bottom: 0,
                           right: 15,
-                          child: AppIcon(
-                              icon: SvgIcons.userBlocked,
-                              width: 16,
-                              height: 16)),
-                    if (((user.isAdmin != null && user.isAdmin) ||
-                            (user.isAdmin != null && user.isOwner)) &&
+                          child: AppIcon(icon: SvgIcons.userBlocked, width: 16, height: 16)),
+                    if (((user.isAdmin != null && user.isAdmin!) ||
+                            (user.isAdmin != null && user.isOwner!)) &&
                         user.status != UserStatus.Terminated)
-                      Positioned(
+                      const Positioned(
                           bottom: 0,
                           right: 15,
-                          child: AppIcon(
-                              icon: SvgIcons.userAdmin, width: 16, height: 16)),
+                          child: AppIcon(icon: SvgIcons.userAdmin, width: 16, height: 16)),
                     if (user.isVisitor != null &&
-                        user.isVisitor &&
+                        user.isVisitor! &&
                         user.status != UserStatus.Terminated)
-                      Positioned(
+                      const Positioned(
                           bottom: 0,
                           right: 15,
-                          child: AppIcon(
-                              icon: SvgIcons.userVisitor,
-                              width: 16,
-                              height: 16)),
+                          child: AppIcon(icon: SvgIcons.userVisitor, width: 16, height: 16)),
                   ],
                 ),
               ),
@@ -129,20 +121,17 @@ class PortalUserItem extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                user.displayName.replaceAll(' ', '\u00A0'),
+                                user.displayName!.replaceAll(' ', '\u00A0'),
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyleHelper.subtitle1(),
                               ),
                               Obx(
-                                () => userController.userTitle != null &&
-                                        userController.userTitle.isNotEmpty
+                                () => userController!.userTitle.isNotEmpty
                                     ? Text(
-                                        userController.userTitle
-                                            .replaceAll(' ', '\u00A0'),
+                                        userController!.userTitle.replaceAll(' ', '\u00A0'),
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyleHelper.body2(
-                                          color:
-                                              Get.theme.colors().onBackground,
+                                          color: Get.theme.colors().onBackground,
                                         ),
                                       )
                                     : const SizedBox(),
@@ -157,20 +146,16 @@ class PortalUserItem extends StatelessWidget {
               ),
             ),
             Obx(() {
-              if (userController.selectionMode.value ==
-                  UserSelectionMode.Multiple) {
-                if (userController.isSelected.value == true) {
+              if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
+                if (userController!.isSelected.value == true) {
                   return SizedBox(
-                      width: 72,
-                      child: Icon(Icons.check_box,
-                          color: Get.theme.colors().primary));
+                      width: 72, child: Icon(Icons.check_box, color: Get.theme.colors().primary));
                 } else {
                   return const SizedBox(
-                      width: 72,
-                      child: Icon(Icons.check_box_outline_blank_outlined));
+                      width: 72, child: Icon(Icons.check_box_outline_blank_outlined));
                 }
               } else {
-                if (userController.isSelected.value == true) {
+                if (userController!.isSelected.value == true) {
                   return SizedBox(
                     width: 72,
                     child: Icon(

@@ -39,24 +39,24 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/main_view.dart';
 
 class PasscodeCheckingController extends GetxController {
-  void setup({canUseFingerprint = false}) {
+  void setup({bool canUseFingerprint = false}) {
     _canUseFingerprint = canUseFingerprint;
   }
 
-  bool _canUseFingerprint;
+  bool _canUseFingerprint = false;
 
-  final _service = locator<PasscodeService>();
-  final _authService = locator<LocalAuthenticationService>();
+  final PasscodeService _service = locator<PasscodeService>();
+  final LocalAuthenticationService _authService = locator<LocalAuthenticationService>();
 
-  var passcodeCheckFailed = false.obs;
+  RxBool passcodeCheckFailed = false.obs;
   RxInt passcodeLen = 0.obs;
-  var loaded = false.obs;
+  RxBool loaded = false.obs;
 
-  bool isFingerprintEnable;
-  bool isFingerprintAvailable;
+  late bool isFingerprintEnable;
+  bool? isFingerprintAvailable;
 
   String _enteredPasscode = '';
-  String _correctPasscode;
+  String? _correctPasscode;
 
   @override
   void onInit() async {
@@ -67,7 +67,7 @@ class PasscodeCheckingController extends GetxController {
   }
 
   // update code in main passcode controller
-  void updatePasscode() async {
+  Future<void> updatePasscode() async {
     _correctPasscode = await _service.getPasscode;
     await _getFingerprintAvailability();
     if (isFingerprintEnable) await useFingerprint();
@@ -75,13 +75,13 @@ class PasscodeCheckingController extends GetxController {
 
   Future<void> useFingerprint() async {
     try {
-      var didAuthenticate = await _authService.authenticate();
+      final didAuthenticate = await _authService.authenticate();
 
       if (!didAuthenticate) {
         await _getFingerprintAvailability();
       } else {
         locator<EventHub>().fire('correctPasscodeChecked');
-        await Get.offAll(() => MainView());
+        await Get.offAll(() => const MainView());
       }
     } catch (_) {
       loaded.value = false;
@@ -91,9 +91,9 @@ class PasscodeCheckingController extends GetxController {
     }
   }
 
-  void addNumberToPasscode(
+  Future<void> addNumberToPasscode(
     int number, {
-    var onPass,
+    Function? onPass,
   }) async {
     if (passcodeCheckFailed.isTrue) passcodeCheckFailed.value = false;
 
@@ -106,7 +106,7 @@ class PasscodeCheckingController extends GetxController {
     if (_enteredPasscode.length == 4) {
       if (_enteredPasscode != _correctPasscode) {
         await HapticFeedback.mediumImpact();
-        _handleIncorrectPinEntering();
+        await _handleIncorrectPinEntering();
       } else {
         _clear();
 
@@ -114,7 +114,7 @@ class PasscodeCheckingController extends GetxController {
           await onPass();
         } else {
           locator<EventHub>().fire('correctPasscodeChecked');
-          await Get.offAll(() => MainView());
+          await Get.offAll(() => const MainView());
         }
       }
     }
@@ -134,7 +134,7 @@ class PasscodeCheckingController extends GetxController {
     passcodeLen.value = 0;
   }
 
-  void _handleIncorrectPinEntering() async {
+  Future<void> _handleIncorrectPinEntering() async {
     passcodeCheckFailed.value = true;
 
     _clear(clearError: false);

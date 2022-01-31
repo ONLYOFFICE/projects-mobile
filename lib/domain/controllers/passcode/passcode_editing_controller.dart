@@ -74,7 +74,7 @@ class PasscodeEditingController extends GetxController {
         await _service.setPasscode(_passcode);
         try {
           // update code in main passcode controller
-          Get.find<PasscodeCheckingController>().updatePasscode();
+          await Get.find<PasscodeCheckingController>().updatePasscode();
           // ignore: empty_catches
         } catch (_) {}
         _onPasscodeSaved();

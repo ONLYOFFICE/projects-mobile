@@ -31,7 +31,7 @@
  */
 
 import 'dart:convert';
-import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:projects/data/models/apiDTO.dart';
@@ -42,26 +42,23 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class PortalApi {
-  var secureStorage = locator<SecureStorage>();
+  SecureStorage? secureStorage = locator<SecureStorage>();
 
-  Future<ApiDTO<Capabilities>> getCapabilities(String portalName) async {
-    var url = locator.get<CoreApi>().capabilitiesUrl(portalName);
+  Future<ApiDTO<Capabilities>> getCapabilities() async {
+    final url = await locator.get<CoreApi>().getCapabilitiesUrl();
 
-    var result = ApiDTO<Capabilities>();
+    final result = ApiDTO<Capabilities>();
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        final Map responseJson = json.decode(response.body);
-        result.response = Capabilities.fromJson(responseJson['response']);
-        await locator.get<CoreApi>().savePortalName();
+        result.response =
+            Capabilities.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
-      var error;
-      if (e is SocketException) error = e?.osError?.message;
-      result.error = CustomError(message: error ?? e.toString());
+      result.error = CustomError(message: tr('portalNotFound'));
     }
 
     return result;

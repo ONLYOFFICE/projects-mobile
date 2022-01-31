@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
@@ -48,48 +47,45 @@ class SubtaskStatus {
 
 class SubtaskController extends GetxController {
   final SubtasksService _api = locator<SubtasksService>();
-  Rx<Subtask> subtask;
-  PortalTask parentTask;
+  late Rx<Subtask?> subtask;
+  PortalTask? parentTask;
   final _userController = Get.find<UserController>();
 
-  SubtaskController({Subtask subtask, this.parentTask}) {
+  SubtaskController({Subtask? subtask, this.parentTask}) {
     this.subtask = subtask.obs;
   }
 
-  bool get canEdit =>
-      subtask.value.canEdit && parentTask.status != SubtaskStatus.CLOSED;
+  bool get canEdit => subtask.value!.canEdit! && parentTask!.status != SubtaskStatus.CLOSED;
   bool get canCreateSubtask =>
-      parentTask.canCreateSubtask && parentTask.status != SubtaskStatus.CLOSED;
+      parentTask!.canCreateSubtask! && parentTask!.status != SubtaskStatus.CLOSED;
 
-  void acceptSubtask(
-    context, {
-    @required int taskId,
-    @required int subtaskId,
+  void acceptSubtask({
+    required int taskId,
+    required int subtaskId,
   }) async {
     await _userController.getUserInfo();
-    var selfUser = _userController.user;
-    var data = {'responsible': selfUser.id, 'title': subtask.value.title};
+    final selfUser = _userController.user!;
+    final data = {'responsible': selfUser.id, 'title': subtask.value!.title};
 
-    var result = await _api.acceptSubtask(
-        data: data, taskId: taskId, subtaskId: subtaskId);
+    final result = await _api.acceptSubtask(data: data, taskId: taskId, subtaskId: subtaskId);
 
     if (result != null) {
       subtask.value = result;
       MessagesHandler.showSnackBar(
-        context: context,
+        context: Get.context!,
         text: tr('subtaskAccepted'),
         buttonText: tr('ok'),
-        buttonOnTap: ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar,
+        buttonOnTap: ScaffoldMessenger.maybeOf(Get.context!)?.hideCurrentSnackBar,
       );
     }
   }
 
   void copySubtask(
-    context, {
-    @required int taskId,
-    @required int subtaskId,
+    BuildContext context, {
+    required int taskId,
+    required int subtaskId,
   }) async {
-    var result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
+    final result = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
       MessagesHandler.showSnackBar(context: context, text: tr('subtaskCopied'));
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
@@ -97,12 +93,12 @@ class SubtaskController extends GetxController {
   }
 
   void deleteSubtask({
-    @required BuildContext context,
-    @required int taskId,
-    @required int subtaskId,
+    required BuildContext context,
+    required int taskId,
+    required int subtaskId,
     bool closePage = false,
   }) async {
-    var result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
+    final result = await _api.deleteSubtask(taskId: taskId, subtaskId: subtaskId);
     if (result != null) {
       locator<EventHub>().fire('needToRefreshParentTask', [taskId]);
 
@@ -112,38 +108,37 @@ class SubtaskController extends GetxController {
   }
 
   void updateSubtaskStatus({
-    @required context,
-    @required int taskId,
-    @required int subtaskId,
+    required BuildContext context,
+    required int taskId,
+    required int subtaskId,
   }) async {
-    if (subtask.value.canEdit) {
+    if (subtask.value!.canEdit!) {
       var newStatus;
 
-      if (subtask.value.status == SubtaskStatus.OPEN)
+      if (subtask.value!.status == SubtaskStatus.OPEN)
         newStatus = 'closed';
       else
         newStatus = 'open';
 
-      var data = {'status': newStatus};
+      final data = {'status': newStatus};
 
-      var result = await _api.updateSubtaskStatus(
-          data: data, taskId: taskId, subtaskId: subtaskId);
+      final result =
+          await _api.updateSubtaskStatus(data: data, taskId: taskId, subtaskId: subtaskId);
 
       if (result != null) subtask.value = result;
     } else {
-      MessagesHandler.showSnackBar(
-          context: context, text: tr('cantEditSubtask'));
+      MessagesHandler.showSnackBar(context: context, text: tr('cantEditSubtask'));
     }
   }
 
   void deleteSubtaskResponsible({
-    @required int taskId,
-    @required int subtaskId,
+    required int taskId,
+    required int subtaskId,
   }) async {
-    if (subtask.value.canEdit) {
-      var data = {'title': subtask.value.title, 'responsible': null};
+    if (subtask.value!.canEdit!) {
+      final data = {'title': subtask.value!.title, 'responsible': null};
 
-      var result = await _api.updateSubtask(
+      final result = await _api.updateSubtask(
         data: data,
         taskId: taskId,
         subtaskId: subtaskId,

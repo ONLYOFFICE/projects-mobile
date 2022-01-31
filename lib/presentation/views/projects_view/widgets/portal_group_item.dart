@@ -40,12 +40,12 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class PortalGroupItem extends StatelessWidget {
   const PortalGroupItem({
-    Key key,
-    @required this.onTapFunction,
-    @required this.groupController,
+    Key? key,
+    required this.onTapFunction,
+    required this.groupController,
   }) : super(key: key);
 
-  final Function onTapFunction;
+  final Function? onTapFunction;
   final PortalGroupItemController groupController;
 
   @override
@@ -55,7 +55,7 @@ class PortalGroupItem extends StatelessWidget {
         value: groupController.isSelected.value == true,
         onChanged: (value) {
           groupController.isSelected.value = !groupController.isSelected.value;
-          onTapFunction(groupController);
+          onTapFunction!(groupController);
         },
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -78,7 +78,7 @@ class PortalGroupItem extends StatelessWidget {
             const SizedBox(width: 16),
             Flexible(
               child: Text(
-                groupController.displayName,
+                groupController.displayName!,
                 overflow: TextOverflow.ellipsis,
                 maxLines: 2,
                 style: TextStyleHelper.subtitle1(),

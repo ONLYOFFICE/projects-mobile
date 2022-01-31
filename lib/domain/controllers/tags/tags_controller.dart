@@ -32,15 +32,16 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/project_tag.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TagsController extends BaseController {
-  final _api = locator<ProjectService>();
+  final ProjectService _api = locator<ProjectService>();
 
-  PaginationController paginationController;
+  late PaginationController paginationController;
 
   @override
   void onInit() {
@@ -56,7 +57,7 @@ class TagsController extends BaseController {
   }
 
   @override
-  var itemList = [].obs;
+  RxList itemList = [].obs;
 
   RxBool loaded = false.obs;
 
@@ -74,13 +75,13 @@ class TagsController extends BaseController {
   }
 
   Future _getItems({bool needToClear = false}) async {
-    var result = await _api.getTagsPaginated(
+    final result = await _api.getTagsPaginated(
         startIndex: paginationController.startIndex);
 
     if (result != null) {
       paginationController.total.value = result.total;
       if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response);
+      paginationController.data.addAll(result.response ?? <ProjectTag>[]);
     }
   }
 }

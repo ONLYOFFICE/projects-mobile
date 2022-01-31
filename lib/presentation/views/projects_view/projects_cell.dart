@@ -34,45 +34,49 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/name_formatter.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/cell_atributed_title.dart';
-import 'package:projects/presentation/shared/widgets/customBottomSheet.dart';
+import 'package:projects/presentation/shared/widgets/custom_bottom_sheet.dart';
 import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
   final ProjectDetailed item;
-  const ProjectCell({Key key, this.item}) : super(key: key);
+  const ProjectCell({Key? key, required this.item}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var itemController = Get.find<ProjectCellController>();
+    final itemController = Get.find<ProjectCellController>();
     itemController.setup(item);
 
-    return Container(
+    return SizedBox(
       height: 72,
       child: InkWell(
-        onTap: () => Get.find<NavigationController>().to(ProjectDetailedView(),
-            arguments: {'projectDetailed': itemController.projectData}),
+        onTap: () => Get.find<NavigationController>()
+            .to(ProjectDetailedView(), arguments: {'projectDetailed': itemController.projectData}),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            item.canEdit
-                ? InkWell(
-                    onTap: () async => showsStatusesBS(
-                        context: context, itemController: itemController),
-                    child: ProjectIcon(itemController: itemController),
-                  )
-                : ProjectIcon(itemController: itemController),
+            if (item.canEdit!)
+              Builder(builder: (builderContext) {
+                return InkWell(
+                  onTap: () async =>
+                      showStatuses(context: builderContext, itemController: itemController),
+                  child: ProjectIcon(itemController: itemController),
+                );
+              })
+            else
+              ProjectIcon(itemController: itemController),
             Expanded(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -85,7 +89,7 @@ class ProjectCell extends StatelessWidget {
                           item: item,
                           itemController: itemController,
                         ),
-                        const SizedBox(width: 8),
+                        const Spacer(),
                         _Suffix(
                           item: item,
                           controller: itemController,
@@ -105,8 +109,8 @@ class ProjectCell extends StatelessWidget {
 
 class ProjectIcon extends StatelessWidget {
   const ProjectIcon({
-    Key key,
-    @required this.itemController,
+    Key? key,
+    required this.itemController,
   }) : super(key: key);
 
   final ProjectCellController itemController;
@@ -119,50 +123,47 @@ class ProjectIcon extends StatelessWidget {
       children: [
         const SizedBox(width: 16),
         Obx(() {
-          var color = itemController.canEdit.value == true
+          final color = itemController.canEdit.value == true
               ? Get.theme.colors().primary
               : Get.theme.colors().onBackground;
-          return Container(
-            // width: 48,
-            child: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Container(
-                  width: 40,
-                  height: 40,
+          return Stack(
+            alignment: Alignment.center,
+            children: <Widget>[
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: color.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  width: 20,
+                  height: 20,
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    border: Border.all(
+                      width: 1,
+                      color: Get.theme.colors().primary.withOpacity(0.1),
+                    ),
+                    color: Get.theme.colors().background,
                     shape: BoxShape.circle,
                   ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        width: 1,
-                        color: Get.theme.colors().primary.withOpacity(0.1),
-                      ),
-                      color: Get.theme.colors().background,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(4),
-                      child: AppIcon(
-                        icon: SvgIcons.project_icon,
-                        color: const Color(0xff666666),
-                        width: 12,
-                        height: 12,
-                      ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(4),
+                    child: AppIcon(
+                      icon: SvgIcons.project_icon,
+                      color: Color(0xff666666),
+                      width: 12,
+                      height: 12,
                     ),
                   ),
                 ),
-                AppIcon(icon: itemController.statusImage, color: color),
-              ],
-            ),
+              ),
+              AppIcon(icon: itemController.statusImage, color: color),
+            ],
           );
         }),
         const SizedBox(width: 16),
@@ -172,13 +173,13 @@ class ProjectIcon extends StatelessWidget {
 }
 
 class _Content extends StatelessWidget {
-  final ProjectDetailed item;
+  final ProjectDetailed? item;
   final ProjectCellController itemController;
 
   const _Content({
-    Key key,
-    @required this.item,
-    @required this.itemController,
+    Key? key,
+    required this.item,
+    required this.itemController,
   }) : super(key: key);
 
   @override
@@ -192,21 +193,21 @@ class _Content extends StatelessWidget {
         children: <Widget>[
           Obx(
             () {
-              var style;
+              TextStyle style;
               if (itemController.status.value == 1) {
                 style = TextStyleHelper.projectTitle.copyWith(
                     decoration: TextDecoration.lineThrough,
                     color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else if (itemController.status.value == 2) {
-                style = TextStyleHelper.projectTitle.copyWith(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6));
+                style = TextStyleHelper.projectTitle
+                    .copyWith(color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else {
                 style = TextStyleHelper.projectTitle;
               }
               return CellAtributedTitle(
-                text: item.title,
+                text: item!.title,
                 style: style,
-                atributeIcon: AppIcon(icon: SvgIcons.lock),
+                atributeIcon: const AppIcon(icon: SvgIcons.lock),
                 atributeIconVisible: itemController.isPrivate.value == true,
               );
             },
@@ -214,7 +215,7 @@ class _Content extends StatelessWidget {
           Row(
             children: [
               Obx(() {
-                var color = itemController.canEdit.value == true
+                final color = itemController.canEdit.value == true
                     ? Get.theme.colors().primary
                     : Get.theme.colors().onBackground;
                 return Text(
@@ -226,7 +227,7 @@ class _Content extends StatelessWidget {
                   style: TextStyleHelper.caption(
                       color: Get.theme.colors().onSurface.withOpacity(0.6))),
               Flexible(
-                child: Text(NameFormatter.formateName(item.responsible),
+                child: Text(NameFormatter.formateName(item!.responsible!)!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
@@ -242,12 +243,12 @@ class _Content extends StatelessWidget {
 
 class _Suffix extends StatelessWidget {
   const _Suffix({
-    Key key,
-    @required this.item,
-    @required this.controller,
+    Key? key,
+    required this.item,
+    required this.controller,
   }) : super(key: key);
 
-  final ProjectDetailed item;
+  final ProjectDetailed? item;
   final ProjectCellController controller;
 
   @override
@@ -259,14 +260,16 @@ class _Suffix extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
-            AppIcon(
-                icon: SvgIcons.check_square,
-                color: Get.theme.colors().onSurface),
+            AppIcon(icon: SvgIcons.check_square, color: Get.theme.colors().onSurface),
             const SizedBox(width: 3),
-            Text(
-              item.taskCount.toString(),
-              style: TextStyleHelper.projectCompleatedTasks.copyWith(
-                color: Get.theme.colors().onSurface.withOpacity(0.6),
+            SizedBox(
+              width: 20,
+              child: Text(
+                item!.taskCount.toString(),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyleHelper.projectCompleatedTasks.copyWith(
+                  color: Get.theme.colors().onSurface.withOpacity(0.6),
+                ),
               ),
             ),
             const SizedBox(width: 16)
@@ -277,13 +280,12 @@ class _Suffix extends StatelessWidget {
   }
 }
 
-void showsStatusesBS({context, itemController}) async {
-  var _statusesController = Get.find<ProjectStatusesController>();
+void showsStatusesBS({required BuildContext context, dynamic itemController}) async {
+  final _statusesController = Get.find<ProjectStatusesController>();
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight:
-        _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
@@ -309,9 +311,7 @@ void showsStatusesBS({context, itemController}) async {
             () => DecoratedBox(
               decoration: BoxDecoration(
                 border: Border(
-                  top: BorderSide(
-                      width: 1,
-                      color: Get.theme.colors().outline.withOpacity(0.5)),
+                  top: BorderSide(width: 1, color: Get.theme.colors().outline.withOpacity(0.5)),
                 ),
               ),
               child: Column(
@@ -320,11 +320,11 @@ void showsStatusesBS({context, itemController}) async {
                   for (var i = 0; i < _statusesController.statuses.length; i++)
                     InkWell(
                       onTap: () async {
-                        var success = await itemController.updateStatus(
+                        final success = await itemController.updateStatus(
                           newStatusId: _statusesController.statuses[i],
-                        );
+                        ) as bool;
                         if (success) {
-                          locator<EventHub>().fire('needToRefreshProjects');
+                          locator<EventHub>().fire('needToRefreshProjects', ['all']);
                         }
                         Get.back();
                       },
@@ -332,11 +332,11 @@ void showsStatusesBS({context, itemController}) async {
                           title: _statusesController.getStatusName(i),
                           icon: AppIcon(
                               icon: _statusesController.getStatusImageString(i),
-                              color: itemController.projectData.canEdit
+                              color: itemController.projectData.canEdit as bool
                                   ? Get.theme.colors().primary
                                   : Get.theme.colors().onBackground),
-                          selected: _statusesController.statuses[i] ==
-                              itemController.projectData.status),
+                          selected:
+                              _statusesController.statuses[i] == itemController.projectData.status),
                     ),
                   const SizedBox(height: 16),
                 ],
@@ -349,7 +349,67 @@ void showsStatusesBS({context, itemController}) async {
   );
 }
 
-double _getInititalSize({int statusCount}) {
-  var size = (statusCount * 50 + 65) / Get.height;
+void showStatuses(
+    {required BuildContext context, required BaseProjectEditorController itemController}) async {
+  if (itemController.projectData!.canEdit!) {
+    if (Get.find<PlatformController>().isMobile) {
+      showsStatusesBS(context: context, itemController: itemController);
+    } else {
+      showsStatusesPM(context: context, itemController: itemController);
+    }
+  }
+}
+
+void showsStatusesPM(
+    {required BuildContext context, required BaseProjectEditorController itemController}) async {
+  final _statusesController = Get.find<ProjectStatusesController>();
+  final items = <PopupMenuEntry<dynamic>>[
+    for (var i = 0; i < _statusesController.statuses.length; i++)
+      PopupMenuItem(
+        height: 36,
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+        onTap: () async {
+          final success = await itemController.updateStatus(
+            newStatusId: _statusesController.statuses[i],
+          );
+          if (success) {
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
+          }
+          Get.back();
+        },
+        child: StatusTileTablet(
+            title: _statusesController.getStatusName(i),
+            icon: AppIcon(
+                icon: _statusesController.getStatusImageString(i),
+                color: itemController.projectData!.canEdit!
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground),
+            selected: _statusesController.statuses[i] == itemController.projectData!.status),
+      ),
+  ];
+
+// calculate the menu position, ofsset dy: 50
+  const offset = Offset(0, 50);
+  final button = context.findRenderObject() as RenderBox;
+  final overlay = Get.overlayContext!.findRenderObject() as RenderBox;
+  final position = RelativeRect.fromRect(
+    Rect.fromPoints(
+      button.localToGlobal(
+        offset,
+        ancestor: overlay,
+      ),
+      button.localToGlobal(
+        button.size.bottomRight(Offset.zero) + offset,
+        ancestor: overlay,
+      ),
+    ),
+    Offset.zero & overlay.size,
+  );
+
+  await showMenu(context: context, position: position, items: items);
+}
+
+double _getInitialSize({required int statusCount}) {
+  final size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

@@ -32,17 +32,15 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/internal/utils/debug_print.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class NothingFound extends StatelessWidget {
   const NothingFound({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
@@ -63,9 +61,9 @@ class EmptyScreen extends StatelessWidget {
   final String text;
 
   const EmptyScreen({
-    Key key,
-    this.text,
-    this.icon,
+    Key? key,
+    required this.text,
+    required this.icon,
   }) : super(key: key);
 
   String get darkThemeIcon => icon.replaceFirst('.', '_dark.');
@@ -84,9 +82,7 @@ class EmptyScreen extends StatelessWidget {
               builder: (_) {
                 try {
                   return AppIcon(
-                    icon: Get.theme.brightness == Brightness.light
-                        ? icon
-                        : darkThemeIcon,
+                    icon: Get.theme.brightness == Brightness.light ? icon : darkThemeIcon,
                   );
                 } catch (e) {
                   printError(e);
@@ -98,8 +94,7 @@ class EmptyScreen extends StatelessWidget {
           Text(
             text,
             textAlign: TextAlign.center,
-            style: TextStyleHelper.subtitle1(
-                color: Get.theme.colors().onSurface.withOpacity(0.4)),
+            style: TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.4)),
           ),
         ],
       ),

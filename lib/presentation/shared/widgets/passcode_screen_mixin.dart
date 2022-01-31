@@ -51,10 +51,10 @@ mixin PasscodeScreenMixin on StatelessWidget {
   final bool hasBackButton = true;
 
   final String title = tr('enterPasscode');
-  final String caption = null;
-  final String errorText = null;
+  final String? caption = null;
+  final String? errorText = null;
 
-  final Widget keyboardLastRow = null;
+  final Widget? keyboardLastRow = null;
 
   @override
   Widget build(BuildContext context) {
@@ -69,36 +69,29 @@ mixin PasscodeScreenMixin on StatelessWidget {
         return hasBackButton;
       },
       child: Scaffold(
-        appBar: hasBackButton
-            ? StyledAppBar(elevation: 0, onLeadingPressed: onBackPressed)
-            : null,
+        appBar: hasBackButton ? StyledAppBar(elevation: 0, onLeadingPressed: onBackPressed) : null,
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SizedBox(height: hasBackButton ? 114.h : 170.h),
+              SizedBox(height: hasBackButton ? 114.h as double? : 170.h as double?),
               Text(title,
                   textAlign: TextAlign.center,
-                  style: TextStyleHelper.headline6(
-                      color: Get.theme.colors().onBackground)),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground)),
               SizedBox(
                   height: h(72),
                   child: Obx(() {
                     return Column(children: [
                       const Flexible(flex: 1, child: SizedBox(height: 16)),
                       if (hasError.isTrue)
-                        Text(errorText,
+                        Text(errorText!,
                             textAlign: TextAlign.center,
-                            style: TextStyleHelper.subtitle1(
-                                color: Get.theme.colors().colorError)),
+                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError)),
                       if (hasError.isFalse && caption != null)
-                        Text(caption,
+                        Text(caption!,
                             textAlign: TextAlign.center,
                             style: TextStyleHelper.subtitle1(
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.6))),
+                                color: Get.theme.colors().onBackground.withOpacity(0.6))),
                       const Flexible(flex: 2, child: SizedBox(height: 32)),
                     ]);
                   })),
@@ -117,15 +110,15 @@ mixin PasscodeScreenMixin on StatelessWidget {
               ),
               SizedBox(height: h(165)),
               PasscodeNumbersRow(
-                numbers: [1, 2, 3],
+                numbers: const [1, 2, 3],
                 onPressed: onNumberPressed,
               ),
               PasscodeNumbersRow(
-                numbers: [4, 5, 6],
+                numbers: const [4, 5, 6],
                 onPressed: onNumberPressed,
               ),
               PasscodeNumbersRow(
-                numbers: [7, 8, 9],
+                numbers: const [7, 8, 9],
                 onPressed: onNumberPressed,
               ),
               keyboardLastRow ??

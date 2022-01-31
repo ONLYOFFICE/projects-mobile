@@ -33,8 +33,8 @@
 part of '../discussions_filter_screen.dart';
 
 class _CreatingDate extends StatelessWidget {
-  final DiscussionsFilterController filterController;
-  const _CreatingDate({Key key, this.filterController}) : super(key: key);
+  final DiscussionsFilterController? filterController;
+  const _CreatingDate({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,32 +45,30 @@ class _CreatingDate extends StatelessWidget {
           FilterElement(
               title: tr('today'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.creationDate['today'],
-              onTap: () => filterController.changeCreationDate(('today'))),
+              isSelected: filterController!.creationDate['today'] as bool,
+              onTap: () => filterController!.changeCreationDate('today')),
           FilterElement(
               title: tr('last7Days'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.creationDate['last7Days'],
-              onTap: () => filterController.changeCreationDate(('last7Days'))),
+              isSelected: filterController!.creationDate['last7Days'] as bool,
+              onTap: () => filterController!.changeCreationDate('last7Days')),
           FilterElement(
               title: tr('customPeriod'),
-              isSelected: filterController.creationDate['custom']['selected'],
+              isSelected: filterController!.creationDate['custom']['selected'] as bool,
               onTap: () async {
-                var pickedRange =
-                    await Get.find<NavigationController>().toScreen(
+                final pickedRange = await Get.find<NavigationController>().toScreen(
                   StyledDateRangePickerDialog(
                     initialDateRange: DateTimeRange(
-                      start: filterController.creationDate['custom']
-                          ['startDate'],
-                      end: filterController.creationDate['custom']['stopDate'],
+                      start: filterController!.creationDate['custom']['startDate'] as DateTime,
+                      end: filterController!.creationDate['custom']['stopDate'] as DateTime,
                     ),
                   ),
                 );
                 if (pickedRange != null) {
-                  await filterController.changeCreationDate(
+                  await filterController!.changeCreationDate(
                     'custom',
-                    start: pickedRange.start,
-                    stop: pickedRange.end,
+                    start: pickedRange.start as DateTime,
+                    stop: pickedRange.end as DateTime,
                   );
                 }
               }),

@@ -32,20 +32,23 @@
 
 class Capabilities {
   Capabilities({
-    this.ldapEnabled,
-    this.providers,
+    required this.ldapEnabled,
+    required this.providers,
     this.ssoLabel,
     this.ssoUrl,
   });
+
   bool ldapEnabled;
   List<String> providers;
-  String ssoLabel;
-  String ssoUrl;
+  String? ssoLabel;
+  String? ssoUrl;
 
-  Capabilities.fromJson(Map<String, dynamic> json) {
-    ldapEnabled = json['ldapEnabled'];
-    providers = List<String>.from(json['providers']);
-    ssoLabel = json['ssoLabel'];
-    ldapEnabled = json['ldapEnabled'];
+  factory Capabilities.fromJson(Map<String, dynamic> json) {
+    return Capabilities(
+      ldapEnabled: json['ldapEnabled'] as bool,
+      providers: List<String>.from(json['providers'] as List),
+      ssoLabel: json['ssoLabel'] as String?,
+      ssoUrl: json['ssoUrl'] as String?,
+    );
   }
 }

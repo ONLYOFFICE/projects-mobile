@@ -37,7 +37,7 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class UserSearchController extends BaseSearchController {
-  final _api = locator<UserService>();
+  final UserService _api = locator<UserService>();
 
   final PaginationController _paginationController =
       Get.put(PaginationController(), tag: 'UserSearchController');
@@ -58,10 +58,10 @@ class UserSearchController extends BaseSearchController {
     super.onInit();
   }
 
-  String _query;
+  String? _query;
 
   @override
-  Future search({needToClear = true, String query}) async {
+  Future search({bool needToClear = true, String? query}) async {
     paginationController.startIndex = 0;
     loaded.value = false;
     _query = query;
@@ -69,13 +69,13 @@ class UserSearchController extends BaseSearchController {
     loaded.value = true;
   }
 
-  Future _performSearch({needToClear = true, String query}) async {
-    var result = await _api.getProfilesByExtendedFilter(
+  Future _performSearch({bool needToClear = true, String? query}) async {
+    final result = await _api.getProfilesByExtendedFilter(
       startIndex: paginationController.startIndex,
       query: query,
     );
 
-    addData(result, needToClear);
+    if (result != null) addData(result, needToClear);
   }
 
   @override

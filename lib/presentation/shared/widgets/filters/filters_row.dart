@@ -36,9 +36,9 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class FiltersRow extends StatelessWidget {
-  final String title;
-  final List<Widget> options;
-  const FiltersRow({Key key, this.title, this.options}) : super(key: key);
+  final String? title;
+  final List<Widget>? options;
+  const FiltersRow({Key? key, this.title, this.options}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class FiltersRow extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 16, bottom: 20),
           child: Text(
-            title,
+            title!,
             style: TextStyleHelper.h6(color: Get.theme.colors().onSurface),
           ),
         ),
@@ -57,7 +57,7 @@ class FiltersRow extends StatelessWidget {
           child: Wrap(
             runSpacing: 16,
             spacing: 16,
-            children: options,
+            children: options!,
           ),
         ),
         const SizedBox(height: 35),

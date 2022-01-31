@@ -31,21 +31,21 @@
  */
 
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 
-import '../pagination_controller.dart';
-
 class TasksWithPresets {
-  TasksController _myTasksController;
-  TasksController _upcomingTaskscontroller;
+  TasksController? _myTasksController;
+  TasksController? _upcomingTaskscontroller;
 
-  TasksController get myTasksController {
+  TasksController? get myTasksController {
     _myTasksController ?? setupMyTasks();
     return _myTasksController;
   }
 
-  TasksController get upcomingTasksController {
+  TasksController? get upcomingTasksController {
     _upcomingTaskscontroller ?? setupUpcomingTasks();
     return _upcomingTaskscontroller;
   }
@@ -54,22 +54,28 @@ class TasksWithPresets {
     _myTasksController = Get.put(
         TasksController(
           Get.find<TaskFilterController>(),
-          Get.find<PaginationController>(),
+          Get.put<PaginationController<PortalTask>>(
+            PaginationController<PortalTask>(),
+            tag: '_myTasksPaginationController',
+          ),
         ),
-        tag: '_myTasksController')
+        tag: '_myTasksController')!
       ..setup(PresetTaskFilters.myTasks, withFAB: false);
 
-    _myTasksController.loadTasks();
+    _myTasksController!.loadTasks();
   }
 
   void setupUpcomingTasks() {
     _upcomingTaskscontroller = Get.put(
         TasksController(
           Get.find<TaskFilterController>(),
-          Get.find<PaginationController>(),
+          Get.put<PaginationController<PortalTask>>(
+            PaginationController<PortalTask>(),
+            tag: '_upcomingTasksPaginationController',
+          ),
         ),
-        tag: '_upcomingTaskscontroller')
+        tag: '_upcomingTaskscontroller')!
       ..setup(PresetTaskFilters.upcomming, withFAB: false);
-    _upcomingTaskscontroller.loadTasks();
+    _upcomingTaskscontroller!.loadTasks();
   }
 }

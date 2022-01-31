@@ -30,12 +30,13 @@
  *
  */
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
 
 abstract class NewCommentController extends GetxController {
-  final int idFrom;
-  final String parentId;
+  final int? idFrom;
+  final String? parentId;
 
   NewCommentController({
     this.parentId,
@@ -43,13 +44,16 @@ abstract class NewCommentController extends GetxController {
   });
 
   RxBool setTitleError = false.obs;
+
   HtmlEditorController get textController;
 
-  void addComment(context);
-  void addReplyComment(context);
+  void addComment(BuildContext context);
+
+  void addReplyComment(BuildContext context);
+
   void leavePage();
 
-  void emptyTitleError() async {
+  Future<void> emptyTitleError() async {
     setTitleError.value = true;
     await 900.milliseconds.delay().then((_) => setTitleError.value = false);
   }

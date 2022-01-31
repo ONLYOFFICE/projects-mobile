@@ -42,8 +42,8 @@ import 'package:projects/presentation/views/projects_view/new_project/team_membe
 
 class TeamMembersTile extends StatelessWidget {
   const TeamMembersTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   final controller;
@@ -52,21 +52,20 @@ class TeamMembersTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(
       () {
-        bool _isNotEmpty = controller.selectedTeamMembers.isNotEmpty;
+        final _isNotEmpty = controller.selectedTeamMembers.isNotEmpty as bool;
 
         return NewItemTile(
           caption: _isNotEmpty ? '${tr('team')}:' : null,
-          text:
-              _isNotEmpty ? controller.teamMembersTitle : tr('addTeamMembers'),
+          text: _isNotEmpty ? controller.teamMembersTitle as String : tr('addTeamMembers'),
           icon: SvgIcons.users,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(
-                  onTap: controller.editTeamMember,
+                  onTap: controller.editTeamMember as Function(),
                   child: Icon(
-                    controller.selectedTeamMembers.length >= 2
+                    controller.selectedTeamMembers.length as int >= 2
                         ? Icons.navigate_next
                         : Icons.close,
                     size: 24,
@@ -74,9 +73,8 @@ class TeamMembersTile extends StatelessWidget {
                   ),
                 )
               : null,
-          onTap: () => Get.find<NavigationController>().toScreen(
-              const TeamMembersSelectionView(),
-              arguments: {'controller': controller}),
+          onTap: () => Get.find<NavigationController>()
+              .toScreen(const TeamMembersSelectionView(), arguments: {'controller': controller}),
         );
       },
     );

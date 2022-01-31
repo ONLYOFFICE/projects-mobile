@@ -30,26 +30,32 @@
  *
  */
 
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionSearchController extends BaseController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
 
-  var loaded = true.obs;
-  var nothingFound = false.obs;
+  RxBool loaded = true.obs;
+  RxBool nothingFound = false.obs;
 
-  String _query;
+  String? _query;
 
-  final PaginationController _paginationController = PaginationController();
-  PaginationController get paginationController => _paginationController;
+  final _paginationController = PaginationController<Discussion>();
 
-  var searchInputController = TextEditingController();
+  PaginationController<Discussion> get paginationController => _paginationController;
+  String? _searchQuery;
+  Timer? _searchDebounce;
+
+  TextEditingController searchInputController = TextEditingController();
 
   @override
   RxList get itemList => _paginationController.data;
@@ -58,41 +64,49 @@ class DiscussionSearchController extends BaseController {
   void onInit() {
     screenName = tr('discussionsSearch');
     paginationController.startIndex = 0;
-    _paginationController.loadDelegate =
-        () => _performSearch(needToClear: false);
-    paginationController.refreshDelegate = () => newSearch(_query);
+    _paginationController.loadDelegate = () => _performSearch(needToClear: false);
+    paginationController.refreshDelegate = () => newSearch(_query!);
     super.onInit();
   }
 
   void newSearch(String query, {bool needToClear = true}) async {
-    _query = query.toLowerCase();
-    loaded.value = false;
+    _searchDebounce?.cancel();
+    _searchDebounce = Timer(const Duration(milliseconds: 500), () async {
+      _query = query.toLowerCase();
 
-    if (needToClear) paginationController.startIndex = 0;
+      if (_searchQuery != _query) {
+        _searchQuery = _query;
+        loaded.value = false;
 
-    if (query == null || query.isEmpty) {
-      clearSearch();
-    } else {
-      await _performSearch(needToClear: needToClear);
-    }
+        if (needToClear) paginationController.startIndex = 0;
 
-    loaded.value = true;
+        if (query.isEmpty) {
+          clearSearch();
+        } else {
+          await _performSearch(needToClear: needToClear);
+        }
+
+        loaded.value = true;
+      }
+    });
   }
 
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
-    var result = await _api.getDiscussionsByParams(
+    final result = await _api.getDiscussionsByParams(
       startIndex: paginationController.startIndex,
       query: _query,
     );
 
-    paginationController.total.value = result.total;
+    if (result != null) {
+      paginationController.total.value = result.total;
 
-    if (result.response.isEmpty) nothingFound.value = true;
+      if (result.response!.isEmpty) nothingFound.value = true;
 
-    if (needToClear) paginationController.data.clear();
+      if (needToClear) paginationController.data.clear();
 
-    paginationController.data.addAll(result.response);
+      paginationController.data.addAll(result.response ?? <Discussion>[]);
+    }
   }
 
   void clearSearch() {

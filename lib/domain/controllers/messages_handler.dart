@@ -40,34 +40,33 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class MessagesHandler {
-  static String _lastMessage;
+  static String? _lastMessage;
 
-  static var isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen);
+  static ValueNotifier<bool> isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen ?? false);
 
   static final Queue _a = Queue();
 
   static void showSnackBar({
-    @required BuildContext context,
-    @required String text,
+    required BuildContext context,
+    required String text,
     bool showOkButton = false,
-    String buttonText,
-    Function buttonOnTap,
+    String? buttonText,
+    Function? buttonOnTap,
   }) async {
     try {
-      if (text == _lastMessage)
-        ScaffoldMessenger.maybeOf(context).hideCurrentSnackBar();
+      if (text == _lastMessage) ScaffoldMessenger.maybeOf(context)!.hideCurrentSnackBar();
 
       _a.addLast(text);
       isDisplayed.value = true;
 
-      await ScaffoldMessenger.maybeOf(context)
+      await ScaffoldMessenger.maybeOf(context)!
           .showSnackBar(
             _styledSnackBar(
               context: context,
               text: text,
               showOkButton: showOkButton,
               buttonText: buttonText,
-              buttonOnTap: buttonOnTap,
+              buttonOnTap: buttonOnTap as dynamic Function()?,
             ),
           )
           .closed;
@@ -83,11 +82,11 @@ class MessagesHandler {
 }
 
 SnackBar _styledSnackBar({
-  @required BuildContext context,
-  @required String text,
+  required BuildContext context,
+  required String text,
   bool showOkButton = false,
-  String buttonText,
-  Function() buttonOnTap,
+  String? buttonText,
+  Function()? buttonOnTap,
 }) {
   // to prevent the button from being pressed again. There could be errors
   // if you click "open a new page" several times in a row, for example.
@@ -95,22 +94,19 @@ SnackBar _styledSnackBar({
   return SnackBar(
     content: StatefulBuilder(
       builder: (context, setState) {
-        return Container(
+        return SizedBox(
           height: 48,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                  child: Text(text,
-                      style:
-                          TextStyleHelper.body2(color: lightColors.surface))),
+              Flexible(child: Text(text, style: TextStyleHelper.body2(color: lightColors.surface))),
               if (buttonText != null && buttonText.isNotEmpty && !wasPressed)
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: GestureDetector(
                     onTap: () {
                       setState(() => wasPressed = true);
-                      return buttonOnTap();
+                      buttonOnTap?.call();
                     },
                     child: SizedBox(
                       height: 16,
@@ -118,10 +114,7 @@ SnackBar _styledSnackBar({
                         child: Text(
                           buttonText,
                           style: TextStyleHelper.button(
-                                  color: Get.theme
-                                      .colors()
-                                      .primary
-                                      .withOpacity(0.5))
+                                  color: Get.theme.colors().primary.withOpacity(0.5))
                               .copyWith(height: 1),
                         ),
                       ),
@@ -134,8 +127,7 @@ SnackBar _styledSnackBar({
                   child: GestureDetector(
                     onTap: () {
                       setState(() => wasPressed = true);
-                      ScaffoldMessenger.maybeOf(context)
-                          .removeCurrentSnackBar();
+                      ScaffoldMessenger.maybeOf(context)!.removeCurrentSnackBar();
                     },
                     child: SizedBox(
                       height: 16,
@@ -143,10 +135,7 @@ SnackBar _styledSnackBar({
                       child: Center(
                         child: Text(tr('ok'),
                             style: TextStyleHelper.button(
-                                    color: Get.theme
-                                        .colors()
-                                        .primary
-                                        .withOpacity(0.5))
+                                    color: Get.theme.colors().primary.withOpacity(0.5))
                                 .copyWith(height: 1)),
                       ),
                     ),

@@ -35,7 +35,7 @@ part of '../documents_filter_screen.dart';
 class _SearchSettings extends StatelessWidget {
   final filterController;
 
-  const _SearchSettings({Key key, this.filterController}) : super(key: key);
+  const _SearchSettings({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,15 +46,13 @@ class _SearchSettings extends StatelessWidget {
           FilterElement(
               title: tr('inContent'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.searchSettings['in_content'],
-              onTap: () =>
-                  filterController.changeSearchSettingsFilter('in_content')),
+              isSelected: filterController.searchSettings['in_content'] as bool,
+              onTap: () => filterController.changeSearchSettingsFilter('in_content')),
           FilterElement(
               title: tr('excludeSubfolders'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.searchSettings['exclude_subfolders'],
-              onTap: () => filterController
-                  .changeSearchSettingsFilter('exclude_subfolders')),
+              isSelected: filterController.searchSettings['exclude_subfolders'] as bool,
+              onTap: () => filterController.changeSearchSettingsFilter('exclude_subfolders')),
         ],
       ),
     );

@@ -35,7 +35,7 @@ part of '../documents_filter_screen.dart';
 class _Author extends StatelessWidget {
   final filterController;
 
-  const _Author({Key key, this.filterController}) : super(key: key);
+  const _Author({Key? key, this.filterController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,35 +45,33 @@ class _Author extends StatelessWidget {
         options: <Widget>[
           FilterElement(
               title: tr('me'),
-              isSelected: filterController.author['me'],
+              isSelected: filterController.author['me'] as bool,
               titleColor: Get.theme.colors().onSurface,
               onTap: () => filterController.changeAuthorFilter('me')),
           FilterElement(
-              title: filterController.author['users'].isEmpty
+              title: filterController.author['users'].isEmpty as bool
                   ? tr('users')
-                  : filterController.author['users'],
-              isSelected: filterController.author['users'].isNotEmpty,
-              cancelButtonEnabled: filterController.author['users'].isNotEmpty,
+                  : filterController.author['users'] as String,
+              isSelected: filterController.author['users'].isNotEmpty as bool,
+              cancelButtonEnabled: filterController.author['users'].isNotEmpty as bool,
               onTap: () async {
-                var newUser = await Get.find<NavigationController>()
-                    .toScreen(const SelectUserScreen());
+                final newUser =
+                    await Get.find<NavigationController>().toScreen(const SelectUserScreen());
                 await filterController.changeAuthorFilter('users', newUser);
               },
-              onCancelTap: () =>
-                  filterController.changeAuthorFilter('users', null)),
+              onCancelTap: () => filterController.changeAuthorFilter('users', null)),
           FilterElement(
-              title: filterController.author['groups'].isEmpty
+              title: filterController.author['groups'].isEmpty as bool
                   ? tr('groups')
-                  : filterController.author['groups'],
-              isSelected: filterController.author['groups'].isNotEmpty,
-              cancelButtonEnabled: filterController.author['groups'].isNotEmpty,
+                  : filterController.author['groups'] as String,
+              isSelected: filterController.author['groups'].isNotEmpty as bool,
+              cancelButtonEnabled: filterController.author['groups'].isNotEmpty as bool,
               onTap: () async {
-                var newGroup = await Get.find<NavigationController>()
-                    .toScreen(const SelectGroupScreen());
+                final newGroup =
+                    await Get.find<NavigationController>().toScreen(const SelectGroupScreen());
                 await filterController.changeAuthorFilter('groups', newGroup);
               },
-              onCancelTap: () =>
-                  filterController.changeAuthorFilter('groups', null)),
+              onCancelTap: () => filterController.changeAuthorFilter('groups', null)),
         ],
       ),
     );

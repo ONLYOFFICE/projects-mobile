@@ -39,12 +39,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
-import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
+import 'package:projects/data/models/from_api/status.dart';
 import 'package:projects/data/models/new_task_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
@@ -61,135 +63,165 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 class TaskItemController extends GetxController {
-  final _api = locator<TaskItemService>();
+  final TaskItemService _api = locator<TaskItemService>();
 
-  var task = PortalTask().obs;
-  var status = Status().obs;
+  Rx<PortalTask> task = PortalTask().obs;
+  Rx<Status> status = Status().obs;
 
-  var loaded = false.obs;
-  var isStatusLoaded = false.obs;
-  var refreshController = RefreshController();
-  var subtaskRefreshController = RefreshController();
-  var commentsRefreshController = RefreshController();
+  RxBool loaded = false.obs;
+  RxBool isStatusLoaded = false.obs;
+
+  RefreshController get refreshController {
+    return RefreshController();
+  }
+
+  RefreshController get subtaskRefreshController {
+    return RefreshController();
+  }
+
+  RefreshController get commentsRefreshController {
+    return RefreshController();
+  }
 
   set setLoaded(bool value) => loaded.value = value;
 
   final TaskStatusHandler _statusHandler = TaskStatusHandler();
 
-  bool get canEdit => task.value.canEdit && task.value.status != 2;
+  bool get canEdit => task.value.canEdit! && task.value.status != 2;
 
   Color get getStatusBGColor =>
-      _statusHandler.getBackgroundColor(status.value, task.value.canEdit);
+      _statusHandler.getBackgroundColor(status.value, task.value.canEdit!);
 
-  Color get getStatusTextColor =>
-      _statusHandler.getTextColor(status.value, task.value.canEdit);
+  Color get getStatusTextColor => _statusHandler.getTextColor(status.value, task.value.canEdit!);
 
-  String get displayName {
-    if (task.value.responsibles.isEmpty) return tr('noResponsible');
-    if (task.value.responsibles.length > 1)
-      return plural('responsibles', task.value.responsibles.length);
-    return NameFormatter.formateName(task.value.responsibles[0]);
+  String? get displayName {
+    if (task.value.responsibles!.isEmpty) return tr('noResponsible');
+    if (task.value.responsibles!.length > 1) {
+      return plural('responsibles', task.value.responsibles!.length);
+    }
+    return NameFormatter.formateName(task.value.responsibles![0]!);
   }
 
   // to show overview screen without loading
   RxBool firstReload = true.obs;
 
-  var commentsListController = ScrollController();
+  final commentsListController = ScrollController();
+
+  late StreamSubscription _refreshParentTaskSubscription;
+  late StreamSubscription _scrollToLastCommentSubscription;
 
   TaskItemController(PortalTask portalTask) {
     task.value = portalTask;
 
-    locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
+    _refreshParentTaskSubscription =
+        locator<EventHub>().on('needToRefreshParentTask', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
-        var showLoading = (data as List).length > 1 ? data[1] : false;
+        final showLoading = data.length > 1 ? data[1] as bool : false;
         await reloadTask(showLoading: showLoading);
       }
     });
 
-    locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
+    _scrollToLastCommentSubscription =
+        locator<EventHub>().on('scrollToLastComment', (dynamic data) async {
       if ((data as List).isNotEmpty && data[0] == task.value.id) {
         scrollToLastComment();
       }
     });
   }
 
-  void scrollToLastComment() {
-    if (commentsListController.hasClients)
-      commentsListController
-          .jumpTo(commentsListController.position.maxScrollExtent);
+  @override
+  void onClose() {
+    _refreshParentTaskSubscription.cancel();
+    _scrollToLastCommentSubscription.cancel();
+    super.onClose();
   }
 
-  dynamic get getActualCommentCount {
-    if (task?.value?.comments == null) return null;
-    return countCommentsAndReplies(task?.value?.comments);
+  void scrollToLastComment() {
+    if (commentsListController.hasClients) {
+      commentsListController.jumpTo(commentsListController.position.maxScrollExtent);
+    }
+  }
+
+  int get getActualCommentCount {
+    if (task.value.comments == null) {
+      return 0;
+    } else {
+      return countCommentsAndReplies(task.value.comments!);
+    }
   }
 
   int countCommentsAndReplies(List<PortalComment> comments) {
     var count = 0;
     if (comments.isNotEmpty)
-      for (var comment in comments) {
-        count += countCommentsAndReplies(comment.commentList);
-        if (!comment.inactive) count++;
+      for (final comment in comments) {
+        count += countCommentsAndReplies(comment.commentList!);
+        if (!comment.inactive!) count++;
       }
 
     return count;
   }
 
-  void copyLink({@required taskId, @required projectId}) async {
-    var link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
-    await Clipboard.setData(ClipboardData(text: link));
+  Future<void> copyLink({required int taskId, required int projectId}) async {
+    final link = await _api.getTaskLink(taskId: taskId, projectId: projectId);
+
+    if (link.isURL) {
+      await Clipboard.setData(ClipboardData(text: link));
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
-  Future accept(context) async {
-    var controller = Get.put(TaskEditingController(task: task.value));
+  Future accept() async {
+    final controller = Get.put(TaskEditingController(task: task.value));
     controller.addResponsible(
       PortalUserItemController(
-        isSelected: true.obs,
-        portalUser: Get.find<UserController>().user,
+        isSelected: true,
+        portalUser: Get.find<UserController>().user!,
       ),
     );
-    await controller.acceptTask(context);
+    await controller.acceptTask();
   }
 
-  Future copyTask({PortalTask portalTask}) async {
-    var responsibleIds = <String>[];
+  Future copyTask({PortalTask? portalTask}) async {
+    final responsibleIds = <String?>[];
 
-    var taskFrom = portalTask ?? task.value;
+    final taskFrom = portalTask ?? task.value;
 
-    for (var item in taskFrom.responsibles) responsibleIds.add(item.id);
+    for (final item in taskFrom.responsibles!) {
+      responsibleIds.add(item!.id);
+    }
 
-    var newTask = NewTaskDTO(
-      deadline:
-          taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline) : null,
-      startDate: taskFrom.startDate != null
-          ? DateTime.parse(taskFrom.startDate)
-          : null,
+    final newTask = NewTaskDTO(
+      deadline: taskFrom.deadline != null ? DateTime.parse(taskFrom.deadline!) : null,
+      startDate: taskFrom.startDate != null ? DateTime.parse(taskFrom.startDate!) : null,
       description: taskFrom.description,
       milestoneid: taskFrom.milestoneId,
       priority: taskFrom.priority == 1 ? 'high' : 'normal',
-      projectId: taskFrom.projectOwner.id,
+      projectId: taskFrom.projectOwner!.id!,
       responsibles: responsibleIds,
       title: taskFrom.title,
       copyFiles: true,
       copySubtasks: true,
     );
 
-    var copiedTask =
-        await _api.copyTask(copyFrom: task.value.id, newTask: newTask);
+    final copiedTask = await _api.copyTask(copyFrom: task.value.id!, newTask: newTask);
 
-    locator<EventHub>().fire('needToRefreshTasks');
+    if (copiedTask != null) {
+      locator<EventHub>().fire('needToRefreshTasks');
 
-    var newTaskController =
-        Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
+      final newTaskController =
+          Get.put(TaskItemController(copiedTask), tag: copiedTask.id.toString());
 
-    Get.find<NavigationController>()
-        .to(TaskDetailedView(), arguments: {'controller': newTaskController});
+      await Get.find<NavigationController>()
+          .to(const TaskDetailedView(), arguments: {'controller': newTaskController});
+    }
   }
 
-  Future<void> initTaskStatus(PortalTask portalTask) async {
+  Future<void> initTaskStatus(PortalTask? portalTask) async {
     isStatusLoaded.value = false;
-    var statusesController = Get.find<TaskStatusesController>();
-    Status receivedStatus = await statusesController.getTaskStatus(portalTask);
+    final statusesController = Get.find<TaskStatusesController>();
+    await statusesController.getStatuses();
+    final receivedStatus = await statusesController.getTaskStatus(portalTask);
     if (receivedStatus != null && !receivedStatus.isNull) {
       status.value = receivedStatus;
       isStatusLoaded.value = true;
@@ -198,66 +230,68 @@ class TaskItemController extends GetxController {
 
   Future reloadTask({bool showLoading = false}) async {
     if (showLoading) loaded.value = false;
-    var t = await _api.getTaskByID(id: task.value.id);
+    final t = await _api.getTaskByID(id: task.value.id!);
     if (t != null) {
       task.value = t;
       await initTaskStatus(task.value);
     }
 
-    var team = Get.find<ProjectTeamController>()
-      ..setup(projectId: task.value.projectOwner.id);
+    final team = Get.find<ProjectTeamController>()..setup(projectId: task.value.projectOwner!.id);
 
     await team.getTeam();
-    var responsibles = team.usersList
-        .where((user) =>
-            task.value.responsibles.any((element) => user.id == element.id))
+    final responsibles = team.usersList
+        .where((user) => task.value.responsibles!.any((element) => user.id == element!.id))
         .toList();
-    task.value.responsibles.clear();
-    for (var user in responsibles) {
-      task.value.responsibles.add(user.portalUser);
+    task.value.responsibles!.clear();
+    for (final user in responsibles) {
+      task.value.responsibles!.add(user.portalUser);
     }
+
+    locator<EventHub>().fire('needToRefreshTasks');
 
     if (showLoading) loaded.value = true;
   }
 
-  void openStatuses(context) {
-    if (task.value.canEdit && isStatusLoaded.isTrue)
-      showsStatusesBS(context: context, taskItemController: this);
+  Future<void> openStatuses(BuildContext context) async {
+    if (task.value.canEdit! && isStatusLoaded.isTrue) {
+      if (Get.find<PlatformController>().isMobile) {
+        showsStatusesBS(context: context, taskItemController: this);
+      } else {
+        await showsStatusesPM(context: context, taskItemController: this);
+      }
+    }
   }
 
   Future<void> tryChangingStatus({
-    int id,
-    int newStatusId,
-    int newStatusType,
+    required int id,
+    required int newStatusId,
+    required int newStatusType,
   }) async {
-    if (newStatusId == status?.value?.id) return;
+    if (newStatusId == status.value.id) return;
 
-    if (newStatusType == 2 &&
-        task.value.status != newStatusType &&
-        task.value.hasOpenSubtasks) {
+    if (newStatusType == 2 && task.value.status != newStatusType && task.value.hasOpenSubtasks) {
       await Get.dialog(StyledAlertDialog(
         titleText: tr('closingTask'),
         contentText: tr('closingTaskWithActiveSubtasks'),
         acceptText: tr('closeTask').toUpperCase(),
         onAcceptTap: () async {
-          await _changeTaskStatus(
-              id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+          await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
           Get.back();
         },
       ));
     } else {
-      await _changeTaskStatus(
-          id: id, newStatusId: newStatusId, newStatusType: newStatusType);
+      await _changeTaskStatus(id: id, newStatusId: newStatusId, newStatusType: newStatusType);
     }
   }
 
-  Future _changeTaskStatus({int id, int newStatusId, int newStatusType}) async {
+  Future _changeTaskStatus(
+      {required int id, required int newStatusId, required int newStatusType}) async {
     loaded.value = false;
-    var t = await _api.updateTaskStatus(
+    final t = await _api.updateTaskStatus(
         taskId: id, newStatusId: newStatusId, newStatusType: newStatusType);
 
     if (t != null) {
-      var newTask = PortalTask.fromJson(t);
+      final newTask = PortalTask.fromJson(t as Map<String, dynamic>);
       task.value = newTask;
       await initTaskStatus(newTask);
 
@@ -266,13 +300,13 @@ class TaskItemController extends GetxController {
     loaded.value = true;
   }
 
-  Future deleteTask({@required int taskId}) async {
-    var r = await _api.deleteTask(taskId: taskId);
+  Future<bool> deleteTask({required int taskId}) async {
+    final r = await _api.deleteTask(taskId: taskId);
     return r != null;
   }
 
-  Future subscribeToTask({@required int taskId}) async {
-    var r = await _api.subscribeToTask(taskId: taskId);
+  Future<bool> subscribeToTask({required int taskId}) async {
+    final r = await _api.subscribeToTask(taskId: taskId);
     return r != null;
   }
 
@@ -282,15 +316,16 @@ class TaskItemController extends GetxController {
     }
   }
 
-  void toProjectOverview() async {
-    var projectService = locator<ProjectService>();
-    var project = await projectService.getProjectById(
-      projectId: task.value.projectOwner.id,
+  Future<void> toProjectOverview() async {
+    final projectService = locator<ProjectService>();
+    final project = await projectService.getProjectById(
+      projectId: task.value.projectOwner!.id!,
     );
-    if (project != null)
-      Get.find<NavigationController>().to(
+    if (project != null) {
+      await Get.find<NavigationController>().to(
         ProjectDetailedView(),
         arguments: {'projectDetailed': project},
       );
+    }
   }
 }

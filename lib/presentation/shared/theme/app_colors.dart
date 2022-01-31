@@ -55,26 +55,28 @@ class AppColors {
   final Color surface;
   final Color tabbarBackground;
   final Color colorError;
+  final Color backgroundSecond;
 
   const AppColors({
-    @required this.background,
-    @required this.backgroundColor,
-    @required this.bgDescription,
-    @required this.lightSecondary,
-    @required this.links,
-    @required this.onBackground,
-    @required this.onNavBar,
-    @required this.onPrimary,
-    @required this.onPrimarySurface,
-    @required this.onSurface,
-    @required this.outline,
-    @required this.primary,
-    @required this.primarySurface,
-    @required this.projectsSubtitle,
-    @required this.snackBarColor,
-    @required this.systemBlue,
-    @required this.surface,
-    @required this.tabbarBackground,
-    @required this.colorError,
+    required this.background,
+    required this.backgroundColor,
+    required this.bgDescription,
+    required this.lightSecondary,
+    required this.links,
+    required this.onBackground,
+    required this.onNavBar,
+    required this.onPrimary,
+    required this.onPrimarySurface,
+    required this.onSurface,
+    required this.outline,
+    required this.primary,
+    required this.primarySurface,
+    required this.projectsSubtitle,
+    required this.snackBarColor,
+    required this.systemBlue,
+    required this.surface,
+    required this.tabbarBackground,
+    required this.colorError,
+    required this.backgroundSecond,
   });
 }

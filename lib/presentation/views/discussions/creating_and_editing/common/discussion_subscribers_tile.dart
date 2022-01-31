@@ -45,8 +45,8 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/new
 class DiscussionSubscribersTile extends StatelessWidget {
   final DiscussionActionsController controller;
   const DiscussionSubscribersTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override

@@ -32,6 +32,7 @@
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/from_api/portal_comment.dart';
@@ -40,21 +41,21 @@ import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/from_api/error.dart';
 
 class CommentsApi {
-  Future<ApiDTO<List<PortalComment>>> getTaskComments({int taskId}) async {
-    var url = await locator.get<CoreApi>().taskComments(taskId: taskId);
+  Future<ApiDTO<List<PortalComment>>> getTaskComments({required int taskId}) async {
+    final url = await locator.get<CoreApi>().taskComments(taskId: taskId);
 
-    var result = ApiDTO<List<PortalComment>>();
+    final result = ApiDTO<List<PortalComment>>();
 
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => PortalComment.fromJson(i))
+            .map((i) => PortalComment.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -64,22 +65,22 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addTaskComment({
-    int taskId,
-    String content,
+    required int taskId,
+    required String content,
   }) async {
-    var url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
+    final url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
 
-    var result = ApiDTO<PortalComment>();
+    final result = ApiDTO<PortalComment>();
 
     try {
-      var body = {'content': content};
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final body = {'content': content};
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalComment.fromJson(responseJson);
+        final responseJson = json.decode(response.body);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -89,23 +90,22 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addMessageComment({
-    int messageId,
-    String content,
+    required int messageId,
+    required String content,
   }) async {
-    var url =
-        await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
+    final url = await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
 
-    var result = ApiDTO<PortalComment>();
+    final result = ApiDTO<PortalComment>();
 
     try {
-      var body = {'content': content};
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final body = {'content': content};
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalComment.fromJson(responseJson);
+        final responseJson = json.decode(response.body);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -115,23 +115,23 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addTaskReplyComment({
-    int taskId,
-    String content,
-    String parentId,
+    required int taskId,
+    required String content,
+    required String parentId,
   }) async {
-    var url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
+    final url = await locator.get<CoreApi>().addTaskCommentUrl(taskId: taskId);
 
-    var result = ApiDTO<PortalComment>();
+    final result = ApiDTO<PortalComment>();
 
     try {
-      var body = {'content': content, 'parentId': parentId};
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final body = {'content': content, 'parentId': parentId};
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalComment.fromJson(responseJson);
+        final responseJson = json.decode(response.body);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -141,24 +141,23 @@ class CommentsApi {
   }
 
   Future<ApiDTO<PortalComment>> addMessageReplyComment({
-    int messageId,
-    String content,
-    String parentId,
+    required int messageId,
+    required String content,
+    required String parentId,
   }) async {
-    var url =
-        await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
+    final url = await locator.get<CoreApi>().addMessageCommentUrl(messageId: messageId);
 
-    var result = ApiDTO<PortalComment>();
+    final result = ApiDTO<PortalComment>();
 
     try {
-      var body = {'content': content, 'parentId': parentId};
-      var response = await locator.get<CoreApi>().postRequest(url, body);
+      final body = {'content': content, 'parentId': parentId};
+      final response = await locator.get<CoreApi>().postRequest(url, body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalComment.fromJson(responseJson);
+        final responseJson = json.decode(response.body);
+        result.response = PortalComment.fromJson(responseJson as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -167,19 +166,18 @@ class CommentsApi {
     return result;
   }
 
-  Future<ApiDTO> deleteComment({String commentId}) async {
-    var url =
-        await locator.get<CoreApi>().deleteCommentUrl(commentId: commentId);
+  Future<ApiDTO> deleteComment({required String commentId}) async {
+    final url = await locator.get<CoreApi>().deleteCommentUrl(commentId: commentId);
 
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -188,19 +186,23 @@ class CommentsApi {
   }
 
   Future<String> getDiscussionCommentLink({
-    discussionId,
-    projectId,
-    commentId,
+    required int discussionId,
+    required int projectId,
+    required String commentId,
   }) async {
-    return await locator.get<CoreApi>().getDiscussionCommentLink(
+    return locator.get<CoreApi>().getDiscussionCommentLink(
           discussionId: discussionId,
           projectId: projectId,
           commentId: commentId,
         );
   }
 
-  Future<String> getTaskCommentLink({taskId, projectId, commentId}) async {
-    return await locator.get<CoreApi>().getTaskCommentLink(
+  Future<String> getTaskCommentLink({
+    required int taskId,
+    required int projectId,
+    required String commentId,
+  }) async {
+    return locator.get<CoreApi>().getTaskCommentLink(
           taskId: taskId,
           projectId: projectId,
           commentId: commentId,
@@ -208,24 +210,47 @@ class CommentsApi {
   }
 
   Future<ApiDTO> updateComment({
-    String commentId,
-    String content,
+    required String commentId,
+    required String content,
   }) async {
-    var url =
-        await locator.get<CoreApi>().updateCommentUrl(commentId: commentId);
+    final url = await locator.get<CoreApi>().updateCommentUrl(commentId: commentId);
 
-    var result = ApiDTO();
+    final result = ApiDTO();
 
     try {
-      var body = {'content': content, 'commentid': commentId};
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final body = {'content': content, 'commentid': commentId};
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<String>> uploadImage({required MultipartFile file}) async {
+    final url = await locator.get<CoreApi>().getUploadImagesUrl();
+
+    final result = ApiDTO<String>();
+
+    final request = http.MultipartRequest('POST', Uri.parse(url));
+    request.fields['name'] = 'upload';
+    request.fields['filename'] = file.filename ?? '';
+    request.headers['Authorization'] =
+        await locator.get<CoreApi>().getToken() ?? ''; //TODO nullcheck
+    request.files.add(file);
+
+    try {
+      final responseStream = await request.send();
+      final response = await http.Response.fromStream(responseStream);
+
+      result.response = response.body;
     } catch (e) {
       result.error = CustomError(message: e.toString());
     }

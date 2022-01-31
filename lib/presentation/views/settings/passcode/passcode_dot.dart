@@ -40,9 +40,9 @@ class PasscodeDot extends StatelessWidget {
   final bool passwordIsWrong;
 
   const PasscodeDot({
-    Key key,
-    @required this.inputLenght,
-    @required this.position,
+    Key? key,
+    required this.inputLenght,
+    required this.position,
     this.passwordIsWrong = false,
   }) : super(key: key);
 

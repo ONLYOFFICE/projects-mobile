@@ -43,8 +43,8 @@ import 'package:projects/presentation/views/new_task/select/select_date_view.dar
 class StartDateTile extends StatelessWidget {
   final TaskActionsController controller;
   const StartDateTile({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
@@ -52,19 +52,17 @@ class StartDateTile extends StatelessWidget {
     return Obx(
       () {
         // ignore: omit_local_variable_types
-        bool _isSelected = controller.startDateText.value.isNotEmpty;
+        final bool _isSelected = controller.startDateText!.value.isNotEmpty;
         return NewItemTile(
           icon: SvgIcons.start_date,
-          text:
-              _isSelected ? controller.startDateText.value : tr('setStartDate'),
+          text: _isSelected ? controller.startDateText!.value : tr('setStartDate'),
           caption: _isSelected ? '${tr('startDate')}:' : null,
           isSelected: _isSelected,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           suffix: _isSelected
               ? IconButton(
-                  icon: Icon(Icons.close_rounded,
-                      size: 24, color: Get.theme.colors().onBackground),
+                  icon: Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
                   onPressed: () => controller.changeStartDate(null))
               : null,
           suffixPadding: const EdgeInsets.only(right: 10),

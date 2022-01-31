@@ -47,58 +47,59 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 class TaskCommentsView extends StatelessWidget {
   final TaskItemController controller;
   const TaskCommentsView({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Obx(
       () {
-        if (controller.loaded.value == true &&
-            controller.task.value.comments != null) {
-          var comments = controller.task.value.comments;
+        if (controller.loaded.value == true && controller.task.value.comments != null) {
+          final comments = controller.task.value.comments!;
           return Column(
             children: [
-              if (comments.isEmpty)
-                Expanded(
-                  child: EmptyScreen(
-                    icon: SvgIcons.comments_not_created,
-                    text: tr('noCommentsCreated'),
-                  ),
+              Expanded(
+                child: SmartRefresher(
+                  controller: controller.commentsRefreshController,
+                  onRefresh: () async => await controller.reloadTask(showLoading: true),
+                  child: () {
+                    if (comments.isEmpty)
+                      return Center(
+                        child: EmptyScreen(
+                          icon: SvgIcons.comments_not_created,
+                          text: tr('noCommentsCreated'),
+                        ),
+                      );
+
+                    if (comments.isNotEmpty)
+                      return ListView.separated(
+                        itemCount: comments.length,
+                        controller: controller.commentsListController,
+                        padding: const EdgeInsets.only(top: 32, bottom: 40),
+                        separatorBuilder: (BuildContext context, int index) {
+                          return SizedBox(
+                            height: comments[index].show ? 21 : null,
+                          );
+                        },
+                        itemBuilder: (BuildContext context, int index) {
+                          return CommentsThread(
+                            comment: comments[index],
+                            taskId: controller.task.value.id,
+                          );
+                        },
+                      );
+                  }(),
                 ),
-              if (comments.isNotEmpty)
-                Expanded(
-                  child: SmartRefresher(
-                    controller: controller.commentsRefreshController,
-                    onRefresh: () async =>
-                        await controller.reloadTask(showLoading: true),
-                    child: ListView.separated(
-                      itemCount: comments.length,
-                      controller: controller.commentsListController,
-                      padding: const EdgeInsets.only(top: 32, bottom: 40),
-                      separatorBuilder: (BuildContext context, int index) {
-                        return SizedBox(
-                          height: comments[index].show ? 21 : null,
-                        );
-                      },
-                      itemBuilder: (BuildContext context, int index) {
-                        return CommentsThread(
-                          comment: comments[index],
-                          taskId: controller.task.value.id,
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              if (controller?.task?.value?.canCreateComment == null ||
-                  controller?.task?.value?.canCreateComment == true)
+              ),
+              if (controller.task.value.canCreateComment == null ||
+                  controller.task.value.canCreateComment == true)
                 AddCommentButton(
                   onPressed: () => Get.find<NavigationController>().toScreen(
                     const NewCommentView(),
                     arguments: {
-                      'controller': Get.put(NewTaskCommentController(
-                          idFrom: controller.task.value.id))
+                      'controller':
+                          Get.put(NewTaskCommentController(idFrom: controller.task.value.id))
                     },
                   ),
                 ),

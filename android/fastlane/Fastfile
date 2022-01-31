@@ -8,6 +8,11 @@ Dotenv.load '.env.secret'
 default_platform(:android)
 skip_docs
 
+def escape_markdown2(string)
+    pattern = /(\[|\_|\*|\[|\`)/
+    string.gsub(pattern){|match|"\\"  + match}
+end
+
 platform :android do
   version_name = '1.0'
   version_code = 1
@@ -88,6 +93,8 @@ platform :android do
       match_lightweight_tag: false,
       merge_commit_filtering: "exclude_merges"
     )
+
+    change_log = escape_markdown2(change_log)
 
     # Build artifacts and upload to store
     get_packages

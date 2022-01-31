@@ -34,13 +34,13 @@ part of 'select_user_screen.dart';
 
 class _UserList extends StatelessWidget {
   const _UserList({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var usersController = Get.find<UsersController>();
-    var currentUser = Get.find<UserController>();
+    final usersController = Get.find<UsersController>();
+    final currentUser = Get.find<UserController>();
 
     return Obx(
       () => PaginationListView(
@@ -48,8 +48,8 @@ class _UserList extends StatelessWidget {
         child: ListView.builder(
           itemCount: usersController.paginationController.data.length,
           itemBuilder: (BuildContext context, int index) {
-            PortalUser user = usersController.paginationController.data[index];
-            if (currentUser.user.id == user.id) return const SizedBox();
+            final user = usersController.paginationController.data[index] as PortalUser;
+            if (currentUser.user!.id == user.id) return const SizedBox();
             return _UserTile(user: user);
           },
         ),

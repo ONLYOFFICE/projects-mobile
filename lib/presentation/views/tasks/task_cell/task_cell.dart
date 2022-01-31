@@ -49,33 +49,24 @@ import 'package:projects/presentation/views/task_detailed/task_detailed_view.dar
 
 part 'status_image.dart';
 
-class TaskCell extends StatefulWidget {
+class TaskCell extends StatelessWidget {
   final PortalTask task;
-  const TaskCell({Key key, this.task}) : super(key: key);
-
-  @override
-  _TaskCellState createState() => _TaskCellState();
-}
-
-class _TaskCellState extends State<TaskCell> {
-  TaskItemController itemController;
-
-  @override
-  void initState() {
-    itemController = Get.put(
-      TaskItemController(widget.task),
-      tag: widget.task.id.toString(),
-    );
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) async => await itemController.initTaskStatus(widget.task));
-    super.initState();
-  }
+  TaskCell({Key? key, required this.task}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final itemController = TaskItemController(task);
+    Get.put(
+      itemController,
+      tag: task.id.toString(),
+    );
+    WidgetsBinding.instance!.addPostFrameCallback(
+      (_) async => await itemController.initTaskStatus(task),
+    );
+
     return InkWell(
       onTap: () => Get.find<NavigationController>()
-          .to(TaskDetailedView(), arguments: {'controller': itemController}),
+          .to(const TaskDetailedView(), arguments: {'controller': itemController}),
       child: SizedBox(
         height: 72,
         child: Row(
@@ -109,15 +100,14 @@ class _TaskCellState extends State<TaskCell> {
 
 class _StatusText extends StatelessWidget {
   const _StatusText({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final TaskItemController controller;
+  final TaskItemController? controller;
 
   bool get _loading =>
-      controller.isStatusLoaded.isFalse ||
-      controller?.status?.value?.isNull != false;
+      controller!.isStatusLoaded.isFalse || controller?.status.value.isNull != false;
 
   @override
   Widget build(BuildContext context) {
@@ -130,15 +120,14 @@ class _StatusText extends StatelessWidget {
           children: [
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: Get.width * 0.25),
-              child: Text(controller.status.value.title,
+              child: Text(controller!.status.value.title!,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.status(
-                      color: controller.getStatusTextColor)),
+                  style: TextStyleHelper.status(color: controller!.getStatusTextColor)),
             ),
             Text(' • ',
-                style: TextStyleHelper.caption(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
+                style:
+                    TextStyleHelper.caption(color: Get.theme.colors().onSurface.withOpacity(0.6))),
           ],
         );
       },
@@ -148,11 +137,11 @@ class _StatusText extends StatelessWidget {
 
 // refactor
 class _SecondColumn extends StatelessWidget {
-  final TaskItemController itemController;
+  final TaskItemController? itemController;
 
   const _SecondColumn({
-    Key key,
-    @required this.itemController,
+    Key? key,
+    required this.itemController,
   }) : super(key: key);
 
   @override
@@ -167,16 +156,16 @@ class _SecondColumn extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               CellAtributedTitle(
-                text: itemController.task.value.title,
+                text: itemController!.task.value.title,
                 style: TextStyleHelper.projectTitle,
-                atributeIcon: AppIcon(icon: SvgIcons.high_priority),
-                atributeIconVisible: itemController.task.value.priority == 1,
+                atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
+                atributeIconVisible: itemController!.task.value.priority == 1,
               ),
               Wrap(
                 children: [
                   _StatusText(controller: itemController),
                   Text(
-                    itemController.displayName,
+                    itemController!.displayName!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyleHelper.caption(
@@ -194,20 +183,20 @@ class _SecondColumn extends StatelessWidget {
 }
 
 class _ThirdColumn extends StatelessWidget {
-  final TaskItemController controller;
+  final TaskItemController? controller;
 
   const _ThirdColumn({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _now = DateTime.now();
+    final _now = DateTime.now();
 
-    DateTime _deadline;
-    if (controller.task.value.deadline != null)
-      _deadline = DateTime.parse(controller.task.value.deadline);
+    DateTime? _deadline;
+    if (controller!.task.value.deadline != null)
+      _deadline = DateTime.parse(controller!.task.value.deadline!);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
@@ -217,22 +206,25 @@ class _ThirdColumn extends StatelessWidget {
           Text(
               formatedDateFromString(
                 now: _now,
-                stringDate: controller.task.value.deadline,
+                stringDate: controller!.task.value.deadline!,
               ),
               style: _deadline.isBefore(_now)
-                  ? TextStyleHelper.caption(
-                      color: Get.theme.colors().colorError)
-                  : TextStyleHelper.caption(
-                      color: Get.theme.colors().onSurface)),
+                  ? TextStyleHelper.caption(color: Get.theme.colors().colorError)
+                  : TextStyleHelper.caption(color: Get.theme.colors().onSurface)),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            AppIcon(icon: SvgIcons.subtasks, color: const Color(0xff666666)),
+            const AppIcon(icon: SvgIcons.subtasks, color: Color(0xff666666)),
             const SizedBox(width: 5),
-            Text(controller.task.value.subtasks.length.toString(),
-                style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6))),
+            SizedBox(
+              width: 20,
+              child: Text(
+                controller!.task.value.subtasks!.length.toString(),
+                overflow: TextOverflow.ellipsis,
+                style: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.6)),
+              ),
+            ),
           ],
         ),
       ],

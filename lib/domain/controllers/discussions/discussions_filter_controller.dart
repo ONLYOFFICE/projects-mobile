@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
@@ -42,13 +41,13 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
 
 class DiscussionsFilterController extends BaseFilterController {
-  final _api = locator<DiscussionsService>();
+  final DiscussionsService _api = locator<DiscussionsService>();
   final _sortController = Get.find<DiscussionsSortController>();
-  final _storage = locator<Storage>();
+  final Storage _storage = locator<Storage>();
 
   final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss.mmm');
 
-  Function applyFiltersDelegate;
+  Function? applyFiltersDelegate;
 
   RxString acceptedFilters = ''.obs;
 
@@ -59,13 +58,17 @@ class DiscussionsFilterController extends BaseFilterController {
   String _otherFilter = '';
 
   String get authorFilter => _authorFilter;
+
   String get statusFilter => _statusFilter;
+
   String get projectFilter => _projectFilter;
+
   String get creationDateFilter => _creationDateFilter;
+
   String get otherFilter => _otherFilter;
 
   var _selfId;
-  String _projectId;
+  String? _projectId;
 
   bool get _hasFilters =>
       _authorFilter.isNotEmpty ||
@@ -74,11 +77,11 @@ class DiscussionsFilterController extends BaseFilterController {
       _creationDateFilter.isNotEmpty ||
       _otherFilter.isNotEmpty;
 
-  RxMap author;
-  RxMap status;
-  RxMap creationDate;
-  RxMap project;
-  RxMap other;
+  late RxMap author;
+  late RxMap status;
+  late RxMap creationDate;
+  late RxMap project;
+  late RxMap other;
 
   @override
   void onInit() async {
@@ -95,8 +98,7 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   @override
-  String get filtersTitle =>
-      plural('discussionsFilterConfirm', suitableResultCount.value);
+  String get filtersTitle => plural('discussionsFilterConfirm', suitableResultCount.value);
 
   DiscussionsFilterController() {
     suitableResultCount = (-1).obs;
@@ -104,15 +106,15 @@ class DiscussionsFilterController extends BaseFilterController {
 
   set projectId(String value) => _projectId = value;
 
-  void changeAuthor(String filter, [newValue = '']) async {
+  Future<void> changeAuthor(String filter, [dynamic newValue = '']) async {
     _selfId = await Get.find<UserController>().getUserId();
 
     _authorFilter = '';
     switch (filter) {
       case 'me':
         author['other'] = '';
-        author['me'] = !author['me'];
-        if (author['me']) _authorFilter = '&participant=$_selfId';
+        author['me'] = !(author['me'] as bool);
+        if (author['me'] as bool) _authorFilter = '&participant=$_selfId';
         break;
       case 'other':
         author['me'] = false;
@@ -125,35 +127,35 @@ class DiscussionsFilterController extends BaseFilterController {
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
-  Future<void> changeStatus(String filter, [newValue = false]) async {
+  Future<void> changeStatus(String filter) async {
     _selfId = await Get.find<UserController>().getUserId();
 
     _statusFilter = '';
     if (filter == 'open') {
       status['archived'] = false;
-      status['open'] = !status['open'];
-      if (status['open']) _statusFilter = '&status=open';
+      status['open'] = !(status['open'] as bool);
+      if (status['open'] as bool) _statusFilter = '&status=open';
     }
     if (filter == 'archived') {
       status['open'] = false;
-      status['archived'] = !status['archived'];
-      if (status['archived']) _statusFilter = '&status=archived';
+      status['archived'] = !(status['archived'] as bool);
+      if (status['archived'] as bool) _statusFilter = '&status=archived';
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
-  void changeProject(String filter, [newValue = '']) async {
+  Future<void> changeProject(String filter, [dynamic newValue = '']) async {
     _projectFilter = '';
     switch (filter) {
       case 'my':
         project['other'] = '';
         project['withTag'] = '';
         project['withoutTag'] = false;
-        project['my'] = !project['my'];
-        if (project['my']) _projectFilter = '&myprojects=true';
+        project['my'] = !(project['my'] as bool);
+        if (project['my'] as bool) _projectFilter = '&myprojects=true';
         break;
       case 'other':
         project['my'] = false;
@@ -181,20 +183,20 @@ class DiscussionsFilterController extends BaseFilterController {
         project['my'] = false;
         project['other'] = '';
         project['withTag'] = '';
-        project['withoutTag'] = !project['withoutTag'];
-        if (project['withoutTag']) _projectFilter = '&tag=-1';
+        project['withoutTag'] = !(project['withoutTag'] as bool);
+        if (project['withoutTag'] as bool) _projectFilter = '&tag=-1';
         break;
       default:
     }
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
-  void changeOther(String filter, [newValue]) {
+  void changeOther(String filter) {
     _otherFilter = '';
     switch (filter) {
       case 'subscribed':
-        other['subscribed'] = !other['subscribed'];
-        if (other['subscribed']) _otherFilter = '&follow=true';
+        other['subscribed'] = !(other['subscribed'] as bool);
+        if (other['subscribed'] as bool) _otherFilter = '&follow=true';
         break;
       default:
     }
@@ -203,51 +205,53 @@ class DiscussionsFilterController extends BaseFilterController {
 
   Future<void> changeCreationDate(
     String filter, {
-    DateTime start,
-    DateTime stop,
+    DateTime? start,
+    DateTime? stop,
   }) async {
     _creationDateFilter = '';
 
     if (filter == 'today') {
       creationDate['last7Days'] = false;
       creationDate['custom']['selected'] = false;
-      creationDate['today'] = !creationDate['today'];
-      var dueDate = formatter.format(DateTime.now()).substring(0, 10);
-      if (creationDate['today'])
+      creationDate['today'] = !(creationDate['today'] as bool);
+      final dueDate = formatter.format(DateTime.now()).substring(0, 10);
+      if (creationDate['today'] as bool) {
         _creationDateFilter = '&createdStart=$dueDate&createdStop=$dueDate';
+      }
     }
     if (filter == 'last7Days') {
       creationDate['today'] = false;
       creationDate['custom']['selected'] = false;
-      creationDate['last7Days'] = !creationDate['last7Days'];
-      var startDate = formatter
-          .format(DateTime.now().add(const Duration(days: -7)))
-          .substring(0, 10);
-      var stopDate = formatter.format(DateTime.now()).substring(0, 10);
+      creationDate['last7Days'] = !(creationDate['last7Days'] as bool);
+      final startDate =
+          formatter.format(DateTime.now().add(const Duration(days: -7))).substring(0, 10);
+      final stopDate = formatter.format(DateTime.now()).substring(0, 10);
 
-      if (creationDate['last7Days'])
+      if (creationDate['last7Days'] as bool) {
         _creationDateFilter = '&createdStart=$startDate&createdStop=$stopDate';
+      }
     }
     if (filter == 'custom') {
       creationDate['today'] = false;
       creationDate['last7Days'] = false;
-      creationDate['custom']['selected'] = !creationDate['custom']['selected'];
+      creationDate['custom']['selected'] = !(creationDate['custom']['selected'] as bool);
       creationDate['custom']['startDate'] = start;
       creationDate['custom']['stopDate'] = stop;
-      var startDate = formatter.format(start).substring(0, 10);
-      var stopDate = formatter.format(stop).substring(0, 10);
-      if (creationDate['custom']['selected'])
+      final startDate = formatter.format(start!).substring(0, 10);
+      final stopDate = formatter.format(stop!).substring(0, 10);
+      if (creationDate['custom']['selected'] as bool) {
         _creationDateFilter = '&createdStart=$startDate&createdStop=$stopDate';
+      }
     }
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void getSuitableResultCount() async {
+  Future<void> getSuitableResultCount() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
-    var result = await _api.getDiscussionsByParams(
+    final result = await _api.getDiscussionsByParams(
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
       authorFilter: _authorFilter,
@@ -258,11 +262,13 @@ class DiscussionsFilterController extends BaseFilterController {
       projectId: _projectId,
     );
 
-    suitableResultCount.value = result.response.length;
+    if (result != null) {
+      suitableResultCount.value = result.response!.length;
+    }
   }
 
   @override
-  void resetFilters() async {
+  Future<void> resetFilters() async {
     author['me'] = false;
     author['other'] = '';
 
@@ -292,14 +298,14 @@ class DiscussionsFilterController extends BaseFilterController {
     _otherFilter = '';
     _creationDateFilter = '';
 
-    getSuitableResultCount();
+    await getSuitableResultCount();
   }
 
   @override
-  void applyFilters() async {
+  Future<void> applyFilters() async {
     hasFilters.value = _hasFilters;
 
-    if (applyFiltersDelegate != null) applyFiltersDelegate();
+    applyFiltersDelegate?.call();
 
     await saveFilters();
   }
@@ -319,10 +325,10 @@ class DiscussionsFilterController extends BaseFilterController {
 
   @override
   Future<void> saveFilters() async {
-    var creation = Map.from(creationDate);
+    final creation = Map.from(creationDate);
 
-    var startDate = creation['custom']['startDate'].toIso8601String();
-    var stopDate = creation['custom']['stopDate'].toIso8601String();
+    final startDate = creation['custom']['startDate'].toIso8601String();
+    final stopDate = creation['custom']['stopDate'].toIso8601String();
 
     creation['custom'] = {
       'selected': creationDate['custom']['selected'],
@@ -356,11 +362,7 @@ class DiscussionsFilterController extends BaseFilterController {
     creationDate = {
       'today': false,
       'last7Days': false,
-      'custom': {
-        'selected': false,
-        'startDate': DateTime.now(),
-        'stopDate': DateTime.now()
-      }
+      'custom': {'selected': false, 'startDate': DateTime.now(), 'stopDate': DateTime.now()}
     }.obs;
     other = {'subscribed': false}.obs;
 
@@ -374,37 +376,37 @@ class DiscussionsFilterController extends BaseFilterController {
   }
 
   Future<void> _getSavedFilters() async {
-    var savedFilters =
-        await _storage.read('discussionFilters', returnCopy: true);
+    final savedFilters = await _storage.read('discussionFilters', returnCopy: true);
 
     if (savedFilters != null) {
       try {
         author.value =
-            Map<String, Object>.from(savedFilters['author']['buttons']);
-        _authorFilter = savedFilters['author']['value'];
+            Map<String, Object>.from(savedFilters['author']['buttons'] as Map<dynamic, dynamic>);
+        _authorFilter = savedFilters['author']['value'] as String;
 
         project.value =
-            Map<String, Object>.from(savedFilters['project']['buttons']);
-        _projectFilter = savedFilters['project']['value'];
+            Map<String, Object>.from(savedFilters['project']['buttons'] as Map<dynamic, dynamic>);
+        _projectFilter = savedFilters['project']['value'] as String;
 
         status.value =
-            Map<String, bool>.from(savedFilters['status']['buttons']);
-        _statusFilter = savedFilters['status']['value'];
+            Map<String, bool>.from(savedFilters['status']['buttons'] as Map<dynamic, dynamic>);
+        _statusFilter = savedFilters['status']['value'] as String;
 
-        Map creation =
-            Map<String, Object>.from(savedFilters['creationDate']['buttons']);
+        final Map creation = Map<String, Object>.from(
+            savedFilters['creationDate']['buttons'] as Map<dynamic, dynamic>);
         creation['custom'] = {
           'selected': creation['custom']['selected'],
-          'startDate': DateTime.parse(creation['custom']['startDate']),
-          'stopDate': DateTime.parse(creation['custom']['stopDate']),
+          'startDate': DateTime.parse(creation['custom']['startDate'] as String),
+          'stopDate': DateTime.parse(creation['custom']['stopDate'] as String),
         };
         creationDate.value = creation;
-        _creationDateFilter = savedFilters['creationDate']['value'];
+        _creationDateFilter = savedFilters['creationDate']['value'] as String;
 
-        other.value = Map<String, bool>.from(savedFilters['other']['buttons']);
-        _otherFilter = savedFilters['other']['value'];
+        other.value =
+            Map<String, bool>.from(savedFilters['other']['buttons'] as Map<dynamic, dynamic>);
+        _otherFilter = savedFilters['other']['value'] as String;
 
-        hasFilters.value = savedFilters['hasFilters'];
+        hasFilters.value = savedFilters['hasFilters'] as bool;
       } catch (e) {
         printWarning('Discussions filter loading error: $e');
         await loadFilters();

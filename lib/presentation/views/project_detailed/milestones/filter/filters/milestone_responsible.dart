@@ -33,11 +33,11 @@
 part of '../milestone_filter_screen.dart';
 
 class _MilestoneResponsible extends StatelessWidget {
-  const _MilestoneResponsible({Key key}) : super(key: key);
+  const _MilestoneResponsible({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var filterController = Get.find<MilestonesFilterController>();
+    final filterController = Get.find<MilestonesFilterController>();
     return Obx(
       () => FiltersRow(
         title: tr('responsible'),
@@ -45,23 +45,20 @@ class _MilestoneResponsible extends StatelessWidget {
           FilterElement(
               title: tr('me'),
               titleColor: Get.theme.colors().onSurface,
-              isSelected: filterController.milestoneResponsible['me'],
+              isSelected: filterController.milestoneResponsible?['me'] as bool,
               onTap: () => filterController.changeResponsible('me')),
           FilterElement(
-            title: filterController.milestoneResponsible['other'].isEmpty
+            title: filterController.milestoneResponsible!['other'].isEmpty as bool
                 ? tr('otherUser')
-                : filterController.milestoneResponsible['other'],
-            isSelected:
-                filterController.milestoneResponsible['other'].isNotEmpty,
-            cancelButtonEnabled:
-                filterController.milestoneResponsible['other'].isNotEmpty,
+                : filterController.milestoneResponsible!['other'] as String,
+            isSelected: filterController.milestoneResponsible?['other'].isNotEmpty as bool,
+            cancelButtonEnabled: filterController.milestoneResponsible?['other'].isNotEmpty as bool,
             onTap: () async {
-              var newUser = await Get.find<NavigationController>()
-                  .toScreen(const SelectUserScreen());
+              final newUser =
+                  await Get.find<NavigationController>().toScreen(const SelectUserScreen());
               await filterController.changeResponsible('other', newUser);
             },
-            onCancelTap: () =>
-                filterController.changeResponsible('other', null),
+            onCancelTap: () => filterController.changeResponsible('other', null),
           ),
         ],
       ),

@@ -31,15 +31,45 @@
  */
 
 import 'package:flutter/material.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsSortOption extends StatelessWidget {
   const DocumentsSortOption({
-    Key key,
-    @required this.controller,
+    Key? key,
+    required this.controller,
   }) : super(key: key);
 
-  final controller;
+  final BaseDocumentsController controller;
+
+  List<SortTile> getSortTile() {
+    return [
+      SortTile(
+        sortParameter: 'dateandtime',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'create_on',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'AZ',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'type',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'size',
+        sortController: controller.sortController,
+      ),
+      SortTile(
+        sortParameter: 'author',
+        sortController: controller.sortController,
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,30 +77,7 @@ class DocumentsSortOption extends StatelessWidget {
       children: [
         const SizedBox(height: 14.5),
         const Divider(height: 9, thickness: 1),
-        SortTile(
-          sortParameter: 'dateandtime',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'create_on',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'AZ',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'type',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'size',
-          sortController: controller.sortController,
-        ),
-        SortTile(
-          sortParameter: 'author',
-          sortController: controller.sortController,
-        ),
+        ...getSortTile(),
         const SizedBox(height: 20),
       ],
     );

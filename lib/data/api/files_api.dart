@@ -31,32 +31,32 @@
  */
 
 import 'dart:convert';
-import 'package:http/http.dart' as http;
 
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/move_folder_response.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/api/core_api.dart';
-import 'package:projects/data/models/from_api/error.dart';
 
 class FilesApi {
-  Future<ApiDTO<List<PortalFile>>> getTaskFiles({int taskId}) async {
-    var url = await locator.get<CoreApi>().getTaskFilesUrl(taskId: taskId);
+  Future<ApiDTO<List<PortalFile>>> getTaskFiles({required int taskId}) async {
+    final url = await locator.get<CoreApi>().getTaskFilesUrl(taskId: taskId);
 
-    var result = ApiDTO<List<PortalFile>>();
+    final result = ApiDTO<List<PortalFile>>();
 
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = (responseJson['response'] as List)
-            .map((i) => PortalFile.fromJson(i))
+            .map((i) => PortalFile.fromJson(i as Map<String, dynamic>))
             .toList();
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -66,27 +66,29 @@ class FilesApi {
   }
 
   Future<ApiDTO<FoldersResponse>> getFilesByParams({
-    int startIndex,
-    String query,
-    String sortBy,
-    String sortOrder,
-    int folderId,
-    String typeFilter,
-    String authorFilter,
-    String entityType,
+    int? startIndex,
+    String? query,
+    String? sortBy,
+    String? sortOrder,
+    int? folderId,
+    String? typeFilter,
+    String? authorFilter,
+    String? entityType,
   }) async {
     var url = await locator.get<CoreApi>().getFilesBaseUrl();
 
     if (entityType != null && entityType == 'task') {
       url = await locator
           .get<CoreApi>()
-          .getEntityFilesUrl(entityId: folderId.toString());
+          // TODO: delete force unwrap folderId
+          .getEntityFilesUrl(entityId: folderId!);
       url += '?entityType=task';
     } else {
-      if (folderId != null)
+      if (folderId != null) {
         url += '${folderId.toString()}?';
-      else
+      } else {
         url += '@projects?';
+      }
     }
 
     if (query != null) {
@@ -109,24 +111,26 @@ class FilesApi {
         sortOrder != null &&
         sortOrder.isNotEmpty) url += '&sortBy=$sortBy&sortOrder=$sortOrder';
 
-    var result = ApiDTO<FoldersResponse>();
+    final result = ApiDTO<FoldersResponse>();
 
     try {
-      var response = await locator.get<CoreApi>().getRequest(url);
+      final response = await locator.get<CoreApi>().getRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         if (entityType != null && entityType == 'task') {
-          var taskFiles = (responseJson['response'] as List)
-              .map((i) => PortalFile.fromJson(i))
+          final taskFiles = (responseJson['response'] as List)
+              .map((i) => PortalFile.fromJson(i as Map<String, dynamic>))
               .toList();
 
           result.response = FoldersResponse();
-          result.response.files = taskFiles;
-        } else
-          result.response = FoldersResponse.fromJson(responseJson['response']);
+          result.response!.files = taskFiles;
+        } else {
+          result.response = FoldersResponse.fromJson(
+              responseJson['response'] as Map<String, dynamic>);
+        }
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -136,20 +140,21 @@ class FilesApi {
   }
 
   Future<ApiDTO<Folder>> renameFolder(
-      {String folderId, String newTitle}) async {
-    var url = await locator.get<CoreApi>().getFolderByIdUrl(folderId: folderId);
-    var body = {'title': newTitle};
+      {required String folderId, required String newTitle}) async {
+    final url = await locator.get<CoreApi>().getFolderByIdUrl(folderId);
+    final body = {'title': newTitle};
 
-    var result = ApiDTO<Folder>();
+    final result = ApiDTO<Folder>();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = Folder.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response =
+            Folder.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -159,20 +164,21 @@ class FilesApi {
   }
 
   Future<ApiDTO<PortalFile>> renameFile(
-      {String fileId, String newTitle}) async {
-    var url = await locator.get<CoreApi>().getFileByIdUrl(fileId: fileId);
-    var body = {'title': newTitle};
+      {required String fileId, required String newTitle}) async {
+    final url = await locator.get<CoreApi>().getFileByIdUrl(fileId);
+    final body = {'title': newTitle};
 
-    var result = ApiDTO<PortalFile>();
+    final result = ApiDTO<PortalFile>();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response = PortalFile.fromJson(responseJson['response']);
+        final responseJson = json.decode(response.body);
+        result.response = PortalFile.fromJson(
+            responseJson['response'] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -181,18 +187,18 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO> deleteFolder({String folderId}) async {
-    var url = await locator.get<CoreApi>().getFolderByIdUrl(folderId: folderId);
-    var result = ApiDTO();
+  Future<ApiDTO> deleteFolder({required String folderId}) async {
+    final url = await locator.get<CoreApi>().getFolderByIdUrl(folderId);
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -201,18 +207,18 @@ class FilesApi {
     return result;
   }
 
-  Future<ApiDTO> deleteFile({String fileId}) async {
-    var url = await locator.get<CoreApi>().getFileByIdUrl(fileId: fileId);
-    var result = ApiDTO();
+  Future<ApiDTO> deleteFile({required String fileId}) async {
+    final url = await locator.get<CoreApi>().getFileByIdUrl(fileId);
+    final result = ApiDTO();
 
     try {
-      var response = await locator.get<CoreApi>().deleteRequest(url);
+      final response = await locator.get<CoreApi>().deleteRequest(url);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
+        final responseJson = json.decode(response.body);
         result.response = responseJson['response'];
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -222,18 +228,18 @@ class FilesApi {
   }
 
   Future<ApiDTO<MoveFolderResponse>> moveDocument({
-    String movingFolder,
-    String targetFolder,
-    String movingFile,
+    String? movingFolder,
+    required String targetFolder,
+    String? movingFile,
   }) async {
-    var url = await locator.get<CoreApi>().getMoveOpsUrl();
+    final url = await locator.get<CoreApi>().getMoveOpsUrl();
 
-    var folderIds = [];
-    if (movingFolder != null) folderIds.add(movingFolder.toString());
-    var fileIds = [];
-    if (movingFile != null) fileIds.add(movingFile.toString());
+    final folderIds = [];
+    if (movingFolder != null) folderIds.add(movingFolder);
+    final fileIds = [];
+    if (movingFile != null) fileIds.add(movingFile);
 
-    var body = {
+    final body = {
       'destFolderId': targetFolder,
       'folderIds': folderIds,
       'fileIds': fileIds,
@@ -241,17 +247,17 @@ class FilesApi {
       'deleteAfter': true
     };
 
-    var result = ApiDTO<MoveFolderResponse>();
+    final result = ApiDTO<MoveFolderResponse>();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response =
-            MoveFolderResponse.fromJson(responseJson['response'][0]);
+        final responseJson = json.decode(response.body);
+        result.response = MoveFolderResponse.fromJson(
+            responseJson['response'][0] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());
@@ -261,18 +267,18 @@ class FilesApi {
   }
 
   Future<ApiDTO<MoveFolderResponse>> copyDocument({
-    String copyingFolder,
-    String targetFolder,
-    String copyingFile,
+    String? copyingFolder,
+    required String targetFolder,
+    String? copyingFile,
   }) async {
-    var url = await locator.get<CoreApi>().getCopyOpsUrl();
+    final url = await locator.get<CoreApi>().getCopyOpsUrl();
 
-    var folderIds = [];
-    if (copyingFolder != null) folderIds.add(copyingFolder.toString());
-    var fileIds = [];
-    if (copyingFile != null) fileIds.add(copyingFile.toString());
+    final folderIds = [];
+    if (copyingFolder != null) folderIds.add(copyingFolder);
+    final fileIds = [];
+    if (copyingFile != null) fileIds.add(copyingFile);
 
-    var body = {
+    final body = {
       'destFolderId': targetFolder,
       'folderIds': folderIds,
       'fileIds': fileIds,
@@ -280,17 +286,17 @@ class FilesApi {
       'deleteAfter': true
     };
 
-    var result = ApiDTO<MoveFolderResponse>();
+    final result = ApiDTO<MoveFolderResponse>();
 
     try {
-      var response = await locator.get<CoreApi>().putRequest(url, body: body);
+      final response = await locator.get<CoreApi>().putRequest(url, body: body);
 
       if (response is http.Response) {
-        var responseJson = json.decode(response.body);
-        result.response =
-            MoveFolderResponse.fromJson(responseJson['response'][0]);
+        final responseJson = json.decode(response.body);
+        result.response = MoveFolderResponse.fromJson(
+            responseJson['response'][0] as Map<String, dynamic>);
       } else {
-        result.error = (response as CustomError);
+        result.error = response as CustomError;
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

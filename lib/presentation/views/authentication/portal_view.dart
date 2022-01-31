@@ -31,8 +31,8 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
@@ -40,79 +40,98 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key key}) : super(key: key);
-
-  final LoginController controller = Get.find<LoginController>();
+  PortalInputView({Key? key}) : super(key: key);
+  final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Obx(
-          () => controller.state.value == ViewState.Busy
-              ? SizedBox(
-                  height: Get.height,
-                  child: const Center(child: CircularProgressIndicator()))
-              : Center(
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      controller.setState(ViewState.Idle);
+      controller.setup();
+    });
+
+    final height = controller.accountManager.accounts.isEmpty ? Get.height : Get.height - 80;
+    return Obx(
+      () => controller.state.value == ViewState.Busy
+          ? Scaffold(
+              body: SizedBox(
+                  height: Get.height, child: const Center(child: CircularProgressIndicator())),
+            )
+          : Scaffold(
+              appBar: controller.accountManager.accounts.isEmpty
+                  ? null
+                  : StyledAppBar(
+                      backButtonIcon: const Icon(Icons.close),
+                      title: Text(
+                        tr('addNewAccount'),
+                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                      ),
+                    ),
+              body: SingleChildScrollView(
+                child: Center(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: const BoxConstraints(maxWidth: 480),
+                    constraints: BoxConstraints(maxWidth: 480, maxHeight: height),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
                       children: <Widget>[
-                        SizedBox(height: Get.height * 0.165),
-                        AppIcon(icon: SvgIcons.app_logo),
-                        SizedBox(height: Get.height * 0.044),
+                        if (controller.accountManager.accounts.isEmpty)
+                          SizedBox(height: height * 0.2)
+                        else
+                          SizedBox(height: height * 0.1),
+                        const AppIcon(icon: SvgIcons.app_logo),
+                        SizedBox(height: height * 0.01),
                         Text(tr('appName'),
-                            textAlign: TextAlign.center,
-                            style: TextStyleHelper.headline6()),
-                        SizedBox(height: Get.height * 0.111),
+                            textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
+                        SizedBox(height: height * 0.111),
                         Obx(
                           () => AuthTextField(
                             controller: controller.portalAdressController,
                             autofillHint: AutofillHints.url,
                             hintText: tr('portalAdress'),
-                            validator: controller.emailValidator,
                             hasError: controller.portalFieldError.value == true,
                           ),
                         ),
-                        SizedBox(height: Get.height * 0.033),
+                        SizedBox(height: height * 0.033),
                         DecoratedBox(
                           decoration: BoxDecoration(boxShadow: [
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.85),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.19)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
                             BoxShadow(
                                 blurRadius: 3,
                                 offset: const Offset(0, 0.25),
-                                color: Get.theme
-                                    .colors()
-                                    .onBackground
-                                    .withOpacity(0.04)),
+                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
                           ]),
                           child: WideButton(
                             text: tr('next'),
-                            onPressed: () async =>
-                                await controller.getPortalCapabilities(),
+                            textColor: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().onBackground.withOpacity(0.5)
+                                : null,
+                            color: controller.needAgreement && !controller.checkBoxValue.value
+                                ? Get.theme.colors().bgDescription
+                                : null,
+                            onPressed: controller.getPortalCapabilities,
                           ),
                         ),
-                        SizedBox(height: Get.height * 0.222),
-                        const PrivacyAndTermsFooter(),
-                        const SizedBox(height: 36),
+                        if (controller.needAgreement)
+                          PrivacyAndTermsFooter.withCheckbox()
+                        else
+                          const Spacer(),
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
                       ],
                     ),
                   ),
                 ),
-        ),
-      ),
+              ),
+            ),
     );
   }
 }

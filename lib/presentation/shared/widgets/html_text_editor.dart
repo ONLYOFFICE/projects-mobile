@@ -33,34 +33,48 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:html_editor_enhanced/html_editor.dart';
+import 'package:projects/data/services/comments_service.dart';
+import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HtmlTextEditor extends StatelessWidget {
   const HtmlTextEditor({
-    Key key,
+    Key? key,
     this.height,
     this.hintText,
     this.hasError = false,
-    this.initialText,
+    this.initialText = '',
     this.textController,
   }) : super(key: key);
 
-  final HtmlEditorController textController;
-  final String hintText;
-  final String initialText;
-  final double height;
+  final HtmlEditorController? textController;
+  final String? hintText;
+  final String? initialText;
+  final double? height;
   final bool hasError;
 
   @override
   Widget build(BuildContext context) {
     print('has error $hasError');
     return HtmlEditor(
-      plugins: [],
       controller: textController ?? HtmlEditorController(),
+      callbacks: Callbacks(onNavigationRequestMobile: (url) {
+        launch(url);
+        return NavigationActionPolicy.CANCEL;
+      }),
       htmlToolbarOptions: HtmlToolbarOptions(
-        textStyle:
-            TextStyleHelper.body2(color: Get.theme.colors().onBackground),
+        mediaUploadInterceptor: (file, type) async {
+          final result = await locator<CommentsService>().uploadImages(file);
+          textController!.insertHtml('<img alt="" src="$result">');
+          return false;
+        },
+        linkInsertInterceptor: (text, url, isNewWindow) {
+          textController?.insertLink(text, url, isNewWindow);
+          return false;
+        },
+        textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
         defaultToolbarButtons: const [
           StyleButtons(),
           FontSettingButtons(fontSizeUnit: false),
@@ -82,7 +96,6 @@ class HtmlTextEditor extends StatelessWidget {
             audio: false,
             table: false,
             hr: false,
-            otherFile: false,
           ),
         ],
       ),

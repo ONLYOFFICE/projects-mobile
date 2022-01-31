@@ -58,12 +58,12 @@ part 'filters/status.dart';
 part 'filters/duedate.dart';
 
 class TasksFilterScreen extends StatelessWidget {
-  const TasksFilterScreen({Key key}) : super(key: key);
+  const TasksFilterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final BaseTaskFilterController filterController =
-        Get.arguments['filterController'];
+    final filterController =
+        Get.arguments['filterController'] as BaseTaskFilterController;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(

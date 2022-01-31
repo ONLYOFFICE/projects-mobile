@@ -40,21 +40,19 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 
 class SelectCountryScreen extends StatelessWidget {
-  const SelectCountryScreen({Key key}) : super(key: key);
+  const SelectCountryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
 
     var previousContrysFirstLetter = '';
 
     return Obx(
       () => Scaffold(
         appBar: StyledAppBar(
-          titleText:
-              controller.searching.value == true ? null : tr('selectCountry'),
-          title:
-              controller.searching.value == true ? const _SarchField() : null,
+          titleText: controller.searching.value == true ? null : tr('selectCountry'),
+          title: controller.searching.value == true ? const _SarchField() : null,
           actions: [
             if (controller.searching.value == false)
               IconButton(
@@ -66,19 +64,16 @@ class SelectCountryScreen extends StatelessWidget {
         body: ListView.builder(
           itemCount: controller.countriesToShow.length,
           itemBuilder: (BuildContext context, int index) {
-            if (controller.countriesToShow[index].countryName[0] !=
-                previousContrysFirstLetter) {
-              previousContrysFirstLetter =
-                  controller.countriesToShow[index].countryName[0];
+            if (controller.countriesToShow[index].countryName![0] != previousContrysFirstLetter) {
+              previousContrysFirstLetter = controller.countriesToShow[index].countryName![0];
               return _CountryWithCodeTile(
                 showFirstLetter: true,
-                showBorder: index != 0 ? true : false,
+                showBorder: index != 0,
                 country: controller.countriesToShow[index],
               );
             }
 
-            return _CountryWithCodeTile(
-                country: controller.countriesToShow[index]);
+            return _CountryWithCodeTile(country: controller.countriesToShow[index]);
           },
         ),
       ),
@@ -87,11 +82,11 @@ class SelectCountryScreen extends StatelessWidget {
 }
 
 class _SarchField extends StatelessWidget {
-  const _SarchField({Key key}) : super(key: key);
+  const _SarchField({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
 
     return TextField(
       autofocus: true,
@@ -100,7 +95,7 @@ class _SarchField extends StatelessWidget {
         hintText: tr('search'),
         hintStyle: TextStyleHelper.headline6().copyWith(height: 1),
       ),
-      onChanged: (value) => controller.onSearch(value),
+      onChanged: controller.onSearch,
     );
   }
 }
@@ -110,15 +105,15 @@ class _CountryWithCodeTile extends StatelessWidget {
   final bool showBorder;
   final bool showFirstLetter;
   const _CountryWithCodeTile({
-    Key key,
-    @required this.country,
+    Key? key,
+    required this.country,
     this.showFirstLetter = false,
     this.showBorder = false,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.find<TFASmsController>();
+    final controller = Get.find<TFASmsController>();
     return InkWell(
       onTap: () => controller.selectCountry(country),
       child: Padding(
@@ -132,25 +127,21 @@ class _CountryWithCodeTile extends StatelessWidget {
                 SizedBox(
                   width: 56,
                   child: showFirstLetter
-                      ? Text(country?.countryName[0],
+                      ? Text(country.countryName![0],
                           style: TextStyleHelper.headline5(
-                              color: Get.theme
-                                  .colors()
-                                  .onBackground
-                                  .withOpacity(0.6)))
+                              color: Get.theme.colors().onBackground.withOpacity(0.6)))
                       : null,
                 ),
                 Expanded(
                   child: Text(
-                    country?.countryName,
-                    style: TextStyleHelper.body2(
-                        color: Get.theme.colors().onBackground),
+                    country.countryName!,
+                    style: TextStyleHelper.body2(color: Get.theme.colors().onBackground),
                   ),
                 ),
                 Text(
-                  '+ ${country?.phoneCode}',
+                  '+ ${country.phoneCode}',
                   style: TextStyleHelper.subtitle2(
-                      color: Get.theme.colors().primarySurface),
+                      color: Get.theme.colors().onSurface.withOpacity(0.6)),
                 ),
               ],
             ),

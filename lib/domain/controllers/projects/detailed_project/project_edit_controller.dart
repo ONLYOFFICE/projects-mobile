@@ -48,68 +48,70 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
 
 class ProjectEditController extends BaseProjectEditorController {
-  final _projectService = locator<ProjectService>();
+  final ProjectService _projectService = locator<ProjectService>();
 
-  var loaded = true.obs;
-  var isSearchResult = false.obs;
-  var nothingFound = false.obs;
-  var projectTitleText = ''.obs;
-  var statusText = ''.obs;
+  RxBool loaded = true.obs;
+  RxBool isSearchResult = false.obs;
+  RxBool nothingFound = false.obs;
+  RxString projectTitleText = ''.obs;
+
   var selectedTags;
 
-  EditProjectDTO oldProjectDTO;
+  EditProjectDTO? oldProjectDTO;
 
-  ProjectDetailed _projectDetailed;
-  ProjectDetailed get projectData => _projectDetailed;
+  ProjectDetailed? _projectDetailed;
 
-  Future<void> setupEditor(projectDetailed) async {
+  @override
+  ProjectDetailed? get projectData => _projectDetailed;
+
+  Future<void> setupEditor(ProjectDetailed? projectDetailed) async {
     _projectDetailed = projectDetailed;
     loaded.value = false;
 
     oldProjectDTO = null;
-    statusText.value = tr('projectStatus',
-        args: [ProjectStatus.toName(_projectDetailed.status)]);
+    statusText.value = tr('projectStatus', args: [ProjectStatus.toName(_projectDetailed!.status)]);
 
-    projectTitleText.value = _projectDetailed.title;
-    descriptionText.value = _projectDetailed.description;
+    projectTitleText.value = _projectDetailed!.title!;
+    descriptionText.value = _projectDetailed!.description!;
 
-    isPrivate.value = _projectDetailed.isPrivate;
+    isPrivate.value = _projectDetailed!.isPrivate!;
 
-    var projectById =
-        await _projectService.getProjectById(projectId: _projectDetailed.id);
-    tags.clear();
-    if (projectById?.tags != null) {
-      for (var value in projectById?.tags) {
-        tags.add(value);
+    final projectById = await _projectService.getProjectById(projectId: _projectDetailed!.id!);
+    if (projectById != null) {
+      tags.clear();
+      if (projectById.tags != null) {
+        for (final value in projectById.tags!) {
+          tags.add(value);
+        }
       }
     }
 
     tagsText.value = tags.join(', ');
 
-    titleController.text = _projectDetailed.title;
-    descriptionController.text = _projectDetailed.description ?? '';
-    selectedProjectManager.value = _projectDetailed.responsible;
+    titleController.text = _projectDetailed!.title!;
+    descriptionController.text = _projectDetailed!.description ?? '';
+    selectedProjectManager.value = _projectDetailed!.responsible;
 
     isPMSelected.value = true;
-    managerName.value = selectedProjectManager.value.displayName;
+    managerName.value = selectedProjectManager.value!.displayName!;
 
-    var projectTeamDataSource = Get.put(ProjectTeamController())
+    final projectTeamDataSource = Get.put(ProjectTeamController())
       ..setup(projectDetailed: projectDetailed);
 
     await projectTeamDataSource.getTeam();
 
     if (selectedTeamMembers.isNotEmpty) selectedTeamMembers.clear();
-    for (var portalUser in projectTeamDataSource.usersList) {
+    for (final portalUser in projectTeamDataSource.usersList) {
       portalUser.selectionMode.value = UserSelectionMode.Multiple;
       portalUser.isSelected.value = true;
       selectedTeamMembers.add(portalUser);
     }
-    selectedTeamMembers.removeWhere(
-        (element) => element.portalUser.id == selectedProjectManager.value.id);
+    selectedTeamMembers
+        .removeWhere((element) => element.portalUser.id == selectedProjectManager.value!.id);
 
-    var participants = <Participant>[];
+    final participants = <Participant>[];
 
-    for (var element in selectedTeamMembers) {
+    for (final element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -124,32 +126,31 @@ class ProjectEditController extends BaseProjectEditorController {
     oldProjectDTO = EditProjectDTO(
       title: titleController.text,
       description: descriptionController.text,
-      responsibleId: selectedProjectManager.value.id,
+      responsibleId: selectedProjectManager.value!.id,
       participants: participants,
       private: isPrivate.value,
-      status: _projectDetailed.status,
+      status: _projectDetailed!.status,
       tags: tagsText.value,
     );
 
     loaded.value = true;
   }
 
-  Future<bool> updateStatus({int newStatusId}) async =>
-      Get.find<ProjectStatusesController>().updateStatus(
-          newStatusId: newStatusId, projectData: _projectDetailed);
+  @override
+  Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
+      .updateStatus(newStatusId: newStatusId, projectData: _projectDetailed!);
 
   Future<void> confirmChanges() async {
     needToFillTitle.value = titleController.text.isEmpty;
 
-    needToFillManager.value = (selectedProjectManager.value == null ||
-        selectedProjectManager.value.id == null);
+    needToFillManager.value =
+        selectedProjectManager.value == null || selectedProjectManager.value!.id == null;
 
-    if (needToFillTitle.value == true || needToFillManager.value == true)
-      return;
+    if (needToFillTitle.value == true || needToFillManager.value == true) return;
 
-    var participants = <Participant>[];
+    final participants = <Participant>[];
 
-    for (var element in selectedTeamMembers) {
+    for (final element in selectedTeamMembers) {
       participants.add(
         Participant(
             iD: element.portalUser.id,
@@ -161,22 +162,22 @@ class ProjectEditController extends BaseProjectEditorController {
       );
     }
 
-    var newProject = EditProjectDTO(
+    final newProject = EditProjectDTO(
       title: titleController.text,
       description: descriptionController.text,
-      responsibleId: selectedProjectManager.value.id,
+      responsibleId: selectedProjectManager.value!.id,
       participants: participants,
       private: isPrivate.value,
-      status: _projectDetailed.status,
+      status: _projectDetailed!.status,
       tags: tagsText.value,
       notify: notificationEnabled.value,
     );
 
-    var success = await _projectService.editProject(
-        project: newProject, projectId: _projectDetailed.id);
+    final success =
+        await _projectService.editProject(project: newProject, projectId: _projectDetailed!.id!);
     if (success) {
       {
-        locator<EventHub>().fire('needToRefreshProjects');
+        locator<EventHub>().fire('needToRefreshProjects', ['all']);
       }
 
       Get.back();
@@ -186,17 +187,16 @@ class ProjectEditController extends BaseProjectEditorController {
   void discardChanges() {
     bool edited;
     // checking all fields for changes
-    edited = oldProjectDTO.title != titleController.text ||
-        oldProjectDTO.description != descriptionController.text ||
-        oldProjectDTO.responsibleId != selectedProjectManager.value?.id ||
-        oldProjectDTO.private != isPrivate.value ||
-        oldProjectDTO.status != _projectDetailed.status ||
+    edited = oldProjectDTO!.title != titleController.text ||
+        oldProjectDTO!.description != descriptionController.text ||
+        oldProjectDTO!.responsibleId != selectedProjectManager.value?.id ||
+        oldProjectDTO!.private != isPrivate.value ||
+        oldProjectDTO!.status != _projectDetailed!.status ||
         tagsText.value != tagsText.value;
 
     var i = 0;
-    while (!edited && oldProjectDTO.participants.length > i) {
-      if (oldProjectDTO.participants[i].iD !=
-          selectedTeamMembers[i].portalUser.id) {
+    while (!edited && oldProjectDTO!.participants!.length > i) {
+      if (oldProjectDTO!.participants![i].iD != selectedTeamMembers[i].portalUser.id) {
         edited = true;
       }
       i++;

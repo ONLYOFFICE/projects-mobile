@@ -41,10 +41,10 @@ import 'package:projects/internal/utils/debug_print.dart';
 import 'package:projects/internal/utils/image_decoder.dart';
 
 class TaskStatusesController extends GetxController {
-  final _api = locator<TaskService>();
+  final TaskService _api = locator<TaskService>();
 
-  RxList statuses = <Status>[].obs;
-  RxList statusImagesDecoded = <String>[].obs;
+  RxList<Status> statuses = <Status>[].obs;
+  RxList<String> statusImagesDecoded = <String>[].obs;
   RxBool loaded = false.obs;
 
   Future getStatuses() async {
@@ -52,49 +52,55 @@ class TaskStatusesController extends GetxController {
     await _updateStatuses(forceReload: true);
   }
 
-  Future _updateStatuses({bool forceReload = false}) async {
+  Future<void> _updateStatuses({bool forceReload = false}) async {
     if (forceReload || loaded.value != false) {
       loaded.value = false;
-      statuses.value = await _api.getStatuses();
-      statusImagesDecoded.clear();
-      for (var element in statuses) {
-        statusImagesDecoded.add(decodeImageString(element.image));
+      final response = await _api.getStatuses();
+      if (response != null) {
+        statuses.value = response;
+        statusImagesDecoded.clear();
+        for (final element in statuses) {
+          if (element.image == null) continue;
+          statusImagesDecoded.add(decodeImageString(element.image!));
+        }
       }
       loaded.value = true;
     }
   }
 
-  Future getTaskStatus(PortalTask task) async {
+  Future<Status?> getTaskStatus(PortalTask? task) async {
     if (!loaded.isFalse) {
-      var status;
-      status = await _findStatus(task);
+      final status = _findStatus(task!);
       if (status == null && !loaded.isFalse) {
         printWarning('TASK ID ${task.id} STATUS DIDNT FIND');
         await _updateStatuses();
-        await _findStatus(task);
+        _findStatus(task);
       }
       return status;
     }
   }
 
-  Future _findStatus(PortalTask task) async {
-    var status;
+  Status? _findStatus(PortalTask task) {
+    Status status;
 
     if (task.customTaskStatus != null) {
       status = statuses.firstWhere(
         (element) => element.id == task.customTaskStatus,
-        orElse: () => null,
+        orElse: () => Status(),
       );
     } else {
       status = statuses.firstWhere(
-        (element) => -element.id == task.status,
-        orElse: () => null,
+        (element) => -element.id! == task.status, // TODO negative task id???
+        orElse: () => Status(),
       );
-      status ??= statuses.lastWhere(
-        (element) => element.statusType == task.status,
-        orElse: () => null,
-      );
+      if (status.id == null) {
+        status = statuses.lastWhere(
+          (element) => element.statusType == task.status,
+          orElse: () => Status(), // TODO StateError
+        );
+      }
     }
-    return status;
+
+    return status.id == null ? null : status;
   }
 }

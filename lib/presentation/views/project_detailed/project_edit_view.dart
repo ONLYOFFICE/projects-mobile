@@ -32,12 +32,9 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
-
+import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
@@ -49,17 +46,17 @@ import 'package:projects/presentation/views/projects_view/new_project/tiles/team
 import 'package:projects/presentation/views/projects_view/new_project/tiles/title.dart';
 
 class EditProjectView extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDetailed? projectDetailed;
 
-  const EditProjectView({Key key, @required this.projectDetailed})
+  const EditProjectView({Key? key, required this.projectDetailed})
       : super(
           key: key,
         );
 
   @override
   Widget build(BuildContext context) {
-    var editProjectController = Get.find<ProjectEditController>();
-    editProjectController.setupEditor(Get.arguments['projectDetailed']);
+    final editProjectController = Get.find<ProjectEditController>();
+    editProjectController.setupEditor(Get.arguments['projectDetailed'] as ProjectDetailed);
 
     return WillPopScope(
       onWillPop: () async {
@@ -86,11 +83,16 @@ class EditProjectView extends StatelessWidget {
             if (editProjectController.loaded.value == true) {
               return ListView(
                 children: [
-                  const SizedBox(height: 26),
-                  ProjectTitleTile(controller: editProjectController),
-                  const SizedBox(height: 20),
-                  ProjectStatusButton(projectController: editProjectController),
-                  const SizedBox(height: 20),
+                  ProjectTitleTile(
+                    controller: editProjectController,
+                    showCaption: true,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 72, bottom: 10, top: 10),
+                    child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: ProjectStatusButton(projectController: editProjectController)),
+                  ),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),
                   TeamMembersTile(controller: editProjectController),
@@ -100,14 +102,14 @@ class EditProjectView extends StatelessWidget {
                       OptionWithSwitch(
                         title: tr('privateProject'),
                         switchValue: editProjectController.isPrivate,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           editProjectController.setPrivate(value);
                         },
                       ),
                       OptionWithSwitch(
                         title: tr('notifyPM'),
                         switchValue: editProjectController.notificationEnabled,
-                        switchOnChanged: (value) {
+                        switchOnChanged: (bool value) {
                           editProjectController.enableNotification(value);
                         },
                       ),

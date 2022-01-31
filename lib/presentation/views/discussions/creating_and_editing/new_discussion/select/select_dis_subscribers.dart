@@ -50,12 +50,12 @@ import 'package:projects/presentation/views/projects_view/widgets/portal_user_it
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectDiscussionSubscribers extends StatelessWidget {
-  const SelectDiscussionSubscribers({Key key}) : super(key: key);
+  const SelectDiscussionSubscribers({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var usersDataSource = Get.find<UsersDataSource>();
-    DiscussionActionsController controller = Get.arguments['controller'];
+    final usersDataSource = Get.find<UsersDataSource>();
+    final controller = Get.arguments['controller'] as DiscussionActionsController;
 
     controller.setupSubscribersSelection();
 
@@ -67,11 +67,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
-          backgroundColor:
-              platformController.isMobile ? null : Get.theme.colors().surface,
+          backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
 
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? const Icon(Icons.arrow_back_rounded)
@@ -82,21 +80,18 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               children: [
                 Text(
                   tr('selectSubscribers'),
-                  style: TextStyleHelper.headerStyle(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
                 ),
                 if (controller.subscribers.isNotEmpty)
                   Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption(
-                          color: Get.theme.colors().onSurface))
+                      style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
               ],
             ),
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           actions: [
             IconButton(
-                onPressed: controller.confirmSubscribersSelection,
-                icon: const Icon(Icons.done))
+                onPressed: controller.confirmSubscribersSelection, icon: const Icon(Icons.done))
           ],
           // bottom: CustomSearchBar(controller: controller),
           bottom: Row(
@@ -106,8 +101,8 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                     child: SearchField(
                       hintText: tr('usersSearch'),
                       onSubmitted: usersDataSource.searchUsers,
-                      showClearIcon:
-                          usersDataSource.isSearchResult.value == true,
+                      showClearIcon: usersDataSource.isSearchResult.value == true,
+                      onChanged: usersDataSource.searchUsers,
                       onClearPressed: controller.clearUserSearch,
                       controller: controller.userSearchController,
                     ),
@@ -115,10 +110,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 15.5, right: 16),
                 child: InkResponse(
-                  onTap: () => Get.find<NavigationController>().to(
-                      const UsersFromGroups(),
-                      arguments: {'controller': controller}),
-                  child: AppIcon(icon: SvgIcons.preferences),
+                  onTap: () => Get.find<NavigationController>()
+                      .to(const UsersFromGroups(), arguments: {'controller': controller}),
+                  child: const AppIcon(icon: SvgIcons.preferences),
                 ),
               )
             ],
@@ -143,8 +137,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                       return PortalUserItem(
                         userController: usersDataSource.usersList[index],
                         onTapFunction: (value) => {
-                          controller.addSubscriber(
-                              usersDataSource.usersList[index],
+                          controller.addSubscriber(usersDataSource.usersList[index],
                               fromUsersDataSource: true)
                         },
                       );
@@ -152,7 +145,7 @@ class SelectDiscussionSubscribers extends StatelessWidget {
               );
             }
             if (usersDataSource.nothingFound.value == true) {
-              return Column(children: [const NothingFound()]);
+              return Column(children: const [NothingFound()]);
             }
             if (usersDataSource.loaded.value == true &&
                 usersDataSource.usersList.isNotEmpty &&

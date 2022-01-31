@@ -37,7 +37,7 @@ import 'package:projects/domain/controllers/passcode/passcode_editing_controller
 import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart';
 
 class EditPasscodeScreen1 extends StatelessWidget with PasscodeScreenMixin {
-  EditPasscodeScreen1({Key key}) : super(key: key);
+  EditPasscodeScreen1({Key? key}) : super(key: key);
 
   final controller = Get.put(PasscodeEditingController());
 
