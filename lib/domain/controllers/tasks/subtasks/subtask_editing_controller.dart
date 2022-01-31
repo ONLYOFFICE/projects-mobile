@@ -184,6 +184,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
   @override
   Future<void> confirm({required BuildContext context, int? taskId}) async {
     // TODO taskid not used
+    titleController.text = titleController.text.trim();
     if (titleController.text.isEmpty)
       setTiltleError!.value = true;
     else {
