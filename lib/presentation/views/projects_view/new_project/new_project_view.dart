@@ -35,8 +35,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
@@ -106,6 +107,7 @@ class NewProject extends StatelessWidget {
             children: [
               const SizedBox(height: 16),
               ProjectTitleTile(controller: controller),
+              const StyledDivider(leftPadding: 72.5),
               ProjectManagerTile(controller: controller),
               TeamMembersTile(controller: controller),
               ProjectDescriptionTile(controller: controller),
@@ -131,7 +133,7 @@ class NewProject extends StatelessWidget {
                       return OptionWithSwitch(
                         title: tr('followProject'),
                         switchValue: false.obs,
-                        switchOnChanged: null,
+                        switchOnChanged: (v) => {},
                       );
                     else
                       return OptionWithSwitch(

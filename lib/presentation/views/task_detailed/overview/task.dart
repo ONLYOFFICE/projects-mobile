@@ -39,30 +39,55 @@ class _Task extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(72, 20, 16, 16),
-      child: Obx(
-        () {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(tr('task').toUpperCase(), style: TextStyleHelper.overline()),
-              Text(
-                taskController!.task.value.title!,
-                style: TextStyleHelper.headline6(
-                  color: Get.theme.colors().onSurface,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: SizedBox(
+                width: 72,
+                child: AppIcon(
+                  icon: SvgIcons.tab_bar_tasks,
+                  color: Get.theme.colors().onBackground.withOpacity(0.6),
                 ),
               ),
-              const SizedBox(height: 22),
-              StatusButton(
-                canEdit: taskController!.task.value.canEdit,
-                text: taskController?.status.value.title ?? '',
-                onPressed: taskController!.openStatuses,
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20, right: 16, bottom: 22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(tr('task').toUpperCase(), style: TextStyleHelper.overline()),
+                    Obx(
+                      () => Text(
+                        taskController!.task.value.title!,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyleHelper.headline6(
+                          color: Get.theme.colors().onSurface,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 72, bottom: 16),
+          child: Obx(
+            () => StatusButton(
+              canEdit: taskController!.task.value.canEdit,
+              text: taskController?.status.value.title ?? '',
+              onPressed: taskController!.openStatuses,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

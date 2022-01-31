@@ -33,7 +33,9 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:http_client_helper/http_client_helper.dart';
 import 'package:projects/data/enums/platforms.dart';
+import 'package:projects/data/models/account_data.dart';
 
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
@@ -102,6 +104,39 @@ class AuthApi {
         result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
       } else {
         result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: e.toString());
+    }
+
+    return result;
+  }
+
+  Future<ApiDTO<PortalUser>> getAccountInfo(AccountData accoutnData) async {
+    final coreApi = locator.get<CoreApi>();
+    var url = await coreApi.selfInfoUrl();
+
+    url = '${accoutnData.scheme}${accoutnData.portal}/api/${coreApi.version}/people/@self';
+
+    final headers = await locator.get<CoreApi>().getHeaders();
+    headers['Authorization'] = accoutnData.token!;
+
+    final request = HttpClientHelper.get(
+      Uri.parse(url),
+      cancelToken: locator.get<CoreApi>().cancellationToken,
+      timeLimit: Duration(seconds: locator.get<CoreApi>().timeout),
+      headers: headers,
+    );
+
+    final result = ApiDTO<PortalUser>();
+    try {
+      final response = await request;
+
+      if (response is http.Response && (response.statusCode == 200 || response.statusCode == 201)) {
+        final dynamic responseJson = json.decode(response.body);
+        result.response = PortalUser.fromJson(responseJson['response'] as Map<String, dynamic>);
+      } else {
+        result.error = CustomError(message: response!.reasonPhrase!);
       }
     } catch (e) {
       result.error = CustomError(message: e.toString());

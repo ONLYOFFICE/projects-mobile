@@ -31,7 +31,9 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+
 import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -54,6 +56,11 @@ class TasksDashboardMoreView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.arguments['controller'] as TasksController;
+
+    final scrollController = ScrollController();
+    final elevation = ValueNotifier<double>(0);
+
+    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return Scaffold(
       //backgroundColor: Get.theme.backgroundColor,

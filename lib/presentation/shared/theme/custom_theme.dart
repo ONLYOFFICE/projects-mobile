@@ -65,6 +65,7 @@ final AppColors lightColors = AppColors(
   surface: const Color(0xffffffff),
   systemBlue: const Color(0xff007aff),
   tabbarBackground: const Color(0xff2E4057),
+  backgroundSecond: const Color(0xffF4F4F4),
 );
 
 final AppColors darkColors = AppColors(
@@ -87,6 +88,7 @@ final AppColors darkColors = AppColors(
   surface: const Color(0xff252525),
   systemBlue: const Color(0xff007aff),
   tabbarBackground: const Color(0xff2E4057),
+  backgroundSecond: const Color(0xff080808),
 );
 
 final ThemeData lightTheme = ThemeData.light().copyWith(

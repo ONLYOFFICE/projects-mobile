@@ -238,19 +238,22 @@ Future<void> _onFolderPopupMenuSelected(
       final portalDomain = controller.portalInfoController.portalUri;
 
       if (portalDomain != null && selectedFolder.id != null) {
-        final link = '${portalDomain}Products/Files/#${selectedFolder.id.toString()}';
+        final link = '$portalDomain/Products/Files/#${selectedFolder.id.toString()}';
 
-        await Clipboard.setData(ClipboardData(text: link));
-        MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        if (link.isURL) {
+          await Clipboard.setData(ClipboardData(text: link));
+          MessagesHandler.showSnackBar(context: context, text: tr('linkCopied'));
+        } else
+          MessagesHandler.showSnackBar(context: context, text: tr('error'));
       }
       break;
     case 'open':
-      Get.find<NavigationController>().to(FolderContentView(),
+      await Get.find<NavigationController>().to(FolderContentView(),
           preventDuplicates: false,
           arguments: {'folderName': selectedFolder.title, 'folderId': selectedFolder.id});
       break;
     case 'copy':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
@@ -258,7 +261,7 @@ Future<void> _onFolderPopupMenuSelected(
       });
       break;
     case 'move':
-      Get.find<NavigationController>()
+      await Get.find<NavigationController>()
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
@@ -295,7 +298,7 @@ void _renameFolder(dynamic controller, Folder element, BuildContext context) {
           hintText: tr('enterFolderName'),
         ),
         onSubmitted: (value) {
-          controller!.newSearch(value);
+          controller.newSearch(value);
         },
       ),
       acceptText: tr('confirm'),
@@ -306,7 +309,6 @@ void _renameFolder(dynamic controller, Folder element, BuildContext context) {
           if (success as bool) {
             MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
             Get.back();
-            await controller.refreshContent();
           }
         } else
           Get.back();

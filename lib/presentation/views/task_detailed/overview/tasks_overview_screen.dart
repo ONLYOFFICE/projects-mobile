@@ -78,7 +78,9 @@ class TaskOverviewScreen extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 21),
                     child: InfoTile(
                       caption: '${tr('description')}:',
-                      icon: const AppIcon(icon: SvgIcons.description, color: Color(0xff707070)),
+                      icon: AppIcon(
+                          icon: SvgIcons.description,
+                          color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       subtitleWidget: ReadMoreText(
                         task.description!,
                         trimLines: 3,
@@ -94,7 +96,9 @@ class TaskOverviewScreen extends StatelessWidget {
                     ),
                   ),
                 InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
+                  icon: AppIcon(
+                      icon: SvgIcons.project,
+                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('project')}:',
                   subtitle: task.projectOwner!.title,
                   subtitleStyle: TextStyleHelper.subtitle1(
@@ -105,14 +109,18 @@ class TaskOverviewScreen extends StatelessWidget {
                 if (task.milestone != null) const SizedBox(height: 20),
                 if (task.milestone != null)
                   InfoTile(
-                      icon: const AppIcon(icon: SvgIcons.milestone, color: Color(0xff707070)),
+                      icon: AppIcon(
+                          icon: SvgIcons.milestone,
+                          color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       caption: '${tr('milestone')}:',
                       subtitle: task.milestone!.title,
                       subtitleStyle: TextStyleHelper.subtitle1()),
                 if (task.startDate != null) const SizedBox(height: 20),
                 if (task.startDate != null)
                   InfoTile(
-                    icon: const AppIcon(icon: SvgIcons.start_date, color: Color(0xff707070)),
+                    icon: AppIcon(
+                        icon: SvgIcons.start_date,
+                        color: Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('startDate')}:',
                     subtitle: formatedDateFromString(
                       now: DateTime.now(),
@@ -122,13 +130,17 @@ class TaskOverviewScreen extends StatelessWidget {
                 if (task.deadline != null) const SizedBox(height: 20),
                 if (task.deadline != null)
                   InfoTile(
-                      icon: const AppIcon(icon: SvgIcons.due_date, color: Color(0xff707070)),
+                      icon: AppIcon(
+                          icon: SvgIcons.due_date,
+                          color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       caption: '${tr('dueDate')}:',
                       subtitle:
                           formatedDateFromString(now: DateTime.now(), stringDate: task.deadline!)),
                 const SizedBox(height: 20),
                 InfoTile(
-                    icon: const AppIcon(icon: SvgIcons.priority, color: Color(0xff707070)),
+                    icon: AppIcon(
+                        icon: SvgIcons.priority,
+                        color: Get.theme.colors().colorError.withOpacity(0.75)),
                     caption: '${tr('priority')}:',
                     subtitle: task.priority == 1 ? tr('high') : tr('normal')),
                 if (task.responsibles != null && task.responsibles!.isNotEmpty)
@@ -139,7 +151,9 @@ class TaskOverviewScreen extends StatelessWidget {
                         Get.find<NavigationController>()
                             .toScreen(TaskTeamView(controller: taskController!));
                       },
-                      icon: const AppIcon(icon: SvgIcons.person, color: Color(0xff707070)),
+                      icon: AppIcon(
+                          icon: SvgIcons.person,
+                          color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       caption: '${tr('assignedTo')}:',
                       subtitle: task.responsibles!.length >= 2
                           ? plural('responsibles', task.responsibles!.length)
@@ -152,14 +166,23 @@ class TaskOverviewScreen extends StatelessWidget {
                                 .toScreen(TaskTeamView(controller: taskController!));
                           })),
                 const SizedBox(height: 20),
-                InfoTile(caption: '${tr('createdBy')}:', subtitle: task.createdBy!.displayName),
-                const SizedBox(height: 20),
                 InfoTile(
+                  icon: AppIcon(
+                      icon: SvgIcons.calendar,
+                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
                   caption: '${tr('creationDate')}:',
                   subtitle: formatedDateFromString(
                     now: DateTime.now(),
                     stringDate: task.created!,
                   ),
+                ),
+                const SizedBox(height: 20),
+                InfoTile(
+                  icon: AppIcon(
+                      icon: SvgIcons.person,
+                      color: Get.theme.colors().onBackground.withOpacity(0.75)),
+                  caption: '${tr('createdBy')}:',
+                  subtitle: task.createdBy!.displayName,
                 ),
                 const SizedBox(height: 110)
               ],

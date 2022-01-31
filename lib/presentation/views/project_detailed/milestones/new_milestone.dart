@@ -42,9 +42,13 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
+
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -59,103 +63,121 @@ class NewMilestoneView extends StatelessWidget {
     newMilestoneController.setup(projectDetailed);
 
     return WillPopScope(
-      onWillPop: () async {
-        newMilestoneController.discard();
-        return false;
-      },
-      child: Scaffold(
-        backgroundColor: Get.theme.colors().backgroundColor,
-        appBar: StyledAppBar(
-          titleText: tr('newMilestone'),
-          actions: [
-            PlatformIconButton(
-                icon: Icon(PlatformIcons(context).checkMark),
-                onPressed: () => newMilestoneController.confirm(context))
-          ],
-          leading: PlatformIconButton(
-            icon: Icon(PlatformIcons(context).back),
-            onPressed: newMilestoneController.discard,
+        onWillPop: () async {
+          newMilestoneController.discard();
+          return false;
+        },
+        child: Scaffold(
+          backgroundColor: Get.theme.colors().backgroundColor,
+          appBar: StyledAppBar(
+            titleText: tr('newMilestone'),
+            actions: [
+              IconButton(
+                  icon: const Icon(Icons.check_rounded),
+                  onPressed: () => newMilestoneController.confirm(context))
+            ],
+            leading: IconButton(
+                icon: const Icon(Icons.arrow_back_rounded),
+                onPressed: newMilestoneController.discard),
           ),
-        ),
-        body: SingleChildScrollView(
-          child: Obx(
-            () => Column(
-              children: [
-                const SizedBox(height: 16),
-                MilestoneInput(controller: newMilestoneController),
-                ProjectTile(controller: newMilestoneController),
-                if (newMilestoneController.slectedProjectTitle.value.isNotEmpty)
-                  ResponsibleTile(controller: newMilestoneController),
-                DescriptionTile(newMilestoneController: newMilestoneController),
-                DueDateTile(controller: newMilestoneController),
-                const SizedBox(height: 5),
-                AdvancedOptions(
-                  options: <Widget>[
-                    OptionWithSwitch(
-                      title: tr('keyMilestone'),
-                      switchValue: newMilestoneController.keyMilestone,
-                      switchOnChanged: (bool value) {
-                        if (!FocusScope.of(context).hasPrimaryFocus) {
-                          FocusScope.of(context).unfocus();
-                        }
-                        newMilestoneController.setKeyMilestone(value);
-                      },
-                    ),
-                    OptionWithSwitch(
-                      title: tr('remindBeforeDue'),
-                      switchValue: newMilestoneController.remindBeforeDueDate,
-                      switchOnChanged: (bool value) {
-                        if (!FocusScope.of(context).hasPrimaryFocus) {
-                          FocusScope.of(context).unfocus();
-                        }
-
-                        newMilestoneController.enableRemindBeforeDueDate(value);
-                      },
-                    ),
-                    OptionWithSwitch(
-                      title: tr('notifyResponsible'),
-                      switchValue: newMilestoneController.notificationEnabled,
-                      switchOnChanged: (bool value) {
-                        newMilestoneController.enableNotification(value);
-                      },
-                    ),
-                  ],
-                ),
-              ],
+          body: Listener(
+            onPointerDown: (_) {
+              if (newMilestoneController.titleController.text.isNotEmpty &&
+                  newMilestoneController.titleFocus.hasFocus)
+                newMilestoneController.titleFocus.unfocus();
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  MilestoneInput(controller: newMilestoneController),
+                  const StyledDivider(leftPadding: 72.5),
+                  ProjectTile(controller: newMilestoneController),
+                  Obx(() => newMilestoneController.slectedProjectTitle.value.isNotEmpty
+                      ? ResponsibleTile(controller: newMilestoneController)
+                      : const SizedBox()),
+                  DescriptionTile(newMilestoneController: newMilestoneController),
+                  DueDateTile(controller: newMilestoneController),
+                  const SizedBox(height: 5),
+                  AdvancedOptions(
+                    options: <Widget>[
+                      OptionWithSwitch(
+                        title: tr('keyMilestone'),
+                        switchValue: newMilestoneController.keyMilestone,
+                        switchOnChanged: (bool value) {
+                          newMilestoneController.setKeyMilestone(value);
+                        },
+                      ),
+                      OptionWithSwitch(
+                        title: tr('remindBeforeDue'),
+                        switchValue: newMilestoneController.remindBeforeDueDate,
+                        switchOnChanged: (bool value) {
+                          newMilestoneController.enableRemindBeforeDueDate(value);
+                        },
+                      ),
+                      OptionWithSwitch(
+                        title: tr('notifyResponsible'),
+                        switchValue: newMilestoneController.notificationEnabled,
+                        switchOnChanged: (bool value) {
+                          newMilestoneController.enableNotification(value);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
 class MilestoneInput extends StatelessWidget {
   final NewMilestoneController controller;
+
+  final bool focusOnTitle;
   const MilestoneInput({
     Key? key,
     required this.controller,
+    this.focusOnTitle = true,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 72, right: 25),
-      child: Obx(
-        () => PlatformTextField(
-          maxLines: 2,
-          controller: controller.titleController,
-          style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-          cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-          decoration: InputDecoration(
-              hintText: tr('milestoneTitle'),
-              contentPadding: EdgeInsets.zero,
-              hintStyle: TextStyleHelper.headline6(
-                  color: controller.needToSetTitle.value
-                      ? Get.theme.colors().colorError
-                      : Get.theme.colors().onSurface.withOpacity(0.5)),
-              border: InputBorder.none),
-        ),
+      padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
+      child: Row(
+        children: [
+          SizedBox(
+            width: 72,
+            child: Obx(
+              () => AppIcon(
+                icon: SvgIcons.milestone,
+                color: controller.titleIsEmpty.isTrue
+                    ? Get.theme.colors().onBackground.withOpacity(0.4)
+                    : Get.theme.colors().onBackground.withOpacity(0.75),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () => PlatformTextField(
+                focusNode: focusOnTitle ? controller.titleFocus : null,
+                maxLines: null,
+                controller: controller.titleController,
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+                cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                decoration: InputDecoration(
+                    hintText: tr('milestoneTitle'),
+                    contentPadding: EdgeInsets.zero,
+                    hintStyle: TextStyleHelper.headline6(
+                        color: controller.needToSetTitle.value
+                            ? Get.theme.colors().colorError
+                            : Get.theme.colors().onSurface.withOpacity(0.5)),
+                    border: InputBorder.none),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -262,7 +284,6 @@ class ResponsibleTile extends StatelessWidget {
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
         selectedIconColor: Get.theme.colors().onBackground,
         onTap: () => {
-          if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
           Get.find<NavigationController>().toScreen(const ProjectTeamResponsibleSelectionView(),
               arguments: {'controller': controller})
         },
@@ -301,10 +322,7 @@ class DueDateTile extends StatelessWidget {
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
-            onTap: () => {
-                  if (!FocusScope.of(context).hasPrimaryFocus) {FocusScope.of(context).unfocus()},
-                  controller.onDueDateTilePressed()
-                });
+            onTap: controller.onDueDateTilePressed);
       },
     );
   }

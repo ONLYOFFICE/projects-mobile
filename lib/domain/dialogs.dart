@@ -35,6 +35,7 @@ import 'dart:collection';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
@@ -74,11 +75,12 @@ class ErrorDialog extends GetxController {
           titleText: tr('error'),
           contentText: _customErrors[error] ?? error,
           acceptText: tr('ok'),
-          onAcceptTap: () => {
+          onAcceptTap: () async => {
             Get.back(),
             dialogIsShown = false,
             if (_blockingErrors[error.toLowerCase()] != null)
               {
+                await Get.put(AccountManagerController()).clearToken(),
                 Get.find<LoginController>().logout(),
                 dialogIsShown = false,
                 queue.clear(),

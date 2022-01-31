@@ -9,8 +9,8 @@ default_platform(:android)
 skip_docs
 
 def escape_markdown2(string)
-  pattern = /(\[|\_|\*|\[|\`)/
-  string.gsub(pattern){|match|"\\"  + match}
+    pattern = /(\[|\_|\*|\[|\`)/
+    string.gsub(pattern){|match|"\\"  + match}
 end
 
 platform :android do

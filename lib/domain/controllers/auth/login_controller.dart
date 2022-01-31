@@ -37,6 +37,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
 import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/data/models/from_api/capabilities.dart';
@@ -64,6 +65,9 @@ class LoginController extends GetxController {
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
   late TextEditingController _portalAdressController;
+
+  late AccountManagerController accountManager;
+
   TextEditingController get portalAdressController => _portalAdressController;
 
   late TextEditingController _emailController;
@@ -82,9 +86,8 @@ class LoginController extends GetxController {
   String? _tfaKey;
   String? get tfaKey => _tfaKey;
 
-  String get portalAdress => _portalAdressController.text.contains('//')
-      ? _portalAdressController.text.split('//')[1]
-      : _portalAdressController.text;
+  Uri portalURI = Uri();
+  String get portalAdress => portalURI.authority;
 
   final cookieManager = WebviewCookieManager();
 
@@ -94,7 +97,7 @@ class LoginController extends GetxController {
   final _state = ViewState.Idle.obs;
   Rx<ViewState> get state => _state;
   void setState(ViewState viewState) {
-    state.value = viewState;
+    if (state.value != viewState) state.value = viewState;
   }
 
   @override
@@ -102,7 +105,17 @@ class LoginController extends GetxController {
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     _portalAdressController = TextEditingController();
+
+    accountManager = Get.isRegistered<AccountManagerController>()
+        ? Get.find<AccountManagerController>()
+        : Get.put(AccountManagerController());
+
     super.onInit();
+  }
+
+  void setup() {
+    portalAdressController.text = '';
+    emailController.text = '';
   }
 
   Future<void> loginByPassword() async {
@@ -169,9 +182,9 @@ class LoginController extends GetxController {
   }
 
   Future<void> saveLoginData({String? token, String? expires}) async {
+    GetIt.instance.resetLazySingleton<CoreApi>();
     await saveToken(token, expires);
     await sendRegistrationType();
-    setState(ViewState.Idle);
 
     await AnalyticsService.shared.logEvent(AnalyticsService.Events.loginPortal,
         {AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName')});
@@ -209,6 +222,7 @@ class LoginController extends GetxController {
   }
 
   Future saveToken(String? token, String? expires) async {
+    //TODO: replace with AccountData
     await _secureStorage.putString('token', token);
     await _secureStorage.putString('expires', expires);
   }
@@ -248,31 +262,45 @@ class LoginController extends GetxController {
       return;
     }
 
-    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
-    _portalAdressController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _portalAdressController.text.length),
-    );
+    final portalString = setupPortalUri();
 
-    if (!(_portalAdressController.text.isURL || _portalAdressController.text.isIPv4)) {
+    if (!portalURI.hasAuthority) {
       portalFieldError.value = true;
       // ignore: unawaited_futures
       900.milliseconds.delay().then((_) => portalFieldError.value = false);
     } else {
       setState(ViewState.Busy);
 
-      locator.get<CoreApi>().setPortalName(_portalAdressController.text);
+      locator.get<CoreApi>().setPortalName(portalString);
 
       final _capabilities = await _portalService.portalCapabilities();
 
       if (_capabilities != null) {
         capabilities = _capabilities;
         checkBoxValue.value = false;
-        setState(ViewState.Idle);
         await Get.to(() => const LoginView());
+        return;
       }
 
       setState(ViewState.Idle);
     }
+  }
+
+  String setupPortalUri() {
+    _portalAdressController.text = _portalAdressController.text.removeAllWhitespace;
+    _portalAdressController.selection = TextSelection.fromPosition(
+      TextPosition(offset: _portalAdressController.text.length),
+    );
+
+    var portalString = _portalAdressController.text;
+
+    if (portalString[portalString.length - 1] == '.')
+      portalString = portalString.substring(0, portalString.length - 1);
+
+    if (!portalString.contains('http')) portalString = 'https://$portalString';
+
+    portalURI = Uri.parse(portalString);
+    return portalString;
   }
 
   Future<bool> sendRegistrationType() async {
@@ -301,6 +329,7 @@ class LoginController extends GetxController {
     await RemoteConfigService.fetchAndActivate();
 
     locator<EventHub>().fire('logoutSuccess');
+    setState(ViewState.Idle);
   }
 
   // TODO: check dispose textControllers

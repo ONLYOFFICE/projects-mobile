@@ -36,6 +36,9 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class DiscussionTitleTextField extends StatelessWidget {
@@ -48,24 +51,45 @@ class DiscussionTitleTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 72, right: 16, top: 16, bottom: 34),
-      child: Obx(
-        () => PlatformTextField(
-            focusNode: controller.titleFocus,
-            maxLines: null,
-            controller: controller.titleController,
-            onChanged: controller.changeTitle,
-            style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
-            cursorColor: Get.theme.colors().primary.withOpacity(0.87),
-            decoration: InputDecoration(
-                hintText: tr('discussionTitle'),
-                contentPadding: EdgeInsets.zero,
-                hintStyle: TextStyleHelper.headline6(
-                  color: controller.setTitleError.value == true
-                      ? Get.theme.colors().colorError
-                      : Get.theme.colors().onSurface.withOpacity(0.5),
+      padding: const EdgeInsets.only(right: 16, bottom: 10, top: 10),
+      child: Row(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 5),
+            child: SizedBox(
+              width: 72,
+              child: Obx(
+                () => AppIcon(
+                  icon: SvgIcons.discussions,
+                  color: controller.titleIsEmpty.value
+                      ? Get.theme.colors().onBackground.withOpacity(0.4)
+                      : Get.theme.colors().onBackground.withOpacity(0.75),
                 ),
-                border: InputBorder.none)),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () => PlatformTextField(
+                onChanged: controller.changeTitle,
+                focusNode: controller.titleFocus,
+                maxLines: null,
+                controller: controller.titleController,
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onBackground),
+                cursorColor: Get.theme.colors().primary.withOpacity(0.87),
+                decoration: InputDecoration(
+                    hintText: tr('discussionTitle'),
+                    contentPadding: EdgeInsets.zero,
+                    hintStyle: TextStyleHelper.headline6(
+                      color: controller.setTitleError.value == true
+                          ? Get.theme.colors().colorError
+                          : Get.theme.colors().onSurface.withOpacity(0.5),
+                    ),
+                    border: InputBorder.none),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }

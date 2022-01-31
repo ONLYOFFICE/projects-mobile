@@ -33,13 +33,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tags_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
@@ -81,9 +81,9 @@ class TagsSelectionView extends StatelessWidget {
       ),
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        title: _Header(
-          controller: controller,
-          title: tr('tags'),
+        title: Text(
+          tr('tags'),
+          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
         ),
         actions: [
           PlatformIconButton(
@@ -91,18 +91,25 @@ class TagsSelectionView extends StatelessWidget {
             onPressed: controller.confirm,
           )
         ],
-        bottom: _TagsSearchBar(controller: controller),
+        bottom: SearchField(
+          hintText: tr('searchTags'),
+          controller: controller.searchInputController,
+          showClearIcon: true,
+          onChanged: controller.newSearch,
+          onSubmitted: controller.newSearch,
+          onClearPressed: controller.clearSearch,
+        ),
       ),
       body: Obx(
         () {
           if (controller.loaded.value == true &&
-              controller.tags.isNotEmpty &&
+              controller.filteredTags.isNotEmpty &&
               controller.isSearchResult.value == false) {
             return _TagsList(
               controller: controller,
               onTapFunction: () => {},
             );
-          } else if (controller.loaded.value == true && controller.tags.isEmpty) {
+          } else if (controller.loaded.value == true && controller.filteredTags.isEmpty) {
             return Column(children: const [NothingFound()]);
           } else
             return const ListLoadingSkeleton();
@@ -123,22 +130,25 @@ class TagsSelectionView extends StatelessWidget {
       ValueListenableBuilder<bool>(
         valueListenable: validate,
         builder: (context, value, child) {
-          return StyledAlertDialog(
-            titleText: tr('enterTag'),
-            content: _TagTextFieldWidget(
-              inputController: inputController,
-              onSubmited: onSubmited,
-              validate: validate,
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 24),
+            child: StyledAlertDialog(
+              titleText: tr('enterTag'),
+              content: _TagTextFieldWidget(
+                inputController: inputController,
+                onSubmited: onSubmited,
+                validate: validate,
+              ),
+              acceptText: tr('confirm').toUpperCase(),
+              onAcceptTap: () {
+                if (inputController.text.isNotEmpty) {
+                  onSubmited(inputController.text);
+                } else {
+                  validate.value = false;
+                }
+              },
+              onCancelTap: Get.back,
             ),
-            acceptText: tr('confirm').toUpperCase(),
-            onAcceptTap: () {
-              if (inputController.text.isNotEmpty) {
-                onSubmited(inputController.text);
-              } else {
-                validate.value = false;
-              }
-            },
-            onCancelTap: Get.back,
           );
         },
       ),
@@ -161,100 +171,36 @@ class _TagTextFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final errorColor = Theme.of(context).errorColor;
-    return TextField(
-      autofocus: true,
-      textInputAction: TextInputAction.done,
-      controller: inputController,
-      onChanged: (_) {
-        validate.value = true;
-      },
-      decoration: InputDecoration(
-        hintText: '',
-        border: InputBorder.none,
-        isCollapsed: true,
-        errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
-        focusedErrorBorder: !validate.value
-            ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
-            : null,
-        errorBorder: !validate.value
-            ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
-            : null,
-      ),
-      onSubmitted: (value) {
-        if (inputController.text.isNotEmpty) {
-          onSubmited(value);
-        } else {
-          validate.value = false;
-        }
-      },
-    );
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({
-    Key? key,
-    required this.title,
-    required this.controller,
-  }) : super(key: key);
-
-  final String title;
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    title,
-                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TagsSearchBar extends StatelessWidget {
-  const _TagsSearchBar({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final controller;
-
-  @override
-  Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      margin: const EdgeInsets.only(left: 16, right: 20, bottom: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        children: <Widget>[
-          const SizedBox(width: 20),
-          SizedBox(
-            height: 24,
-            width: 24,
-            child: InkWell(
-              onTap: () {},
-            ),
-          ),
-        ],
+      margin: const EdgeInsets.only(top: 10),
+      child: TextField(
+        autofocus: true,
+        textInputAction: TextInputAction.done,
+        controller: inputController,
+        onChanged: (_) {
+          validate.value = true;
+        },
+        decoration: InputDecoration(
+          hintText: '',
+          border: InputBorder.none,
+          isCollapsed: true,
+          errorText: !validate.value ? tr('newTagNoTitleErrorMessage') : null,
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Get.theme.colors().onSurface.withOpacity(0.42))),
+          focusedErrorBorder: !validate.value
+              ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+              : null,
+          errorBorder: !validate.value
+              ? UnderlineInputBorder(borderSide: BorderSide(color: errorColor))
+              : null,
+        ),
+        onSubmitted: (value) {
+          if (inputController.text.isNotEmpty) {
+            onSubmited(value);
+          } else {
+            validate.value = false;
+          }
+        },
       ),
     );
   }
@@ -267,7 +213,7 @@ class _TagsList extends StatelessWidget {
     required this.onTapFunction,
   }) : super(key: key);
   final Function onTapFunction;
-  final controller;
+  final ProjectTagsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -277,13 +223,13 @@ class _TagsList extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemBuilder: (c, i) => TagItem(
-              tagItemDTO: controller.tags[i] as TagItemDTO?,
+              tagItemDTO: controller.filteredTags[i],
               onTapFunction: () {
-                controller.changeTagSelection(controller.tags[i]);
+                controller.changeTagSelection(controller.filteredTags[i]);
               },
             ),
             itemExtent: 65,
-            itemCount: controller.tags.length as int?,
+            itemCount: controller.filteredTags.length,
           ),
         )
       ],

@@ -76,6 +76,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
   RxString? selectedProjectTitle = ''.obs;
   @override
   RxString? selectedMilestoneTitle = ''.obs;
+  @override
+  RxBool titleIsEmpty = true.obs;
 
   @override
   RxString? descriptionText = ''.obs;
@@ -118,6 +120,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
       _selectedProjectId = projectDetailed.id;
       needToSelectProject.value = false;
     }
+
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
   }
 
   @override
@@ -301,6 +305,8 @@ class NewTaskController extends GetxController implements TaskActionsController 
     if (title!.isEmpty) setTitleError!.value = true;
     if (_selectedProjectId == null || title!.isEmpty) return;
 
+    Get.back();
+
     String? priority;
     final responsibleIds = <String?>[];
 
@@ -322,7 +328,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
     if (createdTask != null) {
       locator<EventHub>().fire('needToRefreshTasks');
 
-      Get.back();
       MessagesHandler.showSnackBar(
         context: context,
         text: tr('taskCreated'),
@@ -334,7 +339,11 @@ class NewTaskController extends GetxController implements TaskActionsController 
               .to(const TaskDetailedView(), arguments: {'controller': itemController});
         },
       );
-    }
+    } else
+      MessagesHandler.showSnackBar(
+        context: context,
+        text: tr('error'),
+      );
   }
 
   void discardTask() {

@@ -7,8 +7,8 @@ default_platform :ios
 skip_docs # Do not create fastlane/README.md
 
 def escape_markdown2(string)
-  pattern = /(\[|\_|\*|\[|\`)/
-  string.gsub(pattern){|match|"\\"  + match}
+    pattern = /(\[|\_|\*|\[|\`)/
+    string.gsub(pattern){|match|"\\"  + match}
 end
 
 platform :ios do

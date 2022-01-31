@@ -37,6 +37,7 @@ import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HtmlTextEditor extends StatelessWidget {
   const HtmlTextEditor({
@@ -59,10 +60,18 @@ class HtmlTextEditor extends StatelessWidget {
     print('has error $hasError');
     return HtmlEditor(
       controller: textController ?? HtmlEditorController(),
+      callbacks: Callbacks(onNavigationRequestMobile: (url) {
+        launch(url);
+        return NavigationActionPolicy.CANCEL;
+      }),
       htmlToolbarOptions: HtmlToolbarOptions(
         mediaUploadInterceptor: (file, type) async {
           final result = await locator<CommentsService>().uploadImages(file);
           textController!.insertHtml('<img alt="" src="$result">');
+          return false;
+        },
+        linkInsertInterceptor: (text, url, isNewWindow) {
+          textController?.insertLink(text, url, isNewWindow);
           return false;
         },
         textStyle: TextStyleHelper.body2(color: Get.theme.colors().onBackground),

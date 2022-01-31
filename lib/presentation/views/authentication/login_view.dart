@@ -32,6 +32,7 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
@@ -51,7 +52,17 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
-    final styledAppBar = StyledAppBar(elevation: 0);
+
+    SchedulerBinding.instance!.addPostFrameCallback((_) {
+      controller.setState(ViewState.Idle);
+    });
+
+    final styledAppBar = StyledAppBar(
+        title: Text(
+          tr('addNewAccount'),
+          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+        ),
+        elevation: 0);
 
     return Obx(
       () => controller.state.value == ViewState.Busy

@@ -41,7 +41,6 @@ import 'package:projects/presentation/views/authentication/login_view.dart';
 import 'package:projects/presentation/views/authentication/passcode/passcode_screen.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen2.dart';
-import 'package:projects/presentation/views/authentication/portal_view.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/new_discussion/new_discussion_screen.dart';
@@ -85,7 +84,6 @@ import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 List<GetPage> getxPages() => [
       GetPage(name: '/MainView', page: () => const MainView()),
-      GetPage(name: '/PortalInputView', page: () => const PortalInputView()),
       GetPage(name: '/LoginView', page: () => const LoginView()),
       GetPage(name: '/CodeView', page: () => CodeView()),
       GetPage(name: '/AnalyticsScreen', page: () => const AnalyticsScreen()),

@@ -128,6 +128,7 @@ flutter:
     - lib/assets/images/icons/folders/
     - lib/assets/images/icons/empty_state/
     - lib/assets/images/icons/user_atributes/
+    - lib/assets/images/icons/file_icons/
     - lib/assets/splash/
     - lib/l10n/
 

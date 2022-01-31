@@ -33,10 +33,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_group.dart';
+import 'package:projects/data/services/group_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
-import 'package:projects/data/services/group_service.dart';
 
 class GroupsController extends BaseController {
   final GroupService _api = locator<GroupService>();
@@ -44,12 +44,13 @@ class GroupsController extends BaseController {
   @override
   RxList itemList = [].obs; // TODO always empty
 
-  late PaginationController paginationController;
+  late PaginationController<PortalGroup> paginationController;
 
   @override
   void onInit() {
     screenName = tr('groups');
-    paginationController = Get.put(PaginationController(), tag: 'GroupsController');
+
+    paginationController = Get.put(PaginationController<PortalGroup>(), tag: 'GroupsController');
 
     paginationController.loadDelegate = () async => await _getGroups();
     paginationController.refreshDelegate = () async => await refreshData();
@@ -61,7 +62,7 @@ class GroupsController extends BaseController {
 
   RxBool loaded = false.obs;
 
-  Future getAllGroups() async {
+  Future<void> getAllGroups() async {
     loaded.value = false;
     final result = await _api.getAllGroups();
     if (result != null) {
@@ -70,7 +71,7 @@ class GroupsController extends BaseController {
     loaded.value = true;
   }
 
-  Future getGroups({bool needToClear = false}) async {
+  Future<void> getGroups({bool needToClear = false}) async {
     loaded.value = false;
 
     paginationController.startIndex = 0;

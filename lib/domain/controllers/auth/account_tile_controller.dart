@@ -30,13 +30,16 @@
  *
  */
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:projects/data/api/core_api.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/data/services/authentication_service.dart';
 import 'package:projects/data/services/download_service.dart';
 import 'package:projects/data/services/storage/secure_storage.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
@@ -45,6 +48,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/views/authentication/login_view.dart';
 
 class AccountTileController extends GetxController {
   final _downloadService = locator<DownloadService>();
@@ -72,7 +76,17 @@ class AccountTileController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      final avatarBytes = await _downloadService.downloadImage(accountData!.avatarUrl);
+      Uint8List? avatarBytes;
+
+      if (accountData!.avatarUrl!.contains('http')) {
+        avatarBytes = await _downloadService.downloadImageWithToken(
+            accountData!.avatarUrl!, accountData!.token!);
+      } else {
+        final url = '${accountData!.scheme!}$portal${accountData!.avatarUrl!}';
+
+        avatarBytes = await _downloadService.downloadImageWithToken(url, accountData!.token!);
+      }
+
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;
@@ -84,37 +98,68 @@ class AccountTileController extends GetxController {
     }
   }
 
-  void setupUser() {
+  Future<void> setupUser() async {
     if (accountData?.portal != null) {
-      userTitle.value = accountData!.portal;
+      userTitle.value = accountData!.portal!;
+
+      if (accountData!.token!.isNotEmpty) {
+        final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
+
+        if (!isAuthValid)
+          await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+      }
     }
-    loadAvatar();
+
+    await loadAvatar();
   }
 
   Future<void> loginToSavedAccount() async {
-    Get.back();
+    final isAuthValid = await locator<AuthService>().checkAccountAuthorization(accountData!);
+    if (!isAuthValid) {
+      await Get.find<AccountManagerController>().clearTokenForAccount(accountData!);
+    }
 
-    await locator<SecureStorage>()
-        .putString('portalName', '${accountData!.scheme}${accountData!.portal}');
-    await Get.find<LoginController>()
-        .saveLoginData(token: accountData!.token, expires: accountData!.expires);
+    if (accountData?.token == '') {
+      final loginController = Get.find<LoginController>();
 
-    locator<EventHub>().fire('loginSuccess');
+      loginController.portalAdressController.text = accountData!.portal!;
+      loginController.emailController.text = accountData!.login!;
+      loginController.setupPortalUri();
+      locator.get<CoreApi>().setPortalName('${accountData!.scheme}${accountData!.portal}');
+
+      await Get.to(() => const LoginView());
+    } else {
+      await locator<SecureStorage>()
+          .putString('portalName', '${accountData!.scheme}${accountData!.portal}');
+      await Get.find<LoginController>()
+          .saveLoginData(token: accountData!.token, expires: accountData!.expires);
+
+      await locator<SecureStorage>()
+          .putString('currentAccount', json.encode(accountData!.toJson()));
+
+      locator<EventHub>().fire('loginSuccess');
+    }
   }
 
   Future<void> onTap() async => loginToSavedAccount();
 
   Future<void> deleteAccount() async {
-    await Get.dialog(StyledAlertDialog(
-      titleText: tr('removeAccountTitle'),
-      contentText: tr('removeAccountText'),
-      acceptText: tr('remove').toUpperCase(),
-      cancelText: tr('cancel').toUpperCase(),
-      onAcceptTap: () async => {
-        await Get.find<AccountManagerController>().deleteAccounts(accountId: accountData!.id),
-        Get.back(),
-      },
-      onCancelTap: Get.back,
-    ));
+    await Get.dialog(
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 24),
+        child: StyledAlertDialog(
+          titleText: tr('removeAccountTitle'),
+          contentText: tr('removeAccountText'),
+          acceptText: tr('removeAccount').toUpperCase(),
+          cancelText: tr('cancel').toUpperCase(),
+          onAcceptTap: () async => {
+            await Get.find<AccountManagerController>().deleteAccounts(
+                accountId: accountData!.id!, accountData: jsonEncode(accountData!.toJson())),
+            Get.back(),
+          },
+          onCancelTap: Get.back,
+        ),
+      ),
+    );
   }
 }

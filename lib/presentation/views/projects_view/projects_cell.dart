@@ -286,7 +286,7 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
   showCustomBottomSheet(
     context: context,
     headerHeight: 60,
-    initHeight: _getInititalSize(statusCount: _statusesController.statuses.length),
+    initHeight: _getInitialSize(statusCount: _statusesController.statuses.length),
     // maxHeight: 0.7,
     decoration: BoxDecoration(
         color: Get.theme.colors().surface,
@@ -352,10 +352,12 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
 
 void showStatuses(
     {required BuildContext context, required BaseProjectEditorController itemController}) async {
-  if (Get.find<PlatformController>().isMobile) {
-    showsStatusesBS(context: context, itemController: itemController);
-  } else {
-    showsStatusesPM(context: context, itemController: itemController);
+  if (itemController.projectData!.canEdit!) {
+    if (Get.find<PlatformController>().isMobile) {
+      showsStatusesBS(context: context, itemController: itemController);
+    } else {
+      showsStatusesPM(context: context, itemController: itemController);
+    }
   }
 }
 
@@ -367,27 +369,23 @@ void showsStatusesPM(
       PopupMenuItem(
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        child: Expanded(
-          child: InkWell(
-            onTap: () async {
-              final success = await itemController.updateStatus(
-                newStatusId: _statusesController.statuses[i],
-              );
-              if (success) {
-                locator<EventHub>().fire('needToRefreshProjects', ['all']);
-              }
-              Get.back();
-            },
-            child: StatusTileTablet(
-                title: _statusesController.getStatusName(i),
-                icon: AppIcon(
-                    icon: _statusesController.getStatusImageString(i),
-                    color: itemController.projectData!.canEdit!
-                        ? Get.theme.colors().primary
-                        : Get.theme.colors().onBackground),
-                selected: _statusesController.statuses[i] == itemController.projectData!.status),
-          ),
-        ),
+        onTap: () async {
+          final success = await itemController.updateStatus(
+            newStatusId: _statusesController.statuses[i],
+          );
+          if (success) {
+            locator<EventHub>().fire('needToRefreshProjects', ['all']);
+          }
+          Get.back();
+        },
+        child: StatusTileTablet(
+            title: _statusesController.getStatusName(i),
+            icon: AppIcon(
+                icon: _statusesController.getStatusImageString(i),
+                color: itemController.projectData!.canEdit!
+                    ? Get.theme.colors().primary
+                    : Get.theme.colors().onBackground),
+            selected: _statusesController.statuses[i] == itemController.projectData!.status),
       ),
   ];
 
@@ -412,7 +410,7 @@ void showsStatusesPM(
   await showMenu(context: context, position: position, items: items);
 }
 
-double _getInititalSize({required int statusCount}) {
+double _getInitialSize({required int statusCount}) {
   final size = (statusCount * 50 + 65) / Get.height;
   return size > 0.7 ? 0.7 : size;
 }

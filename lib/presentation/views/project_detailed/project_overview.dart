@@ -34,12 +34,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
-
-import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
@@ -62,10 +61,11 @@ class ProjectOverview extends StatelessWidget {
         if (projectController.loaded.value == true) {
           return ListView(
             children: [
-              const SizedBox(height: 26),
+              const SizedBox(height: 20),
               Obx(
                 () => InfoTile(
                   caption: tr('project').toUpperCase(),
+                  icon: const AppIcon(icon: SvgIcons.project, color: Color(0xff707070)),
                   subtitle: projectController.projectTitleText.value,
                   subtitleStyle: TextStyleHelper.headline7(
                     color: Get.theme.colors().onBackground,

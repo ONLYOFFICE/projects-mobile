@@ -60,12 +60,6 @@ class NavigationController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onClose() {
-    // clearCurrentIndex();
-    super.onClose();
-  }
-
   void showMoreView() {
     if (onMoreView.value != true) locator<EventHub>().fire('moreViewVisibilityChanged', true);
 
@@ -135,14 +129,14 @@ class NavigationController extends GetxController {
     }
   }
 
-  void to(Widget widget,
+  Future to(Widget widget,
       {bool? preventDuplicates,
       Map<String, dynamic>? arguments,
       Transition? transition,
       bool? popGesture,
-      bool fullscreenDialog = false}) {
+      bool fullscreenDialog = false}) async {
     if (Get.find<PlatformController>().isMobile) {
-      Get.to(
+      await Get.to(
         () => widget,
         popGesture: popGesture,
         fullscreenDialog: fullscreenDialog,
@@ -152,7 +146,7 @@ class NavigationController extends GetxController {
       );
     } else {
       treeLength++;
-      Get.to(
+      await Get.to(
         () => TabletLayout(contentView: widget),
         transition: Transition.noTransition,
         preventDuplicates: preventDuplicates ?? false,

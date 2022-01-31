@@ -109,9 +109,9 @@ class TaskEditingView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
               TaskTitle(controller: controller, showCaption: true, focusOnTitle: false),
-              const SizedBox(height: 22),
+              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.only(left: 72, right: 16),
                 child: OutlinedButton(

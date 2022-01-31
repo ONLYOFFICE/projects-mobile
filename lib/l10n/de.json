@@ -453,10 +453,23 @@
 	"taskStatusOpen": "Offen",
 	"taskStatusClosed": "Abgeschlossen",
 	"searchMilestone": "Suche nach einem Meilenstein...",
-
 	"privacyAndTermsFooter": {
 		"privacyPolicyWithLink": "Datenschutzerklärung",
 		"termsOfServiceWithLink": "Nutzungsbedingungen",
 		"total": "Wenn Sie fortsetzen, stimmen Sie der @:privacyAndTermsFooter.privacyPolicyWithLink und den @:privacyAndTermsFooter.termsOfServiceWithLink zu"
-	}
+	},
+	"removeAccountTitle": "Möchten Sie das Konto wirklich löschen?",
+	"removeAccountText": "Ihre Portal-Adresse, E-Mail-Adresse und das Password werden beim nächsten Einloggen erforderlich.",
+	"tfaWrongCode": "Ungültiger Code!",
+	"privacyAndTermsAgreement": {
+		"beforeText": "Ich bin einverstanden mit ",
+		"betweenText": " und "
+	},
+	"portalNotFound": "Portal nicht gefunden. Überprüfen Sie die Portal-URL.",
+	"newTagNoTitleErrorMessage": "Jedes Tag soll einen Titel haben.",
+	"accountDeleted": "Konto wurde gelöscht",
+	"removeAccount": "löschen",
+	"addNewAccount": "Neues Konto hinzufügen",
+	"noGroups": "Keine Gruppen gefunden",
+	"searchTags": "Suchen nach Tags..."
 }

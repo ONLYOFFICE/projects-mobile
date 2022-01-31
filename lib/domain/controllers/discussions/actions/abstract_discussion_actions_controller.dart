@@ -53,6 +53,7 @@ abstract class DiscussionActionsController {
   late RxBool setTitleError;
   late RxBool setTextError;
   late RxBool selectProjectError;
+  late RxBool titleIsEmpty;
 
   void setupSubscribersSelection();
   void addSubscriber(PortalUserItemController user, {bool fromUsersDataSource = false});

@@ -116,16 +116,16 @@ class EditProjectView extends StatelessWidget {
             if (editProjectController.loaded.value == true) {
               return ListView(
                 children: [
-                  const SizedBox(height: 26),
-                  ProjectTitleTile(controller: editProjectController),
-                  const SizedBox(height: 20),
+                  ProjectTitleTile(
+                    controller: editProjectController,
+                    showCaption: true,
+                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 72),
+                    padding: const EdgeInsets.only(left: 72, bottom: 10, top: 10),
                     child: Align(
                         alignment: Alignment.centerLeft,
                         child: ProjectStatusButton(projectController: editProjectController)),
                   ),
-                  const SizedBox(height: 20),
                   ProjectDescriptionTile(controller: editProjectController),
                   ProjectManagerTile(controller: editProjectController),
                   TeamMembersTile(controller: editProjectController),

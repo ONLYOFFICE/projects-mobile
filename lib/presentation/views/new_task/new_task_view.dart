@@ -111,8 +111,10 @@ class NewTaskView extends StatelessWidget {
           child: Obx(
             () => Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 TaskTitle(controller: controller),
+                const SizedBox(height: 10),
+                const StyledDivider(leftPadding: 72.5),
                 // unfocus title
                 Listener(
                   onPointerDown: (_) {

@@ -36,6 +36,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/api/authentication_api.dart';
 import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/account_data.dart';
 import 'package:projects/data/models/apiDTO.dart';
 import 'package:projects/data/models/auth_token.dart';
 import 'package:projects/data/models/from_api/error.dart';
@@ -66,6 +67,17 @@ class AuthService {
       } else {
         await Get.find<ErrorDialog>().show(authResponse.error!.message);
       }
+    }
+    return true;
+  }
+
+  Future<bool> checkAccountAuthorization(AccountData accoutnData) async {
+    final authResponse = await _api.getAccountInfo(accoutnData);
+
+    if (authResponse.response == null) {
+      if (authResponse.error!.message.toLowerCase().contains('unauthorized')) {
+        return false;
+      } else {}
     }
     return true;
   }

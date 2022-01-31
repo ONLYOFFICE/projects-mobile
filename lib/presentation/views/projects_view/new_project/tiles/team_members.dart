@@ -60,7 +60,7 @@ class TeamMembersTile extends StatelessWidget {
           text: _isNotEmpty ? controller.teamMembersTitle as String : tr('addTeamMembers'),
           icon: SvgIcons.users,
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
-          selectedIconColor: Get.theme.colors().onBackground,
+          selectedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
           isSelected: _isNotEmpty,
           suffix: _isNotEmpty
               ? InkWell(

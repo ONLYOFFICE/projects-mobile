@@ -123,7 +123,7 @@ class SvgIcons {
   static const String doc = 'lib/assets/images/icons/folders/doc.svg';
   static const String image = 'lib/assets/images/icons/folders/image.svg';
   static const String table = 'lib/assets/images/icons/folders/table.svg';
-  static const String archive = 'lib/assets/images/icons/folders/archive.svg';
+
   static const String presentation = 'lib/assets/images/icons/folders/presentation.svg';
 
   static const String archived_status = 'lib/assets/images/icons/discussion_statuses/archived.svg';
@@ -160,6 +160,33 @@ class SvgIcons {
   static const String userBlocked = 'lib/assets/images/icons/user_atributes/blocked.svg';
   static const String userAdmin = 'lib/assets/images/icons/user_atributes/admin.svg';
   static const String userVisitor = 'lib/assets/images/icons/user_atributes/visitor.svg';
+
+  static const String archive = 'lib/assets/images/icons/file_icons/archive.svg';
+  static const String audio = 'lib/assets/images/icons/file_icons/audio.svg';
+  static const String csv = 'lib/assets/images/icons/file_icons/csv.svg';
+  static const String document_old = 'lib/assets/images/icons/file_icons/document_old.svg';
+  static const String docxf = 'lib/assets/images/icons/file_icons/docxf.svg';
+  static const String dotx = 'lib/assets/images/icons/file_icons/dotx.svg';
+  static const String html = 'lib/assets/images/icons/file_icons/html.svg';
+  static const String jpg = 'lib/assets/images/icons/file_icons/jpg.svg';
+  static const String odp = 'lib/assets/images/icons/file_icons/odp.svg';
+  static const String ods = 'lib/assets/images/icons/file_icons/ods.svg';
+  static const String odt = 'lib/assets/images/icons/file_icons/odt.svg';
+  static const String oform = 'lib/assets/images/icons/file_icons/oform.svg';
+  static const String otp = 'lib/assets/images/icons/file_icons/otp.svg';
+  static const String ots = 'lib/assets/images/icons/file_icons/ots.svg';
+  static const String ott = 'lib/assets/images/icons/file_icons/ott.svg';
+  static const String pdf = 'lib/assets/images/icons/file_icons/pdf.svg';
+  static const String pdfa = 'lib/assets/images/icons/file_icons/pdfa.svg';
+  static const String png = 'lib/assets/images/icons/file_icons/png.svg';
+  static const String potx = 'lib/assets/images/icons/file_icons/potx.svg';
+  static const String presentation_old = 'lib/assets/images/icons/file_icons/presentation_old.svg';
+  static const String rtf = 'lib/assets/images/icons/file_icons/rtf.svg';
+  static const String spreadsheet_old = 'lib/assets/images/icons/file_icons/spreadsheet_old.svg';
+  static const String txt = 'lib/assets/images/icons/file_icons/txt.svg';
+  static const String video = 'lib/assets/images/icons/file_icons/video.svg';
+  static const String xltx = 'lib/assets/images/icons/file_icons/xltx.svg';
+  static const String unknown = 'lib/assets/images/icons/file_icons/unknown.svg';
 }
 
 class PngIcons {

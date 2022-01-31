@@ -37,8 +37,12 @@ import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/discussions/actions/discussion_editing_controller.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';
@@ -82,6 +86,7 @@ class DiscussionEditingScreen extends StatelessWidget {
           child: Column(
             children: [
               DiscussionTitleTextField(controller: controller),
+              const StyledDivider(leftPadding: 72.5),
               Listener(
                 onPointerDown: (_) {
                   if (controller.title.isNotEmpty && controller.titleFocus.hasFocus)

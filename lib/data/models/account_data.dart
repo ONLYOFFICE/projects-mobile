@@ -31,25 +31,25 @@
  */
 
 class AccountData {
-  String id = '';
-  String login = '';
-  String portal = '';
-  String serverVersion = '';
-  String scheme = '';
-  String name = '';
-  String provider = '';
-  String avatarUrl = '';
-  bool isSslCiphers = false;
-  bool isSslState = false;
-  bool isOnline = false;
-  bool isWebDav = false;
-  bool isOneDrive = false;
-  bool isDropbox = false;
-  bool isAdmin = false;
-  bool isVisitor = false;
-  String token = '';
-  String password = '';
-  String expires = '';
+  String? id = '';
+  String? login = '';
+  String? portal = '';
+  String? serverVersion = '';
+  String? scheme = '';
+  String? name = '';
+  String? provider = '';
+  String? avatarUrl = '';
+  bool? isSslCiphers = false;
+  bool? isSslState = false;
+  bool? isOnline = false;
+  bool? isWebDav = false;
+  bool? isOneDrive = false;
+  bool? isDropbox = false;
+  bool? isAdmin = false;
+  bool? isVisitor = false;
+  String? token = '';
+  String? password = '';
+  String? expires = '';
 
   AccountData({
     this.id = '',
@@ -74,26 +74,26 @@ class AccountData {
   });
 
   AccountData.fromJson(Map<String, dynamic> json) {
-    id = json['id'] as String;
-    login = json['login'] as String;
-    portal = json['portal'] as String;
-    serverVersion = json['serverVersion'] as String;
-    scheme = json['scheme'] as String;
-    name = json['name'] as String;
-    provider = json['provider'] as String;
-    avatarUrl = json['avatarUrl'] as String;
-    isSslCiphers = json['isSslCiphers'] as String == '1';
-    isSslState = json['isSslState'] as String == '1';
-    isOnline = json['isOnline'] as String == '1';
-    isWebDav = json['isWebDav'] as String == '1';
-    isOneDrive = json['isOneDrive'] as String == '1';
-    isDropbox = json['isDropbox'] as String == '1';
-    isAdmin = json['isAdmin'] as String == '1';
-    isVisitor = json['isVisitor'] as String == '1';
-    token = (json['token'] as String).replaceAll(RegExp(r'\s+\b|\b\s|\s|\b'), '');
-    password = json['password'] as String;
+    id = json['id'] as String?;
+    login = json['login'] as String?;
+    portal = json['portal'] as String?;
+    serverVersion = json['serverVersion'] as String?;
+    scheme = json['scheme'] as String?;
+    name = json['name'] as String?;
+    provider = json['provider'] as String?;
+    avatarUrl = json['avatarUrl'] as String?;
+    isSslCiphers = json['isSslCiphers'] as bool?;
+    isSslState = json['isSslState'] as bool?;
+    isOnline = json['isOnline'] as bool?;
+    isWebDav = json['isWebDav'] as bool?;
+    isOneDrive = json['isOneDrive'] as bool?;
+    isDropbox = json['isDropbox'] as bool?;
+    isAdmin = json['isAdmin'] as bool?;
+    isVisitor = json['isVisitor'] as bool?;
+    token = (json['token'] as String?)?.replaceAll(RegExp(r'\s+\b|\b\s|\s|\b'), '');
+    password = json['password'] as String?;
 
-    expires = json['expires'] as String;
+    expires = json['expires'] as String?;
   }
 
   Map<String, dynamic> toJson() {

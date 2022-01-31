@@ -38,6 +38,7 @@ import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -121,9 +122,8 @@ class _Content extends StatelessWidget {
                             controller: controller,
                           )
                         : FileCell(
-                            entity: element as PortalFile,
-                            index: index,
-                            controller: controller,
+                            cellController: FileCellController(portalFile: element as PortalFile),
+                            documentsController: controller as DocumentsController,
                           );
                   },
                 );

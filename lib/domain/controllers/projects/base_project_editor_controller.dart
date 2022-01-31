@@ -89,13 +89,23 @@ abstract class BaseProjectEditorController extends GetxController {
 
   final FocusNode titleFocus = FocusNode();
 
+  var titleIsEmpty = true.obs;
+
   @override
   void onInit() {
     _userController.getUserInfo().then((value) => {
           selfUserItem = PortalUserItemController(portalUser: _userController.user!),
         });
 
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
+
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
   }
 
   String? get teamMembersTitle => selectedTeamMembers.length == 1
@@ -170,7 +180,7 @@ abstract class BaseProjectEditorController extends GetxController {
     selectedTeamMembers
         .removeWhere((element) => selectedProjectManager.value!.id == element.portalUser.id);
     managerName.value = '';
-    selectedProjectManager.value = null;
+    selectedProjectManager.value = PortalUser();
     isPMSelected.value = false;
 
     for (final element in usersDataSourse.usersList) {

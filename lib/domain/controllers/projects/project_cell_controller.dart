@@ -36,10 +36,11 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class ProjectCellController extends GetxController {
+class ProjectCellController extends BaseProjectEditorController {
   RefreshController refreshController = RefreshController();
 
   void setup(ProjectDetailed project) {
@@ -53,9 +54,10 @@ class ProjectCellController extends GetxController {
   }
 
   late ProjectDetailed _project;
+
+  @override
   ProjectDetailed get projectData => _project;
 
-  RxBool isPrivate = false.obs;
   RxBool canEdit = false.obs;
   RxInt status = (-1).obs;
 
@@ -69,6 +71,7 @@ class ProjectCellController extends GetxController {
     return utf8.decode(base64.decode(image));
   }
 
+  @override
   Future<bool> updateStatus({int? newStatusId}) async => Get.find<ProjectStatusesController>()
       .updateStatus(newStatusId: newStatusId, projectData: projectData);
 }

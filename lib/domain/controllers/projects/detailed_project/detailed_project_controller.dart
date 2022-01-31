@@ -177,7 +177,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     for (final user in projectTeamDataSource!.usersList) {
       selectedTeamMembers.add(user);
     }
-    Get.find<NavigationController>()
+    await Get.find<NavigationController>()
         .to(const TeamMembersSelectionView(), arguments: {'controller': this});
   }
 

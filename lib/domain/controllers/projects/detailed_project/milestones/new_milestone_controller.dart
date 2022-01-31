@@ -57,6 +57,9 @@ class NewMilestoneController extends GetxController {
   RxBool keyMilestone = false.obs;
 
   RxBool notificationEnabled = false.obs;
+
+  var titleIsEmpty = true.obs;
+  final FocusNode titleFocus = FocusNode();
   int? get selectedProjectId => _selectedProjectId;
   DateTime? get dueDate => _dueDate;
 
@@ -80,6 +83,12 @@ class NewMilestoneController extends GetxController {
   Rx<PortalUserItemController?>? responsible;
   RxList<PortalUserItemController?> teamMembers = <PortalUserItemController>[].obs;
 
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
+  }
+
   Future<void> setup(ProjectDetailed? projectDetailed) async {
     if (projectDetailed != null) {
       slectedProjectTitle.value = projectDetailed.title!;
@@ -94,6 +103,8 @@ class NewMilestoneController extends GetxController {
       for (final user in teamController.usersList) {
         teamMembers.add(user);
       }
+
+      titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
     }
   }
 
@@ -179,7 +190,11 @@ class NewMilestoneController extends GetxController {
   }
 
   void addResponsible(PortalUserItemController user) {
-    responsible = user.obs;
+    if (responsible == null)
+      responsible = user.obs;
+    else
+      responsible?.value = user;
+
     needToSelectResponsible.value = false;
     Get.back();
   }
@@ -209,6 +224,8 @@ class NewMilestoneController extends GetxController {
         needToSelectResponsible.value ||
         needToSetDueDate.value) return;
 
+    Get.back();
+
     final milestone = NewMilestoneDTO(
       title: titleController.text,
       description: descriptionController.value.text,
@@ -225,7 +242,8 @@ class NewMilestoneController extends GetxController {
       MessagesHandler.showSnackBar(context: context, text: tr('milestoneCreated'));
       locator<EventHub>().fire('needToRefreshMilestones');
       Get.back();
-    }
+    } else
+      MessagesHandler.showSnackBar(context: context, text: tr('error'));
   }
 
   void discard() {

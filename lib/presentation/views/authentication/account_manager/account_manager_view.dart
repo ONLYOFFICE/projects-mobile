@@ -29,81 +29,114 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_tile.dart';
+import 'package:projects/presentation/views/authentication/portal_view.dart';
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/login_controller.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class AccountManagerView extends StatelessWidget {
-  const AccountManagerView({
+  AccountManagerView({Key? key}) : super(key: key);
+
+  final loginController = Get.find<LoginController>();
+
+  final accountController = Get.isRegistered<AccountManagerController>()
+      ? Get.find<AccountManagerController>()
+      : Get.put(AccountManagerController());
+
+  @override
+  Widget build(BuildContext context) {
+    accountController.setup();
+
+    return Scaffold(
+      //TODO fix background colors for tablet
+      // backgroundColor: Get.theme.colors().backgroundSecond,
+      body: Obx(
+        () => loginController.state.value == ViewState.Busy
+            ? SizedBox(height: Get.height, child: const Center(child: CircularProgressIndicator()))
+            : Center(
+                child: Container(
+                  constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: <Widget>[
+                      SizedBox(height: Get.height * 0.1),
+                      const AppIcon(icon: SvgIcons.app_logo),
+                      SizedBox(height: Get.height * 0.01),
+                      Text(tr('appName'),
+                          textAlign: TextAlign.center, style: TextStyleHelper.headline6()),
+                      SizedBox(height: Get.height * 0.06),
+                      Expanded(
+                        child: Obx(
+                          () => ListView.separated(
+                            physics: const ScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (c, i) {
+                              if (i == accountController.accounts.length) {
+                                return const _NewAccountButton();
+                              } else
+                                return AccountTile(
+                                  userController: AccountTileController(
+                                      accountData: accountController.accounts[i]),
+                                );
+                            },
+                            separatorBuilder: (c, i) => const StyledDivider(leftPadding: 72),
+                            itemCount: accountController.accounts.length + 1,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+      ),
+    );
+  }
+}
+
+class _NewAccountButton extends StatelessWidget {
+  const _NewAccountButton({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<AccountManagerController>();
-
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15, right: 16, top: 18.5),
-            child: Text(
-              'Select account to log in', //tr('sortBy'),
-              style: TextStyleHelper.h6(color: Get.theme.colors().onSurface),
-            ),
-          ),
-          const SizedBox(height: 18),
-          const Divider(height: 1, thickness: 1),
-          const SizedBox(height: 20),
-          Obx(
-            () => ListView.builder(
-              physics: const ScrollPhysics(),
-              shrinkWrap: true,
-              itemBuilder: (c, i) => AccountTile(
-                userController: AccountTileController(accountData: controller.accounts[i]),
+    return InkWell(
+      onTap: () => Get.to(() => PortalInputView()),
+      child: SizedBox(
+        height: 64,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: 72,
+              child: Icon(
+                Icons.add,
+                color: Get.theme.colors().primary,
               ),
-              itemExtent: 65,
-              itemCount: controller.accounts.length,
             ),
-          ),
-          const SizedBox(height: 34),
-          InkWell(
-            onTap: Get.back,
-            child: SizedBox(
-              height: 48,
+            Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    width: 72,
-                    child: Icon(
-                      Icons.add,
-                      color: Get.theme.colors().primary,
-                    ),
-                  ),
                   Expanded(
-                    child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Add new account',
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
-                              ),
-                            ],
-                          ),
+                        Text(
+                          tr('addNewAccount'),
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().primary),
                         ),
                       ],
                     ),
@@ -111,9 +144,8 @@ class AccountManagerView extends StatelessWidget {
                 ],
               ),
             ),
-          ),
-          const SizedBox(height: 74)
-        ],
+          ],
+        ),
       ),
     );
   }

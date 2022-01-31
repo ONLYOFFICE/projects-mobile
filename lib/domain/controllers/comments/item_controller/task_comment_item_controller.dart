@@ -64,11 +64,12 @@ class TaskCommentItemController extends GetxController implements CommentItemCon
       taskId: taskId!,
       projectId: projectId!,
     );
-// TODO: refactoring needed
-    if (link != null) {
+
+    if (link.isURL) {
       await Clipboard.setData(ClipboardData(text: link));
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('linkCopied'));
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
   }
 
   @override

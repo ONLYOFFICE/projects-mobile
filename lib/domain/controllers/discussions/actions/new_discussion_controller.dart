@@ -102,11 +102,14 @@ class NewDiscussionController extends GetxController implements DiscussionAction
   var _previousSelectedSubscribers = []; // to track changes
 
   @override
-  RxBool selectProjectError = false.obs; //RxBool
+  RxBool selectProjectError = false.obs;
   @override
   RxBool setTitleError = false.obs;
   @override
   RxBool setTextError = false.obs;
+
+  @override
+  RxBool titleIsEmpty = true.obs;
 
   NewDiscussionController({int? projectId, String? projectTitle}) {
     if (projectId != null && projectTitle != null) {
@@ -117,6 +120,8 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
       addTeam();
     }
+
+    titleController.addListener(() => {titleIsEmpty.value = titleController.text.isEmpty});
   }
 
   @override
@@ -124,6 +129,12 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     _titleFocus.requestFocus();
 
     super.onInit();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    super.dispose();
   }
 
   @override
@@ -325,40 +336,43 @@ class NewDiscussionController extends GetxController implements DiscussionAction
     if (_selectedProjectId == null) selectProjectError.value = true;
     if (title.isEmpty) setTitleError.value = true;
     if (text.isEmpty) setTextError.value = true;
-    if (_selectedProjectId != null && title.isNotEmpty && text.isNotEmpty) {
-      // ignore: omit_local_variable_types
-      final List<String?> subscribersIds = [];
 
-      for (final item in subscribers) {
-        subscribersIds.add(item.id);
-      }
+    if (_selectedProjectId == null || title.isEmpty || text.isEmpty) return;
 
-      final newDiss = NewDiscussionDTO(
-        content: text.value,
-        title: title.value,
-        participants: subscribersIds,
-      );
+    Get.back();
 
-      final createdDiss = await _api.addMessage(
-        projectId: _selectedProjectId!,
-        newDiscussion: newDiss,
-      );
+    // ignore: omit_local_variable_types
+    final List<String?> subscribersIds = [];
 
-      if (createdDiss != null) {
-        locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]);
-        locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
-
-        Get.back();
-        MessagesHandler.showSnackBar(
-            context: context,
-            text: tr('discussionCreated'),
-            buttonText: tr('open').toUpperCase(),
-            buttonOnTap: () {
-              return Get.find<NavigationController>()
-                  .to(DiscussionDetailed(), arguments: {'discussion': createdDiss});
-            });
-      }
+    for (final item in subscribers) {
+      subscribersIds.add(item.id);
     }
+
+    final newDiss = NewDiscussionDTO(
+      content: text.value,
+      title: title.value,
+      participants: subscribersIds,
+    );
+
+    final createdDiss = await _api.addMessage(
+      projectId: _selectedProjectId!,
+      newDiscussion: newDiss,
+    );
+
+    if (createdDiss != null) {
+      locator<EventHub>().fire('needToRefreshDetails', [_selectedProjectId]);
+      locator<EventHub>().fire('needToRefreshDiscussions', ['all']);
+
+      MessagesHandler.showSnackBar(
+          context: context,
+          text: tr('discussionCreated'),
+          buttonText: tr('open').toUpperCase(),
+          buttonOnTap: () {
+            return Get.find<NavigationController>()
+                .to(DiscussionDetailed(), arguments: {'discussion': createdDiss});
+          });
+    } else
+      MessagesHandler.showSnackBar(context: context, text: tr('error'));
   }
 
   void discardDiscussion() {

@@ -32,7 +32,6 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
@@ -52,6 +51,4 @@ abstract class BaseDocumentsController extends BaseController {
   RxBool loaded = false.obs;
   RxBool nothingFound = false.obs;
   RxBool searchMode = false.obs;
-
-  Future openFile(PortalFile selectedFile);
 }

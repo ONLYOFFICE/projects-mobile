@@ -55,6 +55,18 @@ class DownloadService {
     }
   }
 
+  Future<Uint8List?> downloadImageWithToken(String url, String token) async {
+    final projects = await _api.downloadImageWithToken(url, token);
+
+    final success = projects.response != null;
+
+    if (success) {
+      return projects.response;
+    } else {
+      return null;
+    }
+  }
+
   Future<void> downloadDocument(String url) async {
     var dir;
     if (Platform.isAndroid) {

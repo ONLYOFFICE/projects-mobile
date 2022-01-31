@@ -64,6 +64,8 @@ class AdvancedOptions extends StatelessWidget {
                   expandedAlignment: Alignment.topLeft,
                   expandedCrossAxisAlignment: CrossAxisAlignment.start,
                   tilePadding: const EdgeInsets.only(right: 25),
+                  iconColor: Get.theme.colors().onBackground.withOpacity(0.75),
+                  collapsedIconColor: Get.theme.colors().onBackground.withOpacity(0.75),
                   title: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
@@ -73,7 +75,7 @@ class AdvancedOptions extends StatelessWidget {
                             icon: SvgIcons.preferences,
                             height: 24,
                             width: 24,
-                            color: Get.theme.colors().onBackground),
+                            color: Get.theme.colors().onBackground.withOpacity(0.75)),
                       ),
                       Text(
                         tr('advancedOptions'),
@@ -108,7 +110,7 @@ class OptionWithSwitch extends StatelessWidget {
   }) : super(key: key);
 
   final RxBool switchValue;
-  final Function? switchOnChanged;
+  final Function switchOnChanged;
   final String title;
 
   @override
@@ -144,8 +146,7 @@ class OptionWithSwitch extends StatelessWidget {
               Obx(
                 () => PlatformSwitch(
                   value: switchValue.value,
-                  onChanged: switchOnChanged as void Function(bool)?,
-                  //activeTrackColor: Get.theme.colors().primary.withOpacity(0.54),
+                  onChanged: (v) => {switchOnChanged(v)},
                   activeColor: Get.theme.colors().primary,
                 ),
               ),

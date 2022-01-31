@@ -32,31 +32,25 @@
 
 import 'dart:convert';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:projects/data/models/account_data.dart';
+import 'package:projects/data/services/storage/secure_storage.dart';
+import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/account_provider.dart';
-import 'package:projects/presentation/views/authentication/account_manager/account_manager_view.dart';
+import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/authentication/portal_view.dart';
 
 class AccountManagerController extends GetxController {
-  static const accountType = 'com.onlyoffice.account';
-  static const tokenType = 'com.onlyoffice.auth';
-  static const key = 'account_data';
+  final SecureStorage _secureStorage = locator<SecureStorage>();
 
   RxList<AccountData> accounts = <AccountData>[].obs;
 
   Future setup() async {
     accounts.value = await fetchAccounts();
-
-    if (accounts.isNotEmpty) {
-      await showBarModalBottomSheet(
-        context: Get.context!,
-        builder: (context) => const AccountManagerView(),
-      );
-    }
   }
 
   Future<void> addAccount({required String tokenString, required String expires}) async {
@@ -71,17 +65,19 @@ class AccountManagerController extends GetxController {
 
       final accountData = AccountData(
           token: tokenString,
-          portal: portalUri.host,
-          login: user.email!,
+          portal: portalUri.authority,
+          login: user.email,
           expires: expires,
-          name: user.displayName!,
-          id: user.id!,
-          isAdmin: user.isAdmin!,
-          isVisitor: user.isVisitor!,
+          name: user.displayName,
+          id: user.id,
+          isAdmin: user.isAdmin,
+          isVisitor: user.isVisitor,
           scheme: '${portalUri.scheme}://',
-          avatarUrl: avatarUrl!);
-      await AccountProvider.addAccount(
-          accountData: json.encode(accountData.toJson()), accountId: user.id!);
+          avatarUrl: avatarUrl);
+      final accountString = json.encode(accountData.toJson());
+      await AccountProvider.addAccount(accountData: accountString, accountId: user.id!);
+
+      await _secureStorage.putString('currentAccount', accountString);
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
@@ -107,15 +103,37 @@ class AccountManagerController extends GetxController {
     return accountsList;
   }
 
-  Future<void> deleteAccounts({String accountId = ''}) async {
+  Future<void> deleteAccounts({String accountId = '', String accountData = ''}) async {
     try {
-      final deleted = await AccountProvider.deleteAccount(accountId: accountId);
+      final deleted =
+          await AccountProvider.deleteAccount(accountId: accountId, accountData: accountData);
       if (deleted!) {
         accounts.value = await fetchAccounts();
+
+        if (accounts.isEmpty) await Get.to(() => PortalInputView());
+
+        MessagesHandler.showSnackBar(context: Get.context!, text: tr('accountDeleted'));
       }
     } catch (e, s) {
       debugPrint(e.toString());
       debugPrint(s.toString());
     }
+  }
+
+  Future<void> clearToken() async {
+    final currentAccount = await _secureStorage.getString('currentAccount');
+    if ((currentAccount ?? '') != '') {
+      final account = AccountData.fromJson(json.decode(currentAccount!) as Map<String, dynamic>);
+
+      await clearTokenForAccount(account);
+      await _secureStorage.putString('currentAccount', jsonEncode(account.toJson()));
+    }
+  }
+
+  Future<void> clearTokenForAccount(AccountData account) async {
+    account.token = '';
+    final accountString = jsonEncode(account.toJson());
+
+    await AccountProvider.updateAccount(accountData: accountString, accountId: account.id!);
   }
 }
