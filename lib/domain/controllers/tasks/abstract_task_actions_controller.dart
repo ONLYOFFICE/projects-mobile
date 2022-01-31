@@ -34,14 +34,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 abstract class TaskActionsController extends GetxController {
-  RxString? title;
+  RxString title = ''.obs;
   RxString? descriptionText;
   RxString? selectedMilestoneTitle;
   RxString? selectedProjectTitle;
   RxList? responsibles;
   RxString? startDateText;
   RxString? dueDateText;
+
   DateTime? get dueDate;
+
   DateTime? get startDate;
 
   RxBool? highPriority;
