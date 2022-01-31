@@ -37,6 +37,8 @@ abstract class BaseFilterController extends GetxController {
 
   late String filtersTitle;
 
+  String? projectId;
+
   RxBool hasFilters = false.obs;
 
   void applyFilters();

@@ -38,6 +38,7 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
 import 'package:projects/internal/locator.dart';
@@ -51,30 +52,31 @@ import 'package:projects/presentation/shared/widgets/status_tile.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class ProjectCell extends StatelessWidget {
-  final ProjectDetailed item;
-  const ProjectCell({Key? key, required this.item}) : super(key: key);
+  const ProjectCell({Key? key, required this.projectDetails}) : super(key: key);
+
+  final ProjectDetailed projectDetails;
 
   @override
   Widget build(BuildContext context) {
-    final itemController = Get.find<ProjectCellController>();
-    itemController.setup(item);
+    final itemController = Get.find<ProjectCellController>()..setup(projectDetails);
+    final projectController = Get.find<ProjectDetailsController>()..fillProjectInfo(projectDetails);
 
     return SizedBox(
       height: 72,
       child: InkWell(
-        onTap: () => Get.find<NavigationController>()
-            .to(ProjectDetailedView(), arguments: {'projectDetailed': itemController.projectData}),
+        onTap: () {
+          Get.find<NavigationController>()
+              .to(ProjectDetailedView(), arguments: {'projectController': projectController});
+        },
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (item.canEdit!)
-              Builder(builder: (builderContext) {
-                return InkWell(
-                  onTap: () async =>
-                      showStatuses(context: builderContext, itemController: itemController),
-                  child: ProjectIcon(itemController: itemController),
-                );
-              })
+            if (projectDetails.canEdit!)
+              InkWell(
+                onTap: () async =>
+                    showsStatusesBS(context: context, itemController: itemController),
+                child: ProjectIcon(itemController: itemController),
+              )
             else
               ProjectIcon(itemController: itemController),
             Expanded(
@@ -86,13 +88,12 @@ class ProjectCell extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         _Content(
-                          item: item,
+                          item: projectDetails,
                           itemController: itemController,
                         ),
                         const Spacer(),
                         _Suffix(
-                          item: item,
-                          controller: itemController,
+                          projectController: projectController,
                         ),
                       ],
                     ),
@@ -244,12 +245,10 @@ class _Content extends StatelessWidget {
 class _Suffix extends StatelessWidget {
   const _Suffix({
     Key? key,
-    required this.item,
-    required this.controller,
+    required this.projectController,
   }) : super(key: key);
 
-  final ProjectDetailed? item;
-  final ProjectCellController controller;
+  final ProjectDetailsController projectController;
 
   @override
   Widget build(BuildContext context) {
@@ -264,11 +263,13 @@ class _Suffix extends StatelessWidget {
             const SizedBox(width: 3),
             SizedBox(
               width: 20,
-              child: Text(
-                item!.taskCount.toString(),
-                overflow: TextOverflow.ellipsis,
-                style: TextStyleHelper.projectCompleatedTasks.copyWith(
-                  color: Get.theme.colors().onSurface.withOpacity(0.6),
+              child: Obx(
+                () => Text(
+                  projectController.taskCount.value.toString(),
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyleHelper.projectCompletedTasks.copyWith(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6),
+                  ),
                 ),
               ),
             ),

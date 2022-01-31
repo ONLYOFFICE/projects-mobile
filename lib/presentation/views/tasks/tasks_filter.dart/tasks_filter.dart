@@ -49,6 +49,8 @@ import 'package:projects/presentation/shared/widgets/select_item_screens/select_
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 part 'filters/responsible.dart';
 part 'filters/creator.dart';
@@ -62,31 +64,27 @@ class TasksFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filterController =
-        Get.arguments['filterController'] as BaseTaskFilterController;
+    final filterController = Get.arguments['filterController'] as BaseTaskFilterController;
     final platformController = Get.find<PlatformController>();
 
     return Scaffold(
-      backgroundColor:
-          platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
         onLeadingPressed: () {
           filterController.restoreFilters();
           Get.back();
         },
-        backgroundColor:
-            platformController.isMobile ? null : Get.theme.colors().surface,
+        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         titleText: tr('filter'),
         showBackButton: true,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         actions: [
-          TextButton(
+          PlatformTextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
-                  style: TextStyleHelper.button(
-                      color: Get.theme.colors().systemBlue))),
+                  style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),
           SizedBox(width: platformController.isMobile ? 8 : 12),
         ],
       ),
@@ -101,7 +99,8 @@ class TasksFilterScreen extends StatelessWidget {
                   const SizedBox(height: 12.5),
                   _Responsible(filterController: filterController),
                   _Creator(filterController: filterController),
-                  _Project(filterController: filterController),
+                  if (filterController.projectId == null)
+                    _Project(filterController: filterController),
                   _Milestone(filterController: filterController),
                   _Status(filterController: filterController),
                   _DueDate(filterController: filterController),

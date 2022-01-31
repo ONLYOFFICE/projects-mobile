@@ -41,6 +41,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/task_description.dart';
 
 class DescriptionTile extends StatefulWidget {
@@ -140,11 +142,11 @@ class _DescriptionTileState extends State<DescriptionTile> with TickerProviderSt
                       if (_needToExpand(textSize.width, text))
                         Padding(
                           padding: const EdgeInsets.only(left: 5, right: 5),
-                          child: IconButton(
+                          child: PlatformIconButton(
                             icon: RotationTransition(
                               turns: _iconTurns,
                               child: Icon(
-                                Icons.navigate_next,
+                                PlatformIcons(context).rightChevron,
                                 size: 24,
                                 color: Get.theme.colors().onBackground,
                               ),

@@ -34,16 +34,21 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
+
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
-
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
 class FileCell extends StatelessWidget {
@@ -91,47 +96,48 @@ class FileCell extends StatelessWidget {
               width: 60,
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: PopupMenuButton(
+                child: PlatformPopupMenuButton(
                   onSelected: (dynamic value) => {
                     _onFilePopupMenuSelected(value, context, documentsController, cellController)
                   },
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(PlatformIcons(context).ellipsis,
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'open',
                         child: Text(tr('open')),
                       ),
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'download',
                         child: Text(tr('download')),
                       ),
                       if (Security.files.canEdit(cellController.file))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
                       if (Security.files.canDelete(cellController.file))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
                       if (Security.files.canEdit(cellController.file))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
                         ),
                       if (Security.files.canDelete(cellController.file))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          ),
+                          isDestructiveAction: true,
+                          textStyle:
+                              TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                          child: Text(tr('delete')),
                         ),
                     ];
                   },
@@ -173,7 +179,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFile',
         'target': cellController.file.id,
-        'initialFolderId': documentsController.currentFolder,
+        'initialFolderId': documentsController.currentFolderID,
         'refreshCalback': documentsController.refreshContent
       });
       break;
@@ -182,7 +188,7 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFile',
         'target': cellController.file.id,
-        'initialFolderId': documentsController.currentFolder,
+        'initialFolderId': documentsController.currentFolderID,
         'refreshCalback': documentsController.refreshContent
       });
 
@@ -212,7 +218,7 @@ void _renameFile(
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFile'),
-      content: TextField(
+      content: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,

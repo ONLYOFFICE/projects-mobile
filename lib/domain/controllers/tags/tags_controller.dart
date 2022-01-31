@@ -46,8 +46,7 @@ class TagsController extends BaseController {
   @override
   void onInit() {
     screenName = tr('tags');
-    paginationController =
-        Get.put(PaginationController(), tag: 'TagsController');
+    paginationController = Get.put(PaginationController(), tag: 'TagsController');
 
     paginationController.loadDelegate = () async => await _getItems();
     paginationController.refreshDelegate = () async => await refreshData();
@@ -75,8 +74,7 @@ class TagsController extends BaseController {
   }
 
   Future _getItems({bool needToClear = false}) async {
-    final result = await _api.getTagsPaginated(
-        startIndex: paginationController.startIndex);
+    final result = await _api.getTagsPaginated(startIndex: paginationController.startIndex);
 
     if (result != null) {
       paginationController.total.value = result.total;

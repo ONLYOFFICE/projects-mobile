@@ -46,10 +46,15 @@ import 'package:projects/internal/locator.dart';
 class MilestonesDataSource extends GetxController {
   final MilestoneService _api = locator<MilestoneService>();
 
+  int get itemCount => paginationController.data.length;
+  RxList<Milestone> get itemList => paginationController.data;
   final paginationController =
       Get.put(PaginationController<Milestone>(), tag: 'MilestonesDataSource');
 
+  MilestonesSortController get sortController => _sortController;
   final _sortController = Get.find<MilestonesSortController>();
+
+  MilestonesFilterController get filterController => _filterController;
   final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
@@ -58,13 +63,8 @@ class MilestonesDataSource extends GetxController {
 
   Timer? _searchDebounce;
 
+  ProjectDetailed get projectDetailed => _projectDetailed ?? ProjectDetailed();
   ProjectDetailed? _projectDetailed;
-
-  MilestonesSortController get sortController => _sortController;
-  MilestonesFilterController get filterController => _filterController;
-
-  int get itemCount => paginationController.data.length;
-  RxList<Milestone> get itemList => paginationController.data;
 
   RxBool loaded = false.obs;
 
@@ -74,12 +74,26 @@ class MilestonesDataSource extends GetxController {
 
   RxBool fabIsVisible = false.obs;
 
+  late StreamSubscription _refreshMilestonesSubscription;
+
   MilestonesDataSource() {
     _sortController.updateSortDelegate = () async => loadMilestones();
     _filterController.applyFiltersDelegate = () async => loadMilestones();
     paginationController.loadDelegate = () async => _getMilestones();
     paginationController.refreshDelegate = () async => loadMilestones();
     paginationController.pullDownEnabled = true;
+
+    _refreshMilestonesSubscription =
+        locator<EventHub>().on('needToRefreshMilestones', (dynamic data) {
+      loadMilestones();
+    });
+  }
+
+  @override
+  void onClose() {
+    _refreshMilestonesSubscription.cancel();
+    searchTextEditingController.dispose();
+    super.onClose();
   }
 
   Future loadMilestones() async {
@@ -87,7 +101,7 @@ class MilestonesDataSource extends GetxController {
 
     paginationController.startIndex = 0;
     await _getMilestones(needToClear: true);
-    locator<EventHub>().fire('needToRefreshMilestones', ['all']);
+    //locator<EventHub>().fire('needToRefreshMilestones', ['all']);
 
     loaded.value = true;
   }
@@ -141,11 +155,5 @@ class MilestonesDataSource extends GetxController {
     searchTextEditingController.clear();
     searchQuery = '';
     loadMilestones();
-  }
-
-  @override
-  void onClose() {
-    searchTextEditingController.dispose();
-    super.onClose();
   }
 }

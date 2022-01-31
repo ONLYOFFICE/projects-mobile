@@ -43,6 +43,8 @@ import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {
@@ -70,7 +72,7 @@ class TagsSelectionView extends StatelessWidget {
             child: StyledFloatingActionButton(
               onPressed: () => showTagAddingDialog(controller),
               child: Icon(
-                Icons.add_rounded,
+                PlatformIcons(context).plus,
                 color: Get.theme.colors().onPrimarySurface,
               ),
             ),
@@ -83,7 +85,12 @@ class TagsSelectionView extends StatelessWidget {
           tr('tags'),
           style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
         ),
-        actions: [IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirm)],
+        actions: [
+          PlatformIconButton(
+            icon: Icon(PlatformIcons(context).checkMark),
+            onPressed: controller.confirm,
+          )
+        ],
         bottom: SearchField(
           hintText: tr('searchTags'),
           controller: controller.searchInputController,

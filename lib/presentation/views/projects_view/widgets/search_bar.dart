@@ -31,11 +31,12 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class UsersSearchBar extends StatelessWidget {
   const UsersSearchBar({
@@ -47,37 +48,48 @@ class UsersSearchBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 32,
-      padding: const EdgeInsets.only(
-        left: 16,
-        right: 16,
-        top: 6,
-        bottom: 6,
-      ),
-      decoration: BoxDecoration(
-        color: Get.theme.colors().bgDescription,
-        borderRadius: const BorderRadius.all(
-          Radius.circular(16),
-        ),
-      ),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              textInputAction: TextInputAction.search,
-              controller: controller.searchInputController,
-              decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),
-              onSubmitted: controller.searchUsers,
-              onChanged: controller.searchUsers,
+    return PlatformWidget(
+      cupertino: (_, __) {
+        return CupertinoSearchTextField(
+          controller: controller.searchInputController,
+          onSubmitted: controller.searchUsers,
+          onChanged: controller.searchUsers,
+        );
+      },
+      material: (_, __) {
+        return Container(
+          height: 32,
+          padding: const EdgeInsets.only(
+            left: 16,
+            right: 16,
+            top: 6,
+            bottom: 6,
+          ),
+          decoration: BoxDecoration(
+            color: Get.theme.colors().bgDescription,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(16),
             ),
           ),
-          InkWell(
-            onTap: controller.clearSearch,
-            child: const Icon(Icons.close, color: Colors.blue),
-          )
-        ],
-      ),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  textInputAction: TextInputAction.search,
+                  controller: controller.searchInputController,
+                  decoration: InputDecoration.collapsed(hintText: tr('usersSearch')),
+                  onSubmitted: controller.searchUsers,
+                  onChanged: controller.searchUsers,
+                ),
+              ),
+              InkWell(
+                onTap: controller.clearSearch,
+                child: const Icon(Icons.clear, color: Colors.blue),
+              )
+            ],
+          ),
+        );
+      },
     );
   }
 }

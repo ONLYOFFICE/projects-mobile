@@ -44,6 +44,9 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/task_detailed/comments/reply_comment_view.dart';
 
 class Comment extends StatelessWidget {
@@ -189,28 +192,27 @@ class _CommentAuthor extends StatelessWidget {
             width: 60,
             child: Padding(
               padding: const EdgeInsets.only(left: 35),
-              child: PopupMenuButton(
+              child: PlatformPopupMenuButton(
                 onSelected: (String value) => _onSelected(value, controller),
-                icon: Icon(Icons.more_vert_rounded,
+                icon: Icon(PlatformIcons(context).ellipsis,
                     size: 25, color: Get.theme.colors().onSurface.withOpacity(0.5)),
                 itemBuilder: (context) {
                   return [
-                    PopupMenuItem(
+                    PlatformPopupMenuItem(
                       value: 'Copy link',
                       child: Text(tr('copyLink')),
                     ),
                     if (comment.isEditPermissions!)
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'Edit',
                         child: Text(tr('edit')),
                       ),
                     if (comment.isEditPermissions!)
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'Delete',
-                        child: Text(
-                          tr('delete'),
-                          style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                        ),
+                        isDestructiveAction: true,
+                        textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                        child: Text(tr('delete')),
                       ),
                   ];
                 },

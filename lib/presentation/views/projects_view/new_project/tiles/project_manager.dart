@@ -36,6 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
@@ -67,7 +68,7 @@ class ProjectManagerTile extends StatelessWidget {
               ? InkWell(
                   onTap: controller.removeManager,
                   child: Icon(
-                    Icons.close,
+                    PlatformIcons(context).clear,
                     size: 24,
                     color: Get.theme.colors().onBackground,
                   ),

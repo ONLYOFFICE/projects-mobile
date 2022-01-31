@@ -38,6 +38,7 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/project_team_responsible.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class ResponsibleTile extends StatelessWidget {
   final controller;
@@ -69,7 +70,8 @@ class ResponsibleTile extends StatelessWidget {
               : tr('addResponsible'),
           suffix: _isSelected
               ? suffixIcon ??
-                  Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
+                  Icon(PlatformIcons(context).rightChevron,
+                      size: 24, color: Get.theme.colors().onBackground)
               : null,
           suffixPadding: const EdgeInsets.only(right: 21),
           icon: SvgIcons.person,

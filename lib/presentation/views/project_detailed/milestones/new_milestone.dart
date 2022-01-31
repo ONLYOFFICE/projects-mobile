@@ -42,7 +42,13 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
+
 import 'package:projects/presentation/views/new_task/select/select_project_view.dart';
 import 'package:projects/presentation/views/project_detailed/milestones/description.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -154,7 +160,7 @@ class MilestoneInput extends StatelessWidget {
           ),
           Expanded(
             child: Obx(
-              () => TextField(
+              () => PlatformTextField(
                 focusNode: focusOnTitle ? controller.titleFocus : null,
                 maxLines: null,
                 controller: controller.titleController,
@@ -199,7 +205,8 @@ class DescriptionTile extends StatelessWidget {
             caption: _isSletected ? tr('description') : null,
             isSelected: _isSletected,
             suffix: _isSletected
-                ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
+                ? Icon(PlatformIcons(context).rightChevron,
+                    size: 24, color: Get.theme.colors().onBackground)
                 : null,
             onTap: () => Get.find<NavigationController>()
                     .toScreen(const NewMilestoneDescription(), arguments: {
@@ -231,9 +238,12 @@ class ProjectTile extends StatelessWidget {
             isSelected: _isSelected,
             caption: _isSelected ? tr('project') : null,
             suffix: _isSelected
-                ? IconButton(
-                    icon:
-                        Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground),
+                ? PlatformIconButton(
+                    icon: Icon(
+                      PlatformIcons(context).rightChevron,
+                      size: 24,
+                      color: Get.theme.colors().onBackground,
+                    ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),
@@ -267,7 +277,8 @@ class ResponsibleTile extends StatelessWidget {
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
         suffix: controller.responsible?.value != null
-            ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
+            ? Icon(PlatformIcons(context).rightChevron,
+                size: 24, color: Get.theme.colors().onBackground)
             : null,
         icon: SvgIcons.person,
         iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
@@ -302,9 +313,12 @@ class DueDateTile extends StatelessWidget {
             isSelected: _isSelected,
             textColor: controller.needToSetDueDate.value ? Get.theme.colors().colorError : null,
             suffix: _isSelected
-                ? IconButton(
-                    icon:
-                        Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
+                ? PlatformIconButton(
+                    icon: Icon(
+                      PlatformIcons(context).clear,
+                      size: 24,
+                      color: Get.theme.colors().onBackground,
+                    ),
                     onPressed: () => controller.changeDueDate(null))
                 : null,
             suffixPadding: const EdgeInsets.only(right: 13),

@@ -110,8 +110,7 @@ class MilestoneService {
     }
   }
 
-  Future<bool> createMilestone(
-      {required int projectId, required NewMilestoneDTO milestone}) async {
+  Future<bool> createMilestone({required int projectId, required NewMilestoneDTO milestone}) async {
     final result = await _api.createMilestone(
       projectId: projectId,
       milestone: milestone,
@@ -120,12 +119,9 @@ class MilestoneService {
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.milestone
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.milestone
       });
       return success;
     } else {

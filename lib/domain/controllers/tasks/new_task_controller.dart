@@ -326,7 +326,6 @@ class NewTaskController extends GetxController implements TaskActionsController 
 
     final createdTask = await _api.addTask(newTask: newTask);
     if (createdTask != null) {
-      locator<EventHub>().fire('needToRefreshProjects', ['all']);
       locator<EventHub>().fire('needToRefreshTasks');
 
       MessagesHandler.showSnackBar(

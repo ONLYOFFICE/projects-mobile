@@ -44,17 +44,13 @@ class SubtasksService {
 
   Future<Subtask?> acceptSubtask(
       {required int taskId, required int subtaskId, required Map data}) async {
-    final response = await _api.acceptSubtask(
-        data: data, taskId: taskId, subtaskId: subtaskId);
+    final response = await _api.acceptSubtask(data: data, taskId: taskId, subtaskId: subtaskId);
     final success = response.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.subtask
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
@@ -65,17 +61,13 @@ class SubtasksService {
 
 // TODO: Future <??>
   Future deleteSubtask({required int taskId, required int subtaskId}) async {
-    final response =
-        await _api.deleteSubTask(taskId: taskId, subtaskId: subtaskId);
+    final response = await _api.deleteSubTask(taskId: taskId, subtaskId: subtaskId);
     final success = response.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.deleteEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.subtask
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.deleteEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
@@ -84,18 +76,14 @@ class SubtasksService {
     }
   }
 
-  Future<Subtask?> createSubtask(
-      {required int taskId, required Map data}) async {
+  Future<Subtask?> createSubtask({required int taskId, required Map data}) async {
     final response = await _api.createSubtask(taskId: taskId, data: data);
     final success = response.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.subtask
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
@@ -104,10 +92,8 @@ class SubtasksService {
     }
   }
 
-  Future<Subtask?> copySubtask(
-      {required int taskId, required int subtaskId}) async {
-    final response =
-        await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
+  Future<Subtask?> copySubtask({required int taskId, required int subtaskId}) async {
+    final response = await _api.copySubtask(taskId: taskId, subtaskId: subtaskId);
     final success = response.response != null;
 
     if (success) {
@@ -120,17 +106,14 @@ class SubtasksService {
 
   Future<Subtask?> updateSubtaskStatus(
       {required int taskId, required int subtaskId, required Map data}) async {
-    final response = await _api.updateSubtaskStatus(
-        taskId: taskId, subtaskId: subtaskId, data: data);
+    final response =
+        await _api.updateSubtaskStatus(taskId: taskId, subtaskId: subtaskId, data: data);
     final success = response.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.subtask
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {
@@ -150,12 +133,9 @@ class SubtasksService {
     final success = response.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.editEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.subtask
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.editEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.subtask
       });
       return response.response;
     } else {

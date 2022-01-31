@@ -40,6 +40,10 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_checkbox.dart';
 
@@ -57,30 +61,31 @@ class SubtaskDetailedView extends StatelessWidget {
           appBar: StyledAppBar(
             actions: [
               if (_subtask.canEdit! || controller.canCreateSubtask)
-                PopupMenuButton(
-                  icon: const Icon(Icons.more_vert, size: 26),
+                PlatformPopupMenuButton(
+                  icon: Icon(PlatformIcons(context).ellipsis, size: 26),
                   offset: const Offset(0, 25),
                   onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
                       if (controller.canEdit && _subtask.responsible == null)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'accept',
                           child: Text(tr('acceptSubtask')),
                         ),
                       if (controller.canEdit)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'edit',
                           child: Text(tr('edit')),
                         ),
                       if (controller.canCreateSubtask)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
                       if (_subtask.canEdit!)
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'delete',
+                          isDestructiveAction: true,
                           child: Text(
                             tr('delete'),
                             style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
@@ -140,8 +145,8 @@ class SubtaskDetailedView extends StatelessWidget {
                       ),
                     ),
                     if (_subtask.responsible != null && _subtask.canEdit!)
-                      IconButton(
-                        icon: Icon(Icons.clear_rounded,
+                      PlatformIconButton(
+                        icon: Icon(PlatformIcons(context).clear,
                             color: Get.theme.colors().onSurface.withOpacity(0.6)),
                         onPressed: () => controller.deleteSubtaskResponsible(
                             taskId: _subtask.taskId!, subtaskId: _subtask.id!),
@@ -166,12 +171,15 @@ void _onSelected(BuildContext context, value, SubtaskController controller) {
       );
       break;
     case 'edit':
-      Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(), arguments: {
-        'taskId': controller.subtask.value!.taskId,
-        'projectId': controller.parentTask!.projectOwner!.id,
-        'forEditing': true,
-        'itemController': controller,
-      });
+      Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(),
+          arguments: {
+            'taskId': controller.subtask.value!.taskId,
+            'projectId': controller.parentTask!.projectOwner!.id,
+            'forEditing': true,
+            'itemController': controller,
+          },
+          transition: Transition.cupertinoDialog,
+          fullscreenDialog: true);
       break;
     case 'copy':
       controller.copySubtask(

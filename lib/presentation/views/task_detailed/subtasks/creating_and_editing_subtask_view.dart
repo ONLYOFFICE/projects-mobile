@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/new_subtask_controller.dart';
@@ -41,6 +42,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
 
 class CreatingAndEditingSubtaskView extends StatelessWidget {
@@ -72,14 +77,42 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
-          onLeadingPressed: controller.leavePage,
+          leadingWidth: 65,
+          centerTitle: GetPlatform.isAndroid ? false : true,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.done_rounded),
-              onPressed: () =>
-                  controller.confirm(context: context, taskId: taskId ?? -1), // TODO FIX
-            )
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () =>
+                    controller.confirm(context: platformContext, taskId: taskId ?? -1), // TODO FIX,
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: () => controller.confirm(context: platformContext, taskId: taskId ?? -1),
+                // TODO FIX,
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('Done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            ),
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.leavePage,
+              child: Text(
+                tr('closeLowerCase'),
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.leavePage,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -92,17 +125,17 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                     child: Row(
                       children: [
                         SizedBox(
-                          width: 56,
+                          width: 72,
                           child: Icon(
                             controller.status!.value == 1
-                                ? Icons.check_box_outline_blank
-                                : Icons.check_box,
+                                ? PlatformIcons(context).checkBoxBlankOutlineRounded
+                                : PlatformIcons(context).checkBoxCheckedOutlineRounded,
                             color: const Color(0xFF666666),
                           ),
                         ),
                         Expanded(
                           child: Center(
-                            child: Obx(() => TextField(
+                            child: Obx(() => PlatformTextField(
                                   controller: controller.titleController,
                                   maxLines: null,
                                   // focusNode = null if subtaskEditingController
@@ -124,7 +157,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  const StyledDivider(leftPadding: 56)
+                  const StyledDivider(leftPadding: 72)
                 ],
               ),
               Listener(
@@ -137,8 +170,8 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
                 child: ResponsibleTile(
                   controller: controller,
                   enableUnderline: false,
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.clear_rounded,
+                  suffixIcon: PlatformIconButton(
+                    icon: Icon(PlatformIcons(context).clear,
                         size: 20, color: Get.theme.colors().onSurface.withOpacity(0.6)),
                     onPressed: controller.deleteResponsible,
                   ),

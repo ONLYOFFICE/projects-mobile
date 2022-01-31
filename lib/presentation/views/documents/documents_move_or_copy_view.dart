@@ -31,22 +31,21 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
@@ -198,7 +197,7 @@ class _DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () {
@@ -261,7 +260,7 @@ class _Title extends StatelessWidget {
           Expanded(
             child: Obx(
               () => Text(
-                controller.screenName.value,
+                controller.documentsScreenName.value,
                 style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
             ),
@@ -278,7 +277,7 @@ class _Title extends StatelessWidget {
                   Get.find<NavigationController>()
                       .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
                     'mode': controller.mode,
-                    'folderName': controller.screenName.value,
+                    'folderName': controller.documentsScreenName.value,
                     'target': target,
                     'currentFolder': controller.currentFolder,
                     'initialFolderId': controller.initialFolderId,
@@ -298,7 +297,7 @@ class _Title extends StatelessWidget {
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {'filterController': controller.filterController}),
-                child: FiltersButton(controler: controller),
+                child: FiltersButton(controller: controller),
               ),
             ],
           ),
@@ -322,7 +321,7 @@ class MoveDocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
       body: Obx(
         () => Column(
@@ -382,29 +381,29 @@ class MoveDocumentsScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                TextButton(
+                PlatformTextButton(
                   onPressed: () => Get.close(controller.foldersCount),
                   child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                 ),
-                if (controller.mode == 'moveFolder' && controller.currentFolder != null)
-                  TextButton(
+                if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
+                  PlatformTextButton(
                     onPressed: controller.moveFolder,
                     child:
                         Text(tr('moveFolderHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFolder' && controller.currentFolder != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.copyFolder,
                     child:
                         Text(tr('copyFolderHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'moveFile' && controller.currentFolder != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.moveFile,
                     child: Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),
                 if (controller.mode == 'copyFile' && controller.currentFolder != null)
-                  TextButton(
+                  PlatformTextButton(
                     onPressed: controller.copyFile,
                     child: Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
                   ),

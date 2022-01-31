@@ -37,6 +37,8 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
@@ -56,28 +58,26 @@ class GroupMembersSelectionView extends StatelessWidget {
 
     groupsDataSource.getGroups();
     return Scaffold(
-      backgroundColor: Get.theme.backgroundColor,
+      //backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('addMembersOf'),
         elevation: 2,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.check_outlined),
+          PlatformIconButton(
+            icon: Icon(PlatformIcons(context).checkMark),
             onPressed: () => controller.confirmGroupSelection(),
           )
         ],
       ),
       body: Obx(
         () {
-          if (groupsDataSource.loaded.value == true &&
-              groupsDataSource.groupsList.isNotEmpty) {
+          if (groupsDataSource.loaded.value == true && groupsDataSource.groupsList.isNotEmpty) {
             return GroupsOverview(
               groupsDataSource: groupsDataSource,
-              onTapFunction: controller.selectGroupMembers as Function(
-                  PortalGroupItemController),
+              onTapFunction: controller.selectGroupMembers as Function(PortalGroupItemController),
             );
           } else if (groupsDataSource.loaded.value == true) {
             return Column(children: const [NothingFound()]);
@@ -115,8 +115,7 @@ class GroupsOverview extends StatelessWidget {
         },
         itemBuilder: (BuildContext c, int i) {
           return PortalGroupItem(
-              groupController: groupsDataSource.groupsList[i],
-              onTapFunction: onTapFunction);
+              groupController: groupsDataSource.groupsList[i], onTapFunction: onTapFunction);
         },
       ),
     );

@@ -83,18 +83,14 @@ class DiscussionsService {
     required int projectId,
     required NewDiscussionDTO newDiscussion,
   }) async {
-    final result =
-        await _api.addMessage(projectId: projectId, newDiss: newDiscussion);
+    final result = await _api.addMessage(projectId: projectId, newDiss: newDiscussion);
 
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {

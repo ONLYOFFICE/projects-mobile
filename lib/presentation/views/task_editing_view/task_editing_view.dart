@@ -31,12 +31,15 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/domain/controllers/tasks/task_editing_controller.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/new_task/tiles/description_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/due_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/milestone_tile.dart';
@@ -67,10 +70,40 @@ class TaskEditingView extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: tr('editTask'),
-          onLeadingPressed: controller.discardChanges,
+          leadingWidth: 65,
+          centerTitle: GetPlatform.isAndroid ? false : true,
           actions: [
-            IconButton(icon: const Icon(Icons.done_rounded), onPressed: controller.confirm)
+            PlatformWidget(
+              material: (_, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: controller.confirm,
+              ),
+              cupertino: (_, __) => CupertinoButton(
+                onPressed: controller.confirm,
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('Done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            )
           ],
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.discardChanges,
+              child: Text(
+                tr('closeLowerCase'),
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.discardChanges,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(
@@ -107,7 +140,7 @@ class TaskEditingView extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 8, bottom: 8),
                               child: Obx(() => Text(controller.newStatus.value!.title!,
                                   style: TextStyleHelper.subtitle2())))),
-                      const Icon(Icons.arrow_drop_down_sharp)
+                      Icon(PlatformIcons(context).downChevron)
                     ],
                   ),
                 ),

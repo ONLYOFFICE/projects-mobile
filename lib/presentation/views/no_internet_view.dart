@@ -39,6 +39,7 @@ import 'package:projects/internal/utils/debug_print.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class NoInternetScreen extends StatelessWidget {
   const NoInternetScreen({
@@ -93,19 +94,23 @@ class NoInternetScreen extends StatelessWidget {
                   child: SizedBox(
                     width: 280,
                     height: 48,
-                    child: TextButton(
+                    child: PlatformTextButton(
                       onPressed: () async {
                         await Connectivity().checkConnectivity();
                       },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                            (_) => const EdgeInsets.fromLTRB(10, 10, 10, 12)),
-                        backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                            (_) => Get.theme.colors().primary),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+                      material: (context, platform) => MaterialTextButtonData(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                              (_) => Get.theme.colors().primary),
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                          ),
                         ),
                       ),
+                      cupertino: (context, platform) => CupertinoTextButtonData(
+                          color: Get.theme.colors().primary,
+                          borderRadius: BorderRadius.circular(6)),
                       child: Text(tr('tryAgain'),
                           textAlign: TextAlign.center,
                           style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),

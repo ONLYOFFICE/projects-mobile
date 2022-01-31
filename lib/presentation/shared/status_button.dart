@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class StatusButton extends StatelessWidget {
   final bool? canEdit;
@@ -82,7 +83,7 @@ class StatusButton extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 2),
               child: Icon(
-                Icons.keyboard_arrow_down_rounded,
+                PlatformIcons(context).downChevron,
                 color: Get.theme.colors().primary,
                 size: 19,
               ),

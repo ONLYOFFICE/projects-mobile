@@ -38,6 +38,8 @@ import 'package:projects/domain/controllers/tasks/abstract_task_actions_controll
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/new_item_tile.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 
 class StartDateTile extends StatelessWidget {
@@ -61,8 +63,9 @@ class StartDateTile extends StatelessWidget {
           iconColor: Get.theme.colors().onBackground.withOpacity(0.4),
           selectedIconColor: Get.theme.colors().onBackground,
           suffix: _isSelected
-              ? IconButton(
-                  icon: Icon(Icons.close_rounded, size: 24, color: Get.theme.colors().onBackground),
+              ? PlatformIconButton(
+                  icon: Icon(PlatformIcons(context).clear,
+                      size: 24, color: Get.theme.colors().onBackground),
                   onPressed: () => controller.changeStartDate(null))
               : null,
           suffixPadding: const EdgeInsets.only(right: 10),

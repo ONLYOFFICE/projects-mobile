@@ -33,7 +33,6 @@
 import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:event_hub/event_hub.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/projects_controller.dart';
@@ -46,6 +45,7 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardController extends GetxController {
   RefreshController _refreshController = RefreshController();
+
   RefreshController get refreshController {
     if (!_refreshController.isLoading && !_refreshController.isRefresh)
       _refreshController = RefreshController();
@@ -55,29 +55,29 @@ class DashboardController extends GetxController {
   final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
   final TasksWithPresets tasksWithPresets = locator<TasksWithPresets>();
 
-  var screenName = tr('dashboard').obs;
+  final screenName = tr('dashboard');
 
-  TasksController? _myTaskController;
-  TasksController? get myTaskController => _myTaskController;
+  late TasksController _myTaskController;
 
-  TasksController? _upcomingTaskscontroller;
-  TasksController? get upcomingTaskscontroller => _upcomingTaskscontroller;
+  TasksController get myTaskController => _myTaskController;
 
-  ProjectsController? _myProjectsController;
-  ProjectsController? get myProjectsController => _myProjectsController;
+  late TasksController _upcomingTaskscontroller;
 
-  ProjectsController? _folowedProjectsController;
-  ProjectsController? get folowedProjectsController => _folowedProjectsController;
+  TasksController get upcomingTaskscontroller => _upcomingTaskscontroller;
 
-  ProjectsController? _activeProjectsController;
-  ProjectsController? get activeProjectsController => _activeProjectsController;
+  late ProjectsController _myProjectsController;
+
+  ProjectsController get myProjectsController => _myProjectsController;
+
+  late ProjectsController _folowedProjectsController;
+  ProjectsController get folowedProjectsController => _folowedProjectsController;
+
+  late ProjectsController _activeProjectsController;
+  ProjectsController get activeProjectsController => _activeProjectsController;
 
   var scrollController = ScrollController();
 
-  late StreamSubscription _refreshProjectsSubscription;
-  late StreamSubscription _refreshTasksSubscription;
-
-  Future setup() async {
+  void setup() {
     _myTaskController = tasksWithPresets.myTasksController;
     _upcomingTaskscontroller = tasksWithPresets.upcomingTasksController;
 
@@ -85,29 +85,14 @@ class DashboardController extends GetxController {
     _folowedProjectsController = projectsWithPresets.folowedProjectsController;
     _activeProjectsController = projectsWithPresets.activeProjectsController;
 
-    myTaskController!.screenName = tr('myTasks');
-    upcomingTaskscontroller!.screenName = tr('upcomingTasks');
-    myProjectsController!.screenName = tr('myProjects');
-    folowedProjectsController!.screenName = tr('projectsIFolow');
-    activeProjectsController!.screenName = tr('activeProjects');
-
-    _refreshProjectsSubscription = locator<EventHub>().on('needToRefreshProjects', (dynamic data) {
-      if (data.any((elem) => elem == 'all') as bool) refreshProjectsData();
-    });
-
-    _refreshTasksSubscription = locator<EventHub>().on('needToRefreshTasks', (dynamic data) {
-      refreshData();
-    });
+    _myTaskController.screenName = tr('myTasks');
+    _upcomingTaskscontroller.screenName = tr('upcomingTasks');
+    _myProjectsController.screenName = tr('myProjects');
+    _folowedProjectsController.screenName = tr('projectsIFolow');
+    _activeProjectsController.screenName = tr('activeProjects');
   }
 
-  @override
-  void onClose() {
-    _refreshProjectsSubscription.cancel();
-    _refreshTasksSubscription.cancel();
-    super.onClose();
-  }
-
-  void onRefresh() async {
+  void onRefresh() {
     refreshData();
     refreshProjectsData();
 
@@ -122,27 +107,27 @@ class DashboardController extends GetxController {
     _refreshController.refreshCompleted();
   }
 
-  void onLoading() async {
+  void onLoading() {
     loadContent();
     _refreshController.loadComplete();
   }
 
   void loadContent() {
-    myTaskController!.loadTasks();
-    upcomingTaskscontroller!.loadTasks();
-    myProjectsController!.loadProjects();
-    folowedProjectsController!.loadProjects();
-    activeProjectsController!.loadProjects();
+    _myTaskController.loadTasks();
+    _upcomingTaskscontroller.loadTasks();
+    _myProjectsController.loadProjects();
+    _folowedProjectsController.loadProjects();
+    _activeProjectsController.loadProjects();
   }
 
   void refreshData() {
-    myTaskController!.refreshData();
-    upcomingTaskscontroller!.refreshData();
+    _myTaskController.refreshData();
+    _upcomingTaskscontroller.refreshData();
   }
 
   void refreshProjectsData() {
-    myProjectsController!.refreshData();
-    folowedProjectsController!.refreshData();
-    activeProjectsController!.refreshData();
+    _myProjectsController.refreshData();
+    _folowedProjectsController.refreshData();
+    _activeProjectsController.refreshData();
   }
 }

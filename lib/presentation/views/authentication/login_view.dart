@@ -40,6 +40,8 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
@@ -50,99 +52,103 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
+
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.setState(ViewState.Idle);
     });
+
+    final styledAppBar = StyledAppBar(
+        title: Text(
+          tr('addNewAccount'),
+          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+        ),
+        elevation: 0);
 
     return Obx(
       () => controller.state.value == ViewState.Busy
           ? Scaffold(
               body: SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator())))
+                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator())))
           : Scaffold(
-              appBar: StyledAppBar(
-                title: Text(
-                  tr('addNewAccount'),
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-                ),
-              ),
+              appBar: styledAppBar,
               body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: Get.height * 0.094),
-                    Text('${tr('portalAdress')}:',
-                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
-                    Text(controller.portalAdress,
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
-                    Center(
-                      child: Container(
-                        color: Get.theme.backgroundColor,
-                        constraints: const BoxConstraints(maxWidth: 480),
-                        child: Padding(
-                          padding: const EdgeInsets.all(36),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Obx(
-                                () => Form(
-                                  child: Column(
-                                    children: [
-                                      AuthTextField(
-                                        hintText: tr('email'),
-                                        controller: controller.emailController,
-                                        autofillHint: AutofillHints.email,
-                                        hasError: controller.emailFieldError.value,
-                                      ),
-                                      SizedBox(height: Get.height * 0.0444),
-                                      AuthTextField(
-                                        hintText: tr('password'),
-                                        controller: controller.passwordController,
-                                        hasError: controller.passwordFieldError.value,
-                                        autofillHint: AutofillHints.password,
-                                        obscureText: true,
-                                      ),
-                                    ],
-                                  ),
+                child: Center(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    constraints: BoxConstraints(
+                        maxWidth: 480,
+                        maxHeight:
+                            Get.height - styledAppBar.titleHeight - styledAppBar.bottomHeight),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        SizedBox(height: Get.height * 0.1),
+                        Text('${tr('portalAdress')}:',
+                            style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
+                        SizedBox(height: Get.height * 0.01),
+                        Text(controller.portalAdress,
+                            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                        SizedBox(height: Get.height * 0.111),
+                        Obx(
+                          () => Form(
+                            child: Column(
+                              children: [
+                                AuthTextField(
+                                  hintText: tr('email'),
+                                  controller: controller.emailController,
+                                  autofillHint: AutofillHints.email,
+                                  hasError: controller.emailFieldError.value,
+                                  keyboardType: TextInputType.emailAddress,
                                 ),
-                              ),
-                              SizedBox(height: Get.height * 0.0333),
-                              DecoratedBox(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                      blurRadius: 3,
-                                      offset: const Offset(0, 0.85),
-                                      color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                                  BoxShadow(
-                                      blurRadius: 3,
-                                      offset: const Offset(0, 0.25),
-                                      color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                                ]),
-                                child: WideButton(
-                                  text: tr('next'),
-                                  onPressed: () async => await controller.loginByPassword(),
+                                SizedBox(height: Get.height * 0.0444),
+                                AuthTextField(
+                                  hintText: tr('password'),
+                                  controller: controller.passwordController,
+                                  hasError: controller.passwordFieldError.value,
+                                  autofillHint: AutofillHints.password,
+                                  obscureText: true,
+                                  keyboardType: TextInputType.visiblePassword,
                                 ),
-                              ),
-                              const SizedBox(height: 4),
-                              TextButton(
-                                onPressed: () async => Get.to<PasswordRecoveryScreen1>(
-                                  () => const PasswordRecoveryScreen1(),
-                                  arguments: {'email': controller.emailController.text},
-                                ),
-                                child: Text(
-                                  tr('forgotPassword'),
-                                  style: TextStyleHelper.subtitle2(
-                                    color: Get.theme.colors().primary,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(height: Get.height * 0.18),
-                              PrivacyAndTermsFooter(),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
+                        SizedBox(height: Get.height * 0.0333),
+                        DecoratedBox(
+                          decoration: BoxDecoration(boxShadow: [
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(0, 0.85),
+                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
+                            BoxShadow(
+                                blurRadius: 3,
+                                offset: const Offset(0, 0.25),
+                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
+                          ]),
+                          child: WideButton(
+                            text: tr('next'),
+                            onPressed: () async => await controller.loginByPassword(),
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        PlatformTextButton(
+                          onPressed: () async => Get.to<PasswordRecoveryScreen1>(
+                            () => const PasswordRecoveryScreen1(),
+                            arguments: {'email': controller.emailController.text},
+                          ),
+                          child: Text(
+                            tr('forgotPassword'),
+                            style: TextStyleHelper.subtitle2(
+                              color: Get.theme.colors().primary,
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        PrivacyAndTermsFooter(),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

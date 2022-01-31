@@ -240,7 +240,8 @@ class NewMilestoneController extends GetxController {
         await _api.createMilestone(projectId: _selectedProjectId!, milestone: milestone);
     if (success) {
       MessagesHandler.showSnackBar(context: context, text: tr('milestoneCreated'));
-      locator<EventHub>().fire('needToRefreshProjects', ['all']);
+      locator<EventHub>().fire('needToRefreshMilestones');
+      Get.back();
     } else
       MessagesHandler.showSnackBar(context: context, text: tr('error'));
   }

@@ -37,6 +37,7 @@ import 'package:projects/domain/controllers/tasks/abstract_task_actions_controll
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class TaskTitle extends StatelessWidget {
   final TaskActionsController controller;
@@ -78,10 +79,8 @@ class TaskTitle extends StatelessWidget {
                   Text('${tr('taskTitle')}:',
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
-                Obx(() => TextField(
-                    onChanged: (value) {
-                      controller.changeTitle(value);
-                    },
+                Obx(() => PlatformTextField(
+                    onChanged: controller.changeTitle,
                     focusNode: focusOnTitle ? controller.titleFocus : null,
                     maxLines: null,
                     controller: controller.titleController,

@@ -238,15 +238,11 @@ class Subtask {
         updatedBy: json['updatedBy'] == null
             ? null
             : PortalUser.fromJson(json['updatedBy'] as Map<String, dynamic>),
-        created: json['created'] == null
-            ? null
-            : DateTime.parse(json['created'] as String),
+        created: json['created'] == null ? null : DateTime.parse(json['created'] as String),
         createdBy: json['createdBy'] == null
             ? null
             : PortalUser.fromJson(json['createdBy'] as Map<String, dynamic>),
-        updated: json['updated'] == null
-            ? null
-            : DateTime.parse(json['updated'] as String),
+        updated: json['updated'] == null ? null : DateTime.parse(json['updated'] as String),
       );
 
   Map<String, dynamic> toJson() => {

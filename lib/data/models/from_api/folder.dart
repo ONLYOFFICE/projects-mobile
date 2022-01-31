@@ -64,9 +64,8 @@ class FoldersResponse {
         folders!.add(Folder.fromJson(e as Map<String, dynamic>));
       });
     }
-    current = json['current'] != null
-        ? Folder.fromJson(json['current'] as Map<String, dynamic>)
-        : null;
+    current =
+        json['current'] != null ? Folder.fromJson(json['current'] as Map<String, dynamic>) : null;
     pathParts = (json['pathParts'] as List).cast<int>();
     startIndex = json['startIndex'] as int?;
     count = json['count'] as int?;

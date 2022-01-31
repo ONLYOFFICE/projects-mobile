@@ -116,21 +116,25 @@ Future<void> showsStatusesPM(
       PopupMenuItem(
         height: 36,
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
-        onTap: () async {
-          await taskItemController.tryChangingStatus(
-              id: taskItemController.task.value.id!,
-              newStatusId: _statusesController.statuses[i].id!,
-              newStatusType: _statusesController.statuses[i].statusType!);
-          Get.back();
-        },
-        child: StatusTileTablet(
-            title: _statusesController.statuses[i].title!,
-            icon: StatusIcon(
-              canEditTask: taskItemController.task.value.canEdit,
-              status: _statusesController.statuses[i],
-            ),
-            selected:
-                _statusesController.statuses[i].title == taskItemController.status.value.title),
+        child: Expanded(
+          child: InkWell(
+            onTap: () async {
+              await taskItemController.tryChangingStatus(
+                  id: taskItemController.task.value.id!,
+                  newStatusId: _statusesController.statuses[i].id!,
+                  newStatusType: _statusesController.statuses[i].statusType!);
+              Get.back();
+            },
+            child: StatusTileTablet(
+                title: _statusesController.statuses[i].title!,
+                icon: StatusIcon(
+                  canEditTask: taskItemController.task.value.canEdit,
+                  status: _statusesController.statuses[i],
+                ),
+                selected:
+                    _statusesController.statuses[i].title == taskItemController.status.value.title),
+          ),
+        ),
       ),
   ];
 

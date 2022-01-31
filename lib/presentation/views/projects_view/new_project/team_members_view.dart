@@ -44,6 +44,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
 import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
@@ -74,8 +75,8 @@ class TeamMembersSelectionView extends StatelessWidget {
       appBar: StyledAppBar(
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         title: TeamMembersSelectionHeader(
           controller: controller,
           title: tr('addTeamMembers'),
@@ -173,7 +174,7 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                   onTap: () {
                     controller.confirmTeamMembers();
                   },
-                  child: const Icon(Icons.check, color: Colors.blue),
+                  child: Icon(PlatformIcons(context).checkMark, color: Colors.blue),
                 );
               }
               return const SizedBox();

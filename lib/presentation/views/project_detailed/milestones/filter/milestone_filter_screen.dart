@@ -47,6 +47,8 @@ import 'package:projects/presentation/shared/widgets/filters/filter_element_widg
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 part 'filters/status.dart';
 part 'filters/duedate.dart';
@@ -75,10 +77,10 @@ class MilestoneFilterScreen extends StatelessWidget {
         showBackButton: true,
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         backButtonIcon: Get.put(PlatformController()).isMobile
-            ? const Icon(Icons.arrow_back_rounded)
-            : const Icon(Icons.close),
+            ? Icon(PlatformIcons(context).back)
+            : Icon(PlatformIcons(context).clear),
         actions: [
-          TextButton(
+          PlatformTextButton(
               onPressed: () async => filterController.resetFilters(),
               child: Text(tr('reset'),
                   style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),

@@ -36,8 +36,7 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/passcode/passcode_checking_controller.dart';
 import 'package:projects/presentation/shared/widgets/passcode_screen_mixin.dart';
 
-class EnterCurrentPasscodeScreen extends StatelessWidget
-    with PasscodeScreenMixin {
+class EnterCurrentPasscodeScreen extends StatelessWidget with PasscodeScreenMixin {
   EnterCurrentPasscodeScreen({
     Key? key,
     required this.onPass,
@@ -63,8 +62,7 @@ class EnterCurrentPasscodeScreen extends StatelessWidget
   String get errorText => tr('incorrectPIN');
 
   @override
-  void onBackPressed() =>
-      onBack != null ? onBack!() : passcodeCheckingController.leave();
+  void onBackPressed() => onBack != null ? onBack!() : passcodeCheckingController.leave();
 
   @override
   void onDeletePressed() => passcodeCheckingController.deleteNumber();

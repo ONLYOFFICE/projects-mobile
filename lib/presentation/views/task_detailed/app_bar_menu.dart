@@ -33,45 +33,55 @@
 part of 'task_detailed_view.dart';
 
 class _AppBarMenu extends StatelessWidget {
-  final TaskItemController? controller;
+  final TaskItemController controller;
   const _AppBarMenu({Key? key, required this.controller}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final task = controller!.task.value;
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
-      offset: const Offset(0, 25),
-      onSelected: (dynamic value) => _onSelected(value, controller!),
+    final task = controller.task.value;
+    return PlatformPopupMenuButton(
+      icon: PlatformWidget(
+        cupertino: (_, __) => Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+          size: 26,
+        ),
+        material: (_, __) => const Icon(
+          Icons.more_vert,
+          size: 26,
+        ),
+      ),
+      onSelected: (dynamic value) => _onSelected(value, controller),
       itemBuilder: (context) {
         return [
-          if (controller!.canEdit && task.responsibles!.isEmpty)
-            PopupMenuItem(
+          if (controller.canEdit && task.responsibles!.isEmpty)
+            PlatformPopupMenuItem(
               value: 'accept',
               child: Text(tr('acceptTask')),
             ),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'copyLink',
             child: Text(tr('copyLink')),
           ),
-          if (controller!.canEdit)
-            PopupMenuItem(
+          if (controller.canEdit)
+            PlatformPopupMenuItem(
               value: 'editTask',
               child: Text(tr('editTask')),
             ),
-          PopupMenuItem(
+          PlatformPopupMenuItem(
             value: 'followTask',
             child: Text((task.isSubscribed ?? false) ? tr('unfollowTask') : tr('followTask')),
           ),
-          if (controller!.canEdit)
-            PopupMenuItem(
+          if (controller.canEdit)
+            PlatformPopupMenuItem(
               value: 'copyTask',
               child: Text(tr('copyTask')),
             ),
           if (task.canDelete!)
-            PopupMenuItem(
+            PlatformPopupMenuItem(
               textStyle: Get.theme.popupMenuTheme.textStyle
                   ?.copyWith(color: Get.theme.colors().colorError),
+              isDestructiveAction: true,
               value: 'deleteTask',
               child: Text(tr('deleteTaskButton')),
             )
@@ -93,7 +103,8 @@ void _onSelected(value, TaskItemController controller) async {
       break;
 
     case 'editTask':
-      await Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value));
+      Get.find<NavigationController>().to(TaskEditingView(task: controller.task.value),
+          transition: Transition.cupertinoDialog, fullscreenDialog: true);
       break;
 
     case 'followTask':
@@ -114,7 +125,6 @@ void _onSelected(value, TaskItemController controller) async {
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);
           if (result) {
-            locator<EventHub>().fire('needToRefreshProjects', ['all']);
             locator<EventHub>().fire('needToRefreshTasks');
 
             Get.back();

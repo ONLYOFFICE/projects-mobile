@@ -34,21 +34,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 class StatusTile extends StatelessWidget {
   final String? title;
   final Widget? icon;
   final bool selected;
 
-  const StatusTile({Key? key, this.icon, this.title, this.selected = false})
-      : super(key: key);
+  const StatusTile({Key? key, this.icon, this.title, this.selected = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: Get.theme.colors().bgDescription,
-          borderRadius: BorderRadius.circular(6));
+          color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
     }
 
     return Container(
@@ -75,7 +74,7 @@ class StatusTile extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Icon(
-                Icons.done_rounded,
+                PlatformIcons(context).checkMark,
                 color: Get.theme.colors().primary,
               ),
             )
@@ -90,19 +89,14 @@ class StatusTileTablet extends StatelessWidget {
   final Widget icon;
   final bool selected;
 
-  const StatusTileTablet(
-      {Key? key,
-      required this.icon,
-      required this.title,
-      this.selected = false})
+  const StatusTileTablet({Key? key, required this.icon, required this.title, this.selected = false})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     BoxDecoration _selectedDecoration() {
       return BoxDecoration(
-          color: Get.theme.colors().bgDescription,
-          borderRadius: BorderRadius.circular(6));
+          color: Get.theme.colors().bgDescription, borderRadius: BorderRadius.circular(6));
     }
 
     return Container(

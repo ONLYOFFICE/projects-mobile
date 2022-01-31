@@ -23,9 +23,6 @@ platform :ios do
     ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "60"
     ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "60"
 
-    cocoapods(
-      repo_update: true
-    )
   end
 
   desc "Read Flutter app version info from local(pubspec.yaml)"
@@ -89,7 +86,7 @@ platform :ios do
       scheme: "Runner",
       configuration: "Release",
       export_method: "app-store",
-      export_xcargs: "-allowProvisioningUpdates"
+      xcargs: "-allowProvisioningUpdates"
     )
 
     git_commit(

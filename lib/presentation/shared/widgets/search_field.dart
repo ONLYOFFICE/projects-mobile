@@ -30,10 +30,12 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class SearchField extends StatelessWidget {
   final bool autofocus;
@@ -73,28 +75,42 @@ class SearchField extends StatelessWidget {
       height: height,
       width: width,
       margin: margin,
-      child: TextField(
-        controller: controller,
-        onSubmitted: onSubmitted,
-        onChanged: onChanged,
-        autofocus: autofocus,
-        decoration: InputDecoration(
-            hintText: hintText,
-            filled: true,
-            fillColor: color ?? Get.theme.colors().bgDescription,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide.none,
-            ),
-            labelStyle: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
-            hintStyle: TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-            suffixIcon: showClearIcon
-                ? GestureDetector(
-                    onTap: onClearPressed,
-                    child: const SizedBox(height: 32, width: 32, child: Icon(Icons.clear_rounded)))
-                : GestureDetector(
-                    onTap: onSuffixTap, child: SizedBox(height: 32, child: suffixIcon))),
+      child: PlatformWidget(
+        cupertino: (_, __) {
+          return CupertinoSearchTextField(
+            controller: controller,
+            onSubmitted: onSubmitted,
+            onChanged: onChanged,
+            autofocus: autofocus,
+          );
+        },
+        material: (_, __) {
+          return TextField(
+            controller: controller,
+            onSubmitted: onSubmitted,
+            onChanged: onChanged,
+            autofocus: autofocus,
+            decoration: InputDecoration(
+                hintText: hintText,
+                filled: true,
+                fillColor: color ?? Get.theme.colors().bgDescription,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide: BorderSide.none,
+                ),
+                labelStyle:
+                    TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+                hintStyle:
+                    TextStyleHelper.body2(color: Get.theme.colors().onSurface.withOpacity(0.4)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                suffixIcon: showClearIcon
+                    ? GestureDetector(
+                        onTap: onClearPressed,
+                        child: const SizedBox(height: 32, width: 32, child: Icon(Icons.clear)))
+                    : GestureDetector(
+                        onTap: onSuffixTap, child: SizedBox(height: 32, child: suffixIcon))),
+          );
+        },
       ),
     );
   }

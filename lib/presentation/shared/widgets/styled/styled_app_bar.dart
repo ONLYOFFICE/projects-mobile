@@ -30,10 +30,14 @@
  *
  */
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double titleHeight;
@@ -48,8 +52,9 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Function()? onLeadingPressed;
   final Color? backgroundColor;
+  final double? leadingWidth;
 
-  final Icon backButtonIcon;
+  final Icon? backButtonIcon;
 
   StyledAppBar({
     Key? key,
@@ -61,15 +66,15 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.leading,
     this.onLeadingPressed,
     this.showBackButton = true,
-    this.backButtonIcon = const Icon(Icons.arrow_back_rounded),
+    this.backButtonIcon,
     this.title,
     this.titleHeight = 56,
     this.titleText,
+    this.leadingWidth,
     this.backgroundColor,
   })  : assert(titleText == null || title == null),
         assert(leading == null || onLeadingPressed == null),
-        preferredSize = Size.fromHeight(
-            bottom != null ? titleHeight + bottomHeight : titleHeight),
+        preferredSize = Size.fromHeight(bottom != null ? titleHeight + bottomHeight : titleHeight),
         super(key: key);
 
   @override
@@ -85,39 +90,164 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: backgroundColor,
+      // backgroundColor: CupertinoColors.white, // TODO
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
-
       // backwardsCompatibility: false,
       // systemOverlayStyle: const SystemUiOverlayStyle(
       //   statusBarColor: Colors.transparent,
       //   statusBarIconBrightness: Brightness.dark,
       // ),
+      leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
-          ? IconButton(
-              icon: backButtonIcon,
+          ? PlatformIconButton(
+              icon: Icon(PlatformIcons(context).back),
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
-      toolbarTextStyle:
-          TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-      actions: actions,
+      toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      actions: [
+        ...?actions,
+        const SizedBox(
+          width: 5,
+        )
+      ],
       // ignore: prefer_if_null_operators
       title: title != null
-          ? PreferredSize(
-              preferredSize: Size.fromHeight(titleHeight), child: title!)
+          ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null
               ? Text(
                   titleText!,
-                  style: TextStyleHelper.headerStyle(
-                      color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline7(color: Get.theme.colors().onSurface),
                 )
               : null,
       bottom: bottom == null
           ? null
-          : PreferredSize(
-              preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
+          : PreferredSize(preferredSize: Size.fromHeight(bottomHeight), child: bottom!),
     );
+  }
+}
+
+class MainAppBar extends StatelessWidget {
+  const MainAppBar({
+    Key? key,
+    this.materialTitle,
+    this.cupertinoTitle,
+    this.bottom,
+    this.actions = const [],
+    this.isCollapsed = false,
+  }) : super(key: key);
+
+  final Widget? materialTitle;
+  final Widget? cupertinoTitle;
+  final PreferredSizeWidget? bottom;
+  final List<Widget> actions;
+  final bool isCollapsed;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformWidget(
+      material: (context, target) => MaterialAppBar(
+        title: materialTitle,
+        bottom: bottom,
+        actions: actions,
+      ),
+      cupertino: (context, target) => CupertinoAppBar(
+        title: cupertinoTitle,
+        actions: actions,
+        isCollapsed: isCollapsed,
+      ),
+    );
+  }
+}
+
+class MaterialAppBar extends StatelessWidget {
+  const MaterialAppBar({Key? key, this.title, this.actions = const [], this.bottom})
+      : super(key: key);
+
+  final List<Widget> actions;
+  final PreferredSizeWidget? bottom;
+  final Widget? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      backgroundColor: Get.theme.colors().background,
+      pinned: true,
+      title: title,
+      actions: actions,
+      bottom: bottom,
+    );
+  }
+}
+
+class CupertinoAppBar extends StatelessWidget {
+  const CupertinoAppBar(
+      {Key? key, required this.title, this.actions = const [], this.isCollapsed = false})
+      : super(key: key);
+
+  final List<Widget> actions;
+  final bool isCollapsed;
+  final Widget? title;
+
+  @override
+  Widget build(BuildContext context) {
+    return isCollapsed
+        ? SliverPersistentHeader(
+            pinned: true,
+            delegate: CupertinoCollapsedNavBar(
+                persistentHeight: 44 + MediaQuery.of(context).padding.top,
+                title: title,
+                actions: actions),
+          )
+        : CupertinoSliverNavigationBar(
+            backgroundColor: Get.theme.colors().background,
+            padding: EdgeInsetsDirectional.zero,
+            largeTitle: title,
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: actions,
+            ),
+          );
+  }
+}
+
+class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
+  const CupertinoCollapsedNavBar({
+    required this.persistentHeight,
+    this.actions = const [],
+    this.title,
+  });
+
+  final double persistentHeight;
+  final List<Widget> actions;
+  final Widget? title;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return CupertinoNavigationBar(
+      padding: EdgeInsetsDirectional.zero,
+      transitionBetweenRoutes: false,
+      backgroundColor: Get.theme.colors().background,
+      middle: title,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: actions,
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => persistentHeight;
+
+  @override
+  double get minExtent => persistentHeight;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
   }
 }

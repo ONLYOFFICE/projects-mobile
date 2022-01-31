@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_switch.dart';
 
 class AdvancedOptions extends StatelessWidget {
   final List<Widget> options;
@@ -143,10 +144,9 @@ class OptionWithSwitch extends StatelessWidget {
                 ),
               ),
               Obx(
-                () => Switch(
+                () => PlatformSwitch(
                   value: switchValue.value,
                   onChanged: (v) => {switchOnChanged(v)},
-                  activeTrackColor: Get.theme.colors().primary.withOpacity(0.54),
                   activeColor: Get.theme.colors().primary,
                 ),
               ),

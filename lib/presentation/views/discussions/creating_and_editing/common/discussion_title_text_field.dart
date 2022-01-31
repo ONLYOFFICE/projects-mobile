@@ -36,7 +36,10 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/abstract_discussion_actions_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class DiscussionTitleTextField extends StatelessWidget {
   final DiscussionActionsController controller;
@@ -67,10 +70,8 @@ class DiscussionTitleTextField extends StatelessWidget {
           ),
           Expanded(
             child: Obx(
-              () => TextField(
-                onChanged: (value) {
-                  controller.changeTitle(value);
-                },
+              () => PlatformTextField(
+                onChanged: controller.changeTitle,
                 focusNode: controller.titleFocus,
                 maxLines: null,
                 controller: controller.titleController,

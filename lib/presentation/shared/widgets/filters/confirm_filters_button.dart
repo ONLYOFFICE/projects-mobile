@@ -36,6 +36,7 @@ import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 
 class ConfirmFiltersButton extends StatelessWidget {
   const ConfirmFiltersButton({
@@ -43,7 +44,7 @@ class ConfirmFiltersButton extends StatelessWidget {
     required this.filterController,
   }) : super(key: key);
 
-  final BaseFilterController? filterController;
+  final BaseFilterController filterController;
 
   @override
   Widget build(BuildContext context) {
@@ -53,28 +54,30 @@ class ConfirmFiltersButton extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 32),
         child: SizedBox(
           width: 280,
-          child: TextButton(
+          child: PlatformTextButton(
             onPressed: () async {
-              filterController!.applyFilters();
+              filterController.applyFilters();
               Get.back();
             },
-            style: ButtonStyle(
-              padding: MaterialStateProperty.resolveWith<EdgeInsetsGeometry>(
-                  (_) => const EdgeInsets.fromLTRB(10, 10, 10, 12)),
-              backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (_) => Get.theme.colors().primary),
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+            padding: const EdgeInsets.fromLTRB(10, 10, 10, 12),
+            material: (context, platform) => MaterialTextButtonData(
+              style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.resolveWith<Color>((_) => Get.theme.colors().primary),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                ),
               ),
             ),
-            child: Text(filterController!.filtersTitle,
+            cupertino: (context, platform) => CupertinoTextButtonData(
+                color: Get.theme.colors().primary, borderRadius: BorderRadius.circular(6)),
+            child: Text(filterController.filtersTitle,
                 textAlign: TextAlign.center,
                 // tr('filterConfirmButton', args: [
                 //   filterController.suitableResultCount.value.toString(),
                 //   filterController.filtersTitle
                 // ]),
-                style: TextStyleHelper.button(
-                    color: Get.theme.colors().onPrimary)),
+                style: TextStyleHelper.button(color: Get.theme.colors().onPrimary)),
           ),
         ),
       ),

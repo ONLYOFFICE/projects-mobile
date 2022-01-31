@@ -38,6 +38,9 @@ import 'package:projects/domain/controllers/auth/2fa_sms_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 
 class SelectCountryScreen extends StatelessWidget {
   const SelectCountryScreen({Key? key}) : super(key: key);
@@ -55,8 +58,8 @@ class SelectCountryScreen extends StatelessWidget {
           title: controller.searching.value == true ? const _SarchField() : null,
           actions: [
             if (controller.searching.value == false)
-              IconButton(
-                icon: const Icon(Icons.search),
+              PlatformIconButton(
+                icon: Icon(PlatformIcons(context).search),
                 onPressed: controller.onSearchPressed,
               )
           ],
@@ -88,7 +91,7 @@ class _SarchField extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.find<TFASmsController>();
 
-    return TextField(
+    return PlatformTextField(
       autofocus: true,
       style: TextStyleHelper.headline6(),
       decoration: InputDecoration.collapsed(

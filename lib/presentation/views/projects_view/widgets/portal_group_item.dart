@@ -64,8 +64,7 @@ class PortalGroupItem extends StatelessWidget {
               height: 40,
               width: 40,
               decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Get.theme.colors().onSurface.withOpacity(0.06)),
+                  shape: BoxShape.circle, color: Get.theme.colors().onSurface.withOpacity(0.06)),
               child: Center(
                 child: AppIcon(
                   icon: SvgIcons.group,

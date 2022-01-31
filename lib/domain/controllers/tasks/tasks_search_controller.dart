@@ -47,15 +47,19 @@ class TasksSearchController extends BaseController {
   RxBool loaded = true.obs;
   RxBool nothingFound = false.obs;
 
-  late String _query;
-
   final _paginationController = PaginationController<PortalTask>();
   PaginationController<PortalTask> get paginationController => _paginationController;
 
-  TextEditingController searchInputController = TextEditingController();
+  final searchInputController = TextEditingController();
+
+  late String _query;
 
   String _searchQuery = '';
   Timer? _searchDebounce;
+
+  int? projectId;
+
+  TasksSearchController({this.projectId});
 
   @override
   void onInit() {
@@ -96,6 +100,7 @@ class TasksSearchController extends BaseController {
     final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
       query: _query.toLowerCase(),
+      projectId: projectId?.toString(),
     );
 
     if (result != null) {

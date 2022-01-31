@@ -44,8 +44,7 @@ class NewPasscodeScreen2 extends StatelessWidget with PasscodeScreenMixin {
 
   final VoidCallback? onSaved;
 
-  final PasscodeSettingsController passcodeController =
-      Get.find<PasscodeSettingsController>();
+  final PasscodeSettingsController passcodeController = Get.find<PasscodeSettingsController>();
 
   @override
   String get caption => tr('reEnterPasscode');
@@ -54,8 +53,7 @@ class NewPasscodeScreen2 extends StatelessWidget with PasscodeScreenMixin {
   String get errorText => tr('passcodesNotMatch');
 
   @override
-  void onNumberPressed(int number) =>
-      passcodeController.addNumberToPasscodeCheck(number);
+  void onNumberPressed(int number) => passcodeController.addNumberToPasscodeCheck(number);
 
   @override
   void onDeletePressed() => passcodeController.deletePasscodeCheckNumber();

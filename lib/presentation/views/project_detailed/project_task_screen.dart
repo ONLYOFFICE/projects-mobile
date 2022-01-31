@@ -29,8 +29,8 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-
 import 'dart:math' as math;
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -38,47 +38,43 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
-
-import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/views/tasks/tasks_filter.dart/tasks_filter.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTaskScreen extends StatelessWidget {
-  final ProjectDetailed? projectDetailed;
+  final ProjectTasksController projectTasksController;
 
-  const ProjectTaskScreen({Key? key, required this.projectDetailed}) : super(key: key);
+  const ProjectTaskScreen({Key? key, required this.projectTasksController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final taskStatusesController = Get.find<TaskStatusesController>();
-    taskStatusesController.getStatuses();
-
-    final controller = Get.find<ProjectTasksController>()..setup(projectDetailed!);
+    Get.find<TaskStatusesController>().getStatuses();
 
     return Stack(
       children: [
-        _Content(controller: controller),
+        _Content(controller: projectTasksController),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
             padding: const EdgeInsets.only(right: 16, bottom: 24),
             child: Obx(
               () => Visibility(
-                visible: controller.fabIsVisible.value,
+                visible: projectTasksController.fabIsVisible.value,
                 child: StyledFloatingActionButton(
-                  onPressed: () => Get.find<NavigationController>()
-                      .to(const NewTaskView(), arguments: {'projectDetailed': projectDetailed}),
+                  onPressed: () => Get.find<NavigationController>().to(const NewTaskView(),
+                      arguments: {'projectDetailed': projectTasksController.projectDetailed}),
                   child: AppIcon(
                     icon: SvgIcons.add_fab,
                     color: Get.theme.colors().onPrimarySurface,
@@ -104,97 +100,105 @@ class _Content extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Obx(
-      () => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Visibility(
-              visible:
-                  controller.itemList.isNotEmpty || controller.filterController.hasFilters.value,
-              child: Header(controller: controller)),
-          (() {
-            if (!controller.loaded.value) return const ListLoadingSkeleton();
+      () {
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
 
-            return Expanded(
-              child: PaginationListView(
-                paginationController: controller.paginationController,
-                child: () {
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
-                      !controller.filterController.hasFilters.value)
-                    return Center(
-                      child: EmptyScreen(
-                        icon: SvgIcons.task_not_created,
-                        text: tr('noTasksCreated'),
-                      ),
-                    );
-                  if (controller.loaded.value &&
-                      controller.paginationController.data.isEmpty &&
-                      controller.filterController.hasFilters.value)
-                    return Center(
-                      child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
-                    );
-                  if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                    return ListView.builder(
-                      itemBuilder: (c, i) =>
-                          TaskCell(task: controller.paginationController.data[i]),
-                      itemExtent: 72,
-                      itemCount: controller.paginationController.data.length,
-                    );
-                }() as Widget,
-              ),
-            );
-          }()),
-        ],
-      ),
+        return PaginationListView(
+          paginationController: controller.paginationController,
+          child: () {
+            if (controller.loaded.value &&
+                controller.tasksList.isEmpty &&
+                !controller.filterController.hasFilters.value)
+              return Center(
+                child: EmptyScreen(
+                  icon: SvgIcons.task_not_created,
+                  text: tr('noTasksCreated'),
+                ),
+              );
+            if (controller.loaded.value &&
+                controller.tasksList.isEmpty &&
+                controller.filterController.hasFilters.value)
+              return Center(
+                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noTasksMatching')),
+              );
+            if (controller.loaded.value && controller.tasksList.isNotEmpty)
+              return ListView.builder(
+                itemBuilder: (c, i) => TaskCell(task: controller.tasksList[i]),
+                itemExtent: 72,
+                itemCount: controller.tasksList.length,
+              );
+          }() as Widget,
+        );
+      },
     );
   }
 }
 
-class Header extends StatelessWidget {
-  Header({
+class ProjectTasksFilterButton extends StatelessWidget {
+  const ProjectTasksFilterButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
 
   final ProjectTasksController controller;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+        const TasksFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+      ),
+    );
+  }
+}
+
+class ProjectTasksSortButton extends StatelessWidget {
+  const ProjectTasksSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProjectTasksController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
       children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 10),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              _ProjectTasksSortButton(controller: controller),
-              Row(
-                children: <Widget>[
-                  InkWell(
-                    onTap: () async => Get.find<NavigationController>().toScreen(
-                        const TasksFilterScreen(),
-                        preventDuplicates: false,
-                        arguments: {'filterController': controller.filterController}),
-                    child: FiltersButton(controler: controller),
-                  ),
-                ],
-              ),
-            ],
+        Obx(
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
           ),
+        ),
+        const SizedBox(width: 8),
+        Obx(
+          () => (controller.sortController.currentSortOrder == 'ascending')
+              ? AppIcon(
+                  icon: SvgIcons.sorting_4_ascend,
+                  color: Get.theme.colors().primary,
+                  width: 20,
+                  height: 20,
+                )
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(math.pi),
+                  child: AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
         ),
       ],
     );
   }
 }
 
-class _ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
-  const _ProjectTasksSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final ProjectTasksController controller;
-
+void taskSortButtonOnPressed(ProjectTasksController controller, BuildContext context) async {
   List<SortTile> _getSortTile() {
     return [
       SortTile(sortParameter: 'deadline', sortController: controller.sortController),
@@ -206,61 +210,21 @@ class _ProjectTasksSortButton extends StatelessWidget with ShowPopupMenuMixin {
     ];
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkWell(
-        onTap: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            final options = Column(
-              children: [
-                const SizedBox(height: 14.5),
-                const Divider(height: 9, thickness: 1),
-                ..._getSortTile(),
-                const SizedBox(height: 20)
-              ],
-            );
-            await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-          } else {
-            await showPopupMenu(
-              context: context,
-              options: _getSortTile(),
-              offset: const Offset(0, 30),
-            );
-          }
-        },
-        child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (controller.sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      color: Get.theme.colors().primary,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        color: Get.theme.colors().primary,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
+  if (Get.find<PlatformController>().isMobile) {
+    final options = Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        ..._getSortTile(),
+        const SizedBox(height: 20)
+      ],
+    );
+    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
+  } else {
+    await showPopupMenu(
+      context: context,
+      options: _getSortTile(),
+      offset: const Offset(0, 30),
     );
   }
 }

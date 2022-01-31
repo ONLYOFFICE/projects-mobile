@@ -35,8 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
-
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
+import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -46,6 +45,10 @@ import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 
@@ -57,7 +60,7 @@ class FolderCell extends StatelessWidget {
   }) : super(key: key);
 
   final Folder entity;
-  final DocumentsController controller;
+  final BaseDocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
@@ -77,48 +80,49 @@ class FolderCell extends StatelessWidget {
               width: 60,
               child: Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: PopupMenuButton(
+                child: PlatformPopupMenuButton(
                   onSelected: (dynamic value) => _onFolderPopupMenuSelected(
                     value,
                     entity,
                     context,
                     controller,
                   ),
-                  icon: Icon(Icons.more_vert, color: Get.theme.colors().onSurface.withOpacity(0.5)),
+                  icon: Icon(PlatformIcons(context).ellipsis,
+                      color: Get.theme.colors().onSurface.withOpacity(0.5)),
                   itemBuilder: (context) {
                     return [
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'open',
                         child: Text(tr('open')),
                       ),
-                      PopupMenuItem(
+                      PlatformPopupMenuItem(
                         value: 'copyLink',
                         child: Text(tr('copyLink')),
                       ),
                       if (Security.documents.canEdit(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'copy',
                           child: Text(tr('copy')),
                         ),
                       if (!Security.documents.isRoot(entity) &&
                           Security.documents.canDelete(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'move',
                           child: Text(tr('move')),
                         ),
                       if (!Security.documents.isRoot(entity) && Security.documents.canEdit(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'rename',
                           child: Text(tr('rename')),
                         ),
                       if (!Security.documents.isRoot(entity) &&
                           Security.documents.canDelete(entity))
-                        PopupMenuItem(
+                        PlatformPopupMenuItem(
                           value: 'delete',
-                          child: Text(
-                            tr('delete'),
-                            style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-                          ),
+                          isDestructiveAction: true,
+                          textStyle:
+                              TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+                          child: Text(tr('delete')),
                         ),
                     ];
                   },
@@ -227,7 +231,7 @@ Future<void> _onFolderPopupMenuSelected(
   value,
   Folder selectedFolder,
   BuildContext context,
-  DocumentsController controller,
+  dynamic controller,
 ) async {
   switch (value) {
     case 'copyLink':
@@ -253,7 +257,7 @@ Future<void> _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'copyFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
       });
       break;
     case 'move':
@@ -261,7 +265,7 @@ Future<void> _onFolderPopupMenuSelected(
           .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
         'mode': 'moveFolder',
         'target': selectedFolder.id,
-        'initialFolderId': controller.currentFolder,
+        'initialFolderId': controller.currentFolderID,
       });
 
       break;
@@ -271,7 +275,7 @@ Future<void> _onFolderPopupMenuSelected(
     case 'delete':
       final success = await controller.deleteFolder(selectedFolder);
 
-      if (success) {
+      if (success as bool) {
         MessagesHandler.showSnackBar(context: context, text: tr('folderDeleted'));
       }
       break;
@@ -279,14 +283,14 @@ Future<void> _onFolderPopupMenuSelected(
   }
 }
 
-void _renameFolder(DocumentsController controller, Folder element, BuildContext context) {
+void _renameFolder(dynamic controller, Folder element, BuildContext context) {
   final inputController = TextEditingController();
   inputController.text = element.title!;
 
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFolder'),
-      content: TextField(
+      content: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.search,
         controller: inputController,
@@ -301,8 +305,8 @@ void _renameFolder(DocumentsController controller, Folder element, BuildContext 
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         if (inputController.text != element.title) {
-          final success = await controller.renameFolder(element, inputController.text);
-          if (success) {
+          final success = await controller!.renameFolder(element, inputController.text);
+          if (success as bool) {
             MessagesHandler.showSnackBar(context: context, text: tr('folderRenamed'));
             Get.back();
           }

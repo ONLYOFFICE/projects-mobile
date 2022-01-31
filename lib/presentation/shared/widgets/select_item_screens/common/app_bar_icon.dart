@@ -53,7 +53,7 @@ class _AppBarIcon extends StatelessWidget {
         switchInCurve: Curves.easeOutSine,
         switchOutCurve: Curves.fastOutSlowIn,
         child: searchController.switchToSearchView.value == true
-            ? IconButton(
+            ? PlatformIconButton(
                 key: searchIconKey,
                 onPressed: () {
                   searchController.switchToSearchView.value =
@@ -61,13 +61,13 @@ class _AppBarIcon extends StatelessWidget {
                   searchController.textController.clear();
                   searchController.clearSearch();
                 },
-                icon: const Icon(Icons.clear),
+                icon: Icon(PlatformIcons(context).clear),
               )
-            : IconButton(
+            : PlatformIconButton(
                 key: clearIconKey,
                 onPressed: () => searchController.switchToSearchView.value =
                     !searchController.switchToSearchView.value,
-                icon: const Icon(Icons.search),
+                icon: Icon(PlatformIcons(context).search),
               ),
       ),
     );

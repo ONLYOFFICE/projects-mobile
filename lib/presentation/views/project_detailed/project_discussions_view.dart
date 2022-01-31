@@ -29,30 +29,37 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/project_detailed.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/discussions/discussions_view.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/views/discussions/discussions_view.dart';
+import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 
 class ProjectDiscussionsScreen extends StatelessWidget {
-  final ProjectDetailed projectDetailed;
+  final ProjectDiscussionsController controller;
+
   const ProjectDiscussionsScreen({
     Key? key,
-    required this.projectDetailed,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final controller = ProjectDiscussionsController(projectDetailed);
-
     return Stack(
       children: [
-        DiscussionsList(controller: controller, scrollController: ScrollController()),
+        DiscussionsList(controller: controller),
         Align(
           alignment: Alignment.bottomRight,
           child: Padding(
@@ -72,6 +79,99 @@ class ProjectDiscussionsScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class ProjectDiscussionsFilterButton extends StatelessWidget {
+  const ProjectDiscussionsFilterButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProjectDiscussionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
+      onPressed: () async => Get.find<NavigationController>().toScreen(
+        const DiscussionsFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+      ),
+    );
+  }
+}
+
+class ProjectDiscussionsSortButton extends StatelessWidget {
+  const ProjectDiscussionsSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final ProjectDiscussionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Obx(
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Obx(
+          () => (controller.sortController.currentSortOrder == 'ascending')
+              ? AppIcon(
+                  icon: SvgIcons.sorting_4_ascend,
+                  color: Get.theme.colors().primary,
+                  width: 20,
+                  height: 20,
+                )
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(math.pi),
+                  child: AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+void discussionsSortButtonOnPressed(
+    ProjectDiscussionsController controller, BuildContext context) async {
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'title', sortController: controller.sortController),
+      SortTile(sortParameter: 'comments', sortController: controller.sortController),
+    ];
+  }
+
+  if (Get.find<PlatformController>().isMobile) {
+    final options = Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        ..._getSortTile(),
+        const SizedBox(height: 20)
+      ],
+    );
+    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
+  } else {
+    await showPopupMenu(
+      context: context,
+      options: _getSortTile(),
+      offset: const Offset(0, 30),
     );
   }
 }

@@ -31,12 +31,18 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/actions/new_discussion_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_title_text_field.dart';
+
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
+
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_project_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_subscribers_tile.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/discussion_text_tile.dart';
@@ -62,11 +68,40 @@ class NewDiscussionScreen extends StatelessWidget {
       child: Scaffold(
         appBar: StyledAppBar(
           titleText: tr('newDiscussion'),
+          leadingWidth: 65,
+          centerTitle: GetPlatform.isAndroid ? false : true,
           actions: [
-            IconButton(
-                onPressed: () => controller.confirm(context), icon: const Icon(Icons.done_rounded))
+            PlatformWidget(
+              material: (platformContext, __) => IconButton(
+                icon: const Icon(Icons.check_rounded),
+                onPressed: () => controller.confirm(platformContext),
+              ),
+              cupertino: (platformContext, __) => CupertinoButton(
+                onPressed: () => controller.confirm(platformContext),
+                padding: const EdgeInsets.only(right: 16),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  tr('Done'),
+                  style: TextStyleHelper.headline7(),
+                ),
+              ),
+            ),
           ],
-          onLeadingPressed: controller.discardDiscussion,
+          leading: PlatformWidget(
+            cupertino: (_, __) => CupertinoButton(
+              padding: const EdgeInsets.only(left: 16),
+              alignment: Alignment.centerLeft,
+              onPressed: controller.discardDiscussion,
+              child: Text(
+                tr('closeLowerCase'),
+                style: TextStyleHelper.button(),
+              ),
+            ),
+            material: (_, __) => IconButton(
+              onPressed: controller.discardDiscussion,
+              icon: const Icon(Icons.close),
+            ),
+          ),
         ),
         body: SingleChildScrollView(
           child: Column(

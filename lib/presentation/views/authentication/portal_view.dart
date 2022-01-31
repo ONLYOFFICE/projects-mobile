@@ -35,27 +35,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/viewstate.dart';
+import 'package:projects/domain/controllers/auth/account_manager_controller.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
+
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
 
 class PortalInputView extends StatelessWidget {
-  PortalInputView({Key? key}) : super(key: key);
-  final controller = Get.find<LoginController>();
+  const PortalInputView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.find<LoginController>();
+
+    if (Get.isRegistered<AccountManagerController>()) {
+      Get.find<AccountManagerController>();
+    } else {
+      Get.put(AccountManagerController()).setup();
+    }
+
     SchedulerBinding.instance!.addPostFrameCallback((_) {
       controller.setState(ViewState.Idle);
       controller.setup();
     });
 
     final height = controller.accountManager.accounts.isEmpty ? Get.height : Get.height - 80;
+
     return Obx(
       () => controller.state.value == ViewState.Busy
           ? Scaffold(
@@ -96,6 +107,7 @@ class PortalInputView extends StatelessWidget {
                             autofillHint: AutofillHints.url,
                             hintText: tr('portalAdress'),
                             hasError: controller.portalFieldError.value == true,
+                            keyboardType: TextInputType.url,
                           ),
                         ),
                         SizedBox(height: height * 0.033),

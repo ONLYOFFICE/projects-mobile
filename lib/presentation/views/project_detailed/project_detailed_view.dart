@@ -32,10 +32,10 @@
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
@@ -45,13 +45,38 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
+import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
-import 'package:projects/presentation/views/documents/entity_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
+import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_milestones_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
+
+class ProjectDetailedTabs {
+  static const overview = 0;
+  static const tasks = 1;
+  static const milestones = 2;
+  static const discussions = 3;
+  static const documents = 4;
+  static const team = 5;
+}
+
+class PopupMenuItemValue {
+  static const editProject = 'editProject';
+  static const followProject = 'followProject';
+  static const deleteProject = 'deleteProject';
+  static const sortTasks = 'sortTasks';
+  static const sortMilestones = 'sortMilestones';
+  static const sortDiscussions = 'sortDiscussions';
+  static const sortDocuments = 'sortDocuments';
+}
 
 class ProjectDetailedView extends StatefulWidget {
   ProjectDetailedView({Key? key}) : super(key: key);
@@ -62,66 +87,65 @@ class ProjectDetailedView extends StatefulWidget {
 
 class _ProjectDetailedViewState extends State<ProjectDetailedView>
     with SingleTickerProviderStateMixin {
-  TabController? _tabController;
+  late TabController _tabController;
+
   final _activeIndex = 0.obs;
 
-  final ProjectDetailsController projectController = Get.find<ProjectDetailsController>();
-  final DocumentsController documentsController = Get.find<DocumentsController>();
+  late final ProjectDetailsController projectController;
 
   @override
   void initState() {
-    var projectDetailed = Get.arguments['projectDetailed'] as ProjectDetailed;
+    if (Get.arguments['projectController'] != null)
+      projectController = Get.arguments['projectController'] as ProjectDetailsController;
+    else {
+      projectController = Get.find<ProjectDetailsController>();
+      projectController.fillProjectInfo(Get.arguments['projectDetailed'] as ProjectDetailed);
+    } // TODO refactor
 
-    documentsController.setupFolder(
-        folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
-
-    projectController.setup(projectDetailed).then((value) {
-      projectDetailed = projectController.projectData!;
-      documentsController.setupFolder(
-          folderName: projectDetailed.title!, folderId: projectDetailed.projectFolder);
-    });
+    projectController.setup();
 
     _tabController = TabController(
       vsync: this,
       length: 6,
     );
 
+    _tabController.addListener(() {
+      if (_activeIndex.value == _tabController.index) return;
+
+      _activeIndex.value = _tabController.index;
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
+    _tabController.dispose();
     super.dispose();
-    _tabController!.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    _tabController!.addListener(() {
-      if (_activeIndex.value == _tabController!.index) return;
-
-      _activeIndex.value = _tabController!.index;
-    });
-
-    return Obx(
-      () => Scaffold(
-        appBar: StyledAppBar(
-          actions: [
-            if (projectController.projectData!.canEdit!)
-              IconButton(
-                  icon: const Icon(Icons.edit_outlined),
-                  onPressed: () => Get.find<NavigationController>().to(
-                      EditProjectView(projectDetailed: projectController.projectData),
-                      arguments: {'projectDetailed': projectController.projectData}))
-            else
-              const SizedBox(),
-            if (!(projectController.projectData!.security!['isInTeam'] as bool) ||
-                projectController.projectData!.canDelete!)
-              _ProjectContextMenu(controller: projectController)
-          ],
-          bottom: SizedBox(
-            height: 40,
-            child: TabBar(
+    return Scaffold(
+      appBar: StyledAppBar(
+        actions: [
+          Obx(
+            () => _ProjectAppBarActions(
+              projectController: projectController,
+              index: _activeIndex.value,
+            ),
+          ),
+          Obx(
+            () => _ProjectContextMenu(
+              controller: projectController,
+              index: _activeIndex.value,
+            ),
+          )
+        ],
+        bottom: SizedBox(
+          height: 40,
+          child: Obx(
+            () => TabBar(
                 isScrollable: true,
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
@@ -132,77 +156,202 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   Tab(text: tr('overview')),
                   CustomTab(
                       title: tr('tasks'),
-                      currentTab: _activeIndex.value == 1,
-                      count: projectController.tasksCount.value),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.tasks,
+                      count: projectController.projectTasksController?.tasksList.length ?? 0),
                   CustomTab(
                       title: tr('milestones'),
-                      currentTab: _activeIndex.value == 2,
-                      count: projectController.milestoneCount.value),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.milestones,
+                      count: projectController.projectMilestonesController?.itemList.length ?? 0),
                   CustomTab(
                       title: tr('discussions'),
-                      currentTab: _activeIndex.value == 3,
-                      count: projectController.projectData!.discussionCount),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.discussions,
+                      count: projectController.projectDiscussionsController?.itemList.length ?? 0),
                   CustomTab(
                       title: tr('documents'),
-                      currentTab: _activeIndex.value == 4,
-                      count: documentsController.filesCount.value),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.documents,
+                      count: projectController.projectDocumentsController?.filesCount.value ?? 0),
                   CustomTab(
                       title: tr('team'),
-                      currentTab: _activeIndex.value == 5,
-                      count: projectController.projectData!.participantCount),
+                      currentTab: _activeIndex.value == ProjectDetailedTabs.team,
+                      count: projectController.projectTeamDataSource?.usersList.length ?? 0),
                 ]),
           ),
         ),
-        body: TabBarView(controller: _tabController, children: [
+      ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
           ProjectOverview(projectController: projectController, tabController: _tabController),
-          ProjectTaskScreen(projectDetailed: projectController.projectData),
-          ProjectMilestonesScreen(projectDetailed: projectController.projectData),
-          ProjectDiscussionsScreen(projectDetailed: projectController.projectData!),
-          EntityDocumentsView(
-            folderId: projectController.projectData!.projectFolder,
-            folderName: projectController.projectData!.title,
-            documentsController: documentsController,
-          ),
+          ProjectTaskScreen(projectTasksController: projectController.projectTasksController!),
+          ProjectMilestonesScreen(controller: projectController.projectMilestonesController!),
+          ProjectDiscussionsScreen(controller: projectController.projectDiscussionsController!),
+          ProjectDocumentsScreen(controller: projectController.projectDocumentsController!),
           ProjectTeamView(
-              projectDetailed: projectController.projectData,
+              projectTeamDataSource: projectController.projectTeamDataSource!,
               fabAction: projectController.manageTeamMembers),
-        ]),
+        ],
       ),
     );
   }
 }
 
-class _ProjectContextMenu extends StatelessWidget {
-  final ProjectDetailsController controller;
-  const _ProjectContextMenu({Key? key, required this.controller}) : super(key: key);
+class _ProjectAppBarActions extends StatelessWidget {
+  final ProjectDetailsController projectController;
+  final int index;
+
+  const _ProjectAppBarActions({Key? key, required this.projectController, required this.index})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton(
-      icon: const Icon(Icons.more_vert, size: 26),
-      offset: const Offset(0, 25),
-      onSelected: (dynamic value) => _onSelected(value, controller, context),
+    return () {
+      if (index == ProjectDetailedTabs.tasks &&
+          projectController.projectTasksController != null &&
+          (projectController.projectTasksController!.tasksList.isNotEmpty ||
+              projectController.projectTasksController!.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+              onPressed: projectController.projectTasksController!.showSearch,
+            ),
+            ProjectTasksFilterButton(controller: projectController.projectTasksController!),
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.milestones &&
+          projectController.projectMilestonesController != null &&
+          (projectController.projectMilestonesController!.itemList.isNotEmpty ||
+              projectController.projectMilestonesController!.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+            ),
+            ProjectMilestonesFilterButton(
+                controller: projectController.projectMilestonesController!),
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.discussions &&
+          projectController.projectDiscussionsController != null &&
+          (projectController.projectDiscussionsController!.itemList.isNotEmpty ||
+              projectController.projectDiscussionsController!.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+              icon: Icon(PlatformIcons(context).search),
+              onPressed: projectController.projectDiscussionsController!.showSearch,
+            ),
+            ProjectDiscussionsFilterButton(
+                controller: projectController.projectDiscussionsController!)
+          ],
+        );
+
+      if (index == ProjectDetailedTabs.documents &&
+          projectController.projectDocumentsController != null &&
+          (projectController.projectDocumentsController!.itemList.isNotEmpty ||
+              projectController.projectDocumentsController!.filterController.hasFilters.value))
+        return Row(
+          children: [
+            PlatformIconButton(
+                icon: Icon(PlatformIcons(context).search),
+                onPressed: () {
+                  Get.find<NavigationController>()
+                      .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+                    'folderName': projectController.projectDocumentsController!.screenName,
+                    'folderId': projectController.projectDocumentsController!.currentFolderID,
+                    'documentsController': projectController.projectDocumentsController,
+                  });
+                }),
+            ProjectDocumentsFilterButton(controller: projectController.projectDocumentsController!),
+          ],
+        );
+
+      return const SizedBox();
+    }();
+  }
+}
+
+class _ProjectContextMenu extends StatelessWidget {
+  final ProjectDetailsController controller;
+  final int index;
+
+  const _ProjectContextMenu({Key? key, required this.controller, required this.index})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformPopupMenuButton(
+      icon: PlatformWidget(
+        cupertino: (_, __) => Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+          size: 26,
+        ),
+        material: (_, __) => const Icon(
+          Icons.more_vert,
+          size: 26,
+        ),
+      ),
+      //offset: const Offset(0, 25),
+      onSelected: (String value) => _onSelected(value, controller, context),
       itemBuilder: (context) {
         return [
-          // const PopupMenuItem(value: 'copyLink', child: Text('Copy link')),
-          // if (controller.projectDetailed.canEdit)
-          //   const PopupMenuItem(value: 'edit', child: Text('Edit')),
-          if (!(controller.projectData?.security?['isInTeam'] as bool))
-            PopupMenuItem(
-              value: 'follow',
-              child: controller.projectData?.isFollow as bool
+          if (index == ProjectDetailedTabs.tasks &&
+              controller.projectTasksController != null &&
+              (controller.projectTasksController!.tasksList.isNotEmpty ||
+                  controller.projectTasksController!.filterController.hasFilters.value))
+            PlatformPopupMenuItem(
+                value: PopupMenuItemValue.sortTasks,
+                child: ProjectTasksSortButton(
+                  controller: controller.projectTasksController!,
+                )),
+          if (index == ProjectDetailedTabs.milestones &&
+              controller.projectMilestonesController != null &&
+              (controller.projectMilestonesController!.itemList.isNotEmpty ||
+                  controller.projectMilestonesController!.filterController.hasFilters.value))
+            PlatformPopupMenuItem(
+                value: PopupMenuItemValue.sortMilestones,
+                child: ProjectMilestonesSortButton(
+                  controller: controller.projectMilestonesController!,
+                )),
+          if (index == ProjectDetailedTabs.discussions &&
+              controller.projectDiscussionsController != null &&
+              (controller.projectDiscussionsController!.itemList.isNotEmpty ||
+                  controller.projectDiscussionsController!.filterController.hasFilters.value))
+            PlatformPopupMenuItem(
+                value: PopupMenuItemValue.sortDiscussions,
+                child: ProjectDiscussionsSortButton(
+                  controller: controller.projectDiscussionsController!,
+                )),
+          if (index == ProjectDetailedTabs.documents &&
+              controller.projectDocumentsController != null &&
+              (controller.projectDocumentsController!.itemList.isNotEmpty ||
+                  controller.projectDocumentsController!.filterController.hasFilters.value))
+            PlatformPopupMenuItem(
+                value: PopupMenuItemValue.sortDocuments,
+                child: ProjectDocumentsSortButton(
+                  controller: controller.projectDocumentsController!,
+                )),
+          if (controller.projectData.canEdit!)
+            PlatformPopupMenuItem(
+              value: PopupMenuItemValue.editProject,
+              child: Text(tr('editProject')),
+            ),
+          if (!(controller.projectData.security?['isInTeam'] as bool))
+            PlatformPopupMenuItem(
+              value: PopupMenuItemValue.followProject,
+              child: controller.projectData.isFollow as bool
                   ? Text(tr('unFollowProjectButton'))
                   : Text(tr('followProjectButton')),
             ),
-          if (controller.projectData?.canDelete as bool)
-            PopupMenuItem(
-              textStyle: Get.theme.popupMenuTheme.textStyle
-                  ?.copyWith(color: Get.theme.colors().colorError),
-              value: 'delete',
-              child: Text(
-                tr('delete'),
-                style: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
-              ),
+          if (controller.projectData.canDelete as bool)
+            PlatformPopupMenuItem(
+              textStyle: TextStyleHelper.subtitle1(color: Get.theme.colors().colorError),
+              value: PopupMenuItemValue.deleteProject,
+              isDestructiveAction: true,
+              child: Text(tr('delete')),
             )
         ];
       },
@@ -210,23 +359,41 @@ class _ProjectContextMenu extends StatelessWidget {
   }
 }
 
-Future<void> _onSelected(value, controller, BuildContext context) async {
+Future<void> _onSelected(
+    String value, ProjectDetailsController controller, BuildContext context) async {
   switch (value) {
     case 'copyLink':
-      controller.copyLink();
+      await controller.copyLink();
       break;
 
-    // case 'edit':
-    //   await Get.find<NavigationController>().navigateToFullscreen(
-    //       ProjectEditingView(),
-    //       arguments: {'projectDetailed': controller.projectDetailed});
-    //   break;
-
-    case 'follow':
-      controller.followProject();
+    case PopupMenuItemValue.sortTasks:
+      taskSortButtonOnPressed(controller.projectTasksController!, context);
       break;
 
-    case 'delete':
+    case PopupMenuItemValue.sortMilestones:
+      milestonesSortButtonOnPressed(controller.projectMilestonesController!, context);
+      break;
+
+    case PopupMenuItemValue.sortDiscussions:
+      discussionsSortButtonOnPressed(controller.projectDiscussionsController!, context);
+      break;
+
+    case PopupMenuItemValue.sortDocuments:
+      documentsSortButtonOnPressed(controller.projectDocumentsController!, context);
+      break;
+
+    case PopupMenuItemValue.editProject:
+      Get.find<NavigationController>().to(EditProjectView(projectDetailed: controller.projectData),
+          transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
+          fullscreenDialog: true,
+          arguments: {'projectDetailed': controller.projectData});
+      break;
+
+    case PopupMenuItemValue.followProject:
+      await controller.followProject();
+      break;
+
+    case PopupMenuItemValue.deleteProject:
       await Get.dialog(StyledAlertDialog(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
@@ -243,7 +410,10 @@ Future<void> _onSelected(value, controller, BuildContext context) async {
             );
             locator<EventHub>().fire('needToRefreshProjects', ['all']);
           } else {
-            print('ERROR');
+            MessagesHandler.showSnackBar(
+              context: context,
+              text: tr('error'),
+            );
           }
         },
       ));

@@ -52,9 +52,7 @@ abstract class BaseSearchController extends GetxController {
       loaded.isTrue;
 
   bool get hasResult =>
-      loaded.isTrue &&
-      switchToSearchView.isTrue &&
-      paginationController!.data.isNotEmpty;
+      loaded.isTrue && switchToSearchView.isTrue && paginationController!.data.isNotEmpty;
 
   Future search({bool needToClear = true, String? query});
 

@@ -40,13 +40,14 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_network_image.dart';
 import 'package:projects/presentation/shared/widgets/default_avatar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/settings/settings_screen.dart';
 
 class SelfProfileScreen extends StatelessWidget {
@@ -62,10 +63,18 @@ class SelfProfileScreen extends StatelessWidget {
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null
-    final showBackButton =
-        Get.arguments == null ? false : Get.arguments['showBackButton'] as bool? ?? false;
-    final showSettingsButton =
-        Get.arguments == null ? true : Get.arguments['showSettingsButton'] as bool? ?? true;
+    final bool showBackButton;
+    if (Get.arguments == null) {
+      showBackButton = false;
+    } else {
+      showBackButton = Get.arguments['showBackButton'] as bool? ?? false;
+    }
+    final bool showSettingsButton;
+    if (Get.arguments == null) {
+      showSettingsButton = true;
+    } else {
+      showSettingsButton = Get.arguments['showSettingsButton'] as bool? ?? true;
+    }
 
     final platformController = Get.find<PlatformController>();
 
@@ -77,13 +86,28 @@ class SelfProfileScreen extends StatelessWidget {
           showBackButton: showBackButton,
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
-          titleText: tr('profile'),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
+          // titleText: tr('profile'),
+          title: Text(
+            tr('profile'),
+            style: TextStyle(color: Get.theme.colors().onSurface),
+          ),
+          centerTitle: GetPlatform.isAndroid ? false : true,
           actions: [
             if (showSettingsButton)
-              IconButton(
-                icon: const AppIcon(icon: SvgIcons.settings),
+              PlatformIconButton(
+                cupertino: (_, __) {
+                  return CupertinoIconButtonData(
+                    icon: AppIcon(
+                      icon: SvgIcons.settings,
+                      color: Get.theme.colors().primary,
+                    ),
+                    onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
+                    padding: EdgeInsets.zero,
+                  );
+                },
+                materialIcon: const AppIcon(icon: SvgIcons.settings),
                 onPressed: () => Get.find<NavigationController>().to(const SettingsScreen()),
               )
           ],

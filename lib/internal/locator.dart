@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_lambdas
+
 /*
  * (c) Copyright Ascensio System SIA 2010-2021
  *
@@ -96,6 +98,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/milestones
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/new_milestone_controller.dart';
+import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_edit_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
@@ -188,12 +191,7 @@ void setupGetX() {
   // Get.lazyPut(() => PaginationController<PortalTask>(),
   //     fenix: true, tag: '_myTasksPaginationController');
 
-  Get.create(
-    () => DiscussionsController(
-      Get.find<DiscussionsFilterController>(),
-      Get.find<PaginationController>(),
-    ),
-  );
+  Get.create(() => DiscussionsController());
   Get.lazyPut(() => GroupsController(), fenix: true);
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
@@ -212,9 +210,11 @@ void setupGetX() {
   Get.lazyPut(() => GroupsDataSource(), fenix: true);
 
   Get.lazyPut(() => ProjectStatusesController(), fenix: true);
-  Get.lazyPut(() => ProjectTasksController(), fenix: true);
+  Get.create<ProjectTasksController>(() => ProjectTasksController());
 
   Get.lazyPut(() => MilestonesDataSource(), fenix: true);
+  //Get.create<MilestonesDataSource>(() => MilestonesDataSource());
+  Get.lazyPut(() => ProjectDiscussionsController(), fenix: true);
 
   Get.lazyPut(() => MilestonesSortController(), fenix: true);
   Get.lazyPut(() => MilestonesFilterController(), fenix: true);
@@ -228,11 +228,7 @@ void setupGetX() {
   Get.create<ProjectsSortController>(() => ProjectsSortController());
   Get.create<DocumentsSortController>(() => DocumentsSortController());
 
-  Get.create<DocumentsController>(() => DocumentsController(
-        Get.find<DocumentsFilterController>(),
-        Get.find<PaginationController>(),
-        Get.find<DocumentsSortController>(),
-      ));
+  Get.create<DocumentsController>(() => DocumentsController());
   Get.create<DocumentsMoveOrCopyController>(() => DocumentsMoveOrCopyController(
         Get.find<DocumentsFilterController>(),
         Get.find<PaginationController>(),

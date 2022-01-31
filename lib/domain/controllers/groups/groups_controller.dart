@@ -49,6 +49,7 @@ class GroupsController extends BaseController {
   @override
   void onInit() {
     screenName = tr('groups');
+
     paginationController = Get.put(PaginationController<PortalGroup>(), tag: 'GroupsController');
 
     paginationController.loadDelegate = () async => await _getGroups();

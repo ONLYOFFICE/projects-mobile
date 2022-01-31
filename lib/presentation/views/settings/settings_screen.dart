@@ -39,6 +39,7 @@ import 'package:projects/domain/controllers/settings/settings_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
 import 'package:projects/presentation/views/settings/color_theme_selection_screen.dart';
 import 'package:projects/presentation/views/settings/passcode/screens/passcode_settings_screen.dart';
@@ -65,8 +66,8 @@ class SettingsScreen extends StatelessWidget {
           titleText: tr('settings'),
           onLeadingPressed: controller.leave,
           backButtonIcon: Get.put(PlatformController()).isMobile
-              ? const Icon(Icons.arrow_back_rounded)
-              : const Icon(Icons.close),
+              ? Icon(PlatformIcons(context).back)
+              : Icon(PlatformIcons(context).clear),
         ),
         body: Obx(
           () {
