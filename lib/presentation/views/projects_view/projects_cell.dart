@@ -58,8 +58,27 @@ class ProjectCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemController = Get.find<ProjectCellController>()..setup(projectDetails);
-    final projectController = Get.find<ProjectDetailsController>()..fillProjectInfo(projectDetails);
+    ProjectCellController itemController;
+    if (Get.isRegistered<ProjectCellController>(tag: projectDetails.id.toString()))
+      itemController = Get.find<ProjectCellController>(tag: projectDetails.id.toString());
+    else {
+      itemController = Get.put(
+        ProjectCellController(),
+        tag: projectDetails.id.toString(),
+      );
+      itemController.setup(projectDetails);
+    }
+
+    ProjectDetailsController projectController;
+    if (Get.isRegistered<ProjectDetailsController>(tag: projectDetails.id.toString()))
+      projectController = Get.find<ProjectDetailsController>(tag: projectDetails.id.toString());
+    else {
+      projectController = Get.put(
+        ProjectDetailsController(),
+        tag: projectDetails.id.toString(),
+      );
+      projectController.fillProjectInfo(projectDetails);
+    }
 
     return SizedBox(
       height: 72,

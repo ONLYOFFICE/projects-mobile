@@ -242,13 +242,11 @@ void setupGetX() {
       ));
 
   Get.create<NewProjectController>(() => NewProjectController());
-  Get.create<ProjectCellController>(() => ProjectCellController());
   Get.create<NewTaskController>(() => NewTaskController());
   Get.create<ProjectEditController>(() => ProjectEditController());
   Get.create<ProjectsFilterController>(() => ProjectsFilterController());
 
   Get.create<ProjectTeamController>(() => ProjectTeamController());
-  Get.create<ProjectDetailsController>(() => ProjectDetailsController());
 
   Get.lazyPut(() => ErrorDialog(), fenix: true);
   Get.put(LoginController(), permanent: true);

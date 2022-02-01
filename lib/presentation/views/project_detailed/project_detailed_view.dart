@@ -98,9 +98,14 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     if (Get.arguments['projectController'] != null)
       projectController = Get.arguments['projectController'] as ProjectDetailsController;
     else {
-      projectController = Get.find<ProjectDetailsController>();
-      projectController.fillProjectInfo(Get.arguments['projectDetailed'] as ProjectDetailed);
-    } // TODO refactor
+      final projectDetails = Get.arguments['projectDetailed'] as ProjectDetailed;
+
+      projectController = Get.put<ProjectDetailsController>(
+        ProjectDetailsController(),
+        tag: projectDetails.id.toString(),
+      );
+      projectController.fillProjectInfo(projectDetails);
+    }
 
     projectController.setup();
 
