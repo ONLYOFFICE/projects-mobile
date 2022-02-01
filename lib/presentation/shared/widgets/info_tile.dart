@@ -76,15 +76,17 @@ class InfoTile extends StatelessWidget {
                     TextSpan(
                       style: captionStyle ?? TextStyleHelper.caption(),
                       children: [
-                        if (privateIconVisible) ...[
-                          const WidgetSpan(
-                            child: AppIcon(icon: SvgIcons.lock),
-                            alignment: PlaceholderAlignment.middle,
-                          ),
-                          const WidgetSpan(
-                            child: SizedBox(width: 4),
-                          ),
-                        ],
+                        ...privateIconVisible
+                            ? [
+                                const WidgetSpan(
+                                  child: AppIcon(icon: SvgIcons.lock),
+                                  alignment: PlaceholderAlignment.middle,
+                                ),
+                                const WidgetSpan(
+                                  child: SizedBox(width: 4),
+                                ),
+                              ]
+                            : [],
                         TextSpan(text: caption),
                       ],
                     ),
