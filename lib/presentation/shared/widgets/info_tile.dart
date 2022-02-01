@@ -34,6 +34,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 
 class InfoTile extends StatelessWidget {
   final Widget? icon;
@@ -44,6 +45,7 @@ class InfoTile extends StatelessWidget {
   final Widget? subtitleWidget;
   final Widget? suffix;
   final Function()? onTap;
+  final bool privateIconVisible;
 
   const InfoTile({
     Key? key,
@@ -55,6 +57,7 @@ class InfoTile extends StatelessWidget {
     this.subtitleStyle,
     this.subtitleWidget,
     this.suffix,
+    this.privateIconVisible = false,
   }) : super(key: key);
 
   @override
@@ -69,7 +72,25 @@ class InfoTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (caption != null)
-                  Text(caption!, style: captionStyle ?? TextStyleHelper.caption()),
+                  Text.rich(
+                    TextSpan(
+                      style: captionStyle ?? TextStyleHelper.caption(),
+                      children: [
+                        ...privateIconVisible
+                            ? [
+                                const WidgetSpan(
+                                  child: AppIcon(icon: SvgIcons.lock),
+                                  alignment: PlaceholderAlignment.middle,
+                                ),
+                                const WidgetSpan(
+                                  child: SizedBox(width: 4),
+                                ),
+                              ]
+                            : [],
+                        TextSpan(text: caption),
+                      ],
+                    ),
+                  ),
                 if (subtitleWidget != null) subtitleWidget!,
                 if (subtitleWidget == null && subtitle != null)
                   Text(subtitle!,
