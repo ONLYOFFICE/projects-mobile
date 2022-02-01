@@ -65,20 +65,23 @@ class TasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.isRegistered<TasksController>(tag: 'TasksView')
-        ? Get.find<TasksController>(tag: 'TasksView')
-        : Get.put(
-            TasksController(
-              Get.find<TaskFilterController>(),
-              Get.find<PaginationController<PortalTask>>(),
-            ),
-            tag: 'TasksView');
+    TasksController controller;
+    if (Get.isRegistered<TasksController>(tag: 'TasksView'))
+      controller = Get.find<TasksController>(tag: 'TasksView');
+    else {
+      controller = Get.put(
+          TasksController(
+            Get.find<TaskFilterController>(),
+            Get.find<PaginationController<PortalTask>>(),
+          ),
+          tag: 'TasksView');
 
-    controller.setup(PresetTaskFilters.saved);
+      controller.setup(PresetTaskFilters.saved);
 
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.loadTasks();
-    });
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        controller.loadTasks();
+      });
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,

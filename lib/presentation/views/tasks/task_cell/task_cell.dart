@@ -57,14 +57,19 @@ class TaskCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final itemController = TaskItemController(task);
-    Get.put(
-      itemController,
-      tag: task.id.toString(),
-    );
-    WidgetsBinding.instance!.addPostFrameCallback(
-      (_) async => await itemController.initTaskStatus(task),
-    );
+    TaskItemController itemController;
+
+    if (Get.isRegistered<TaskItemController>(tag: task.id.toString()))
+      itemController = Get.find<TaskItemController>(tag: task.id.toString());
+    else {
+      itemController = Get.put(
+        TaskItemController(task),
+        tag: task.id.toString(),
+      );
+      WidgetsBinding.instance!.addPostFrameCallback(
+        (_) async => await itemController.initTaskStatus(task),
+      );
+    }
 
     return InkWell(
       enableFeedback: false,
