@@ -90,17 +90,18 @@ class ProjectManagerSelectionView extends StatelessWidget {
               withoutGuests: true,
             );
           }
-          if (usersDataSource.nothingFound.value == true) {
+          if (usersDataSource.nothingFound.value) {
             return Column(children: const [NothingFound()]);
           }
-          if (usersDataSource.loaded.value == true &&
-              usersDataSource.usersWithoutVisitors.isNotEmpty &&
-              usersDataSource.isSearchResult.value == true) {
-            return UsersSearchResult(
-              usersDataSource: usersDataSource,
-              onTapFunction: (v) => controller.changePMSelection(v),
-              withoutVisitors: true,
-            );
+          if (usersDataSource.loaded.value && usersDataSource.isSearchResult.value) {
+            if (usersDataSource.usersWithoutVisitors.isNotEmpty)
+              return UsersSearchResult(
+                usersDataSource: usersDataSource,
+                onTapFunction: (v) => controller.changePMSelection(v),
+                withoutVisitors: true,
+              );
+            else
+              return Column(children: const [NothingFound()]);
           }
           return const ListLoadingSkeleton();
         },
