@@ -51,6 +51,7 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
@@ -69,89 +70,7 @@ class ProjectDocumentsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar,
-      body: _Content(controller: controller),
-    );
-  }
-}
-
-class _Content extends StatelessWidget {
-  const _Content({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        if (!controller.loaded.value) return const ListLoadingSkeleton();
-
-        return PaginationListView(
-            paginationController: controller.paginationController,
-            child: () {
-              if (controller.loaded.value && controller.nothingFound.value) {
-                return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
-              }
-              if (controller.loaded.value &&
-                  controller.paginationController.data.isEmpty &&
-                  !controller.filterController.hasFilters.value &&
-                  !controller.searchMode.value) {
-                return Center(
-                    child: EmptyScreen(
-                        icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
-              }
-              if (controller.loaded.value &&
-                  controller.paginationController.data.isEmpty &&
-                  controller.filterController.hasFilters.value &&
-                  !controller.searchMode.value) {
-                return Center(
-                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
-              }
-              if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                return ListView.separated(
-                  controller: ScrollController(),
-                  itemCount: controller.paginationController.data.length,
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
-                  itemBuilder: (BuildContext context, int index) {
-                    final element = controller.paginationController.data[index];
-                    return element is Folder
-                        ? FolderCell(
-                            entity: element,
-                            controller: controller,
-                          )
-                        : FileCell(
-                            cellController: FileCellController(portalFile: element as PortalFile),
-                            documentsController: controller as DocumentsController,
-                          );
-                  },
-                );
-
-              return const SizedBox();
-            }());
-      },
-    );
-  }
-}
-
-class ProjectDocumentsFilterButton extends StatelessWidget {
-  const ProjectDocumentsFilterButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final DocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformIconButton(
-      icon: FiltersButton(controller: controller),
-      onPressed: () async => Get.find<NavigationController>().toScreen(
-        const DocumentsFilterScreen(),
-        preventDuplicates: false,
-        arguments: {'filterController': controller.filterController},
-      ),
+      body: DocumentsContent(controller: controller),
     );
   }
 }

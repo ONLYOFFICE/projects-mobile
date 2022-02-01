@@ -38,11 +38,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/folder.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
-import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
@@ -51,15 +48,12 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/documents/documents_sort_options.dart';
-import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
-import 'package:projects/presentation/views/documents/folder_cell.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
 class PortalDocumentsView extends StatelessWidget {
@@ -138,72 +132,34 @@ class DocumentsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Get.theme.backgroundColor,
-      body: NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return [
-            MainAppBar(
-              isCollapsed: isCollapsed,
-              materialTitle: Obx(
-                () => Text(
-                  controller.documentsScreenName.value,
-                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-                ),
+        //backgroundColor: Get.theme.backgroundColor,
+        body: NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return [
+          MainAppBar(
+            isCollapsed: isCollapsed,
+            materialTitle: Obx(
+              () => Text(
+                controller.documentsScreenName.value,
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
               ),
-              cupertinoTitle: Obx(
-                () => Text(
-                  controller.documentsScreenName.value,
-                  style: TextStyle(color: Get.theme.colors().onSurface),
-                ),
-              ),
-              actions: [
-                _SearchButtonWidget(controller: controller),
-                _FilterButtonWidget(controller: controller),
-                const _MoreButtonWidget(),
-              ],
             ),
-          ];
-        },
-        body: Obx(
-          () {
-            if (!controller.loaded.value) return const ListLoadingSkeleton();
-
-            if (controller.loaded.value && controller.nothingFound.value) {
-              return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
-            } else if (controller.loaded.value &&
-                controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value &&
-                !controller.searchMode.value) {
-              return Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
-            } else if (controller.loaded.value &&
-                controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value &&
-                !controller.searchMode.value) {
-              return Center(
-                  child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
-            } else
-              return ListView.separated(
-                itemCount: controller.paginationController.data.length,
-                separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
-                itemBuilder: (BuildContext context, int index) {
-                  final element = controller.paginationController.data[index];
-                  return element is Folder
-                      ? FolderCell(
-                          entity: element,
-                          controller: controller as DocumentsController,
-                        )
-                      : FileCell(
-                          cellController: FileCellController(portalFile: element as PortalFile),
-                          documentsController: controller as DocumentsController,
-                        );
-                },
-              );
-          },
-        ),
-      ),
-    );
+            cupertinoTitle: Obx(
+              () => Text(
+                controller.documentsScreenName.value,
+                style: TextStyle(color: Get.theme.colors().onSurface),
+              ),
+            ),
+            actions: [
+              DocumentsSearchButton(controller: controller),
+              DocumentsFilterButton(controller: controller),
+              const _MoreButtonWidget(),
+            ],
+          ),
+        ];
+      },
+      body: DocumentsContent(controller: controller),
+    ));
   }
 }
 
@@ -230,137 +186,6 @@ class _MoreButtonWidget extends StatelessWidget {
       materialIcon: Icon(
         Icons.more_vert,
         color: Get.theme.colors().primary,
-      ),
-    );
-  }
-}
-
-class _FilterButtonWidget extends StatelessWidget {
-  const _FilterButtonWidget({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformIconButton(
-      onPressed: () async => Get.find<NavigationController>().toScreen(
-          const DocumentsFilterScreen(),
-          preventDuplicates: false,
-          arguments: {'filterController': controller.filterController}),
-      materialIcon: FiltersButton(controller: controller),
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          icon: FiltersButton(controller: controller),
-          color: Get.theme.colors().background,
-          onPressed: () async => Get.find<NavigationController>().toScreen(
-              const DocumentsFilterScreen(),
-              preventDuplicates: false,
-              arguments: {'filterController': controller.filterController}),
-          padding: EdgeInsets.zero,
-        );
-      },
-    );
-  }
-}
-
-class _SearchButtonWidget extends StatelessWidget {
-  const _SearchButtonWidget({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformIconButton(
-      onPressed: () {
-        Get.find<NavigationController>()
-            .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-          'folderName': controller.documentsScreenName.value,
-          'folderId': controller.currentFolderID,
-          'documentsController': controller,
-        });
-      },
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          icon: AppIcon(
-            icon: SvgIcons.search,
-            color: Get.theme.colors().primary,
-          ),
-          color: Get.theme.colors().background,
-          onPressed: () {
-            Get.find<NavigationController>()
-                .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-              'folderName': controller.documentsScreenName.value,
-              'folderId': controller.currentFolderID,
-              'documentsController': controller,
-            });
-          },
-          padding: EdgeInsets.zero,
-        );
-      },
-      materialIcon: AppIcon(
-        icon: SvgIcons.search,
-        color: Get.theme.colors().primary,
-      ),
-    );
-  }
-}
-
-class DocsTitle extends StatelessWidget {
-  const DocsTitle({Key? key, required this.controller}) : super(key: key);
-  final DocumentsController controller;
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Obx(
-              () => Text(
-                controller.documentsScreenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-              ),
-            ),
-          ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              InkResponse(
-                onTap: () {
-                  Get.find<NavigationController>()
-                      .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                    'folderName': controller.documentsScreenName.value,
-                    'folderId': controller.currentFolderID,
-                    'documentsController': controller,
-                  });
-                },
-                child: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
-                ),
-              ),
-              const SizedBox(width: 24),
-              InkResponse(
-                onTap: () async => Get.find<NavigationController>().toScreen(
-                    const DocumentsFilterScreen(),
-                    preventDuplicates: false,
-                    arguments: {'filterController': controller.filterController}),
-                child: FiltersButton(controller: controller),
-              ),
-            ],
-          ),
-        ],
       ),
     );
   }
