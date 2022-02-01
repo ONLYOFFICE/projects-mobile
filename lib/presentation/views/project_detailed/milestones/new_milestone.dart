@@ -260,13 +260,13 @@ class ResponsibleTile extends StatelessWidget {
       //strange behavior of obx if rx value is used like this:
       //var _isSelected = controller.responsible != null;
       return NewItemTile(
-        isSelected: controller.responsible?.value != null,
-        caption: controller.responsible?.value != null ? tr('assignedTo') : null,
-        text: controller.responsible?.value != null
-            ? '${controller.responsible?.value?.portalUser.displayName}'
+        isSelected: controller.responsible.value != null,
+        caption: controller.responsible.value != null ? tr('assignedTo') : null,
+        text: controller.responsible.value != null
+            ? '${controller.responsible.value?.portalUser.displayName}'
             : tr('addResponsible'),
         textColor: controller.needToSelectResponsible.value ? Get.theme.colors().colorError : null,
-        suffix: controller.responsible?.value != null
+        suffix: controller.responsible.value != null
             ? Icon(Icons.navigate_next, size: 24, color: Get.theme.colors().onBackground)
             : null,
         icon: SvgIcons.person,

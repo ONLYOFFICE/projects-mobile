@@ -123,7 +123,7 @@ class ProjectTeamController extends GetxController {
     if (!response) return Future.value(false);
     final selfUser = _userController.user!;
 
-    if (_projectDetailed != null && _projectDetailed!.security!['canEditTeam'] as bool) {
+    if (_projectDetailed != null && (_projectDetailed!.security?['canEditTeam'] ?? false)) {
       fabIsVisible.value = true;
     } else {
       if (selfUser.isAdmin! ||
