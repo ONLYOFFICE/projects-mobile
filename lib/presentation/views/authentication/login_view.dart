@@ -54,98 +54,105 @@ class LoginView extends StatelessWidget {
       controller.setState(ViewState.Idle);
     });
 
-    return Obx(
-      () => controller.state.value == ViewState.Busy
-          ? Scaffold(
-              body: SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator())))
-          : Scaffold(
-              appBar: StyledAppBar(
-                title: Text(
-                  tr('addNewAccount'),
-                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leaveLoginScreen();
+        return false;
+      },
+      child: Obx(
+        () => controller.state.value == ViewState.Busy
+            ? Scaffold(
+                body: SizedBox(
+                    height: Get.height, child: const Center(child: CircularProgressIndicator())))
+            : Scaffold(
+                appBar: StyledAppBar(
+                  onLeadingPressed: controller.leaveLoginScreen,
+                  title: Text(
+                    tr('addNewAccount'),
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+                  ),
                 ),
-              ),
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: Get.height * 0.094),
-                    Text('${tr('portalAdress')}:',
-                        style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
-                    Text(controller.portalAdress,
-                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
-                    Center(
-                      child: Container(
-                        color: Get.theme.backgroundColor,
-                        constraints: const BoxConstraints(maxWidth: 480),
-                        child: Padding(
-                          padding: const EdgeInsets.all(36),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Obx(
-                                () => Form(
-                                  child: Column(
-                                    children: [
-                                      AuthTextField(
-                                        hintText: tr('email'),
-                                        controller: controller.emailController,
-                                        autofillHint: AutofillHints.email,
-                                        hasError: controller.emailFieldError.value,
-                                      ),
-                                      SizedBox(height: Get.height * 0.0444),
-                                      AuthTextField(
-                                        hintText: tr('password'),
-                                        controller: controller.passwordController,
-                                        hasError: controller.passwordFieldError.value,
-                                        autofillHint: AutofillHints.password,
-                                        obscureText: true,
-                                      ),
-                                    ],
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: Get.height * 0.094),
+                      Text('${tr('portalAdress')}:',
+                          style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
+                      Text(controller.portalAdress,
+                          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                      Center(
+                        child: Container(
+                          color: Get.theme.backgroundColor,
+                          constraints: const BoxConstraints(maxWidth: 480),
+                          child: Padding(
+                            padding: const EdgeInsets.all(36),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Obx(
+                                  () => Form(
+                                    child: Column(
+                                      children: [
+                                        AuthTextField(
+                                          hintText: tr('email'),
+                                          controller: controller.emailController,
+                                          autofillHint: AutofillHints.email,
+                                          hasError: controller.emailFieldError.value,
+                                        ),
+                                        SizedBox(height: Get.height * 0.0444),
+                                        AuthTextField(
+                                          hintText: tr('password'),
+                                          controller: controller.passwordController,
+                                          hasError: controller.passwordFieldError.value,
+                                          autofillHint: AutofillHints.password,
+                                          obscureText: true,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: Get.height * 0.0333),
-                              DecoratedBox(
-                                decoration: BoxDecoration(boxShadow: [
-                                  BoxShadow(
-                                      blurRadius: 3,
-                                      offset: const Offset(0, 0.85),
-                                      color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                                  BoxShadow(
-                                      blurRadius: 3,
-                                      offset: const Offset(0, 0.25),
-                                      color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                                ]),
-                                child: WideButton(
-                                  text: tr('next'),
-                                  onPressed: () async => await controller.loginByPassword(),
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              TextButton(
-                                onPressed: () async => Get.to<PasswordRecoveryScreen1>(
-                                  () => const PasswordRecoveryScreen1(),
-                                  arguments: {'email': controller.emailController.text},
-                                ),
-                                child: Text(
-                                  tr('forgotPassword'),
-                                  style: TextStyleHelper.subtitle2(
-                                    color: Get.theme.colors().primary,
+                                SizedBox(height: Get.height * 0.0333),
+                                DecoratedBox(
+                                  decoration: BoxDecoration(boxShadow: [
+                                    BoxShadow(
+                                        blurRadius: 3,
+                                        offset: const Offset(0, 0.85),
+                                        color: Get.theme.colors().onBackground.withOpacity(0.19)),
+                                    BoxShadow(
+                                        blurRadius: 3,
+                                        offset: const Offset(0, 0.25),
+                                        color: Get.theme.colors().onBackground.withOpacity(0.04)),
+                                  ]),
+                                  child: WideButton(
+                                    text: tr('next'),
+                                    onPressed: () async => await controller.loginByPassword(),
                                   ),
                                 ),
-                              ),
-                              SizedBox(height: Get.height * 0.18),
-                              PrivacyAndTermsFooter(),
-                            ],
+                                const SizedBox(height: 4),
+                                TextButton(
+                                  onPressed: () async => Get.to<PasswordRecoveryScreen1>(
+                                    () => const PasswordRecoveryScreen1(),
+                                    arguments: {'email': controller.emailController.text},
+                                  ),
+                                  child: Text(
+                                    tr('forgotPassword'),
+                                    style: TextStyleHelper.subtitle2(
+                                      color: Get.theme.colors().primary,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(height: Get.height * 0.18),
+                                PrivacyAndTermsFooter(),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }
