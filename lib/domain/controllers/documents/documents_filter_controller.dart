@@ -79,12 +79,7 @@ class DocumentsFilterController extends BaseFilterController {
 
   DocumentsFilterController() {
     suitableResultCount = (-1).obs;
-  }
-
-  @override
-  void onInit() async {
-    await loadFilters();
-    super.onInit();
+    loadFilters();
   }
 
   @override
