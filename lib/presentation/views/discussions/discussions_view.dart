@@ -54,13 +54,19 @@ import 'package:projects/presentation/views/discussions/filter/discussions_filte
 
 class PortalDiscussionsView extends StatelessWidget {
   const PortalDiscussionsView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DiscussionsController>();
+    DiscussionsController controller;
+    if (Get.isRegistered<DiscussionsController>(tag: 'DiscussionsView'))
+      controller = Get.find<DiscussionsController>(tag: 'DiscussionsView');
+    else {
+      controller = Get.put(DiscussionsController(), tag: 'DiscussionsView');
 
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
-    });
+      SchedulerBinding.instance!.addPostFrameCallback((_) {
+        controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
+      });
+    }
 
     return Scaffold(
       floatingActionButton: Obx(
