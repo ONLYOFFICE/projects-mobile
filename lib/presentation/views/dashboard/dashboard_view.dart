@@ -51,18 +51,7 @@ class DashboardView extends StatelessWidget {
   const DashboardView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    DashboardController dashboardController;
-
-    if (Get.isRegistered<DashboardController>(tag: 'DashboardController'))
-      dashboardController = Get.find<DashboardController>(tag: 'DashboardController');
-    else {
-      dashboardController = Get.put(
-        DashboardController(),
-        tag: 'DashboardController',
-      )
-        ..setup()
-        ..loadContent();
-    }
+    final dashboardController = Get.find<DashboardController>(tag: 'DashboardController');
 
     return Scaffold(
       backgroundColor: Get.theme.colors().background,

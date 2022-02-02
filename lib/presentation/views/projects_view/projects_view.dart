@@ -64,24 +64,7 @@ class ProjectsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProjectsController controller;
-    if (Get.isRegistered<ProjectsController>(tag: 'ProjectsView'))
-      controller = Get.find<ProjectsController>(tag: 'ProjectsView');
-    else {
-      controller = Get.put(
-        ProjectsController(
-          Get.find<ProjectsFilterController>(),
-          Get.find<PaginationController<ProjectDetailed>>(),
-        ),
-        tag: 'ProjectsView',
-      );
-
-      controller.setup(PresetProjectFilters.saved);
-
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        controller.loadProjects();
-      });
-    }
+    final controller = Get.find<ProjectsController>(tag: 'ProjectsView');
 
     return Scaffold(
       backgroundColor: Get.theme.colors().backgroundColor,

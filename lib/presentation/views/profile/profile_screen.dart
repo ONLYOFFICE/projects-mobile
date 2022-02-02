@@ -55,11 +55,7 @@ class SelfProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final profileController = Get.find<ProfileController>();
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      profileController.setup();
-    });
+    final profileController = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     // arguments may be null or may not contain needed parameters
     // then Get.arguments['param_name'] will return null

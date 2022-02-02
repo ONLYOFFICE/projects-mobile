@@ -58,12 +58,10 @@ import 'package:projects/presentation/views/project_detailed/project_documents_v
 
 class PortalDocumentsView extends StatelessWidget {
   const PortalDocumentsView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<DocumentsController>();
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      controller.initialSetup();
-    });
+    final controller = Get.find<DocumentsController>(tag: 'DocumentsView');
 
     return DocumentsScreen(
       controller: controller,

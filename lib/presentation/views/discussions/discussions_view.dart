@@ -57,16 +57,7 @@ class PortalDiscussionsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DiscussionsController controller;
-    if (Get.isRegistered<DiscussionsController>(tag: 'DiscussionsView'))
-      controller = Get.find<DiscussionsController>(tag: 'DiscussionsView');
-    else {
-      controller = Get.put(DiscussionsController(), tag: 'DiscussionsView');
-
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
-        controller.loadDiscussions(preset: PresetDiscussionFilters.saved);
-      });
-    }
+    final controller = Get.find<DiscussionsController>(tag: 'DiscussionsView');
 
     return Scaffold(
       floatingActionButton: Obx(

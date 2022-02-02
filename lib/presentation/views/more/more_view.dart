@@ -46,13 +46,7 @@ class MoreView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final portalUser = Get.isRegistered<ProfileController>()
-        ? Get.find<ProfileController>()
-        : Get.put(ProfileController(), permanent: true);
-
-    SchedulerBinding.instance!.addPostFrameCallback((_) {
-      portalUser.setup();
-    });
+    final portalUser = Get.find<ProfileController>(tag: 'SelfProfileScreen');
 
     return Container(
       height: 312,
