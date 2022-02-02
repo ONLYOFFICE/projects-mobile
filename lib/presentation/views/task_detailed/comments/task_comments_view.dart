@@ -40,9 +40,9 @@ import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
 import 'package:projects/presentation/views/task_detailed/comments/new_comment_view.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class TaskCommentsView extends StatelessWidget {
   final TaskItemController controller;
@@ -61,7 +61,7 @@ class TaskCommentsView extends StatelessWidget {
           return Column(
             children: [
               Expanded(
-                child: SmartRefresher(
+                child: StyledSmartRefresher(
                   controller: controller.commentsRefreshController,
                   onRefresh: () async => await controller.reloadTask(showLoading: true),
                   child: () {

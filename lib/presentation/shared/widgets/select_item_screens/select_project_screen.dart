@@ -47,10 +47,10 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SelectProjectScreen extends StatelessWidget {
   SelectProjectScreen({Key? key}) : super(key: key);
@@ -143,7 +143,7 @@ class SelectProjectScreen extends StatelessWidget {
         () {
           if (searchController.switchToSearchView.value == true &&
               searchController.searchResult.isNotEmpty) {
-            return SmartRefresher(
+            return StyledSmartRefresher(
               enablePullDown: false,
               enablePullUp: searchController.pullUpEnabled,
               controller: searchController.refreshController,

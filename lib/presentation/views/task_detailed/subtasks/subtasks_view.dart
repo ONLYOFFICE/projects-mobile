@@ -41,9 +41,9 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/creating_and_editing_subtask_view.dart';
 import 'package:projects/presentation/views/task_detailed/subtasks/subtask_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class SubtasksView extends StatelessWidget {
   final TaskItemController controller;
@@ -61,7 +61,7 @@ class SubtasksView extends StatelessWidget {
         if (controller.loaded.value == true) {
           return Stack(
             children: [
-              SmartRefresher(
+              StyledSmartRefresher(
                 controller: controller.subtaskRefreshController,
                 onRefresh: () => controller.reloadTask(showLoading: true),
                 child: () {

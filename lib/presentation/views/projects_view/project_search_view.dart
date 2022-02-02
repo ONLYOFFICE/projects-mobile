@@ -37,8 +37,8 @@ import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ProjectSearchView extends StatelessWidget {
   ProjectSearchView({Key? key}) : super(key: key);
@@ -57,7 +57,7 @@ class ProjectSearchView extends StatelessWidget {
             if (controller.nothingFound.value == true) const NothingFound(),
             if (controller.loaded.value == true && controller.searchResult.isNotEmpty)
               Expanded(
-                child: SmartRefresher(
+                child: StyledSmartRefresher(
                   enablePullDown: false,
                   enablePullUp: controller.pullUpEnabled,
                   controller: controller.refreshController,

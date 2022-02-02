@@ -36,9 +36,9 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 
@@ -94,7 +94,7 @@ class _Content extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (projectTeamDataSource.loaded.value == true) {
-        return SmartRefresher(
+        return StyledSmartRefresher(
             enablePullDown: true,
             enablePullUp: projectTeamDataSource.pullUpEnabled,
             controller: projectTeamDataSource.refreshController,

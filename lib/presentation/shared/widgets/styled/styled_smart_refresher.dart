@@ -30,28 +30,55 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
+import 'package:flutter/widgets.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
-class PaginationListView<T> extends StatelessWidget {
-  const PaginationListView({
+class StyledSmartRefresher extends StatelessWidget {
+  final bool? enablePullDown;
+  final bool? enablePullUp;
+  final RefreshController controller;
+  final void Function()? onRefresh;
+  final void Function()? onLoading;
+  final Widget? child;
+
+  StyledSmartRefresher({
     Key? key,
-    required this.paginationController,
-    required this.child,
+    this.enablePullDown,
+    this.enablePullUp,
+    required this.controller,
+    this.onRefresh,
+    this.onLoading,
+    this.child,
   }) : super(key: key);
-
-  final PaginationController<T> paginationController;
-  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return StyledSmartRefresher(
-        enablePullDown: paginationController.pullDownEnabled,
-        enablePullUp: paginationController.pullUpEnabled,
-        controller: paginationController.refreshController,
-        onRefresh: paginationController.onRefresh,
-        onLoading: paginationController.onLoading,
+    return SmartRefresher(
+        header: isMaterial(context)
+            ? const MaterialClassicHeader()
+            : CustomHeader(
+                builder: (context, mode) {
+                  return SizedBox(
+                    height: 55,
+                    child: Center(child: PlatformCircularProgressIndicator()),
+                  );
+                },
+              ),
+        footer: CustomFooter(
+          builder: (BuildContext context, LoadStatus? mode) {
+            return SizedBox(
+              height: 55,
+              child: Center(child: PlatformCircularProgressIndicator()),
+            );
+          },
+        ),
+        enablePullDown: enablePullDown ?? true,
+        enablePullUp: enablePullUp ?? false,
+        controller: controller,
+        onRefresh: onRefresh,
+        onLoading: onLoading,
         child: child);
   }
 }

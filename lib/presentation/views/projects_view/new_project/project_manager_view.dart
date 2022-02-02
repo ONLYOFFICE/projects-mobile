@@ -38,8 +38,8 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
@@ -129,7 +129,7 @@ class UsersSearchResult extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         Expanded(
-          child: SmartRefresher(
+          child: StyledSmartRefresher(
             enablePullDown: false,
             enablePullUp: usersDataSource.pullUpEnabled,
             controller: usersDataSource.refreshController,
@@ -165,7 +165,7 @@ class UsersDefault extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final users = withoutGuests ? usersDataSource.usersWithoutVisitors : usersDataSource.usersList;
-    return SmartRefresher(
+    return StyledSmartRefresher(
       enablePullDown: false,
       enablePullUp: usersDataSource.pullUpEnabled,
       controller: usersDataSource.refreshController,

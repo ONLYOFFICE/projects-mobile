@@ -42,7 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:readmore/readmore.dart';
 
 class DiscussionOverview extends StatelessWidget {
@@ -60,7 +60,7 @@ class DiscussionOverview extends StatelessWidget {
           return const ListLoadingSkeleton();
         else {
           final discussion = controller!.discussion.value;
-          return SmartRefresher(
+          return StyledSmartRefresher(
             controller: controller!.refreshController,
             onRefresh: controller!.onRefresh,
             child: ListView(

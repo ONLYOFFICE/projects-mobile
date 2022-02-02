@@ -42,10 +42,10 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/info_tile.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/task_detailed/task_team.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:readmore/readmore.dart';
 
 part 'task.dart';
@@ -66,7 +66,7 @@ class TaskOverviewScreen extends StatelessWidget {
       () {
         if (taskController!.loaded.value || taskController!.firstReload.value) {
           final task = taskController!.task.value;
-          return SmartRefresher(
+          return StyledSmartRefresher(
             controller: taskController!.refreshController,
             onRefresh: () => taskController!.reloadTask(showLoading: true),
             child: ListView(

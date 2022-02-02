@@ -40,12 +40,12 @@ import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_more_view.dart';
 import 'package:projects/presentation/views/dashboard/tasks_dashboard_more_view.dart';
 import 'package:projects/presentation/views/projects_view/projects_cell.dart';
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DashboardView extends StatelessWidget {
   const DashboardView({Key? key}) : super(key: key);
@@ -85,8 +85,7 @@ class _BodyDashboardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
-      // scrollController: dashboardController.scrollController,
+    return StyledSmartRefresher(
       controller: dashboardController.refreshController,
       onLoading: dashboardController.onLoading,
       onRefresh: dashboardController.onRefresh,

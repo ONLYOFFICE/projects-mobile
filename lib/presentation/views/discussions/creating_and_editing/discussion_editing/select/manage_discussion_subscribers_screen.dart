@@ -45,12 +45,12 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/common/users_from_groups.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ManageDiscussionSubscribersScreen extends StatelessWidget {
   const ManageDiscussionSubscribersScreen({Key? key}) : super(key: key);
@@ -128,7 +128,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             if (usersDataSource.loaded.value == true &&
                 usersDataSource.usersList.isNotEmpty &&
                 usersDataSource.isSearchResult.value == false) {
-              return SmartRefresher(
+              return StyledSmartRefresher(
                 enablePullDown: false,
                 controller: usersDataSource.refreshController,
                 onLoading: usersDataSource.onLoading,

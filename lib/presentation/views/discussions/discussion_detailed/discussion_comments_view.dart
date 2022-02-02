@@ -35,8 +35,8 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/add_comment_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/views/task_detailed/comments/comments_thread.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class DiscussionCommentsView extends StatelessWidget {
   final DiscussionItemController? controller;
@@ -54,7 +54,7 @@ class DiscussionCommentsView extends StatelessWidget {
         else {
           return Stack(
             children: [
-              SmartRefresher(
+              StyledSmartRefresher(
                 controller: controller!.commentsRefreshController,
                 onRefresh: controller!.onRefresh,
                 child: ListView.separated(

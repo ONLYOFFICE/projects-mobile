@@ -37,9 +37,9 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -100,7 +100,7 @@ class GroupsOverview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SmartRefresher(
+    return StyledSmartRefresher(
       enablePullDown: false,
       enablePullUp: false,
       controller: groupsDataSource.refreshController,
