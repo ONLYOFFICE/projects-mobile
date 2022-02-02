@@ -31,7 +31,6 @@
  */
 
 import 'dart:core';
-import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,20 +40,19 @@ import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
-import 'package:projects/presentation/views/documents/documents_sort_options.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
+import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
 class PortalDocumentsView extends StatelessWidget {
@@ -152,7 +150,7 @@ class DocumentsScreen extends StatelessWidget {
             actions: [
               SearchButton(controller: controller),
               DocumentsFilterButton(controller: controller),
-              const _MoreButtonWidget(),
+              _MoreButtonWidget(controller: controller),
             ],
           ),
         ];
@@ -165,28 +163,44 @@ class DocumentsScreen extends StatelessWidget {
 class _MoreButtonWidget extends StatelessWidget {
   const _MoreButtonWidget({
     Key? key,
+    required this.controller,
   }) : super(key: key);
+
+  final BaseDocumentsController controller;
 
   @override
   Widget build(BuildContext context) {
-    return PlatformIconButton(
-      onPressed: () {},
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          icon: Icon(
-            CupertinoIcons.ellipsis_circle,
-            color: Get.theme.colors().primary,
-          ),
-          color: Get.theme.colors().background,
-          onPressed: () {},
-          padding: EdgeInsets.zero,
-        );
-      },
-      materialIcon: Icon(
-        Icons.more_vert,
-        color: Get.theme.colors().primary,
+    return PlatformPopupMenuButton(
+      icon: PlatformWidget(
+        cupertino: (_, __) => Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+          size: 26,
+        ),
+        material: (_, __) => const Icon(
+          Icons.more_vert,
+          size: 26,
+        ),
       ),
+      onSelected: (String value) => _onSelected(value, controller, context),
+      itemBuilder: (context) {
+        return [
+          PlatformPopupMenuItem(
+            value: PopupMenuItemValue.sortDocuments,
+            child: DocumentsSortButton(controller: controller),
+          ),
+        ];
+      },
     );
+  }
+}
+
+Future<void> _onSelected(
+    String value, BaseDocumentsController controller, BuildContext context) async {
+  switch (value) {
+    case PopupMenuItemValue.sortDocuments:
+      documentsSortButtonOnPressed(controller, context);
+      break;
   }
 }
 
@@ -204,7 +218,7 @@ class DocsBottom extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              _DocumentsSortButton(controller: controller),
+              //_DocumentsSortButton(controller: controller), TODO
               Row(
                 children: <Widget>[
                   Obx(
@@ -221,94 +235,6 @@ class DocsBottom extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _DocumentsSortButton extends StatelessWidget with ShowPopupMenuMixin {
-  const _DocumentsSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(right: 4),
-      child: InkResponse(
-        onTap: () async {
-          if (Get.find<PlatformController>().isMobile) {
-            await Get.bottomSheet(
-              SortView(sortOptions: DocumentsSortOption(controller: controller)),
-              isScrollControlled: true,
-            );
-          } else {
-            final options = [
-              SortTile(
-                sortParameter: 'dateandtime',
-                sortController: controller.sortController,
-              ),
-              SortTile(
-                sortParameter: 'create_on',
-                sortController: controller.sortController,
-              ),
-              SortTile(
-                sortParameter: 'AZ',
-                sortController: controller.sortController,
-              ),
-              SortTile(
-                sortParameter: 'type',
-                sortController: controller.sortController,
-              ),
-              SortTile(
-                sortParameter: 'size',
-                sortController: controller.sortController,
-              ),
-              SortTile(
-                sortParameter: 'author',
-                sortController: controller.sortController,
-              ),
-            ];
-            await showPopupMenu(
-              context: context,
-              options: options,
-              offset: const Offset(0, 30),
-            );
-          }
-        },
-        child: Row(
-          children: <Widget>[
-            Obx(
-              () => Text(
-                controller.sortController.currentSortTitle.value,
-                style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-              ),
-            ),
-            const SizedBox(width: 8),
-            Obx(
-              () => (controller.sortController.currentSortOrder == 'ascending')
-                  ? AppIcon(
-                      icon: SvgIcons.sorting_4_ascend,
-                      color: Get.theme.colors().primary,
-                      width: 20,
-                      height: 20,
-                    )
-                  : Transform(
-                      alignment: Alignment.center,
-                      transform: Matrix4.rotationX(math.pi),
-                      child: AppIcon(
-                        icon: SvgIcons.sorting_4_ascend,
-                        color: Get.theme.colors().primary,
-                        width: 20,
-                        height: 20,
-                      ),
-                    ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

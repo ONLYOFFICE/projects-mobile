@@ -31,9 +31,9 @@
  */
 
 import 'dart:core';
+import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
@@ -49,10 +49,13 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsContent extends StatelessWidget {
   const DocumentsContent({
@@ -138,6 +141,80 @@ class DocumentsFilterButton extends StatelessWidget {
           padding: EdgeInsets.zero,
         );
       },
+    );
+  }
+}
+
+class DocumentsSortButton extends StatelessWidget {
+  const DocumentsSortButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final BaseDocumentsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: <Widget>[
+        Obx(
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
+          ),
+        ),
+        const SizedBox(width: 8),
+        Obx(
+          () => (controller.sortController.currentSortOrder == 'ascending')
+              ? AppIcon(
+                  icon: SvgIcons.sorting_4_ascend,
+                  color: Get.theme.colors().primary,
+                  width: 20,
+                  height: 20,
+                )
+              : Transform(
+                  alignment: Alignment.center,
+                  transform: Matrix4.rotationX(math.pi),
+                  child: AppIcon(
+                    icon: SvgIcons.sorting_4_ascend,
+                    color: Get.theme.colors().primary,
+                    width: 20,
+                    height: 20,
+                  ),
+                ),
+        ),
+      ],
+    );
+  }
+}
+
+void documentsSortButtonOnPressed(BaseDocumentsController controller, BuildContext context) async {
+  List<SortTile> _getSortTile() {
+    return [
+      SortTile(sortParameter: 'dateandtime', sortController: controller.sortController),
+      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
+      SortTile(sortParameter: 'AZ', sortController: controller.sortController),
+      SortTile(sortParameter: 'type', sortController: controller.sortController),
+      SortTile(sortParameter: 'size', sortController: controller.sortController),
+      SortTile(sortParameter: 'author', sortController: controller.sortController),
+    ];
+  }
+
+  if (Get.find<PlatformController>().isMobile) {
+    final options = Column(
+      children: [
+        const SizedBox(height: 14.5),
+        const Divider(height: 9, thickness: 1),
+        ..._getSortTile(),
+        const SizedBox(height: 20)
+      ],
+    );
+    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
+  } else {
+    await showPopupMenu(
+      context: context,
+      options: _getSortTile(),
+      offset: const Offset(0, 30),
     );
   }
 }

@@ -325,7 +325,7 @@ class _ProjectContextMenu extends StatelessWidget {
                   controller.projectDocumentsController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortDocuments,
-                child: ProjectDocumentsSortButton(
+                child: DocumentsSortButton(
                   controller: controller.projectDocumentsController!,
                 )),
           if (controller.projectData.canEdit!)
