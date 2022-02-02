@@ -83,7 +83,12 @@ class TagsSelectionView extends StatelessWidget {
           tr('tags'),
           style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
         ),
-        actions: [IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirm)],
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 4),
+            child: IconButton(icon: const Icon(Icons.check_rounded), onPressed: controller.confirm),
+          ),
+        ],
         bottom: SearchField(
           hintText: tr('searchTags'),
           controller: controller.searchInputController,
