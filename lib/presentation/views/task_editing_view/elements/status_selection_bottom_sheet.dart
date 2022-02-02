@@ -57,17 +57,22 @@ Future<void> statusSelectionBS(
         color: Get.theme.colors().surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
     headerBuilder: (context, bottomSheetOffset) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 18.5),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Text(tr('selectStatus'),
-                style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
-          ),
-          const SizedBox(height: 18.5),
-        ],
+      return Container(
+        decoration: BoxDecoration(
+            color: Get.theme.colors().surface,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16))),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 18.5),
+            Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Text(tr('selectStatus'),
+                  style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
+            ),
+            const SizedBox(height: 18.5),
+          ],
+        ),
       );
     },
     builder: (context, bottomSheetOffset) {
