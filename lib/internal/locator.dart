@@ -194,10 +194,11 @@ void setupGetX() {
   Get.lazyPut(() => MilestonesController(), fenix: true);
 
   Get.create<TaskFilterController>(() => TaskFilterController());
+  Get.create<TasksSortController>(() => TasksSortController());
+
   Get.lazyPut<ProjectTaskFilterController>(() => ProjectTaskFilterController(), fenix: true);
   Get.lazyPut(() => TaskStatusesController(), fenix: true);
 
-  Get.lazyPut(() => TasksSortController(), fenix: true);
   Get.lazyPut(
     () => UserController(),
     fenix: true,

@@ -93,12 +93,7 @@ class NavigationView extends StatelessWidget {
     }
 
     if (!Get.isRegistered<TasksController>(tag: 'TasksView')) {
-      Get.put(
-          TasksController(
-            Get.find<TaskFilterController>(),
-            Get.find<PaginationController<PortalTask>>(),
-          ),
-          tag: 'TasksView')
+      Get.put(TasksController(), tag: 'TasksView')
         ..setup(PresetTaskFilters.saved)
         ..loadTasks();
     }

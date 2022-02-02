@@ -49,41 +49,36 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
 class TasksController extends BaseTasksController {
-  final TaskService _api = locator<TaskService>();
-
-  final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
-
-  late PaginationController<PortalTask> _paginationController;
-
-  @override
-  PaginationController<PortalTask> get paginationController => _paginationController;
+  final _api = locator<TaskService>();
 
   final _userController = Get.find<UserController>();
 
+  final projectsWithPresets = locator<ProjectsWithPresets>();
   PresetTaskFilters? _preset;
 
-  final taskStatusesLoaded = false.obs;
+  @override
+  PaginationController<PortalTask> get paginationController => _paginationController;
+  final _paginationController = PaginationController<PortalTask>();
 
   @override
   TasksSortController get sortController => _sortController;
-  final _sortController = Get.put(TasksSortController(), tag: 'TasksController');
+  final _sortController = TasksSortController();
 
   @override
   TaskFilterController get filterController => _filterController;
-  late TaskFilterController _filterController;
+  final _filterController = TaskFilterController();
 
-  RxBool fabIsVisible = false.obs;
+  final taskStatusesLoaded = false.obs;
+  final fabIsVisible = false.obs;
+
   bool _withFAB = true;
 
   late StreamSubscription _visibilityChangedSubscription;
   late StreamSubscription _refreshTasksSubscription;
 
-  TasksController(TaskFilterController filterController,
-      PaginationController<PortalTask> paginationController) {
+  TasksController() {
     screenName = tr('tasks');
-    loaded.value = false;
-    _paginationController = paginationController;
-    _filterController = filterController;
+
     _filterController.applyFiltersDelegate = () async => loadTasks();
     _sortController.updateSortDelegate = () async => loadTasks();
     paginationController.loadDelegate = () async => _getTasks();
@@ -183,15 +178,15 @@ class TasksController extends BaseTasksController {
     if (selfUser.isAdmin! ||
         selfUser.isOwner! ||
         (selfUser.listAdminModules != null && selfUser.listAdminModules!.contains('projects'))) {
-      if (projectsWithPresets!.activeProjectsController.itemList.isEmpty) {
-        await projectsWithPresets!.activeProjectsController.loadProjects();
+      if (projectsWithPresets.activeProjectsController.itemList.isEmpty) {
+        await projectsWithPresets.activeProjectsController.loadProjects();
       }
-      fabVisibility = projectsWithPresets!.activeProjectsController.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets.activeProjectsController.itemList.isNotEmpty;
     } else {
-      if (projectsWithPresets!.myProjectsController.itemList.isEmpty) {
-        await projectsWithPresets!.myProjectsController.loadProjects();
+      if (projectsWithPresets.myProjectsController.itemList.isEmpty) {
+        await projectsWithPresets.myProjectsController.loadProjects();
       }
-      fabVisibility = projectsWithPresets!.myProjectsController.itemList.isNotEmpty;
+      fabVisibility = projectsWithPresets.myProjectsController.itemList.isNotEmpty;
     }
     if (selfUser.isVisitor!) fabVisibility = false;
 

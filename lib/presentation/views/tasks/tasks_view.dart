@@ -89,7 +89,7 @@ class TasksView extends StatelessWidget {
                 actions: [
                   SearchButton(controller: controller),
                   TasksFilterButton(controller: controller),
-                  _MoreButtonWidget(controller: controller),
+                  TasksMoreButtonWidget(controller: controller),
                 ],
               ),
             ];
@@ -99,8 +99,8 @@ class TasksView extends StatelessWidget {
   }
 }
 
-class _MoreButtonWidget extends StatelessWidget {
-  const _MoreButtonWidget({
+class TasksMoreButtonWidget extends StatelessWidget {
+  const TasksMoreButtonWidget({
     Key? key,
     required this.controller,
   }) : super(key: key);

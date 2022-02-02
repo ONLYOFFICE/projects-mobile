@@ -87,13 +87,6 @@ class TaskFilterController extends BaseTaskFilterController {
       _statusFilter.isNotEmpty;
 
   @override
-  void onInit() async {
-    // await _storage.removeAll();
-    await loadFilters();
-    super.onInit();
-  }
-
-  @override
   Future<void> restoreFilters() async {
     suitableResultCount.value = -1;
     hasFilters.value = _hasFilters;
@@ -106,6 +99,7 @@ class TaskFilterController extends BaseTaskFilterController {
 
   TaskFilterController() {
     suitableResultCount = (-1).obs;
+    loadFilters();
   }
 
   @override
