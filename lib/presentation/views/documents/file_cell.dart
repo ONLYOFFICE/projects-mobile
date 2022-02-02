@@ -39,7 +39,6 @@ import 'package:projects/domain/controllers/documents/file_cell_controller.dart'
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/security.dart';
-
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -209,32 +208,94 @@ void _renameFile(
   final inputController = TextEditingController();
   inputController.text = cellController.file.title!.replaceAll(cellController.file.fileExst!, '');
 
+  final isErrorInputText = ValueNotifier<bool>(false);
+
   Get.dialog(
     StyledAlertDialog(
       titleText: tr('renameFile'),
-      content: TextField(
-        autofocus: true,
-        textInputAction: TextInputAction.search,
-        controller: inputController,
-        decoration: InputDecoration.collapsed(hintText: tr('enterFileName')),
-        onSubmitted: (value) {
-          docController.newSearch(value);
+      content: ValueListenableBuilder<bool>(
+        valueListenable: isErrorInputText,
+        builder: (_, __, ___) {
+          return _NewFileTextFieldWidget(
+            inputController: inputController,
+            docController: docController,
+            isErrorInputText: isErrorInputText,
+            cellController: cellController,
+          );
         },
       ),
       acceptText: tr('confirm'),
       cancelText: tr('cancel'),
       onAcceptTap: () async {
-        if (inputController.text != cellController.file.title) {
-          final success =
-              await cellController.renameFile(cellController.file, inputController.text);
-          if (success) {
-            MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
+        inputController.text = inputController.text.trim();
+        if (inputController.text.isEmpty) {
+          isErrorInputText.value = true;
+        } else {
+          if (inputController.text != cellController.file.title) {
+            final success =
+                await cellController.renameFile(cellController.file, inputController.text);
+            if (success) {
+              MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
+              Get.back();
+            }
+          } else
             Get.back();
-          }
-        } else
-          Get.back();
+        }
       },
       onCancelTap: Get.back,
     ),
   );
+}
+
+class _NewFileTextFieldWidget extends StatelessWidget {
+  const _NewFileTextFieldWidget({
+    Key? key,
+    required this.inputController,
+    required this.docController,
+    required this.isErrorInputText,
+    required this.cellController,
+  }) : super(key: key);
+
+  final TextEditingController inputController;
+  final DocumentsController docController;
+  final ValueNotifier<bool> isErrorInputText;
+  final FileCellController cellController;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      autofocus: true,
+      textInputAction: TextInputAction.done,
+      controller: inputController,
+      decoration: InputDecoration.collapsed(
+        hintText: tr('enterFileName'),
+        hintStyle: TextStyleHelper.body2(
+          color: isErrorInputText.value
+              ? Get.theme.colors().colorError
+              : Get.theme.colors().onSurface.withOpacity(0.5),
+        ),
+      ),
+      onChanged: (_) {
+        if (isErrorInputText.value) {
+          isErrorInputText.value = false;
+        }
+      },
+      onSubmitted: (_) async {
+        inputController.text = inputController.text.trim();
+        if (inputController.text.isEmpty) {
+          isErrorInputText.value = true;
+        } else {
+          if (inputController.text != cellController.file.title) {
+            final success =
+                await cellController.renameFile(cellController.file, inputController.text);
+            if (success) {
+              MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
+              Get.back();
+            }
+          } else
+            Get.back();
+        }
+      },
+    );
+  }
 }

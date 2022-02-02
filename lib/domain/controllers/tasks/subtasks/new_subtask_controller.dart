@@ -168,6 +168,7 @@ class NewSubtaskController extends GetxController implements SubtaskActionContro
 
   @override
   Future<void> confirm({required dynamic context, required int taskId}) async {
+    titleController.text = titleController.text.trim();
     if (titleController.text.isEmpty)
       setTiltleError!.value = true;
     else {

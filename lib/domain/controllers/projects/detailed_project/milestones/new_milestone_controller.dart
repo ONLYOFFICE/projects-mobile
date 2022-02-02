@@ -229,6 +229,8 @@ class NewMilestoneController extends GetxController {
 
   void confirm(BuildContext context) async {
     needToSelectProject.value = _selectedProjectId == null;
+
+    titleController.text = titleController.text.trim();
     needToSetTitle.value = titleController.text.isEmpty;
     needToSelectResponsible.value = responsible.value == null;
     needToSetDueDate.value = dueDate == null;
