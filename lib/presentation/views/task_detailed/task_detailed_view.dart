@@ -83,10 +83,12 @@ class _TaskDetailedViewState extends State<TaskDetailedView> with SingleTickerPr
   void initState() {
     super.initState();
     taskItemController = Get.arguments['controller'] as TaskItemController;
-    taskItemController.firstReload.value = true;
 
     // to get full info about task
-    taskItemController.reloadTask().then((value) => taskItemController.setLoaded = true);
+    taskItemController.reloadTask().then((value) {
+      taskItemController.setLoaded = true;
+      taskItemController.firstReload.value = false;
+    });
 
     _tabController = TabController(vsync: this, length: tabsAmount);
 
