@@ -35,6 +35,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
+import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
@@ -45,6 +46,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.
 
 class ProfileController extends GetxController {
   final DownloadService _downloadService = locator<DownloadService>();
+  final UserPhotoService _photoService = locator<UserPhotoService>();
 
   var portalInfoController = Get.find<PortalInfoController>();
   var userController = Get.find<UserController>();
@@ -101,9 +103,12 @@ class ProfileController extends GetxController {
   }
 
   Future<void> loadAvatar() async {
+    final photoUrl = await _photoService.getUserPhoto(userController.user!.id!);
     try {
-      final avatarBytes = await _downloadService.downloadImage(
-          (user.value?.avatar ?? user.value?.avatarMedium ?? user.value?.avatarSmall!)!);
+      final avatarBytes = await _downloadService.downloadImage((photoUrl?.max ??
+          user.value?.avatar ??
+          user.value?.avatarMedium ??
+          user.value?.avatarSmall!)!);
       if (avatarBytes == null) return;
 
       // ignore: unnecessary_cast
