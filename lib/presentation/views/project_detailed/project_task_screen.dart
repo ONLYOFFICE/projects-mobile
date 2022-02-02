@@ -29,20 +29,13 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-import 'dart:math' as math;
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/new_task/new_task_view.dart';
 import 'package:projects/presentation/views/tasks/tasks_shared.dart';
@@ -79,80 +72,6 @@ class ProjectTaskScreen extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class ProjectTasksSortButton extends StatelessWidget {
-  const ProjectTasksSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final ProjectTasksController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Obx(
-          () => Text(
-            controller.sortController.currentSortTitle.value,
-            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-          ),
-        ),
-        const SizedBox(width: 8),
-        Obx(
-          () => (controller.sortController.currentSortOrder == 'ascending')
-              ? AppIcon(
-                  icon: SvgIcons.sorting_4_ascend,
-                  color: Get.theme.colors().primary,
-                  width: 20,
-                  height: 20,
-                )
-              : Transform(
-                  alignment: Alignment.center,
-                  transform: Matrix4.rotationX(math.pi),
-                  child: AppIcon(
-                    icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().primary,
-                    width: 20,
-                    height: 20,
-                  ),
-                ),
-        ),
-      ],
-    );
-  }
-}
-
-void taskSortButtonOnPressed(ProjectTasksController controller, BuildContext context) async {
-  List<SortTile> _getSortTile() {
-    return [
-      SortTile(sortParameter: 'deadline', sortController: controller.sortController),
-      SortTile(sortParameter: 'priority', sortController: controller.sortController),
-      SortTile(sortParameter: 'create_on', sortController: controller.sortController),
-      SortTile(sortParameter: 'start_date', sortController: controller.sortController),
-      SortTile(sortParameter: 'title', sortController: controller.sortController),
-      SortTile(sortParameter: 'sort_order', sortController: controller.sortController),
-    ];
-  }
-
-  if (Get.find<PlatformController>().isMobile) {
-    final options = Column(
-      children: [
-        const SizedBox(height: 14.5),
-        const Divider(height: 9, thickness: 1),
-        ..._getSortTile(),
-        const SizedBox(height: 20)
-      ],
-    );
-    await Get.bottomSheet(SortView(sortOptions: options), isScrollControlled: true);
-  } else {
-    await showPopupMenu(
-      context: context,
-      options: _getSortTile(),
-      offset: const Offset(0, 30),
     );
   }
 }

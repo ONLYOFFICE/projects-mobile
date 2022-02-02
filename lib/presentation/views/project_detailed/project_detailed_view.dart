@@ -298,19 +298,18 @@ class _ProjectContextMenu extends StatelessWidget {
               (controller.projectTasksController!.itemList.isNotEmpty ||
                   controller.projectTasksController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
-                value: PopupMenuItemValue.sortTasks,
-                child: ProjectTasksSortButton(
-                  controller: controller.projectTasksController!,
-                )),
+              value: PopupMenuItemValue.sortTasks,
+              child: TasksSortButton(controller: controller.projectTasksController!),
+            ),
           if (index == ProjectDetailedTabs.milestones &&
               controller.projectMilestonesController != null &&
               (controller.projectMilestonesController!.itemList.isNotEmpty ||
                   controller.projectMilestonesController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
-                value: PopupMenuItemValue.sortMilestones,
-                child: ProjectMilestonesSortButton(
-                  controller: controller.projectMilestonesController!,
-                )),
+              value: PopupMenuItemValue.sortMilestones,
+              child:
+                  ProjectMilestonesSortButton(controller: controller.projectMilestonesController!),
+            ),
           if (index == ProjectDetailedTabs.discussions &&
               controller.projectDiscussionsController != null &&
               (controller.projectDiscussionsController!.itemList.isNotEmpty ||

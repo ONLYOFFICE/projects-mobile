@@ -62,17 +62,15 @@ class TasksController extends BaseTasksController {
 
   PresetTaskFilters? _preset;
 
-  final _sortController = Get.find<TasksSortController>();
-
   final taskStatusesLoaded = false.obs;
 
   @override
   TasksSortController get sortController => _sortController;
-
-  late TaskFilterController _filterController;
+  final _sortController = Get.put(TasksSortController(), tag: 'TasksController');
 
   @override
   TaskFilterController get filterController => _filterController;
+  late TaskFilterController _filterController;
 
   RxBool fabIsVisible = false.obs;
   bool _withFAB = true;
