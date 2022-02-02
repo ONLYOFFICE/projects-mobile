@@ -93,7 +93,6 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/profile_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/detailed_project_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_sort_controller.dart';
@@ -105,7 +104,6 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_ta
 import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
-import 'package:projects/domain/controllers/projects/project_cell_controller.dart';
 import 'package:projects/domain/controllers/projects/project_filter_controller.dart';
 import 'package:projects/domain/controllers/projects/project_sort_controller.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';

@@ -51,7 +51,6 @@ import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
-import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_edit_view.dart';

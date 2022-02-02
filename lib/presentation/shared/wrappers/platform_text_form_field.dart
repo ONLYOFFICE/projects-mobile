@@ -3,8 +3,6 @@ import 'package:flutter/material.dart'
     show InputCounterWidgetBuilder, InputDecoration, TextFormField;
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 import 'platform.dart';
 import 'widget_base.dart';
