@@ -76,7 +76,6 @@ class ProjectTaskFilterController extends BaseTaskFilterController {
   String get deadlineFilter => _deadlineFilter;
 
   var _selfId;
-  String? projectId;
 
   bool get _hasFilters =>
       _responsibleFilter.isNotEmpty ||

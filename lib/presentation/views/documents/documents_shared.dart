@@ -141,36 +141,3 @@ class DocumentsFilterButton extends StatelessWidget {
     );
   }
 }
-
-class DocumentsSearchButton extends StatelessWidget {
-  const DocumentsSearchButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final BaseDocumentsController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return PlatformIconButton(
-      onPressed: () {
-        Get.find<NavigationController>()
-            .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-          'folderName': controller.documentsScreenName.value,
-          'folderId': controller.currentFolderID,
-          'documentsController': controller,
-        });
-      },
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          color: Get.theme.colors().background,
-          padding: EdgeInsets.zero,
-        );
-      },
-      icon: AppIcon(
-        icon: SvgIcons.search,
-        color: Get.theme.colors().primary,
-      ),
-    );
-  }
-}

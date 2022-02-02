@@ -58,8 +58,6 @@ class UsersController extends BaseController {
   @override
   RxList itemList = [].obs;
 
-  RxBool loaded = false.obs;
-
   Future<void> refreshData() async {
     loaded.value = false;
     await _getUsers(needToClear: true);

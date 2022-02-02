@@ -39,29 +39,32 @@ import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
-class ProjectTasksController extends GetxController {
+class ProjectTasksController extends BaseTasksController {
   final TaskService _api = locator<TaskService>();
 
-  RxList<PortalTask> get tasksList => _paginationController.data;
+  @override
+  RxList<PortalTask> get itemList => _paginationController.data;
+  @override
   PaginationController<PortalTask> get paginationController => _paginationController;
   final _paginationController = PaginationController<PortalTask>();
 
+  @override
   TasksSortController get sortController => _sortController;
   final _sortController = Get.put(TasksSortController(), tag: 'ProjectTasksController');
 
+  @override
   ProjectTaskFilterController get filterController => _filterController;
   final _filterController = Get.find<ProjectTaskFilterController>();
 
   ProjectDetailed get projectDetailed => _projectDetailed;
   ProjectDetailed _projectDetailed = ProjectDetailed();
 
-  RxBool loaded = false.obs;
-  RxBool hasFilters = false.obs;
   RxBool fabIsVisible = false.obs;
 
   StreamSubscription? _refreshTasksSubscription;
@@ -84,6 +87,7 @@ class ProjectTasksController extends GetxController {
     super.dispose();
   }
 
+  @override
   void showSearch() =>
       Get.find<NavigationController>().to(TasksSearchScreen(projectId: projectDetailed.id));
 

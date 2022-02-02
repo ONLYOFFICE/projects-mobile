@@ -48,6 +48,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -149,7 +150,7 @@ class DocumentsScreen extends StatelessWidget {
               ),
             ),
             actions: [
-              DocumentsSearchButton(controller: controller),
+              SearchButton(controller: controller),
               DocumentsFilterButton(controller: controller),
               const _MoreButtonWidget(),
             ],

@@ -37,10 +37,10 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
-import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/projects/projects_with_presets.dart';
+import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_statuses_controller.dart';
@@ -48,29 +48,30 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/tasks/tasks_search_screen.dart';
 
-class TasksController extends BaseController {
+class TasksController extends BaseTasksController {
   final TaskService _api = locator<TaskService>();
 
   final ProjectsWithPresets? projectsWithPresets = locator<ProjectsWithPresets>();
 
   late PaginationController<PortalTask> _paginationController;
 
+  @override
   PaginationController<PortalTask> get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
 
   PresetTaskFilters? _preset;
 
-  final taskStatusesController = Get.find<TaskStatusesController>();
   final _sortController = Get.find<TasksSortController>();
-  final loaded = false.obs;
 
   final taskStatusesLoaded = false.obs;
 
+  @override
   TasksSortController get sortController => _sortController;
 
   late TaskFilterController _filterController;
 
+  @override
   TaskFilterController get filterController => _filterController;
 
   RxBool fabIsVisible = false.obs;
@@ -78,12 +79,6 @@ class TasksController extends BaseController {
 
   late StreamSubscription _visibilityChangedSubscription;
   late StreamSubscription _refreshTasksSubscription;
-
-  @override
-  Future<void> onInit() async {
-    await taskStatusesController.getStatuses().then((value) => taskStatusesLoaded.value = true);
-    super.onInit();
-  }
 
   TasksController(TaskFilterController filterController,
       PaginationController<PortalTask> paginationController) {
@@ -98,6 +93,10 @@ class TasksController extends BaseController {
     paginationController.pullDownEnabled = true;
 
     getFabVisibility().then((value) => fabIsVisible.value = value);
+
+    Get.find<TaskStatusesController>()
+        .getStatuses()
+        .then((value) => taskStatusesLoaded.value = true);
 
     _userController.loaded.listen((_loaded) async =>
         {if (_loaded && _withFAB) fabIsVisible.value = await getFabVisibility()});

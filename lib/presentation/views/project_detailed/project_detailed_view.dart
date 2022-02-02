@@ -43,6 +43,7 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/custom_tab.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
@@ -58,6 +59,7 @@ import 'package:projects/presentation/views/project_detailed/project_milestones_
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/project_detailed/project_task_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_team_view.dart';
+import 'package:projects/presentation/views/tasks/tasks_shared.dart';
 
 class ProjectDetailedTabs {
   static const overview = 0;
@@ -162,7 +164,7 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
                   CustomTab(
                       title: tr('tasks'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.tasks,
-                      count: projectController.projectTasksController?.tasksList.length ?? 0),
+                      count: projectController.projectTasksController?.itemList.length ?? 0),
                   CustomTab(
                       title: tr('milestones'),
                       currentTab: _activeIndex.value == ProjectDetailedTabs.milestones,
@@ -212,15 +214,12 @@ class _ProjectAppBarActions extends StatelessWidget {
     return () {
       if (index == ProjectDetailedTabs.tasks &&
           projectController.projectTasksController != null &&
-          (projectController.projectTasksController!.tasksList.isNotEmpty ||
+          (projectController.projectTasksController!.itemList.isNotEmpty ||
               projectController.projectTasksController!.filterController.hasFilters.value))
         return Row(
           children: [
-            PlatformIconButton(
-              icon: Icon(PlatformIcons(context).search),
-              onPressed: projectController.projectTasksController!.showSearch,
-            ),
-            ProjectTasksFilterButton(controller: projectController.projectTasksController!),
+            SearchButton(controller: projectController.projectTasksController!),
+            TasksFilterButton(controller: projectController.projectTasksController!),
           ],
         );
 
@@ -231,7 +230,7 @@ class _ProjectAppBarActions extends StatelessWidget {
         return Row(
           children: [
             PlatformIconButton(
-              icon: Icon(PlatformIcons(context).search),
+              icon: Icon(PlatformIcons(context).search), // TODO
             ),
             ProjectMilestonesFilterButton(
                 controller: projectController.projectMilestonesController!),
@@ -259,7 +258,7 @@ class _ProjectAppBarActions extends StatelessWidget {
               projectController.projectDocumentsController!.filterController.hasFilters.value))
         return Row(
           children: [
-            DocumentsSearchButton(controller: projectController.projectDocumentsController!),
+            SearchButton(controller: projectController.projectDocumentsController!),
             DocumentsFilterButton(controller: projectController.projectDocumentsController!),
           ],
         );
@@ -296,7 +295,7 @@ class _ProjectContextMenu extends StatelessWidget {
         return [
           if (index == ProjectDetailedTabs.tasks &&
               controller.projectTasksController != null &&
-              (controller.projectTasksController!.tasksList.isNotEmpty ||
+              (controller.projectTasksController!.itemList.isNotEmpty ||
                   controller.projectTasksController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortTasks,

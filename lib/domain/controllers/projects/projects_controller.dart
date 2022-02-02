@@ -51,11 +51,10 @@ import 'package:projects/presentation/views/projects_view/project_search_view.da
 class ProjectsController extends BaseController {
   final ProjectService _api = locator<ProjectService>();
 
-  RxBool loaded = false.obs;
-
   RxList<ProjectTag> tags = <ProjectTag>[].obs;
 
   late PaginationController<ProjectDetailed> _paginationController;
+  @override
   PaginationController<ProjectDetailed> get paginationController => _paginationController;
 
   @override

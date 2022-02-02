@@ -30,21 +30,35 @@
  *
  */
 
-import 'package:easy_localization/easy_localization.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
-import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
-import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 
-abstract class BaseDocumentsController extends BaseController {
-  DocumentsSortController get sortController;
+class SearchButton extends StatelessWidget {
+  const SearchButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
 
-  RxString documentsScreenName = tr('documents').obs;
+  final BaseController controller;
 
-  DocumentsFilterController get filterController;
-
-  int? get currentFolderID;
-
-  RxBool nothingFound = false.obs;
-  RxBool searchMode = false.obs;
+  @override
+  Widget build(BuildContext context) {
+    return PlatformIconButton(
+      icon: AppIcon(
+        icon: SvgIcons.search,
+        color: Get.theme.colors().primary,
+      ),
+      onPressed: controller.showSearch,
+      cupertino: (_, __) {
+        return CupertinoIconButtonData(
+          color: Get.theme.colors().background,
+          padding: EdgeInsets.zero,
+        );
+      },
+    );
+  }
 }

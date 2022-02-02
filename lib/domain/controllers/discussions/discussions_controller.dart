@@ -56,6 +56,7 @@ class DiscussionsController extends BaseController {
   @override
   RxList get itemList => paginationController.data;
   final _paginationController = Get.find<PaginationController>();
+  @override
   PaginationController get paginationController => _paginationController;
 
   final _userController = Get.find<UserController>();
@@ -66,7 +67,6 @@ class DiscussionsController extends BaseController {
   final _filterController = Get.find<DiscussionsFilterController>();
   DiscussionsFilterController get filterController => _filterController;
 
-  final loaded = false.obs;
   final fabIsVisible = false.obs;
 
   late StreamSubscription _visibilityChangedSubscription;

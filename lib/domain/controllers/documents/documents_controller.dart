@@ -43,10 +43,12 @@ import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/data/services/files_service.dart';
 import 'package:projects/domain/controllers/documents/documents_filter_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_sort_controller.dart';
+import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/domain/controllers/portal_info_controller.dart';
 
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:synchronized/synchronized.dart';
 
 class DocumentsController extends GetxController implements BaseDocumentsController {
@@ -261,9 +263,12 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
   RxBool get showAll => throw UnimplementedError();
 
   @override
-  void showSearch() {
-    // TODO: implement showSearch
-  }
+  void showSearch() => Get.find<NavigationController>()
+          .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
+        'folderName': documentsScreenName.value,
+        'folderId': currentFolderID,
+        'documentsController': this,
+      });
 
   @override
   String screenName = tr('documents');

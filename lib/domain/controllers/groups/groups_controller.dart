@@ -60,8 +60,6 @@ class GroupsController extends BaseController {
 
   RxList<PortalGroup> groups = <PortalGroup>[].obs;
 
-  RxBool loaded = false.obs;
-
   Future<void> getAllGroups() async {
     loaded.value = false;
     final result = await _api.getAllGroups();

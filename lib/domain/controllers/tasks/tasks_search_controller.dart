@@ -44,10 +44,10 @@ import 'package:projects/internal/locator.dart';
 class TasksSearchController extends BaseController {
   final TaskService _api = locator<TaskService>();
 
-  RxBool loaded = true.obs;
   RxBool nothingFound = false.obs;
 
   final _paginationController = PaginationController<PortalTask>();
+  @override
   PaginationController<PortalTask> get paginationController => _paginationController;
 
   final searchInputController = TextEditingController();
@@ -67,6 +67,8 @@ class TasksSearchController extends BaseController {
     paginationController.startIndex = 0;
     _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query);
+
+    loaded.value = true;
     super.onInit();
   }
 

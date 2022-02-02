@@ -44,10 +44,10 @@ import 'package:projects/internal/locator.dart';
 class DiscussionSearchController extends BaseController {
   final DiscussionsService _api = locator<DiscussionsService>();
 
-  RxBool loaded = true.obs;
   RxBool nothingFound = false.obs;
 
   final _paginationController = PaginationController<Discussion>();
+  @override
   PaginationController<Discussion> get paginationController => _paginationController;
   @override
   RxList get itemList => _paginationController.data;
@@ -67,6 +67,8 @@ class DiscussionSearchController extends BaseController {
     paginationController.startIndex = 0;
     _paginationController.loadDelegate = () => _performSearch(needToClear: false);
     paginationController.refreshDelegate = () => newSearch(_query!);
+
+    loaded.value = true;
     super.onInit();
   }
 

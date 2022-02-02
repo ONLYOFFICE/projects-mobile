@@ -98,7 +98,7 @@ class ProjectDetailsController extends BaseProjectEditorController {
     projectTeamDataSource = Get.find<ProjectTeamController>();
 
     _taskCountSubscription?.cancel();
-    _taskCountSubscription = projectTasksController!.tasksList.listen((taskList) {
+    _taskCountSubscription = projectTasksController!.itemList.listen((taskList) {
       taskCount.value = taskList.length;
     });
 

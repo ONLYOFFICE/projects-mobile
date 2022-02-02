@@ -69,7 +69,6 @@ class DiscussionsFilterController extends BaseFilterController {
   String get otherFilter => _otherFilter;
 
   var _selfId;
-  String? projectId;
 
   bool get _hasFilters =>
       _authorFilter.isNotEmpty ||

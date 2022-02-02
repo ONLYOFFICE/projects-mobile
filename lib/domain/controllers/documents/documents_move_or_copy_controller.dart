@@ -298,10 +298,4 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
 
   @override
   String screenName = tr('documents');
-
-  @override
-  Future openFile(PortalFile selectedFile) {
-    // TODO: implement openFile
-    throw UnimplementedError();
-  }
 }
