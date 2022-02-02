@@ -46,6 +46,7 @@ import 'package:projects/data/api/project_api.dart';
 import 'package:projects/data/api/subtasks_api.dart';
 import 'package:projects/data/api/tasks_api.dart';
 import 'package:projects/data/api/user_api.dart';
+import 'package:projects/data/api/user_photo_api.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/authentication_service.dart';
@@ -70,6 +71,7 @@ import 'package:projects/data/services/storage/storage.dart';
 import 'package:projects/data/services/task/subtasks_service.dart';
 import 'package:projects/data/services/task/task_item_service.dart';
 import 'package:projects/data/services/task/task_service.dart';
+import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/data/services/user_service.dart';
 import 'package:projects/domain/controllers/auth/login_controller.dart';
 import 'package:projects/domain/controllers/comments/comments_controller.dart';
@@ -161,6 +163,8 @@ void setupLocator() {
   locator.registerLazySingleton(() => UserService());
   locator.registerLazySingleton(() => EventHub());
   locator.registerLazySingleton(() => ImagesController());
+  locator.registerLazySingleton(() => UserPhotoService());
+  locator.registerLazySingleton(() => UserPhotoApi());
 }
 
 void setupGetX() {
