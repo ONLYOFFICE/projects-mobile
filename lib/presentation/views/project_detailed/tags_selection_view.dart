@@ -92,7 +92,7 @@ class TagsSelectionView extends StatelessWidget {
         bottom: SearchField(
           hintText: tr('searchTags'),
           controller: controller.searchInputController,
-          showClearIcon: controller.isSearchResult.value == true,
+          showClearIcon: true,
           onChanged: controller.newSearch,
           onSubmitted: controller.newSearch,
           onClearPressed: controller.clearSearch,

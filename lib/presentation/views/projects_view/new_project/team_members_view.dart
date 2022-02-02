@@ -228,7 +228,7 @@ class TeamMembersSearchBar extends StatelessWidget {
               hintText: tr('usersSearch'),
               margin: EdgeInsets.zero,
               textInputAction: TextInputAction.search,
-              showClearIcon: usersDataSource.isSearchResult.value == true,
+              showClearIcon: true,
               onClearPressed: usersDataSource.clearSearch,
               onChanged: usersDataSource.searchUsers,
               onSubmitted: usersDataSource.searchUsers,

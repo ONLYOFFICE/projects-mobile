@@ -52,6 +52,8 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
 
     final platformController = Get.find<PlatformController>();
 
+    final searchTextEditingController = TextEditingController();
+
     return Scaffold(
       backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
       appBar: StyledAppBar(
@@ -59,7 +61,12 @@ class ProjectTeamResponsibleSelectionView extends StatelessWidget {
         titleText: tr('selectResponsible'),
         bottom: SearchField(
           showClearIcon: true,
+          controller: searchTextEditingController,
           hintText: tr('usersSearch'),
+          onClearPressed: () {
+            controller.teamController.clearSearch();
+            searchTextEditingController.clear();
+          },
           onSubmitted: (value) => controller.teamController.searchUsers(value),
           onChanged: (value) => controller.teamController.searchUsers(value),
         ),
