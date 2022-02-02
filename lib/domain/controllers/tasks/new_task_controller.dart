@@ -104,7 +104,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
   List _previusSelectedResponsibles = [];
   @override
   RxBool? highPriority = false.obs;
-  RxBool notifyResponsibles = false.obs;
+  RxBool notifyResponsibles = true.obs;
 
   @override
   dynamic needToSelectProject = false.obs; //RxBool
