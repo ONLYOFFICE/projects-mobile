@@ -79,9 +79,7 @@ class TaskTitle extends StatelessWidget {
                       style: TextStyleHelper.caption(
                           color: Get.theme.colors().onBackground.withOpacity(0.75))),
                 Obx(() => TextField(
-                    onChanged: (value) {
-                      controller.changeTitle(value);
-                    },
+                    onChanged: controller.changeTitle,
                     focusNode: focusOnTitle ? controller.titleFocus : null,
                     maxLines: null,
                     controller: controller.titleController,
