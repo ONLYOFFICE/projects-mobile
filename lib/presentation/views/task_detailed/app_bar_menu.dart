@@ -131,9 +131,8 @@ void _onSelected(value, TaskItemController controller) async {
             Get.back();
 
             MessagesHandler.showSnackBar(context: Get.context!, text: tr('taskDeleted'));
-          } else {
-            print('ERROR');
-          }
+          } else
+            MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
         },
       ));
       break;
