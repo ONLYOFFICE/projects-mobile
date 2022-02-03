@@ -36,6 +36,7 @@ import 'package:projects/domain/controllers/auth/account_tile_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/views/authentication/account_manager/account_tile.dart';
 import 'package:projects/presentation/views/authentication/portal_view.dart';
 
@@ -62,7 +63,8 @@ class AccountManagerView extends StatelessWidget {
       // backgroundColor: Get.theme.colors().backgroundSecond,
       body: Obx(
         () => loginController.state.value == ViewState.Busy
-            ? SizedBox(height: Get.height, child: const Center(child: CircularProgressIndicator()))
+            ? SizedBox(
+                height: Get.height, child: Center(child: PlatformCircularProgressIndicator()))
             : Center(
                 child: Container(
                   constraints: BoxConstraints(maxWidth: 480, maxHeight: Get.height),

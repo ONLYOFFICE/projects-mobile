@@ -43,6 +43,7 @@ import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.dart';
 
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
@@ -71,7 +72,7 @@ class PortalInputView extends StatelessWidget {
       () => controller.state.value == ViewState.Busy
           ? Scaffold(
               body: SizedBox(
-                  height: Get.height, child: const Center(child: CircularProgressIndicator())),
+                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator())),
             )
           : Scaffold(
               appBar: controller.accountManager.accounts.isEmpty

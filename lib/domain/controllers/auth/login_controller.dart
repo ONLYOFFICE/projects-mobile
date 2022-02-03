@@ -64,10 +64,9 @@ class LoginController extends GetxController {
   final PortalService _portalService = locator<PortalService>();
   final SecureStorage _secureStorage = locator<SecureStorage>();
 
-  late TextEditingController _portalAdressController;
-
   late AccountManagerController accountManager;
 
+  late TextEditingController _portalAdressController;
   TextEditingController get portalAdressController => _portalAdressController;
 
   late TextEditingController _emailController;
@@ -76,9 +75,9 @@ class LoginController extends GetxController {
   late TextEditingController _passwordController;
   TextEditingController get passwordController => _passwordController;
 
-  RxBool portalFieldError = false.obs;
-  RxBool emailFieldError = false.obs;
-  RxBool passwordFieldError = false.obs;
+  final portalFieldError = false.obs;
+  final emailFieldError = false.obs;
+  final passwordFieldError = false.obs;
 
   Capabilities? capabilities;
   String? _pass;
@@ -336,13 +335,18 @@ class LoginController extends GetxController {
   @override
   void onClose() {
     clearInputFields();
+
+    _portalAdressController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+
     super.onClose();
   }
 
   void clearInputFields() {
-    _portalAdressController.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
+    _portalAdressController.clear();
+    _emailController.clear();
+    _passwordController.clear();
 
     capabilities = null;
     _pass = null;
