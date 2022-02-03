@@ -49,11 +49,11 @@ import 'package:projects/presentation/views/projects_view/new_project/new_projec
 import 'package:projects/presentation/views/projects_view/project_search_view.dart';
 
 class ProjectsController extends BaseController {
-  final ProjectService _api = locator<ProjectService>();
+  final _api = locator<ProjectService>();
 
-  RxList<ProjectTag> tags = <ProjectTag>[].obs;
+  final tags = <ProjectTag>[].obs;
 
-  late PaginationController<ProjectDetailed> _paginationController;
+  late final PaginationController<ProjectDetailed> _paginationController;
   @override
   PaginationController<ProjectDetailed> get paginationController => _paginationController;
 
@@ -65,13 +65,12 @@ class ProjectsController extends BaseController {
   final _sortController = Get.find<ProjectsSortController>();
   ProjectsSortController get sortController => _sortController;
 
-  ProjectsFilterController? _filterController;
-
-  ProjectsFilterController? get filterController => _filterController;
+  late final ProjectsFilterController _filterController;
+  ProjectsFilterController get filterController => _filterController;
 
   final _userController = Get.find<UserController>();
 
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
 
   var _withFAB = true;
 
@@ -86,7 +85,7 @@ class ProjectsController extends BaseController {
     _paginationController = paginationController;
     _sortController.updateSortDelegate = updateSort;
     _filterController = filterController;
-    _filterController!.applyFiltersDelegate = () async => await loadProjects();
+    _filterController.applyFiltersDelegate = () async => await loadProjects();
 
     paginationController.loadDelegate = () async => await _getProjects();
     paginationController.refreshDelegate = () async => await refreshData();
@@ -151,9 +150,7 @@ class ProjectsController extends BaseController {
     loaded.value = false;
     paginationController.startIndex = 0;
     if (_preset != null) {
-      await _filterController!
-          .setupPreset(_preset)
-          .then((value) => _getProjects(needToClear: true));
+      await _filterController.setupPreset(_preset).then((value) => _getProjects(needToClear: true));
     } else {
       await _getProjects(needToClear: true);
     }
@@ -165,10 +162,10 @@ class ProjectsController extends BaseController {
       startIndex: paginationController.startIndex,
       sortBy: _sortController.currentSortfilter,
       sortOrder: _sortController.currentSortOrder,
-      projectManagerFilter: _filterController!.projectManagerFilter,
-      participantFilter: _filterController!.teamMemberFilter,
-      otherFilter: _filterController!.otherFilter,
-      statusFilter: _filterController!.statusFilter,
+      projectManagerFilter: _filterController.projectManagerFilter,
+      participantFilter: _filterController.teamMemberFilter,
+      otherFilter: _filterController.otherFilter,
+      statusFilter: _filterController.statusFilter,
     );
     if (needToClear) paginationController.data.clear();
     if (result == null) return;
