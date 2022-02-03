@@ -139,7 +139,9 @@ class TaskOverviewScreen extends StatelessWidget {
                 InfoTile(
                     icon: AppIcon(
                         icon: SvgIcons.priority,
-                        color: Get.theme.colors().colorError.withOpacity(0.75)),
+                        color: task.priority == 1
+                            ? Get.theme.colors().colorError.withOpacity(0.75)
+                            : Get.theme.colors().onBackground.withOpacity(0.75)),
                     caption: '${tr('priority')}:',
                     subtitle: task.priority == 1 ? tr('high') : tr('normal')),
                 if (task.responsibles != null && task.responsibles!.isNotEmpty)
