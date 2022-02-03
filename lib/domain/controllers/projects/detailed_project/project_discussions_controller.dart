@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
+import 'package:projects/domain/controllers/discussions/base_discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -46,26 +47,28 @@ import 'package:projects/presentation/views/discussions/creating_and_editing/new
 import 'package:projects/presentation/views/discussions/discussion_detailed/discussion_detailed.dart';
 import 'package:projects/presentation/views/discussions/discussions_search_view.dart';
 
-class ProjectDiscussionsController extends GetxController {
+class ProjectDiscussionsController extends BaseDiscussionsController {
   final DiscussionsService _api = locator<DiscussionsService>();
 
   int? projectId;
   String? projectTitle;
 
+  @override
   RxList<Discussion> get itemList => paginationController.data;
+  @override
   PaginationController<Discussion> get paginationController => _paginationController;
-  final _paginationController =
-      Get.put(PaginationController<Discussion>(), tag: 'ProjectDiscussionsController');
+  final _paginationController = PaginationController<Discussion>();
 
   late ProjectDetailed _projectDetailed;
 
-  final _sortController = Get.find<DiscussionsSortController>();
+  final _sortController = DiscussionsSortController();
+  @override
   DiscussionsSortController get sortController => _sortController;
 
   final _filterController = Get.find<DiscussionsFilterController>();
+  @override
   DiscussionsFilterController get filterController => _filterController;
 
-  final loaded = false.obs;
   final fabIsVisible = false.obs;
 
   late StreamSubscription _refreshDiscussionsSubscription;
@@ -138,6 +141,7 @@ class ProjectDiscussionsController extends GetxController {
     return Future.value(true);
   }
 
+  @override
   void toDetailed(Discussion discussion) => Get.find<NavigationController>()
       .to(DiscussionDetailed(), arguments: {'discussion': discussion});
 
@@ -146,6 +150,7 @@ class ProjectDiscussionsController extends GetxController {
       transition: Transition.cupertinoDialog,
       fullscreenDialog: true);
 
+  @override
   void showSearch() =>
       Get.find<NavigationController>().to(DiscussionsSearchScreen(projectId: projectId));
 }

@@ -51,6 +51,7 @@ import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
+import 'package:projects/presentation/views/discussions/discussions_shared.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/project_detailed/project_discussions_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
@@ -243,12 +244,8 @@ class _ProjectAppBarActions extends StatelessWidget {
               projectController.projectDiscussionsController!.filterController.hasFilters.value))
         return Row(
           children: [
-            PlatformIconButton(
-              icon: Icon(PlatformIcons(context).search),
-              onPressed: projectController.projectDiscussionsController!.showSearch,
-            ),
-            ProjectDiscussionsFilterButton(
-                controller: projectController.projectDiscussionsController!)
+            SearchButton(controller: projectController.projectDiscussionsController!),
+            DiscussionsFilterButton(controller: projectController.projectDiscussionsController!)
           ],
         );
 

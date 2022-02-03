@@ -30,46 +30,14 @@
  *
  */
 
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-import 'package:projects/presentation/views/discussions/discussions_shared.dart';
+import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_filter_controller.dart';
+import 'package:projects/domain/controllers/base/base_sort_controller.dart';
 
-class ProjectDiscussionsScreen extends StatelessWidget {
-  final ProjectDiscussionsController controller;
+abstract class BaseDiscussionsController extends BaseController {
+  BaseSortController get sortController;
+  BaseFilterController get filterController;
 
-  const ProjectDiscussionsScreen({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        DiscussionsContent(controller: controller),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Padding(
-            padding: const EdgeInsets.only(right: 16, bottom: 24),
-            child: Obx(
-              () => Visibility(
-                visible: controller.fabIsVisible.value,
-                child: StyledFloatingActionButton(
-                  onPressed: controller.toNewDiscussionScreen,
-                  child: AppIcon(
-                    icon: SvgIcons.add_discussion,
-                    color: Get.theme.colors().onPrimarySurface,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
+  void toDetailed(Discussion discussion) {}
 }
