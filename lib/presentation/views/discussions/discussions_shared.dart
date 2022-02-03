@@ -33,6 +33,7 @@
 import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
@@ -49,8 +50,12 @@ import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
+import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 
 class DiscussionsContent extends StatelessWidget {
   const DiscussionsContent({
@@ -132,8 +137,8 @@ class DiscussionsFilterButton extends StatelessWidget {
   }
 }
 
-class ProjectDiscussionsSortButton extends StatelessWidget {
-  const ProjectDiscussionsSortButton({
+class DiscussionsSortButton extends StatelessWidget {
+  const DiscussionsSortButton({
     Key? key,
     required this.controller,
   }) : super(key: key);
@@ -201,5 +206,49 @@ void discussionsSortButtonOnPressed(
       options: _getSortTile(),
       offset: const Offset(0, 30),
     );
+  }
+}
+
+class DiscussionsMoreButtonWidget extends StatelessWidget {
+  const DiscussionsMoreButtonWidget({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final BaseDiscussionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return PlatformPopupMenuButton(
+      icon: PlatformWidget(
+        cupertino: (_, __) => Icon(
+          CupertinoIcons.ellipsis_circle,
+          color: Get.theme.colors().primary,
+          size: 26,
+        ),
+        material: (_, __) => const Icon(
+          Icons.more_vert,
+          size: 26,
+        ),
+      ),
+      onSelected: (String value) => _onSelected(value, controller, context),
+      itemBuilder: (context) {
+        return [
+          PlatformPopupMenuItem(
+            value: PopupMenuItemValue.sortDiscussions,
+            child: DiscussionsSortButton(controller: controller),
+          ),
+        ];
+      },
+    );
+  }
+}
+
+Future<void> _onSelected(
+    String value, BaseDiscussionsController controller, BuildContext context) async {
+  switch (value) {
+    case PopupMenuItemValue.sortDiscussions:
+      discussionsSortButtonOnPressed(controller, context);
+      break;
   }
 }

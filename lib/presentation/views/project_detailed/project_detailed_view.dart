@@ -313,7 +313,7 @@ class _ProjectContextMenu extends StatelessWidget {
                   controller.projectDiscussionsController!.filterController.hasFilters.value))
             PlatformPopupMenuItem(
                 value: PopupMenuItemValue.sortDiscussions,
-                child: ProjectDiscussionsSortButton(
+                child: DiscussionsSortButton(
                   controller: controller.projectDiscussionsController!,
                 )),
           if (index == ProjectDetailedTabs.documents &&
