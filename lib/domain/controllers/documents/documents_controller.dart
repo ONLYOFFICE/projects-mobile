@@ -34,6 +34,7 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:flutter/widgets.dart';
@@ -162,7 +163,7 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
     if (_paginationController.data.isNotEmpty) _paginationController.data.clear();
   }
 
-  Future _getDocuments() async {
+  Future<bool> _getDocuments() async {
     final result = await _api.getFilesByParams(
       folderId: _currentFolderId,
       query: _query,
@@ -181,15 +182,22 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
     if (_currentFolderId != null && result.current != null) _screenName = result.current!.title;
 
     if (result.folders != null) _paginationController.data.addAll(result.folders!);
-    if (result.files != null) {
-      _paginationController.data.addAll(result.files!);
-      filesCount.value = result.files!.length;
-    }
+    if (result.files != null) _paginationController.data.addAll(result.files!);
+
+    countFiles();
 
     documentsScreenName.value = _screenName ?? tr('documents');
     screenName = _screenName ?? tr('documents');
 
     return Future.value(true);
+  }
+
+  void countFiles() {
+    var counter = 0;
+    for (final item in _paginationController.data) {
+      if (item is PortalFile) counter++;
+    }
+    filesCount.value = counter;
   }
 
   void clearSearch() {
