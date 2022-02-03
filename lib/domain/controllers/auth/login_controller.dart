@@ -156,7 +156,7 @@ class LoginController extends GetxController {
           _tfaKey = result.response!.tfaKey;
           await Get.to<GetCodeViews>(() => const GetCodeViews());
         } else {
-          await Get.to<CodeView>(() => CodeView());
+          await Get.to<CodeView>(CodeView.new);
         }
       } else if (result.response!.sms == true) {
         _email = email;
@@ -249,7 +249,7 @@ class LoginController extends GetxController {
       locator<EventHub>().fire('loginSuccess');
     } else if (result.response!.tfa!) {
       setState(ViewState.Idle);
-      await Get.to(() => CodeView());
+      await Get.to(CodeView.new);
       return true;
     }
 
@@ -340,9 +340,9 @@ class LoginController extends GetxController {
   }
 
   void clearInputFields() {
-    _portalAdressController.clear();
-    _emailController.clear();
-    _passwordController.clear();
+    _portalAdressController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
 
     capabilities = null;
     _pass = null;

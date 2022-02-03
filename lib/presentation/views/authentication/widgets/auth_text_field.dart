@@ -45,18 +45,20 @@ class AuthTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
+  final Function(String)? onSubmitted;
 
-  const AuthTextField({
-    Key? key,
-    this.autofillHint,
-    this.controller,
-    this.hintText,
-    this.keyboardType,
-    this.obscureText = false,
-    this.onChanged,
-    this.validator,
-    this.hasError = false,
-  }) : super(key: key);
+  const AuthTextField(
+      {Key? key,
+      this.autofillHint,
+      this.controller,
+      this.hintText,
+      this.keyboardType,
+      this.obscureText = false,
+      this.onChanged,
+      this.validator,
+      this.hasError = false,
+      this.onSubmitted})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +69,7 @@ class AuthTextField extends StatelessWidget {
       obscureText: obscureText,
       obscuringCharacter: '*',
       keyboardType: keyboardType,
+      onFieldSubmitted: onSubmitted,
       validator: validator,
       style: TextStyleHelper.subtitle1(
         color: hasError ? Get.theme.colors().colorError : Get.theme.colors().onSurface,

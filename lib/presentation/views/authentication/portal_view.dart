@@ -108,6 +108,7 @@ class PortalInputView extends StatelessWidget {
                             hintText: tr('portalAdress'),
                             hasError: controller.portalFieldError.value == true,
                             keyboardType: TextInputType.url,
+                            onSubmitted: (_) => controller.getPortalCapabilities(),
                           ),
                         ),
                         SizedBox(height: height * 0.033),
