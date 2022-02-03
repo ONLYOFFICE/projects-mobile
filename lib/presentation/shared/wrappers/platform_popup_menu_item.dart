@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 
 class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
@@ -47,15 +49,16 @@ class PlatformPopupMenuItem<T> extends PopupMenuEntry<T> {
 
 class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<W> {
   static const double _kMenuHorizontalPadding = 16;
-  static const Color _kBackgroundColor = CupertinoColors.white;
-  static const Color _kBackgroundColorPressed = CupertinoColors.lightBackgroundGray;
+  static final Color _kBackgroundColor = Get.isDarkMode ? Colors.black54 : Colors.white54;
+  static final Color _kBackgroundColorPressed =
+      Get.isDarkMode ? Colors.grey.shade800 : Colors.grey.shade300;
   static const double _kButtonHeight = 44;
-  static const TextStyle _kActionSheetActionStyle = TextStyle(
+  static final TextStyle _kActionSheetActionStyle = TextStyle(
     //fontFamily: '.SF Pro Display',
     inherit: false,
     fontSize: 16,
     fontWeight: FontWeight.w400,
-    color: CupertinoColors.black,
+    color: Get.theme.colors().onBackground,
     textBaseline: TextBaseline.alphabetic,
   );
 
@@ -121,7 +124,7 @@ class MyPopupMenuItemState<T, W extends PlatformPopupMenuItem<T>> extends State<
           child: Container(
             decoration: BoxDecoration(
               color: _isPressed ? _kBackgroundColorPressed : _kBackgroundColor,
-              border: const Border(
+              border: Border(
                 bottom: BorderSide(color: _kBackgroundColorPressed),
               ),
             ),
