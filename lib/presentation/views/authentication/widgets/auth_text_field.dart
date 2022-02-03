@@ -46,6 +46,8 @@ class AuthTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final String? Function(String?)? validator;
   final Function(String)? onSubmitted;
+  final TextInputAction? textInputAction;
+  final FocusNode? focusNode;
 
   const AuthTextField(
       {Key? key,
@@ -57,18 +59,22 @@ class AuthTextField extends StatelessWidget {
       this.onChanged,
       this.validator,
       this.hasError = false,
-      this.onSubmitted})
+      this.onSubmitted,
+      this.textInputAction,
+      this.focusNode})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return PlatformTextFormField(
+      focusNode: focusNode,
       controller: controller,
       autofillHints: [autofillHint!],
       onChanged: onChanged,
       obscureText: obscureText,
       obscuringCharacter: '*',
       keyboardType: keyboardType,
+      textInputAction: textInputAction,
       onFieldSubmitted: onSubmitted,
       validator: validator,
       style: TextStyleHelper.subtitle1(

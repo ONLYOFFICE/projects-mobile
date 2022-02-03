@@ -42,6 +42,7 @@ import 'package:projects/presentation/shared/widgets/privacy_and_terms_footer.da
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_form_field.dart';
 import 'package:projects/presentation/views/authentication/password_recovery/password_recovery_screen1.dart';
 import 'package:projects/presentation/views/authentication/widgets/auth_text_field.dart';
 import 'package:projects/presentation/views/authentication/widgets/wide_button.dart';
@@ -58,11 +59,16 @@ class LoginView extends StatelessWidget {
     });
 
     final styledAppBar = StyledAppBar(
-        title: Text(
-          tr('addNewAccount'),
-          style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
-        ),
-        elevation: 0);
+      title: Text(
+        tr('addNewAccount'),
+        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
+      ),
+      titleHeight: GetPlatform.isIOS ? 50 : 56,
+      centerTitle: GetPlatform.isIOS,
+      elevation: 0,
+    );
+
+    final passwordFocusNode = FocusNode();
 
     return Obx(
       () => controller.state.value == ViewState.Busy
@@ -100,15 +106,22 @@ class LoginView extends StatelessWidget {
                                   autofillHint: AutofillHints.email,
                                   hasError: controller.emailFieldError.value,
                                   keyboardType: TextInputType.emailAddress,
+                                  textInputAction: TextInputAction.next,
+                                  onSubmitted: (_) {
+                                    FocusScope.of(context).requestFocus(passwordFocusNode);
+                                  },
                                 ),
                                 SizedBox(height: Get.height * 0.0444),
                                 AuthTextField(
                                   hintText: tr('password'),
+                                  focusNode: passwordFocusNode,
                                   controller: controller.passwordController,
                                   hasError: controller.passwordFieldError.value,
                                   autofillHint: AutofillHints.password,
+                                  textInputAction: TextInputAction.done,
                                   obscureText: true,
                                   keyboardType: TextInputType.visiblePassword,
+                                  onSubmitted: (_) async => await controller.loginByPassword(),
                                 ),
                               ],
                             ),
