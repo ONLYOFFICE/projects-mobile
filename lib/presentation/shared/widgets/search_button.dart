@@ -52,13 +52,8 @@ class SearchButton extends StatelessWidget {
         icon: SvgIcons.search,
         color: Get.theme.colors().primary,
       ),
+      padding: EdgeInsets.zero,
       onPressed: controller.showSearch,
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          color: Get.theme.colors().background,
-          padding: EdgeInsets.zero,
-        );
-      },
     );
   }
 }

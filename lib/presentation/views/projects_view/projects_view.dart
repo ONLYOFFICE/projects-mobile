@@ -88,12 +88,7 @@ class ProjectsView extends StatelessWidget {
                       preventDuplicates: false,
                       arguments: {'filterController': controller.filterController}),
                   icon: FiltersButton(controller: controller),
-                  cupertino: (_, __) {
-                    return CupertinoIconButtonData(
-                      color: Get.theme.colors().background,
-                      padding: EdgeInsets.zero,
-                    );
-                  },
+                  padding: EdgeInsets.zero,
                 ),
                 ProjectsMoreButtonWidget(controller: controller)
               ],

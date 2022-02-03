@@ -129,18 +129,12 @@ class DocumentsFilterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformIconButton(
+      icon: FiltersButton(controller: controller),
       onPressed: () async => Get.find<NavigationController>().toScreen(
           const DocumentsFilterScreen(),
           preventDuplicates: false,
           arguments: {'filterController': controller.filterController}),
-      materialIcon: FiltersButton(controller: controller),
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          icon: FiltersButton(controller: controller),
-          color: Get.theme.colors().background,
-          padding: EdgeInsets.zero,
-        );
-      },
+      padding: EdgeInsets.zero,
     );
   }
 }

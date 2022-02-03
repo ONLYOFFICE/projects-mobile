@@ -155,6 +155,7 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformIconButton(
       icon: FiltersButton(controller: controller),
+      padding: EdgeInsets.zero,
       onPressed: () async =>
           Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
     );

@@ -114,12 +114,7 @@ class TasksFilterButton extends StatelessWidget {
         preventDuplicates: false,
         arguments: {'filterController': controller.filterController},
       ),
-      cupertino: (_, __) {
-        return CupertinoIconButtonData(
-          color: Get.theme.colors().background,
-          padding: EdgeInsets.zero,
-        );
-      },
+      padding: EdgeInsets.zero,
     );
   }
 }

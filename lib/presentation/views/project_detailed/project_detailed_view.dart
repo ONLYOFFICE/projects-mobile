@@ -232,6 +232,7 @@ class _ProjectAppBarActions extends StatelessWidget {
           children: [
             PlatformIconButton(
               icon: Icon(PlatformIcons(context).search), // TODO
+              padding: EdgeInsets.zero,
             ),
             ProjectMilestonesFilterButton(
                 controller: projectController.projectMilestonesController!),
@@ -279,11 +280,10 @@ class _ProjectContextMenu extends StatelessWidget {
         cupertino: (_, __) => Icon(
           CupertinoIcons.ellipsis_circle,
           color: Get.theme.colors().primary,
-          size: 26,
         ),
-        material: (_, __) => const Icon(
+        material: (_, __) => Icon(
           Icons.more_vert,
-          size: 26,
+          color: Get.theme.colors().primary,
         ),
       ),
       //offset: const Offset(0, 25),
