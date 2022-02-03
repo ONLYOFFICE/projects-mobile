@@ -132,17 +132,14 @@ class TasksSortButton extends StatelessWidget {
     return Row(
       children: <Widget>[
         Obx(
-          () => Text(
-            controller.sortController.currentSortTitle.value,
-            style: TextStyleHelper.projectsSorting.copyWith(color: Get.theme.colors().primary),
-          ),
+          () => Text(controller.sortController.currentSortTitle.value),
         ),
         const SizedBox(width: 8),
         Obx(
           () => (controller.sortController.currentSortOrder == 'ascending')
               ? AppIcon(
                   icon: SvgIcons.sorting_4_ascend,
-                  color: Get.theme.colors().primary,
+                  color: Get.theme.colors().onBackground,
                   width: 20,
                   height: 20,
                 )
@@ -151,7 +148,7 @@ class TasksSortButton extends StatelessWidget {
                   transform: Matrix4.rotationX(math.pi),
                   child: AppIcon(
                     icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().primary,
+                    color: Get.theme.colors().onBackground,
                     width: 20,
                     height: 20,
                   ),
