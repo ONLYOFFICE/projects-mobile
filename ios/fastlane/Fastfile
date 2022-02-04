@@ -83,11 +83,6 @@ platform :ios do
     get_packages
     cleanup
     increment_build
-
-    cocoapods(
-      repo_update: true
-    )
-
     make_app
 
     # build iOS app
