@@ -128,7 +128,8 @@ class ProjectsController extends BaseController {
 
   @override
   void showSearch() {
-    Get.find<NavigationController>().to(ProjectSearchView());
+    Get.find<NavigationController>().to(ProjectSearchView(),
+        arguments: {'filtersController': filterController, 'sortController': sortController});
   }
 
   void updateSort() {
