@@ -167,10 +167,10 @@ class TasksController extends BaseTasksController {
   }
 
   @override
-  void showSearch() => Get.find<NavigationController>().to(TasksSearchScreen(
-        tasksFilterController: filterController,
-        tasksSortController: sortController,
-      ));
+  void showSearch() => Get.find<NavigationController>().to(const TasksSearchScreen(), arguments: {
+        'tasksFilterController': filterController,
+        'tasksSortController': sortController
+      });
 
   Future<bool> getFabVisibility() async {
     if (!_withFAB) return false;

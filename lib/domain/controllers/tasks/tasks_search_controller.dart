@@ -40,14 +40,13 @@ import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
-import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TasksSearchController extends BaseController {
-  final TaskService _api = locator<TaskService>();
+  final _api = locator<TaskService>();
 
-  RxBool nothingFound = false.obs;
+  final nothingFound = false.obs;
 
   final _paginationController = PaginationController<PortalTask>();
   @override
@@ -60,11 +59,11 @@ class TasksSearchController extends BaseController {
   String _searchQuery = '';
   Timer? _searchDebounce;
 
-  int? projectId;
-  final BaseTaskFilterController? tasksFilterController;
-  final TasksSortController? tasksSortController;
-
-  TasksSearchController({this.projectId, this.tasksFilterController, this.tasksSortController});
+  final int? projectId = Get.arguments['projectId'] as int?;
+  final BaseTaskFilterController? tasksFilterController =
+      Get.arguments['tasksFilterController'] as BaseTaskFilterController?;
+  final TasksSortController? tasksSortController =
+      Get.arguments['tasksSortController'] as TasksSortController?;
 
   @override
   void onInit() {
