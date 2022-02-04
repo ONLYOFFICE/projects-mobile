@@ -47,7 +47,6 @@ import 'package:projects/presentation/views/new_task/tiles/priority_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/responsible_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/start_date_tile.dart';
 import 'package:projects/presentation/views/new_task/tiles/task_title.dart';
-import 'package:projects/presentation/views/task_editing_view/elements/status_selection_bottom_sheet.dart';
 
 class TaskEditingView extends StatelessWidget {
   const TaskEditingView({
@@ -111,40 +110,7 @@ class TaskEditingView extends StatelessWidget {
             children: [
               const SizedBox(height: 10),
               TaskTitle(controller: controller, showCaption: true, focusOnTitle: false),
-              const SizedBox(height: 20),
-              Padding(
-                padding: const EdgeInsets.only(left: 72, right: 16),
-                child: OutlinedButton(
-                  onPressed: () async {
-                    FocusScope.of(context).unfocus();
-                    WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                      await statusSelectionBS(
-                        context: context,
-                        controller: controller,
-                      );
-                    });
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>((_) {
-                      return const Color(0xff81C4FF).withOpacity(0.1);
-                    }),
-                    side: MaterialStateProperty.resolveWith((_) {
-                      return const BorderSide(color: Colors.transparent, width: 1.5);
-                    }),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                          child: Padding(
-                              padding: const EdgeInsets.only(top: 8, bottom: 8),
-                              child: Obx(() => Text(controller.newStatus.value!.title!,
-                                  style: TextStyleHelper.subtitle2())))),
-                      Icon(PlatformIcons(context).downChevron)
-                    ],
-                  ),
-                ),
-              ),
+              const SizedBox(height: 10),
               DescriptionTile(controller: controller),
               MilestoneTile(controller: controller),
               StartDateTile(controller: controller),

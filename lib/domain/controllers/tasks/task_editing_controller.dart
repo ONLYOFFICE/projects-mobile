@@ -69,7 +69,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
   int? get selectedProjectId => task.projectOwner!.id;
 
   @override
-  RxString? title;
+  RxString title = ''.obs;
   @override
   RxString? descriptionText;
   int? newMilestoneId;
@@ -79,6 +79,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
   var selectedProjectTitle; //Unused
   @override
   dynamic needToSelectProject = false;
+
   // to track changes.
   DateTime? _newStartDate;
   @override
@@ -157,7 +158,8 @@ class TaskEditingController extends GetxController implements TaskActionsControl
   }
 
   @override
-  void changeTitle(String newText) => title!.value = newText;
+  void changeTitle(String newText) => title.value = newText;
+
   Future<void> changeStatus(Status newStatus) async {
     if (newStatus.id == this.newStatus.value!.id) return;
 
@@ -326,7 +328,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
   void discardChanges() {
     bool taskEdited;
     // checking all fields for changes
-    taskEdited = title!.value != task.title ||
+    taskEdited = title.value != task.title ||
         descriptionText!.value != task.description ||
         newMilestoneId != task.milestoneId ||
         initialStatus!.id != newStatus.value!.id ||
@@ -359,7 +361,10 @@ class TaskEditingController extends GetxController implements TaskActionsControl
   }
 
   Future<void> confirm() async {
-    if (title!.isEmpty || task.title == null) {
+    title.value = title.string.trim();
+    _titleController.text = title.value;
+
+    if (title.isEmpty || task.title == null) {
       setTitleError!.value = true;
     } else {
       // update the task status if it has been changed
@@ -378,7 +383,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
         id: task.id,
         startDate: _newStartDate,
         priority: highPriority!.value == true ? 'high' : 'normal',
-        title: title!.value,
+        title: title.value,
         milestoneid: newMilestoneId,
         projectId: task.projectOwner!.id!,
         responsibles: responsibleIds,
@@ -401,7 +406,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
       id: task.id,
       startDate: _newStartDate,
       priority: highPriority!.value == true ? 'high' : 'normal',
-      title: title!.value,
+      title: title.value,
       milestoneid: newMilestoneId,
       projectId: task.projectOwner!.id!,
       responsibles: [Get.find<UserController>().user!.id],

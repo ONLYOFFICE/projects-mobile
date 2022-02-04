@@ -34,10 +34,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/enums/user_status.dart';
-
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 
@@ -146,31 +145,32 @@ class PortalUserItem extends StatelessWidget {
                 ],
               ),
             ),
-            Obx(() {
-              if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
-                if (userController!.isSelected.value == true) {
-                  return SizedBox(
-                      width: 72,
-                      child: Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
-                          color: Get.theme.colors().primary));
+            Padding(
+              padding: const EdgeInsets.only(left: 54),
+              child: Obx(() {
+                if (userController!.selectionMode.value == UserSelectionMode.Multiple) {
+                  if (userController!.isSelected.value == true) {
+                    return Icon(PlatformIcons(context).checkBoxCheckedOutlineRounded,
+                        color: Get.theme.colors().primary);
+                  } else {
+                    return Icon(
+                      PlatformIcons(context).checkBoxBlankOutlineRounded,
+                      color: Get.theme.colors().inactiveGrey,
+                    );
+                  }
                 } else {
-                  return SizedBox(
-                      width: 72, child: Icon(PlatformIcons(context).checkBoxBlankOutlineRounded));
-                }
-              } else {
-                if (userController!.isSelected.value == true) {
-                  return SizedBox(
-                    width: 72,
-                    child: Icon(
+                  if (userController!.isSelected.value == true) {
+                    return Icon(
                       PlatformIcons(context).checkMark,
                       color: Get.theme.colors().primary,
-                    ),
-                  );
-                } else {
-                  return const SizedBox(width: 72);
+                    );
+                  } else {
+                    return const SizedBox(width: 72);
+                  }
                 }
-              }
-            }),
+              }),
+            ),
+            const SizedBox(width: 16),
           ],
         ),
       ),

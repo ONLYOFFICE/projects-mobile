@@ -70,101 +70,108 @@ class LoginView extends StatelessWidget {
 
     final passwordFocusNode = FocusNode();
 
-    return Obx(
-      () => controller.state.value == ViewState.Busy
-          ? Scaffold(
-              body: SizedBox(
-                  height: Get.height, child: Center(child: PlatformCircularProgressIndicator())))
-          : Scaffold(
-              appBar: styledAppBar,
-              body: SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    constraints: BoxConstraints(
-                        maxWidth: 480,
-                        maxHeight:
-                            Get.height - styledAppBar.titleHeight - styledAppBar.bottomHeight),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        SizedBox(height: Get.height * 0.1),
-                        Text('${tr('portalAdress')}:',
-                            style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
-                        SizedBox(height: Get.height * 0.01),
-                        Text(controller.portalAdress,
-                            style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
-                        SizedBox(height: Get.height * 0.111),
-                        Obx(
-                          () => Form(
-                            child: Column(
-                              children: [
-                                AuthTextField(
-                                  hintText: tr('email'),
-                                  controller: controller.emailController,
-                                  autofillHint: AutofillHints.email,
-                                  hasError: controller.emailFieldError.value,
-                                  keyboardType: TextInputType.emailAddress,
-                                  textInputAction: TextInputAction.next,
-                                  onSubmitted: (_) {
-                                    FocusScope.of(context).requestFocus(passwordFocusNode);
-                                  },
-                                ),
-                                SizedBox(height: Get.height * 0.0444),
-                                AuthTextField(
-                                  hintText: tr('password'),
-                                  focusNode: passwordFocusNode,
-                                  controller: controller.passwordController,
-                                  hasError: controller.passwordFieldError.value,
-                                  autofillHint: AutofillHints.password,
-                                  textInputAction: TextInputAction.done,
-                                  obscureText: true,
-                                  keyboardType: TextInputType.visiblePassword,
-                                  onSubmitted: (_) async => await controller.loginByPassword(),
-                                ),
-                              ],
+    return WillPopScope(
+      onWillPop: () async {
+        controller.leaveLoginScreen();
+        return false;
+      },
+      child: Obx(
+        () => controller.state.value == ViewState.Busy
+            ? Scaffold(
+                body: SizedBox(
+                    height: Get.height, child: Center(child: PlatformCircularProgressIndicator())))
+            : Scaffold(
+                appBar: styledAppBar,
+                body: SingleChildScrollView(
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 40),
+                      constraints: BoxConstraints(
+                          maxWidth: 480,
+                          maxHeight:
+                              Get.height - styledAppBar.titleHeight - styledAppBar.bottomHeight),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children: [
+                          SizedBox(height: Get.height * 0.1),
+                          Text('${tr('portalAdress')}:',
+                              style: TextStyleHelper.body2(color: Get.theme.colors().onSurface)),
+                          SizedBox(height: Get.height * 0.01),
+                          Text(controller.portalAdress,
+                              style:
+                                  TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
+                          SizedBox(height: Get.height * 0.111),
+                          Obx(
+                            () => Form(
+                              child: Column(
+                                children: [
+                                  AuthTextField(
+                                    hintText: tr('email'),
+                                    controller: controller.emailController,
+                                    autofillHint: AutofillHints.email,
+                                    hasError: controller.emailFieldError.value,
+                                    keyboardType: TextInputType.emailAddress,
+                                    textInputAction: TextInputAction.next,
+                                    onSubmitted: (_) {
+                                      FocusScope.of(context).requestFocus(passwordFocusNode);
+                                    },
+                                  ),
+                                  SizedBox(height: Get.height * 0.0444),
+                                  AuthTextField(
+                                    hintText: tr('password'),
+                                    focusNode: passwordFocusNode,
+                                    controller: controller.passwordController,
+                                    hasError: controller.passwordFieldError.value,
+                                    autofillHint: AutofillHints.password,
+                                    textInputAction: TextInputAction.done,
+                                    obscureText: true,
+                                    keyboardType: TextInputType.visiblePassword,
+                                    onSubmitted: (_) async => await controller.loginByPassword(),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: Get.height * 0.0333),
-                        DecoratedBox(
-                          decoration: BoxDecoration(boxShadow: [
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.85),
-                                color: Get.theme.colors().onBackground.withOpacity(0.19)),
-                            BoxShadow(
-                                blurRadius: 3,
-                                offset: const Offset(0, 0.25),
-                                color: Get.theme.colors().onBackground.withOpacity(0.04)),
-                          ]),
-                          child: WideButton(
-                            text: tr('next'),
-                            onPressed: () async => await controller.loginByPassword(),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        PlatformTextButton(
-                          onPressed: () async => Get.to<PasswordRecoveryScreen1>(
-                            () => const PasswordRecoveryScreen1(),
-                            arguments: {'email': controller.emailController.text},
-                          ),
-                          child: Text(
-                            tr('forgotPassword'),
-                            style: TextStyleHelper.subtitle2(
-                              color: Get.theme.colors().primary,
+                          SizedBox(height: Get.height * 0.0333),
+                          DecoratedBox(
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 0.85),
+                                  color: Get.theme.colors().onBackground.withOpacity(0.19)),
+                              BoxShadow(
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 0.25),
+                                  color: Get.theme.colors().onBackground.withOpacity(0.04)),
+                            ]),
+                            child: WideButton(
+                              text: tr('next'),
+                              onPressed: () async => await controller.loginByPassword(),
                             ),
                           ),
-                        ),
-                        const Spacer(),
-                        PrivacyAndTermsFooter(),
-                      ],
+                          const SizedBox(height: 4),
+                          PlatformTextButton(
+                            onPressed: () async => Get.to<PasswordRecoveryScreen1>(
+                              () => const PasswordRecoveryScreen1(),
+                              arguments: {'email': controller.emailController.text},
+                            ),
+                            child: Text(
+                              tr('forgotPassword'),
+                              style: TextStyleHelper.subtitle2(
+                                color: Get.theme.colors().primary,
+                              ),
+                            ),
+                          ),
+                          const Spacer(),
+                          PrivacyAndTermsFooter(),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+      ),
     );
   }
 }

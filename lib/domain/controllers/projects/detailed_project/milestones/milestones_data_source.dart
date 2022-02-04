@@ -113,7 +113,7 @@ class MilestonesDataSource extends GetxController {
       projectId: _projectId?.toString(),
       milestoneResponsibleFilter: _filterController.milestoneResponsibleFilter,
       taskResponsibleFilter: _filterController.taskResponsibleFilter,
-      statusFilter: _filterController.statusFilter,
+      statusFilter: '&status=open',
       deadlineFilter: _filterController.deadlineFilter,
       query: searchQuery,
     );

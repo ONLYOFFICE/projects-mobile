@@ -44,18 +44,19 @@ import 'package:projects/internal/locator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class UsersDataSource extends GetxController {
-  final UserService _api = locator<UserService>();
-  RxList<PortalUserItemController> usersList = <PortalUserItemController>[].obs;
-  RxBool loaded = true.obs;
-  TextEditingController searchInputController = TextEditingController();
+  final _api = locator<UserService>();
 
-  RxBool nothingFound = false.obs;
+  final usersList = <PortalUserItemController>[].obs;
+  final loaded = true.obs;
+  final searchInputController = TextEditingController();
+
+  final nothingFound = false.obs;
   int _startIndex = 0;
   String _query = '';
 
   UserSelectionMode selectionMode = UserSelectionMode.Single;
 
-  RxBool isSearchResult = false.obs;
+  final isSearchResult = false.obs;
 
   Timer? _searchDebounce;
 
@@ -74,7 +75,7 @@ class UsersDataSource extends GetxController {
   Future<void> Function()? applyUsersSelection;
 
   PortalUser? selectedProjectManager;
-  RxBool selfIsVisible = true.obs;
+  final selfIsVisible = true.obs;
 
   bool get pullUpEnabled => usersList.length != totalProfiles;
 

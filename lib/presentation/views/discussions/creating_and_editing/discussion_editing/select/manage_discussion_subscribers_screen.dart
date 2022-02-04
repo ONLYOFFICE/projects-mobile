@@ -74,54 +74,26 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
         backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
         appBar: StyledAppBar(
           backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-          title: Obx(
-            () => Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  tr('manageSubscribers'),
-                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-                ),
-                if (controller.subscribers.isNotEmpty)
-                  Text(plural('selected', controller.subscribers.length),
-                      style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
-              ],
-            ),
+          title: _DiscussionSubscribersSelectionHeader(
+            title: tr('manageSubscribers'),
+            controller: controller,
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           backButtonIcon: Get.put(PlatformController()).isMobile
               ? Icon(PlatformIcons(context).back)
               : Icon(PlatformIcons(context).clear),
           actions: [
-            PlatformIconButton(
-              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-              icon: Icon(PlatformIcons(context).checkMark),
+            Padding(
+              padding: const EdgeInsets.only(right: 4.0),
+              child: PlatformIconButton(
+                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+                icon: Icon(PlatformIcons(context).checkMark),
+              ),
             )
           ],
           // bottom: CustomSearchBar(controller: controller),
-          bottom: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Obx(() => Expanded(
-                    child: SearchField(
-                      hintText: tr('usersSearch'),
-                      onSubmitted: usersDataSource.searchUsers,
-                      showClearIcon: usersDataSource.isSearchResult.value == true,
-                      onChanged: usersDataSource.searchUsers,
-                      onClearPressed: controller.clearUserSearch,
-                      controller: controller.userSearchController,
-                    ),
-                  )),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 15.5, right: 16),
-                child: InkResponse(
-                  onTap: () => Get.find<NavigationController>()
-                      .to(const UsersFromGroups(), arguments: {'controller': controller}),
-                  child: const AppIcon(icon: SvgIcons.preferences),
-                ),
-              )
-            ],
-          ),
+          bottom: _DiscussionSubscribersSearchBar(
+              usersDataSource: usersDataSource, controller: controller),
         ),
         body: Obx(
           () {
@@ -165,6 +137,78 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
             return const ListLoadingSkeleton();
           },
         ),
+      ),
+    );
+  }
+}
+
+class _DiscussionSubscribersSearchBar extends StatelessWidget {
+  const _DiscussionSubscribersSearchBar({
+    Key? key,
+    required this.usersDataSource,
+    required this.controller,
+  }) : super(key: key);
+
+  final UsersDataSource usersDataSource;
+  final DiscussionActionsController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 32,
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
+      child: Row(
+        children: [
+          Obx(
+            () => Expanded(
+              child: SearchField(
+                hintText: tr('usersSearch'),
+                textInputAction: TextInputAction.search,
+                margin: EdgeInsets.zero,
+                onSubmitted: usersDataSource.searchUsers,
+                showClearIcon: usersDataSource.isSearchResult.value == true,
+                onChanged: usersDataSource.searchUsers,
+                onClearPressed: controller.clearUserSearch,
+                controller: controller.userSearchController,
+              ),
+            ),
+          ),
+          const SizedBox(width: 16),
+          InkResponse(
+            onTap: () => Get.find<NavigationController>()
+                .to(const UsersFromGroups(), arguments: {'controller': controller}),
+            child: const AppIcon(icon: SvgIcons.preferences),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class _DiscussionSubscribersSelectionHeader extends StatelessWidget {
+  const _DiscussionSubscribersSelectionHeader({
+    Key? key,
+    required this.title,
+    required this.controller,
+  }) : super(key: key);
+
+  final DiscussionActionsController controller;
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+          ),
+          if (controller.subscribers.isNotEmpty)
+            Text(plural('selected', controller.subscribers.length),
+                style: TextStyleHelper.caption(color: Get.theme.colors().onSurface))
+        ],
       ),
     );
   }

@@ -304,8 +304,12 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
   }
 
   Future<void> confirm(BuildContext context) async {
+    title.value = title.value.trim();
+    titleController.text = titleController.text.trim();
     if (title.isEmpty) setTitleError.value = true;
+
     if (text.isEmpty) setTextError.value = true;
+
     if (title.isNotEmpty && text.isNotEmpty) {
       final subscribersIds = <String?>[];
 

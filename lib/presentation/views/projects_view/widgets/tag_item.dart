@@ -33,10 +33,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
-
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TagItem extends StatelessWidget {
   final TagItemDTO? tagItemDTO;
@@ -74,10 +73,14 @@ class TagItem extends StatelessWidget {
               } else {
                 return SizedBox(
                   width: 72,
-                  child: Icon(PlatformIcons(context).checkBoxBlankOutlineRounded),
+                  child: Icon(
+                    PlatformIcons(context).checkBoxBlankOutlineRounded,
+                    color: Get.theme.colors().inactiveGrey,
+                  ),
                 );
               }
             }),
+            const SizedBox(width: 16),
           ],
         ),
       ),

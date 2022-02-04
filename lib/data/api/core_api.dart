@@ -170,6 +170,9 @@ class CoreApi {
 
   Future<String> selfInfoUrl() async => '${await getPortalURI()}/api/$version/people/@self';
 
+  Future<String> photosByProfileIdUrl(String userId) async =>
+      '${await getPortalURI()}/api/$version/people/$userId/photo';
+
   Future<String> sendRegistrationTypeUrl() async =>
       '${await getPortalURI()}/api/$version/portal/mobile/registration';
 

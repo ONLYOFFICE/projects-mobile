@@ -38,19 +38,17 @@ import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
-
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
+import 'package:projects/presentation/shared/widgets/search_field.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
 import 'package:projects/presentation/views/projects_view/new_project/project_manager_view.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_selection.dart';
-import 'package:projects/presentation/views/projects_view/widgets/search_bar.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 
 class TeamMembersSelectionView extends StatelessWidget {
   const TeamMembersSelectionView({
@@ -81,7 +79,9 @@ class TeamMembersSelectionView extends StatelessWidget {
           controller: controller,
           title: tr('addTeamMembers'),
         ),
-        titleHeight: 60,
+        actions: [
+          _DoneButton(controller: controller),
+        ],
         bottom: TeamMembersSearchBar(
           usersDataSource: usersDataSource,
           controller: controller,
@@ -167,21 +167,41 @@ class TeamMembersSelectionHeader extends StatelessWidget {
                 );
             },
           ),
-          Obx(
-            () {
-              if (controller.selectedTeamMembers.isNotEmpty as bool) {
-                return InkWell(
-                  onTap: () {
-                    controller.confirmTeamMembers();
-                  },
-                  child: Icon(PlatformIcons(context).checkMark, color: Colors.blue),
-                );
-              }
-              return const SizedBox();
-            },
-          ),
+          // const SizedBox(width: 4),
         ],
       ),
+    );
+  }
+}
+
+class _DoneButton extends StatelessWidget {
+  const _DoneButton({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Obx(
+          () {
+            if (controller.selectedTeamMembers.isNotEmpty as bool) {
+              return IconButton(
+                onPressed: () {
+                  controller.confirmTeamMembers();
+                },
+                icon: const Icon(Icons.check),
+                padding: EdgeInsets.zero,
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+        const SizedBox(width: 4),
+      ],
     );
   }
 }
@@ -199,13 +219,23 @@ class TeamMembersSearchBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 40,
-      margin: const EdgeInsets.only(left: 16, right: 20, bottom: 10),
+      height: 32,
+      margin: const EdgeInsets.only(left: 16, right: 16, bottom: 8, top: 4),
       child: Row(
-        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Expanded(child: UsersSearchBar(controller: usersDataSource)),
-          const SizedBox(width: 20),
+          Expanded(
+            child: SearchField(
+              controller: usersDataSource.searchInputController,
+              hintText: tr('usersSearch'),
+              margin: EdgeInsets.zero,
+              textInputAction: TextInputAction.search,
+              showClearIcon: true,
+              onClearPressed: usersDataSource.clearSearch,
+              onChanged: usersDataSource.searchUsers,
+              onSubmitted: usersDataSource.searchUsers,
+            ),
+          ),
+          const SizedBox(width: 16),
           SizedBox(
             height: 24,
             width: 24,

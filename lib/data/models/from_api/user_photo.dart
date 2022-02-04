@@ -30,39 +30,42 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+class UserPhoto {
+  final String? original;
+  final String? retina;
+  final String? max;
+  final String? big;
+  final String? medium;
+  final String? small;
 
-abstract class TaskActionsController extends GetxController {
-  RxString title = ''.obs;
-  RxString? descriptionText;
-  RxString? selectedMilestoneTitle;
-  RxString? selectedProjectTitle;
-  RxList? responsibles;
-  RxString? startDateText;
-  RxString? dueDateText;
+  UserPhoto({
+    this.original,
+    this.retina,
+    this.max,
+    this.big,
+    this.medium,
+    this.small,
+  });
 
-  DateTime? get dueDate;
+  Map<String, dynamic> toJson() {
+    return {
+      'original': original,
+      'retina': retina,
+      'max': max,
+      'big': big,
+      'medium': medium,
+      'small': small,
+    };
+  }
 
-  DateTime? get startDate;
-
-  RxBool? highPriority;
-  late RxBool titleIsEmpty;
-
-  TextEditingController? _titleController;
-  TextEditingController? get titleController => _titleController;
-  FocusNode? get titleFocus => FocusNode();
-
-  RxBool? setTitleError;
-  var needToSelectProject;
-
-  void changeMilestoneSelection();
-  void leaveDescriptionView(String typedText);
-
-  void confirmDescription(String typedText);
-  void changeTitle(String newText);
-  void changeStartDate(DateTime? newDate);
-  void changeDueDate(DateTime? newDate);
-  void changePriority(bool value);
-  void checkDate(DateTime startDate, DateTime dueDate);
+  factory UserPhoto.fromJson(Map<String, dynamic> json) {
+    return UserPhoto(
+      original: json['original'] as String?,
+      retina: json['retina'] as String?,
+      max: json['max'] as String?,
+      big: json['big'] as String?,
+      medium: json['medium'] as String?,
+      small: json['small'] as String?,
+    );
+  }
 }

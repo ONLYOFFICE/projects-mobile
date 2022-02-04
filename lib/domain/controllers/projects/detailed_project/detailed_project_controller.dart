@@ -35,17 +35,19 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
-
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/models/project_status.dart';
 import 'package:projects/data/services/project_service.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
-import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_discussions_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/project_tasks_controller.dart';
+
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
+
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/domain/controllers/projects/project_status_controller.dart';
@@ -90,6 +92,8 @@ class ProjectDetailsController extends BaseProjectEditorController {
 
   bool setup({ProjectDetailed? projectDetailed}) {
     if (projectDetailed != null) _projectDetailed = projectDetailed;
+
+    setPrivate(projectDetailed?.isPrivate ?? false);
 
     projectTasksController = Get.find<ProjectTasksController>();
     projectMilestonesController = Get.find<MilestonesDataSource>();

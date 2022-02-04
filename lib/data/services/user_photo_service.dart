@@ -30,39 +30,16 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:projects/data/api/user_photo_api.dart';
+import 'package:projects/data/models/from_api/user_photo.dart';
+import 'package:projects/internal/locator.dart';
 
-abstract class TaskActionsController extends GetxController {
-  RxString title = ''.obs;
-  RxString? descriptionText;
-  RxString? selectedMilestoneTitle;
-  RxString? selectedProjectTitle;
-  RxList? responsibles;
-  RxString? startDateText;
-  RxString? dueDateText;
+class UserPhotoService {
+  final UserPhotoApi _api = locator<UserPhotoApi>();
 
-  DateTime? get dueDate;
+  Future<UserPhoto?> getUserPhoto(String userId) async {
+    final userPhoto = await _api.getUserPhoto(userId);
 
-  DateTime? get startDate;
-
-  RxBool? highPriority;
-  late RxBool titleIsEmpty;
-
-  TextEditingController? _titleController;
-  TextEditingController? get titleController => _titleController;
-  FocusNode? get titleFocus => FocusNode();
-
-  RxBool? setTitleError;
-  var needToSelectProject;
-
-  void changeMilestoneSelection();
-  void leaveDescriptionView(String typedText);
-
-  void confirmDescription(String typedText);
-  void changeTitle(String newText);
-  void changeStartDate(DateTime? newDate);
-  void changeDueDate(DateTime? newDate);
-  void changePriority(bool value);
-  void checkDate(DateTime startDate, DateTime dueDate);
+    return userPhoto.response;
+  }
 }

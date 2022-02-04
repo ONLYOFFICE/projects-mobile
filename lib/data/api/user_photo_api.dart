@@ -30,39 +30,33 @@
  *
  */
 
-import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'dart:convert';
 
-abstract class TaskActionsController extends GetxController {
-  RxString title = ''.obs;
-  RxString? descriptionText;
-  RxString? selectedMilestoneTitle;
-  RxString? selectedProjectTitle;
-  RxList? responsibles;
-  RxString? startDateText;
-  RxString? dueDateText;
+import 'package:http/http.dart' as http;
+import 'package:projects/data/api/core_api.dart';
+import 'package:projects/data/models/apiDTO.dart';
+import 'package:projects/data/models/from_api/error.dart';
+import 'package:projects/data/models/from_api/user_photo.dart';
+import 'package:projects/internal/locator.dart';
 
-  DateTime? get dueDate;
+class UserPhotoApi {
+  Future<ApiDTO<UserPhoto>> getUserPhoto(String userId) async {
+    final url = await locator.get<CoreApi>().photosByProfileIdUrl(userId);
 
-  DateTime? get startDate;
+    final result = ApiDTO<UserPhoto>();
+    try {
+      final response = await locator.get<CoreApi>().getRequest(url);
 
-  RxBool? highPriority;
-  late RxBool titleIsEmpty;
+      if (response is http.Response) {
+        result.response =
+            UserPhoto.fromJson(json.decode(response.body)['response'] as Map<String, dynamic>);
+      } else {
+        result.error = response as CustomError;
+      }
+    } catch (e) {
+      result.error = CustomError(message: '');
+    }
 
-  TextEditingController? _titleController;
-  TextEditingController? get titleController => _titleController;
-  FocusNode? get titleFocus => FocusNode();
-
-  RxBool? setTitleError;
-  var needToSelectProject;
-
-  void changeMilestoneSelection();
-  void leaveDescriptionView(String typedText);
-
-  void confirmDescription(String typedText);
-  void changeTitle(String newText);
-  void changeStartDate(DateTime? newDate);
-  void changeDueDate(DateTime? newDate);
-  void changePriority(bool value);
-  void checkDate(DateTime startDate, DateTime dueDate);
+    return result;
+  }
 }

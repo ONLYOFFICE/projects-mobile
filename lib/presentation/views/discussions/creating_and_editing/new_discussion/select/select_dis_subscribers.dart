@@ -92,10 +92,13 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           actions: [
-            PlatformIconButton(
-              onPressed: controller.confirmSubscribersSelection,
-              icon: Icon(PlatformIcons(context).checkMark),
-            )
+            Padding(
+              padding: const EdgeInsets.only(right: 4),
+              child: PlatformIconButton(
+                onPressed: controller.confirmSubscribersSelection,
+                icon: Icon(PlatformIcons(context).checkMark),
+              ),
+            ),
           ],
           // bottom: CustomSearchBar(controller: controller),
           bottom: Row(

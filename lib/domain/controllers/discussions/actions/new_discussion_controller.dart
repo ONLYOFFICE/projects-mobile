@@ -334,7 +334,11 @@ class NewDiscussionController extends GetxController implements DiscussionAction
 
   Future<void> confirm(BuildContext context) async {
     if (_selectedProjectId == null) selectProjectError.value = true;
+
+    title.value = title.value.trim();
+    titleController.text = titleController.text.trim();
     if (title.isEmpty) setTitleError.value = true;
+
     if (text.isEmpty) setTextError.value = true;
 
     if (_selectedProjectId == null || title.isEmpty || text.isEmpty) return;
