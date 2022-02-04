@@ -73,7 +73,7 @@ class NewTaskView extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('newTask'),
           leadingWidth: 65,
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: GetPlatform.isIOS,
           actions: [
             PlatformWidget(
               material: (platformContext, __) => IconButton(

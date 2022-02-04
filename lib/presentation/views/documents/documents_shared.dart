@@ -42,19 +42,19 @@ import 'package:projects/domain/controllers/documents/base_documents_controller.
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
+import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/documents/file_cell.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsContent extends StatelessWidget {
   const DocumentsContent({
@@ -130,9 +130,12 @@ class DocumentsFilterButton extends StatelessWidget {
     return PlatformIconButton(
       icon: FiltersButton(controller: controller),
       onPressed: () async => Get.find<NavigationController>().toScreen(
-          const DocumentsFilterScreen(),
-          preventDuplicates: false,
-          arguments: {'filterController': controller.filterController}),
+        const DocumentsFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+        transition: Transition.cupertinoDialog,
+        fullscreenDialog: true,
+      ),
       padding: EdgeInsets.zero,
     );
   }

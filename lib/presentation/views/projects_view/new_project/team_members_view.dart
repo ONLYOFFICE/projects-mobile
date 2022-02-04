@@ -241,8 +241,12 @@ class TeamMembersSearchBar extends StatelessWidget {
             width: 24,
             child: InkWell(
               onTap: () {
-                Get.find<NavigationController>().toScreen(const GroupMembersSelectionView(),
-                    arguments: {'controller': controller});
+                Get.find<NavigationController>().toScreen(
+                  const GroupMembersSelectionView(),
+                  arguments: {'controller': controller},
+                  transition: Transition.cupertinoDialog,
+                  fullscreenDialog: true,
+                );
               },
               child: AppIcon(
                 icon: SvgIcons.preferences,
