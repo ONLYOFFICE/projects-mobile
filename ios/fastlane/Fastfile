@@ -79,14 +79,15 @@ platform :ios do
 
     change_log = truncate(escape_markdown2(change_log), 3500)
 
-    cocoapods(
-      repo_update: true
-    )
-
     # Build artifacts and upload to store
     get_packages
     cleanup
     increment_build
+
+    cocoapods(
+      repo_update: true
+    )
+
     make_app
 
     # build iOS app
