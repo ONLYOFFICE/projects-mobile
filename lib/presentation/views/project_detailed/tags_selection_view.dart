@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_field.dart';
 import 'package:projects/presentation/views/projects_view/widgets/tag_item.dart';
 
 class TagsSelectionView extends StatelessWidget {
@@ -174,7 +175,7 @@ class _TagTextFieldWidget extends StatelessWidget {
     final errorColor = Theme.of(context).errorColor;
     return Container(
       margin: const EdgeInsets.only(top: 10),
-      child: TextField(
+      child: PlatformTextField(
         autofocus: true,
         textInputAction: TextInputAction.done,
         controller: inputController,
