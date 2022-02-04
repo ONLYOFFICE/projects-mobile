@@ -115,15 +115,15 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                     ),
                   )),
               Padding(
-                padding: const EdgeInsets.only(bottom: 15.5, right: 16),
-                child: InkResponse(
-                  onTap: () => Get.find<NavigationController>().to(
+                padding: const EdgeInsets.only(right: 16),
+                child: PlatformIconButton(
+                  onPressed: () => Get.find<NavigationController>().to(
                     const UsersFromGroups(),
                     arguments: {'controller': controller},
                     transition: Transition.cupertinoDialog,
                     fullscreenDialog: true,
                   ),
-                  child: const AppIcon(icon: SvgIcons.preferences),
+                  icon: const AppIcon(icon: SvgIcons.preferences),
                 ),
               )
             ],

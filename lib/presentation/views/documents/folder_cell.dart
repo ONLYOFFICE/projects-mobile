@@ -66,7 +66,7 @@ class FolderCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: () {
         Get.find<NavigationController>().to(FolderContentView(),
             preventDuplicates: false,
@@ -150,7 +150,7 @@ class MoveFolderCell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkResponse(
+    return InkWell(
       onTap: () {
         final target = controller.target;
         Get.find<NavigationController>()

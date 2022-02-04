@@ -45,6 +45,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
@@ -269,8 +270,8 @@ class _Title extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              InkResponse(
-                onTap: () {
+              PlatformIconButton(
+                onPressed: () {
                   var target;
                   target = controller.target;
 
@@ -284,20 +285,19 @@ class _Title extends StatelessWidget {
                     'foldersCount': controller.foldersCount,
                   });
                 },
-                child: AppIcon(
+                icon: AppIcon(
                   width: 24,
                   height: 24,
                   icon: SvgIcons.search,
                   color: Get.theme.colors().primary,
                 ),
               ),
-              const SizedBox(width: 24),
-              InkResponse(
-                onTap: () async => Get.find<NavigationController>().toScreen(
+              PlatformIconButton(
+                onPressed: () async => Get.find<NavigationController>().toScreen(
                     const DocumentsFilterScreen(),
                     preventDuplicates: false,
                     arguments: {'filterController': controller.filterController}),
-                child: FiltersButton(controller: controller),
+                icon: FiltersButton(controller: controller),
               ),
             ],
           ),
