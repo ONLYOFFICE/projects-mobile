@@ -54,7 +54,6 @@ import 'package:projects/presentation/views/documents/filter/documents_filter_sc
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
 
 class DocumentsContent extends StatelessWidget {

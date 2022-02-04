@@ -29,18 +29,9 @@
  * terms at http://creativecommons.org/licenses/by-sa/4.0/legalcode
  *
  */
-import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
-import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
 
 class ProjectDocumentsScreen extends StatelessWidget {
