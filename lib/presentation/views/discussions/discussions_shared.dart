@@ -42,7 +42,6 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -124,9 +123,12 @@ class DiscussionsFilterButton extends StatelessWidget {
     return PlatformIconButton(
       icon: FiltersButton(controller: controller),
       onPressed: () async => Get.find<NavigationController>().toScreen(
-          const DiscussionsFilterScreen(),
-          preventDuplicates: false,
-          arguments: {'filterController': controller.filterController}),
+        const DiscussionsFilterScreen(),
+        preventDuplicates: false,
+        arguments: {'filterController': controller.filterController},
+        transition: Transition.cupertinoDialog,
+        fullscreenDialog: true,
+      ),
       padding: EdgeInsets.zero,
     );
   }

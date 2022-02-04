@@ -175,8 +175,12 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           InkResponse(
-            onTap: () => Get.find<NavigationController>()
-                .to(const UsersFromGroups(), arguments: {'controller': controller}),
+            onTap: () => Get.find<NavigationController>().to(
+              const UsersFromGroups(),
+              arguments: {'controller': controller},
+              transition: Transition.cupertinoDialog,
+              fullscreenDialog: true,
+            ),
             child: const AppIcon(icon: SvgIcons.preferences),
           )
         ],

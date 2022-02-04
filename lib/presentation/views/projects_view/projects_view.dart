@@ -84,9 +84,12 @@ class ProjectsView extends StatelessWidget {
                 SearchButton(controller: controller),
                 PlatformIconButton(
                   onPressed: () async => Get.find<NavigationController>().toScreen(
-                      const ProjectsFilterScreen(),
-                      preventDuplicates: false,
-                      arguments: {'filterController': controller.filterController}),
+                    const ProjectsFilterScreen(),
+                    preventDuplicates: false,
+                    arguments: {'filterController': controller.filterController},
+                    transition: Transition.cupertinoDialog,
+                    fullscreenDialog: true,
+                  ),
                   icon: FiltersButton(controller: controller),
                   padding: EdgeInsets.zero,
                 ),

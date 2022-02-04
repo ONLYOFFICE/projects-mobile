@@ -31,18 +31,17 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/domain/controllers/platform_controller.dart';
+import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
+import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_smart_refresher.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-
-import 'package:projects/domain/controllers/projects/new_project/groups_data_source.dart';
-import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_group_item.dart';
 
 class GroupMembersSelectionView extends StatelessWidget {
@@ -56,20 +55,46 @@ class GroupMembersSelectionView extends StatelessWidget {
 
     final groupsDataSource = Get.find<GroupsDataSource>();
 
+    void onActionPressed() => controller.confirmGroupSelection();
+
     groupsDataSource.getGroups();
     return Scaffold(
       //backgroundColor: Get.theme.backgroundColor,
       appBar: StyledAppBar(
         titleText: tr('addMembersOf'),
-        elevation: 2,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
-            : Icon(PlatformIcons(context).clear),
+        centerTitle: GetPlatform.isIOS,
+        leadingWidth: 65,
+        leading: PlatformWidget(
+          cupertino: (_, __) => CupertinoButton(
+            padding: const EdgeInsets.only(left: 16),
+            alignment: Alignment.centerLeft,
+            onPressed: Get.back,
+            child: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.button(),
+            ),
+          ),
+          material: (_, __) => IconButton(
+            onPressed: Get.back,
+            icon: const Icon(Icons.close),
+          ),
+        ),
         actions: [
-          PlatformIconButton(
-            icon: Icon(PlatformIcons(context).checkMark),
-            onPressed: () => controller.confirmGroupSelection(),
-          )
+          PlatformWidget(
+            material: (platformContext, __) => IconButton(
+              icon: const Icon(Icons.check_rounded),
+              onPressed: onActionPressed,
+            ),
+            cupertino: (platformContext, __) => CupertinoButton(
+              onPressed: onActionPressed,
+              padding: const EdgeInsets.only(right: 16),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('Done'),
+                style: TextStyleHelper.headline7(),
+              ),
+            ),
+          ),
         ],
       ),
       body: Obx(

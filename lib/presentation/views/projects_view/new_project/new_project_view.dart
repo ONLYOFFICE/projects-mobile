@@ -35,9 +35,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/projects/new_project/new_project_controller.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/description.dart';
@@ -64,7 +64,7 @@ class NewProject extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: tr('project'),
           leadingWidth: 65,
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: GetPlatform.isIOS,
           actions: [
             PlatformWidget(
               material: (platformContext, __) => IconButton(
