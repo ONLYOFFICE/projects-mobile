@@ -38,13 +38,15 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
+import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class DiscussionSearchController extends BaseController {
-  final DiscussionsService _api = locator<DiscussionsService>();
+  final _api = locator<DiscussionsService>();
 
-  RxBool nothingFound = false.obs;
+  final nothingFound = false.obs;
 
   final _paginationController = PaginationController<Discussion>();
   @override
@@ -55,11 +57,14 @@ class DiscussionSearchController extends BaseController {
   String? _query;
   String? _searchQuery;
   Timer? _searchDebounce;
-  String? projectId;
 
-  TextEditingController searchInputController = TextEditingController();
+  final int? _projectId = Get.arguments['projectId'] as int?;
+  final DiscussionsFilterController? _filterController =
+      Get.arguments['discussionsFilterController'] as DiscussionsFilterController?;
+  final DiscussionsSortController? _sortController =
+      Get.arguments['discussionsSortController'] as DiscussionsSortController?;
 
-  DiscussionSearchController({this.projectId});
+  final searchInputController = TextEditingController();
 
   @override
   void onInit() {
@@ -97,8 +102,15 @@ class DiscussionSearchController extends BaseController {
   Future<void> _performSearch({bool needToClear = true}) async {
     nothingFound.value = false;
     final result = await _api.getDiscussionsByParams(
-      projectId: projectId,
       startIndex: paginationController.startIndex,
+      sortBy: _sortController?.currentSortfilter,
+      sortOrder: _sortController?.currentSortOrder,
+      authorFilter: _filterController?.authorFilter,
+      statusFilter: _filterController?.statusFilter,
+      creationDateFilter: _filterController?.creationDateFilter,
+      projectFilter: _filterController?.projectFilter,
+      otherFilter: _filterController?.otherFilter,
+      projectId: _projectId?.toString(),
       query: _query,
     );
 

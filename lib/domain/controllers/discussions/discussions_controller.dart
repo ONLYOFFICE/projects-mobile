@@ -158,7 +158,11 @@ class DiscussionsController extends BaseDiscussionsController {
       transition: Transition.cupertinoDialog, fullscreenDialog: true);
 
   @override
-  void showSearch() => Get.find<NavigationController>().to(const DiscussionsSearchScreen());
+  void showSearch() =>
+      Get.find<NavigationController>().to(const DiscussionsSearchScreen(), arguments: {
+        'discussionsFilterController': filterController,
+        'discussionsSortController': sortController
+      });
 
   Future<bool> getFabVisibility() async {
     var fabVisibility = false;

@@ -152,5 +152,9 @@ class ProjectDiscussionsController extends BaseDiscussionsController {
 
   @override
   void showSearch() =>
-      Get.find<NavigationController>().to(DiscussionsSearchScreen(projectId: projectId));
+      Get.find<NavigationController>().to(const DiscussionsSearchScreen(), arguments: {
+        'projectId': projectId,
+        'discussionsFilterController': filterController,
+        'discussionsSortController': sortController
+      });
 }
