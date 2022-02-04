@@ -82,7 +82,7 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               : const Icon(Icons.close),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 4.0),
+              padding: const EdgeInsets.only(right: 4),
               child: IconButton(
                   onPressed: onConfirm ?? controller.confirmSubscribersSelection,
                   icon: const Icon(Icons.done, size: 24)),

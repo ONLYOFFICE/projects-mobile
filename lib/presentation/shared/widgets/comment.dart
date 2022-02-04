@@ -97,6 +97,15 @@ class Comment extends StatelessWidget {
                     padding: const EdgeInsets.only(left: 4),
                     child: HtmlWidget(
                       controller.comment?.value.commentBody ?? '',
+                      textStyle: TextStyle(
+                        color: Get.theme.colors().onBackground,
+                      ),
+                      customStylesBuilder: (element) {
+                        if (element.attributes.containsKey('style') &&
+                            element.attributes['style']!.contains('color')) {
+                          element.attributes['style'] = '';
+                        }
+                      },
                       factoryBuilder: () => _HTMLWidgetFactory(),
                     ),
                   ),
