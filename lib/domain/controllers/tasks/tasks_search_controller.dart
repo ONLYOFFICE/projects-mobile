@@ -59,10 +59,10 @@ class TasksSearchController extends BaseController {
   String _searchQuery = '';
   Timer? _searchDebounce;
 
-  final int? projectId = Get.arguments['projectId'] as int?;
-  final BaseTaskFilterController? tasksFilterController =
+  final int? _projectId = Get.arguments['projectId'] as int?;
+  final BaseTaskFilterController? _filterController =
       Get.arguments['tasksFilterController'] as BaseTaskFilterController?;
-  final TasksSortController? tasksSortController =
+  final TasksSortController? _sortController =
       Get.arguments['tasksSortController'] as TasksSortController?;
 
   @override
@@ -105,15 +105,15 @@ class TasksSearchController extends BaseController {
     nothingFound.value = false;
     final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
-      sortBy: tasksSortController?.currentSortfilter,
-      sortOrder: tasksSortController?.currentSortOrder,
-      responsibleFilter: tasksFilterController?.responsibleFilter,
-      creatorFilter: tasksFilterController?.creatorFilter,
-      projectFilter: tasksFilterController?.projectFilter,
-      milestoneFilter: tasksFilterController?.milestoneFilter,
-      deadlineFilter: tasksFilterController?.deadlineFilter,
+      sortBy: _sortController?.currentSortfilter,
+      sortOrder: _sortController?.currentSortOrder,
+      responsibleFilter: _filterController?.responsibleFilter,
+      creatorFilter: _filterController?.creatorFilter,
+      projectFilter: _filterController?.projectFilter,
+      milestoneFilter: _filterController?.milestoneFilter,
+      deadlineFilter: _filterController?.deadlineFilter,
       query: _query.toLowerCase(),
-      projectId: projectId?.toString(),
+      projectId: _projectId?.toString(),
     );
 
     if (result != null) {

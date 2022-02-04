@@ -49,9 +49,9 @@ class ProjectSearchController extends GetxController {
   final ProjectService _api = locator<ProjectService>();
   final bool onlyMyProjects;
 
-  final ProjectsSortController? sortController =
+  final ProjectsSortController? _sortController =
       Get.arguments['sortController'] as ProjectsSortController?;
-  final ProjectsFilterController? filterController =
+  final ProjectsFilterController? _filterController =
       Get.arguments['filtersController'] as ProjectsFilterController?;
 
   ProjectSearchController({this.onlyMyProjects = false});
@@ -115,12 +115,12 @@ class ProjectSearchController extends GetxController {
 
     final result = await _api.getProjectsByParams(
       startIndex: _startIndex,
-      sortBy: sortController?.currentSortfilter,
-      sortOrder: sortController?.currentSortOrder,
-      projectManagerFilter: filterController?.projectManagerFilter,
-      participantFilter: filterController?.teamMemberFilter,
-      otherFilter: filterController?.otherFilter,
-      statusFilter: filterController?.statusFilter,
+      sortBy: _sortController?.currentSortfilter,
+      sortOrder: _sortController?.currentSortOrder,
+      projectManagerFilter: _filterController?.projectManagerFilter,
+      participantFilter: _filterController?.teamMemberFilter,
+      otherFilter: _filterController?.otherFilter,
+      statusFilter: _filterController?.statusFilter,
       query: _query.toLowerCase(),
     );
 
