@@ -38,7 +38,10 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/portal_task.dart';
 import 'package:projects/data/services/task/task_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
+import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
+import 'package:projects/domain/controllers/tasks/base_task_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class TasksSearchController extends BaseController {
@@ -58,8 +61,10 @@ class TasksSearchController extends BaseController {
   Timer? _searchDebounce;
 
   int? projectId;
+  final BaseTaskFilterController? tasksFilterController;
+  final TasksSortController? tasksSortController;
 
-  TasksSearchController({this.projectId});
+  TasksSearchController({this.projectId, this.tasksFilterController, this.tasksSortController});
 
   @override
   void onInit() {
@@ -101,6 +106,13 @@ class TasksSearchController extends BaseController {
     nothingFound.value = false;
     final result = await _api.getTasksByParams(
       startIndex: paginationController.startIndex,
+      sortBy: tasksSortController?.currentSortfilter,
+      sortOrder: tasksSortController?.currentSortOrder,
+      responsibleFilter: tasksFilterController?.responsibleFilter,
+      creatorFilter: tasksFilterController?.creatorFilter,
+      projectFilter: tasksFilterController?.projectFilter,
+      milestoneFilter: tasksFilterController?.milestoneFilter,
+      deadlineFilter: tasksFilterController?.deadlineFilter,
       query: _query.toLowerCase(),
       projectId: projectId?.toString(),
     );

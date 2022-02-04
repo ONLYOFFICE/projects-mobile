@@ -32,6 +32,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/base/base_task_filter_controller.dart';
+import 'package:projects/domain/controllers/tasks/task_sort_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_search_controller.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -41,12 +43,20 @@ import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart'
 import 'package:projects/presentation/views/tasks/task_cell/task_cell.dart';
 
 class TasksSearchScreen extends StatelessWidget {
+  const TasksSearchScreen(
+      {Key? key, this.projectId, this.tasksFilterController, this.tasksSortController})
+      : super(key: key);
+
   final int? projectId;
-  const TasksSearchScreen({Key? key, this.projectId}) : super(key: key);
+  final BaseTaskFilterController? tasksFilterController;
+  final TasksSortController? tasksSortController;
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TasksSearchController(projectId: projectId));
+    final controller = Get.put(TasksSearchController(
+        projectId: projectId,
+        tasksFilterController: tasksFilterController,
+        tasksSortController: tasksSortController));
 
     return Scaffold(
       appBar: StyledAppBar(title: CustomSearchBar(controller: controller)),

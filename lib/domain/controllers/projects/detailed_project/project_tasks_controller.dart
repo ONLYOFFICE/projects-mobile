@@ -88,8 +88,11 @@ class ProjectTasksController extends BaseTasksController {
   }
 
   @override
-  void showSearch() =>
-      Get.find<NavigationController>().to(TasksSearchScreen(projectId: projectDetailed.id));
+  void showSearch() => Get.find<NavigationController>().to(TasksSearchScreen(
+        projectId: projectDetailed.id,
+        tasksFilterController: filterController,
+        tasksSortController: sortController,
+      ));
 
   Future<void> loadTasks() async {
     loaded.value = false;
