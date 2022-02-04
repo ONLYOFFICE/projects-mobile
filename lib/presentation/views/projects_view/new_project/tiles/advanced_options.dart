@@ -37,6 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_switch.dart';
 
 class AdvancedOptions extends StatelessWidget {
@@ -120,12 +121,9 @@ class OptionWithSwitch extends StatelessWidget {
       height: 60,
       child: Column(
         children: <Widget>[
-          Divider(
+          const StyledDivider(
             height: 1,
             thickness: 1,
-            indent: 0,
-            endIndent: 0,
-            color: Get.theme.colors().outline,
           ),
           const SizedBox(height: 5),
           Row(
@@ -134,15 +132,12 @@ class OptionWithSwitch extends StatelessWidget {
             mainAxisSize: MainAxisSize.max,
             children: <Widget>[
               Expanded(
-                child: FittedBox(
-                  alignment: Alignment.topLeft,
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    title,
-                    style: TextStyleHelper.subtitle1(),
-                  ),
+                child: Text(
+                  title,
+                  style: TextStyleHelper.subtitle1(),
                 ),
               ),
+              const SizedBox(width: 20),
               Obx(
                 () => PlatformSwitch(
                   value: switchValue.value,
