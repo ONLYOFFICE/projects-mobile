@@ -104,15 +104,15 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                 tabs: [
                   CustomTab(
                       title: tr('comments'),
-                      currentTab: _activeIndex == 1,
+                      currentTab: _activeIndex == 0,
                       count: controller.discussion.value.commentsCount),
                   CustomTab(
                       title: tr('subscribers'),
-                      currentTab: _activeIndex == 2,
+                      currentTab: _activeIndex == 1,
                       count: controller.discussion.value.subscribers?.length),
                   CustomTab(
                       title: tr('documents'),
-                      currentTab: _activeIndex == 3,
+                      currentTab: _activeIndex == 2,
                       count: controller.discussion.value.files?.length),
                   Tab(text: tr('overview')),
                 ]),
