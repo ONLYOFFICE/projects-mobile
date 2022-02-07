@@ -47,6 +47,7 @@ import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
@@ -171,15 +172,16 @@ class _MoreButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformPopupMenuButton(
-      icon: PlatformWidget(
-        cupertino: (_, __) => Icon(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
           color: Get.theme.colors().primary,
-          size: 26,
         ),
-        material: (_, __) => const Icon(
+        materialIcon: Icon(
           Icons.more_vert,
-          size: 26,
+          color: Get.theme.colors().primary,
         ),
       ),
       onSelected: (String value) => _onSelected(value, controller, context),
@@ -236,70 +238,5 @@ class DocsBottom extends StatelessWidget {
         ),
       ],
     );
-  }
-}
-
-class CupertinoCollapsedNavBar extends SliverPersistentHeaderDelegate {
-  const CupertinoCollapsedNavBar({required this.controller, required this.persistentHeight});
-
-  final BaseDocumentsController controller;
-  final double persistentHeight;
-
-  @override
-  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return CupertinoNavigationBar(
-      backgroundColor: Get.theme.colors().background,
-      middle: Obx(
-        () => Text(
-          controller.documentsScreenName.value,
-          style: TextStyle(color: Get.theme.colors().onSurface),
-        ),
-      ),
-      trailing: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(
-            icon: AppIcon(
-              width: 24,
-              height: 24,
-              icon: SvgIcons.search,
-              color: Get.theme.colors().primary,
-            ),
-            onPressed: () {
-              Get.find<NavigationController>()
-                  .to(DocumentsSearchView(), preventDuplicates: false, arguments: {
-                'folderName': controller.documentsScreenName.value,
-                'folderId': controller.currentFolderID,
-                'documentsController': controller,
-              });
-            },
-          ),
-          IconButton(
-            icon: FiltersButton(controller: controller),
-            onPressed: () async => Get.find<NavigationController>().toScreen(
-                const DocumentsFilterScreen(),
-                preventDuplicates: false,
-                arguments: {'filterController': controller.filterController}),
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(CupertinoIcons.ellipsis_circle, color: Get.theme.colors().primary, size: 24),
-          ),
-        ],
-      ),
-    );
-  }
-
-  @override
-  double get maxExtent => persistentHeight;
-
-  @override
-  double get minExtent => persistentHeight;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    // TODO: implement shouldRebuild
-    return false;
   }
 }

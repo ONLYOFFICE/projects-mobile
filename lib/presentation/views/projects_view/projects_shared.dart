@@ -46,6 +46,7 @@ import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart'
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
 import 'package:projects/presentation/shared/widgets/sort_view.dart';
+import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
 import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
@@ -105,15 +106,16 @@ class ProjectsMoreButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformPopupMenuButton(
-      icon: PlatformWidget(
-        cupertino: (_, __) => Icon(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
           color: Get.theme.colors().primary,
-          size: 26,
         ),
-        material: (_, __) => const Icon(
+        materialIcon: Icon(
           Icons.more_vert,
-          size: 26,
+          color: Get.theme.colors().primary,
         ),
       ),
       onSelected: (String value) => _onSelected(value, controller, context),

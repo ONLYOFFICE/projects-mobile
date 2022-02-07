@@ -214,15 +214,16 @@ class DiscussionsMoreButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformPopupMenuButton(
-      icon: PlatformWidget(
-        cupertino: (_, __) => Icon(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
           color: Get.theme.colors().primary,
-          size: 26,
         ),
-        material: (_, __) => const Icon(
+        materialIcon: Icon(
           Icons.more_vert,
-          size: 26,
+          color: Get.theme.colors().primary,
         ),
       ),
       onSelected: (String value) => _onSelected(value, controller, context),

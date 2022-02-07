@@ -276,12 +276,14 @@ class _ProjectContextMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformPopupMenuButton(
-      icon: PlatformWidget(
-        cupertino: (_, __) => Icon(
+      padding: EdgeInsets.zero,
+      icon: PlatformIconButton(
+        padding: EdgeInsets.zero,
+        cupertinoIcon: Icon(
           CupertinoIcons.ellipsis_circle,
           color: Get.theme.colors().primary,
         ),
-        material: (_, __) => Icon(
+        materialIcon: Icon(
           Icons.more_vert,
           color: Get.theme.colors().primary,
         ),
