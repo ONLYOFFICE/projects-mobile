@@ -88,6 +88,7 @@ class _SearchFieldState extends State<SearchField> {
       child: PlatformWidget(
         cupertino: (_, __) {
           return CupertinoSearchTextField(
+            style: TextStyle(color: Get.theme.colors().onBackground),
             controller: widget.controller,
             onSubmitted: widget.onSubmitted,
             onChanged: widget.onChanged,
