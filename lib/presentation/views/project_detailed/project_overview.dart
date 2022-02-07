@@ -132,10 +132,14 @@ class ProjectOverview extends StatelessWidget {
                   caption: tr('creationDate'),
                   subtitle: projectController.creationDateText.value)),
               const SizedBox(height: 20),
-              Obx(() => InfoTile(
-                  icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
-                  caption: tr('tags'),
-                  subtitle: projectController.tagsText.value)),
+              Obx(() {
+                if (projectController.tagsText.value.isNotEmpty)
+                  return InfoTile(
+                      icon: const AppIcon(icon: SvgIcons.tag, color: Color(0xff707070)),
+                      caption: tr('tags'),
+                      subtitle: projectController.tagsText.value);
+                return const SizedBox();
+              })
             ],
           );
         } else {
