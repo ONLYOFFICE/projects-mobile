@@ -56,7 +56,8 @@ class StyledSmartRefresher extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SmartRefresher(
-        header: isMaterial(context)
+        // TODO Bug: CircularProgressIndicator always run
+        /* header: isMaterial(context)
             ? const MaterialClassicHeader()
             : CustomHeader(
                 builder: (context, mode) {
@@ -73,7 +74,7 @@ class StyledSmartRefresher extends StatelessWidget {
               child: Center(child: PlatformCircularProgressIndicator()),
             );
           },
-        ),
+        ), */
         enablePullDown: enablePullDown ?? true,
         enablePullUp: enablePullUp ?? false,
         controller: controller,
