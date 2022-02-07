@@ -31,6 +31,7 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -62,8 +63,19 @@ class SubtaskDetailedView extends StatelessWidget {
             actions: [
               if (_subtask.canEdit! || controller.canCreateSubtask)
                 PlatformPopupMenuButton(
-                  icon: Icon(PlatformIcons(context).ellipsis, size: 26),
-                  offset: const Offset(0, 25),
+                  padding: EdgeInsets.zero,
+                  icon: PlatformIconButton(
+                    padding: EdgeInsets.zero,
+                    cupertinoIcon: Icon(
+                      CupertinoIcons.ellipsis_circle,
+                      color: Get.theme.colors().primary,
+                    ),
+                    materialIcon: Icon(
+                      Icons.more_vert,
+                      color: Get.theme.colors().primary,
+                    ),
+                  ),
+                  //offset: const Offset(0, 25),
                   onSelected: (dynamic value) => _onSelected(context, value, controller),
                   itemBuilder: (context) {
                     return [
