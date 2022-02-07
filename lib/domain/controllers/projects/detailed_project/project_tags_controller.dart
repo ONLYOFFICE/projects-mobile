@@ -34,42 +34,42 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/tag_item_DTO.dart';
 import 'package:projects/data/services/project_service.dart';
+import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 
 class ProjectTagsController extends GetxController {
-  final ProjectService _api = locator<ProjectService>();
+  final _api = locator<ProjectService>();
   final _userController = Get.find<UserController>()..getUserInfo();
 
   final searchInputController = TextEditingController();
 
-  RxList usersList = [].obs;
-  RxBool loaded = true.obs;
+  final usersList = [].obs;
+  final loaded = true.obs;
 
-  RxBool isSearchResult = false.obs;
+  final isSearchResult = false.obs;
 
-  RxList<TagItemDTO> tags = <TagItemDTO>[].obs;
-  RxList<TagItemDTO> filteredTags = <TagItemDTO>[].obs;
+  final tags = <TagItemDTO>[].obs;
+  final filteredTags = <TagItemDTO>[].obs;
 
-  RxList<String?> projectDetailedTags = <String>[].obs;
+  final projectDetailedTags = <String>[].obs;
 
-  var _projController;
+  late BaseProjectEditorController _projController;
 
-  RxBool fabIsVisible = false.obs;
+  final fabIsVisible = false.obs;
 
   void onLoading() async {}
 
-  Future<void> setup(projController) async {
+  Future<void> setup(BaseProjectEditorController projController) async {
     _projController = projController;
     loaded.value = false;
     tags.clear();
     projectDetailedTags.clear();
+    filteredTags.clear();
     final allTags = await _api.getProjectTags();
 
-    if (projController?.tags != null) {
-      for (final value in projController?.tags) {
-        projectDetailedTags.add(value as String?);
-      }
+    for (final value in projController.tags) {
+      projectDetailedTags.add(value as String);
     }
 
     if (allTags != null) {
