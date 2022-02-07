@@ -252,57 +252,48 @@ class _Title extends StatelessWidget {
   final DocumentsMoveOrCopyController controller;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: Obx(
-              () => Text(
-                controller.documentsScreenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-              ),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: <Widget>[
+        Expanded(
+          child: Obx(
+            () => Text(
+              controller.documentsScreenName.value,
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
             ),
           ),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              PlatformIconButton(
-                onPressed: () {
-                  var target;
-                  target = controller.target;
+        ),
+        PlatformIconButton(
+          onPressed: () {
+            var target;
+            target = controller.target;
 
-                  Get.find<NavigationController>()
-                      .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
-                    'mode': controller.mode,
-                    'folderName': controller.documentsScreenName.value,
-                    'target': target,
-                    'currentFolder': controller.currentFolder,
-                    'initialFolderId': controller.initialFolderId,
-                    'foldersCount': controller.foldersCount,
-                  });
-                },
-                icon: AppIcon(
-                  width: 24,
-                  height: 24,
-                  icon: SvgIcons.search,
-                  color: Get.theme.colors().primary,
-                ),
-              ),
-              PlatformIconButton(
-                onPressed: () async => Get.find<NavigationController>().toScreen(
-                    const DocumentsFilterScreen(),
-                    preventDuplicates: false,
-                    arguments: {'filterController': controller.filterController}),
-                icon: FiltersButton(controller: controller),
-              ),
-            ],
+            Get.find<NavigationController>()
+                .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
+              'mode': controller.mode,
+              'folderName': controller.documentsScreenName.value,
+              'target': target,
+              'currentFolder': controller.currentFolder,
+              'initialFolderId': controller.initialFolderId,
+              'foldersCount': controller.foldersCount,
+            });
+          },
+          icon: AppIcon(
+            width: 24,
+            height: 24,
+            icon: SvgIcons.search,
+            color: Get.theme.colors().primary,
           ),
-        ],
-      ),
+        ),
+        PlatformIconButton(
+          onPressed: () async => Get.find<NavigationController>().toScreen(
+              const DocumentsFilterScreen(),
+              preventDuplicates: false,
+              arguments: {'filterController': controller.filterController}),
+          icon: FiltersButton(controller: controller),
+        ),
+      ],
     );
   }
 }

@@ -83,12 +83,9 @@ class ManageDiscussionSubscribersScreen extends StatelessWidget {
               ? Icon(PlatformIcons(context).back)
               : Icon(PlatformIcons(context).clear),
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4.0),
-              child: PlatformIconButton(
-                onPressed: onConfirm ?? controller.confirmSubscribersSelection,
-                icon: Icon(PlatformIcons(context).checkMark),
-              ),
+            PlatformIconButton(
+              onPressed: onConfirm ?? controller.confirmSubscribersSelection,
+              icon: Icon(PlatformIcons(context).checkMark),
             )
           ],
           // bottom: CustomSearchBar(controller: controller),
@@ -175,7 +172,7 @@ class _DiscussionSubscribersSearchBar extends StatelessWidget {
           ),
           const SizedBox(width: 16),
           PlatformIconButton(
-            //TODO check margin
+            padding: EdgeInsets.zero,
             onPressed: () => Get.find<NavigationController>().to(
               const UsersFromGroups(),
               arguments: {'controller': controller},

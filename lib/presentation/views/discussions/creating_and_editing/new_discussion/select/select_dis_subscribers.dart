@@ -92,12 +92,9 @@ class SelectDiscussionSubscribers extends StatelessWidget {
           ),
           onLeadingPressed: controller.leaveSubscribersSelectionView,
           actions: [
-            Padding(
-              padding: const EdgeInsets.only(right: 4),
-              child: PlatformIconButton(
-                onPressed: controller.confirmSubscribersSelection,
-                icon: Icon(PlatformIcons(context).checkMark),
-              ),
+            PlatformIconButton(
+              onPressed: controller.confirmSubscribersSelection,
+              icon: Icon(PlatformIcons(context).checkMark),
             ),
           ],
           // bottom: CustomSearchBar(controller: controller),
@@ -114,17 +111,15 @@ class SelectDiscussionSubscribers extends StatelessWidget {
                       controller: controller.userSearchController,
                     ),
                   )),
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: PlatformIconButton(
-                  onPressed: () => Get.find<NavigationController>().to(
-                    const UsersFromGroups(),
-                    arguments: {'controller': controller},
-                    transition: Transition.cupertinoDialog,
-                    fullscreenDialog: true,
-                  ),
-                  icon: const AppIcon(icon: SvgIcons.preferences),
+              PlatformIconButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => Get.find<NavigationController>().to(
+                  const UsersFromGroups(),
+                  arguments: {'controller': controller},
+                  transition: Transition.cupertinoDialog,
+                  fullscreenDialog: true,
                 ),
+                icon: const AppIcon(icon: SvgIcons.preferences),
               )
             ],
           ),

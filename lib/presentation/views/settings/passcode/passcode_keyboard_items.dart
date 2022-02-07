@@ -109,7 +109,7 @@ class PasscodeNumber extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkResponse(
       onTap: () => onPressed(number),
       child: SizedBox(
         height: 72,
@@ -137,7 +137,7 @@ class DeleteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return InkResponse(
       onTap: onTap,
       child: SizedBox(
         height: 72,
