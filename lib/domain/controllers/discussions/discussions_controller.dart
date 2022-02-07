@@ -37,6 +37,7 @@ import 'package:event_hub/event_hub.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/services/discussions_service.dart';
+import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/domain/controllers/base/base_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
@@ -51,6 +52,7 @@ import 'package:projects/presentation/views/discussions/discussions_search_view.
 
 class DiscussionsController extends BaseController {
   final DiscussionsService _api = locator<DiscussionsService>();
+  final UserPhotoService _userPhotoService = locator<UserPhotoService>();
   final ProjectsWithPresets projectsWithPresets = locator<ProjectsWithPresets>();
   PaginationController? _paginationController;
 
@@ -146,6 +148,17 @@ class DiscussionsController extends BaseController {
 
     paginationController!.total.value = result.total;
     if (needToClear) paginationController!.data.clear();
+
+    for (final discussion in result.response as List<Discussion>) {
+      final userId = discussion.createdBy?.id;
+      if (userId != null) {
+        final photo = await _userPhotoService.getUserPhoto(userId);
+        discussion.createdBy?.avatarMedium = photo?.medium;
+        discussion.createdBy?.avatarSmall = photo?.small;
+        discussion.createdBy?.avatar = photo?.big;
+      }
+    }
+
     paginationController!.data.addAll(result.response ?? <Discussion>[]);
 
     return Future.value(true);
