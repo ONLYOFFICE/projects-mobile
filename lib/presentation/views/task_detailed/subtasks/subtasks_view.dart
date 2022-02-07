@@ -55,7 +55,6 @@ class SubtasksView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _task = controller.task.value;
     return Obx(
       () {
         if (controller.loaded.value == true) {
@@ -65,7 +64,7 @@ class SubtasksView extends StatelessWidget {
                 controller: controller.subtaskRefreshController,
                 onRefresh: () => controller.reloadTask(showLoading: true),
                 child: () {
-                  if (_task.subtasks!.isEmpty)
+                  if (controller.task.value.subtasks!.isEmpty)
                     return Center(
                       child: EmptyScreen(
                         icon: SvgIcons.task_not_created,
@@ -73,14 +72,14 @@ class SubtasksView extends StatelessWidget {
                       ),
                     );
 
-                  if (_task.subtasks!.isNotEmpty)
+                  if (controller.task.value.subtasks!.isNotEmpty)
                     return ListView.builder(
-                      itemCount: _task.subtasks!.length,
+                      itemCount: controller.task.value.subtasks!.length,
                       padding: const EdgeInsets.only(top: 6, bottom: 50),
                       itemBuilder: (BuildContext context, int index) {
                         return SubtaskCell(
-                          subtask: _task.subtasks![index],
-                          parentTask: _task,
+                          subtask: controller.task.value.subtasks![index],
+                          parentTask: controller.task.value,
                         );
                       },
                     );
@@ -88,7 +87,7 @@ class SubtasksView extends StatelessWidget {
               ),
               if (controller.task.value.canCreateSubtask == true &&
                   controller.task.value.status != 2)
-                _FAB(task: _task),
+                _FAB(task: controller.task.value),
             ],
           );
         } else {
@@ -102,11 +101,11 @@ class SubtasksView extends StatelessWidget {
 class _FAB extends StatelessWidget {
   const _FAB({
     Key? key,
-    required PortalTask? task,
+    required PortalTask task,
   })  : _task = task,
         super(key: key);
 
-  final PortalTask? _task;
+  final PortalTask _task;
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +115,8 @@ class _FAB extends StatelessWidget {
       child: StyledFloatingActionButton(
         onPressed: () => Get.find<NavigationController>().to(const CreatingAndEditingSubtaskView(),
             arguments: {
-              'taskId': _task!.id,
-              'projectId': _task!.projectOwner!.id,
+              'taskId': _task.id,
+              'projectId': _task.projectOwner!.id,
               'forEditing': false,
             },
             transition: Transition.cupertinoDialog,
