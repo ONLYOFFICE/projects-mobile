@@ -30,7 +30,7 @@
  *
  */
 
-import 'package:flutter/widgets.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:projects/presentation/shared/wrappers/platform.dart';
 import 'package:projects/presentation/shared/wrappers/platform_circluar_progress_indicator.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -55,31 +55,42 @@ class StyledSmartRefresher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final header = isMaterial(context)
+        ? const MaterialClassicHeader()
+        : CustomHeader(builder: (context, mode) {
+            if (mode == RefreshStatus.idle)
+              return const SizedBox(
+                height: 55,
+                child: Center(
+                    child: CupertinoActivityIndicator(
+                  animating: false,
+                )),
+              );
+            if (mode == RefreshStatus.canRefresh)
+              return const SizedBox(
+                height: 55,
+                child: Center(child: CupertinoActivityIndicator()),
+              );
+            return const SizedBox();
+          });
+
+    final footer = CustomFooter(
+        builder: (context, mode) => mode == LoadStatus.loading
+            ? SizedBox(
+                height: 55,
+                child: Center(child: PlatformCircularProgressIndicator()),
+              )
+            : const SizedBox());
+
     return SmartRefresher(
-        // TODO Bug: CircularProgressIndicator always run
-        /* header: isMaterial(context)
-            ? const MaterialClassicHeader()
-            : CustomHeader(
-                builder: (context, mode) {
-                  return SizedBox(
-                    height: 55,
-                    child: Center(child: PlatformCircularProgressIndicator()),
-                  );
-                },
-              ),
-        footer: CustomFooter(
-          builder: (BuildContext context, LoadStatus? mode) {
-            return SizedBox(
-              height: 55,
-              child: Center(child: PlatformCircularProgressIndicator()),
-            );
-          },
-        ), */
-        enablePullDown: enablePullDown ?? true,
-        enablePullUp: enablePullUp ?? false,
-        controller: controller,
-        onRefresh: onRefresh,
-        onLoading: onLoading,
-        child: child);
+      header: header,
+      footer: footer,
+      enablePullDown: enablePullDown ?? true,
+      enablePullUp: enablePullUp ?? false,
+      controller: controller,
+      onRefresh: onRefresh,
+      onLoading: onLoading,
+      child: child,
+    );
   }
 }

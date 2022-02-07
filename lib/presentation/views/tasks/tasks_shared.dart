@@ -86,7 +86,7 @@ class TasksContent extends StatelessWidget {
             if (controller.loaded.value && controller.itemList.isNotEmpty)
               return ListView.builder(
                 itemBuilder: (c, i) => TaskCell(task: controller.itemList[i] as PortalTask),
-                //itemExtent: 72,
+                itemExtent: 72,
                 itemCount: controller.itemList.length,
               );
           }() as Widget,
