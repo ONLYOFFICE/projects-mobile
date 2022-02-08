@@ -11,7 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'platform.dart';
 import 'widget_base.dart';
 
-const EdgeInsets _defaultInsetPadding = EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0);
+const EdgeInsets _defaultInsetPadding = EdgeInsets.symmetric(horizontal: 40, vertical: 24);
 
 abstract class _BaseData {
   _BaseData({
@@ -96,21 +96,12 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
   final PlatformBuilder<MaterialAlertDialogData>? material;
   final PlatformBuilder<CupertinoAlertDialogData>? cupertino;
 
-  EdgeInsets? titlePadding;
-  EdgeInsets? contentPadding;
-  EdgeInsets? insetPadding;
-  EdgeInsets? actionsPadding;
-
   PlatformAlertDialog({
     Key? key,
     this.widgetKey,
     this.actions,
     this.content,
     this.title,
-    this.titlePadding,
-    this.contentPadding,
-    this.insetPadding,
-    this.actionsPadding,
     this.material,
     this.cupertino,
   }) : super(key: key);
@@ -123,12 +114,10 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
       key: data?.widgetKey ?? widgetKey,
       actions: data?.actions ?? actions,
       content: data?.content ?? content,
-      contentPadding: data?.contentPadding ??
-          contentPadding ??
-          const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
+      contentPadding: data?.contentPadding ?? const EdgeInsets.fromLTRB(24, 20, 24, 24),
       semanticLabel: data?.semanticLabel,
       title: data?.title ?? title,
-      titlePadding: data?.titlePadding ?? titlePadding,
+      titlePadding: data?.titlePadding,
       contentTextStyle: data?.contentTextStyle,
       backgroundColor: data?.backgroundColor,
       elevation: data?.elevation,
@@ -136,11 +125,11 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
       titleTextStyle: data?.titleTextStyle,
       scrollable: data?.scrollable ?? false,
       actionsOverflowDirection: data?.actionsOverflowDirection,
-      actionsPadding: data?.actionsPadding ?? actionsPadding ?? EdgeInsets.zero,
+      actionsPadding: data?.actionsPadding ?? EdgeInsets.zero,
       buttonPadding: data?.buttonPadding,
       actionsOverflowButtonSpacing: data?.actionsOverflowButtonSpacing,
       clipBehavior: data?.clipBehavior ?? Clip.none,
-      insetPadding: data?.insetPadding ?? insetPadding ?? _defaultInsetPadding,
+      insetPadding: data?.insetPadding ?? _defaultInsetPadding,
       actionsAlignment: data?.actionsAlignment,
     );
   }
@@ -149,7 +138,7 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
   CupertinoAlertDialog createCupertinoWidget(BuildContext context) {
     final data = cupertino?.call(context, platform(context));
 
-    Curve? curve = data?.insetAnimationCurve;
+    final curve = data?.insetAnimationCurve;
 
     return CupertinoAlertDialog(
       key: data?.widgetKey ?? widgetKey,
@@ -159,7 +148,7 @@ class PlatformAlertDialog extends PlatformWidgetBase<CupertinoAlertDialog, Alert
       actionScrollController: data?.actionScrollController,
       title: data?.title ?? title,
       insetAnimationCurve: curve ?? Curves.decelerate,
-      insetAnimationDuration: data?.insetAnimationDuration ?? Duration(milliseconds: 100),
+      insetAnimationDuration: data?.insetAnimationDuration ?? const Duration(milliseconds: 100),
     );
   }
 }

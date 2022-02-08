@@ -48,6 +48,7 @@ class StyledAlertDialog extends StatelessWidget {
   final Color? acceptColor;
   final Function()? onCancelTap;
   final Function()? onAcceptTap;
+
   const StyledAlertDialog({
     Key? key,
     this.cancelText,
@@ -68,33 +69,38 @@ class StyledAlertDialog extends StatelessWidget {
     final defaultCancelText =
         GetPlatform.isIOS ? tr('cancel').toLowerCase().capitalizeFirst! : tr('cancel');
     final defaultAcceptText =
-        GetPlatform.isIOS ? tr('accept').toLowerCase().capitalizeFirst! : tr('cancel');
+        GetPlatform.isIOS ? tr('accept').toLowerCase().capitalizeFirst! : tr('accept');
 
     final platformCancelText =
         GetPlatform.isIOS ? cancelText?.toLowerCase().capitalizeFirst : cancelText;
     final platformAcceptText =
         GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
 
+    final _title = title ?? Text(titleText!);
+    final _content = content ?? (contentText != null ? Text(contentText!) : null);
+
     return PlatformAlertDialog(
-      titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
-      contentPadding: contentText != null || content != null
-          ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
-          : const EdgeInsets.symmetric(horizontal: 24),
-      insetPadding: EdgeInsets.zero,
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      title: title ?? Text(titleText!),
-      content: content ?? (contentText != null ? Text(contentText!) : null),
+      title: _title,
+      content: _content != null
+          ? Container(
+              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 18) : null,
+              child: _content,
+            )
+          : null,
       actions: [
         PlatformTextButton(
           onPressed: onCancelTap ?? Get.back,
-          child: Text(platformCancelText ?? defaultCancelText, style: TextStyleHelper.button()),
+          child: Text(
+            platformCancelText ?? defaultCancelText,
+            style: TextStyleHelper.button(),
+            softWrap: false,
+          ),
         ),
         PlatformTextButton(
           onPressed: onAcceptTap,
-          child: Text(
-            platformAcceptText ?? defaultAcceptText,
-            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
-          ),
+          child: Text(platformAcceptText ?? defaultAcceptText,
+              style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
+              softWrap: false),
         ),
       ],
     );
@@ -125,26 +131,29 @@ class SingleButtonDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final defaultAcceptText =
+        GetPlatform.isIOS ? tr('accept').toLowerCase().capitalizeFirst! : tr('accept');
+
+    final platformAcceptText =
+        GetPlatform.isIOS ? acceptText?.toLowerCase().capitalizeFirst : acceptText;
+
+    final _title = title ?? Text(titleText!);
+    final _content = content ?? (contentText != null ? Text(contentText!) : null);
+
     return PlatformAlertDialog(
-      titlePadding: const EdgeInsets.only(left: 24, right: 24, top: 20),
-      contentPadding: contentText != null || content != null
-          ? const EdgeInsets.symmetric(horizontal: 24, vertical: 8)
-          : const EdgeInsets.symmetric(horizontal: 24),
-      insetPadding: EdgeInsets.zero,
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-      title: title ?? Text(titleText!),
-      // ignore: prefer_if_null_operators
-      content: content != null
-          ? content
-          : contentText != null
-              ? Text(contentText!)
-              : null,
+      title: _title,
+      content: _content != null
+          ? Container(
+              padding: GetPlatform.isIOS ? const EdgeInsets.only(top: 18) : null,
+              child: _content,
+            )
+          : null,
       actions: [
         PlatformTextButton(
           onPressed: onAcceptTap,
           child: Text(
-            acceptText ?? tr('accept'),
-            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().colorError),
+            platformAcceptText ?? defaultAcceptText,
+            style: TextStyleHelper.button(color: acceptColor ?? Get.theme.colors().links),
           ),
         ),
       ],
