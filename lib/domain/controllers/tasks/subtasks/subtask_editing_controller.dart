@@ -43,6 +43,7 @@ import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/tasks/subtasks/subtask_action_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class SubtaskEditingController extends GetxController implements SubtaskActionController {
@@ -141,6 +142,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           responsibles.value = [_previusSelectedResponsible];
           Get.back();
@@ -169,6 +171,7 @@ class SubtaskEditingController extends GetxController implements SubtaskActionCo
           titleText: tr('discardChanges'),
           contentText: tr('lostOnLeaveWarning'),
           acceptText: tr('delete').toUpperCase(),
+          acceptColor: Get.theme.colors().colorError,
           onAcceptTap: () {
             Get.back();
             Get.back();

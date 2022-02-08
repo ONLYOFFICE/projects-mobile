@@ -122,6 +122,7 @@ void _onSelected(value, TaskItemController controller) async {
         titleText: tr('deleteTaskTitle'),
         contentText: tr('deleteTaskAlert'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteTask(taskId: task.id!);

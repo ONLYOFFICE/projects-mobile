@@ -46,6 +46,7 @@ import 'package:projects/domain/controllers/projects/new_project/users_data_sour
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_group_item_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/projects_view/new_project/team_members_view.dart';
 
@@ -125,6 +126,7 @@ abstract class BaseProjectEditorController extends GetxController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           descriptionController.text = descriptionText.value;
           Get.back();

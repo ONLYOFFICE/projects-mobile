@@ -39,6 +39,7 @@ import 'package:projects/data/services/comments_service.dart';
 import 'package:projects/domain/controllers/comments/new_comment/abstract_new_comment.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class NewTaskCommentController extends NewCommentController {
@@ -112,6 +113,7 @@ class NewTaskCommentController extends NewCommentController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           _textController.clear();
           Get.back();

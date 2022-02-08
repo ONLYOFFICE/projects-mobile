@@ -45,6 +45,7 @@ import 'package:projects/domain/controllers/project_team_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/new_task/select/select_date_view.dart';
 
@@ -154,6 +155,7 @@ class NewMilestoneController extends GetxController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           descriptionController.value.text = descriptionText.value;
           Get.back();
@@ -177,6 +179,7 @@ class NewMilestoneController extends GetxController {
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           responsible.value = _previusSelectedResponsible;
           Get.back();

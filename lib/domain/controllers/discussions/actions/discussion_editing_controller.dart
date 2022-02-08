@@ -50,6 +50,7 @@ import 'package:projects/domain/controllers/projects/new_project/portal_group_it
 import 'package:projects/domain/controllers/projects/new_project/portal_user_item_controller.dart';
 import 'package:projects/domain/controllers/projects/new_project/users_data_source.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class DiscussionEditingController extends GetxController implements DiscussionActionsController {
@@ -155,6 +156,7 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.back();
@@ -183,6 +185,7 @@ class DiscussionEditingController extends GetxController implements DiscussionAc
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           for (final item in _previusSelectedSubscribers) {
             if (!item.isSelected.value) item.isSelected.value = true;

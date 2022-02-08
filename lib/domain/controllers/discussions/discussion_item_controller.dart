@@ -49,6 +49,7 @@ import 'package:projects/domain/controllers/portal_info_controller.dart';
 import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/internal/utils/debug_print.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/discussion_editing_screen.dart';
 import 'package:projects/presentation/views/discussions/creating_and_editing/discussion_editing/select/manage_discussion_subscribers_screen.dart';
@@ -199,6 +200,7 @@ class DiscussionItemController extends GetxController {
       titleText: tr('deleteDiscussionTitle'),
       contentText: tr('deleteDiscussionAlert'),
       acceptText: tr('delete').toUpperCase(),
+      acceptColor: Get.theme.colors().colorError,
       onCancelTap: () async => Get.back(),
       onAcceptTap: () async {
         try {

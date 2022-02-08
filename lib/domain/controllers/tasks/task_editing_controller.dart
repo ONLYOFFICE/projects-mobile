@@ -48,6 +48,7 @@ import 'package:projects/domain/controllers/user_controller.dart';
 import 'package:projects/domain/dialogs.dart';
 import 'package:projects/internal/extentions.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 
 class TaskEditingController extends GetxController implements TaskActionsController {
@@ -196,6 +197,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           descriptionController.value.text = task.description!;
           Get.back();
@@ -282,6 +284,7 @@ class TaskEditingController extends GetxController implements TaskActionsControl
         titleText: tr('discardChanges'),
         contentText: tr('lostOnLeaveWarning'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           responsibles!.value = List.of(_previusSelectedResponsibles!);
           Get.back();
