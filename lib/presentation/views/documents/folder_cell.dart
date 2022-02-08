@@ -159,7 +159,7 @@ class MoveFolderCell extends StatelessWidget {
           'target': target,
           'currentFolder': element,
           'initialFolderId': controller.initialFolderId,
-          'foldersCount': controller.foldersCount,
+          'nestingCounter': controller.nestingCounter,
         });
       },
       child: SizedBox(

@@ -61,9 +61,10 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
   int? get currentFolderID => initialFolderId;
 
   Timer? _searchDebounce;
-  int foldersCount = 0;
 
   String? mode;
+
+  int nestingCounter = 0;
 
   int? _targetId;
 
@@ -81,9 +82,6 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
   Folder? _currentFolder;
 
   Folder? get currentFolder => _currentFolder;
-
-  @override
-  RxString documentsScreenName = tr('chooseSection').obs;
 
   late DocumentsSortController _sortController;
 
@@ -114,6 +112,8 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     paginationController.refreshDelegate = () async => refreshContent();
 
     paginationController.pullDownEnabled = true;
+
+    documentsScreenName.value = tr('chooseSection');
   }
 
   Future<void> refreshContent() async {
@@ -173,8 +173,11 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     paginationController.data.addAll(result.folders!);
     paginationController.data.addAll(result.files!);
 
-    documentsScreenName.value = _screenName ?? tr('documents');
-    screenName = _screenName ?? tr('documents');
+    countFolders();
+    countFiles();
+
+    documentsScreenName.value = _screenName ?? tr('chooseSection');
+    screenName = _screenName ?? tr('chooseSection');
   }
 
   void clearSearch() {
@@ -225,7 +228,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     );
 
     if (result != null) {
-      Get.close(foldersCount);
+      Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
     }
@@ -239,7 +242,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     );
 
     if (result != null) {
-      Get.close(foldersCount);
+      Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
     }
@@ -253,7 +256,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     );
 
     if (result != null) {
-      Get.close(foldersCount);
+      Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
     }
@@ -267,10 +270,12 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     );
 
     if (result != null) {
-      Get.close(foldersCount);
+      Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileCopied'));
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
@@ -296,10 +301,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       'target': target,
       'currentFolder': currentFolder,
       'initialFolderId': initialFolderId,
-      'foldersCount': foldersCount,
+      'nestingCounter': nestingCounter,
     });
   }
-
-  @override
-  String screenName = tr('documents');
 }

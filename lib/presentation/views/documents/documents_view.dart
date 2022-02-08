@@ -228,7 +228,7 @@ class DocsBottom extends StatelessWidget {
           }),
           Obx(
             () => Text(
-              tr('total', args: [controller.paginationController.total.value.toString()]),
+              tr('total', args: [controller.foldersCount.value.toString()]),
               style: TextStyleHelper.body2(
                 color: Get.theme.colors().onSurface.withOpacity(0.6),
               ),

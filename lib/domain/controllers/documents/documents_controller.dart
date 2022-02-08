@@ -80,8 +80,6 @@ class DocumentsController extends BaseDocumentsController {
   @override
   RxString documentsScreenName = tr('documents').obs;
 
-  RxInt filesCount = RxInt(-1);
-
   final _sortController = DocumentsSortController();
   @override
   DocumentsSortController get sortController => _sortController;
@@ -184,14 +182,6 @@ class DocumentsController extends BaseDocumentsController {
     screenName = _screenName ?? tr('documents');
 
     return Future.value(true);
-  }
-
-  void countFiles() {
-    var counter = 0;
-    for (final item in _paginationController.data) {
-      if (item is PortalFile) counter++;
-    }
-    filesCount.value = counter;
   }
 
   void clearSearch() {

@@ -64,7 +64,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
 
     controller.setupOptions(target, initialFolderId);
 
-    controller.foldersCount = 1;
+    controller.nestingCounter = 1;
     controller.mode = mode;
 
     final scrollController = ScrollController();
@@ -94,20 +94,17 @@ class MoveFolderContentView extends StatelessWidget {
     final currentFolder = Get.arguments['currentFolder'] as Folder;
     final target = Get.arguments['target'] as int?;
     final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final foldersCount = Get.arguments['foldersCount'] as int;
+    final nestingCounter = Get.arguments['nestingCounter'] as int;
     final mode = Get.arguments['mode'] as String?;
 
     controller.setupFolder(folderName: currentFolder.title!, folder: currentFolder);
 
     controller.setupOptions(target, initialFolderId);
 
-    controller.foldersCount = foldersCount + 1;
+    controller.nestingCounter = nestingCounter + 1;
     controller.mode = mode;
 
     final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return MoveDocumentsScreen(
       controller: controller,
@@ -134,7 +131,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
     final currentFolder = Get.arguments['currentFolder'] as Folder?;
     final target = Get.arguments['target'] as int?;
     final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final foldersCount = Get.arguments['foldersCount'] as int;
+    final nestingCounter = Get.arguments['nestingCounter'] as int;
     final folderName = Get.arguments['folderName'] as String?;
     final mode = Get.arguments['mode'] as String?;
 
@@ -142,7 +139,7 @@ class DocumentsMoveSearchView extends StatelessWidget {
 
     controller.setupOptions(target, initialFolderId);
 
-    controller.foldersCount = foldersCount + 1;
+    controller.nestingCounter = nestingCounter + 1;
     controller.mode = mode;
 
     final scrollController = ScrollController();
@@ -316,36 +313,40 @@ class MoveDocumentsScreen extends StatelessWidget {
                   ),
                 ),
               ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                PlatformTextButton(
-                  onPressed: () => Get.close(controller.foldersCount),
-                  child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
-                ),
-                if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
+            SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
                   PlatformTextButton(
-                    onPressed: controller.moveFolder,
-                    child:
-                        Text(tr('moveFolderHere').toUpperCase(), style: TextStyleHelper.button()),
+                    onPressed: () => Get.close(controller.nestingCounter),
+                    child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                   ),
-                if (controller.mode == 'copyFolder' && controller.currentFolder != null)
-                  PlatformTextButton(
-                    onPressed: controller.copyFolder,
-                    child:
-                        Text(tr('copyFolderHere').toUpperCase(), style: TextStyleHelper.button()),
-                  ),
-                if (controller.mode == 'moveFile' && controller.currentFolder != null)
-                  PlatformTextButton(
-                    onPressed: controller.moveFile,
-                    child: Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
-                  ),
-                if (controller.mode == 'copyFile' && controller.currentFolder != null)
-                  PlatformTextButton(
-                    onPressed: controller.copyFile,
-                    child: Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
-                  ),
-              ],
+                  if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
+                    PlatformTextButton(
+                      onPressed: controller.moveFolder,
+                      child:
+                          Text(tr('moveFolderHere').toUpperCase(), style: TextStyleHelper.button()),
+                    ),
+                  if (controller.mode == 'copyFolder' && controller.currentFolder != null)
+                    PlatformTextButton(
+                      onPressed: controller.copyFolder,
+                      child:
+                          Text(tr('copyFolderHere').toUpperCase(), style: TextStyleHelper.button()),
+                    ),
+                  if (controller.mode == 'moveFile' && controller.currentFolder != null)
+                    PlatformTextButton(
+                      onPressed: controller.moveFile,
+                      child:
+                          Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
+                    ),
+                  if (controller.mode == 'copyFile' && controller.currentFolder != null)
+                    PlatformTextButton(
+                      onPressed: controller.copyFile,
+                      child:
+                          Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
+                    ),
+                ],
+              ),
             ),
           ],
         ),
