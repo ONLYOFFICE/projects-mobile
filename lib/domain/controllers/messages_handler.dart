@@ -42,7 +42,7 @@ import 'package:projects/presentation/shared/theme/text_styles.dart';
 class MessagesHandler {
   static String? _lastMessage;
 
-  static ValueNotifier<bool> isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen ?? false);
+  static ValueNotifier<bool> isDisplayed = ValueNotifier<bool>(Get.isSnackbarOpen);
 
   static final Queue _a = Queue();
 

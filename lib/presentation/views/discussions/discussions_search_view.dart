@@ -32,6 +32,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussion_search_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
@@ -62,10 +63,13 @@ class DiscussionsSearchScreen extends StatelessWidget {
               child: ListView.builder(
                 itemCount: controller.paginationController.data.length,
                 itemBuilder: (BuildContext context, int index) {
+                  final discussion = controller.paginationController.data[index];
+                  final discussionItemController = Get.find<DiscussionItemController>();
+                  discussionItemController.setup(discussion);
                   return DiscussionTile(
-                    discussion: controller.paginationController.data[index],
+                    controller: discussionItemController,
                     onTap: () => Get.find<NavigationController>().to(DiscussionDetailed(),
-                        arguments: {'discussion': controller.paginationController.data[index]}),
+                        arguments: {'controller': discussionItemController}),
                   );
                 },
               ),
