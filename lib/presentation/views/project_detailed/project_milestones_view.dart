@@ -40,7 +40,6 @@ import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_data_source.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
-import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -128,10 +127,9 @@ class _Content extends StatelessWidget {
                     );
                   if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
                     return ListView.builder(
-                      itemBuilder: (c, i) =>
-                          MilestoneCell(milestone: controller.paginationController.data[i]),
+                      itemBuilder: (c, i) => MilestoneCell(milestone: controller.itemList[i]),
                       itemExtent: 72,
-                      itemCount: controller.paginationController.data.length,
+                      itemCount: controller.itemList.length,
                     );
                 }() as Widget,
               ),
@@ -153,12 +151,20 @@ class ProjectMilestonesFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformIconButton(
-      icon: FiltersButton(controller: controller),
-      padding: EdgeInsets.zero,
-      onPressed: () async =>
-          Get.find<NavigationController>().toScreen(const MilestoneFilterScreen()),
-    );
+    return Obx(() {
+      if (controller.itemList.isNotEmpty || controller.filterController.hasFilters.value)
+        return PlatformIconButton(
+          icon: FiltersButton(controller: controller),
+          padding: EdgeInsets.zero,
+          onPressed: () async => Get.find<NavigationController>().toScreen(
+            const MilestoneFilterScreen(),
+            arguments: {'filterController': controller.filterController},
+            transition: Transition.cupertinoDialog,
+            fullscreenDialog: true,
+          ),
+        );
+      return const SizedBox();
+    });
   }
 }
 

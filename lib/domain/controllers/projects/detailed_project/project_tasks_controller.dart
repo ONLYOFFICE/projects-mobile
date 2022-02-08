@@ -111,6 +111,7 @@ class ProjectTasksController extends BaseTasksController {
         startIndex: _paginationController.startIndex,
         sortBy: _sortController.currentSortfilter,
         sortOrder: _sortController.currentSortOrder,
+        statusFilter: _filterController.statusFilter,
         responsibleFilter: _filterController.responsibleFilter,
         creatorFilter: _filterController.creatorFilter,
         projectFilter: _filterController.projectFilter,

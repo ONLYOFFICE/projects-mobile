@@ -60,8 +60,7 @@ class MilestoneFilterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final BaseFilterController filterController = Get.find<MilestonesFilterController>();
-
+    final filterController = Get.arguments['filterController'] as BaseFilterController;
     final platformController = Get.find<PlatformController>();
 
     void onActionPressed() async => filterController.resetFilters();

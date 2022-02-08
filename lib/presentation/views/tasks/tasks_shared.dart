@@ -106,17 +106,21 @@ class TasksFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformIconButton(
-      icon: FiltersButton(controller: controller),
-      onPressed: () async => Get.find<NavigationController>().toScreen(
-        const TasksFilterScreen(),
-        preventDuplicates: false,
-        arguments: {'filterController': controller.filterController},
-        transition: Transition.cupertinoDialog,
-        fullscreenDialog: true,
-      ),
-      padding: EdgeInsets.zero,
-    );
+    return Obx(() {
+      if (controller.itemList.isNotEmpty || controller.filterController.hasFilters.value)
+        return PlatformIconButton(
+          icon: FiltersButton(controller: controller),
+          onPressed: () async => Get.find<NavigationController>().toScreen(
+            const TasksFilterScreen(),
+            preventDuplicates: false,
+            arguments: {'filterController': controller.filterController},
+            transition: Transition.cupertinoDialog,
+            fullscreenDialog: true,
+          ),
+          padding: EdgeInsets.zero,
+        );
+      return const SizedBox();
+    });
   }
 }
 

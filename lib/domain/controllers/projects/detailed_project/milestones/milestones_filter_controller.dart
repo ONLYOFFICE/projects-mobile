@@ -94,12 +94,7 @@ class MilestonesFilterController extends BaseFilterController {
 
   MilestonesFilterController() {
     suitableResultCount = (-1).obs;
-  }
-
-  @override
-  void onInit() async {
-    await loadFilters();
-    super.onInit();
+    loadFilters();
   }
 
   Future<void> changeResponsible(String filter, [newValue = '']) async {

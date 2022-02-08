@@ -213,10 +213,7 @@ class _ProjectAppBarActions extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return () {
-      if (index == ProjectDetailedTabs.tasks &&
-          projectController.projectTasksController != null &&
-          (projectController.projectTasksController!.itemList.isNotEmpty ||
-              projectController.projectTasksController!.filterController.hasFilters.value))
+      if (index == ProjectDetailedTabs.tasks && projectController.projectTasksController != null)
         return Row(
           children: [
             SearchButton(controller: projectController.projectTasksController!),
@@ -225,24 +222,17 @@ class _ProjectAppBarActions extends StatelessWidget {
         );
 
       if (index == ProjectDetailedTabs.milestones &&
-          projectController.projectMilestonesController != null &&
-          (projectController.projectMilestonesController!.itemList.isNotEmpty ||
-              projectController.projectMilestonesController!.filterController.hasFilters.value))
+          projectController.projectMilestonesController != null)
         return Row(
           children: [
-            PlatformIconButton(
-              icon: Icon(PlatformIcons(context).search), // TODO
-              padding: EdgeInsets.zero,
-            ),
+            SearchButton(controller: projectController.projectMilestonesController!),
             ProjectMilestonesFilterButton(
-                controller: projectController.projectMilestonesController!),
+                controller: projectController.projectMilestonesController!)
           ],
         );
 
       if (index == ProjectDetailedTabs.discussions &&
-          projectController.projectDiscussionsController != null &&
-          (projectController.projectDiscussionsController!.itemList.isNotEmpty ||
-              projectController.projectDiscussionsController!.filterController.hasFilters.value))
+          projectController.projectDiscussionsController != null)
         return Row(
           children: [
             SearchButton(controller: projectController.projectDiscussionsController!),
@@ -251,9 +241,7 @@ class _ProjectAppBarActions extends StatelessWidget {
         );
 
       if (index == ProjectDetailedTabs.documents &&
-          projectController.projectDocumentsController != null &&
-          (projectController.projectDocumentsController!.itemList.isNotEmpty ||
-              projectController.projectDocumentsController!.filterController.hasFilters.value))
+          projectController.projectDocumentsController != null)
         return Row(
           children: [
             SearchButton(controller: projectController.projectDocumentsController!),
