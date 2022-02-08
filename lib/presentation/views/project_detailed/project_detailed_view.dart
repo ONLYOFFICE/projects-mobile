@@ -391,6 +391,7 @@ Future<void> _onSelected(
         titleText: tr('deleteProject'),
         contentText: tr('deleteProjectAlert'),
         acceptText: tr('delete').toUpperCase(),
+        acceptColor: Get.theme.colors().colorError,
         onCancelTap: () async => Get.back(),
         onAcceptTap: () async {
           final result = await controller.deleteProject();

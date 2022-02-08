@@ -95,7 +95,7 @@ class ProfileController extends GetxController {
     await Get.dialog(StyledAlertDialog(
       titleText: tr('logOutTitle'),
       acceptText: tr('logOut').toUpperCase(),
-      acceptColor: Get.theme.colors().primary,
+      acceptColor: Get.theme.colors().colorError,
       onAcceptTap: () async {
         await Get.find<LoginController>().logout();
       },
