@@ -52,18 +52,9 @@ import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
 import 'package:synchronized/synchronized.dart';
 
-class DocumentsController extends GetxController implements BaseDocumentsController {
+class DocumentsController extends BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
-
-  @override
-  RxBool hasFilters = false.obs;
-  @override
-  RxBool loaded = false.obs;
-  @override
-  RxBool nothingFound = false.obs;
-  @override
-  RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -98,6 +89,9 @@ class DocumentsController extends GetxController implements BaseDocumentsControl
   final _filterController = DocumentsFilterController();
   @override
   DocumentsFilterController get filterController => _filterController;
+
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
 
   late StreamSubscription _refreshDocumentsSubscription;
 

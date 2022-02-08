@@ -68,6 +68,9 @@ class TasksController extends BaseTasksController {
   TaskFilterController get filterController => _filterController;
   final _filterController = TaskFilterController();
 
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
+
   final taskStatusesLoaded = false.obs;
   final fabIsVisible = false.obs;
 

@@ -48,17 +48,8 @@ import 'package:projects/domain/controllers/pagination_controller.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:projects/presentation/views/documents/documents_move_or_copy_view.dart';
 
-class DocumentsMoveOrCopyController extends GetxController implements BaseDocumentsController {
+class DocumentsMoveOrCopyController extends BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
-
-  @override
-  RxBool hasFilters = false.obs;
-  @override
-  RxBool loaded = false.obs;
-  @override
-  RxBool nothingFound = false.obs;
-  @override
-  RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -103,6 +94,9 @@ class DocumentsMoveOrCopyController extends GetxController implements BaseDocume
 
   @override
   DocumentsFilterController get filterController => _filterController;
+
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
 
   DocumentsMoveOrCopyController(
     DocumentsFilterController filterController,

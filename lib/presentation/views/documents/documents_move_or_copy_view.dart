@@ -112,19 +112,13 @@ class MoveFolderContentView extends StatelessWidget {
     return MoveDocumentsScreen(
       controller: controller,
       scrollController: scrollController,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            title: _Title(controller: controller),
-            bottom: DocsBottom(controller: controller),
-            showBackButton: true,
-            titleHeight: 50,
-            bottomHeight: 50,
-            elevation: value,
-          ),
-        ),
+      appBar: StyledAppBar(
+        title: _Title(controller: controller),
+        bottom: DocsBottom(controller: controller),
+        actions: [
+          SearchButton(controller: controller),
+          DocumentsFilterButton(controller: controller)
+        ],
       ),
     );
   }
@@ -158,7 +152,6 @@ class DocumentsMoveSearchView extends StatelessWidget {
       scrollController: scrollController,
       appBar: StyledAppBar(
         title: CustomSearchBar(controller: controller),
-        titleHeight: 50,
       ),
     );
   }

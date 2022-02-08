@@ -208,34 +208,34 @@ class DocsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              PlatformTextButton(
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 11),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Obx(() {
+            if (controller.itemList.isNotEmpty)
+              return PlatformTextButton(
                 padding: EdgeInsets.zero,
                 onPressed: () => documentsSortButtonOnPressed(controller, context),
                 child: DocumentsSortButton(
                   controller: controller,
                   color: Get.theme.colors().primary,
                 ),
+              );
+            return const SizedBox();
+          }),
+          Obx(
+            () => Text(
+              tr('total', args: [controller.paginationController.total.value.toString()]),
+              style: TextStyleHelper.body2(
+                color: Get.theme.colors().onSurface.withOpacity(0.6),
               ),
-              Obx(
-                () => Text(
-                  tr('total', args: [controller.paginationController.total.value.toString()]),
-                  style: TextStyleHelper.body2(
-                    color: Get.theme.colors().onSurface.withOpacity(0.6),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

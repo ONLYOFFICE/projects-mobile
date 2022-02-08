@@ -52,20 +52,11 @@ import 'package:projects/internal/constants.dart';
 import 'package:projects/internal/locator.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class DiscussionsDocumentsController extends GetxController implements BaseDocumentsController {
+class DiscussionsDocumentsController extends BaseDocumentsController {
   final FilesService _api = locator<FilesService>();
   PortalInfoController portalInfoController = Get.find<PortalInfoController>();
 
   final _userController = Get.find<UserController>();
-
-  @override
-  RxBool hasFilters = false.obs;
-  @override
-  RxBool loaded = false.obs;
-  @override
-  RxBool nothingFound = false.obs;
-  @override
-  RxBool searchMode = false.obs;
 
   TextEditingController searchInputController = TextEditingController();
 
@@ -100,6 +91,9 @@ class DiscussionsDocumentsController extends GetxController implements BaseDocum
   DocumentsSortController get sortController => _sortController;
 
   late DocumentsFilterController _filterController;
+
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
 
   @override
   DocumentsFilterController get filterController => _filterController;

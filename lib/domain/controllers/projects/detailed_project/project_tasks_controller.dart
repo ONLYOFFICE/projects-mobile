@@ -62,6 +62,9 @@ class ProjectTasksController extends BaseTasksController {
   ProjectTaskFilterController get filterController => _filterController;
   final _filterController = Get.find<ProjectTaskFilterController>();
 
+  @override
+  RxBool get hasFilters => _filterController.hasFilters;
+
   ProjectDetailed get projectDetailed => _projectDetailed;
   ProjectDetailed _projectDetailed = ProjectDetailed();
 

@@ -47,13 +47,18 @@ class SearchButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformIconButton(
-      icon: AppIcon(
-        icon: SvgIcons.search,
-        color: Get.theme.colors().primary,
-      ),
-      padding: EdgeInsets.zero,
-      onPressed: controller.showSearch,
-    );
+    return Obx(() {
+      if (controller.itemList.isNotEmpty)
+        return PlatformIconButton(
+          icon: AppIcon(
+            icon: SvgIcons.search,
+            color: Get.theme.colors().primary,
+          ),
+          padding: EdgeInsets.zero,
+          onPressed: controller.showSearch,
+        );
+
+      return const SizedBox();
+    });
   }
 }
