@@ -98,9 +98,12 @@ class TasksFilterScreen extends StatelessWidget {
         ),
         actions: [
           PlatformWidget(
-            material: (platformContext, __) => IconButton(
-              icon: const Icon(Icons.check_rounded),
+            material: (platformContext, __) => TextButton(
               onPressed: onActionPressed,
+              child: Text(
+                tr('reset'),
+                style: TextStyleHelper.button(color: Get.theme.colors().systemBlue),
+              ),
             ),
             cupertino: (platformContext, __) => CupertinoButton(
               onPressed: onActionPressed,

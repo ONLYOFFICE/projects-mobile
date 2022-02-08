@@ -31,29 +31,27 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/base/base_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
-
 import 'package:projects/domain/controllers/projects/detailed_project/milestones/milestones_filter_controller.dart';
-
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/filters/confirm_filters_button.dart';
-import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/filters/filter_element_widget.dart';
+import 'package:projects/presentation/shared/widgets/filters/filters_row.dart';
 import 'package:projects/presentation/shared/widgets/select_item_screens/users/select_user_screen.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_date_range_picker.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icons.dart';
-import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
-part 'filters/status.dart';
 part 'filters/duedate.dart';
-part 'filters/task_responsible.dart';
 part 'filters/milestone_responsible.dart';
+part 'filters/status.dart';
+part 'filters/task_responsible.dart';
 
 class MilestoneFilterScreen extends StatelessWidget {
   const MilestoneFilterScreen({
@@ -66,25 +64,56 @@ class MilestoneFilterScreen extends StatelessWidget {
 
     final platformController = Get.find<PlatformController>();
 
+    void onActionPressed() async => filterController.resetFilters();
+
+    void onLeadingPressed() {
+      filterController.restoreFilters();
+      Get.back();
+    }
+
+    final backgroundColor = platformController.isMobile ? null : Get.theme.colors().surface;
+
     return Scaffold(
-      backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
+      backgroundColor: backgroundColor,
       appBar: StyledAppBar(
-        onLeadingPressed: () {
-          filterController.restoreFilters();
-          Get.back();
-        },
         titleText: tr('filter'),
-        showBackButton: true,
-        backgroundColor: platformController.isMobile ? null : Get.theme.colors().surface,
-        backButtonIcon: Get.put(PlatformController()).isMobile
-            ? Icon(PlatformIcons(context).back)
-            : Icon(PlatformIcons(context).clear),
+        backgroundColor: backgroundColor,
+        centerTitle: GetPlatform.isIOS,
+        leadingWidth: 65,
+        leading: PlatformWidget(
+          cupertino: (_, __) => CupertinoButton(
+            padding: const EdgeInsets.only(left: 16),
+            alignment: Alignment.centerLeft,
+            onPressed: onLeadingPressed,
+            child: Text(
+              tr('closeLowerCase'),
+              style: TextStyleHelper.button(),
+            ),
+          ),
+          material: (_, __) => IconButton(
+            onPressed: onLeadingPressed,
+            icon: const Icon(Icons.close),
+          ),
+        ),
         actions: [
-          PlatformTextButton(
-              onPressed: () async => filterController.resetFilters(),
-              child: Text(tr('reset'),
-                  style: TextStyleHelper.button(color: Get.theme.colors().systemBlue))),
-          SizedBox(width: platformController.isMobile ? 8 : 12),
+          PlatformWidget(
+            material: (platformContext, __) => TextButton(
+              onPressed: onActionPressed,
+              child: Text(
+                tr('reset'),
+                style: TextStyleHelper.button(color: Get.theme.colors().systemBlue),
+              ),
+            ),
+            cupertino: (platformContext, __) => CupertinoButton(
+              onPressed: onActionPressed,
+              padding: const EdgeInsets.only(right: 16),
+              alignment: Alignment.centerLeft,
+              child: Text(
+                tr('reset').toLowerCase().capitalizeFirst!,
+                style: TextStyleHelper.button(),
+              ),
+            ),
+          ),
         ],
       ),
       body: Stack(
