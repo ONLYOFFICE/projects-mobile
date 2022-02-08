@@ -60,51 +60,29 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     final initialFolderId = Get.arguments['initialFolderId'] as int?;
     final mode = Get.arguments['mode'] as String?;
 
-    controller.initialSetup();
+    final currentFolder = Get.arguments['currentFolder'] as Folder?;
+    final nestingCounter = Get.arguments['nestingCounter'] as int?;
+
+    if (currentFolder == null)
+      controller.initialSetup();
+    else
+      controller.setupFolder(
+        folderName: currentFolder.title!,
+        folder: currentFolder,
+      );
 
     controller.setupOptions(target, initialFolderId);
 
-    controller.nestingCounter = 1;
+    if (nestingCounter != null) controller.nestingCounter = nestingCounter + 1;
     controller.mode = mode;
 
     return MoveDocumentsScreen(
       controller: controller,
       appBar: StyledAppBar(
-        title: _Title(controller: controller),
-        bottom: DocsBottom(controller: controller),
-        actions: [
-          SearchButton(controller: controller),
-          DocumentsFilterButton(controller: controller)
-        ],
-      ),
-    );
-  }
-}
-
-class MoveFolderContentView extends StatelessWidget {
-  MoveFolderContentView({Key? key}) : super(key: key);
-
-  final controller = Get.find<DocumentsMoveOrCopyController>();
-
-  @override
-  Widget build(BuildContext context) {
-    final currentFolder = Get.arguments['currentFolder'] as Folder;
-    final target = Get.arguments['target'] as int?;
-    final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final nestingCounter = Get.arguments['nestingCounter'] as int;
-    final mode = Get.arguments['mode'] as String?;
-
-    controller.setupFolder(folderName: currentFolder.title!, folder: currentFolder);
-
-    controller.setupOptions(target, initialFolderId);
-
-    controller.nestingCounter = nestingCounter + 1;
-    controller.mode = mode;
-
-    return MoveDocumentsScreen(
-      controller: controller,
-      appBar: StyledAppBar(
-        title: _Title(controller: controller),
+        title: Obx(() => Text(
+              controller.documentsScreenName.value,
+              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+            )),
         bottom: DocsBottom(controller: controller),
         actions: [
           SearchButton(controller: controller),
@@ -122,14 +100,20 @@ class DocumentsMoveSearchView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currentFolder = Get.arguments['currentFolder'] as Folder?;
     final target = Get.arguments['target'] as int?;
     final initialFolderId = Get.arguments['initialFolderId'] as int?;
-    final nestingCounter = Get.arguments['nestingCounter'] as int;
-    final folderName = Get.arguments['folderName'] as String?;
     final mode = Get.arguments['mode'] as String?;
 
-    controller.setupSearchMode(folderName: folderName, folder: currentFolder);
+    final currentFolder = Get.arguments['currentFolder'] as Folder?;
+    final nestingCounter = Get.arguments['nestingCounter'] as int;
+
+    if (currentFolder == null)
+      controller.initialSetup();
+    else
+      controller.setupFolder(
+        folderName: currentFolder.title!,
+        folder: currentFolder,
+      );
 
     controller.setupOptions(target, initialFolderId);
 
@@ -141,90 +125,6 @@ class DocumentsMoveSearchView extends StatelessWidget {
         title: CustomSearchBar(controller: controller),
       ),
       body: MoveOrCopyFolderContent(controller: controller),
-    );
-  }
-}
-
-class MoveOrCopyFolderContent extends StatelessWidget {
-  const MoveOrCopyFolderContent({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final DocumentsMoveOrCopyController controller;
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        if (!controller.loaded.value) return const ListLoadingSkeleton();
-
-        return PaginationListView(
-            paginationController: controller.paginationController,
-            child: () {
-              if (controller.loaded.value && controller.nothingFound.value) {
-                return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
-              }
-              if (controller.loaded.value &&
-                  controller.paginationController.data.isEmpty &&
-                  !controller.filterController.hasFilters.value &&
-                  !controller.searchMode.value) {
-                return Center(
-                    child: EmptyScreen(
-                        icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
-              }
-              if (controller.loaded.value &&
-                  controller.paginationController.data.isEmpty &&
-                  controller.filterController.hasFilters.value &&
-                  controller.searchMode.value) {
-                return Center(
-                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
-              }
-              if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
-                return ListView.separated(
-                  itemCount: controller.paginationController.data.length,
-                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
-                  itemBuilder: (BuildContext context, int index) {
-                    final element = controller.paginationController.data[index];
-                    if (controller.target == element.id) return const SizedBox();
-                    return element is Folder
-                        ? MoveFolderCell(
-                            element: element,
-                            controller: controller,
-                          )
-                        : const SizedBox();
-                  },
-                );
-
-              return const SizedBox();
-            }());
-      },
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  const _Title({Key? key, required this.controller}) : super(key: key);
-
-  final DocumentsMoveOrCopyController controller;
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: <Widget>[
-        Expanded(
-          child: SizedBox(
-            width: double.infinity,
-            child: Obx(
-              () => Text(
-                controller.documentsScreenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
@@ -290,6 +190,64 @@ class MoveDocumentsScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class MoveOrCopyFolderContent extends StatelessWidget {
+  const MoveOrCopyFolderContent({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final DocumentsMoveOrCopyController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(
+      () {
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
+
+        return PaginationListView(
+            paginationController: controller.paginationController,
+            child: () {
+              if (controller.loaded.value && controller.nothingFound.value) {
+                return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
+              }
+              if (controller.loaded.value &&
+                  controller.paginationController.data.isEmpty &&
+                  !controller.filterController.hasFilters.value &&
+                  !controller.searchMode.value) {
+                return Center(
+                    child: EmptyScreen(
+                        icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
+              }
+              if (controller.loaded.value &&
+                  controller.paginationController.data.isEmpty &&
+                  controller.filterController.hasFilters.value &&
+                  controller.searchMode.value) {
+                return Center(
+                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
+              }
+              if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                return ListView.separated(
+                  itemCount: controller.paginationController.data.length,
+                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
+                  itemBuilder: (BuildContext context, int index) {
+                    final element = controller.paginationController.data[index];
+                    if (controller.target == element.id) return const SizedBox();
+                    return element is Folder
+                        ? MoveFolderCell(
+                            element: element,
+                            controller: controller,
+                          )
+                        : const SizedBox();
+                  },
+                );
+
+              return const SizedBox();
+            }());
+      },
     );
   }
 }

@@ -64,7 +64,7 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
 
   String? mode;
 
-  int nestingCounter = 0;
+  int nestingCounter = 1;
 
   int? _targetId;
 

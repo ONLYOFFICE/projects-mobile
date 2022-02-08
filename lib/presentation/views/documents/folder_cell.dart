@@ -31,13 +31,11 @@
  */
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
-import 'package:projects/domain/controllers/documents/documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
 import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -152,11 +150,10 @@ class MoveFolderCell extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        final target = controller.target;
         Get.find<NavigationController>()
-            .to(MoveFolderContentView(), preventDuplicates: false, arguments: {
+            .to(DocumentsMoveOrCopyView(), preventDuplicates: false, arguments: {
           'mode': controller.mode,
-          'target': target,
+          'target': controller.target,
           'currentFolder': element,
           'initialFolderId': controller.initialFolderId,
           'nestingCounter': controller.nestingCounter,

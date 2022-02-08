@@ -191,7 +191,6 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
         'initialFolderId': documentsController.currentFolderID,
         'refreshCalback': documentsController.refreshContent
       });
-
       break;
     case 'rename':
       _renameFile(documentsController, cellController, context);
@@ -201,7 +200,8 @@ Future<void> _onFilePopupMenuSelected(value, BuildContext context,
 
       if (success) {
         MessagesHandler.showSnackBar(context: context, text: tr('fileDeleted'));
-      }
+      } else
+        MessagesHandler.showSnackBar(context: context, text: tr('error'));
       break;
     default:
   }
