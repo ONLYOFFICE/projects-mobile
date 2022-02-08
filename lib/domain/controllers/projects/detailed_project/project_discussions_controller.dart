@@ -37,7 +37,7 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/data/services/discussions_service.dart';
-import 'package:projects/data/services/user_photo_service.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_sort_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/pagination_controller.dart';
@@ -47,7 +47,6 @@ import 'package:projects/presentation/views/discussions/discussion_detailed/disc
 
 class ProjectDiscussionsController extends GetxController {
   final DiscussionsService _api = locator<DiscussionsService>();
-  final UserPhotoService _userPhotoService = locator<UserPhotoService>();
 
   var projectId;
   var projectTitle;
@@ -130,23 +129,13 @@ class ProjectDiscussionsController extends GetxController {
     paginationController.total.value = result.total;
     if (needToClear) paginationController.data.clear();
 
-    for (final discussion in result.response as List<Discussion>) {
-      final userId = discussion.createdBy?.id;
-      if (userId != null) {
-        final photo = await _userPhotoService.getUserPhoto(userId);
-        discussion.createdBy?.avatarMedium = photo?.medium;
-        discussion.createdBy?.avatarSmall = photo?.small;
-        discussion.createdBy?.avatar = photo?.big;
-      }
-    }
-
     paginationController.data.addAll(result.response ?? <Discussion>[]);
 
     return Future.value(true);
   }
 
-  void toDetailed(Discussion discussion) => Get.find<NavigationController>()
-      .to(DiscussionDetailed(), arguments: {'discussion': discussion});
+  void toDetailed(DiscussionItemController controller) => Get.find<NavigationController>()
+      .to(DiscussionDetailed(), arguments: {'controller': controller});
 
   void toNewDiscussionScreen() => Get.find<NavigationController>().to(const NewDiscussionScreen(),
       arguments: {'projectId': projectId, 'projectTitle': projectTitle});

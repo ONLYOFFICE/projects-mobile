@@ -61,7 +61,8 @@ class CustomNetworkImage extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4));
         }
-        return CachedNetworkImage(
+        if (image != null && image!.isNotEmpty) {
+          return CachedNetworkImage(
             imageUrl: locator<ImagesController>().getImagePath(image!),
             httpHeaders: snapshot.data as Map<String, String>?,
             fit: fit,
@@ -72,7 +73,11 @@ class CustomNetworkImage extends StatelessWidget {
                 CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)),
             errorWidget: (_, __, ___) =>
                 defaultImage ??
-                CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)));
+                CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4)),
+          );
+        } else {
+          return CircleAvatar(backgroundColor: Get.theme.colors().bgDescription.withOpacity(0.4));
+        }
       },
     );
   }
