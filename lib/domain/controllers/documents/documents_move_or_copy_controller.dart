@@ -231,7 +231,9 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
@@ -245,7 +247,9 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
@@ -259,7 +263,9 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
       Get.close(nestingCounter);
 
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('fileMoved'));
-    }
+    } else
+      MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
+
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 

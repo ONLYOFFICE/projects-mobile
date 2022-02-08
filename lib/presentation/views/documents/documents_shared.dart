@@ -94,7 +94,6 @@ class DocumentsContent extends StatelessWidget {
               }
               if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
                 return ListView.separated(
-                  controller: ScrollController(),
                   itemCount: controller.paginationController.data.length,
                   separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
                   itemBuilder: (BuildContext context, int index) {

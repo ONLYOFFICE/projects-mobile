@@ -67,11 +67,8 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     controller.nestingCounter = 1;
     controller.mode = mode;
 
-    final scrollController = ScrollController();
-
     return MoveDocumentsScreen(
       controller: controller,
-      scrollController: scrollController,
       appBar: StyledAppBar(
         title: _Title(controller: controller),
         bottom: DocsBottom(controller: controller),
@@ -104,11 +101,8 @@ class MoveFolderContentView extends StatelessWidget {
     controller.nestingCounter = nestingCounter + 1;
     controller.mode = mode;
 
-    final scrollController = ScrollController();
-
     return MoveDocumentsScreen(
       controller: controller,
-      scrollController: scrollController,
       appBar: StyledAppBar(
         title: _Title(controller: controller),
         bottom: DocsBottom(controller: controller),
@@ -142,76 +136,69 @@ class DocumentsMoveSearchView extends StatelessWidget {
     controller.nestingCounter = nestingCounter + 1;
     controller.mode = mode;
 
-    final scrollController = ScrollController();
-
-    return _DocumentsScreen(
-      controller: controller,
-      scrollController: scrollController,
+    return Scaffold(
       appBar: StyledAppBar(
         title: CustomSearchBar(controller: controller),
       ),
+      body: MoveOrCopyFolderContent(controller: controller),
     );
   }
 }
 
-class _DocumentsScreen extends StatelessWidget {
-  const _DocumentsScreen({
+class MoveOrCopyFolderContent extends StatelessWidget {
+  const MoveOrCopyFolderContent({
     Key? key,
     required this.controller,
-    required this.scrollController,
-    this.appBar,
   }) : super(key: key);
-  final PreferredSizeWidget? appBar;
+
   final DocumentsMoveOrCopyController controller;
-  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //backgroundColor: Get.theme.backgroundColor,
-      appBar: appBar,
-      body: Obx(
-        () {
-          if (controller.loaded.value == false) return const ListLoadingSkeleton();
-          if (controller.loaded.value == true && controller.nothingFound.value == true) {
-            return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              !controller.filterController.hasFilters.value &&
-              controller.searchMode.value == false) {
-            return Center(
-                child: EmptyScreen(
-                    icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
-          }
-          if (controller.loaded.value == true &&
-              controller.paginationController.data.isEmpty &&
-              controller.filterController.hasFilters.value &&
-              controller.searchMode.value == false) {
-            return Center(
-                child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
-          }
-          if (controller.loaded.value == true && controller.paginationController.data.isNotEmpty) {
-            return PaginationListView(
-              paginationController: controller.paginationController,
-              child: ListView.separated(
-                itemCount: controller.paginationController.data.length,
-                separatorBuilder: (BuildContext context, int index) {
-                  return const SizedBox(height: 10);
-                },
-                itemBuilder: (BuildContext context, int index) {
-                  final element = controller.paginationController.data[index];
-                  return MoveFolderCell(
-                    element: element as Folder,
-                    controller: controller,
-                  );
-                },
-              ),
-            );
-          }
-          return const SizedBox();
-        },
-      ),
+    return Obx(
+      () {
+        if (!controller.loaded.value) return const ListLoadingSkeleton();
+
+        return PaginationListView(
+            paginationController: controller.paginationController,
+            child: () {
+              if (controller.loaded.value && controller.nothingFound.value) {
+                return Center(child: EmptyScreen(icon: SvgIcons.not_found, text: tr('notFound')));
+              }
+              if (controller.loaded.value &&
+                  controller.paginationController.data.isEmpty &&
+                  !controller.filterController.hasFilters.value &&
+                  !controller.searchMode.value) {
+                return Center(
+                    child: EmptyScreen(
+                        icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')));
+              }
+              if (controller.loaded.value &&
+                  controller.paginationController.data.isEmpty &&
+                  controller.filterController.hasFilters.value &&
+                  controller.searchMode.value) {
+                return Center(
+                    child: EmptyScreen(icon: SvgIcons.not_found, text: tr('noDocumentsMatching')));
+              }
+              if (controller.loaded.value && controller.paginationController.data.isNotEmpty)
+                return ListView.separated(
+                  itemCount: controller.paginationController.data.length,
+                  separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
+                  itemBuilder: (BuildContext context, int index) {
+                    final element = controller.paginationController.data[index];
+                    if (controller.target == element.id) return const SizedBox();
+                    return element is Folder
+                        ? MoveFolderCell(
+                            element: element,
+                            controller: controller,
+                          )
+                        : const SizedBox();
+                  },
+                );
+
+              return const SizedBox();
+            }());
+      },
     );
   }
 }
@@ -246,110 +233,62 @@ class MoveDocumentsScreen extends StatelessWidget {
   const MoveDocumentsScreen({
     Key? key,
     required this.controller,
-    required this.scrollController,
     this.appBar,
   }) : super(key: key);
+
   final PreferredSizeWidget? appBar;
   final DocumentsMoveOrCopyController controller;
-  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       //backgroundColor: Get.theme.backgroundColor,
       appBar: appBar,
-      body: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            if (controller.loaded.value == false) const ListLoadingSkeleton(),
-            if (controller.loaded.value == true && controller.nothingFound.value == true)
-              const Expanded(
-                child: Center(
-                  child: NothingFound(),
-                ),
-              ),
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                !controller.filterController.hasFilters.value &&
-                controller.searchMode.value == false)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.documents_not_created, text: tr('noDocumentsCreated')),
-                ),
-              ),
-            if (controller.loaded.value == true &&
-                controller.paginationController.data.isEmpty &&
-                controller.filterController.hasFilters.value &&
-                controller.searchMode.value == false)
-              Expanded(
-                child: Center(
-                  child: EmptyScreen(
-                      icon: SvgIcons.not_found,
-                      text: tr('noDocumentsMatching', args: [tr('documents').toLowerCase()])),
-                ),
-              ),
-            if (controller.loaded.value == true && controller.paginationController.data.isNotEmpty)
-              Expanded(
-                child: PaginationListView(
-                  paginationController: controller.paginationController,
-                  child: ListView.separated(
-                    itemCount: controller.paginationController.data.length,
-                    controller: scrollController,
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const SizedBox(height: 10);
-                    },
-                    itemBuilder: (BuildContext context, int index) {
-                      final element = controller.paginationController.data[index];
-                      if (controller.target == element.id) return const SizedBox();
-                      return element is Folder
-                          ? MoveFolderCell(
-                              element: element,
-                              controller: controller,
-                            )
-                          : const SizedBox();
-                    },
-                  ),
-                ),
-              ),
-            SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  PlatformTextButton(
-                    onPressed: () => Get.close(controller.nestingCounter),
-                    child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
-                  ),
-                  if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
+      body: Stack(
+        children: [
+          MoveOrCopyFolderContent(controller: controller),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              color: Get.theme.colors().surface,
+              child: SafeArea(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
                     PlatformTextButton(
-                      onPressed: controller.moveFolder,
-                      child:
-                          Text(tr('moveFolderHere').toUpperCase(), style: TextStyleHelper.button()),
+                      onPressed: () => Get.close(controller.nestingCounter),
+                      child: Text(tr('cancel').toUpperCase(), style: TextStyleHelper.button()),
                     ),
-                  if (controller.mode == 'copyFolder' && controller.currentFolder != null)
-                    PlatformTextButton(
-                      onPressed: controller.copyFolder,
-                      child:
-                          Text(tr('copyFolderHere').toUpperCase(), style: TextStyleHelper.button()),
-                    ),
-                  if (controller.mode == 'moveFile' && controller.currentFolder != null)
-                    PlatformTextButton(
-                      onPressed: controller.moveFile,
-                      child:
-                          Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
-                    ),
-                  if (controller.mode == 'copyFile' && controller.currentFolder != null)
-                    PlatformTextButton(
-                      onPressed: controller.copyFile,
-                      child:
-                          Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
-                    ),
-                ],
+                    if (controller.mode == 'moveFolder' && controller.currentFolderID != null)
+                      PlatformTextButton(
+                        onPressed: controller.moveFolder,
+                        child: Text(tr('moveFolderHere').toUpperCase(),
+                            style: TextStyleHelper.button()),
+                      ),
+                    if (controller.mode == 'copyFolder' && controller.currentFolder != null)
+                      PlatformTextButton(
+                        onPressed: controller.copyFolder,
+                        child: Text(tr('copyFolderHere').toUpperCase(),
+                            style: TextStyleHelper.button()),
+                      ),
+                    if (controller.mode == 'moveFile' && controller.currentFolder != null)
+                      PlatformTextButton(
+                        onPressed: controller.moveFile,
+                        child:
+                            Text(tr('moveFileHere').toUpperCase(), style: TextStyleHelper.button()),
+                      ),
+                    if (controller.mode == 'copyFile' && controller.currentFolder != null)
+                      PlatformTextButton(
+                        onPressed: controller.copyFile,
+                        child:
+                            Text(tr('copyFileHere').toUpperCase(), style: TextStyleHelper.button()),
+                      ),
+                  ],
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
