@@ -90,14 +90,14 @@ Future<void> showsDiscussionStatusesBS({
                   InkWell(
                     onTap: () async => controller!.updateMessageStatus(0),
                     child: StatusTile(
-                      title: tr('open'),
+                      title: tr('openDiscussion'),
                       selected: controller!.status.value == 0,
                     ),
                   ),
                   InkWell(
                     onTap: () async => controller.updateMessageStatus(1),
                     child: StatusTile(
-                      title: tr('archived'),
+                      title: tr('archiveDiscussion'),
                       selected: controller.status.value == 1,
                     ),
                   ),
@@ -123,7 +123,7 @@ Future<void> showsDiscussionStatusesPM({
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       onTap: () async => controller.updateMessageStatus(0),
       child: StatusTileTablet(
-        title: tr('open'),
+        title: tr('openDiscussion'),
         selected: controller.status.value == 0,
         icon: Center(
           child: AppIcon(
@@ -140,7 +140,7 @@ Future<void> showsDiscussionStatusesPM({
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
       onTap: () async => controller.updateMessageStatus(1),
       child: StatusTileTablet(
-        title: tr('archived'),
+        title: tr('archiveDiscussion'),
         selected: controller.status.value == 1,
         icon: Center(
           child: AppIcon(

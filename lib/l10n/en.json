@@ -473,5 +473,9 @@
 	"noGroups": "No groups here yet",
 	"searchTags": "Search for tags...",
 	"done": "Done",
-	"closeLowerCase": "Close"
+	"closeLowerCase": "Close",
+	"discussionIsOpen": "Open",
+	"discussionInArchive": "Archived",
+	"openDiscussion": "Open",
+	"archiveDiscussion": "To archive"
 }
