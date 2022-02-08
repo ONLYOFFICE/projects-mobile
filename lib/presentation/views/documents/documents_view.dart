@@ -39,20 +39,16 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:projects/domain/controllers/documents/documents_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
+import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
 import 'package:projects/presentation/views/documents/documents_shared.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/project_documents_view.dart';
 
@@ -220,18 +216,21 @@ class DocsBottom extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //_DocumentsSortButton(controller: controller), TODO
-              Row(
-                children: <Widget>[
-                  Obx(
-                    () => Text(
-                      tr('total', args: [controller.paginationController.total.value.toString()]),
-                      style: TextStyleHelper.body2(
-                        color: Get.theme.colors().onSurface.withOpacity(0.6),
-                      ),
-                    ),
+              PlatformTextButton(
+                padding: EdgeInsets.zero,
+                onPressed: () => documentsSortButtonOnPressed(controller, context),
+                child: DocumentsSortButton(
+                  controller: controller,
+                  color: Get.theme.colors().primary,
+                ),
+              ),
+              Obx(
+                () => Text(
+                  tr('total', args: [controller.paginationController.total.value.toString()]),
+                  style: TextStyleHelper.body2(
+                    color: Get.theme.colors().onSurface.withOpacity(0.6),
                   ),
-                ],
+                ),
               ),
             ],
           ),

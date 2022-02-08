@@ -11,7 +11,7 @@ import 'package:flutter/widgets.dart';
 import 'platform.dart';
 import 'widget_base.dart';
 
-const double _kMinInteractiveDimensionCupertino = 44.0;
+const double _kMinInteractiveDimensionCupertino = 44;
 
 abstract class _BaseData {
   _BaseData({
@@ -125,13 +125,13 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
 
     return TextButton(
       key: data?.widgetKey ?? widgetKey,
-      child: data?.child ?? child!,
       onPressed: data?.onPressed ?? onPressed,
       onLongPress: data?.onLongPress,
       autofocus: data?.autofocus ?? false,
       clipBehavior: data?.clipBehavior ?? Clip.none,
       focusNode: data?.focusNode,
       style: data?.style ?? TextButton.styleFrom(padding: padding, alignment: alignment),
+      child: data?.child ?? child!,
     );
   }
 
@@ -142,27 +142,27 @@ class PlatformTextButton extends PlatformWidgetBase<CupertinoButton, TextButton>
     if (data?.originalStyle ?? false) {
       return CupertinoButton.filled(
         key: data?.widgetKey ?? widgetKey,
-        child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(Radius.circular(8)),
         minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
         disabledColor: data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: data?.alignment ?? alignment ?? Alignment.center,
+        child: data?.child ?? child!,
       );
     } else {
       return CupertinoButton(
         key: data?.widgetKey ?? widgetKey,
-        child: data?.child ?? child!,
         onPressed: data?.onPressed ?? onPressed,
-        borderRadius: data?.borderRadius ?? const BorderRadius.all(const Radius.circular(8.0)),
-        minSize: data?.minSize ?? _kMinInteractiveDimensionCupertino,
+        borderRadius: data?.borderRadius ?? const BorderRadius.all(Radius.circular(8)),
+        minSize: data?.minSize /* ?? _kMinInteractiveDimensionCupertino */,
         padding: data?.padding ?? padding,
         pressedOpacity: data?.pressedOpacity ?? 0.4,
         disabledColor: data?.disabledColor ?? CupertinoColors.quaternarySystemFill,
         alignment: data?.alignment ?? alignment ?? Alignment.center,
         color: data?.color,
+        child: data?.child ?? child!,
       );
     }
   }

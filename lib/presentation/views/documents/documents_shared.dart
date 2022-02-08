@@ -45,6 +45,7 @@ import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/platform_controller.dart';
 import 'package:projects/presentation/shared/mixins/show_popup_menu_mixin.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
@@ -142,26 +143,27 @@ class DocumentsFilterButton extends StatelessWidget {
 }
 
 class DocumentsSortButton extends StatelessWidget {
-  const DocumentsSortButton({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
+  const DocumentsSortButton({Key? key, required this.controller, this.color}) : super(key: key);
 
   final BaseDocumentsController controller;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: <Widget>[
         Obx(
-          () => Text(controller.sortController.currentSortTitle.value),
+          () => Text(
+            controller.sortController.currentSortTitle.value,
+            style: TextStyleHelper.body2(color: color ?? Get.theme.colors().onBackground),
+          ),
         ),
         const SizedBox(width: 8),
         Obx(
           () => (controller.sortController.currentSortOrder == 'ascending')
               ? AppIcon(
                   icon: SvgIcons.sorting_4_ascend,
-                  color: Get.theme.colors().onBackground,
+                  color: color ?? Get.theme.colors().onBackground,
                   width: 20,
                   height: 20,
                 )
@@ -170,7 +172,7 @@ class DocumentsSortButton extends StatelessWidget {
                   transform: Matrix4.rotationX(math.pi),
                   child: AppIcon(
                     icon: SvgIcons.sorting_4_ascend,
-                    color: Get.theme.colors().onBackground,
+                    color: color ?? Get.theme.colors().onBackground,
                     width: 20,
                     height: 20,
                   ),

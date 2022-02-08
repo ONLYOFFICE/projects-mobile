@@ -102,13 +102,14 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       leadingWidth: leadingWidth,
       leading: leading == null && showBackButton
           ? PlatformIconButton(
+              padding: EdgeInsets.zero,
               icon: Icon(PlatformIcons(context).back),
               onPressed: onLeadingPressed ?? Get.back,
             )
           : leading,
       toolbarTextStyle: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
 
-      actions: [...?actions],
+      actions: actions,
 
       // ignore: prefer_if_null_operators
       title: title != null

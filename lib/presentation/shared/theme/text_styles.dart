@@ -259,7 +259,7 @@ class TextStyleHelper {
         color: color,
         fontFamily: '.SF UI Text',
         fontWeight: FontWeight.w400,
-        fontSize: 12,
+        fontSize: 20,
         height: 1.333);
   }
 

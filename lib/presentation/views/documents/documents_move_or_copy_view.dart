@@ -35,20 +35,18 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
-import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/custom_searchbar.dart';
-import 'package:projects/presentation/shared/widgets/filters_button.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/nothing_found.dart';
 import 'package:projects/presentation/shared/widgets/paginating_listview.dart';
+import 'package:projects/presentation/shared/widgets/search_button.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
-import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_text_button.dart';
+import 'package:projects/presentation/views/documents/documents_shared.dart';
 import 'package:projects/presentation/views/documents/documents_view.dart';
-import 'package:projects/presentation/views/documents/filter/documents_filter_screen.dart';
 import 'package:projects/presentation/views/documents/folder_cell.dart';
 
 class DocumentsMoveOrCopyView extends StatelessWidget {
@@ -70,25 +68,17 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
     controller.mode = mode;
 
     final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return MoveDocumentsScreen(
       controller: controller,
       scrollController: scrollController,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, double value, __) => StyledAppBar(
-            title: _Title(controller: controller),
-            bottom: DocsBottom(controller: controller),
-            showBackButton: true,
-            titleHeight: 50,
-            elevation: value,
-          ),
-        ),
+      appBar: StyledAppBar(
+        title: _Title(controller: controller),
+        bottom: DocsBottom(controller: controller),
+        actions: [
+          SearchButton(controller: controller),
+          DocumentsFilterButton(controller: controller)
+        ],
       ),
     );
   }
@@ -162,23 +152,13 @@ class DocumentsMoveSearchView extends StatelessWidget {
     controller.mode = mode;
 
     final scrollController = ScrollController();
-    final elevation = ValueNotifier<double>(0);
-
-    scrollController.addListener(() => elevation.value = scrollController.offset > 2 ? 1 : 0);
 
     return _DocumentsScreen(
       controller: controller,
       scrollController: scrollController,
-      appBar: PreferredSize(
-        preferredSize: const Size(double.infinity, 101),
-        child: ValueListenableBuilder(
-          valueListenable: elevation,
-          builder: (_, dynamic value, __) => StyledAppBar(
-            title: CustomSearchBar(controller: controller),
-            showBackButton: true,
-            titleHeight: 50,
-          ),
-        ),
+      appBar: StyledAppBar(
+        title: CustomSearchBar(controller: controller),
+        titleHeight: 50,
       ),
     );
   }
@@ -257,41 +237,15 @@ class _Title extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         Expanded(
-          child: Obx(
-            () => Text(
-              controller.documentsScreenName.value,
-              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+          child: SizedBox(
+            width: double.infinity,
+            child: Obx(
+              () => Text(
+                controller.documentsScreenName.value,
+                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+              ),
             ),
           ),
-        ),
-        PlatformIconButton(
-          onPressed: () {
-            var target;
-            target = controller.target;
-
-            Get.find<NavigationController>()
-                .to(DocumentsMoveSearchView(), preventDuplicates: false, arguments: {
-              'mode': controller.mode,
-              'folderName': controller.documentsScreenName.value,
-              'target': target,
-              'currentFolder': controller.currentFolder,
-              'initialFolderId': controller.initialFolderId,
-              'foldersCount': controller.foldersCount,
-            });
-          },
-          icon: AppIcon(
-            width: 24,
-            height: 24,
-            icon: SvgIcons.search,
-            color: Get.theme.colors().primary,
-          ),
-        ),
-        PlatformIconButton(
-          onPressed: () async => Get.find<NavigationController>().toScreen(
-              const DocumentsFilterScreen(),
-              preventDuplicates: false,
-              arguments: {'filterController': controller.filterController}),
-          icon: FiltersButton(controller: controller),
         ),
       ],
     );
