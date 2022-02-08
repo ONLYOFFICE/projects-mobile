@@ -235,18 +235,23 @@ void _renameFile(
       cancelText: tr('cancel'),
       onAcceptTap: () async {
         inputController.text = inputController.text.trim();
+        inputController.selection = TextSelection.fromPosition(
+          TextPosition(offset: inputController.text.length),
+        );
+
         if (inputController.text.isEmpty) {
           isErrorInputText.value = true;
         } else {
           if (inputController.text != cellController.file.title) {
             final success =
                 await cellController.renameFile(cellController.file, inputController.text);
-            if (success) {
+            if (success)
               MessagesHandler.showSnackBar(context: context, text: tr('fileRenamed'));
-              Get.back();
-            }
-          } else
-            Get.back();
+            else
+              MessagesHandler.showSnackBar(context: context, text: tr('error'));
+          }
+
+          Get.back();
         }
       },
       onCancelTap: Get.back,
