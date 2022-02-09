@@ -55,10 +55,10 @@ class MilestonesDataSource extends BaseController {
   final _paginationController = PaginationController<Milestone>();
 
   MilestonesSortController get sortController => _sortController;
-  final _sortController = MilestonesSortController();
+  final _sortController = Get.find<MilestonesSortController>();
 
   MilestonesFilterController get filterController => _filterController;
-  final _filterController = MilestonesFilterController();
+  final _filterController = Get.find<MilestonesFilterController>();
 
   final searchTextEditingController = TextEditingController();
 

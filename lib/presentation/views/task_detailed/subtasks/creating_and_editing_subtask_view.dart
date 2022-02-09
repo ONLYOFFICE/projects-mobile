@@ -78,7 +78,7 @@ class CreatingAndEditingSubtaskView extends StatelessWidget {
         appBar: StyledAppBar(
           titleText: forEditing ? tr('editSubtask') : tr('addSubtask'),
           leadingWidth: 65,
-          centerTitle: GetPlatform.isAndroid ? false : true,
+          centerTitle: !GetPlatform.isAndroid,
           actions: [
             PlatformWidget(
               material: (platformContext, __) => IconButton(
