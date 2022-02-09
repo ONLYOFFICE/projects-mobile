@@ -22,12 +22,12 @@ import 'package:flutter/material.dart'
         Scaffold;
 import 'package:flutter/widgets.dart';
 
-import 'extensions.dart';
-import 'platform.dart';
-import 'platform_app_bar.dart';
-import 'platform_nav_bar.dart';
-import 'platform_provider.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/extensions.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform_app_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_nav_bar.dart';
+import 'package:projects/presentation/shared/wrappers/platform_provider.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 abstract class _BaseData {
   _BaseData({

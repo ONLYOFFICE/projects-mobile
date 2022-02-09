@@ -51,7 +51,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
     checkBoxValue = controller.checkBoxValue;
   }
 
-  RxBool? checkBoxValue;
+  late final RxBool? checkBoxValue;
   final controller = Get.find<LoginController>();
 
   @override
@@ -62,7 +62,6 @@ class PrivacyAndTermsFooter extends StatelessWidget {
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
     final textTermsOfService = tr('privacyAndTermsFooter.termsOfServiceWithLink');
 
-
     final beforeText = needAgreement
         ? tr('privacyAndTermsAgreement.beforeText')
         : fullText.substring(0, fullText.indexOf(textPrivacyPolicy));
@@ -72,7 +71,6 @@ class PrivacyAndTermsFooter extends StatelessWidget {
             fullText.indexOf(textTermsOfService));
     final afterText =
         fullText.substring(fullText.indexOf(textTermsOfService) + textTermsOfService.length);
-
 
     final textSpanPrivacyPolicy = TextSpan(
       style: TextStyle(
@@ -111,7 +109,6 @@ class PrivacyAndTermsFooter extends StatelessWidget {
                 value: checkBoxValue!.value,
                 onChanged: (bool? value) {
                   checkBoxValue!.value = value ?? false;
-
                 },
               ),
             ),

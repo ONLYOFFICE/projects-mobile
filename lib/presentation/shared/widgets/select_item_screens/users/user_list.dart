@@ -48,7 +48,7 @@ class _UserList extends StatelessWidget {
         child: ListView.builder(
           itemCount: usersController.paginationController.data.length,
           itemBuilder: (BuildContext context, int index) {
-            final user = usersController.paginationController.data[index] as PortalUser;
+            final user = usersController.paginationController.data[index];
             if (currentUser.user!.id == user.id) return const SizedBox();
             return _UserTile(user: user);
           },

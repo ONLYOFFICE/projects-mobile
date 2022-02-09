@@ -6,8 +6,8 @@
 
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
 
 class PlatformWidget extends PlatformWidgetBase<Widget, Widget> {
   final PlatformBuilder<Widget?>? material;
@@ -21,11 +21,11 @@ class PlatformWidget extends PlatformWidgetBase<Widget, Widget> {
 
   @override
   Widget createMaterialWidget(BuildContext context) {
-    return material?.call(context, platform(context)) ?? SizedBox.shrink();
+    return material?.call(context, platform(context)) ?? const SizedBox.shrink();
   }
 
   @override
   Widget createCupertinoWidget(BuildContext context) {
-    return cupertino?.call(context, platform(context)) ?? SizedBox.shrink();
+    return cupertino?.call(context, platform(context)) ?? const SizedBox.shrink();
   }
 }

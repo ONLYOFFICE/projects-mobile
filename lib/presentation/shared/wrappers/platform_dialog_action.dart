@@ -15,12 +15,11 @@ import 'package:flutter/material.dart'
         MaterialTapTargetSize,
         TextButton,
         VisualDensity;
-import 'package:flutter/rendering.dart' show MouseCursor;
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'platform_provider.dart';
-import 'widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/widget_base.dart';
+import 'package:projects/presentation/shared/wrappers/platform_provider.dart';
 
 abstract class _BaseData {
   _BaseData({

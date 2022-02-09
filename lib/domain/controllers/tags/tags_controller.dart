@@ -41,22 +41,23 @@ import 'package:projects/internal/locator.dart';
 class TagsController extends BaseController {
   final ProjectService _api = locator<ProjectService>();
 
-  late PaginationController paginationController;
+  final _paginationController = Get.put(PaginationController<ProjectTag>(), tag: 'TagsController');
+  @override
+  PaginationController<ProjectTag> get paginationController => _paginationController;
+
+  @override
+  RxList<ProjectTag> get itemList => _paginationController.data;
 
   @override
   void onInit() {
     screenName = tr('tags');
-    paginationController = Get.put(PaginationController(), tag: 'TagsController');
 
-    paginationController.loadDelegate = () async => await _getItems();
-    paginationController.refreshDelegate = () async => await refreshData();
-    paginationController.pullDownEnabled = true;
+    _paginationController.loadDelegate = () async => await _getItems();
+    _paginationController.refreshDelegate = () async => await refreshData();
+    _paginationController.pullDownEnabled = true;
 
     super.onInit();
   }
-
-  @override
-  RxList itemList = [].obs;
 
   Future<void> refreshData() async {
     loaded.value = false;
@@ -65,19 +66,19 @@ class TagsController extends BaseController {
   }
 
   Future getItems({bool needToClear = false}) async {
-    paginationController.startIndex = 0;
+    _paginationController.startIndex = 0;
     loaded.value = false;
     await _getItems(needToClear: needToClear);
     loaded.value = true;
   }
 
   Future _getItems({bool needToClear = false}) async {
-    final result = await _api.getTagsPaginated(startIndex: paginationController.startIndex);
+    final result = await _api.getTagsPaginated(startIndex: _paginationController.startIndex);
 
     if (result != null) {
-      paginationController.total.value = result.total;
-      if (needToClear) paginationController.data.clear();
-      paginationController.data.addAll(result.response ?? <ProjectTag>[]);
+      _paginationController.total.value = result.total;
+      if (needToClear) _paginationController.data.clear();
+      _paginationController.data.addAll(result.response ?? <ProjectTag>[]);
     }
   }
 }

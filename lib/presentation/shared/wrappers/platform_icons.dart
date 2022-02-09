@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
 
 extension PlatformIconsExt on BuildContext {
   /// Render either a Material or Cupertino icon based on the platform

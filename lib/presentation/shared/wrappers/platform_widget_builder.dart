@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 
-import 'platform.dart';
-import 'platform_widget.dart';
+import 'package:projects/presentation/shared/wrappers/platform.dart';
+import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 
 /// Provides a builder for either the Material or Cupertino platforms
 /// which take a child for common use
@@ -20,10 +20,11 @@ class PlatformWidgetBuilder extends StatelessWidget {
   final Widget? Function(BuildContext, Widget?, PlatformTarget)? material;
 
   PlatformWidgetBuilder({
+    Key? key,
     this.cupertino,
     this.material,
     this.child,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

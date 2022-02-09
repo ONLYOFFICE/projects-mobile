@@ -34,7 +34,6 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
 
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:flutter/widgets.dart';
@@ -77,9 +76,6 @@ class DocumentsController extends BaseDocumentsController {
   @override
   int? get currentFolderID => _currentFolderId;
 
-  @override
-  RxString documentsScreenName = tr('documents').obs;
-
   final _sortController = DocumentsSortController();
   @override
   DocumentsSortController get sortController => _sortController;
@@ -95,6 +91,8 @@ class DocumentsController extends BaseDocumentsController {
 
   final _lock = Lock();
   DocumentsController() {
+    screenName = tr('documents');
+
     _filterController.applyFiltersDelegate = () async => await refreshContent();
     sortController.updateSortDelegate = () async => await refreshContent();
 
@@ -261,7 +259,4 @@ class DocumentsController extends BaseDocumentsController {
         'folderId': currentFolderID,
         'documentsController': this,
       });
-
-  @override
-  String screenName = tr('documents');
 }

@@ -51,7 +51,6 @@ import 'package:projects/presentation/shared/widgets/sort_view.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_button.dart';
 import 'package:projects/presentation/shared/wrappers/platform_popup_menu_item.dart';
-import 'package:projects/presentation/shared/wrappers/platform_widget.dart';
 import 'package:projects/presentation/views/discussions/discussion_tile.dart';
 import 'package:projects/presentation/views/discussions/filter/discussions_filter_screen.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
