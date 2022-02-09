@@ -33,7 +33,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projects/data/models/from_api/discussion.dart';
 import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
@@ -61,9 +60,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
   @override
   void initState() {
     _tabController = TabController(vsync: this, length: 4);
-    final discussionItemController =
-        DiscussionItemController(Get.arguments['discussion'] as Discussion);
-    controller = Get.put(discussionItemController);
+    controller = Get.arguments['controller'] as DiscussionItemController;
     controller.getDiscussionDetailed();
     super.initState();
   }
@@ -94,8 +91,7 @@ class _DiscussionDetailedState extends State<DiscussionDetailed>
                 controller: _tabController,
                 indicatorColor: Get.theme.colors().primary,
                 labelColor: Get.theme.colors().onSurface,
-                unselectedLabelColor:
-                    Get.theme.colors().onSurface.withOpacity(0.6),
+                unselectedLabelColor: Get.theme.colors().onSurface.withOpacity(0.6),
                 labelStyle: TextStyleHelper.subtitle2(),
                 tabs: [
                   CustomTab(

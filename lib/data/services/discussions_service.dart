@@ -56,7 +56,7 @@ class DiscussionsService {
     String? creationDateFilter,
     String? otherFilter,
   }) async {
-    final projects = await _api.getDiscussionsByParams(
+    final discussions = await _api.getDiscussionsByParams(
       startIndex: startIndex,
       query: query,
       sortBy: sortBy,
@@ -69,12 +69,12 @@ class DiscussionsService {
       projectId: projectId,
     );
 
-    final success = projects.response != null;
+    final success = discussions.response != null;
 
     if (success) {
-      return projects;
+      return discussions;
     } else {
-      await Get.find<ErrorDialog>().show(projects.error!.message);
+      await Get.find<ErrorDialog>().show(discussions.error!.message);
       return null;
     }
   }
@@ -83,18 +83,14 @@ class DiscussionsService {
     required int projectId,
     required NewDiscussionDTO newDiscussion,
   }) async {
-    final result =
-        await _api.addMessage(projectId: projectId, newDiss: newDiscussion);
+    final result = await _api.addMessage(projectId: projectId, newDiss: newDiscussion);
 
     final success = result.response != null;
 
     if (success) {
-      await AnalyticsService.shared
-          .logEvent(AnalyticsService.Events.createEntity, {
-        AnalyticsService.Params.Key.portal:
-            await _secureStorage.getString('portalName'),
-        AnalyticsService.Params.Key.entity:
-            AnalyticsService.Params.Value.discussion
+      await AnalyticsService.shared.logEvent(AnalyticsService.Events.createEntity, {
+        AnalyticsService.Params.Key.portal: await _secureStorage.getString('portalName'),
+        AnalyticsService.Params.Key.entity: AnalyticsService.Params.Value.discussion
       });
       return result.response;
     } else {

@@ -35,6 +35,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/discussion.dart';
+import 'package:projects/domain/controllers/discussions/discussion_item_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_controller.dart';
 import 'package:projects/domain/controllers/discussions/discussions_filter_controller.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
@@ -171,9 +172,12 @@ class DiscussionsList extends StatelessWidget {
                   return const SizedBox(height: 12);
                 },
                 itemBuilder: (BuildContext context, int index) {
+                  final discussion = controller.paginationController.data[index] as Discussion;
+                  final discussionItemController = Get.find<DiscussionItemController>();
+                  discussionItemController.setup(discussion);
                   return DiscussionTile(
-                    discussion: controller.paginationController.data[index] as Discussion,
-                    onTap: () => controller.toDetailed(controller.paginationController.data[index]),
+                    controller: discussionItemController,
+                    onTap: () => controller.toDetailed(discussionItemController),
                   );
                 },
               );
