@@ -36,14 +36,13 @@ import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/project_detailed.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/project_team_controller.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 import 'package:projects/presentation/views/projects_view/widgets/portal_user_item.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
-import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_floating_action_button.dart';
-
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
 
 class ProjectTeamView extends StatelessWidget {
   final ProjectDetailed? projectDetailed;
@@ -112,14 +111,15 @@ class _Content extends StatelessWidget {
                     ListView.builder(
                       physics: const ScrollPhysics(),
                       shrinkWrap: true,
-                      itemBuilder: (c, i) => PortalUserItem(
-                          userController: projectTeamDataSource.usersList[i],
-                          onTapFunction: (value) => {
-                                Get.find<NavigationController>().toScreen(const ProfileScreen(),
-                                    arguments: {
-                                      'portalUser': projectTeamDataSource.usersList[i].portalUser
-                                    })
-                              }),
+                      itemBuilder: (c, i) {
+                        final userController = projectTeamDataSource.usersList[i];
+                        return PortalUserItem(
+                            userController: userController,
+                            onTapFunction: (value) => {
+                                  Get.find<NavigationController>().toScreen(const ProfileScreen(),
+                                      arguments: {'controller': userController})
+                                });
+                      },
                       itemExtent: 65,
                       itemCount: projectTeamDataSource.usersList.length,
                     )
