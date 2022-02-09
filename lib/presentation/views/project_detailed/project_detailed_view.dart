@@ -364,7 +364,7 @@ Future<void> _onSelected(
       break;
 
     case PopupMenuItemValue.editProject:
-      Get.find<NavigationController>().to(EditProjectView(projectDetailed: controller.projectData),
+      Get.find<NavigationController>().to(EditProjectView(),
           transition: GetPlatform.isAndroid ? Transition.downToUp : Transition.cupertinoDialog,
           fullscreenDialog: true,
           arguments: {'projectDetailed': controller.projectData});

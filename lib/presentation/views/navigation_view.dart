@@ -236,7 +236,6 @@ class TabletLayout extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         PlatformIconButton(
-                          iconSize: 64,
                           icon: SizedBox(
                               width: 72,
                               child: SizedBox(
@@ -256,7 +255,6 @@ class TabletLayout extends StatelessWidget {
                               arguments: {'showBackButton': true, 'showSettingsButton': false}),
                         ),
                         PlatformIconButton(
-                          iconSize: 64,
                           icon: AppIcon(
                             icon: SvgIcons.settings,
                             width: 24,

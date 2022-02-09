@@ -90,7 +90,7 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: centerTitle,
       iconTheme: const IconThemeData(color: Color(0xff1A73E9)),
       backgroundColor: backgroundColor,
-      // backgroundColor: CupertinoColors.white, // TODO
+      // backgroundColor: CupertinoColors.white,
       automaticallyImplyLeading: showBackButton,
       elevation: elevation,
       shadowColor: Get.theme.colors().outline,
@@ -111,7 +111,6 @@ class StyledAppBar extends StatelessWidget implements PreferredSizeWidget {
 
       actions: actions,
 
-      // ignore: prefer_if_null_operators
       title: title != null
           ? PreferredSize(preferredSize: Size.fromHeight(titleHeight), child: title!)
           : titleText != null
