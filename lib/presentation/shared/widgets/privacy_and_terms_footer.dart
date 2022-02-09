@@ -51,7 +51,7 @@ class PrivacyAndTermsFooter extends StatelessWidget {
     checkBoxValue = controller.checkBoxValue;
   }
 
-  late final RxBool? checkBoxValue;
+  RxBool? checkBoxValue;
   final controller = Get.find<LoginController>();
 
   @override
