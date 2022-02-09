@@ -276,14 +276,14 @@ class DiscussionItemController extends GetxController {
   }
 
   Future<void> _getUserAvatarUrl() async {
-    if (discussion.value.createdBy?.avatar == null) {
+    if (discussion.value.createdBy?.avatarMedium == null) {
       final userId = discussion.value.createdBy?.id;
       if (userId != null) {
         final userPhoto = await _userPhotoService.getUserPhoto(userId);
         discussion.value.createdBy?.avatar = userPhoto?.big;
         discussion.value.createdBy?.avatarSmall = userPhoto?.small;
         discussion.value.createdBy?.avatarMedium = userPhoto?.medium;
-        avatarUrl.value = userPhoto?.big ?? userPhoto?.medium ?? userPhoto?.small ?? '';
+        avatarUrl.value = userPhoto?.medium ?? userPhoto?.big ?? userPhoto?.small ?? '';
       }
     }
   }
