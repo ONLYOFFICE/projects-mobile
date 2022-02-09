@@ -99,27 +99,51 @@ class NewMilestoneView extends StatelessWidget {
                   DueDateTile(controller: newMilestoneController),
                   const SizedBox(height: 5),
                   AdvancedOptions(
-                    options: <Widget>[
-                      OptionWithSwitch(
-                        title: tr('keyMilestone'),
-                        switchValue: newMilestoneController.keyMilestone,
-                        switchOnChanged: (bool value) {
-                          newMilestoneController.setKeyMilestone(value);
-                        },
+                    options: [
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
                       ),
-                      OptionWithSwitch(
-                        title: tr('remindBeforeDue'),
-                        switchValue: newMilestoneController.remindBeforeDueDate,
-                        switchOnChanged: (bool value) {
-                          newMilestoneController.enableRemindBeforeDueDate(value);
-                        },
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('keyMilestone'),
+                          switchValue: newMilestoneController.keyMilestone,
+                          switchOnChanged: (bool value) {
+                            newMilestoneController.setKeyMilestone(value);
+                          },
+                        ),
                       ),
-                      OptionWithSwitch(
-                        title: tr('notifyResponsible'),
-                        switchValue: newMilestoneController.notificationEnabled,
-                        switchOnChanged: (bool value) {
-                          newMilestoneController.enableNotification(value);
-                        },
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('remindBeforeDue'),
+                          switchValue: newMilestoneController.remindBeforeDueDate,
+                          switchOnChanged: (bool value) {
+                            newMilestoneController.enableRemindBeforeDueDate(value);
+                          },
+                        ),
+                      ),
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('notifyResponsible'),
+                          switchValue: newMilestoneController.notificationEnabled,
+                          switchOnChanged: (bool value) {
+                            newMilestoneController.enableNotification(value);
+                          },
+                        ),
                       ),
                     ],
                   ),

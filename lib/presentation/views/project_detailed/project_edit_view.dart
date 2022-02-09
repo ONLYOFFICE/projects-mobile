@@ -38,6 +38,7 @@ import 'package:projects/domain/controllers/projects/detailed_project/project_ed
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/list_loading_skeleton.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_app_bar.dart';
+import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/project_detailed/project_overview.dart';
 import 'package:projects/presentation/views/projects_view/new_project/tiles/advanced_options.dart';
@@ -108,20 +109,36 @@ class EditProjectView extends StatelessWidget {
                   TeamMembersTile(controller: editProjectController),
                   TagsTile(controller: editProjectController),
                   AdvancedOptions(
-                    options: <Widget>[
-                      OptionWithSwitch(
-                        title: tr('privateProject'),
-                        switchValue: editProjectController.isPrivate,
-                        switchOnChanged: (bool value) {
-                          editProjectController.setPrivate(value);
-                        },
+                    options: [
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
                       ),
-                      OptionWithSwitch(
-                        title: tr('notifyPM'),
-                        switchValue: editProjectController.notificationEnabled,
-                        switchOnChanged: (bool value) {
-                          editProjectController.enableNotification(value);
-                        },
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('privateProject'),
+                          switchValue: editProjectController.isPrivate,
+                          switchOnChanged: (bool value) {
+                            editProjectController.setPrivate(value);
+                          },
+                        ),
+                      ),
+                      const StyledDivider(
+                        leftPadding: 72,
+                        height: 1,
+                        thickness: 1,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                        child: OptionWithSwitch(
+                          title: tr('notifyPM'),
+                          switchValue: editProjectController.notificationEnabled,
+                          switchOnChanged: (bool value) {
+                            editProjectController.enableNotification(value);
+                          },
+                        ),
                       ),
                     ],
                   ),

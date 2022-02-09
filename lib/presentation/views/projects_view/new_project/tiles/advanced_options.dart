@@ -37,7 +37,6 @@ import 'package:get/get.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
-import 'package:projects/presentation/shared/widgets/styled/styled_divider.dart';
 import 'package:projects/presentation/shared/wrappers/platform_switch.dart';
 
 class AdvancedOptions extends StatelessWidget {
@@ -87,13 +86,6 @@ class AdvancedOptions extends StatelessWidget {
                   children: options,
                 ),
               ),
-              Divider(
-                height: 1,
-                thickness: 1,
-                indent: 72,
-                endIndent: 0,
-                color: Get.theme.colors().outline,
-              ),
             ],
           ),
         ),
@@ -103,49 +95,41 @@ class AdvancedOptions extends StatelessWidget {
 }
 
 class OptionWithSwitch extends StatelessWidget {
-  const OptionWithSwitch({
-    Key? key,
-    required this.title,
-    required this.switchOnChanged,
-    required this.switchValue,
-  }) : super(key: key);
+  const OptionWithSwitch(
+      {Key? key,
+      required this.title,
+      required this.switchOnChanged,
+      required this.switchValue,
+      this.style})
+      : super(key: key);
 
   final RxBool switchValue;
-  final Function switchOnChanged;
+  final Function(bool) switchOnChanged;
   final String title;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(72, 0, 16, 0),
+    return SizedBox(
       height: 60,
-      child: Column(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          const StyledDivider(
-            height: 1,
-            thickness: 1,
+          Expanded(
+            child: Text(
+              title,
+              style: style ?? TextStyleHelper.subtitle1(),
+            ),
           ),
-          const SizedBox(height: 5),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.max,
-            children: <Widget>[
-              Expanded(
-                child: Text(
-                  title,
-                  style: TextStyleHelper.subtitle1(),
-                ),
-              ),
-              const SizedBox(width: 20),
-              Obx(
-                () => PlatformSwitch(
-                  value: switchValue.value,
-                  onChanged: (v) => {switchOnChanged(v)},
-                  activeColor: Get.theme.colors().primary,
-                ),
-              ),
-            ],
+          const SizedBox(width: 20),
+          Obx(
+            () => PlatformSwitch(
+              value: switchValue.value,
+              onChanged: switchOnChanged,
+              activeColor: Get.theme.colors().primary,
+            ),
           ),
         ],
       ),

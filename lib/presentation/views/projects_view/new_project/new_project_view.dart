@@ -113,37 +113,58 @@ class NewProject extends StatelessWidget {
               ProjectDescriptionTile(controller: controller),
               TagsTile(controller: controller),
               AdvancedOptions(
-                options: <Widget>[
-                  OptionWithSwitch(
-                    title: tr('notifyPM'),
-                    switchValue: controller.notificationEnabled,
-                    switchOnChanged: (bool value) {
-                      controller.enableNotification(value);
-                    },
+                options: [
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
                   ),
-                  OptionWithSwitch(
-                    title: tr('privateProject'),
-                    switchValue: controller.isPrivate,
-                    switchOnChanged: (bool value) {
-                      controller.setPrivate(value);
-                    },
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: OptionWithSwitch(
+                      title: tr('notifyPM'),
+                      switchValue: controller.notificationEnabled,
+                      switchOnChanged: (bool value) {
+                        controller.enableNotification(value);
+                      },
+                    ),
                   ),
-                  Obx(() {
-                    if (controller.selfUserItem?.id == controller.selectedProjectManager.value?.id)
-                      return OptionWithSwitch(
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                    child: OptionWithSwitch(
+                      title: tr('privateProject'),
+                      switchValue: controller.isPrivate,
+                      switchOnChanged: (bool value) {
+                        controller.setPrivate(value);
+                      },
+                    ),
+                  ),
+                  const StyledDivider(
+                    leftPadding: 72,
+                    height: 1,
+                    thickness: 1,
+                  ),
+                  Obx(
+                    () => Padding(
+                      padding: const EdgeInsets.fromLTRB(72, 2, 16, 2),
+                      child: OptionWithSwitch(
                         title: tr('followProject'),
-                        switchValue: false.obs,
-                        switchOnChanged: (v) => {},
-                      );
-                    else
-                      return OptionWithSwitch(
-                        title: tr('followProject'),
-                        switchValue: controller.isFolowed,
-                        switchOnChanged: (bool value) {
-                          controller.folow(value);
-                        },
-                      );
-                  }),
+                        switchValue: controller.selfUserItem?.id ==
+                                controller.selectedProjectManager.value?.id
+                            ? false.obs
+                            : controller.isFolowed,
+                        switchOnChanged: controller.selfUserItem?.id ==
+                                controller.selectedProjectManager.value?.id
+                            ? (v) => {}
+                            : controller.folow,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ],

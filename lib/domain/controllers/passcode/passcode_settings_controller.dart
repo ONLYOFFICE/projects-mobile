@@ -193,8 +193,8 @@ class PasscodeSettingsController extends GetxController {
         preventDuplicates: false);
   }
 
-  void onPasscodeTilePressed(value) {
-    if (value == true) {
+  void onPasscodeTilePressed(bool value) {
+    if (value) {
       tryEnablingPasscode();
     } else {
       tryDisablingPasscode();
