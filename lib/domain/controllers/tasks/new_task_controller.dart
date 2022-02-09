@@ -364,6 +364,7 @@ class NewTaskController extends GetxController implements TaskActionsController 
         titleText: tr('discardTask'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.back();

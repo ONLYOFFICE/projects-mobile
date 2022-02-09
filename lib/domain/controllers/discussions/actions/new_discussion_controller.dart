@@ -391,6 +391,7 @@ class NewDiscussionController extends GetxController implements DiscussionAction
         titleText: tr('discardDiscussion'),
         contentText: tr('changesWillBeLost'),
         acceptText: tr('discard'),
+        acceptColor: Get.theme.colors().colorError,
         onAcceptTap: () {
           Get.back();
           Get.back();

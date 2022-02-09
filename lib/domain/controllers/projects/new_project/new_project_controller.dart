@@ -42,6 +42,7 @@ import 'package:projects/domain/controllers/messages_handler.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/domain/controllers/projects/base_project_editor_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/styled/styled_alert_dialog.dart';
 import 'package:projects/presentation/views/project_detailed/project_detailed_view.dart';
 import 'package:projects/presentation/views/project_detailed/tags_selection_view.dart';
@@ -60,6 +61,7 @@ class NewProjectController extends BaseProjectEditorController {
       titleText: tr('discardChanges'),
       contentText: tr('changesWillBeLost'),
       acceptText: tr('discard'),
+      acceptColor: Get.theme.colors().colorError,
       onAcceptTap: () {
         Get.back();
         Get.back();
