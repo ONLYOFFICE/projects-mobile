@@ -30,6 +30,7 @@
  *
  */
 
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/widgets.dart';
@@ -37,15 +38,16 @@ import 'package:get/get.dart';
 import 'package:projects/data/enums/user_selection_mode.dart';
 import 'package:projects/data/models/from_api/portal_user.dart';
 import 'package:projects/data/services/download_service.dart';
+import 'package:projects/data/services/user_photo_service.dart';
 import 'package:projects/domain/controllers/navigation_controller.dart';
 import 'package:projects/internal/locator.dart';
+import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/views/profile/profile_screen.dart';
 
-import 'package:projects/presentation/shared/theme/custom_theme.dart';
-
 class PortalUserItemController extends GetxController {
   final DownloadService _downloadService = locator<DownloadService>();
+  final _userPhotoService = locator<UserPhotoService>();
 
   RxString userTitle = ''.obs;
 
@@ -55,6 +57,7 @@ class PortalUserItemController extends GetxController {
   }
 
   final PortalUser portalUser;
+  final profileAvatar = ''.obs;
   RxBool isSelected = false.obs;
   Rx<UserSelectionMode> selectionMode = UserSelectionMode.None.obs;
 
@@ -74,17 +77,29 @@ class PortalUserItemController extends GetxController {
 
   Future<void> loadAvatar() async {
     try {
-      final avatarUrl = portalUser.avatar ?? portalUser.avatarMedium ?? portalUser.avatarSmall;
+      final avatarUrl = portalUser.avatarMedium ?? portalUser.avatar ?? portalUser.avatarSmall;
       if (avatarUrl == null) return;
       final avatarBytes = await _downloadService.downloadImage(avatarUrl);
       if (avatarBytes == null) return;
 
       avatarData.value = avatarBytes;
-      // ignore: unnecessary_cast
-      avatar.value = Image.memory(avatarData.value) as Widget;
+      avatar.value = Image.memory(avatarData.value);
+
+      unawaited(_getProfileAvatarUrl(portalUser));
     } catch (e) {
       print(e);
       return;
+    }
+  }
+
+  Future<void> _getProfileAvatarUrl(PortalUser user) async {
+    if (user.id != null) {
+      final userPhoto = await _userPhotoService.getUserPhoto(user.id!);
+      if (userPhoto?.big != null) {
+        profileAvatar.value = userPhoto!.max!;
+      } else {
+        profileAvatar.value = user.avatar ?? user.avatarMedium ?? user.avatarSmall ?? '';
+      }
     }
   }
 
@@ -103,6 +118,6 @@ class PortalUserItemController extends GetxController {
       isSelected.value = !isSelected.value;
     else
       Get.find<NavigationController>()
-          .toScreen(const ProfileScreen(), arguments: {'portalUser': portalUser});
+          .toScreen(const ProfileScreen(), arguments: {'controller': this});
   }
 }
