@@ -209,10 +209,6 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     });
   }
 
-  Future<void> setupSearchMode({String? folderName, Folder? folder}) async {
-    loaded.value = true;
-  }
-
   void _performSearch() async {
     loaded.value = false;
     nothingFound.value = false;
@@ -226,37 +222,59 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     loaded.value = true;
   }
 
-  void onFilePopupMenuSelected(value, PortalFile element) {}
-
   Future moveFolder() async {
+    final conflictsResult = await _api.checkForConflicts(
+      destFolderId: _currentFolder!.id.toString(),
+      folderIds: [_targetId.toString()],
+    );
+
+    var type = ConflictResolveType.Skip;
+    if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      final titles = <String>[];
+      for (final portalFile in conflictsResult) titles.add(portalFile.title!);
+
+      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+    }
+
     final result = await _api.moveDocument(
       movingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
-      type: ConflictResolveType.Skip,
+      type: type,
     );
 
-    if (result != null) {
-      Get.close(nestingCounter);
-
+    Get.close(nestingCounter);
+    if (result != null)
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderMoved'));
-    } else
+    else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
     locator<EventHub>().fire('needToRefreshDocuments');
   }
 
   Future copyFolder() async {
+    final conflictsResult = await _api.checkForConflicts(
+      destFolderId: _currentFolder!.id.toString(),
+      folderIds: [_targetId.toString()],
+    );
+
+    var type = ConflictResolveType.Skip;
+    if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      final titles = <String>[];
+      for (final portalFile in conflictsResult) titles.add(portalFile.title!);
+
+      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+    }
+
     final result = await _api.copyDocument(
       copyingFolder: _targetId.toString(),
       targetFolder: _currentFolder!.id.toString(),
-      type: ConflictResolveType.Skip,
+      type: type,
     );
 
-    if (result != null) {
-      Get.close(nestingCounter);
-
+    Get.close(nestingCounter);
+    if (result != null)
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('folderCopied'));
-    } else
+    else
       MessagesHandler.showSnackBar(context: Get.context!, text: tr('error'));
 
     locator<EventHub>().fire('needToRefreshDocuments');
@@ -269,9 +287,12 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     );
 
     var type = ConflictResolveType.Skip;
-    if (conflictsResult != null && conflictsResult.isNotEmpty)
-      type = (await showConflictResolvingDialog([conflictsResult[0].title.toString()])) ??
-          ConflictResolveType.Skip;
+    if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      final titles = <String>[];
+      for (final portalFile in conflictsResult) titles.add(portalFile.title!);
+
+      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+    }
 
     final result = await _api.moveDocument(
       movingFile: _targetId.toString(),
@@ -295,9 +316,12 @@ class DocumentsMoveOrCopyController extends BaseDocumentsController {
     );
 
     var type = ConflictResolveType.Skip;
-    if (conflictsResult != null && conflictsResult.isNotEmpty)
-      type = (await showConflictResolvingDialog([conflictsResult[0].title.toString()])) ??
-          ConflictResolveType.Skip;
+    if (conflictsResult != null && conflictsResult.isNotEmpty) {
+      final titles = <String>[];
+      for (final portalFile in conflictsResult) titles.add(portalFile.title!);
+
+      type = (await showConflictResolvingDialog(titles)) ?? ConflictResolveType.Skip;
+    }
 
     final result = await _api.copyDocument(
       copyingFile: _targetId.toString(),
