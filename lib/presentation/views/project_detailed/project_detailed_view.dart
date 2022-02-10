@@ -69,6 +69,8 @@ class ProjectDetailedTabs {
   static const discussions = 3;
   static const documents = 4;
   static const team = 5;
+
+  static const length = 6;
 }
 
 class PopupMenuItemValue {
@@ -113,8 +115,9 @@ class _ProjectDetailedViewState extends State<ProjectDetailedView>
     projectController.setup();
 
     _tabController = TabController(
+      initialIndex: ProjectDetailedTabs.overview,
       vsync: this,
-      length: 6,
+      length: ProjectDetailedTabs.length,
     );
 
     _tabController.addListener(() {
