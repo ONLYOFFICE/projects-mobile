@@ -34,7 +34,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projects/data/models/from_api/folder.dart';
+import 'package:projects/data/models/from_api/portal_file.dart';
 import 'package:projects/domain/controllers/documents/documents_move_or_copy_controller.dart';
+import 'package:projects/domain/controllers/documents/file_cell_controller.dart';
+import 'package:projects/internal/extentions.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
 import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
@@ -235,19 +238,61 @@ class MoveOrCopyFolderContent extends StatelessWidget {
                   separatorBuilder: (BuildContext context, int index) => const SizedBox(height: 10),
                   itemBuilder: (BuildContext context, int index) {
                     final element = controller.paginationController.data[index];
-                    if (controller.target == element.id) return const SizedBox();
                     return element is Folder
                         ? MoveFolderCell(
                             element: element,
                             controller: controller,
                           )
-                        : const SizedBox();
+                        : _FileCell(
+                            cellController: FileCellController(portalFile: element as PortalFile),
+                          );
                   },
                 );
 
               return const SizedBox();
             }());
       },
+    );
+  }
+}
+
+class _FileCell extends StatelessWidget {
+  const _FileCell({Key? key, required this.cellController}) : super(key: key);
+
+  final FileCellController cellController;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 72,
+      child: Row(
+        children: [
+          SizedBox(
+            width: 72,
+            child: Center(
+              child: Obx(() => cellController.fileIcon.value),
+            ),
+          ),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyleHelper.projectTitle),
+                ),
+                Text(
+                    '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',
+                    style: TextStyleHelper.caption(
+                        color: Get.theme.colors().onSurface.withOpacity(0.6))),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
