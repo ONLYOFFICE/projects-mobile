@@ -55,6 +55,7 @@ class PortalInputView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<LoginController>();
+    controller.checkBoxValue.value = false;
 
     if (Get.isRegistered<AccountManagerController>()) {
       Get.find<AccountManagerController>();
@@ -140,7 +141,7 @@ class PortalInputView extends StatelessWidget {
                           PrivacyAndTermsFooter.withCheckbox()
                         else
                           const Spacer(),
-                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter()
+                        if (controller.needAgreement) const Spacer() else PrivacyAndTermsFooter(),
                       ],
                     ),
                   ),

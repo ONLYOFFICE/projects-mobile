@@ -43,20 +43,20 @@ import 'package:url_launcher/url_launcher.dart';
 class PrivacyAndTermsFooter extends StatelessWidget {
   PrivacyAndTermsFooter({
     Key? key,
-  }) : super(key: key);
+  })  : needCheckbox = false,
+        super(key: key);
 
   PrivacyAndTermsFooter.withCheckbox({
     Key? key,
-  }) : super(key: key) {
-    checkBoxValue = controller.checkBoxValue;
-  }
+  })  : needCheckbox = true,
+        super(key: key);
 
-  RxBool? checkBoxValue;
+  final bool needCheckbox;
   final controller = Get.find<LoginController>();
 
   @override
   Widget build(BuildContext context) {
-    final needAgreement = controller.needAgreement && checkBoxValue != null;
+    final needAgreement = controller.needAgreement && needCheckbox;
 
     final fullText = tr('privacyAndTermsFooter.total');
     final textPrivacyPolicy = tr('privacyAndTermsFooter.privacyPolicyWithLink');
@@ -106,9 +106,9 @@ class PrivacyAndTermsFooter extends StatelessWidget {
             Obx(
               () => Checkbox(
                 activeColor: Get.theme.colors().primary,
-                value: checkBoxValue!.value,
+                value: controller.checkBoxValue.value,
                 onChanged: (bool? value) {
-                  checkBoxValue!.value = value ?? false;
+                  controller.checkBoxValue.value = value ?? false;
                 },
               ),
             ),
