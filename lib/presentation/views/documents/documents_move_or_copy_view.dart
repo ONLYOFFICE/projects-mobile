@@ -81,7 +81,7 @@ class DocumentsMoveOrCopyView extends StatelessWidget {
       appBar: StyledAppBar(
         title: Obx(() => Text(
               controller.documentsScreenName.value,
-              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
             )),
         bottom: DocsBottom(controller: controller),
         actions: [

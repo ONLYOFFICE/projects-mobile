@@ -131,7 +131,7 @@ class _CountryWithCodeTile extends StatelessWidget {
                   width: 56,
                   child: showFirstLetter
                       ? Text(country.countryName![0],
-                          style: TextStyleHelper.headline5(
+                          style: TextStyleHelper.headline6(
                               color: Get.theme.colors().onBackground.withOpacity(0.6)))
                       : null,
                 ),

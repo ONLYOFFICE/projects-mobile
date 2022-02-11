@@ -191,7 +191,7 @@ class SelectItemTile extends StatelessWidget {
                 Flexible(
                   child: Text(
                     title!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                   ),
                 ),
               ],

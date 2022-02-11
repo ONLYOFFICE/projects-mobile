@@ -80,7 +80,7 @@ class _CodeViewState extends State<CodeView> {
                     SizedBox(height: Get.height * 0.0347),
                     Text(tr('tfaTitle'),
                         textAlign: TextAlign.center,
-                        style: TextStyleHelper.headline5(color: Get.theme.colors().onSurface)),
+                        style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
                     SizedBox(height: Get.height * 0.0222),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 40),

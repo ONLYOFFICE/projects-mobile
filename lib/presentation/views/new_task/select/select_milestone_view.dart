@@ -191,7 +191,7 @@ class _MilestoneSelectionTile extends StatelessWidget {
                 children: [
                   Text(
                     milestone.title!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                   ),
                   Text(milestone.responsible!.displayName!,
                       style: TextStyleHelper.caption(

@@ -34,7 +34,6 @@ import 'dart:async';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:event_hub/event_hub.dart';
-import 'package:projects/data/models/from_api/portal_file.dart';
 
 import 'package:projects/domain/controllers/documents/base_documents_controller.dart';
 import 'package:flutter/widgets.dart';

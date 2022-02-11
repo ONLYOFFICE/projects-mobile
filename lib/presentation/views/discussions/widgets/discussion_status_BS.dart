@@ -65,7 +65,7 @@ Future<void> showsDiscussionStatusesBS({
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
-                  style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             ),
             const SizedBox(height: 18.5),
           ],

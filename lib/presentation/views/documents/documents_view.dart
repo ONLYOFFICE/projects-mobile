@@ -135,7 +135,7 @@ class DocumentsScreen extends StatelessWidget {
             materialTitle: Obx(
               () => Text(
                 controller.documentsScreenName.value,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
               ),
             ),
             cupertinoTitle: Obx(

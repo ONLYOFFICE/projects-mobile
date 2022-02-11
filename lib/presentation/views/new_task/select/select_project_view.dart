@@ -167,7 +167,7 @@ class _ProjectCell extends StatelessWidget {
                   children: [
                     Text(
                       item.title!,
-                      style: TextStyleHelper.projectTitle,
+                      style: TextStyleHelper.subtitle1(),
                     ),
                     Text(item.responsible!.displayName!,
                         style: TextStyleHelper.caption(

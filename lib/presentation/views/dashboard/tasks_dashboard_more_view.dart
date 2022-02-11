@@ -77,7 +77,7 @@ class TasksDashboardMoreView extends StatelessWidget {
               ),
               materialTitle: Text(
                 controller.screenName,
-                style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+                style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
               ),
               actions: [
                 SearchButton(controller: controller),

@@ -47,6 +47,7 @@ import 'package:projects/domain/controllers/projects/projects_controller.dart';
 import 'package:projects/domain/controllers/tasks/task_filter_controller.dart';
 import 'package:projects/domain/controllers/tasks/tasks_controller.dart';
 import 'package:projects/presentation/shared/theme/custom_theme.dart';
+import 'package:projects/presentation/shared/theme/text_styles.dart';
 import 'package:projects/presentation/shared/widgets/app_icons.dart';
 import 'package:projects/presentation/shared/wrappers/platform_icon_button.dart';
 import 'package:projects/presentation/views/dashboard/dashboard_view.dart';
@@ -184,7 +185,9 @@ class TabletLayout extends StatelessWidget {
                                   icon: SvgIcons.tab_bar_dashboard,
                                   color: Get.theme.colors().onNavBar,
                                   height: _iconSize),
-                              label: Text(tr('dashboard'))),
+                              label: Text(
+                                tr('dashboard'),
+                              )),
                           NavigationRailDestination(
                               icon: AppIcon(
                                   icon: SvgIcons.tab_bar_tasks,

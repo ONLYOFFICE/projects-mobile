@@ -114,14 +114,14 @@ class _SecondColumn extends StatelessWidget {
           Obx(() {
             TextStyle style;
             if (itemController.milestone.value!.status == 1) {
-              style = TextStyleHelper.projectTitle.copyWith(
+              style = TextStyleHelper.subtitle1().copyWith(
                   decoration: TextDecoration.lineThrough,
                   color: Get.theme.colors().onSurface.withOpacity(0.6));
             } else if (itemController.milestone.value!.status == 2) {
-              style = TextStyleHelper.projectTitle
+              style = TextStyleHelper.subtitle1()
                   .copyWith(color: Get.theme.colors().onSurface.withOpacity(0.6));
             } else {
-              style = TextStyleHelper.projectTitle;
+              style = TextStyleHelper.subtitle1();
             }
             return CellAtributedTitle(
               text: milestone!.title,

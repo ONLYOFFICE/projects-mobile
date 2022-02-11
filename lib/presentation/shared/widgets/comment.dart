@@ -179,7 +179,7 @@ class _CommentAuthor extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(comment.userFullName!, style: TextStyleHelper.projectTitle),
+              Text(comment.userFullName!, style: TextStyleHelper.subtitle1()),
               Text(comment.timeStampStr!,
                   style: TextStyleHelper.caption(
                       color: Get.theme.colors().onBackground.withOpacity(0.6))),

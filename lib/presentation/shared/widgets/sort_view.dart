@@ -70,7 +70,7 @@ class SortView extends StatelessWidget {
           Padding(
               padding: const EdgeInsets.only(left: 15, right: 16, top: 18.5),
               child: Text(tr('sortBy'),
-                  style: TextStyleHelper.h6(color: Get.theme.colors().onSurface))),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface))),
           sortOptions,
         ],
       ),

@@ -81,7 +81,7 @@ class TasksView extends StatelessWidget {
               MainAppBar(
                 materialTitle: Text(
                   controller.screenName,
-                  style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                 ),
                 cupertinoTitle: Text(
                   controller.screenName,

@@ -108,7 +108,7 @@ class SelectProjectScreen extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     child: Text(
                       tr('selectProject'),
-                      style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+                      style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
                     ),
                   ),
           ),
@@ -229,7 +229,7 @@ class _ProjectTile extends StatelessWidget {
                 children: [
                   Text(
                     project.title!,
-                    style: TextStyleHelper.projectTitle,
+                    style: TextStyleHelper.subtitle1(),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
                   ),

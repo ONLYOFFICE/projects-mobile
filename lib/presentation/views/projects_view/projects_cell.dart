@@ -215,14 +215,14 @@ class _Content extends StatelessWidget {
             () {
               TextStyle style;
               if (itemController.status.value == 1) {
-                style = TextStyleHelper.projectTitle.copyWith(
-                    decoration: TextDecoration.lineThrough,
-                    color: Get.theme.colors().onSurface.withOpacity(0.6));
+                style =
+                    TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6))
+                        .copyWith(decoration: TextDecoration.lineThrough);
               } else if (itemController.status.value == 2) {
-                style = TextStyleHelper.projectTitle
-                    .copyWith(color: Get.theme.colors().onSurface.withOpacity(0.6));
+                style =
+                    TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface.withOpacity(0.6));
               } else {
-                style = TextStyleHelper.projectTitle;
+                style = TextStyleHelper.subtitle1(color: Get.theme.colors().onSurface);
               }
               return CellAtributedTitle(
                 text: item!.title,
@@ -286,7 +286,7 @@ class _Suffix extends StatelessWidget {
                 () => Text(
                   projectController.taskCount.value.toString(),
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyleHelper.projectCompletedTasks.copyWith(
+                  style: TextStyleHelper.body2(
                     color: Get.theme.colors().onSurface.withOpacity(0.6),
                   ),
                 ),
@@ -322,7 +322,7 @@ void showsStatusesBS({required BuildContext context, dynamic itemController}) as
             Padding(
               padding: const EdgeInsets.only(left: 16),
               child: Text(tr('selectStatus'),
-                  style: TextStyleHelper.h6(color: Get.theme.colors().onSurface)),
+                  style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface)),
             ),
             const SizedBox(height: 18.5),
           ],

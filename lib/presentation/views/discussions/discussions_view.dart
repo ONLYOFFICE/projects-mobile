@@ -67,7 +67,7 @@ class PortalDiscussionsView extends StatelessWidget {
           MainAppBar(
             materialTitle: Text(
               tr('discussions'),
-              style: TextStyleHelper.headerStyle(color: Get.theme.colors().onSurface),
+              style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface),
             ),
             cupertinoTitle: Text(
               tr('discussions'),

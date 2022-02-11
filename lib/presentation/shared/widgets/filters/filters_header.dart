@@ -78,7 +78,7 @@ class FiltersHeader extends StatelessWidget {
                 top: 18.5,
                 left: 16,
                 child: Text(tr('filter'),
-                    style: TextStyleHelper.h6(color: Get.theme.colors().onSurface))),
+                    style: TextStyleHelper.headline6(color: Get.theme.colors().onSurface))),
             Positioned(
                 top: 5,
                 right: Get.find<PlatformController>().isMobile ? 8 : 12,

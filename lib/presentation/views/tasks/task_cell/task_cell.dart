@@ -165,7 +165,7 @@ class _SecondColumn extends StatelessWidget {
             children: <Widget>[
               CellAtributedTitle(
                 text: itemController!.task.value.title,
-                style: TextStyleHelper.projectTitle,
+                style: TextStyleHelper.subtitle1(),
                 atributeIcon: const AppIcon(icon: SvgIcons.high_priority),
                 atributeIconVisible: itemController!.task.value.priority == 1,
               ),

@@ -116,7 +116,7 @@ class _DiscussionInfo extends StatelessWidget {
             discussion!.title!,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyleHelper.projectTitle.copyWith(
+            style: TextStyleHelper.subtitle1().copyWith(
               color:
                   discussion!.status == 1 ? Get.theme.colors().onBackground.withOpacity(0.6) : null,
             ),

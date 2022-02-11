@@ -83,7 +83,7 @@ class FileCell extends StatelessWidget {
                     child: Text(cellController.file.title!.replaceAll(' ', '\u00A0'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyleHelper.projectTitle),
+                        style: TextStyleHelper.subtitle1()),
                   ),
                   Text(
                       '${formatedDate(cellController.file.updated!)} • ${cellController.file.contentLength} • ${cellController.file.createdBy!.displayName}',

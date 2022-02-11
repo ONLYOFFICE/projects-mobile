@@ -80,7 +80,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         // controller.tryEnablingPasscode(),
                         title: Text(
                           tr('enablePasscode'),
-                          style: TextStyleHelper.projectTitle,
+                          style: TextStyleHelper.subtitle1(),
                         ),
                       ),
                     ),
@@ -91,7 +91,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                           onPressed: controller.tryChangingPasscode,
                           child: Text(
                             tr('changePasscode'),
-                            style: TextStyleHelper.projectTitle
+                            style: TextStyleHelper.subtitle1()
                                 .copyWith(color: Get.theme.colors().primary),
                           ),
                         ),
@@ -125,7 +125,7 @@ class PasscodeSettingsScreen extends StatelessWidget {
                         activeColor: Get.theme.colors().primary,
                         title: Text(
                           tr('fingerprint'),
-                          style: TextStyleHelper.projectTitle,
+                          style: TextStyleHelper.subtitle1(),
                         ),
                       ),
                   ],

@@ -106,7 +106,7 @@ class _ColorThemeTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(text, style: TextStyleHelper.projectTitle),
+            Text(text, style: TextStyleHelper.subtitle1()),
             if (isSelected!)
               Icon(
                 PlatformIcons(context).checkMark,

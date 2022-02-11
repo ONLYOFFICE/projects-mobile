@@ -210,7 +210,7 @@ class FolderCellTitle extends StatelessWidget {
         children: [
           Flexible(
             child: Text(element.title!.replaceAll(' ', '\u00A0'),
-                maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyleHelper.projectTitle),
+                maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyleHelper.subtitle1()),
           ),
           Text(
               tr('documentsCaption', args: [
